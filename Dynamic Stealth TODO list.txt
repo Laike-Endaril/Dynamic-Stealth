@@ -1,3 +1,6 @@
+Make it so when the target is dead, search is cancelled
+
+
 Add stealth GUI that shows stealth aspect levels
 
 
