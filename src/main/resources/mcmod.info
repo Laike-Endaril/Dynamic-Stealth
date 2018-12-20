@@ -1,0 +1,16 @@
+[
+{
+  "modid": "dynamicstealth",
+  "name": "Dynamic Stealth",
+  "description": "You can now *actually sneak around* (accounts for FOV, distance, lighting...)",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Laike_Endaril"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
