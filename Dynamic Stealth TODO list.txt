@@ -1,7 +1,11 @@
 Add stealth GUI that shows stealth aspect levels
 
 
-Add visible indicators when mobs detect you, lose you, etc (like in Rogue Lab)
+Change "wandering" AI so that it can't instantly flip a 180 (force it to turn gradually before moving in the chosen direction)
+Do the same for the movement part of the "search" AI that occurs after the spin
+
+
+Add visible indicators when mobs detect you, lose you, etc (somewhat similar to Mark of the Ninja)
 
 
 Add smoke bombs which block LOS
