@@ -1,39 +1,36 @@
 Add stealth GUI that shows stealth aspect levels
 
 
-
 Add stealth-based attributes for armor (ie, actual attributes; like how armor ratings are an attribute, I think?)
 
 
-
 Re-add and implement "noticed" visibility multiplier
-
 
 
 Add optional per-entity setting overrides in config, and use them to increase ghast sight distance
 Include natural nightvision settings here
 
 
-
-This gets the follow distance of "searcher":
-searcher.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).getAttributeValue()
-See where I want to use it, if at all
+Don't send entity data of unseen entities to players, including potion effects.
+Make sure entities that *were* seen and are no longer seen are..."gone"
 
 
-
-don't send entity data of unseen entities to players, including potion effects
-
-show nametags when seen, not when unseen
-
+Add touch-based detection (within very close range)
+Add sound-based detection
+Add smell-based detection (wolves, cats, bears)
 
 
-add touch-based detection (within very close range)
-add sound-based detection
-add smell-based detection (wolves, cats, bears)
+Add the ability to see mob FOVs (as a cone render), maybe when under a potion effect or something
 
 
 
-add the ability to see mob FOVs (as a cone render), maybe when under a potion effect or something
 
-add armor/bauble that gives stealth bonus
-add armor/bauble that gives awareness bonus
+
+Maybe in this mod, or maybe in addon mods...
+
+
+Add armor/bauble that gives stealth bonus
+Add armor/bauble that gives awareness bonus
+
+
+Add NINJAS (and config option to disable them, I guess...)
