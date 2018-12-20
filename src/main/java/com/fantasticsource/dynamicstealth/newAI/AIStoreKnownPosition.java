@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth.newAI;
+package com.fantasticsource.dynamicstealth.newai;
 
 import com.fantasticsource.dynamicstealth.ai.AITargetEdit;
 import net.minecraft.entity.EntityLiving;

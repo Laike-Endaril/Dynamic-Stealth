@@ -1,8 +1,8 @@
 package com.fantasticsource.dynamicstealth;
 
 import com.fantasticsource.dynamicstealth.ai.*;
-import com.fantasticsource.dynamicstealth.newAI.AISearchLastKnownPosition;
-import com.fantasticsource.dynamicstealth.newAI.AIStoreKnownPosition;
+import com.fantasticsource.dynamicstealth.newai.AISearchLastKnownPosition;
+import com.fantasticsource.dynamicstealth.newai.AIStoreKnownPosition;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.TrigLookupTable;
 import net.minecraft.entity.Entity;
