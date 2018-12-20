@@ -37,7 +37,3 @@ add the ability to see mob FOVs (as a cone render), maybe when under a potion ef
 
 add armor/bauble that gives stealth bonus
 add armor/bauble that gives awareness bonus
-
-
-
-Post a link @eyamaz
