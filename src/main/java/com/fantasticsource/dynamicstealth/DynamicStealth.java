@@ -27,6 +27,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
@@ -38,7 +39,7 @@ public class DynamicStealth
 {
     public static final String MODID = "dynamicstealth";
     public static final String NAME = "Dynamic Stealth";
-    public static final String VERSION = "1.12.2.002";
+    public static final String VERSION = "1.12.2.003";
 
     private static Logger logger;
 
@@ -55,7 +56,7 @@ public class DynamicStealth
     }
 
     @EventHandler
-    public void preInit(FMLPreInitializationEvent event) throws NoSuchFieldException, IllegalAccessException
+    public void preInit(FMLPreInitializationEvent event) throws NoSuchFieldException, IllegalAccessException, IOException
     {
         logger = event.getModLog();
 

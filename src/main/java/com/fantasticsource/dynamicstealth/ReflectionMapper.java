@@ -2,7 +2,6 @@ package com.fantasticsource.dynamicstealth;
 
 import java.io.*;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 public class ReflectionMapper
@@ -55,51 +54,53 @@ public class ReflectionMapper
         }
     }
 
-    public static void mapMethods(Class classType) throws IOException
-    {
-        Method[] methods = classType.getDeclaredMethods();
-        ArrayList<String> existingMethods = new ArrayList<>();
-
-        String filename = classType.getSimpleName() + "_method_mappings.txt";
-        File file = new File(filename);
-
-        if (file.exists())
-        {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            String line = reader.readLine();
-            while (line != null && !line.equals(""))
-            {
-                existingMethods.add(line);
-                line = reader.readLine();
-            }
-            reader.close();
-            file.delete();
-        }
-
-        if (methods.length > 0)
-        {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
-
-            if (existingMethods.size() > 0)
-            {
-                if (existingMethods.size() == methods.length)
-                {
-                    for (int i = 0; i < methods.length; i++)
-                    {
-                        writer.write(methods[i].getName() + "(" + methods[i].getParameterCount() + " args)\t==\t" + existingMethods.get(i) + "\r\n");
-                    }
-                    writer.close();
-                }
-                else throw new IllegalArgumentException("Map length mismatch!");
-            }
-            else
-            {
-                for (Method method : methods)
-                {
-                    writer.write(method.getName() + "(" + method.getParameterCount() + " args)\r\n");
-                }
-                writer.close();
-            }
-        }
-    }
+    //On its own, the mapMethods function is not reliable; for some reason, the method listings are not always in the same order in obf vs deobf environments, even the the field listings seem to always match, order-wise
+    //Could rewrite it to use MCBot mappings later, if needed
+//    public static void mapMethods(Class classType) throws IOException
+//    {
+//        Method[] methods = classType.getDeclaredMethods();
+//        ArrayList<String> existingMethods = new ArrayList<>();
+//
+//        String filename = classType.getSimpleName() + "_method_mappings.txt";
+//        File file = new File(filename);
+//
+//        if (file.exists())
+//        {
+//            BufferedReader reader = new BufferedReader(new FileReader(file));
+//            String line = reader.readLine();
+//            while (line != null && !line.equals(""))
+//            {
+//                existingMethods.add(line);
+//                line = reader.readLine();
+//            }
+//            reader.close();
+//            file.delete();
+//        }
+//
+//        if (methods.length > 0)
+//        {
+//            BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
+//
+//            if (existingMethods.size() > 0)
+//            {
+//                if (existingMethods.size() == methods.length)
+//                {
+//                    for (int i = 0; i < methods.length; i++)
+//                    {
+//                        writer.write(methods[i].getName() + "(" + methods[i].getParameterCount() + " args)\t==\t" + existingMethods.get(i) + "\r\n");
+//                    }
+//                    writer.close();
+//                }
+//                else throw new IllegalArgumentException("Map length mismatch!");
+//            }
+//            else
+//            {
+//                for (Method method : methods)
+//                {
+//                    writer.write(method.getName() + "(" + method.getParameterCount() + " args)\r\n");
+//                }
+//                writer.close();
+//            }
+//        }
+//    }
 }

@@ -52,7 +52,7 @@ public class AILlamaHurtByTargetEdit extends AIHurtByTargetEdit
 
     private static void initReflections()
     {
-        setDidSpitMethod = ReflectionTool.getMethod(EntityLlama.class, "func_184639_G", "setDidSpit");
+        setDidSpitMethod = ReflectionTool.getMethod(EntityLlama.class, "func_190714_x", "setDidSpit");
 
         try
         {

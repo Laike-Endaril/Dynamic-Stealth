@@ -48,6 +48,6 @@ public class AIPigmanHurtByAggressorEdit extends AIHurtByTargetEdit
 
     private static void initReflections()
     {
-        pigmanBecomeAngryAtMethod = ReflectionTool.getMethod(EntityPigZombie.class, "func_184645_a", "becomeAngryAt");
+        pigmanBecomeAngryAtMethod = ReflectionTool.getMethod(EntityPigZombie.class, "func_70835_c", "becomeAngryAt");
     }
 }
