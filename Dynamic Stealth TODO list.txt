@@ -1,52 +1,54 @@
-Add stealth GUI that shows SOME stealth aspect levels...
+VISUAL INDICATORS ======================================================
+
+Add visible indicators when mobs detect you, lose you, etc (somewhat similar to Mark of the Ninja)
+
+Add stealth HUD that shows SOME stealth aspect levels...
 ...light
 ...speed
 ...combined stealth multiplier?
 
+Don't send entity data of unseen entities to players, including potion effects.
+Make sure entities that *were* seen and are no longer seen are..."gone" on client-side
+
+Add the ability to see mob FOVs (as a cone render), maybe when under a potion effect or something
+
+
+
+AI =====================================================================
 
 Change "wandering" AI so that it can't instantly flip a 180 (force it to turn gradually before moving in the chosen direction)
 Do the same for the movement part of the "search" AI that occurs after the spin
 
-
-Separate the horizontal and vertical FOV angles
-
-
-Add visible indicators when mobs detect you, lose you, etc (somewhat similar to Mark of the Ninja)
+Replace EntityAILookIdle with a new version that has gradual head rotation, instead of just removing it
 
 
-Add smoke bombs which block LOS
 
 
-Add stealth-based attributes for armor (ie, actual attributes; like how armor ratings are an attribute, I think?)
+SENSES =================================================================
 
+Separate the horizontal and vertical FOV angles, so that each can be configured separately
 
 Re-add and implement "noticed" visibility multiplier
 
-
 Add optional per-entity setting overrides in config, and use them to increase ghast sight distance
 Include natural nightvision settings here
-
-
-Don't send entity data of unseen entities to players, including potion effects.
-Make sure entities that *were* seen and are no longer seen are..."gone" on client-side
-
 
 Add touch-based detection (within very close range)
 Add sound-based detection
 Add smell-based detection (wolves, cats, bears)
 
 
-Add the ability to see mob FOVs (as a cone render), maybe when under a potion effect or something
+
+ITEMS ==================================================================
+
+Add smoke bombs which block LOS
+
+Add stealth-based attributes for armor (ie, actual attributes; like how armor ratings are an attribute, I think?)
+
+Add armor/baubles that improve stealth/anti-stealth attributes
 
 
 
-
-
-Maybe in this mod, or maybe in addon mods...
-
-
-Add armor/bauble that gives stealth bonus
-Add armor/bauble that gives awareness bonus
-
+MOBS ===================================================================
 
 NINJAS (probably a separate mod)
