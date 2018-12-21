@@ -2,14 +2,12 @@ package com.fantasticsource.dynamicstealth;
 
 import com.fantasticsource.tools.Tools;
 import com.google.common.collect.Lists;
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntitySenses;
-import net.minecraft.entity.boss.EntityDragon;
-import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.monster.*;
-import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -17,9 +15,13 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.fantasticsource.dynamicstealth.DynamicStealth.TRIG_TABLE;
@@ -27,6 +29,18 @@ import static com.fantasticsource.dynamicstealth.DynamicStealthConfig.*;
 
 public class EntitySensesEdit extends EntitySenses
 {
+    public static ArrayList<Class<? extends Entity>> naturalNightvisionEntities = new ArrayList<>();
+    static
+    {
+        EntityEntry entry;
+        for (String string : y_mobOverrides.naturalNightVisionMobs)
+        {
+            entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(string));
+            if (entry == null) throw new IllegalArgumentException("ResourceLocation for entity \"" + string + "\" not found!");
+            else naturalNightvisionEntities.add(entry.getEntityClass());
+        }
+    }
+
     public static int angleRange = e_angles.angleLarge - e_angles.angleSmall;
 
     public static int lightRange = c_lighting.lightHigh - c_lighting.lightLow;
@@ -203,8 +217,6 @@ public class EntitySensesEdit extends EntitySenses
 
     public static boolean naturalNightVision(Entity searcher)
     {
-        return searcher instanceof EntityOcelot || searcher instanceof EntityWolf || searcher instanceof EntityPolarBear || searcher instanceof EntityCow
-                || searcher instanceof EntityGuardian || searcher instanceof EntityEnderman || searcher instanceof EntityEndermite || searcher instanceof EntityDragon
-                || searcher instanceof EntityWither || searcher instanceof EntitySquid || searcher instanceof EntitySheep || searcher instanceof EntityVex;
+        return naturalNightvisionEntities.contains(searcher.getClass());
     }
 }
