@@ -7,6 +7,7 @@ import net.minecraftforge.common.config.Config.Comment;
 public class DynamicStealthConfig
 {
     @Comment({"FOV angles"})
+    @Config.Name("Angle")
     public static Angles angles = new Angles();
     public static class Angles
     {
@@ -23,6 +24,7 @@ public class DynamicStealthConfig
         })
         @Config.RangeInt(min = 0, max = 180)
         @Config.RequiresMcRestart
+        @Config.Name("Angle (Large/Wide; Near)")
         public int angleLarge = 107;
 
         @Comment({
@@ -42,12 +44,14 @@ public class DynamicStealthConfig
         })
         @Config.RangeInt(min = 0, max = 180)
         @Config.RequiresMcRestart
+        @Config.Name("Angle (Small/Thin; Far)")
         public int angleSmall = 30;
     }
 
 
 
     @Comment({"FOV distances"})
+    @Config.Name("Distance")
     public static Distance distances = new Distance();
     public static class Distance
     {
@@ -65,6 +69,7 @@ public class DynamicStealthConfig
         })
         @Config.RangeInt(min = 0)
         @Config.RequiresMcRestart
+        @Config.Name("Distance (Far)")
         public int distanceFar = 40;
 
         @Comment({
@@ -81,12 +86,14 @@ public class DynamicStealthConfig
         })
         @Config.RangeInt(min = 0)
         @Config.RequiresMcRestart
+        @Config.Name("Distance (Near)")
         public int distanceNear = 5;
     }
 
 
 
     @Comment({"Special cases, eg. glowing"})
+    @Config.Name("Absolute Cases")
     public static Absolutes absolutes = new Absolutes();
     public static class Absolutes
     {
@@ -98,12 +105,14 @@ public class DynamicStealthConfig
                 "Allows entities to see invisible players who are glowing, but does not remove invisibility; if glowing runs out before invisibility, you're hard to see again",
                 ""
         })
+        @Config.Name("See Glowing?")
         public boolean seeGlowing = true;
     }
 
 
 
     @Comment({"How much of an effect lighting has on stealth.  Nightvision is in here as well"})
+    @Config.Name("Lighting")
     public static Lighting lighting = new Lighting();
     public static class Lighting
     {
@@ -117,6 +126,7 @@ public class DynamicStealthConfig
         })
         @Config.RangeInt(min = 0, max = 15)
         @Config.RequiresMcRestart
+        @Config.Name("Light (High/Bright)")
         public int lightHigh = 8;
 
         @Comment({
@@ -129,6 +139,7 @@ public class DynamicStealthConfig
         })
         @Config.RangeInt(min = -1, max = 15)
         @Config.RequiresMcRestart
+        @Config.Name("Light (Low/Dark)")
         public int lightLow = -1;
 
         @Comment({
@@ -139,12 +150,14 @@ public class DynamicStealthConfig
         })
         @Config.RangeInt(min = 0, max = 15)
         @Config.RequiresMcRestart
+        @Config.Name("Night Vision Awareness Bonus")
         public int nightVisionAddition = 15;
     }
 
 
 
     @Comment({"How much of an effect an entity's speed has on stealth"})
+    @Config.Name("Speed")
     public static Speeds speeds = new Speeds();
     public static class Speeds
     {
@@ -155,6 +168,7 @@ public class DynamicStealthConfig
                 ""
         })
         @Config.RequiresMcRestart
+        @Config.Name("Speed (High/Fast)")
         public double speedHigh = 5.6;
 
         @Comment({
@@ -164,12 +178,18 @@ public class DynamicStealthConfig
                 ""
         })
         @Config.RequiresMcRestart
+        @Config.Name("Speed (Low/Slow)")
         public double speedLow = 0;
     }
 
 
 
-    @Comment({"Whichever of these multipliers is currently giving the best (lowest) multiplier is used"})
+    @Comment({
+            "Contains multipliers that increase stealth / decrease awareness",
+            "",
+            "Whichever of these multipliers is currently giving the best (lowest) multiplier is used"
+    })
+    @Config.Name("Stealth Multipliers")
     public static StealthMultipliers stealthMultipliers = new StealthMultipliers();
     public static class StealthMultipliers
     {
@@ -182,6 +202,7 @@ public class DynamicStealthConfig
                 ""
         })
         @Config.RangeDouble(min = 0, max = 1)
+        @Config.Name("Crouching Multiplier")
         public double crouchingMultiplier = 0.75;
 
         @Comment({
@@ -193,6 +214,7 @@ public class DynamicStealthConfig
                 ""
         })
         @Config.RangeDouble(min = 0, max = 1)
+        @Config.Name("Mob Head Multiplier")
         public double mobHeadMultiplier = 0.5;
 
         @Comment({
@@ -204,6 +226,7 @@ public class DynamicStealthConfig
                 ""
         })
         @Config.RangeDouble(min = 0, max = 1)
+        @Config.Name("Invisibility Multiplier")
         public double invisibilityMultiplier = 0.1;
 
         @Comment({
@@ -215,12 +238,18 @@ public class DynamicStealthConfig
                 ""
         })
         @Config.RangeDouble(min = 0, max = 1)
+        @Config.Name("Blindness Multiplier")
         public double blindnessMultiplier = 0.5;
     }
 
 
 
-    @Comment({"Whichever of these multipliers is currently giving the worst (highest) multiplier is used"})
+    @Comment({
+            "Contains multipliers that decrease stealth / increase awareness",
+            "",
+            "Whichever of these multipliers is currently giving the worst (highest) multiplier is used"
+    })
+    @Config.Name("Visibility Multipliers")
     public static VisibilityMultipliers visibilityMultipliers = new VisibilityMultipliers();
     public static class VisibilityMultipliers
     {
@@ -233,6 +262,7 @@ public class DynamicStealthConfig
                 ""
         })
         @Config.RangeDouble(min = 0)
+        @Config.Name("Armor Multiplier (Cumulative)")
         public double armorMultiplierCumulative = 0.25;
 
         @Comment({
@@ -244,12 +274,14 @@ public class DynamicStealthConfig
                 ""
         })
         @Config.RangeDouble(min = 1)
+        @Config.Name("\"On Fire\" Multiplier")
         public double onFireMultiplier = 1.5;
     }
 
 
 
     @Comment({"Stuff that doesn't fit in other categories"})
+    @Config.Name("Other Settings")
     public static OtherSettings otherSettings = new OtherSettings();
     public static class OtherSettings
     {
@@ -259,6 +291,7 @@ public class DynamicStealthConfig
                 "If set to true, when one living entity hits another living entity, they both lose invisibility",
                 ""
         })
+        @Config.Name("Remove Invisibility On Hit")
         public boolean removeInvisibilityOnHit = true;
 
         @Comment({
@@ -267,6 +300,7 @@ public class DynamicStealthConfig
                 "If set to true, when one living entity hits another living entity, they both lose blindness",
                 ""
         })
+        @Config.Name("Remove Blindness On Hit")
         public boolean removeBlindnessOnHit = true;
     }
 }
