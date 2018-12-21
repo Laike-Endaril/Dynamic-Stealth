@@ -60,10 +60,10 @@ public class DynamicStealth
     {
         logger = event.getModLog();
 
-        if (angles.angleSmall > angles.angleLarge) throw new IllegalArgumentException("angleLarge must be greater than or equal to angleSmall");
-        if (distances.distanceNear > distances.distanceFar) throw new IllegalArgumentException("distanceFar must be greater than or equal to distanceNear");
-        if (lighting.lightLow > lighting.lightHigh) throw new IllegalArgumentException("lightHigh must be greater than or equal to lightLow");
-        if (speeds.speedLow > speeds.speedHigh) throw new IllegalArgumentException("speedHigh must be greater than or equal to speedLow");
+        if (e_angles.angleSmall > e_angles.angleLarge) throw new IllegalArgumentException("angleLarge must be greater than or equal to angleSmall");
+        if (f_distances.distanceNear > f_distances.distanceFar) throw new IllegalArgumentException("distanceFar must be greater than or equal to distanceNear");
+        if (c_lighting.lightLow > c_lighting.lightHigh) throw new IllegalArgumentException("lightHigh must be greater than or equal to lightLow");
+        if (d_speeds.speedLow > d_speeds.speedHigh) throw new IllegalArgumentException("speedHigh must be greater than or equal to speedLow");
 
         sensesField = ReflectionTool.getField(EntityLiving.class, "field_70723_bA", "senses");
         abstractSkeletonAIArrowAttackField = ReflectionTool.getField(AbstractSkeleton.class, "field_85037_d", "aiArrowAttack");
@@ -149,12 +149,12 @@ public class DynamicStealth
         if (source instanceof EntityLivingBase)
         {
             EntityLivingBase sourceBase = (EntityLivingBase) source;
-            if (otherSettings.removeInvisibilityOnHit)
+            if (z_otherSettings.removeInvisibilityOnHit)
             {
                 sourceBase.removePotionEffect(MobEffects.INVISIBILITY);
                 target.removePotionEffect(MobEffects.INVISIBILITY);
             }
-            if (otherSettings.removeBlindnessOnHit)
+            if (z_otherSettings.removeBlindnessOnHit)
             {
                 sourceBase.removePotionEffect(MobEffects.BLINDNESS);
                 target.removePotionEffect(MobEffects.BLINDNESS);

@@ -28,7 +28,7 @@ public class AIWatchClosestEdit extends EntityAIBase
     public Entity target;
     public int lookTime;
     public final float chance;
-    public static float range = DynamicStealthConfig.distances.distanceFar;
+    public static float range = DynamicStealthConfig.f_distances.distanceFar;
     public Class <? extends Entity > watchedClass;
 
     public AIWatchClosestEdit(EntityAIWatchClosest oldAI) throws IllegalAccessException

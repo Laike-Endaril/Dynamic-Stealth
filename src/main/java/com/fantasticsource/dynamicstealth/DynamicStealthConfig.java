@@ -6,191 +6,13 @@ import net.minecraftforge.common.config.Config.Comment;
 @Config(modid = DynamicStealth.MODID)
 public class DynamicStealthConfig
 {
-    @Comment({"FOV angles"})
-    @Config.Name("Angle")
-    public static Angles angles = new Angles();
-    public static class Angles
-    {
-        @Comment({
-                "",
-                "",
-                "The angle inside which an entity can see another entity at close range (distance <= distanceNear), in degrees",
-                "",
-                "This is otherwise similar to angleSmall",
-                "",
-                "If this and angleSmall are both 0, entities (other than exceptions) are blind",
-                "",
-                "Cannot be smaller than angleSmall"
-        })
-        @Config.RangeInt(min = 0, max = 180)
-        @Config.RequiresMcRestart
-        @Config.Name("Angle (Large/Wide; Near)")
-        public int angleLarge = 107;
-
-        @Comment({
-                "",
-                "",
-                "The angle inside which an entity can see another entity at long range (distance >= distanceFar, in degrees",
-                "",
-                "This is a cone-shaped FOV, and the setting is the angle between the center axis of the cone and the outer surface of the cone",
-                "",
-                "Unless you make it > 90* in which case it's everywhere *except* a cone behind the entity, but w/e",
-                "",
-                "Also, it's technically not a cone shape with other settings accounted for, but let's not get into that",
-                "",
-                "If this and angleLarge are both 0, entities (other than exceptions) are blind",
-                "",
-                "Cannot be larger than angleLarge"
-        })
-        @Config.RangeInt(min = 0, max = 180)
-        @Config.RequiresMcRestart
-        @Config.Name("Angle (Small/Thin; Far)")
-        public int angleSmall = 30;
-    }
-
-
-
-    @Comment({"FOV distances"})
-    @Config.Name("Distance")
-    public static Distance distances = new Distance();
-    public static class Distance
-    {
-        @Comment({
-                "",
-                "",
-                "The absolute maximum distance that an entity can see another entity from, in blocks",
-                "",
-                "Exclusive, so if set to 0 mobs NEVER see anything, with a few exceptions, eg...",
-                "",
-                "Zombies will still attack villagers as normal; this uses completely different logic than what I'm accessing atm so I'm not trying to change it for now",
-                "",
-                "Some mobs are not affected at all, for the same reason as stated above, including endermen and the ender dragon",
-                ""
-        })
-        @Config.RangeInt(min = 0)
-        @Config.RequiresMcRestart
-        @Config.Name("Distance (Far)")
-        public int distanceFar = 40;
-
-        @Comment({
-                "",
-                "",
-                "The distance before an entity's sight starts degrading naturally (even in good conditions),  in blocks",
-                "",
-                "Exclusive, so if set to 0 mobs NEVER see anything, with a few exceptions, eg...",
-                "",
-                "...zombies will still attack villagers as normal; this uses completely different logic than what I'm accessing atm so I'm not trying to change it for now",
-                "",
-                "...some mobs are not affected at all, for the same reason as stated above, including endermen and the ender dragon",
-                ""
-        })
-        @Config.RangeInt(min = 0)
-        @Config.RequiresMcRestart
-        @Config.Name("Distance (Near)")
-        public int distanceNear = 5;
-    }
-
-
-
-    @Comment({"Special cases, eg. glowing"})
-    @Config.Name("Absolute Cases")
-    public static Absolutes absolutes = new Absolutes();
-    public static class Absolutes
-    {
-        @Comment({
-                "",
-                "",
-                "If set to true, glowing entities will be seen when inside another entity's FOV, ignoring all other factors",
-                "",
-                "Allows entities to see invisible players who are glowing, but does not remove invisibility; if glowing runs out before invisibility, you're hard to see again",
-                ""
-        })
-        @Config.Name("See Glowing?")
-        public boolean seeGlowing = true;
-    }
-
-
-
-    @Comment({"How much of an effect lighting has on stealth.  Nightvision is in here as well"})
-    @Config.Name("Lighting")
-    public static Lighting lighting = new Lighting();
-    public static class Lighting
-    {
-        @Comment({
-                "",
-                "",
-                "The lowest light level at which entities take no sight penalty",
-                "",
-                "Entities are harder to see in light levels lower than this",
-                ""
-        })
-        @Config.RangeInt(min = 0, max = 15)
-        @Config.RequiresMcRestart
-        @Config.Name("Light (High/Bright)")
-        public int lightHigh = 8;
-
-        @Comment({
-                "",
-                "",
-                "At or below this light level, entities cannot be seen at all",
-                "",
-                "Inclusive, so if set to 0, then in 0 lighting, entities cannot be seen by other entities",
-                ""
-        })
-        @Config.RangeInt(min = -1, max = 15)
-        @Config.RequiresMcRestart
-        @Config.Name("Light (Low/Dark)")
-        public int lightLow = -1;
-
-        @Comment({
-                "",
-                "",
-                "When an entity has the nightvision effect, this value is added to their perceived light levels (and then set to 15 if larger than 15)",
-                ""
-        })
-        @Config.RangeInt(min = 0, max = 15)
-        @Config.RequiresMcRestart
-        @Config.Name("Night Vision Awareness Bonus")
-        public int nightVisionAddition = 15;
-    }
-
-
-
-    @Comment({"How much of an effect an entity's speed has on stealth"})
-    @Config.Name("Speed")
-    public static Speeds speeds = new Speeds();
-    public static class Speeds
-    {
-        @Comment({
-                "",
-                "",
-                "If moving at this speed or above, an entity has the maximum speed penalty to their stealth rating",
-                ""
-        })
-        @Config.RequiresMcRestart
-        @Config.Name("Speed (High/Fast)")
-        public double speedHigh = 5.6;
-
-        @Comment({
-                "",
-                "",
-                "At or below this speed, an entity has no speed penalty to their stealth rating",
-                ""
-        })
-        @Config.RequiresMcRestart
-        @Config.Name("Speed (Low/Slow)")
-        public double speedLow = 0;
-    }
-
-
-
     @Comment({
             "Contains multipliers that increase stealth / decrease awareness",
             "",
             "Whichever of these multipliers is currently giving the best (lowest) multiplier is used"
     })
     @Config.Name("Stealth Multipliers")
-    public static StealthMultipliers stealthMultipliers = new StealthMultipliers();
+    public static StealthMultipliers a_stealthMultipliers = new StealthMultipliers();
     public static class StealthMultipliers
     {
         @Comment({
@@ -250,7 +72,7 @@ public class DynamicStealthConfig
             "Whichever of these multipliers is currently giving the worst (highest) multiplier is used"
     })
     @Config.Name("Visibility Multipliers")
-    public static VisibilityMultipliers visibilityMultipliers = new VisibilityMultipliers();
+    public static VisibilityMultipliers b_visibilityMultipliers = new VisibilityMultipliers();
     public static class VisibilityMultipliers
     {
         @Comment({
@@ -280,9 +102,187 @@ public class DynamicStealthConfig
 
 
 
+    @Comment({"How much of an effect lighting has on stealth.  Nightvision is in here as well"})
+    @Config.Name("Lighting")
+    public static Lighting c_lighting = new Lighting();
+    public static class Lighting
+    {
+        @Comment({
+                "",
+                "",
+                "The lowest light level at which entities take no sight penalty",
+                "",
+                "Entities are harder to see in light levels lower than this",
+                ""
+        })
+        @Config.RangeInt(min = 0, max = 15)
+        @Config.RequiresMcRestart
+        @Config.Name("Light (High/Bright)")
+        public int lightHigh = 8;
+
+        @Comment({
+                "",
+                "",
+                "At or below this light level, entities cannot be seen at all",
+                "",
+                "Inclusive, so if set to 0, then in 0 lighting, entities cannot be seen by other entities",
+                ""
+        })
+        @Config.RangeInt(min = -1, max = 15)
+        @Config.RequiresMcRestart
+        @Config.Name("Light (Low/Dark)")
+        public int lightLow = -1;
+
+        @Comment({
+                "",
+                "",
+                "When an entity has the nightvision effect, this value is added to their perceived light levels (and then set to 15 if larger than 15)",
+                ""
+        })
+        @Config.RangeInt(min = 0, max = 15)
+        @Config.RequiresMcRestart
+        @Config.Name("Night Vision Awareness Bonus")
+        public int nightVisionAddition = 15;
+    }
+
+
+
+    @Comment({"How much of an effect an entity's speed has on stealth"})
+    @Config.Name("Speed")
+    public static Speeds d_speeds = new Speeds();
+    public static class Speeds
+    {
+        @Comment({
+                "",
+                "",
+                "If moving at this speed or above, an entity has the maximum speed penalty to their stealth rating",
+                ""
+        })
+        @Config.RequiresMcRestart
+        @Config.Name("Speed (High/Fast)")
+        public double speedHigh = 5.6;
+
+        @Comment({
+                "",
+                "",
+                "At or below this speed, an entity has no speed penalty to their stealth rating",
+                ""
+        })
+        @Config.RequiresMcRestart
+        @Config.Name("Speed (Low/Slow)")
+        public double speedLow = 0;
+    }
+
+
+
+    @Comment({"FOV angles"})
+    @Config.Name("Angle")
+    public static Angles e_angles = new Angles();
+    public static class Angles
+    {
+        @Comment({
+                "",
+                "",
+                "The angle inside which an entity can see another entity at close range (distance <= distanceNear), in degrees",
+                "",
+                "This is otherwise similar to angleSmall",
+                "",
+                "If this and angleSmall are both 0, entities (other than exceptions) are blind",
+                "",
+                "Cannot be smaller than angleSmall"
+        })
+        @Config.RangeInt(min = 0, max = 180)
+        @Config.RequiresMcRestart
+        @Config.Name("Angle (Large/Wide; Near)")
+        public int angleLarge = 107;
+
+        @Comment({
+                "",
+                "",
+                "The angle inside which an entity can see another entity at long range (distance >= distanceFar, in degrees",
+                "",
+                "This is a cone-shaped FOV, and the setting is the angle between the center axis of the cone and the outer surface of the cone",
+                "",
+                "Unless you make it > 90* in which case it's everywhere *except* a cone behind the entity, but w/e",
+                "",
+                "Also, it's technically not a cone shape with other settings accounted for, but let's not get into that",
+                "",
+                "If this and angleLarge are both 0, entities (other than exceptions) are blind",
+                "",
+                "Cannot be larger than angleLarge"
+        })
+        @Config.RangeInt(min = 0, max = 180)
+        @Config.RequiresMcRestart
+        @Config.Name("Angle (Small/Thin; Far)")
+        public int angleSmall = 30;
+    }
+
+
+
+    @Comment({"FOV distances"})
+    @Config.Name("Distance")
+    public static Distance f_distances = new Distance();
+    public static class Distance
+    {
+        @Comment({
+                "",
+                "",
+                "The absolute maximum distance that an entity can see another entity from, in blocks",
+                "",
+                "Exclusive, so if set to 0 mobs NEVER see anything, with a few exceptions, eg...",
+                "",
+                "Zombies will still attack villagers as normal; this uses completely different logic than what I'm accessing atm so I'm not trying to change it for now",
+                "",
+                "Some mobs are not affected at all, for the same reason as stated above, including endermen and the ender dragon",
+                ""
+        })
+        @Config.RangeInt(min = 0)
+        @Config.RequiresMcRestart
+        @Config.Name("Distance (Far)")
+        public int distanceFar = 40;
+
+        @Comment({
+                "",
+                "",
+                "The distance before an entity's sight starts degrading naturally (even in good conditions),  in blocks",
+                "",
+                "Exclusive, so if set to 0 mobs NEVER see anything, with a few exceptions, eg...",
+                "",
+                "...zombies will still attack villagers as normal; this uses completely different logic than what I'm accessing atm so I'm not trying to change it for now",
+                "",
+                "...some mobs are not affected at all, for the same reason as stated above, including endermen and the ender dragon",
+                ""
+        })
+        @Config.RangeInt(min = 0)
+        @Config.RequiresMcRestart
+        @Config.Name("Distance (Near)")
+        public int distanceNear = 5;
+    }
+
+
+
+    @Comment({"Special cases, eg. glowing"})
+    @Config.Name("Absolute Cases")
+    public static Absolutes g_absolutes = new Absolutes();
+    public static class Absolutes
+    {
+        @Comment({
+                "",
+                "",
+                "If set to true, glowing entities will be seen when inside another entity's FOV, ignoring all other factors",
+                "",
+                "Allows entities to see invisible players who are glowing, but does not remove invisibility; if glowing runs out before invisibility, you're hard to see again",
+                ""
+        })
+        @Config.Name("See Glowing?")
+        public boolean seeGlowing = true;
+    }
+
+
+
     @Comment({"Stuff that doesn't fit in other categories"})
     @Config.Name("Other Settings")
-    public static OtherSettings otherSettings = new OtherSettings();
+    public static OtherSettings z_otherSettings = new OtherSettings();
     public static class OtherSettings
     {
         @Comment({
@@ -303,4 +303,6 @@ public class DynamicStealthConfig
         @Config.Name("Remove Blindness On Hit")
         public boolean removeBlindnessOnHit = true;
     }
+
+
 }

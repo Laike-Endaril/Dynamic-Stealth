@@ -27,19 +27,17 @@ import static com.fantasticsource.dynamicstealth.DynamicStealthConfig.*;
 
 public class EntitySensesEdit extends EntitySenses
 {
-    public static int angleRange = angles.angleLarge - angles.angleSmall;
+    public static int angleRange = e_angles.angleLarge - e_angles.angleSmall;
 
-    public static int lightRange = lighting.lightHigh - lighting.lightLow;
+    public static int lightRange = c_lighting.lightHigh - c_lighting.lightLow;
 
-    public static double speedRange = speeds.speedHigh - speeds.speedLow;
+    public static double speedRange = d_speeds.speedHigh - d_speeds.speedLow;
 
-    public static double distanceFarSquared = Math.pow(distances.distanceFar, 2);
-    public static double distanceRange = distances.distanceFar - distances.distanceNear;
+    public static double distanceFarSquared = Math.pow(f_distances.distanceFar, 2);
+    public static double distanceRange = f_distances.distanceFar - f_distances.distanceNear;
 
     EntityLivingBase entity;
-    /** Cache of entities which we can see */
     List<Entity> seenEntities = Lists.<Entity>newArrayList();
-    /** Cache of entities which we cannot see */
     List<Entity> unseenEntities = Lists.<Entity>newArrayList();
 
     public EntitySensesEdit(EntityLiving entityIn)
@@ -48,9 +46,6 @@ public class EntitySensesEdit extends EntitySenses
         entity = entityIn;
     }
 
-    /**
-     * Clears canSeeCachePositive and canSeeCacheNegative.
-     */
     @Override
     public void clearSensingCache()
     {
@@ -58,9 +53,6 @@ public class EntitySensesEdit extends EntitySenses
         unseenEntities.clear();
     }
 
-    /**
-     * Checks, whether 'our' entity can see the entity given as argument (true) or not (false), caching the result (for the rest of the current tick; clearSensingCache is called every tick).
-     */
     @Override
     public boolean canSee(Entity entityIn)
     {
@@ -86,7 +78,7 @@ public class EntitySensesEdit extends EntitySenses
         //Hard checks (absolute)
         if (searcher == null || target == null) return true;
         if (target instanceof EntityPlayer && ((EntityPlayer) target).capabilities.disableDamage) return true;
-        if (angles.angleLarge == 0 || !target.isEntityAlive()) return true;
+        if (e_angles.angleLarge == 0 || !target.isEntityAlive()) return true;
 
 
 
@@ -95,7 +87,7 @@ public class EntitySensesEdit extends EntitySenses
         if (distSquared > distanceFarSquared) return true;
 
         double distanceThreshold;
-        if (angles.angleSmall == 180) distanceThreshold = distances.distanceFar;
+        if (e_angles.angleSmall == 180) distanceThreshold = f_distances.distanceFar;
         else
         {
             //Using previous values here to give the player a chance, because client-side rendering always runs behind what's actually happening
@@ -106,15 +98,15 @@ public class EntitySensesEdit extends EntitySenses
             else if (angleDif > 1) angleDif = 1;
 
             angleDif = Tools.radtodeg(TRIG_TABLE.arccos(angleDif)); //0 in front, 180 in back
-            if (angleDif > angles.angleLarge) return true;
-            if (angleDif < angles.angleSmall) distanceThreshold = distances.distanceFar;
-            else distanceThreshold = distances.distanceNear + distanceRange * (angles.angleLarge - angleDif) / angleRange;
+            if (angleDif > e_angles.angleLarge) return true;
+            if (angleDif < e_angles.angleSmall) distanceThreshold = f_distances.distanceFar;
+            else distanceThreshold = f_distances.distanceNear + distanceRange * (e_angles.angleLarge - angleDif) / angleRange;
         }
 
 
 
         //Glowing (absolute, after Angles)
-        if (absolutes.seeGlowing && target.isGlowing()) return false;
+        if (g_absolutes.seeGlowing && target.isGlowing()) return false;
 
 
 
@@ -127,34 +119,34 @@ public class EntitySensesEdit extends EntitySenses
         double lightFactor = light(target);
         if (searcher.getActivePotionEffect(MobEffects.NIGHT_VISION) != null || naturalNightVision(searcher))
         {
-            lightFactor = Math.min(15, lightFactor + lighting.nightVisionAddition);
+            lightFactor = Math.min(15, lightFactor + c_lighting.nightVisionAddition);
         }
 
-        if (lightFactor <= lighting.lightLow) return true;
-        lightFactor = lightFactor >= lighting.lightHigh ? 1 : lightFactor / lightRange;
+        if (lightFactor <= c_lighting.lightLow) return true;
+        lightFactor = lightFactor >= c_lighting.lightHigh ? 1 : lightFactor / lightRange;
 
 
 
         //Speeds (factor)
         double speedFactor = Speedometer.getSpeed(target);
-        speedFactor = speedFactor >= speeds.speedHigh ? 1 : speedFactor <= speeds.speedLow ? 0 : (speedFactor - speeds.speedLow) / speedRange;
+        speedFactor = speedFactor >= d_speeds.speedHigh ? 1 : speedFactor <= d_speeds.speedLow ? 0 : (speedFactor - d_speeds.speedLow) / speedRange;
 
 
 
         //Blindness (multiplier)
-        double blindnessMultiplier = searcher.getActivePotionEffect(MobEffects.BLINDNESS) != null ? stealthMultipliers.blindnessMultiplier : 1;
+        double blindnessMultiplier = searcher.getActivePotionEffect(MobEffects.BLINDNESS) != null ? a_stealthMultipliers.blindnessMultiplier : 1;
 
 
 
         //Invisibility (multiplier)
         boolean isLivingBase = target instanceof EntityLivingBase;
         EntityLivingBase targetLiving = isLivingBase ? (EntityLivingBase) target : null;
-        double invisibilityMultiplier = isLivingBase && targetLiving.getActivePotionEffect(MobEffects.INVISIBILITY) != null ? stealthMultipliers.invisibilityMultiplier : 1;
+        double invisibilityMultiplier = isLivingBase && targetLiving.getActivePotionEffect(MobEffects.INVISIBILITY) != null ? a_stealthMultipliers.invisibilityMultiplier : 1;
 
 
 
         //Crouching (multiplier)
-        double crouchingMultiplier = target.isSneaking() ? stealthMultipliers.crouchingMultiplier : 1;
+        double crouchingMultiplier = target.isSneaking() ? a_stealthMultipliers.crouchingMultiplier : 1;
 
 
 
@@ -168,21 +160,21 @@ public class EntitySensesEdit extends EntitySenses
                 int damage = helmet.getItemDamage();
                 if (target instanceof EntitySkeleton && damage == 0 || target instanceof EntityWitherSkeleton && damage == 1 || target instanceof EntityZombie && damage == 2 || target instanceof EntityCreeper && damage == 4)
                 {
-                    mobHeadMultiplier = stealthMultipliers.mobHeadMultiplier;
+                    mobHeadMultiplier = a_stealthMultipliers.mobHeadMultiplier;
                 }
             } else if ((helmet.getItem() == Item.getItemFromBlock(Blocks.PUMPKIN) && helmet.getItem() == Item.getItemFromBlock(Blocks.LIT_PUMPKIN)) && target instanceof EntitySnowman)
-                mobHeadMultiplier = stealthMultipliers.mobHeadMultiplier;
+                mobHeadMultiplier = a_stealthMultipliers.mobHeadMultiplier;
         }
 
 
 
         //Armor
-        double armorMultiplier = isLivingBase ? Math.max(0, 1 + visibilityMultipliers.armorMultiplierCumulative * targetLiving.getTotalArmorValue()) : 1;
+        double armorMultiplier = isLivingBase ? Math.max(0, 1 + b_visibilityMultipliers.armorMultiplierCumulative * targetLiving.getTotalArmorValue()) : 1;
 
 
 
         //Fire
-        double fireMultiplier = !isLivingBase ? 1 : !targetLiving.isBurning() ? 1 : visibilityMultipliers.onFireMultiplier;
+        double fireMultiplier = !isLivingBase ? 1 : !targetLiving.isBurning() ? 1 : b_visibilityMultipliers.onFireMultiplier;
 
 
 

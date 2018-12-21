@@ -42,7 +42,7 @@ public class AIFindEntityNearestEdit extends EntityAIBase
     @Override
     public boolean shouldExecute()
     {
-        double range = DynamicStealthConfig.distances.distanceFar;
+        double range = DynamicStealthConfig.f_distances.distanceFar;
         List<EntityLivingBase> list = searcher.world.getEntitiesWithinAABB(targetClass, searcher.getEntityBoundingBox().grow(range, 4, range));
         if (list.isEmpty()) return false;
 
