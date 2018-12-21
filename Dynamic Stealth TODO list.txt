@@ -6,6 +6,7 @@ Add stealth HUD that shows SOME stealth aspect levels...
 ...light
 ...speed
 ...combined stealth multiplier?
+For now, just show it as a vertical math equation
 
 Don't send entity data of unseen entities to players, including potion effects.
 Make sure entities that *were* seen and are no longer seen are..."gone" on client-side
@@ -20,6 +21,10 @@ Change "wandering" AI so that it can't instantly flip a 180 (force it to turn gr
 Do the same for the movement part of the "search" AI that occurs after the spin
 
 Replace EntityAILookIdle with a new version that has gradual head rotation, instead of just removing it
+
+Make it so when an entity is damaged but doesn't see an attacker, it reacts accordingly
+
+Make it so mobs on the same team can tell each other where you are / where they last saw you
 
 
 
