@@ -1,6 +1,5 @@
 package com.fantasticsource.dynamicstealth;
 
-import javafx.util.Pair;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityEntry;
