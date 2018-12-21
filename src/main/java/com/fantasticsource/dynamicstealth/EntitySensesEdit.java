@@ -2,7 +2,6 @@ package com.fantasticsource.dynamicstealth;
 
 import com.fantasticsource.tools.Tools;
 import com.google.common.collect.Lists;
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -15,41 +14,17 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.fml.common.registry.EntityEntry;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.fantasticsource.dynamicstealth.DynamicStealth.TRIG_TABLE;
 import static com.fantasticsource.dynamicstealth.DynamicStealthConfig.*;
+import static com.fantasticsource.dynamicstealth.EntityData.*;
 
 public class EntitySensesEdit extends EntitySenses
 {
-    public static ArrayList<Class<? extends Entity>> naturalNightvisionEntities = new ArrayList<>();
-    static
-    {
-        EntityEntry entry;
-        for (String string : y_mobOverrides.naturalNightVisionMobs)
-        {
-            entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(string));
-            if (entry == null) throw new IllegalArgumentException("ResourceLocation for entity \"" + string + "\" not found!");
-            else naturalNightvisionEntities.add(entry.getEntityClass());
-        }
-    }
-
-    public static int angleRange = e_angles.angleLarge - e_angles.angleSmall;
-
-    public static int lightRange = c_lighting.lightHigh - c_lighting.lightLow;
-
-    public static double speedRange = d_speeds.speedHigh - d_speeds.speedLow;
-
-    public static double distanceFarSquared = Math.pow(f_distances.distanceFar, 2);
-    public static double distanceRange = f_distances.distanceFar - f_distances.distanceNear;
-
     EntityLivingBase entity;
     List<Entity> seenEntities = Lists.<Entity>newArrayList();
     List<Entity> unseenEntities = Lists.<Entity>newArrayList();
@@ -92,16 +67,16 @@ public class EntitySensesEdit extends EntitySenses
         //Hard checks (absolute)
         if (searcher == null || target == null) return true;
         if (target instanceof EntityPlayer && ((EntityPlayer) target).capabilities.disableDamage) return true;
-        if (e_angles.angleLarge == 0 || !target.isEntityAlive()) return true;
+        if (!target.isEntityAlive() || angleLarge(searcher) == 0) return true;
 
 
 
         //Angles and Distances (absolute, base FOV)
         double distSquared = searcher.getDistanceSq(target);
-        if (distSquared > distanceFarSquared) return true;
+        if (distSquared > distanceFarSquared(searcher)) return true;
 
         double distanceThreshold;
-        if (e_angles.angleSmall == 180) distanceThreshold = f_distances.distanceFar;
+        if (angleSmall(searcher) == 180) distanceThreshold = distanceFar(searcher);
         else
         {
             //Using previous values here to give the player a chance, because client-side rendering always runs behind what's actually happening
@@ -112,9 +87,9 @@ public class EntitySensesEdit extends EntitySenses
             else if (angleDif > 1) angleDif = 1;
 
             angleDif = Tools.radtodeg(TRIG_TABLE.arccos(angleDif)); //0 in front, 180 in back
-            if (angleDif > e_angles.angleLarge) return true;
-            if (angleDif < e_angles.angleSmall) distanceThreshold = f_distances.distanceFar;
-            else distanceThreshold = f_distances.distanceNear + distanceRange * (e_angles.angleLarge - angleDif) / angleRange;
+            if (angleDif > angleLarge(searcher)) return true;
+            if (angleDif < angleSmall(searcher)) distanceThreshold = distanceFar(searcher);
+            else distanceThreshold = distanceNear(searcher) + distanceRange(searcher) * (angleLarge(searcher) - angleDif) / angleRange(searcher);
         }
 
 
@@ -136,14 +111,14 @@ public class EntitySensesEdit extends EntitySenses
             lightFactor = Math.min(15, lightFactor + c_lighting.nightVisionAddition);
         }
 
-        if (lightFactor <= c_lighting.lightLow) return true;
-        lightFactor = lightFactor >= c_lighting.lightHigh ? 1 : lightFactor / lightRange;
+        if (lightFactor <= lightLow(searcher)) return true;
+        lightFactor = lightFactor >= lightHigh(searcher) ? 1 : lightFactor / lightRange(searcher);
 
 
 
         //Speeds (factor)
         double speedFactor = Speedometer.getSpeed(target);
-        speedFactor = speedFactor >= d_speeds.speedHigh ? 1 : speedFactor <= d_speeds.speedLow ? 0 : (speedFactor - d_speeds.speedLow) / speedRange;
+        speedFactor = speedFactor >= speedHigh(searcher) ? 1 : speedFactor <= speedLow(searcher) ? 0 : (speedFactor - speedLow(searcher)) / speedRange(searcher);
 
 
 
@@ -213,10 +188,5 @@ public class EntitySensesEdit extends EntitySenses
     public static boolean los(Entity searcher, Entity target)
     {
         return LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), new Vec3d(target.posX, target.posY + target.getEyeHeight(), target.posZ), false, true);
-    }
-
-    public static boolean naturalNightVision(Entity searcher)
-    {
-        return naturalNightvisionEntities.contains(searcher.getClass());
     }
 }

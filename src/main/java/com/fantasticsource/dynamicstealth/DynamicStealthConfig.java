@@ -240,10 +240,49 @@ public class DynamicStealthConfig
 
 
 
-    @Config.Name("Mob-Specific Settings")
-    public static MobSettings y_mobOverrides = new MobSettings();
-    public static class MobSettings
+    @Config.Name("Entity-Specific Settings (Advanced)")
+    public static EntitySettings y_entityOverrides = new EntitySettings();
+    public static class EntitySettings
     {
+        @Config.Name("Angle")
+        @Comment({
+                "How wide an entity's vision is, near and far away",
+                "",
+                "entityID, angleLarge, angleSmall",
+                "",
+                "eg...",
+                "",
+                "minecraft:skeleton, 90, 45"
+        })
+        @Config.RequiresMcRestart
+        public String[] angle = new String[]{"ghast, 90, 0"};
+
+        @Config.Name("Distance")
+        @Comment({
+                "How far an entity can see, at the edge of its vision and at its focal point",
+                "",
+                "entityID, distanceFar, distanceNear",
+                "",
+                "eg...",
+                "",
+                "minecraft:skeleton, 40, 3"
+        })
+        @Config.RequiresMcRestart
+        public String[] distance = new String[]{"ghast, 80, 20"};
+
+        @Config.Name("Lighting")
+        @Comment({
+                "How well an entity sees in the dark",
+                "",
+                "entityID, lightHigh, lightLow",
+                "",
+                "eg...",
+                "",
+                "minecraft:skeleton, 15, -1"
+        })
+        @Config.RequiresMcRestart
+        public String[] lighting = new String[]{"ghast, 0, -1"};
+
         @Config.Name("Natural Night Vision")
         @Comment({"Entities in this list ALWAYS get the night vision bonus"})
         @Config.RequiresMcRestart
@@ -262,8 +301,22 @@ public class DynamicStealthConfig
                 "minecraft:enderman",
                 "minecraft:ender_dragon",
                 "minecraft:wither",
-                "minecraft:vex"
+                "minecraft:vex",
+                "minecraft:ghast"
         };
+
+        @Config.Name("Speed")
+        @Comment({
+                "How sensitive an entity's sight is to movement",
+                "",
+                "entityID, speedHigh, speedLow",
+                "",
+                "eg...",
+                "",
+                "minecraft:skeleton, 5.6, 0"
+        })
+        @Config.RequiresMcRestart
+        public String[] speed = new String[]{"ghast, 3, 3"};
     }
 
 

@@ -35,8 +35,6 @@ Separate the horizontal and vertical FOV angles, so that each can be configured 
 
 Re-add and implement "noticed" visibility multiplier
 
-Add optional per-entity setting overrides in config, and use them to increase ghast sight distance
-
 Add touch-based detection (within very close range)
 Add sound-based detection
 Add smell-based detection (wolves, cats, bears)
