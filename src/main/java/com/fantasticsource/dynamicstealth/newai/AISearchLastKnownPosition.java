@@ -104,7 +104,7 @@ public class AISearchLastKnownPosition extends EntityAIBase
                 spinDirecion = searcher.getRNG().nextBoolean();
                 startAngle = searcher.rotationYaw;
                 angleDif = 0;
-                timer = searchTicks;
+                timer = searchTicks - timeAtPos;
 
                 navigator.clearPath();
                 path = null;
