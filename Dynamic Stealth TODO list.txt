@@ -30,6 +30,8 @@ Make it so mobs on the same team can tell each other where you are / where they 
 
 SENSES =================================================================
 
+Make it so mobs can see through glass
+
 Separate the horizontal and vertical FOV angles, so that each can be configured separately
 
 Re-add and implement "noticed" visibility multiplier
