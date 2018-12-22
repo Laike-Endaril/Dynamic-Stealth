@@ -165,7 +165,7 @@ public class DynamicStealthConfig
         })
         @Config.RangeInt(min = 0, max = 180)
         @Config.RequiresMcRestart
-        public int angleLarge = 107;
+        public int angleLarge = 85;
 
         @Config.Name("Angle (Small/Thin; Far)")
         @Comment({
