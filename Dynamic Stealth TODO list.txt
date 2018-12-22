@@ -22,8 +22,6 @@ Do the same for the movement part of the "search" AI that occurs after the spin
 
 Replace EntityAILookIdle with a new version that has gradual head rotation, instead of just removing it
 
-Make it so when an entity is damaged but doesn't see an attacker, it reacts accordingly
-
 Make it so mobs on the same team can tell each other where you are / where they last saw you
 
 
@@ -54,3 +52,9 @@ Add armor/baubles that improve stealth/anti-stealth attributes
 MOBS ===================================================================
 
 NINJAS (probably a separate mod)
+
+
+
+MOD COMPATIBILITY ======================================================
+
+Check issue with Vampirism, where hunters attack the player regardless of whether they're a vampire or not when my mod is installed
