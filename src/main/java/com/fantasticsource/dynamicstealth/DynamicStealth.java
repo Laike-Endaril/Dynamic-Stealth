@@ -13,6 +13,7 @@ import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.init.MobEffects;
+import net.minecraft.pathfinding.PathPoint;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
@@ -103,22 +104,6 @@ public class DynamicStealth
 
         if (target instanceof EntityLiving)
         {
-            if (!(target instanceof EntitySlime))
-            {
-                EntityLiving living = (EntityLiving) target;
-                living.getNavigator().clearPath();
-
-                for (EntityAITasks.EntityAITaskEntry task : living.targetTasks.taskEntries)
-                {
-                    //This is mostly for resetting things when eg. you hit an entity that is in the middle of a task, and they don't see you (even after you hit them)
-                    //Only resetting select tasks, because I'm sure it will cause issues if I reset all tasks
-                    if (task.action instanceof AIStoreKnownPosition || task.action instanceof AISearchLastKnownPosition)
-                    {
-                        if (task.using) task.action.resetTask();
-                    }
-                }
-            }
-
             if ((target.getRevengeTarget() == null || target.getRevengeTarget() == source))
             {
                 float newYaw = (float) (TRIG_TABLE.arctanFullcircle(target.posZ, target.posX, source.posZ, source.posX) / Math.PI * 180);
@@ -142,6 +127,34 @@ public class DynamicStealth
                 {
                     ((EntityLiving) target).setAttackTarget((EntityLivingBase) source);
                     target.setRevengeTarget((EntityLivingBase) source);
+                }
+            }
+
+            if (!(target instanceof EntitySlime))
+            {
+                EntityLiving living = (EntityLiving) target;
+                living.getNavigator().clearPath();
+
+                //This is mostly for setting/resetting things when eg. you hit an entity that is in the middle of a task, and they don't see you (even after you hit them)
+                //Only setting/resetting select tasks, because I'm sure it will cause issues if I reset all tasks
+                if (source instanceof EntityLivingBase)
+                {
+                    AIStoreKnownPosition knownPositionAI = null;
+                    AISearchLastKnownPosition searchAI = null;
+                    for (EntityAITasks.EntityAITaskEntry task : living.targetTasks.taskEntries)
+                    {
+                        if (task.action instanceof AIStoreKnownPosition) knownPositionAI = (AIStoreKnownPosition) task.action;
+                        else if (task.action instanceof AISearchLastKnownPosition) searchAI = (AISearchLastKnownPosition) task.action;
+                    }
+
+                    if (knownPositionAI != null && searchAI != null)
+                    {
+                        int distance = (int) Math.sqrt(source.getDistanceSq(target));
+                        EntityLivingBase sourceLivingBase = (EntityLivingBase) source;
+                        knownPositionAI.target = sourceLivingBase;
+                        knownPositionAI.lastKnownPosition = searchAI.randomPath(source.getPosition(), distance / 2, 0);
+                        if (searchAI.shouldExecute()) searchAI.startExecuting();
+                    }
                 }
             }
         }

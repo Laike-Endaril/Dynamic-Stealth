@@ -88,6 +88,7 @@ public class AISearchLastKnownPosition extends EntityAIBase
     @Override
     public void updateTask()
     {
+        timer--;
         if (phase == 0) //Goal; to reach searchPos, or the nearest reachable position to it
         {
             if (navigator.getPath() != path) navigator.setPath(path, speed);
@@ -96,19 +97,17 @@ public class AISearchLastKnownPosition extends EntityAIBase
             if (lastPos != null && lastPos.squareDistanceTo(currentPos) < speed * 0.005) timeAtPos++;
             else timeAtPos = 0;
 
-            if (timeAtPos > 20 || navigator.noPath() || (searcher.onGround && timeAtPos > 0))
+            if (timeAtPos > 60 || (searcher.onGround && navigator.noPath() && !newPath(knownPositionAI.lastKnownPosition)))
             {
-                if (timeAtPos > 20 || !newPath(knownPositionAI.lastKnownPosition.getX(), knownPositionAI.lastKnownPosition.getY(), knownPositionAI.lastKnownPosition.getZ()))
-                {
-                    phase = 1;
-                    spinMode = true;
-                    spinDirecion = searcher.getRNG().nextBoolean();
-                    startAngle = searcher.rotationYaw;
-                    angleDif = 0;
+                phase = 1;
+                spinMode = true;
+                spinDirecion = searcher.getRNG().nextBoolean();
+                startAngle = searcher.rotationYaw;
+                angleDif = 0;
+                timer = searchTicks;
 
-                    navigator.clearPath();
-                    path = null;
-                }
+                navigator.clearPath();
+                path = null;
             }
 
             lastPos = currentPos;
@@ -116,7 +115,6 @@ public class AISearchLastKnownPosition extends EntityAIBase
 
         if (phase == 1) //Goal; to search the area
         {
-            timer--;
             if (searchTicks - timer < 20) return; //Pause when reaching destination
 
             if (spinMode) //Spin around after pausing
@@ -130,7 +128,7 @@ public class AISearchLastKnownPosition extends EntityAIBase
 
                 if (Math.abs(angleDif) - 360 > 5)
                 {
-                    if (randomPath(4, 2))
+                    if (randomPath(searcher.getPosition(), 4, 2) != null)
                     {
                         spinMode = false;
                         lastPos = null;
@@ -145,7 +143,7 @@ public class AISearchLastKnownPosition extends EntityAIBase
                 if (navigator.noPath() || (searcher.onGround && lastPos != null && lastPos.squareDistanceTo(currentPos) < speed * 0.005))
                 {
                     PathPoint finalPoint = path.getFinalPathPoint();
-                    if (finalPoint == null || !newPath(finalPoint.x, finalPoint.y, finalPoint.z) || path.getFinalPathPoint() == null || pointDistSquared(finalPoint, path.getFinalPathPoint()) < 1)
+                    if (finalPoint == null || !newPath(new BlockPos(finalPoint.x, finalPoint.y, finalPoint.z)) || path.getFinalPathPoint() == null || pointDistSquared(finalPoint, path.getFinalPathPoint()) < 1)
                     {
                         spinMode = true;
                         spinDirecion = searcher.getRNG().nextBoolean();
@@ -162,16 +160,25 @@ public class AISearchLastKnownPosition extends EntityAIBase
         }
     }
 
-    private boolean newPath(double x, double y, double z)
+    private boolean newPath(BlockPos targetPos)
     {
-        Path newPath = navigator.getPathToXYZ(x, y, z);
-        if (newPath == null) return false;
+        Path newPath = navigator.getPathToPos(targetPos);
+        if (newPath == null)
+        {
+            System.out.println("Fail: " + targetPos.getX() + ", " + targetPos.getY() + ", " + targetPos.getZ());
+            return false;
+        }
 
         PathPoint finalPoint = newPath.getFinalPathPoint();
-        if (finalPoint == null || Math.pow(finalPoint.x - searcher.posX, 2) + Math.pow(finalPoint.y - searcher.posY, 2) + Math.pow(finalPoint.z - searcher.posZ, 2) < 1) return false;
+        if (finalPoint == null || Math.pow(finalPoint.x - searcher.posX, 2) + Math.pow(finalPoint.y - searcher.posY, 2) + Math.pow(finalPoint.z - searcher.posZ, 2) < 1)
+        {
+            System.out.println("B");
+            return false;
+        }
 
         path = newPath;
         navigator.setPath(path, speed);
+        System.out.println("path found");
         return true;
     }
 
@@ -186,14 +193,16 @@ public class AISearchLastKnownPosition extends EntityAIBase
         path = null;
     }
 
-    private boolean randomPath(int xz, int y)
+    public BlockPos randomPath(BlockPos position, int xz, int y)
     {
-        int x = searcher.getRNG().nextInt(xz * 2);
-        int z = searcher.getRNG().nextInt(xz * 2);
+        if (xz < 0) xz = -xz;
+        if (y < 0) y = -y;
+
+        int x = xz > 0 ? searcher.getRNG().nextInt(xz * 2) : 0;
+        int z = xz > 0 ? searcher.getRNG().nextInt(xz * 2) : 0;
+
         int yDir = searcher.getRNG().nextBoolean() ? 1 : -1;
         int yEnd = yDir == 1 ? y * 2 : 0;
-
-        BlockPos currentPos = searcher.getPosition();
 
         int xCheck, yCheck, zCheck;
         BlockPos checkPos;
@@ -201,22 +210,27 @@ public class AISearchLastKnownPosition extends EntityAIBase
         {
             for(int iz = 0; iz < xz * 2; iz++)
             {
-                for(int iy = yDir == 1 ? 0 : y * 2; iy != yEnd; iy += yDir)
+                for(int iy = 0; Math.abs(iy) <= yEnd; iy += yDir)
                 {
-                    xCheck = (x + ix) % (xz * 2) - xz + currentPos.getX();
-                    yCheck = (y + iy) % (y * 2) - y + currentPos.getY();
-                    zCheck = (z + iz) % (xz * 2) - xz + currentPos.getZ();
-                    checkPos = new BlockPos(xCheck, yCheck, zCheck);
-
-                    if (navigator.canEntityStandOnPos(checkPos))
+                    if (xz > 0)
                     {
-                        if (newPath(checkPos.getX(), checkPos.getY(), checkPos.getZ())) return true;
+                        xCheck = (x + ix) % (xz * 2) - xz + position.getX();
+                        zCheck = (z + iz) % (xz * 2) - xz + position.getZ();
                     }
+                    else
+                    {
+                        xCheck = position.getX();
+                        zCheck = position.getZ();
+                    }
+                    yCheck = y > 0 ? (y + iy) % (y * 2) - y + position.getY() : position.getY();
+
+                    checkPos = new BlockPos(xCheck, yCheck, zCheck);
+                    if (newPath(checkPos)) return checkPos;
                 }
             }
         }
 
-        return false;
+        return null;
     }
 
     private double pointDistSquared(PathPoint a, PathPoint b)
