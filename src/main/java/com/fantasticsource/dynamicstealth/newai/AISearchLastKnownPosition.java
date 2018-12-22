@@ -74,8 +74,6 @@ public class AISearchLastKnownPosition extends EntityAIBase
     public void startExecuting()
     {
         phase = 0;
-        System.out.println("Phase 0");
-        date = new Date();
 
         timer = searchTicks;
 
@@ -89,15 +87,9 @@ public class AISearchLastKnownPosition extends EntityAIBase
     @Override
     public boolean shouldContinueExecuting()
     {
-        if (timer <= 0) System.out.println("Target lost; timer");
-        if (knownPositionAI.target == null) System.out.println("Target lost; null target");
-        if (knownPositionAI.lastKnownPosition == null) System.out.println("Target lost; null position");
-        if (AITargetEdit.isSuitableTarget(searcher, knownPositionAI.target)) System.out.println("Target seen");
-
         return (shouldExecute() && timer > 0);
     }
 
-    Date date; //TODO remove this
     @Override
     public void updateTask()
     {
@@ -116,10 +108,6 @@ public class AISearchLastKnownPosition extends EntityAIBase
 
             if (timeAtPos > 60 || (searcher.onGround && navigator.noPath() && !newPath(knownPositionAI.lastKnownPosition)))
             {
-                Date newDate = new Date();
-                System.out.println("Phase 1 (Phase " + phase + " was " + (newDate.getTime() - date.getTime()) + " ms)");
-                date = newDate;
-
                 phase = 1;
 
                 timer = searchTicks - timeAtPos;
@@ -145,10 +133,6 @@ public class AISearchLastKnownPosition extends EntityAIBase
             {
                 if (randomPath(searcher.getPosition(), 4, 2) != null && !path.isFinished() && findPathAngle())
                 {
-                    Date newDate = new Date();
-                    System.out.println("Phase 2 (Phase " + phase + " was " + (newDate.getTime() - date.getTime()) + " ms)");
-                    date = newDate;
-
                     phase = 2;
                 }
                 else
@@ -168,11 +152,6 @@ public class AISearchLastKnownPosition extends EntityAIBase
             double head = Tools.mod(searcher.rotationYawHead, 360);
             if ((head > pathAngle && head - pathAngle <= 1) || (head <= pathAngle && pathAngle - head <= 1))
             {
-                Date newDate = new Date();
-                if (newDate.getTime() - date.getTime() < 3) System.out.println(head + ", " + pathAngle);
-                System.out.println("Phase 3 (Phase " + phase + " was " + (newDate.getTime() - date.getTime()) + " ms)");
-                date = newDate;
-
                 phase = 3;
 
                 lastPos = null;
@@ -197,10 +176,6 @@ public class AISearchLastKnownPosition extends EntityAIBase
 
             if (timeAtPos > 60 || (searcher.onGround && navigator.noPath() && !newPath(path)))
             {
-                Date newDate = new Date();
-                System.out.println("Phase 1 (Phase " + phase + " was " + (newDate.getTime() - date.getTime()) + " ms)");
-                date = newDate;
-
                 phase = 1;
 
                 startAngle = searcher.rotationYawHead;
@@ -216,11 +191,7 @@ public class AISearchLastKnownPosition extends EntityAIBase
         //Right now this is not very accurate, but still better than not having it at all
 
         int length = path.getCurrentPathLength();
-        if (length < 2)
-        {
-            System.out.println("nopath");
-            return false;
-        }
+        if (length < 2) return false;
 
         int i = 1;
         Vec3d pos = searcher.getPositionVector();
@@ -228,11 +199,7 @@ public class AISearchLastKnownPosition extends EntityAIBase
 
         while ((new BlockPos(pos)).distanceSq(new BlockPos(nextPos)) < 2)
         {
-            if (length < i + 2)
-            {
-                System.out.println("nopath");
-                return false;
-            }
+            if (length < i + 2) return false;
 
             i++;
             nextPos = path.getVectorFromIndex(searcher, i);

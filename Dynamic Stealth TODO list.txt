@@ -17,12 +17,12 @@ Add the ability to see mob FOVs (as a cone render), maybe when under a potion ef
 
 AI =====================================================================
 
-Make it so "search" AI chooses a new random path FIRST, then spins until it's aligned with the first path point
-...or spins until search time is up, if no path found
-
-Change "wandering" AI so that it can't instantly flip a 180 (force it to turn gradually before moving in the chosen direction)
+Figure out why entities sometimes have a delayed reaction when they should see you (when not yet alerted)
+...maybe the targetTasks don't update as often as normal tasks?
 
 Replace EntityAILookIdle with a new version that has gradual head rotation, instead of just removing it
+
+Change "wandering" AI so that it can't instantly flip a 180 (force it to turn gradually before moving in the chosen direction)
 
 Make it so mobs on the same team can tell each other where you are / where they last saw you
 
