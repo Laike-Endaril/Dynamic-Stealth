@@ -163,22 +163,13 @@ public class AISearchLastKnownPosition extends EntityAIBase
     private boolean newPath(BlockPos targetPos)
     {
         Path newPath = navigator.getPathToPos(targetPos);
-        if (newPath == null)
-        {
-            System.out.println("Fail: " + targetPos.getX() + ", " + targetPos.getY() + ", " + targetPos.getZ());
-            return false;
-        }
+        if (newPath == null) return false;
 
         PathPoint finalPoint = newPath.getFinalPathPoint();
-        if (finalPoint == null || Math.pow(finalPoint.x - searcher.posX, 2) + Math.pow(finalPoint.y - searcher.posY, 2) + Math.pow(finalPoint.z - searcher.posZ, 2) < 1)
-        {
-            System.out.println("B");
-            return false;
-        }
+        if (finalPoint == null || Math.pow(finalPoint.x - searcher.posX, 2) + Math.pow(finalPoint.y - searcher.posY, 2) + Math.pow(finalPoint.z - searcher.posZ, 2) < 1) return false;
 
         path = newPath;
         navigator.setPath(path, speed);
-        System.out.println("path found");
         return true;
     }
 
