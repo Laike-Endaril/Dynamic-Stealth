@@ -80,7 +80,7 @@ public class EntitySensesEdit extends EntitySenses
         else
         {
             //Using previous values here to give the player a chance, because client-side rendering always runs behind what's actually happening
-            double angleDif = Vec3d.fromPitchYaw(searcher.prevRotationPitch, searcher.prevRotationYaw).normalize().dotProduct(new Vec3d(target.posX - searcher.posX, target.posY - searcher.posY, target.posZ - searcher.posZ).normalize());
+            double angleDif = Vec3d.fromPitchYaw(searcher.prevRotationPitch, searcher.prevRotationYawHead).normalize().dotProduct(new Vec3d(target.posX - searcher.posX, target.posY - searcher.posY, target.posZ - searcher.posZ).normalize());
 
             //And because Vec3d.fromPitchYaw occasionally returns values barely out of the range of (-1, 1)...
             if (angleDif < -1) angleDif = -1;

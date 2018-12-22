@@ -13,7 +13,6 @@ import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.init.MobEffects;
-import net.minecraft.pathfinding.PathPoint;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
@@ -40,7 +39,7 @@ public class DynamicStealth
 {
     public static final String MODID = "dynamicstealth";
     public static final String NAME = "Dynamic Stealth";
-    public static final String VERSION = "1.12.2.005";
+    public static final String VERSION = "1.12.2.006";
 
     private static Logger logger;
 
@@ -110,6 +109,8 @@ public class DynamicStealth
 
                 target.rotationYaw = newYaw;
                 target.prevRotationYaw = newYaw;
+                target.rotationYawHead = newYaw;
+                target.prevRotationYawHead = newYaw;
 
                 if (target instanceof EntitySlime)
                 {
@@ -152,7 +153,7 @@ public class DynamicStealth
                         int distance = (int) Math.sqrt(source.getDistanceSq(target));
                         EntityLivingBase sourceLivingBase = (EntityLivingBase) source;
                         knownPositionAI.target = sourceLivingBase;
-                        knownPositionAI.lastKnownPosition = searchAI.randomPath(source.getPosition(), distance / 2, 0);
+                        knownPositionAI.lastKnownPosition = searchAI.randomPath(source.getPosition(), distance / 2, distance / 4);
                         if (searchAI.shouldExecute()) searchAI.startExecuting();
                     }
                 }

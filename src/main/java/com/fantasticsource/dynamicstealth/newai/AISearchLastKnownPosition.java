@@ -13,19 +13,22 @@ import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.Date;
+
 public class AISearchLastKnownPosition extends EntityAIBase
 {
-    public final AIStoreKnownPosition knownPositionAI;
+    private final static int HEAD_TURN_SPEED = 3;
 
-    public final EntityLiving searcher;
-    public final PathNavigate navigator;
-    public int phase, timer = 0, searchTicks, timeAtPos;
+    private final AIStoreKnownPosition knownPositionAI;
+    private final EntityLiving searcher;
+    private final PathNavigate navigator;
+
+    private int phase, timer = 0, searchTicks, timeAtPos;
     public double speed;
-    public boolean spinDirecion;
+    private boolean spinDirection;
     public Path path = null;
-    private Vec3d lastPos = null;
-    private double startAngle, angleDif;
-    private boolean spinMode;
+    private Vec3d lastPos = null, nextPos = null;
+    private double startAngle, angleDif, pathAngle;
     private static TrigLookupTable trigTable = DynamicStealth.TRIG_TABLE;
 
 
@@ -71,25 +74,37 @@ public class AISearchLastKnownPosition extends EntityAIBase
     public void startExecuting()
     {
         phase = 0;
+        System.out.println("Phase 0");
+        date = new Date();
+
         timer = searchTicks;
+
         timeAtPos = 0;
+        lastPos = null;
 
         path = navigator.getPathToPos(knownPositionAI.lastKnownPosition);
         navigator.setPath(path, speed);
-        lastPos = null;
     }
 
     @Override
     public boolean shouldContinueExecuting()
     {
+        if (timer <= 0) System.out.println("Target lost; timer");
+        if (knownPositionAI.target == null) System.out.println("Target lost; null target");
+        if (knownPositionAI.lastKnownPosition == null) System.out.println("Target lost; null position");
+        if (AITargetEdit.isSuitableTarget(searcher, knownPositionAI.target)) System.out.println("Target seen");
+
         return (shouldExecute() && timer > 0);
     }
 
+    Date date; //TODO remove this
     @Override
     public void updateTask()
     {
         timer--;
-        if (phase == 0) //Goal; to reach searchPos, or the nearest reachable position to it
+
+        //Reach searchPos, or the nearest reachable position to it.  If we reach a position, reset the search timer
+        if (phase == 0)
         {
             if (navigator.getPath() != path) navigator.setPath(path, speed);
 
@@ -97,68 +112,143 @@ public class AISearchLastKnownPosition extends EntityAIBase
             if (lastPos != null && lastPos.squareDistanceTo(currentPos) < speed * 0.005) timeAtPos++;
             else timeAtPos = 0;
 
+            lastPos = currentPos;
+
             if (timeAtPos > 60 || (searcher.onGround && navigator.noPath() && !newPath(knownPositionAI.lastKnownPosition)))
             {
+                Date newDate = new Date();
+                System.out.println("Phase 1 (Phase " + phase + " was " + (newDate.getTime() - date.getTime()) + " ms)");
+                date = newDate;
+
                 phase = 1;
+
                 timer = searchTicks - timeAtPos;
 
-                spinMode = true;
-                spinDirecion = searcher.getRNG().nextBoolean();
-                startAngle = searcher.rotationYaw;
+                startAngle = searcher.rotationYawHead;
+                spinDirection = searcher.getRNG().nextBoolean();
                 angleDif = 0;
-
-                path = null;
-                navigator.clearPath();
             }
+        }
+
+        //Do a 360 search-in-place, then choose a random spot to move to nearby
+        if (phase == 1)
+        {
+            navigator.clearPath();
+
+            if (spinDirection) angleDif += HEAD_TURN_SPEED;
+            else angleDif -= HEAD_TURN_SPEED;
+
+            double angleRad = Tools.degtorad(startAngle + angleDif);
+            searcher.getLookHelper().setLookPosition(searcher.posX - trigTable.sin(angleRad), searcher.posY + searcher.getEyeHeight(), searcher.posZ + trigTable.cos(angleRad), HEAD_TURN_SPEED, HEAD_TURN_SPEED);
+
+            if (Math.abs(angleDif) >= 360)
+            {
+                if (randomPath(searcher.getPosition(), 4, 2) != null && !path.isFinished() && findPathAngle())
+                {
+                    Date newDate = new Date();
+                    System.out.println("Phase 2 (Phase " + phase + " was " + (newDate.getTime() - date.getTime()) + " ms)");
+                    date = newDate;
+
+                    phase = 2;
+                }
+                else
+                {
+                    startAngle = searcher.rotationYawHead;
+                    spinDirection = searcher.getRNG().nextBoolean();
+                    angleDif = 0;
+                }
+            }
+        }
+
+        //Gradually turn toward initial path direction before moving to new random point
+        if (phase == 2)
+        {
+            navigator.clearPath();
+
+            double head = Tools.mod(searcher.rotationYawHead, 360);
+            if ((head > pathAngle && head - pathAngle <= 1) || (head <= pathAngle && pathAngle - head <= 1))
+            {
+                Date newDate = new Date();
+                if (newDate.getTime() - date.getTime() < 3) System.out.println(head + ", " + pathAngle);
+                System.out.println("Phase 3 (Phase " + phase + " was " + (newDate.getTime() - date.getTime()) + " ms)");
+                date = newDate;
+
+                phase = 3;
+
+                lastPos = null;
+                timeAtPos = 0;
+            }
+            else
+            {
+                searcher.getLookHelper().setLookPosition(nextPos.x, searcher.posY + searcher.getEyeHeight(), nextPos.z, HEAD_TURN_SPEED, HEAD_TURN_SPEED);
+            }
+        }
+
+        //Move along our path to our random point, then choose a new random point
+        if (phase == 3)
+        {
+            if (navigator.getPath() != path) navigator.setPath(path, speed);
+
+            Vec3d currentPos = searcher.getPositionVector();
+            if (lastPos != null && lastPos.squareDistanceTo(currentPos) < speed * 0.005) timeAtPos++;
+            else timeAtPos = 0;
 
             lastPos = currentPos;
-        }
 
-        if (phase == 1) //Goal; to search the area
+            if (timeAtPos > 60 || (searcher.onGround && navigator.noPath() && !newPath(path)))
+            {
+                Date newDate = new Date();
+                System.out.println("Phase 1 (Phase " + phase + " was " + (newDate.getTime() - date.getTime()) + " ms)");
+                date = newDate;
+
+                phase = 1;
+
+                startAngle = searcher.rotationYawHead;
+                spinDirection = searcher.getRNG().nextBoolean();
+                angleDif = 0;
+            }
+        }
+    }
+
+    private boolean findPathAngle()
+    {
+        //TODO Increase accuracy by making pathAngle account for more path points, or find a way to access the angle directly somehow?
+        //Right now this is not very accurate, but still better than not having it at all
+
+        int length = path.getCurrentPathLength();
+        if (length < 2)
         {
-            if (searchTicks - timer < 20) return; //Pause when reaching destination
-
-            if (spinMode) //Spin around after pausing
-            {
-                navigator.clearPath();
-
-                if (spinDirecion) angleDif += 5;
-                else angleDif -= 5;
-                double angleRad = Tools.degtorad(startAngle + angleDif);
-                searcher.getLookHelper().setLookPosition(searcher.posX - trigTable.sin(angleRad), lastPos.y + knownPositionAI.target.getEyeHeight(), searcher.posZ + trigTable.cos(angleRad), 30, 30);
-
-                if (Math.abs(angleDif) - 360 > 5)
-                {
-                    if (randomPath(searcher.getPosition(), 4, 2) != null)
-                    {
-                        spinMode = false;
-                        lastPos = null;
-                    }
-                }
-            }
-            else //Wander after spinning around
-            {
-                if (navigator.getPath() != path) navigator.setPath(path, speed);
-
-                Vec3d currentPos = searcher.getPositionVector();
-                if (navigator.noPath() || (searcher.onGround && lastPos != null && lastPos.squareDistanceTo(currentPos) < speed * 0.005))
-                {
-                    PathPoint finalPoint = path.getFinalPathPoint();
-                    if (finalPoint == null || !newPath(new BlockPos(finalPoint.x, finalPoint.y, finalPoint.z)) || path.getFinalPathPoint() == null || pointDistSquared(finalPoint, path.getFinalPathPoint()) < 1)
-                    {
-                        spinMode = true;
-                        spinDirecion = searcher.getRNG().nextBoolean();
-                        startAngle = searcher.rotationYaw;
-                        angleDif = 0;
-
-                        path = null;
-                        navigator.clearPath();
-                    }
-                }
-
-                lastPos = currentPos;
-            }
+            System.out.println("nopath");
+            return false;
         }
+
+        int i = 1;
+        Vec3d pos = searcher.getPositionVector();
+        nextPos = path.getVectorFromIndex(searcher, i);
+
+        while ((new BlockPos(pos)).distanceSq(new BlockPos(nextPos)) < 2)
+        {
+            if (length < i + 2)
+            {
+                System.out.println("nopath");
+                return false;
+            }
+
+            i++;
+            nextPos = path.getVectorFromIndex(searcher, i);
+        }
+
+        pathAngle = 360 - Tools.radtodeg(DynamicStealth.TRIG_TABLE.arctanFullcircle(pos.z, -pos.x, nextPos.z, -nextPos.x));
+
+        return true;
+    }
+
+    private boolean newPath(Path pathIn)
+    {
+        if (pathIn == null) return false;
+
+        PathPoint finalPoint = pathIn.getFinalPathPoint();
+        return finalPoint != null && newPath(new BlockPos(finalPoint.x, finalPoint.y, finalPoint.z));
     }
 
     private boolean newPath(BlockPos targetPos)
@@ -177,12 +267,16 @@ public class AISearchLastKnownPosition extends EntityAIBase
     @Override
     public void resetTask()
     {
-        knownPositionAI.lastKnownPosition = null;
-        knownPositionAI.target = null;
-        timer = 0;
+        if (!AITargetEdit.isSuitableTarget(searcher, knownPositionAI.target))
+        {
+            knownPositionAI.lastKnownPosition = null;
+            knownPositionAI.target = null;
+        }
 
         if (path != null && path.equals(navigator.getPath())) navigator.clearPath();
         path = null;
+
+        searcher.rotationYaw = searcher.rotationYawHead;
     }
 
     public BlockPos randomPath(BlockPos position, int xz, int y)
@@ -223,10 +317,5 @@ public class AISearchLastKnownPosition extends EntityAIBase
         }
 
         return null;
-    }
-
-    private double pointDistSquared(PathPoint a, PathPoint b)
-    {
-        return Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2) + Math.pow(a.z - b.z, 2);
     }
 }
