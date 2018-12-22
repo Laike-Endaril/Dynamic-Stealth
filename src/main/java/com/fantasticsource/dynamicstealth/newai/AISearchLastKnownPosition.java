@@ -100,14 +100,15 @@ public class AISearchLastKnownPosition extends EntityAIBase
             if (timeAtPos > 60 || (searcher.onGround && navigator.noPath() && !newPath(knownPositionAI.lastKnownPosition)))
             {
                 phase = 1;
+                timer = searchTicks - timeAtPos;
+
                 spinMode = true;
                 spinDirecion = searcher.getRNG().nextBoolean();
                 startAngle = searcher.rotationYaw;
                 angleDif = 0;
-                timer = searchTicks - timeAtPos;
 
-                navigator.clearPath();
                 path = null;
+                navigator.clearPath();
             }
 
             lastPos = currentPos;
