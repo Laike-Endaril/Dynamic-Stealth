@@ -30,6 +30,8 @@ Add the ability to see mob FOVs (as a cone render), maybe when under a potion ef
 
 AI =====================================================================
 
+Add threat rating system as described by LordPhrozen on discord (in this mod, or in another mod?)
+
 Make search AI use the same speeds used by attack AIs
 
 Figure out why entities sometimes have a delayed reaction when they should see you (when not yet alerted)
@@ -59,6 +61,8 @@ Add smell-based detection (wolves, cats, bears)
 
 ITEMS ==================================================================
 
+Add a stealth guidebook
+
 Add smoke bombs which block LOS
 
 Add stealth-based attributes for armor (ie, actual attributes; like how armor ratings are an attribute, I think?)
@@ -76,3 +80,6 @@ NINJAS (probably a separate mod)
 MOD COMPATIBILITY ======================================================
 
 Check issue with Vampirism, where hunters attack the player regardless of whether they're a vampire or not when my mod is installed
+
+Check issue with Custom NPCs; apparently their sight distance overrides my own, but only when it is less
+Ie. when both are installed, you're only detected if both mods say you're detected
