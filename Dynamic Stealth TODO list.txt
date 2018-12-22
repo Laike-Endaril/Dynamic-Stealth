@@ -1,3 +1,16 @@
+CONFIG FILE ============================================================
+
+Add section for AI
+Add AI config options for...
+...head turn speed
+...attention span
+
+Add entity-specific config options for...
+...head turn speed
+...attention span
+
+
+
 VISUAL INDICATORS ======================================================
 
 Add visible indicators when mobs detect you, lose you, etc (somewhat similar to Mark of the Ninja)
@@ -16,6 +29,8 @@ Add the ability to see mob FOVs (as a cone render), maybe when under a potion ef
 
 
 AI =====================================================================
+
+Make search AI use the same speeds used by attack AIs
 
 Figure out why entities sometimes have a delayed reaction when they should see you (when not yet alerted)
 ...maybe the targetTasks don't update as often as normal tasks?

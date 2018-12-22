@@ -187,9 +187,6 @@ public class AISearchLastKnownPosition extends EntityAIBase
 
     private boolean findPathAngle()
     {
-        //TODO Increase accuracy by making pathAngle account for more path points, or find a way to access the angle directly somehow?
-        //Right now this is not very accurate, but still better than not having it at all
-
         int length = path.getCurrentPathLength();
         if (length < 2) return false;
 

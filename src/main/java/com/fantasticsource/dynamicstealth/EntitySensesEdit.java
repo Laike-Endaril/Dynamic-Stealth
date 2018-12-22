@@ -45,7 +45,7 @@ public class EntitySensesEdit extends EntitySenses
     @Override
     public boolean canSee(Entity entityIn)
     {
-        //TODO This should actually include not only sight, but all other senses as well, since it's the one and only sense method called by vanilla classes
+        //This should actually include not only sight, but all other senses as well, since it's the one and only sense method called by vanilla classes
 
         if (seenEntities.contains(entityIn)) return true;
         if (unseenEntities.contains(entityIn)) return false;

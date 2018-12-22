@@ -310,8 +310,6 @@ public class DynamicStealth
             }
 
             //Finally, add the new tasks
-            //TODO change value of attentionSpan argument based on creature type
-            //TODO change value of speed argument based on creature type
             targetTasks.addTask(newTaskPriority, new AISearchLastKnownPosition(living, 300, 1));
         }
     }
