@@ -20,7 +20,9 @@ public class Threat
 
     public static Pair<EntityLivingBase, Integer> get(EntityLiving searcher)
     {
-        return threatMap.get(searcher);
+        Pair<EntityLivingBase, Integer> entry = threatMap.get(searcher);
+        if (entry != null) return entry;
+        return new Pair<>(null, 0);
     }
 
     public static EntityLivingBase getTarget(EntityLiving searcher)
