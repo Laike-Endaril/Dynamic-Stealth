@@ -63,7 +63,7 @@ public class AISearchLastKnownPosition extends EntityAIBase
             return false;
         }
 
-        return Threat.getThreat(searcher) >= a8_threatSystem.unseenMinimumThreat;
+        return Threat.getThreat(searcher) > a8_threatSystem.unseenMinimumThreat;
     }
 
     @Override
