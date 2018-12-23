@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.newai;
 
 import com.fantasticsource.dynamicstealth.DynamicStealth;
+import com.fantasticsource.dynamicstealth.Threat;
 import com.fantasticsource.dynamicstealth.ai.AITargetEdit;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.TrigLookupTable;
@@ -21,7 +22,7 @@ public class AISearchLastKnownPosition extends EntityAIBase
     private final EntityLiving searcher;
     private final PathNavigate navigator;
 
-    private int phase, timer = 0, searchTicks, timeAtPos;
+    private int phase, timeAtPos;
     public double speed;
     private boolean spinDirection;
     public Path path = null;
@@ -31,12 +32,11 @@ public class AISearchLastKnownPosition extends EntityAIBase
 
 
 
-    public AISearchLastKnownPosition(EntityLiving living, int searchTicksIn, double speedIn)
+    public AISearchLastKnownPosition(EntityLiving living, double speedIn)
     {
         searcher = living;
         navigator = living.getNavigator();
         speed = speedIn;
-        searchTicks = searchTicksIn;
 
         knownPositionAI = findKnownPositionAI();
         if (knownPositionAI == null) throw new IllegalArgumentException("AISearchLastKnownPosition may only be added to an entity that already has an AIStoreKnownPosition in its targetTasks");
@@ -65,15 +65,13 @@ public class AISearchLastKnownPosition extends EntityAIBase
             return false;
         }
 
-        return (knownPositionAI.target != null && knownPositionAI.lastKnownPosition != null);
+        return Threat.getThreat(searcher) >= a8_threatSystem.unseenMinimumThreat;
     }
 
     @Override
     public void startExecuting()
     {
         phase = 0;
-
-        timer = searchTicks;
 
         timeAtPos = 0;
         lastPos = null;
@@ -85,14 +83,12 @@ public class AISearchLastKnownPosition extends EntityAIBase
     @Override
     public boolean shouldContinueExecuting()
     {
-        return (shouldExecute() && timer > 0);
+        return shouldExecute();
     }
 
     @Override
     public void updateTask()
     {
-        timer--;
-
         //Reach searchPos, or the nearest reachable position to it.  If we reach a position, reset the search timer
         if (phase == 0)
         {
@@ -107,8 +103,6 @@ public class AISearchLastKnownPosition extends EntityAIBase
             if (timeAtPos > 60 || (searcher.onGround && navigator.noPath() && !newPath(knownPositionAI.lastKnownPosition)))
             {
                 phase = 1;
-
-                timer = searchTicks - timeAtPos;
 
                 startAngle = searcher.rotationYawHead;
                 spinDirection = searcher.getRNG().nextBoolean();
@@ -181,6 +175,8 @@ public class AISearchLastKnownPosition extends EntityAIBase
                 angleDif = 0;
             }
         }
+
+        Threat.setThreat(searcher, (Threat.getThreat(searcher) - a8_threatSystem.unseenTargetDegredationRate));
     }
 
     private boolean findPathAngle()
@@ -239,6 +235,8 @@ public class AISearchLastKnownPosition extends EntityAIBase
         path = null;
 
         searcher.rotationYaw = searcher.rotationYawHead;
+
+        Threat.remove(searcher);
     }
 
     public BlockPos randomPath(BlockPos position, int xz, int y)

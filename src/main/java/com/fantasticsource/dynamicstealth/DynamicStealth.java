@@ -309,7 +309,7 @@ public class DynamicStealth
             }
 
             //Finally, add the new tasks
-            targetTasks.addTask(newTaskPriority, new AISearchLastKnownPosition(living, 300, 1));
+            targetTasks.addTask(newTaskPriority, new AISearchLastKnownPosition(living, 1));
         }
     }
 }
