@@ -1,7 +1,6 @@
 RELEVANT TO FAERUN HEROES ==============================================
 
-Add threat rating system as described by LordPhrozen on discord (reference Faerun GDD)
-(in this mod; after thinking it through, it works well in a stealth mod, so long as it's configurable enough)
+Implement threat system
 
 Fix mobs not searching last known position when too far away...
 ...Create function which, when beyond normal pathfinding range...
@@ -13,6 +12,12 @@ This system, if improved upon, could be used for most pathfinding and should imp
 
 
 CONFIG FILE ============================================================
+
+Add section for Threat System
+Add threat system config options for...
+...update frequency
+...unseen target degredation multiplier
+...unseen target minimum threat
 
 Add section for AI
 Add AI config options for...
