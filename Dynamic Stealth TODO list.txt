@@ -1,6 +1,9 @@
 RELEVANT TO FAERUN HEROES ==============================================
 
 Implement threat system
+...Move threat degredation to "search" AI
+...Make "search" AI use threat level instead of timer
+...Any time threat would reach 0, remove the entity from the map
 
 Fix mobs not searching last known position when too far away...
 ...Create function which, when beyond normal pathfinding range...
@@ -13,15 +16,12 @@ This system, if improved upon, could be used for most pathfinding and should imp
 
 CONFIG FILE ============================================================
 
-Add section for Threat System
 Add threat system config options for...
 ...update frequency
 ...unseen target degredation multiplier
 ...unseen target minimum threat
 
-Add section for AI
 Add AI config options for...
-...head turn speed
 ...attention span
 
 Add entity-specific config options for...

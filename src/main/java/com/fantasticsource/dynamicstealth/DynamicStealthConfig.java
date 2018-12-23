@@ -6,6 +6,31 @@ import net.minecraftforge.common.config.Config.Comment;
 @Config(modid = DynamicStealth.MODID)
 public class DynamicStealthConfig
 {
+    @Config.Name("AI")
+    public static AI a5_ai = new AI();
+    public static class AI
+    {
+        @Config.Name("Head Turn Speed")
+        @Comment({"How quickly entities' heads spin during eg. a search sequence"})
+        @Config.RangeInt(min = 1, max = 180)
+        public int headTurnSpeed = 3;
+    }
+
+
+
+    @Config.Name("Threat System")
+    @Comment({
+            "The threat system decides when an entity switches from one attack target to another",
+            "",
+            "This is similar to threat systems found in some MMORPGs"
+    })
+    public static ThreatSystem a8_threatSystem = new ThreatSystem();
+    public static class ThreatSystem
+    {
+    }
+
+
+
     @Config.Name("Stealth Multipliers")
     @Comment({
             "Contains multipliers that increase stealth / decrease awareness",

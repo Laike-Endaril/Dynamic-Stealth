@@ -13,12 +13,10 @@ import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-import java.util.Date;
+import static com.fantasticsource.dynamicstealth.DynamicStealthConfig.*;
 
 public class AISearchLastKnownPosition extends EntityAIBase
 {
-    private final static int HEAD_TURN_SPEED = 3;
-
     private final AIStoreKnownPosition knownPositionAI;
     private final EntityLiving searcher;
     private final PathNavigate navigator;
@@ -123,11 +121,11 @@ public class AISearchLastKnownPosition extends EntityAIBase
         {
             navigator.clearPath();
 
-            if (spinDirection) angleDif += HEAD_TURN_SPEED;
-            else angleDif -= HEAD_TURN_SPEED;
+            if (spinDirection) angleDif += a5_ai.headTurnSpeed;
+            else angleDif -= a5_ai.headTurnSpeed;
 
             double angleRad = Tools.degtorad(startAngle + angleDif);
-            searcher.getLookHelper().setLookPosition(searcher.posX - trigTable.sin(angleRad), searcher.posY + searcher.getEyeHeight(), searcher.posZ + trigTable.cos(angleRad), HEAD_TURN_SPEED, HEAD_TURN_SPEED);
+            searcher.getLookHelper().setLookPosition(searcher.posX - trigTable.sin(angleRad), searcher.posY + searcher.getEyeHeight(), searcher.posZ + trigTable.cos(angleRad), a5_ai.headTurnSpeed, a5_ai.headTurnSpeed);
 
             if (Math.abs(angleDif) >= 360)
             {
@@ -159,7 +157,7 @@ public class AISearchLastKnownPosition extends EntityAIBase
             }
             else
             {
-                searcher.getLookHelper().setLookPosition(nextPos.x, searcher.posY + searcher.getEyeHeight(), nextPos.z, HEAD_TURN_SPEED, HEAD_TURN_SPEED);
+                searcher.getLookHelper().setLookPosition(nextPos.x, searcher.posY + searcher.getEyeHeight(), nextPos.z, a5_ai.headTurnSpeed, a5_ai.headTurnSpeed);
             }
         }
 
