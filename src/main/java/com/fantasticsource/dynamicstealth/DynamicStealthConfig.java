@@ -28,22 +28,22 @@ public class DynamicStealthConfig
 
     public static class ThreatSystem
     {
-        @Config.Name("\"Attacked\" Threat Multiplier (Initial Attack)")
+        @Config.Name("'Attacked' Threat Multiplier (Initial Attack)")
         @Comment({"When an out-of-combat entity is attacked, its threat is set to the damage taken times this, divided by its max HP"})
         @Config.RangeDouble(min = 1)
         public double attackedThreatMultiplierInitial = 100;
 
-        @Config.Name("\"Attacked\" Threat Multiplier (Attacked By Current Target)")
+        @Config.Name("'Attacked' Threat Multiplier (Attacked By Current Target)")
         @Comment({"When an in-combat entity is attacked by its current target, its threat is increased by the damage taken times this, divided by its max HP"})
         @Config.RangeDouble(min = 1)
         public double attackedThreatMultiplierTarget = 50;
 
-        @Config.Name("\"Attacked\" Threat Multiplier (Initial Attack)")
+        @Config.Name("'Attacked' Threat Multiplier (Initial Attack)")
         @Comment({"When an in-combat entity is attacked by something that is *not* its current target, its threat is decreased by damage taken times this, divided by its max HP"})
         @Config.RangeDouble(min = 1)
         public double attackedThreatMultiplierOther = 50;
 
-        @Config.Name("Initial \"Target Spotted\" Threat")
+        @Config.Name("Initial 'Target Spotted' Threat")
         @Comment({"When an out-of-combat entity spots a valid target, its threat is set to this"})
         @Config.RangeInt(min = 1)
         public int targetSpottedThreat = 1;
@@ -137,7 +137,7 @@ public class DynamicStealthConfig
         @Config.Name("Armor Multiplier (Cumulative)")
         public double armorMultiplierCumulative = 0.25;
 
-        @Config.Name("\"On Fire\" Multiplier")
+        @Config.Name("'On Fire' Multiplier")
         @Comment({
                 "An entity's visibility is multiplied by 1 + (this setting * armor)",
                 "",
