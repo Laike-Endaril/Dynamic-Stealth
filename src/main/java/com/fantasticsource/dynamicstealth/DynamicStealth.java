@@ -30,6 +30,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 import java.util.Set;
 
 import static com.fantasticsource.dynamicstealth.DynamicStealthConfig.*;
@@ -101,12 +102,44 @@ public class DynamicStealth
         if (source == null) source = event.getSource().getImmediateSource();
         if (source == null) return;
 
-        if (target instanceof EntityLiving)
+        if (target instanceof EntityLiving && source instanceof EntityLivingBase)
         {
-            if ((target.getRevengeTarget() == null || target.getRevengeTarget() == source))
-            {
-                float newYaw = (float) (TRIG_TABLE.arctanFullcircle(target.posZ, target.posX, source.posZ, source.posX) / Math.PI * 180);
+            EntityLiving livingTarget = (EntityLiving) target;
+            EntityLivingBase livingBaseSource = (EntityLivingBase) source;
+            boolean updateTarget = true;
 
+            //Threat
+            Pair<EntityLivingBase, Integer> threatEntry = Threat.get(livingTarget);
+            EntityLivingBase threatTarget = threatEntry.getKey();
+            int threat = threatEntry.getValue();
+            if (threatTarget == null) //Hit by entity when out-of-combat
+            {
+                Threat.set(livingTarget, livingBaseSource, (int) (event.getAmount() * a8_threatSystem.attackedThreatMultiplierInitial / livingTarget.getMaxHealth()));
+            }
+            else if (threatTarget != source) //Hit by an entity besides our threat target
+            {
+                double threatChangeFactor = event.getAmount() / livingTarget.getMaxHealth();
+                threat -= threatChangeFactor * a8_threatSystem.attackedThreatMultiplierOther;
+                if (threat <= 0) Threat.set(livingTarget, livingBaseSource, (int) (threatChangeFactor * a8_threatSystem.attackedThreatMultiplierInitial));
+                else
+                {
+                    Threat.setThreat(livingTarget, threat);
+                    updateTarget = false;
+                }
+            }
+            else //Hit by threat target
+            {
+                Threat.setThreat(livingTarget, (int) (threat * event.getAmount() / livingTarget.getMaxHealth()));
+            }
+
+            if (updateTarget)
+            {
+                //Set vanilla targeting
+                livingTarget.setRevengeTarget(livingBaseSource);
+                livingTarget.setAttackTarget(livingBaseSource);
+
+                //Look toward damage
+                float newYaw = (float) (TRIG_TABLE.arctanFullcircle(target.posZ, target.posX, source.posZ, source.posX) / Math.PI * 180);
                 target.rotationYaw = newYaw;
                 target.prevRotationYaw = newYaw;
                 target.rotationYawHead = newYaw;
@@ -114,6 +147,7 @@ public class DynamicStealth
 
                 if (target instanceof EntitySlime)
                 {
+                    //Look toward damage (slime)
                     for (EntityAITasks.EntityAITaskEntry task : ((EntitySlime) target).tasks.taskEntries)
                     {
                         if (task.action instanceof AISlimeFaceRandomEdit)
@@ -123,26 +157,15 @@ public class DynamicStealth
                         }
                     }
                 }
-
-                if (source instanceof EntityLivingBase)
+                else
                 {
-                    ((EntityLiving) target).setAttackTarget((EntityLivingBase) source);
-                    target.setRevengeTarget((EntityLivingBase) source);
-                }
-            }
+                    //This is mostly for setting/resetting things when eg. you hit an entity that is in the middle of a task, and they don't see you (even after you hit them)
+                    //Only setting/resetting select tasks, because I'm sure it will cause issues if I reset all tasks
+                    livingTarget.getNavigator().clearPath();
 
-            if (!(target instanceof EntitySlime))
-            {
-                EntityLiving living = (EntityLiving) target;
-                living.getNavigator().clearPath();
-
-                //This is mostly for setting/resetting things when eg. you hit an entity that is in the middle of a task, and they don't see you (even after you hit them)
-                //Only setting/resetting select tasks, because I'm sure it will cause issues if I reset all tasks
-                if (source instanceof EntityLivingBase)
-                {
                     AIStoreKnownPosition knownPositionAI = null;
                     AISearchLastKnownPosition searchAI = null;
-                    for (EntityAITasks.EntityAITaskEntry task : living.targetTasks.taskEntries)
+                    for (EntityAITasks.EntityAITaskEntry task : livingTarget.targetTasks.taskEntries)
                     {
                         if (task.action instanceof AIStoreKnownPosition) knownPositionAI = (AIStoreKnownPosition) task.action;
                         else if (task.action instanceof AISearchLastKnownPosition) searchAI = (AISearchLastKnownPosition) task.action;
