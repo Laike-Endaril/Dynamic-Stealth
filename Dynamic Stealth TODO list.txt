@@ -1,3 +1,17 @@
+RELEVANT TO FAERUN HEROES ==============================================
+
+Add threat rating system as described by LordPhrozen on discord (reference Faerun GDD)
+(in this mod; after thinking it through, it works well in a stealth mod, so long as it's configurable enough)
+
+Fix mobs not searching last known position when too far away...
+...Create function which, when beyond normal pathfinding range...
+...finds a partial path instead of a full path, and follows it...
+...then if not at the final destination, finds another partial path and follow it...
+...etc.
+This system, if improved upon, could be used for most pathfinding and should improve pathfinding performance
+
+
+
 CONFIG FILE ============================================================
 
 Add section for AI
@@ -30,16 +44,14 @@ Add the ability to see mob FOVs (as a cone render), maybe when under a potion ef
 
 AI =====================================================================
 
-Add threat rating system as described by LordPhrozen on discord (in this mod, or in another mod?)
-
 Make search AI use the same speeds used by attack AIs
 
 Figure out why entities sometimes have a delayed reaction when they should see you (when not yet alerted)
 ...maybe the targetTasks don't update as often as normal tasks?
 
-Replace EntityAILookIdle with a new version that has gradual head rotation, instead of just removing it
-
-Change "wandering" AI so that it can't instantly flip a 180 (force it to turn gradually before moving in the chosen direction)
+Can probably combine the two below into a single AI task...
+...Replace EntityAILookIdle with a new version that has gradual head rotation, instead of just removing it
+...Change "wandering" AI so that it can't instantly flip a 180 (force it to turn gradually before moving in the chosen direction)
 
 Make it so mobs on the same team can tell each other where you are / where they last saw you
 
@@ -47,7 +59,7 @@ Make it so mobs on the same team can tell each other where you are / where they 
 
 SENSES =================================================================
 
-Make it so mobs can see through glass
+Make it so mobs can see through glass (but maybe not quite yet; for now it's good for watching/debugging their behavior when they're searching for you)
 
 Separate the horizontal and vertical FOV angles, so that each can be configured separately
 
@@ -74,12 +86,11 @@ Add armor/baubles that improve stealth/anti-stealth attributes
 MOBS ===================================================================
 
 NINJAS (probably a separate mod)
+Make ninjas sometimes disguise themselves as players who play on the server, but with slight typos in the nametag
+If they kill a player while disguised, it still says the player was killed by a ninja, to help prevent confused players raging at each other
 
 
 
 MOD COMPATIBILITY ======================================================
 
 Check issue with Vampirism, where hunters attack the player regardless of whether they're a vampire or not when my mod is installed
-
-Check issue with Custom NPCs; apparently their sight distance overrides my own, but only when it is less
-Ie. when both are installed, you're only detected if both mods say you're detected
