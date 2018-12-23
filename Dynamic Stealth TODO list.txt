@@ -93,4 +93,11 @@ If they kill a player while disguised, it still says the player was killed by a 
 
 MOD COMPATIBILITY ======================================================
 
+Many cases might be solvable with more selective AI replacements on my part, depending on what other mods are installed.
+Even a simple required-after may suffice, because if the other mod has already replaced the vanilla AI, then my mod will not find/replace that AI anyway
+
 Check issue with Vampirism, where hunters attack the player regardless of whether they're a vampire or not when my mod is installed
+
+Check Special AI Revival
+
+Check Rough Mobs 2
