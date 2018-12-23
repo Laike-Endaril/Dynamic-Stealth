@@ -19,11 +19,11 @@ import java.util.List;
 public class AIFindEntityNearestPlayerEdit extends EntityAIBase
 {
     private static Field entityLivingField;
+
     static
     {
         initReflections();
     }
-
 
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -73,7 +73,6 @@ public class AIFindEntityNearestPlayerEdit extends EntityAIBase
         searcher.setAttackTarget(null);
         super.startExecuting();
     }
-
 
 
     private static void initReflections()

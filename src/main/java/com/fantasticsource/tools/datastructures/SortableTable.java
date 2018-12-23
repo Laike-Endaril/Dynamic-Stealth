@@ -14,7 +14,7 @@ public class SortableTable
         if (columns.length == 0) throw new IllegalArgumentException("Must have at least 1 column, eg. new SortableTable(Integer.class)");
 
         this.columns = new Column[columns.length];
-        for(int i = 0; i < columns.length; i++)
+        for (int i = 0; i < columns.length; i++)
         {
             this.columns[i] = new Column(columns[i]);
         }
@@ -23,7 +23,7 @@ public class SortableTable
     public void add(Object... item)
     {
         if (item.length != columns.length) throw new IllegalArgumentException("Item length (" + item.length + ") must match number of columns (" + columns.length + ")");
-        for(int i = 0; i < item.length; i++)
+        for (int i = 0; i < item.length; i++)
         {
             //noinspection unchecked
             if (!columns[i].c.isAssignableFrom(item[i].getClass()))
@@ -33,13 +33,13 @@ public class SortableTable
         }
 
         if (used == columns[0].values.length) expand();
-        for(int i = 0; i < columns.length; i++) columns[i].values[used] = item[i];
+        for (int i = 0; i < columns.length; i++) columns[i].values[used] = item[i];
 
         if (sortedColumn != -1)
         {
             if (ascending)
             {
-                for(int i = used; i > 0; i--)
+                for (int i = used; i > 0; i--)
                 {
                     if (columns[sortedColumn].greater(i - 1, i)) swap(i - 1, i);
                     else break;
@@ -47,7 +47,7 @@ public class SortableTable
             }
             else
             {
-                for(int i = used; i > 0; i--)
+                for (int i = used; i > 0; i--)
                 {
                     if (columns[sortedColumn].greater(i, i - 1)) swap(i - 1, i);
                     else break;
@@ -62,7 +62,7 @@ public class SortableTable
     {
         if (index >= used) throw new ArrayIndexOutOfBoundsException("Items: " + used + ", index given: " + index);
         if (item.length != columns.length) throw new IllegalArgumentException("Item length (" + item.length + ") must match number of columns (" + columns.length + ")");
-        for(int i = 0; i < item.length; i++)
+        for (int i = 0; i < item.length; i++)
         {
             //noinspection unchecked
             if (!columns[i].c.isAssignableFrom(item[i].getClass()))
@@ -71,19 +71,19 @@ public class SortableTable
             }
         }
 
-        for(int i = 0; i < columns.length; i++) columns[i].values[index] = item[i];
+        for (int i = 0; i < columns.length; i++) columns[i].values[index] = item[i];
 
         if (sortedColumn != -1)
         {
             if (ascending)
             {
                 int i = index;
-                for(; i > 0; i--)
+                for (; i > 0; i--)
                 {
                     if (columns[sortedColumn].greater(i - 1, i)) swap(i - 1, i);
                     else break;
                 }
-                for(; i < used - 1; i++)
+                for (; i < used - 1; i++)
                 {
                     if (columns[sortedColumn].greater(i, i + 1)) swap(i, i + 1);
                     else break;
@@ -92,12 +92,12 @@ public class SortableTable
             else
             {
                 int i = index;
-                for(; i > 0; i--)
+                for (; i > 0; i--)
                 {
                     if (columns[sortedColumn].greater(i, i - 1)) swap(i - 1, i);
                     else break;
                 }
-                for(; i < used - 1; i++)
+                for (; i < used - 1; i++)
                 {
                     if (columns[sortedColumn].greater(i + 1, i)) swap(i, i + 1);
                     else break;
@@ -111,7 +111,7 @@ public class SortableTable
         if (index >= used) throw new ArrayIndexOutOfBoundsException("Item count: " + used + ", index given: " + index);
 
         used--;
-        for(int i = index; i < used; i++)
+        for (int i = index; i < used; i++)
         {
             for (Column column : columns)
             {
@@ -119,6 +119,7 @@ public class SortableTable
             }
         }
     }
+
     public boolean delete(Object o, int column)
     {
         if (column >= columns.length) throw new ArrayIndexOutOfBoundsException("Column count: " + columns.length + ", index given: " + column);
@@ -138,6 +139,7 @@ public class SortableTable
     {
         startSorting(column, ascending);
     }
+
     public void startSorting(int column, boolean ascending)
     {
         if (column >= columns.length) throw new ArrayIndexOutOfBoundsException("Column count: " + columns.length + ", index given: " + column);
@@ -147,9 +149,9 @@ public class SortableTable
 
         if (ascending)
         {
-            for(int i2 = used - 1; i2 > 0; i2--)
+            for (int i2 = used - 1; i2 > 0; i2--)
             {
-                for(int i = 0; i < i2; i++)
+                for (int i = 0; i < i2; i++)
                 {
                     if (columns[column].greater(i, i + 1)) swap(i, i + 1);
                 }
@@ -157,9 +159,9 @@ public class SortableTable
         }
         else
         {
-            for(int i2 = used - 1; i2 > 0; i2--)
+            for (int i2 = used - 1; i2 > 0; i2--)
             {
-                for(int i = 0; i < i2; i++)
+                for (int i = 0; i < i2; i++)
                 {
                     if (columns[column].greater(i + 1, i)) swap(i, i + 1);
                 }
@@ -216,14 +218,14 @@ public class SortableTable
         String[] strings = new String[columns.length * (1 + used)];
         int[] maxes = new int[columns.length];
 
-        for(int i = 0; i < columns.length; i++)
+        for (int i = 0; i < columns.length; i++)
         {
             strings[i] = columns[i].label;
             maxes[i] = strings[i].length();
         }
-        for(int i2 = 0; i2 < used; i2++)
+        for (int i2 = 0; i2 < used; i2++)
         {
-            for(int i = 0; i < columns.length; i++)
+            for (int i = 0; i < columns.length; i++)
             {
                 strings[(1 + i2) * columns.length + i] = columns[i].toString(i2);
                 if (strings[(1 + i2) * columns.length + i].length() > maxes[i]) maxes[i] = strings[(1 + i2) * columns.length + i].length();
@@ -231,18 +233,18 @@ public class SortableTable
         }
 
         StringBuilder result = new StringBuilder();
-        for(int i = 0; i < columns.length; i++)
+        for (int i = 0; i < columns.length; i++)
         {
             result.append(strings[i]);
-            for(int i3 = strings[i].length(); i3 < maxes[i] + 1; i3++) result.append(" ");
+            for (int i3 = strings[i].length(); i3 < maxes[i] + 1; i3++) result.append(" ");
         }
         result.append("\r\n");
-        for(int i2 = 0; i2 < used; i2++)
+        for (int i2 = 0; i2 < used; i2++)
         {
-            for(int i = 0; i < columns.length; i++)
+            for (int i = 0; i < columns.length; i++)
             {
                 result.append(strings[(1 + i2) * columns.length + i]);
-                for(int i3 = strings[(1 + i2) * columns.length + i].length(); i3 < maxes[i] + 1; i3++) result.append(" ");
+                for (int i3 = strings[(1 + i2) * columns.length + i].length(); i3 < maxes[i] + 1; i3++) result.append(" ");
             }
             result.append("\r\n");
         }
@@ -283,6 +285,7 @@ public class SortableTable
         {
             this("", c);
         }
+
         Column(String label, Class c)
         {
             this.label = label;
@@ -320,7 +323,7 @@ public class SortableTable
             {
                 comparison = LONG;
             }
-            else if (Byte.class.isAssignableFrom(c));
+            else if (Byte.class.isAssignableFrom(c)) ;
             else //Everything else; not a primitive or a String
             {
                 comparison = CLASS;
@@ -329,16 +332,18 @@ public class SortableTable
 
         boolean greater(int index1, int index2) //True if index1 > index2
         {
-            switch(comparison)
+            switch (comparison)
             {
-                case INT: return ((int) values[index1]) > ((int) values[index2]);
-                case BOOLEAN: return ((boolean) values[index1]) && !((boolean) values[index2]);
+                case INT:
+                    return ((int) values[index1]) > ((int) values[index2]);
+                case BOOLEAN:
+                    return ((boolean) values[index1]) && !((boolean) values[index2]);
                 case STRING:
                 {
                     String str1 = (String) values[index1], str2 = (String) values[index2];
                     int i = 0, min = Math.min(str1.length(), str2.length());
                     char c1, c2;
-                    while(i < min)
+                    while (i < min)
                     {
                         if (str1.length() > i) c1 = str1.charAt(i);
                         else c1 = 0;
@@ -351,18 +356,24 @@ public class SortableTable
                     }
                     return str1.length() > str2.length();
                 }
-                case FLOAT: return ((float) values[index1]) > ((float) values[index2]);
-                case CHAR: return ((char) values[index1]) > ((char) values[index2]);
-                case DOUBLE: return ((double) values[index1]) > ((double) values[index2]);
-                case SHORT: return ((short) values[index1]) > ((short) values[index2]);
-                case LONG: return ((long) values[index1]) > ((long) values[index2]);
-                case BYTE: return ((byte) values[index1]) > ((byte) values[index2]);
+                case FLOAT:
+                    return ((float) values[index1]) > ((float) values[index2]);
+                case CHAR:
+                    return ((char) values[index1]) > ((char) values[index2]);
+                case DOUBLE:
+                    return ((double) values[index1]) > ((double) values[index2]);
+                case SHORT:
+                    return ((short) values[index1]) > ((short) values[index2]);
+                case LONG:
+                    return ((long) values[index1]) > ((long) values[index2]);
+                case BYTE:
+                    return ((byte) values[index1]) > ((byte) values[index2]);
                 default:
                 {
                     String str1 = values[index1].getClass().getSimpleName(), str2 = values[index2].getClass().getSimpleName();
                     int i = 0, min = Math.min(str1.length(), str2.length());
                     char c1, c2;
-                    while(i < min)
+                    while (i < min)
                     {
                         if (str1.length() > i) c1 = str1.charAt(i);
                         else c1 = 0;
@@ -380,7 +391,7 @@ public class SortableTable
 
         int indexOf(Object value)
         {
-            for(int i = 0; i < used; i++)
+            for (int i = 0; i < used; i++)
             {
                 if (value.equals(values[i])) return i;
             }

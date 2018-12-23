@@ -16,11 +16,11 @@ import java.util.List;
 public class AIParrotFollowEdit extends EntityAIBase //In vanilla, this is only used by parrots, to randomly follow other mobs that are not parrots
 {
     private static Field entityField, speedModifierField, stopDistanceField, areaSizeField;
+
     static
     {
         initReflections();
     }
-
 
 
     private final EntityLiving searcher;
@@ -66,7 +66,7 @@ public class AIParrotFollowEdit extends EntityAIBase //In vanilla, this is only 
         }
 
         target = queue.poll();
-        while(target != null && !searcher.getEntitySenses().canSee(target)) //Doesn't need isSuitableTarget because it's not always used for attacking
+        while (target != null && !searcher.getEntitySenses().canSee(target)) //Doesn't need isSuitableTarget because it's not always used for attacking
         {
             target = queue.poll();
         }
@@ -111,7 +111,7 @@ public class AIParrotFollowEdit extends EntityAIBase //In vanilla, this is only 
                 double d2 = searcher.posZ - target.posZ;
                 double d3 = d0 * d0 + d1 * d1 + d2 * d2;
 
-                if (d3 > (double)(stopDistance * stopDistance))
+                if (d3 > (double) (stopDistance * stopDistance))
                 {
                     path = navigator.getPathToEntityLiving(target);
                     navigator.setPath(path, speedModifier);
@@ -121,7 +121,7 @@ public class AIParrotFollowEdit extends EntityAIBase //In vanilla, this is only 
                     if (path != null && path.equals(navigator.getPath())) navigator.clearPath();
                     EntityLookHelper entitylookhelper = target.getLookHelper();
 
-                    if (d3 <= (double)stopDistance || entitylookhelper.getLookPosX() == searcher.posX && entitylookhelper.getLookPosY() == searcher.posY && entitylookhelper.getLookPosZ() == searcher.posZ)
+                    if (d3 <= (double) stopDistance || entitylookhelper.getLookPosX() == searcher.posX && entitylookhelper.getLookPosY() == searcher.posY && entitylookhelper.getLookPosZ() == searcher.posZ)
                     {
                         double d4 = target.posX - searcher.posX;
                         double d5 = target.posZ - searcher.posZ;
@@ -132,7 +132,6 @@ public class AIParrotFollowEdit extends EntityAIBase //In vanilla, this is only 
             }
         }
     }
-
 
 
     private static void initReflections()

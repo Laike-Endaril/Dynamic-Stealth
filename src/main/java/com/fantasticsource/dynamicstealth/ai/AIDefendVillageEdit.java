@@ -17,11 +17,11 @@ import java.util.UUID;
 public class AIDefendVillageEdit extends AITargetEdit
 {
     private static Field villageReputationsField;
+
     static
     {
         initReflections();
     }
-
 
 
     EntityIronGolem irongolem;
@@ -69,7 +69,7 @@ public class AIDefendVillageEdit extends AITargetEdit
                 if (queue.isEmpty()) return false;
 
                 villageAgressorTarget = queue.poll();
-                while(villageAgressorTarget != null && !isSuitableTarget(villageAgressorTarget)) villageAgressorTarget = queue.poll();
+                while (villageAgressorTarget != null && !isSuitableTarget(villageAgressorTarget)) villageAgressorTarget = queue.poll();
             }
             catch (IllegalAccessException e)
             {
@@ -89,7 +89,6 @@ public class AIDefendVillageEdit extends AITargetEdit
         irongolem.setAttackTarget(villageAgressorTarget);
         super.startExecuting();
     }
-
 
 
     private static void initReflections()

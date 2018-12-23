@@ -11,11 +11,11 @@ import java.lang.reflect.Field;
 public class AIJohnnyAttackEdit extends AINearestAttackableTargetEdit<EntityLivingBase>
 {
     private static Field johnnyField;
+
     static
     {
         initReflections();
     }
-
 
 
     public AIJohnnyAttackEdit(EntityAINearestAttackableTarget oldAI) throws IllegalAccessException
@@ -37,7 +37,6 @@ public class AIJohnnyAttackEdit extends AINearestAttackableTargetEdit<EntityLivi
             return false;
         }
     }
-
 
 
     private static void initReflections()

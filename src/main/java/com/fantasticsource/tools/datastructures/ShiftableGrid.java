@@ -38,7 +38,7 @@ public class ShiftableGrid<T>
     {
         if (x < 0)
         {
-            for(int ix = 0; ix > x && ix > -w; ix--)
+            for (int ix = 0; ix > x && ix > -w; ix--)
             {
                 clearColumn(xOffset);
 
@@ -48,7 +48,7 @@ public class ShiftableGrid<T>
         }
         else
         {
-            for(int ix = 0; ix < x && ix < w; ix++)
+            for (int ix = 0; ix < x && ix < w; ix++)
             {
                 if (xOffset == 0) xOffset = w;
                 xOffset--;
@@ -59,7 +59,7 @@ public class ShiftableGrid<T>
 
         if (y < 0)
         {
-            for(int iy = 0; iy > y && iy > -h; iy--)
+            for (int iy = 0; iy > y && iy > -h; iy--)
             {
                 clearRow(yOffset);
 
@@ -69,7 +69,7 @@ public class ShiftableGrid<T>
         }
         else
         {
-            for(int iy = 0; iy < y && iy < h; iy++)
+            for (int iy = 0; iy < y && iy < h; iy++)
             {
                 if (yOffset == 0) yOffset = h;
                 yOffset--;
@@ -81,12 +81,12 @@ public class ShiftableGrid<T>
 
     private void clearRow(int y)
     {
-        for(int i = 0; i < h; i++) values[i][y] = null;
+        for (int i = 0; i < h; i++) values[i][y] = null;
     }
 
     private void clearColumn(int x)
     {
-        for(int i = 0; i < h; i++) values[x][i] = null;
+        for (int i = 0; i < h; i++) values[x][i] = null;
     }
 
     public String toString(int x, int y)
@@ -102,11 +102,11 @@ public class ShiftableGrid<T>
 
         StringBuilder result = new StringBuilder();
 
-        for(int iy = 0; iy < h; iy++)
+        for (int iy = 0; iy < h; iy++)
         {
             result.append(toString(0, iy));
 
-            for(int ix = 1; ix < w; ix++)
+            for (int ix = 1; ix < w; ix++)
             {
                 result.append(", ").append(toString(ix, iy));
             }

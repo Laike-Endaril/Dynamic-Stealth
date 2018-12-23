@@ -161,6 +161,7 @@ public class PNG
             loaded = false;
         }
     }
+
     public void finalize() throws Throwable //Because direct byte buffers are not unloaded by the garbage collector!
     {
         super.finalize();
@@ -169,10 +170,9 @@ public class PNG
     }
 
 
-
     private void readLine() throws IOException, DataFormatException
     {
-        for(int bytesRead, position = 0; position < line.length; position += bytesRead)
+        for (int bytesRead, position = 0; position < line.length; position += bytesRead)
         {
             bytesRead = inflater.inflate(line, position, line.length - position);
 
@@ -202,7 +202,6 @@ public class PNG
         chunkBytesRemaining -= length;
         return length;
     }
-
 
 
     private void unfilter() throws IOException
@@ -274,7 +273,6 @@ public class PNG
             line[i] += (byte) c;
         }
     }
-
 
 
     private void read(byte[] buffer, int offset, int length) throws IOException

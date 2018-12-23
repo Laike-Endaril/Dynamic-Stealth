@@ -8,7 +8,7 @@ public class Matrices
         if (matrices[0].length != 16) throw new IllegalArgumentException("All matrices must be of length 16 (4x4 matrices; argument 0 was not)");
 
         float[] result = matrices[0].clone();
-        for(int i = 1; i < matrices.length; i++)
+        for (int i = 1; i < matrices.length; i++)
         {
             if (matrices[i].length != 16) throw new IllegalArgumentException("All matrices must be of length 16 (4x4 matrices; argument " + i + " was not)");
 
@@ -39,6 +39,7 @@ public class Matrices
     {
         return mult(matrix, translate(x, y, z));
     }
+
     public static float[] translate(float x, float y, float z)
     {
         return new float[]{
@@ -68,6 +69,7 @@ public class Matrices
     {
         return mult(matrix, scale(x, y, z));
     }
+
     public static float[] scale(float x, float y, float z)
     {
         return new float[]{

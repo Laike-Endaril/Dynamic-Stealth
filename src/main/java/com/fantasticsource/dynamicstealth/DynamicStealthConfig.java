@@ -8,6 +8,7 @@ public class DynamicStealthConfig
 {
     @Config.Name("AI")
     public static AI a5_ai = new AI();
+
     public static class AI
     {
         @Config.Name("Head Turn Speed")
@@ -17,7 +18,6 @@ public class DynamicStealthConfig
     }
 
 
-
     @Config.Name("Threat System")
     @Comment({
             "The threat system decides when an entity switches from one attack target to another",
@@ -25,6 +25,7 @@ public class DynamicStealthConfig
             "This is similar to threat systems found in some MMORPGs"
     })
     public static ThreatSystem a8_threatSystem = new ThreatSystem();
+
     public static class ThreatSystem
     {
         @Config.Name("\"Attacked\" Threat Multiplier (Initial Attack)")
@@ -59,7 +60,6 @@ public class DynamicStealthConfig
     }
 
 
-
     @Config.Name("Stealth Multipliers")
     @Comment({
             "Contains multipliers that increase stealth / decrease awareness",
@@ -67,6 +67,7 @@ public class DynamicStealthConfig
             "Whichever of these multipliers is currently giving the best (lowest) multiplier is used"
     })
     public static StealthMultipliers a_stealthMultipliers = new StealthMultipliers();
+
     public static class StealthMultipliers
     {
         @Config.Name("Crouching Multiplier")
@@ -115,7 +116,6 @@ public class DynamicStealthConfig
     }
 
 
-
     @Config.Name("Visibility Multipliers")
     @Comment({
             "Contains multipliers that decrease stealth / increase awareness",
@@ -123,6 +123,7 @@ public class DynamicStealthConfig
             "Whichever of these multipliers is currently giving the worst (highest) multiplier is used"
     })
     public static VisibilityMultipliers b_visibilityMultipliers = new VisibilityMultipliers();
+
     public static class VisibilityMultipliers
     {
         @Comment({
@@ -149,10 +150,10 @@ public class DynamicStealthConfig
     }
 
 
-
     @Config.Name("Lighting")
     @Comment({"How much of an effect lighting has on stealth.  Nightvision is in here as well"})
     public static Lighting c_lighting = new Lighting();
+
     public static class Lighting
     {
         @Config.Name("Light (High/Bright)")
@@ -183,10 +184,10 @@ public class DynamicStealthConfig
     }
 
 
-
     @Config.Name("Speed")
     @Comment({"How much of an effect an entity's speed has on stealth"})
     public static Speeds d_speeds = new Speeds();
+
     public static class Speeds
     {
         @Config.Name("Speed (High/Fast)")
@@ -201,10 +202,10 @@ public class DynamicStealthConfig
     }
 
 
-
     @Config.Name("Angle")
     @Comment({"FOV angles"})
     public static Angles e_angles = new Angles();
+
     public static class Angles
     {
         @Config.Name("Angle (Large/Wide; Near)")
@@ -241,10 +242,10 @@ public class DynamicStealthConfig
     }
 
 
-
     @Config.Name("Distance")
     @Comment({"FOV distances"})
     public static Distance f_distances = new Distance();
+
     public static class Distance
     {
         @Config.Name("Distance (Far)")
@@ -277,10 +278,10 @@ public class DynamicStealthConfig
     }
 
 
-
     @Config.Name("Absolute Cases")
     @Comment({"Special cases, eg. glowing"})
     public static Absolutes g_absolutes = new Absolutes();
+
     public static class Absolutes
     {
         @Config.Name("See Glowing?")
@@ -293,9 +294,9 @@ public class DynamicStealthConfig
     }
 
 
-
     @Config.Name("Entity-Specific Settings (Advanced)")
     public static EntitySettings y_entityOverrides = new EntitySettings();
+
     public static class EntitySettings
     {
         @Config.Name("Angle")
@@ -374,10 +375,10 @@ public class DynamicStealthConfig
     }
 
 
-
     @Config.Name("Other Settings")
     @Comment({"Stuff that doesn't fit in other categories"})
     public static OtherSettings z_otherSettings = new OtherSettings();
+
     public static class OtherSettings
     {
         @Config.Name("Remove Invisibility On Hit")

@@ -15,11 +15,11 @@ import java.lang.reflect.Field;
 public class AIAttackRangedEdit extends EntityAIBase
 {
     private static Field rangedAttackEntityHostField, entityMoveSpeedField, attackIntervalMinField, maxRangedAttackTimeField, attackRadiusField;
+
     static
     {
         initReflections();
     }
-
 
 
     private final EntityLiving attacker;
@@ -43,7 +43,7 @@ public class AIAttackRangedEdit extends EntityAIBase
         attackIntervalRange = (int) maxRangedAttackTimeField.get(oldAI) - attackIntervalMin;
 
         attackRadiusSquared = attackRadius * attackRadius;
-        attacker = (EntityLiving)rangedAttacker;
+        attacker = (EntityLiving) rangedAttacker;
         timer = -1;
 
         setMutexBits(3);
@@ -111,7 +111,6 @@ public class AIAttackRangedEdit extends EntityAIBase
             timer = MathHelper.floor(attackIntervalMin + distanceFactor * attackIntervalRange);
         }
     }
-
 
 
     private static void initReflections()

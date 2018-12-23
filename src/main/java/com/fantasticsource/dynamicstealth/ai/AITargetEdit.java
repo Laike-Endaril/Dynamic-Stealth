@@ -18,6 +18,7 @@ import java.lang.reflect.Field;
 public abstract class AITargetEdit extends EntityAIBase
 {
     private static Field taskOwnerField, nearbyOnlyField;
+
     static
     {
         initReflections();
@@ -45,7 +46,7 @@ public abstract class AITargetEdit extends EntityAIBase
         Team targetTeam = target.getTeam();
         if (attackerTeam != null && targetTeam == attackerTeam) return false;
 
-        if (target instanceof EntityPlayer && ((EntityPlayer)target).capabilities.disableDamage) return false;
+        if (target instanceof EntityPlayer && ((EntityPlayer) target).capabilities.disableDamage) return false;
 
         if (!attacker.getEntitySenses().canSee(target)) return false;
 
@@ -72,19 +73,19 @@ public abstract class AITargetEdit extends EntityAIBase
             return false;
         }
 
-        if (attacker instanceof IEntityOwnable && ((IEntityOwnable)attacker).getOwnerId() != null)
+        if (attacker instanceof IEntityOwnable && ((IEntityOwnable) attacker).getOwnerId() != null)
         {
-            if (target instanceof IEntityOwnable && ((IEntityOwnable)attacker).getOwnerId().equals(((IEntityOwnable)target).getOwnerId()))
+            if (target instanceof IEntityOwnable && ((IEntityOwnable) attacker).getOwnerId().equals(((IEntityOwnable) target).getOwnerId()))
             {
                 return false;
             }
 
-            if (target == ((IEntityOwnable)attacker).getOwner())
+            if (target == ((IEntityOwnable) attacker).getOwner())
             {
                 return false;
             }
         }
-        else if (target instanceof EntityPlayer && ((EntityPlayer)target).capabilities.disableDamage)
+        else if (target instanceof EntityPlayer && ((EntityPlayer) target).capabilities.disableDamage)
         {
             return false;
         }
@@ -112,7 +113,6 @@ public abstract class AITargetEdit extends EntityAIBase
         int j = pathpoint.z - MathHelper.floor(target.posZ);
         return (i * i + j * j) <= 2.25;
     }
-
 
 
     private static void initReflections()

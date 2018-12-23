@@ -68,7 +68,7 @@ public class StringList
 
     public int indexOf(String string)
     {
-        for(int i = 0; i < size(); i++)
+        for (int i = 0; i < size(); i++)
         {
             if (get(i).equals(string)) return i;
         }
@@ -101,6 +101,7 @@ public class StringList
         }
         return false;
     }
+
     public void remove(int index)
     {
         strings.remove(index);

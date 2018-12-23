@@ -13,11 +13,11 @@ import java.lang.reflect.Field;
 public class AIAttackMeleeEdit extends EntityAIAttackMelee
 {
     private static Field attackerField, speedTowardsTargetField;
+
     static
     {
         initReflections();
     }
-
 
 
     protected EntityCreature attacker;
@@ -103,7 +103,6 @@ public class AIAttackMeleeEdit extends EntityAIAttackMelee
     {
         return Math.pow(attacker.width * 2, 2) + target.width;
     }
-
 
 
     private static void initReflections()

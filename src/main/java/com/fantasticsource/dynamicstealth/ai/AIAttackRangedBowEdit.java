@@ -16,11 +16,11 @@ import java.lang.reflect.Field;
 public class AIAttackRangedBowEdit<T extends EntityMob & IRangedAttackMob> extends EntityAIAttackRangedBow
 {
     private static Field entityField, moveSpeedAmpField, attackCooldownField, maxAttackDistanceField;
+
     static
     {
         initReflections();
     }
-
 
 
     private T attacker;
@@ -153,7 +153,6 @@ public class AIAttackRangedBowEdit<T extends EntityMob & IRangedAttackMob> exten
             attacker.setActiveHand(EnumHand.MAIN_HAND);
         }
     }
-
 
 
     private static void initReflections()

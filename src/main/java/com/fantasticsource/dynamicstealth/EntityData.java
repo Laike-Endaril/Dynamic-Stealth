@@ -99,12 +99,10 @@ public class EntityData
     }
 
 
-
     public static boolean naturalNightVision(Entity searcher)
     {
         return naturalNightvisionEntities.contains(searcher.getClass());
     }
-
 
 
     public static int angleLarge(Entity searcher)
@@ -124,7 +122,6 @@ public class EntityData
         Pair<Integer, Integer> pair = entityAngles.get(searcher.getClass());
         return pair == null ? angleRange : pair.getKey() - pair.getValue();
     }
-
 
 
     public static int distanceFar(Entity searcher)
@@ -152,7 +149,6 @@ public class EntityData
     }
 
 
-
     public static int lightHigh(Entity searcher)
     {
         Pair<Integer, Integer> pair = entityLighting.get(searcher.getClass());
@@ -170,7 +166,6 @@ public class EntityData
         Pair<Integer, Integer> pair = entityLighting.get(searcher.getClass());
         return pair == null ? lightRange : pair.getKey() - pair.getValue();
     }
-
 
 
     public static double speedHigh(Entity searcher)

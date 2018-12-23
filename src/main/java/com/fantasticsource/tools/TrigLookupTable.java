@@ -16,7 +16,7 @@ public class TrigLookupTable
         double invstep = ((double) 2) / ((double) granularity);
 
         double theta, val;
-        for(int i = 0; i < granularity; i++)
+        for (int i = 0; i < granularity; i++)
         {
             theta = step * i; // 0 -> 2pi
             if (theta == Math.PI) table[i] = 0;
@@ -99,7 +99,7 @@ public class TrigLookupTable
             else if (y < 0) //Quad 4
             {
                 if (x > -y) return Math.PI * 2 + arcsin(y / Math.sqrt(x * x + y * y));
-                else return Math.PI * 2 -arccos(x / Math.sqrt(x * x + y * y));
+                else return Math.PI * 2 - arccos(x / Math.sqrt(x * x + y * y));
             }
             else return 0;
         }
@@ -139,6 +139,7 @@ public class TrigLookupTable
     {
         return table;
     }
+
     public double[] getInvArray()
     {
         return invtable;
@@ -161,12 +162,12 @@ public class TrigLookupTable
         System.out.println("The TrigLookupTable has a granularity of 1024\r\n");
 
         d1 = new Date();
-        for(i = 0; i < 1000000; i++)
+        for (i = 0; i < 1000000; i++)
         {
             doubles[i] = t.sin(Math.random() * (double) 2000000 - (double) 1000000);
         }
         d2 = new Date();
-        for(i = 0; i < 1000000; i++)
+        for (i = 0; i < 1000000; i++)
         {
             doubles[i] = Math.sin(Math.random() * (double) 2000000 - (double) 1000000);
         }
@@ -175,12 +176,12 @@ public class TrigLookupTable
         System.out.println("Math.sin = " + (d3.getTime() - d2.getTime()) + "\r\n");
 
         d1 = new Date();
-        for(i = 0; i < 1000000; i++)
+        for (i = 0; i < 1000000; i++)
         {
             doubles[i] = t.cos(Math.random() * (double) 2000000 - (double) 1000000);
         }
         d2 = new Date();
-        for(i = 0; i < 1000000; i++)
+        for (i = 0; i < 1000000; i++)
         {
             doubles[i] = Math.cos(Math.random() * (double) 2000000 - (double) 1000000);
         }
@@ -189,12 +190,12 @@ public class TrigLookupTable
         System.out.println("Math.cos = " + (d3.getTime() - d2.getTime()) + "\r\n");
 
         d1 = new Date();
-        for(i = 0; i < 1000000; i++)
+        for (i = 0; i < 1000000; i++)
         {
             doubles[i] = t.tan(Math.random() * (double) 2000000 - (double) 1000000);
         }
         d2 = new Date();
-        for(i = 0; i < 1000000; i++)
+        for (i = 0; i < 1000000; i++)
         {
             doubles[i] = Math.tan(Math.random() * (double) 2000000 - (double) 1000000);
         }
@@ -203,12 +204,12 @@ public class TrigLookupTable
         System.out.println("Math.tan = " + (d3.getTime() - d2.getTime()) + "\r\n");
 
         d1 = new Date();
-        for(i = 0; i < 1000000; i++)
+        for (i = 0; i < 1000000; i++)
         {
             doubles[i] = t.arcsin(Math.random() * (double) 2 - (double) 1);
         }
         d2 = new Date();
-        for(i = 0; i < 1000000; i++)
+        for (i = 0; i < 1000000; i++)
         {
             doubles[i] = Math.asin(Math.random() * (double) 2 - (double) 1);
         }
@@ -217,12 +218,12 @@ public class TrigLookupTable
         System.out.println("Math.asin = " + (d3.getTime() - d2.getTime()) + "\r\n");
 
         d1 = new Date();
-        for(i = 0; i < 1000000; i++)
+        for (i = 0; i < 1000000; i++)
         {
             doubles[i] = t.arccos(Math.random() * (double) 2 - (double) 1);
         }
         d2 = new Date();
-        for(i = 0; i < 1000000; i++)
+        for (i = 0; i < 1000000; i++)
         {
             doubles[i] = Math.acos(Math.random() * (double) 2 - (double) 1);
         }
@@ -231,12 +232,12 @@ public class TrigLookupTable
         System.out.println("Math.acos = " + (d3.getTime() - d2.getTime()) + "\r\n");
 
         d1 = new Date();
-        for(i = 0; i < 1000000; i++)
+        for (i = 0; i < 1000000; i++)
         {
             doubles[i] = t.arctan(Math.random() * (double) 2000000 - (double) 1000000);
         }
         d2 = new Date();
-        for(i = 0; i < 1000000; i++)
+        for (i = 0; i < 1000000; i++)
         {
             doubles[i] = Math.atan(Math.random() * (double) 2000000 - (double) 1000000);
         }

@@ -18,17 +18,17 @@ import java.util.List;
 public class AIFindEntityNearestEdit extends EntityAIBase
 {
     private static Field mobField, classToCheckField;
+
     static
     {
         initReflections();
     }
 
     public EntityLiving searcher;
-    public Class <? extends EntityLivingBase > targetClass;
+    public Class<? extends EntityLivingBase> targetClass;
 
     public static Logger LOGGER = LogManager.getLogger();
     public EntityLivingBase target;
-
 
 
     public AIFindEntityNearestEdit(EntityAIFindEntityNearest oldAI) throws IllegalAccessException
@@ -53,7 +53,7 @@ public class AIFindEntityNearestEdit extends EntityAIBase
         }
 
         target = queue.poll();
-        while(target != null && !AITargetEdit.isSuitableTarget(searcher, target)) target = queue.poll();
+        while (target != null && !AITargetEdit.isSuitableTarget(searcher, target)) target = queue.poll();
         return target != null;
     }
 
@@ -78,14 +78,14 @@ public class AIFindEntityNearestEdit extends EntityAIBase
     }
 
 
-
     private static void initReflections()
     {
         try
         {
             mobField = ReflectionTool.getField(EntityAIFindEntityNearest.class, "field_179442_b", "mob");
             classToCheckField = ReflectionTool.getField(EntityAIFindEntityNearest.class, "field_179439_f", "classToCheck");
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
             FMLCommonHandler.instance().exitJava(120, false);

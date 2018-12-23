@@ -12,11 +12,11 @@ import java.lang.reflect.Method;
 public class AIBearAttackEdit extends AIAttackMeleeEdit
 {
     static Method playWarningSoundMethod;
+
     static
     {
         initReflections();
     }
-
 
 
     EntityPolarBear bear;
@@ -79,7 +79,6 @@ public class AIBearAttackEdit extends AIAttackMeleeEdit
     {
         return 4 + attackTarget.width;
     }
-
 
 
     public static void initReflections()

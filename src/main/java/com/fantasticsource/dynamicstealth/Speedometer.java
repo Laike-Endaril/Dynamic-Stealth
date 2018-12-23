@@ -94,6 +94,7 @@ public class Speedometer
     public static class PlayerPackets extends SimpleChannelInboundHandler
     {
         EntityPlayer player;
+
         public PlayerPackets(EntityPlayer player)
         {
             super(false);

@@ -43,6 +43,7 @@ public class WrappingQueue<T>
     {
         return remove(0);
     }
+
     @SuppressWarnings("unchecked")
     public T remove(int index)
     {
@@ -50,7 +51,7 @@ public class WrappingQueue<T>
 
         int i = (index + startPos) % array.length;
         T result = (T) array[i];
-        for(; index >= 0; index--)
+        for (; index >= 0; index--)
         {
             if (i == 0) array[0] = array[array.length - 1];
             else array[i] = array[i - 1];
@@ -64,6 +65,7 @@ public class WrappingQueue<T>
 
         return result;
     }
+
     public boolean remove(T t) //Returns true if the object was removed, false if object was not found
     {
         int index = indexOf(t);
@@ -76,13 +78,14 @@ public class WrappingQueue<T>
     {
         return getArray(0, length);
     }
+
     public Object[] getArray(int index, int length)
     {
         if (index + length > this.length) throw new ArrayIndexOutOfBoundsException("Index: " + index + length + ", Length: " + this.length);
 
         Object[] result = new Object[length];
         index = (index + startPos) % array.length;
-        for(int i = 0; i < length; i++)
+        for (int i = 0; i < length; i++)
         {
             result[i] = array[index];
 
@@ -101,7 +104,7 @@ public class WrappingQueue<T>
     public int indexOf(T t)
     {
         int index = startPos;
-        for(int i = 0; i < length; i++)
+        for (int i = 0; i < length; i++)
         {
             if (array[index].equals(t)) return i;
             index++;
@@ -109,6 +112,7 @@ public class WrappingQueue<T>
         }
         return -1;
     }
+
     public boolean contains(T t)
     {
         return indexOf(t) != -1;

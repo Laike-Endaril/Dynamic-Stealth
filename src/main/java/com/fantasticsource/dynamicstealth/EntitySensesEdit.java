@@ -70,7 +70,6 @@ public class EntitySensesEdit extends EntitySenses
         if (!target.isEntityAlive() || angleLarge(searcher) == 0) return true;
 
 
-
         //Angles and Distances (absolute, base FOV)
         double distSquared = searcher.getDistanceSq(target);
         if (distSquared > distanceFarSquared(searcher)) return true;
@@ -93,15 +92,12 @@ public class EntitySensesEdit extends EntitySenses
         }
 
 
-
         //Glowing (absolute, after Angles)
         if (g_absolutes.seeGlowing && target.isGlowing()) return false;
 
 
-
         //LOS check (absolute, after Angles, after Glowing)
         if (!los(searcher, target)) return true;
-
 
 
         //Lighting (absolute, factor, after Angles, after Glowing, after LOS)
@@ -115,16 +111,13 @@ public class EntitySensesEdit extends EntitySenses
         lightFactor = lightFactor >= lightHigh(searcher) ? 1 : lightFactor / lightRange(searcher);
 
 
-
         //Speeds (factor)
         double speedFactor = Speedometer.getSpeed(target);
         speedFactor = speedFactor >= speedHigh(searcher) ? 1 : speedFactor <= speedLow(searcher) ? 0 : (speedFactor - speedLow(searcher)) / speedRange(searcher);
 
 
-
         //Blindness (multiplier)
         double blindnessMultiplier = searcher.getActivePotionEffect(MobEffects.BLINDNESS) != null ? a_stealthMultipliers.blindnessMultiplier : 1;
-
 
 
         //Invisibility (multiplier)
@@ -133,10 +126,8 @@ public class EntitySensesEdit extends EntitySenses
         double invisibilityMultiplier = isLivingBase && targetLiving.getActivePotionEffect(MobEffects.INVISIBILITY) != null ? a_stealthMultipliers.invisibilityMultiplier : 1;
 
 
-
         //Crouching (multiplier)
         double crouchingMultiplier = target.isSneaking() ? a_stealthMultipliers.crouchingMultiplier : 1;
-
 
 
         //Mob Heads (multiplier)
@@ -152,27 +143,22 @@ public class EntitySensesEdit extends EntitySenses
                     mobHeadMultiplier = a_stealthMultipliers.mobHeadMultiplier;
                 }
             }
-            else if ((helmet.getItem() == Item.getItemFromBlock(Blocks.PUMPKIN) && helmet.getItem() == Item.getItemFromBlock(Blocks.LIT_PUMPKIN)) && target instanceof EntitySnowman)
-                mobHeadMultiplier = a_stealthMultipliers.mobHeadMultiplier;
+            else if ((helmet.getItem() == Item.getItemFromBlock(Blocks.PUMPKIN) && helmet.getItem() == Item.getItemFromBlock(Blocks.LIT_PUMPKIN)) && target instanceof EntitySnowman) mobHeadMultiplier = a_stealthMultipliers.mobHeadMultiplier;
         }
-
 
 
         //Armor
         double armorMultiplier = isLivingBase ? Math.max(0, 1 + b_visibilityMultipliers.armorMultiplierCumulative * targetLiving.getTotalArmorValue()) : 1;
 
 
-
         //Fire
         double fireMultiplier = !isLivingBase ? 1 : !targetLiving.isBurning() ? 1 : b_visibilityMultipliers.onFireMultiplier;
-
 
 
         //Combine multipliers
         double stealthMultiplier = Tools.min(blindnessMultiplier, invisibilityMultiplier, crouchingMultiplier, mobHeadMultiplier);
         double visibilityMultiplier = Tools.max(armorMultiplier, fireMultiplier);
         double combinedMultiplier = Math.max(0, Math.min(1, stealthMultiplier * visibilityMultiplier));
-
 
 
         //Final calculation

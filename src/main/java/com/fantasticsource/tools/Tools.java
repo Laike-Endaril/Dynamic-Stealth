@@ -52,8 +52,6 @@ public class Tools
     }
 
 
-
-
     public static void printStack(Thread thread, int maxNodes)
     {
         StackTraceElement[] stack = thread.getStackTrace();
@@ -62,6 +60,7 @@ public class Tools
             System.out.println(stack[i].toString());
         }
     }
+
     public static void printStack(Thread thread)
     {
         printStack(thread, Integer.MAX_VALUE);
@@ -80,43 +79,51 @@ public class Tools
     }
 
 
-
     public static byte choose(byte... choices)
     {
         return choices[(int) Math.floor(Math.random() * choices.length)];
     }
+
     public static short choose(short... choices)
     {
         return choices[(int) Math.floor(Math.random() * choices.length)];
     }
+
     public static int choose(int... choices)
     {
         return choices[(int) Math.floor(Math.random() * choices.length)];
     }
+
     public static long choose(long... choices)
     {
         return choices[(int) Math.floor(Math.random() * choices.length)];
     }
+
     public static float choose(float... choices)
     {
         return choices[(int) Math.floor(Math.random() * choices.length)];
     }
+
     public static double choose(double... choices)
     {
         return choices[(int) Math.floor(Math.random() * choices.length)];
     }
+
     public static boolean choose(boolean... choices)
     {
         return choices[(int) Math.floor(Math.random() * choices.length)];
     }
+
     public static char choose(char... choices)
     {
         return choices[(int) Math.floor(Math.random() * choices.length)];
     }
+
     public static String choose(String... choices)
     {
         return choices[(int) Math.floor(Math.random() * choices.length)];
     }
+
     @SuppressWarnings("unchecked")
     public static <E> E chooseObj(E... choices)
     {
@@ -124,17 +131,18 @@ public class Tools
     }
 
 
-
     public static void insertBytes(byte[] bytes, int index, short value)
     {
         bytes[index] = (byte) (value >> 8);
         bytes[index + 1] = (byte) value;
     }
+
     public static void insertBytes(byte[] bytes, int index, char value)
     {
         bytes[index] = (byte) (value >> 8);
         bytes[index + 1] = (byte) value;
     }
+
     public static void insertBytes(byte[] bytes, int index, int value)
     {
         bytes[index] = (byte) (value >> 24);
@@ -142,10 +150,12 @@ public class Tools
         bytes[index + 2] = (byte) (value >> 8);
         bytes[index + 3] = (byte) value;
     }
+
     public static void insertBytes(byte[] bytes, int index, float value)
     {
         insertBytes(bytes, index, Float.floatToRawIntBits(value));
     }
+
     public static void insertBytes(byte[] bytes, int index, long value)
     {
         bytes[index] = (byte) (value >> 56);
@@ -157,11 +167,11 @@ public class Tools
         bytes[index + 6] = (byte) (value >> 8);
         bytes[index + 7] = (byte) value;
     }
+
     public static void insertBytes(byte[] bytes, int index, double value)
     {
         insertBytes(bytes, index, Double.doubleToRawLongBits(value));
     }
-
 
 
     public static byte[] mergeByteArrays(byte[] dest, byte[] src)
@@ -178,6 +188,7 @@ public class Tools
     {
         return subArray(bytes, start, bytes.length - start);
     }
+
     public static byte[] subArray(byte[] bytes, int start, int length)
     {
         byte[] result = new byte[length];
@@ -189,6 +200,7 @@ public class Tools
     {
         return subArray(chars, start, chars.length - start);
     }
+
     public static char[] subArray(char[] chars, int start, int length)
     {
         char[] result = new char[length];
@@ -197,27 +209,30 @@ public class Tools
     }
 
 
-
     public static short bytesToShort(byte[] b, int index)
     {
         return (short) (((b[index] & 0xFF) << 8) | (b[index + 1] & 0xFF));
     }
+
     public static char bytesToChar(byte[] b, int index)
     {
         return (char) (((b[index] & 0xFF) << 8) | (b[index + 1] & 0xFF));
     }
+
     public static int bytesToInt(byte[] b, int index)
     {
         return (((b[index] & 0xFF) << 24) | ((b[index + 1] & 0xFF) << 16) | ((b[index + 2] & 0xFF) << 8) | (b[index + 3] & 0xFF));
     }
+
     public static float bytesToFloat(byte[] b, int index)
     {
         return Float.intBitsToFloat(bytesToInt(b, index));
     }
+
     public static String bytesToASCII(byte[] b, int index, int length)
     {
         String result = "";
-        for(int i = 0; i < length; i++) result += (char) b[index + i];
+        for (int i = 0; i < length; i++) result += (char) b[index + i];
         return result;
     }
 
@@ -225,6 +240,7 @@ public class Tools
     {
         return deg * Math.PI / 180;
     }
+
     public static double radtodeg(double rad)
     {
         return rad * 180 / Math.PI;
@@ -236,12 +252,14 @@ public class Tools
         if (a < 0) a += b;
         return a;
     }
+
     public static float mod(float a, float b)
     {
         a = a % b;
         if (a < 0) a += b;
         return a;
     }
+
     public static double mod(double a, double b)
     {
         a = a % b;
@@ -253,26 +271,32 @@ public class Tools
     {
         return (byte) (maxvalue * Math.random());
     }
+
     public static short random(short maxvalue)
     {
         return (short) (maxvalue * Math.random());
     }
+
     public static int random(int maxvalue)
     {
         return (int) (maxvalue * Math.random());
     }
+
     public static long random(long maxvalue)
     {
         return (long) (maxvalue * Math.random());
     }
+
     public static float random(float maxvalue)
     {
         return (float) (maxvalue * Math.random());
     }
+
     public static double random(double maxvalue)
     {
         return maxvalue * Math.random();
     }
+
     public static char random(char maxvalue)
     {
         return (char) (maxvalue * Math.random());
@@ -281,7 +305,7 @@ public class Tools
     public static double randomGaussian(Random random, double center, double range)
     {
         double result = random.nextGaussian() * .5;
-        while(result < -1 || result > 1) result = random.nextGaussian() * .5;
+        while (result < -1 || result > 1) result = random.nextGaussian() * .5;
         return center + range * result;
     }
 
@@ -289,7 +313,6 @@ public class Tools
     {
         return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
     }
-
 
 
     public static void freeDirectByteBuffer(ByteBuffer directBuffer) throws NoSuchFieldException, IllegalAccessException
@@ -301,11 +324,11 @@ public class Tools
     }
 
 
-
     public static String readTXT(String filename) throws IOException
     {
         return readTXT(filename, false, null);
     }
+
     public static String readTXT(String filename, boolean internal, Class calledFrom) throws IOException
     {
         InputStream in;
@@ -323,7 +346,6 @@ public class Tools
 
         return result;
     }
-
 
 
     public static ByteBuffer allocateNative(int bytes)

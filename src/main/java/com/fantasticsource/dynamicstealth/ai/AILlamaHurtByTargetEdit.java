@@ -13,11 +13,11 @@ public class AILlamaHurtByTargetEdit extends AIHurtByTargetEdit
 {
     private static Method setDidSpitMethod;
     private static Field didSpitField;
+
     static
     {
         initReflections();
     }
-
 
 
     EntityLlama llama;
@@ -47,7 +47,6 @@ public class AILlamaHurtByTargetEdit extends AIHurtByTargetEdit
 
         return super.shouldContinueExecuting();
     }
-
 
 
     private static void initReflections()

@@ -21,11 +21,11 @@ public class AISlimeFaceRandomEdit extends EntityAIBase
 
     private static Class slimeMoveHelperClass;
     private static Method slimeMoveHelperSetDirectionMethod;
+
     static
     {
         initReflections();
     }
-
 
 
     public AISlimeFaceRandomEdit(EntitySlime slimeIn)
@@ -105,7 +105,6 @@ public class AISlimeFaceRandomEdit extends EntityAIBase
     {
         timer = timeMin + slime.getRNG().nextInt(timeRange);
     }
-
 
 
     private static void initReflections()

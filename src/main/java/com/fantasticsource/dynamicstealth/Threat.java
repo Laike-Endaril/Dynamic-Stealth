@@ -11,12 +11,10 @@ public class Threat
     private static Map<EntityLiving, Pair<EntityLiving, Integer>> threatMap = new LinkedHashMap<>(200);
 
 
-
     public static void remove(EntityLiving searcher)
     {
         threatMap.remove(searcher);
     }
-
 
 
     public static Pair<EntityLiving, Integer> get(EntityLiving searcher)
@@ -37,7 +35,6 @@ public class Threat
         if (entry != null) return entry.getValue();
         return 0;
     }
-
 
 
     public static void set(EntityLiving searcher, EntityLiving target, int threat)

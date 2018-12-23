@@ -31,7 +31,6 @@ public class AISearchLastKnownPosition extends EntityAIBase
     private static TrigLookupTable trigTable = DynamicStealth.TRIG_TABLE;
 
 
-
     public AISearchLastKnownPosition(EntityLiving living, double speedIn)
     {
         searcher = living;
@@ -52,7 +51,6 @@ public class AISearchLastKnownPosition extends EntityAIBase
         }
         return null;
     }
-
 
 
     @Override
@@ -252,11 +250,11 @@ public class AISearchLastKnownPosition extends EntityAIBase
 
         int xCheck, yCheck, zCheck;
         BlockPos checkPos;
-        for(int ix = 0; ix < xz * 2; ix++)
+        for (int ix = 0; ix < xz * 2; ix++)
         {
-            for(int iz = 0; iz < xz * 2; iz++)
+            for (int iz = 0; iz < xz * 2; iz++)
             {
-                for(int iy = 0; Math.abs(iy) <= yEnd; iy += yDir)
+                for (int iy = 0; Math.abs(iy) <= yEnd; iy += yDir)
                 {
                     if (xz > 0)
                     {

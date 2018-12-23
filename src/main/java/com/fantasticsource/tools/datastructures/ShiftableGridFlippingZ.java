@@ -11,6 +11,7 @@ public class ShiftableGridFlippingZ<T> extends ShiftableGrid<T>
     {
         super(width, height);
     }
+
     public ShiftableGridFlippingZ(int width, int height)
     {
         super(width, height);
@@ -41,10 +42,12 @@ public class ShiftableGridFlippingZ<T> extends ShiftableGrid<T>
     {
         shift(x, y, 0);
     }
+
     private void shift(int x, int y, boolean flag)
     {
         super.shift(x, y);
     }
+
     public void shift(int x, int y, int z)
     {
         shiftableGrids[0].shift(x, y, true);
@@ -62,6 +65,7 @@ public class ShiftableGridFlippingZ<T> extends ShiftableGrid<T>
     {
         return super.toString();
     }
+
     public String toString()
     {
         return shiftableGrids[0].toString(true) + "\r\n" + shiftableGrids[1].toString(true);

@@ -13,11 +13,11 @@ import java.lang.reflect.Method;
 public class AIPigmanHurtByAggressorEdit extends AIHurtByTargetEdit
 {
     private static Method pigmanBecomeAngryAtMethod;
+
     static
     {
         initReflections();
     }
-
 
 
     public AIPigmanHurtByAggressorEdit(EntityAIHurtByTarget oldAI) throws IllegalAccessException
@@ -43,7 +43,6 @@ public class AIPigmanHurtByAggressorEdit extends AIHurtByTargetEdit
             }
         }
     }
-
 
 
     private static void initReflections()

@@ -34,6 +34,7 @@ public class Collision
                 || pointRectangle(r2x2, r2y1, r1x1, r1y1, r1x2, r1y2)
                 || pointRectangle(r2x2, r2y2, r1x1, r1y1, r1x2, r1y2);
     }
+
     public static double[] rectangleRectangleExt(double r1x1, double r1y1, double r1x2, double r1y2, double r2x1, double r2y1, double r2x2, double r2y2)
     {
         double swap;
@@ -70,22 +71,22 @@ public class Collision
                 {
                     if (within(r1y2, r2y1, r2y2))
                     {
-                        return new double[] {r1x1, r1y1, r1x2, r1y2};
+                        return new double[]{r1x1, r1y1, r1x2, r1y2};
                     }
                     else
                     {
-                        return new double[] {r1x1, r1y1, r1x2, r2y1};
+                        return new double[]{r1x1, r1y1, r1x2, r2y1};
                     }
                 }
                 else
                 {
                     if (within(r1y2, r2y1, r2y2))
                     {
-                        return new double[] {r1x1, r2y2, r1x2, r1y2};
+                        return new double[]{r1x1, r2y2, r1x2, r1y2};
                     }
                     else if (within(r2y1, r1y1, r1y2))
                     {
-                        return new double[] {r1x1, r2y1, r1x2, r2y2};
+                        return new double[]{r1x1, r2y1, r1x2, r2y2};
                     }
                 }
             }
@@ -95,22 +96,22 @@ public class Collision
                 {
                     if (within(r1y2, r2y1, r2y2))
                     {
-                        return new double[] {r1x1, r1y1, r2x2, r1y2};
+                        return new double[]{r1x1, r1y1, r2x2, r1y2};
                     }
                     else
                     {
-                        return new double[] {r1x1, r1y1, r2x2, r2y2};
+                        return new double[]{r1x1, r1y1, r2x2, r2y2};
                     }
                 }
                 else
                 {
                     if (within(r1y2, r2y1, r2y2))
                     {
-                        return new double[] {r1x1, r2y1, r2x2, r1y2};
+                        return new double[]{r1x1, r2y1, r2x2, r1y2};
                     }
                     else
                     {
-                        return new double[] {r1x1, r2y1, r2x2, r2y2};
+                        return new double[]{r1x1, r2y1, r2x2, r2y2};
                     }
                 }
             }
@@ -123,22 +124,22 @@ public class Collision
                 {
                     if (within(r1y2, r2y1, r2y2))
                     {
-                        return new double[] {r2x1, r1y1, r1x2, r1y2};
+                        return new double[]{r2x1, r1y1, r1x2, r1y2};
                     }
                     else
                     {
-                        return new double[] {r2x1, r1y1, r1x2, r2y2};
+                        return new double[]{r2x1, r1y1, r1x2, r2y2};
                     }
                 }
                 else
                 {
                     if (within(r1y2, r2y1, r2y2))
                     {
-                        return new double[] {r2x1, r2y1, r1x2, r1y2};
+                        return new double[]{r2x1, r2y1, r1x2, r1y2};
                     }
                     else if (within(r2y1, r1y1, r1y2))
                     {
-                        return new double[] {r2x1, r2y1, r1x2, r2y2};
+                        return new double[]{r2x1, r2y1, r1x2, r2y2};
                     }
                 }
             }
@@ -148,22 +149,22 @@ public class Collision
                 {
                     if (within(r1y2, r2y1, r2y2))
                     {
-                        return new double[] {r2x1, r1y1, r2x2, r1y2};
+                        return new double[]{r2x1, r1y1, r2x2, r1y2};
                     }
                     else
                     {
-                        return new double[] {r2x1, r1y1, r2x2, r2y2};
+                        return new double[]{r2x1, r1y1, r2x2, r2y2};
                     }
                 }
                 else
                 {
                     if (within(r1y2, r2y1, r2y2))
                     {
-                        return new double[] {r2x1, r2y1, r2x2, r1y2};
+                        return new double[]{r2x1, r2y1, r2x2, r1y2};
                     }
                     else if (pointRectangle(r2x1, r2y1, r1x1, r1y1, r1x2, r1y2))
                     {
-                        return new double[] {r2x1, r2y1, r2x2, r2y2};
+                        return new double[]{r2x1, r2y1, r2x2, r2y2};
                     }
                 }
             }
@@ -181,6 +182,7 @@ public class Collision
     {
         return (linex1 - x) * (liney2 - y) == (linex2 - x) * (liney1 - y);
     }
+
     public static char pointLineSide(double x, double y, double linex1, double liney1, double linex2, double liney2, boolean upNegative)
     {
         //For directional line defined by (sx1, sy1), (sx2, sy2), returns whether point (x, y) is ON, to LEFT, or to RIGHT of line
@@ -215,7 +217,7 @@ public class Collision
         //Purposely mismatching upNegative here with the ones in checks; this allows to check whether the direction is
         //NOT equal to the OPPOSITE direction...which means we don't have to check for two cases (on line or same direction)
 
-        for(int i = 2; i < points.length; i += 2)
+        for (int i = 2; i < points.length; i += 2)
         {
             if (pointLineSide(x, y, points[i - 2], points[i - 1], points[i], points[i + 1], true) == otherDir) return false;
         }
@@ -275,19 +277,19 @@ public class Collision
     {
         if (lx1 == lx2 && ly1 == ly2) //Line is a point
         {
-            if (pointSegment(lx1, ly1, sx1, sy1, sx2, sy2)) return new double[] {lx1, ly1};
+            if (pointSegment(lx1, ly1, sx1, sy1, sx2, sy2)) return new double[]{lx1, ly1};
             return null;
         }
         if (sx1 == sx2 && sy1 == sy2) //Segment is a point
         {
-            if (pointLine(sx1, sy1, lx1, ly1, lx2, ly2)) return new double[] {sx1, sy1};
+            if (pointLine(sx1, sy1, lx1, ly1, lx2, ly2)) return new double[]{sx1, sy1};
         }
 
         //Neither are points
         double[] p1 = lineLine(lx1, ly1, lx2, ly2, sx1, sy1, sx2, sy2);
 
         if (p1 == null) return null; //Parallel and not colinear
-        if (Double.isNaN(p1[1])) return new double[] {sx1, sy1, sx2, sy2}; //Parallel and colinear
+        if (Double.isNaN(p1[1])) return new double[]{sx1, sy1, sx2, sy2}; //Parallel and colinear
         if (pointRectangle(p1[0], p1[1], sx1, sy1, sx2, sy2)) return p1; //Not parallel; see if point is within segment bounds
         return null;
     }
@@ -296,6 +298,7 @@ public class Collision
     {
         return segmentSegmentExt(s1x1, s1y1, s1x2, s1y2, s2x1, s2y1, s2x2, s2y2)[0] >= 8;
     }
+
     public static double[] segmentSegmentExt(double s1x1, double s1y1, double s1x2, double s1y2, double s2x1, double s2y1, double s2x2, double s2y2)
     {
         //Returns a double[] of varying lengths, depending on result
@@ -473,7 +476,7 @@ public class Collision
     {
         if (x1 == x2 && y1 == y2) //Line is a point
         {
-            if (pointRectangle(x1, y1, rx1, ry1, rx2, ry2)) return new double[] {x1, y1};
+            if (pointRectangle(x1, y1, rx1, ry1, rx2, ry2)) return new double[]{x1, y1};
             return null;
         }
 
@@ -481,7 +484,7 @@ public class Collision
         {
             if (ry1 == ry2) //Rectangle is a point
             {
-                if (pointLine(rx1, ry1, x1, y1, x2, y2)) return new double[] {rx1, ry1};
+                if (pointLine(rx1, ry1, x1, y1, x2, y2)) return new double[]{rx1, ry1};
                 return null;
             }
             else //Rectangle is a vertical segment
@@ -569,7 +572,7 @@ public class Collision
             }
         }
 
-        if (onePoint) return new double[] {result[0], result[1]};
+        if (onePoint) return new double[]{result[0], result[1]};
         return null;
     }
 
@@ -577,7 +580,7 @@ public class Collision
     {
         if (x1 == x2 && y1 == y2)
         {
-            if (pointRectangle(x1, y1, rx1, ry1, rx2, ry2)) return new double[] {x1, y1};
+            if (pointRectangle(x1, y1, rx1, ry1, rx2, ry2)) return new double[]{x1, y1};
             return null;
         }
 
@@ -586,78 +589,78 @@ public class Collision
         {
             if (ry1 == ry2)
             {
-                if (pointSegment(rx1, ry1, x1, y1, x2, y2)) return new double[] {rx1, ry1};
+                if (pointSegment(rx1, ry1, x1, y1, x2, y2)) return new double[]{rx1, ry1};
                 return null;
             }
             result = segmentSegmentExt(x1, y1, x2, y2, rx1, ry1, rx2, ry2);
             if (result.length == 1) return null;
-            if (result.length == 3) return new double[] {result[1], result[2]};
-            return new double[] {result[1], result[2], result[3], result[4]};
+            if (result.length == 3) return new double[]{result[1], result[2]};
+            return new double[]{result[1], result[2], result[3], result[4]};
         }
         if (ry1 == ry2)
         {
             result = segmentSegmentExt(x1, y1, x2, y2, rx1, ry1, rx2, ry2);
             if (result.length == 1) return null;
-            if (result.length == 3) return new double[] {result[1], result[2]};
-            return new double[] {result[1], result[2], result[3], result[4]};
+            if (result.length == 3) return new double[]{result[1], result[2]};
+            return new double[]{result[1], result[2], result[3], result[4]};
         }
 
         //Segment is not a point and rectangle is not a segment or a point
         if (pointRectangle(x1, y1, rx1, ry1, rx2, ry2)) //First segment point is within rectangle
         {
-            if (pointRectangle(x2, y2, rx1, ry1, rx2, ry2)) return new double[] {x1, y1, x2, y2}; //Both segment points are within rectangle
+            if (pointRectangle(x2, y2, rx1, ry1, rx2, ry2)) return new double[]{x1, y1, x2, y2}; //Both segment points are within rectangle
 
             //First segment point is within rectangle, second is not
             //Top
             result = segmentSegmentExt(x1, y1, x2, y2, rx1, ry1, rx2, ry1);
-            if (result.length == 5) return new double[] {result[1], result[2], result[3], result[4]};
-            if (result[1] != x1 || result[2] != y1) return new double[] {x1, y1, result[1], result[2]};
+            if (result.length == 5) return new double[]{result[1], result[2], result[3], result[4]};
+            if (result[1] != x1 || result[2] != y1) return new double[]{x1, y1, result[1], result[2]};
             //Bottom
             result = segmentSegmentExt(x1, y1, x2, y2, rx1, ry2, rx2, ry2);
-            if (result.length == 5) return new double[] {result[1], result[2], result[3], result[4]};
-            if (result[1] != x1 || result[2] != y1) return new double[] {x1, y1, result[1], result[2]};
+            if (result.length == 5) return new double[]{result[1], result[2], result[3], result[4]};
+            if (result[1] != x1 || result[2] != y1) return new double[]{x1, y1, result[1], result[2]};
             //Left
             result = segmentSegmentExt(x1, y1, x2, y2, rx1, ry1, rx1, ry2);
-            if (result.length == 5) return new double[] {result[1], result[2], result[3], result[4]};
-            if (result[1] != x1 || result[2] != y1) return new double[] {x1, y1, result[1], result[2]};
+            if (result.length == 5) return new double[]{result[1], result[2], result[3], result[4]};
+            if (result[1] != x1 || result[2] != y1) return new double[]{x1, y1, result[1], result[2]};
             //Right
             result = segmentSegmentExt(x1, y1, x2, y2, rx2, ry1, rx2, ry2);
-            if (result.length == 5) return new double[] {result[1], result[2], result[3], result[4]};
-            if (result[1] != x1 || result[2] != y1) return new double[] {x1, y1, result[1], result[2]};
+            if (result.length == 5) return new double[]{result[1], result[2], result[3], result[4]};
+            if (result[1] != x1 || result[2] != y1) return new double[]{x1, y1, result[1], result[2]};
             //None of the above gave a new point, so first segment point must be on edge of rectangle
-            return new double[] {x1, y1};
+            return new double[]{x1, y1};
         }
         if (pointRectangle(x2, y2, rx1, ry1, rx2, ry2)) //Second segment point is within rectangle, first is not
         {
             //Top
             result = segmentSegmentExt(x1, y1, x2, y2, rx1, ry1, rx2, ry1);
-            if (result.length == 5) return new double[] {result[1], result[2], result[3], result[4]};
-            if (result[1] != x2 || result[2] != y2) return new double[] {result[1], result[2], x2, y2};
+            if (result.length == 5) return new double[]{result[1], result[2], result[3], result[4]};
+            if (result[1] != x2 || result[2] != y2) return new double[]{result[1], result[2], x2, y2};
             //Bottom
             result = segmentSegmentExt(x1, y1, x2, y2, rx1, ry2, rx2, ry2);
-            if (result.length == 5) return new double[] {result[1], result[2], result[3], result[4]};
-            if (result[1] != x2 || result[2] != y2) return new double[] {result[1], result[2], x2, y2};
+            if (result.length == 5) return new double[]{result[1], result[2], result[3], result[4]};
+            if (result[1] != x2 || result[2] != y2) return new double[]{result[1], result[2], x2, y2};
             //Left
             result = segmentSegmentExt(x1, y1, x2, y2, rx1, ry1, rx1, ry2);
-            if (result.length == 5) return new double[] {result[1], result[2], result[3], result[4]};
-            if (result[1] != x2 || result[2] != y2) return new double[] {result[1], result[2], x2, y2};
+            if (result.length == 5) return new double[]{result[1], result[2], result[3], result[4]};
+            if (result[1] != x2 || result[2] != y2) return new double[]{result[1], result[2], x2, y2};
             //Right
             result = segmentSegmentExt(x1, y1, x2, y2, rx2, ry1, rx2, ry2);
-            if (result.length == 5) return new double[] {result[1], result[2], result[3], result[4]};
-            if (result[1] != x2 || result[2] != y2) return new double[] {result[1], result[2], x2, y2};
+            if (result.length == 5) return new double[]{result[1], result[2], result[3], result[4]};
+            if (result[1] != x2 || result[2] != y2) return new double[]{result[1], result[2], x2, y2};
             //None of the above gave a new point, so second segment point must be on edge of rectangle
-            return new double[] {x2, y2};
+            return new double[]{x2, y2};
         }
 
         //Both segment points are outside the rectangle
         //Top
         result = segmentSegmentExt(x1, y1, x2, y2, rx1, ry1, rx2, ry1);
-        if (result.length == 5) return new double[] {result[1], result[2], result[3], result[4]};
+        if (result.length == 5) return new double[]{result[1], result[2], result[3], result[4]};
         double prevResult[] = null;
         if (result.length == 3) prevResult = result;
         //Bottom
         result = segmentSegmentExt(x1, y1, x2, y2, rx1, ry2, rx2, ry2);
-        if (result.length == 5) return new double[] {result[1], result[2], result[3], result[4]};
+        if (result.length == 5) return new double[]{result[1], result[2], result[3], result[4]};
         double nearest[];
         if (result.length == 3)
         {
@@ -667,14 +670,14 @@ public class Collision
                 if (prevResult[1] != result[1] || prevResult[2] != result[2])
                 {
                     nearest = pointListNearest(x1, y1, prevResult[1], prevResult[2], result[1], result[2]);
-                    if (result[1] != nearest[0]  || result[2] != nearest[1]) return new double[] {nearest[0], nearest[1], result[1], result[2]};
-                    return new double[] {nearest[0], nearest[1], prevResult[1], prevResult[2]};
+                    if (result[1] != nearest[0] || result[2] != nearest[1]) return new double[]{nearest[0], nearest[1], result[1], result[2]};
+                    return new double[]{nearest[0], nearest[1], prevResult[1], prevResult[2]};
                 }
             }
         }
         //Left
         result = segmentSegmentExt(x1, y1, x2, y2, rx1, ry1, rx1, ry2);
-        if (result.length == 5) return new double[] {result[1], result[2], result[3], result[4]};
+        if (result.length == 5) return new double[]{result[1], result[2], result[3], result[4]};
         if (result.length == 3)
         {
             if (prevResult == null) prevResult = result;
@@ -683,24 +686,24 @@ public class Collision
                 if (prevResult[1] != result[1] || prevResult[2] != result[2])
                 {
                     nearest = pointListNearest(x1, y1, prevResult[1], prevResult[2], result[1], result[2]);
-                    if (result[1] != nearest[0]  || result[2] != nearest[1]) return new double[] {nearest[0], nearest[1], result[1], result[2]};
-                    return new double[] {nearest[0], nearest[1], prevResult[1], prevResult[2]};
+                    if (result[1] != nearest[0] || result[2] != nearest[1]) return new double[]{nearest[0], nearest[1], result[1], result[2]};
+                    return new double[]{nearest[0], nearest[1], prevResult[1], prevResult[2]};
                 }
             }
         }
         //Right
         result = segmentSegmentExt(x1, y1, x2, y2, rx1, ry1, rx1, ry2);
-        if (result.length == 5) return new double[] {result[1], result[2], result[3], result[4]};
+        if (result.length == 5) return new double[]{result[1], result[2], result[3], result[4]};
         if (result.length == 3)
         {
-            if (prevResult == null || (prevResult[1] == result[1] && prevResult[2] == result[2])) return new double[] {result[1], result[2]};
+            if (prevResult == null || (prevResult[1] == result[1] && prevResult[2] == result[2])) return new double[]{result[1], result[2]};
 
             nearest = pointListNearest(x1, y1, prevResult[1], prevResult[2], result[1], result[2]);
-            if (result[1] != nearest[0]  || result[2] != nearest[1]) return new double[] {nearest[0], nearest[1], result[1], result[2]};
-            return new double[] {nearest[0], nearest[1], prevResult[1], prevResult[2]};
+            if (result[1] != nearest[0] || result[2] != nearest[1]) return new double[]{nearest[0], nearest[1], result[1], result[2]};
+            return new double[]{nearest[0], nearest[1], prevResult[1], prevResult[2]};
         }
 
-        if (prevResult != null) return new double[] {prevResult[1], prevResult[2]};
+        if (prevResult != null) return new double[]{prevResult[1], prevResult[2]};
         return null;
     }
 
@@ -732,16 +735,16 @@ public class Collision
             }
 
             //p1 within, p2 outside; find end of collision segment
-            for(int i = 2; i < points.length; i += 2)
+            for (int i = 2; i < points.length; i += 2)
             {
                 result = segmentSegmentExt(x1, y1, x2, y2, points[i - 2], points[i - 1], points[i], points[i + 1]);
-                if (result.length == 5) return new double[] {result[1], result[2], result[3], result[4]};
-                if (result.length == 3 && (result[1] != x1 || result[2] != y1)) return new double[] {x1, y1, result[1], result[2]};
+                if (result.length == 5) return new double[]{result[1], result[2], result[3], result[4]};
+                if (result.length == 3 && (result[1] != x1 || result[2] != y1)) return new double[]{x1, y1, result[1], result[2]};
             }
             //Final segment check (from last point of poly to first point of poly)
             result = segmentSegmentExt(x1, y1, x2, y2, points[points.length - 2], points[points.length - 1], points[0], points[1]);
-            if (result.length == 5) return new double[] {result[1], result[2], result[3], result[4]};
-            if (result.length == 3 && (result[1] != x1 || result[2] != y1)) return new double[] {x1, y1, result[1], result[2]};
+            if (result.length == 5) return new double[]{result[1], result[2], result[3], result[4]};
+            if (result.length == 3 && (result[1] != x1 || result[2] != y1)) return new double[]{x1, y1, result[1], result[2]};
 
             //Start point on edge of polygon, going outwards
             return new double[]{x1, y1};
@@ -750,16 +753,16 @@ public class Collision
         //P1 outside polygon
         if (pointConvexPolygon(x2, y2, points)) //p1 outside, but p2 within, so p2 is endpoint of collision segment
         {
-            for(int i = 2; i < points.length; i += 2)
+            for (int i = 2; i < points.length; i += 2)
             {
                 result = segmentSegmentExt(x1, y1, x2, y2, points[i - 2], points[i - 1], points[i], points[i + 1]);
-                if (result.length == 5) return new double[] {result[1], result[2], result[3], result[4]};
-                if (result.length == 3 && (result[1] != x2 || result[2] != y2)) return new double[] {result[1], result[2], x2, y2};
+                if (result.length == 5) return new double[]{result[1], result[2], result[3], result[4]};
+                if (result.length == 3 && (result[1] != x2 || result[2] != y2)) return new double[]{result[1], result[2], x2, y2};
             }
             //Final segment check (from last point of poly to first point of poly)
             result = segmentSegmentExt(x1, y1, x2, y2, points[points.length - 2], points[points.length - 1], points[0], points[1]);
-            if (result.length == 5) return new double[] {result[1], result[2], result[3], result[4]};
-            if (result.length == 3 && (result[1] != x2 || result[2] != y2)) return new double[] {result[1], result[2], x2, y2};
+            if (result.length == 5) return new double[]{result[1], result[2], result[3], result[4]};
+            if (result.length == 3 && (result[1] != x2 || result[2] != y2)) return new double[]{result[1], result[2], x2, y2};
 
             //End point on edge of polygon, coming from outside
             return new double[]{x2, y2};
@@ -767,30 +770,30 @@ public class Collision
 
         //p1 and p2 BOTH outside polygon, so if there is a collision, it is intersecting multiple sides of the polygon
         double[] prevResult = null, nearest;
-        for(int i = 2; i < points.length; i += 2)
+        for (int i = 2; i < points.length; i += 2)
         {
             result = segmentSegmentExt(x1, y1, x2, y2, points[i - 2], points[i - 1], points[i], points[i + 1]);
-            if (result.length == 5) return new double[] {result[1], result[2], result[3], result[4]};
+            if (result.length == 5) return new double[]{result[1], result[2], result[3], result[4]};
             if (result.length == 3)
             {
                 if (prevResult == null) prevResult = result;
                 else if (result[1] != prevResult[1] || result[2] != prevResult[2])
                 {
                     nearest = pointListNearest(x1, y1, result[1], result[2], prevResult[1], prevResult[2]);
-                    if (result[1] != nearest[0]  || result[2] != nearest[1]) return new double[] {nearest[0], nearest[1], result[1], result[2]};
-                    return new double[] {nearest[0], nearest[1], prevResult[1], prevResult[2]};
+                    if (result[1] != nearest[0] || result[2] != nearest[1]) return new double[]{nearest[0], nearest[1], result[1], result[2]};
+                    return new double[]{nearest[0], nearest[1], prevResult[1], prevResult[2]};
                 }
             }
         }
         result = segmentSegmentExt(x1, y1, x2, y2, points[points.length - 2], points[points.length - 1], points[0], points[1]);
-        if (result.length == 5) return new double[] {result[1], result[2], result[3], result[4]};
+        if (result.length == 5) return new double[]{result[1], result[2], result[3], result[4]};
         if (result.length == 3)
         {
-            if (prevResult == null || (result[1] == prevResult[1] && result[2] == prevResult[2])) return new double[] {result[1], result[2]};
+            if (prevResult == null || (result[1] == prevResult[1] && result[2] == prevResult[2])) return new double[]{result[1], result[2]};
 
             nearest = pointListNearest(x1, y1, result[1], result[2], prevResult[1], prevResult[2]);
-            if (result[1] != nearest[0]  || result[2] != nearest[1]) return new double[] {nearest[0], nearest[1], result[1], result[2]};
-            return new double[] {nearest[0], nearest[1], prevResult[1], prevResult[2]};
+            if (result[1] != nearest[0] || result[2] != nearest[1]) return new double[]{nearest[0], nearest[1], result[1], result[2]};
+            return new double[]{nearest[0], nearest[1], prevResult[1], prevResult[2]};
         }
 
         return null;
@@ -834,7 +837,7 @@ public class Collision
             finalResult[0] = x1;
             finalResult[1] = y1;
 
-            for(int i = 2; i < points.length; i += 2)
+            for (int i = 2; i < points.length; i += 2)
             {
                 result = segmentSegmentExt(x1, y1, x2, y2, points[i - 2], points[i - 1], points[i], points[i + 1]);
                 if (result.length == 5)
@@ -917,7 +920,7 @@ public class Collision
             finalResult[2] = x2;
             finalResult[3] = y2;
 
-            for(int i = 2; i < points.length; i += 2)
+            for (int i = 2; i < points.length; i += 2)
             {
                 result = segmentSegmentExt(x1, y1, x2, y2, points[i - 2], points[i - 1], points[i], points[i + 1]);
                 if (result.length == 5)
@@ -996,7 +999,7 @@ public class Collision
 
         //p1 and p2 BOTH outside polygon, so if there is a collision, it is intersecting multiple sides of the polygon
         double[] nearest;
-        for(int i = 2; i < points.length; i += 2)
+        for (int i = 2; i < points.length; i += 2)
         {
             result = segmentSegmentExt(x1, y1, x2, y2, points[i - 2], points[i - 1], points[i], points[i + 1]);
             if (result.length == 5)
@@ -1217,10 +1220,10 @@ public class Collision
         if (arg == null || arg.length < 2) return null;
 
         double distSquared = Math.pow(x - arg[0], 2) + Math.pow(y - arg[1], 2);
-        double result[] = new double[] {arg[0], arg[1]};
+        double result[] = new double[]{arg[0], arg[1]};
 
         double checkDistSquared;
-        for(int i = 2; i + 1 < arg.length; i += 2)
+        for (int i = 2; i + 1 < arg.length; i += 2)
         {
             checkDistSquared = Math.pow(x - arg[i], 2) + Math.pow(y - arg[i + 1], 2);
             if (checkDistSquared < distSquared)
@@ -1252,7 +1255,7 @@ public class Collision
 
     public static boolean convexPolygonConvexPolygon(double[] points1, double[] points2)
     {
-        for(int i = 2; i < points1.length; i += 2)
+        for (int i = 2; i < points1.length; i += 2)
         {
             if (segmentConvexPolygon(points1[i - 2], points1[i - 1], points1[i], points1[i + 1], points2) != null) return true;
         }
@@ -1269,8 +1272,8 @@ public class Collision
         double[] p1 = pointLineNearest(x, y, x1, y1, x2, y2);
         if (p1 == null) return null; //Should only happen if segment is a point
         if (pointRectangle(p1[0], p1[1], x1, y1, x2, y2)) return p1;
-        if (Math.pow(x1 - x, 2) + Math.pow(y1 - y, 2) < Math.pow(x2 - x, 2) + Math.pow(y2 - y, 2)) return new double[] {x1, y1};
-        return new double[] {x2, y2};
+        if (Math.pow(x1 - x, 2) + Math.pow(y1 - y, 2) < Math.pow(x2 - x, 2) + Math.pow(y2 - y, 2)) return new double[]{x1, y1};
+        return new double[]{x2, y2};
     }
 
     public static double[] pointRectangleNearest(double x, double y, double x1, double y1, double x2, double y2)
@@ -1305,13 +1308,13 @@ public class Collision
     {
         //Same requirements as pointConvexPolygon
 
-        if (pointConvexPolygon(x, y, points)) return new double[] {x, y};
+        if (pointConvexPolygon(x, y, points)) return new double[]{x, y};
 
         double[] result = new double[points.length];
         double[] point = pointSegmentNearest(x, y, points[points.length - 2], points[points.length - 1], points[0], points[1]);
         System.arraycopy(point, 0, result, 0, 2);
 
-        for(int i = 2; i < points.length; i += 2)
+        for (int i = 2; i < points.length; i += 2)
         {
             point = pointSegmentNearest(x, y, points[i - 2], points[i - 1], points[i], points[i + 1]);
             System.arraycopy(point, 0, result, i, 2);
@@ -1329,7 +1332,7 @@ public class Collision
     {
         if (x1 == x2 && y1 == y2)
         {
-            if (pointCircle(x1, y1, cx, cy, r)) return new double[] {x1, y1};
+            if (pointCircle(x1, y1, cx, cy, r)) return new double[]{x1, y1};
             return null;
         }
 
@@ -1351,8 +1354,8 @@ public class Collision
                 xd = ratio * (p1[0] - x1);
                 yd = ratio * (p1[1] - y1);
 
-                if (x2 >= x1 && pointCircle(x1, y1, cx, cy, r)) return new double[] {p1[0] + xd, p1[1] + yd, p1[0] - xd, p1[1] - yd};
-                return new double[] {p1[0] - xd, p1[1] - yd, p1[0] + xd, p1[1] + yd};
+                if (x2 >= x1 && pointCircle(x1, y1, cx, cy, r)) return new double[]{p1[0] + xd, p1[1] + yd, p1[0] - xd, p1[1] - yd};
+                return new double[]{p1[0] - xd, p1[1] - yd, p1[0] + xd, p1[1] + yd};
             }
 
             p1d2 = Math.sqrt(Math.pow(p1[0] - x2, 2) + Math.pow(p1[1] - y2, 2)); //Swapping in distance from p1 to (x2, y2)...because we need the denominator of the ratio to be non-zero
@@ -1361,7 +1364,7 @@ public class Collision
             xd = ratio * (p1[1] - x2);
             yd = ratio * (p1[2] - y2);
 
-            return new double[] {p1[0] + xd, p1[1] + yd, p1[0] - xd, p1[1] - yd};
+            return new double[]{p1[0] + xd, p1[1] + yd, p1[0] - xd, p1[1] - yd};
         }
 
         return p1;
@@ -1371,7 +1374,7 @@ public class Collision
     {
         if (x1 == x2 && y1 == y2)
         {
-            if (pointCircle(x1, y1, cx, cy, r)) return new double[] {x1, y1};
+            if (pointCircle(x1, y1, cx, cy, r)) return new double[]{x1, y1};
             return null;
         }
 
@@ -1388,20 +1391,20 @@ public class Collision
         double[] nearest;
         if (pointRectangle(x1, y1, points[0], points[1], points[2], points[3])) //First segment point is intersecting
         {
-            if (pointRectangle(x2, y2, points[0], points[1], points[2], points[3])) return new double[] {x1, y1, x2, y2}; //Both are
+            if (pointRectangle(x2, y2, points[0], points[1], points[2], points[3])) return new double[]{x1, y1, x2, y2}; //Both are
 
             //First segment point is intersecting circle but second is not
             nearest = pointListNearest(x2, y2, points[0], points[1], points[2], points[3]);
-            if (nearest[0] != x1 || nearest[1] != y1) return new double[] {x1, y1, nearest[0], nearest[1]};
-            return new double[] {x1, y1};
+            if (nearest[0] != x1 || nearest[1] != y1) return new double[]{x1, y1, nearest[0], nearest[1]};
+            return new double[]{x1, y1};
         }
 
         if (pointRectangle(x2, y2, points[0], points[1], points[2], points[3]))
         {
             //Second segment point is intersecting circle but first is not
             nearest = pointListNearest(x1, y1, points[0], points[1], points[2], points[3]);
-            if (nearest[0] != x2 || nearest[1] != y2) return new double[] {nearest[0], nearest[1], x2, y2};
-            return new double[] {x2, y2};
+            if (nearest[0] != x2 || nearest[1] != y2) return new double[]{nearest[0], nearest[1], x2, y2};
+            return new double[]{x2, y2};
         }
 
         //Neither segment ends are intersecting circle; either passing through all the way or no collision
@@ -1428,7 +1431,7 @@ public class Collision
         if (pointConvexPolygon(cx, cy, points)) return true;
 
         if (segmentCircle(points[points.length - 2], points[points.length - 1], points[0], points[1], cx, cy, r) != null) return true;
-        for(int i = 2; i < points.length; i += 2)
+        for (int i = 2; i < points.length; i += 2)
         {
             if (segmentCircle(points[i - 2], points[i - 1], points[i], points[i + 1], cx, cy, r) != null) return true;
         }
@@ -1439,7 +1442,7 @@ public class Collision
     public static double[] pointCircleNearest(double x, double y, double cx, double cy, double r)
     {
         double[] points = segmentCircle(x, y, cx, cy, cx, cy, r);
-        return new double[] {points[0], points[1]};
+        return new double[]{points[0], points[1]};
     }
 
     public static double[] circleTan2Center(double cx, double cy, double r, double l1x1, double l1y1, double l1x2, double l1y2, double l2x1, double l2y1, double l2x2, double l2y2)
@@ -1500,7 +1503,7 @@ public class Collision
         //Given a line and a list of points, return the list of points mirrored over the line
         double nearest[];
         double result[] = new double[points.length];
-        for(int i = 0; i < points.length; i += 2)
+        for (int i = 0; i < points.length; i += 2)
         {
             nearest = pointLineNearest(points[i], points[i + 1], x1, y1, x2, y2);
             result[i] = nearest[0] * 2 - points[i];

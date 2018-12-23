@@ -14,6 +14,6 @@ public class AIPigmanTargetAggressorEdit extends AINearestAttackableTargetEdit<E
     @Override
     public boolean shouldExecute()
     {
-        return ((EntityPigZombie)attacker).isAngry() && super.shouldExecute();
+        return ((EntityPigZombie) attacker).isAngry() && super.shouldExecute();
     }
 }

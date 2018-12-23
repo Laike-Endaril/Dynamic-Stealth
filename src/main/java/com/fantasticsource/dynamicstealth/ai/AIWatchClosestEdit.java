@@ -19,6 +19,7 @@ import java.util.List;
 public class AIWatchClosestEdit extends EntityAIBase
 {
     private static Field entityField, watchedClassField, chanceField;
+
     static
     {
         initReflections();
@@ -29,7 +30,7 @@ public class AIWatchClosestEdit extends EntityAIBase
     public int lookTime;
     public final float chance;
     public static float range = DynamicStealthConfig.f_distances.distanceFar;
-    public Class <? extends Entity > watchedClass;
+    public Class<? extends Entity> watchedClass;
 
     public AIWatchClosestEdit(EntityAIWatchClosest oldAI) throws IllegalAccessException
     {
@@ -44,7 +45,6 @@ public class AIWatchClosestEdit extends EntityAIBase
         this(oldAI);
         if (isEntityAIWatchClosest2) setMutexBits(3);
     }
-
 
 
     @Override
@@ -82,7 +82,7 @@ public class AIWatchClosestEdit extends EntityAIBase
         }
 
         target = queue.poll();
-        while(target != null && !entity.getEntitySenses().canSee(target)) //Doesn't need isSuitableTarget because it's not always used for attacking
+        while (target != null && !entity.getEntitySenses().canSee(target)) //Doesn't need isSuitableTarget because it's not always used for attacking
         {
             target = queue.poll();
         }
@@ -116,7 +116,6 @@ public class AIWatchClosestEdit extends EntityAIBase
     }
 
 
-
     private static void initReflections()
     {
         try
@@ -124,7 +123,8 @@ public class AIWatchClosestEdit extends EntityAIBase
             entityField = ReflectionTool.getField(EntityAIWatchClosest.class, "field_75332_b", "entity");
             watchedClassField = ReflectionTool.getField(EntityAIWatchClosest.class, "field_75329_f", "watchedClass");
             chanceField = ReflectionTool.getField(EntityAIWatchClosest.class, "field_75331_e", "chance");
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             e.printStackTrace();
             FMLCommonHandler.instance().exitJava(123, false);
