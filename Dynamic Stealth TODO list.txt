@@ -5,7 +5,10 @@ Implement threat system
 ...Remove when SEARCHER dies
 ...Remove when SEARCHER is unloaded
 ...When TARGET dies, set target to null
-...In "search" AI, if target is null, try to detect any valid target
+...In "search" AI, if target is null, try to detect any valid target, and if one is found, set target, and set threat to initial value
+...When damaged, if threat is 0 |OR| if target is null, set target and set threat to inital value
+...When damaged, if threat is not 0 and target matches, add threat
+...When damaged, if threat is not 0 and target does not match, subtract threat.  If threat would fall to 0 or less, then instead swap targets and set initial threat
 
 Fix mobs not moving to last known position before searching when too far away...
 ...Create function which, when beyond normal pathfinding range...

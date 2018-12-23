@@ -60,8 +60,4 @@ public class Threat
         if (entry != null) entry.setValue(threat);
         else threatMap.put(searcher, new Pair<>(null, threat));
     }
-
-
-
-    //TODO When target dies, DO NOT REMOVE!  Go into search mode instead, and degrade threat normally unless it runs out or another target is found.  If a new target is found, set target, and set threat to initial "target found" value
 }
