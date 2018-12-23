@@ -132,7 +132,7 @@ public class DynamicStealth
             else
             {
                 //Hit by threat target
-                Threat.setThreat(livingTarget, threat + (int) (threat * event.getAmount() / livingTarget.getMaxHealth()));
+                Threat.setThreat(livingTarget, threat + (int) (event.getAmount() * a8_threatSystem.attackedThreatMultiplierTarget / livingTarget.getMaxHealth()));
             }
 
             if (updateTarget)
