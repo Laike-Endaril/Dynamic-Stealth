@@ -20,19 +20,19 @@ public class Pair<K, V>
         return value;
     }
 
-    public Pair setKey(K key)
+    public Pair<K, V> setKey(K key)
     {
         this.key = key;
         return this;
     }
 
-    public Pair setValue(V value)
+    public Pair<K, V> setValue(V value)
     {
         this.value = value;
         return this;
     }
 
-    public Pair set(K key, V value)
+    public Pair<K, V> set(K key, V value)
     {
         setKey(key);
         setValue(value);
