@@ -151,7 +151,8 @@ public class EntitySensesEdit extends EntitySenses
                 {
                     mobHeadMultiplier = a_stealthMultipliers.mobHeadMultiplier;
                 }
-            } else if ((helmet.getItem() == Item.getItemFromBlock(Blocks.PUMPKIN) && helmet.getItem() == Item.getItemFromBlock(Blocks.LIT_PUMPKIN)) && target instanceof EntitySnowman)
+            }
+            else if ((helmet.getItem() == Item.getItemFromBlock(Blocks.PUMPKIN) && helmet.getItem() == Item.getItemFromBlock(Blocks.LIT_PUMPKIN)) && target instanceof EntitySnowman)
                 mobHeadMultiplier = a_stealthMultipliers.mobHeadMultiplier;
         }
 

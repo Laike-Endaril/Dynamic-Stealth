@@ -151,8 +151,7 @@ public class DynamicStealth
                     if (knownPositionAI != null && searchAI != null)
                     {
                         int distance = (int) Math.sqrt(source.getDistanceSq(target));
-                        EntityLivingBase sourceLivingBase = (EntityLivingBase) source;
-                        knownPositionAI.target = sourceLivingBase;
+                        knownPositionAI.target = (EntityLivingBase) source;
                         knownPositionAI.lastKnownPosition = searchAI.randomPath(source.getPosition(), distance / 2, distance / 4);
                         if (searchAI.shouldExecute()) searchAI.startExecuting();
                     }
