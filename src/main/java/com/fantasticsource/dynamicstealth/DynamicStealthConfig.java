@@ -27,10 +27,20 @@ public class DynamicStealthConfig
     public static ThreatSystem a8_threatSystem = new ThreatSystem();
     public static class ThreatSystem
     {
-        @Config.Name("Initial \"Target Attacked\" Threat Multiplier")
+        @Config.Name("\"Attacked\" Threat Multiplier (Initial Attack)")
         @Comment({"When an out-of-combat entity is attacked, its threat is set to the damage taken times this"})
         @Config.RangeDouble(min = 1)
-        public double attackedThreatMultiplier = 100;
+        public double attackedThreatMultiplierInitial = 100;
+
+        @Config.Name("\"Attacked\" Threat Multiplier (Attacked By Current Target)")
+        @Comment({"When an in-combat entity is attacked by its current target, its threat is increased by the damage taken times this"})
+        @Config.RangeDouble(min = 1)
+        public double attackedThreatMultiplierTarget = 50;
+
+        @Config.Name("\"Attacked\" Threat Multiplier (Initial Attack)")
+        @Comment({"When an in-combat entity is attacked by something that is *not* its current target, its threat is decreased by damage taken times this"})
+        @Config.RangeDouble(min = 1)
+        public double attackedThreatMultiplierOther = 50;
 
         @Config.Name("Initial \"Target Spotted\" Threat")
         @Comment({"When an out-of-combat entity spots a valid target, its threat is set to this"})
