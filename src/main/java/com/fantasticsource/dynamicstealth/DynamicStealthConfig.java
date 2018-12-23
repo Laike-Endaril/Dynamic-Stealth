@@ -27,6 +27,25 @@ public class DynamicStealthConfig
     public static ThreatSystem a8_threatSystem = new ThreatSystem();
     public static class ThreatSystem
     {
+        @Config.Name("Initial \"Target Attacked\" Threat Multiplier")
+        @Comment({"When an out-of-combat entity is attacked, its threat is set to the damage taken times this"})
+        @Config.RangeDouble(min = 1)
+        public double attackedThreatMultiplier = 100;
+
+        @Config.Name("Initial \"Target Spotted\" Threat")
+        @Comment({"When an out-of-combat entity spots a valid target, its threat is set to this"})
+        @Config.RangeInt(min = 1)
+        public int targetSpottedThreat = 1;
+
+        @Config.Name("Unseen Target Minimum Threat Level")
+        @Comment({"If an entity's threat level falls below this and they don't see their target, they go out-of-combat / stop searching"})
+        @Config.RangeInt(min = 0)
+        public int unseenMinimumThreat = 0;
+
+        @Config.Name("Unseen Target Degredation Multiplier")
+        @Comment({"Every time an entity updates and their target's position is unknown, their threat is multiplied by this"})
+        @Config.RangeInt(min = 1)
+        public int unseenTargetDegredationRate = 1;
     }
 
 
