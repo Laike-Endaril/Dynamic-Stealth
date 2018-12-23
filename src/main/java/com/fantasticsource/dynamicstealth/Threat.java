@@ -40,14 +40,14 @@ public class Threat
     }
 
 
-    public static void set(EntityLiving searcher, EntityLiving target, int threat)
+    public static void set(EntityLiving searcher, EntityLivingBase target, int threat)
     {
         Pair<EntityLivingBase, Integer> entry = threatMap.get(searcher);
         if (entry != null) entry.set(target, threat);
         else threatMap.put(searcher, new Pair<>(target, threat));
     }
 
-    public static void setTarget(EntityLiving searcher, EntityLiving target)
+    public static void setTarget(EntityLiving searcher, EntityLivingBase target)
     {
         Pair<EntityLivingBase, Integer> entry = threatMap.get(searcher);
         if (entry != null) entry.setKey(target);
