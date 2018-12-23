@@ -1,11 +1,13 @@
 RELEVANT TO FAERUN HEROES ==============================================
 
 Implement threat system
-...Move threat degredation to "search" AI
-...Make "search" AI use threat level instead of timer
-...Any time threat would reach 0, remove the entity from the map
+...Scale damage-based threat changes based on searcher's max hp
+...Remove when SEARCHER dies
+...Remove when SEARCHER is unloaded
+...When TARGET dies, set target to null
+...In "search" AI, if target is null, try to detect any valid target
 
-Fix mobs not searching last known position when too far away...
+Fix mobs not moving to last known position before searching when too far away...
 ...Create function which, when beyond normal pathfinding range...
 ...finds a partial path instead of a full path, and follows it...
 ...then if not at the final destination, finds another partial path and follow it...
@@ -34,7 +36,7 @@ VISUAL INDICATORS ======================================================
 
 Add visible indicators when mobs detect you, lose you, etc (somewhat similar to Mark of the Ninja)
 "!" when target spotted
-"!?" when target not sensed
+"!?" when target not sensed, includes when "remotely alerted" due to "reinforcement calling"
 "?" when starting to search an area
 "..." when target is lost (giving up search / going out-of-combat)
 
