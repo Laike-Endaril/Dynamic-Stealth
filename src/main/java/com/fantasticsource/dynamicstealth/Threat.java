@@ -13,24 +13,26 @@ public class Threat
     public static double unseenTargetDegredationMutliplier = 0.5;
     public static int unseenMinimumThreat = 10;
 
+    private static int timer = updateFrequency;
+
     //Searcher EntityLiving, current target EntityLiving, current threat
     private static Map<EntityLiving, Pair<EntityLiving, Integer>> threatMap = new LinkedHashMap<>(200);
 
 
 
-    public Pair<EntityLiving, Integer> get(EntityLiving searcher)
+    public static Pair<EntityLiving, Integer> get(EntityLiving searcher)
     {
         return threatMap.get(searcher);
     }
 
-    public EntityLiving getTarget(EntityLiving searcher)
+    public static EntityLiving getTarget(EntityLiving searcher)
     {
         Pair<EntityLiving, Integer> entry = threatMap.get(searcher);
         if (entry != null) return entry.getKey();
         return null;
     }
 
-    public Integer getThreat(EntityLiving searcher)
+    public static Integer getThreat(EntityLiving searcher)
     {
         Pair<EntityLiving, Integer> entry = threatMap.get(searcher);
         if (entry != null) return entry.getValue();
@@ -39,21 +41,21 @@ public class Threat
 
 
 
-    public void set(EntityLiving searcher, EntityLiving target, int threat)
+    public static void set(EntityLiving searcher, EntityLiving target, int threat)
     {
         Pair<EntityLiving, Integer> entry = threatMap.get(searcher);
         if (entry != null) entry.set(target, threat);
         else threatMap.put(searcher, new Pair<>(target, threat));
     }
 
-    public void setTarget(EntityLiving searcher, EntityLiving target)
+    public static void setTarget(EntityLiving searcher, EntityLiving target)
     {
         Pair<EntityLiving, Integer> entry = threatMap.get(searcher);
         if (entry != null) entry.setKey(target);
         else threatMap.put(searcher, new Pair<>(target, 0));
     }
 
-    public void setThreat(EntityLiving searcher, int threat)
+    public static void setThreat(EntityLiving searcher, int threat)
     {
         Pair<EntityLiving, Integer> entry = threatMap.get(searcher);
         if (entry != null) entry.setValue(threat);
@@ -62,12 +64,16 @@ public class Threat
 
 
 
-    public void update()
+    public static void update()
     {
-        threatMap.entrySet().removeIf(this::updateEntry);
+        if (--timer <= 0)
+        {
+            timer = updateFrequency;
+            threatMap.entrySet().removeIf(Threat::updateEntry);
+        }
     }
 
-    private boolean updateEntry(Map.Entry<EntityLiving, Pair<EntityLiving, Integer>> entry)
+    private static boolean updateEntry(Map.Entry<EntityLiving, Pair<EntityLiving, Integer>> entry)
     {
         Pair<EntityLiving, Integer> properties = entry.getValue();
         int threat = properties.getValue();
