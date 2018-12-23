@@ -28,6 +28,10 @@ Add entity-specific config options for...
 VISUAL INDICATORS ======================================================
 
 Add visible indicators when mobs detect you, lose you, etc (somewhat similar to Mark of the Ninja)
+"!" when target spotted
+"!?" when target not sensed
+"?" when starting to search an area
+"..." when target is lost (giving up search / going out-of-combat)
 
 Add stealth HUD that shows SOME stealth aspect levels...
 ...light
@@ -76,6 +80,8 @@ ITEMS ==================================================================
 Add a stealth guidebook
 
 Add smoke bombs which block LOS
+
+Add hand mirror, which allows you to peek around corners (changes camera position while in use, based on which hand it is in)
 
 Add stealth-based attributes for armor (ie, actual attributes; like how armor ratings are an attribute, I think?)
 
