@@ -112,12 +112,14 @@ public class DynamicStealth
             Pair<EntityLivingBase, Integer> threatEntry = Threat.get(livingTarget);
             EntityLivingBase threatTarget = threatEntry.getKey();
             int threat = threatEntry.getValue();
-            if (threatTarget == null) //Hit by entity when out-of-combat
+            if (threatTarget == null)
             {
+                //Hit by entity when out-of-combat
                 Threat.set(livingTarget, livingBaseSource, (int) (event.getAmount() * a8_threatSystem.attackedThreatMultiplierInitial / livingTarget.getMaxHealth()));
             }
-            else if (threatTarget != source) //Hit by an entity besides our threat target
+            else if (threatTarget != source)
             {
+                //Hit by an entity besides our threat target
                 double threatChangeFactor = event.getAmount() / livingTarget.getMaxHealth();
                 threat -= threatChangeFactor * a8_threatSystem.attackedThreatMultiplierOther;
                 if (threat <= 0) Threat.set(livingTarget, livingBaseSource, (int) (threatChangeFactor * a8_threatSystem.attackedThreatMultiplierInitial));
@@ -127,9 +129,10 @@ public class DynamicStealth
                     updateTarget = false;
                 }
             }
-            else //Hit by threat target
+            else
             {
-                Threat.setThreat(livingTarget, (int) (threat * event.getAmount() / livingTarget.getMaxHealth()));
+                //Hit by threat target
+                Threat.setThreat(livingTarget, threat + (int) (threat * event.getAmount() / livingTarget.getMaxHealth()));
             }
 
             if (updateTarget)
