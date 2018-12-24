@@ -8,11 +8,24 @@ import net.minecraft.entity.EntityLivingBase;
 
 public class Threat
 {
+    private static final int ITERATION_FREQUENCY = 72000; //Server ticks
+
+    private static int timer = ITERATION_FREQUENCY;
+
     //Searcher EntityLiving, current target EntityLiving, current threat
     private static Map<EntityLiving, Pair<EntityLivingBase, Integer>> threatMap = new LinkedHashMap<>(200);
 
 
-    public static void removeUnusedEntities()
+    public static void update()
+    {
+        if (--timer == 0)
+        {
+            timer = ITERATION_FREQUENCY;
+            removeUnusedEntities();
+        }
+    }
+
+    private static void removeUnusedEntities()
     {
         threatMap.entrySet().removeIf(Threat::checkRemove);
     }

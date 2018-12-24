@@ -144,7 +144,7 @@ public class DynamicStealth
     @SubscribeEvent
     public static void serverTick(TickEvent.ServerTickEvent event)
     {
-        Threat.removeUnusedEntities();
+        Threat.update();
     }
 
     @SubscribeEvent
