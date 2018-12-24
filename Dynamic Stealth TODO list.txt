@@ -1,14 +1,8 @@
 RELEVANT TO FAERUN HEROES ==============================================
 
 Implement threat system
-...Scale damage-based threat changes based on searcher's max hp
-...Remove when SEARCHER dies
-...Remove when SEARCHER is unloaded
-...When TARGET dies, set target to null
-...If target is NOT NULL, make sure to only attack/search for specified target (in targeting AI classes; right now by default it will attack any found)
-...When damaged, if threat is 0 |OR| if target is null, set target and set threat to inital value
-...When damaged, if threat is not 0 and target matches, add threat
-...When damaged, if threat is not 0 and target does not match, subtract threat.  If threat would fall to 0 or less, then instead swap targets and set initial threat
+...When target is NOT NULL, make sure to only attack/search for specified target (in targeting AI classes; right now by default it will attack any found)
+...When target is null and a target is spotted, set threat to inital "spotted" threat
 
 Fix issue with Dynamic Stealth preventing CNPC dialogs
 
