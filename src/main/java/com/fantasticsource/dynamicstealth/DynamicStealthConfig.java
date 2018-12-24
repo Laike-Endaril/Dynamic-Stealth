@@ -58,15 +58,14 @@ public class DynamicStealthConfig
         @Config.RangeInt(min = 1)
         public int unseenTargetDegredationRate = 1;
 
-        @Config.Name("Debug Mode")
+        @Config.Name("~Debug Mode~")
         @Comment({
                 "If enabled, threat debug messages are printed in real-time in the console",
                 "",
                 "If there is a lot of combat going on, this can get extremly verbose instantly, so I only suggest using this for small, controlled tests",
                 "",
-                "Output is in the form 'searcher      target     threatLevel'"
+                "Output is in the form 'Searcher      Target     threatLevel'"
         })
-        @Config.RangeInt(min = 1)
         public boolean debug = false;
     }
 

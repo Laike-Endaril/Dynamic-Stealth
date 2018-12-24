@@ -18,16 +18,16 @@ public class Threat
 
     public static void update()
     {
-        if (DynamicStealthConfig.a8_threatSystem.debug)
+        if (DynamicStealthConfig.a8_threatSystem.debug && threatMap.size() > 0)
         {
             System.out.println("=====================================================================================");
-            System.out.println(threatMap.size() == 0 ? "No threat levels to report" : "Searcher\t\t\tTarget\t\t\tThreat Level");
             for (Map.Entry<EntityLiving, Pair<EntityLivingBase, Integer>> entry : threatMap.entrySet())
             {
                 Pair<EntityLivingBase, Integer> properties = entry.getValue();
                 System.out.println((entry.getKey() == null ? "null" : entry.getKey().getName()) + "\t\t\t" + (properties.getKey() == null ? "null" : properties.getKey().getName()) + "\t\t\t" + properties.getValue());
             }
             System.out.println("=====================================================================================");
+            System.out.println();
         }
 
         if (--timer == 0)
