@@ -53,8 +53,8 @@ public class DynamicStealthConfig
         @Config.RangeInt(min = 0)
         public int unseenMinimumThreat = 0;
 
-        @Config.Name("Unseen Target Degredation Multiplier")
-        @Comment({"Every time an entity updates and their target's position is unknown, their threat is multiplied by this"})
+        @Config.Name("Unseen Target Degredation Rate")
+        @Comment({"Every time an entity updates and their target's position is unknown, this is subtracted from their threat"})
         @Config.RangeInt(min = 1)
         public int unseenTargetDegredationRate = 1;
     }
