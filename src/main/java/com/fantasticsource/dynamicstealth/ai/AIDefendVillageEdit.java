@@ -38,6 +38,7 @@ public class AIDefendVillageEdit extends AITargetEdit
     public boolean shouldExecute()
     {
         Village village = irongolem.getVillage();
+        if (village == null) return false;
 
         villageAgressorTarget = village.findNearestVillageAggressor(irongolem);
 
