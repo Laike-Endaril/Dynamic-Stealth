@@ -2,7 +2,6 @@ package com.fantasticsource.dynamicstealth;
 
 import com.fantasticsource.dynamicstealth.ai.*;
 import com.fantasticsource.dynamicstealth.newai.AISearchLastKnownPosition;
-import com.fantasticsource.dynamicstealth.newai.AIStoreKnownPosition;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.TrigLookupTable;
 import net.minecraft.entity.Entity;
@@ -13,7 +12,6 @@ import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.init.MobEffects;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config;
@@ -172,12 +170,14 @@ public class DynamicStealth
             int threat = threatEntry.getValue();
             if (threatTarget == null || threat == 0)
             {
-                //Hit by entity when out-of-combat
+                //Hit by entity when no target is set; this includes...
+                //...getting hit while out-of-combat
+                //...getting hit after previous target has been killed
                 Threat.set(livingTarget, livingBaseSource, (int) (event.getAmount() * a8_threatSystem.attackedThreatMultiplierInitial / livingTarget.getMaxHealth()));
             }
             else if (threatTarget != source)
             {
-                //Hit by an entity besides our threat target
+                //In combat, and hit by an entity besides our threat target
                 double threatChangeFactor = event.getAmount() / livingTarget.getMaxHealth();
                 threat -= threatChangeFactor * a8_threatSystem.attackedThreatMultiplierOther;
                 if (threat <= 0) Threat.set(livingTarget, livingBaseSource, (int) (threatChangeFactor * a8_threatSystem.attackedThreatMultiplierInitial));
@@ -189,7 +189,7 @@ public class DynamicStealth
             }
             else
             {
-                //Hit by threat target
+                //In combat, and hit by threat target
                 Threat.setThreat(livingTarget, threat + (int) (event.getAmount() * a8_threatSystem.attackedThreatMultiplierTarget / livingTarget.getMaxHealth()));
             }
 
@@ -198,7 +198,6 @@ public class DynamicStealth
                 //Threat targeting already updated
 
                 //Update vanilla targeting
-                livingTarget.setRevengeTarget(livingBaseSource);
                 livingTarget.setAttackTarget(livingBaseSource);
 
                 //Look toward damage
@@ -223,23 +222,17 @@ public class DynamicStealth
                 else
                 {
                     //This is mostly for setting/resetting things when eg. you hit an entity that is in the middle of a task, and they don't see you (even after you hit them)
-                    //Only setting/resetting select tasks, because I'm sure it will cause issues if I reset all tasks
+
                     livingTarget.getNavigator().clearPath();
 
-                    AIStoreKnownPosition knownPositionAI = null;
-                    AISearchLastKnownPosition searchAI = null;
                     for (EntityAITasks.EntityAITaskEntry task : livingTarget.targetTasks.taskEntries)
                     {
-                        if (task.action instanceof AIStoreKnownPosition) knownPositionAI = (AIStoreKnownPosition) task.action;
-                        else if (task.action instanceof AISearchLastKnownPosition) searchAI = (AISearchLastKnownPosition) task.action;
-                    }
-
-                    if (knownPositionAI != null && searchAI != null)
-                    {
-                        int distance = (int) Math.sqrt(source.getDistanceSq(target));
-                        knownPositionAI.target = (EntityLivingBase) source;
-                        knownPositionAI.lastKnownPosition = searchAI.randomPath(source.getPosition(), distance / 2, distance / 4);
-                        if (searchAI.shouldExecute()) searchAI.startExecuting();
+                        if (task.action instanceof AISearchLastKnownPosition)
+                        {
+                            AISearchLastKnownPosition searchAI = (AISearchLastKnownPosition) task.action;
+                            int distance = (int) Math.sqrt(source.getDistanceSq(target));
+                            searchAI.lastKnownPosition = searchAI.randomPath(source.getPosition(), distance / 2, distance / 4);
+                        }
                     }
                 }
             }
@@ -365,37 +358,7 @@ public class DynamicStealth
     {
         if (!(living instanceof EntitySlime))
         {
-            //Insert AIStoreKnownPosition at a negative priority (very high priority)
-            targetTasks.addTask(-7, new AIStoreKnownPosition(living));
-
-            //Find priority slightly lower than the lowest priority among current targetTasks (lowest priority being highest priority number)
-            int newTaskPriority = Integer.MIN_VALUE;
-            for (EntityAITasks.EntityAITaskEntry entry : targetTasks.taskEntries)
-                if (entry.priority >= newTaskPriority)
-                    newTaskPriority = entry.priority + 1;
-
-            //Find highest priority (lowest number) among normal tasks
-            int highestAndLeast = Integer.MAX_VALUE;
-            for (EntityAITasks.EntityAITaskEntry entry : tasks.taskEntries)
-                if (entry.priority < highestAndLeast)
-                    highestAndLeast = entry.priority;
-
-            //Make sure all non-target task priorities are lower priority (higher number) than (newTaskPriority + # of new tasks)
-            int offset = highestAndLeast - newTaskPriority + 1; //1 new task
-            if (offset > 0)
-            {
-                EntityAIBase action;
-                for (EntityAITasks.EntityAITaskEntry entry : tasks.taskEntries.toArray(new EntityAITasks.EntityAITaskEntry[tasks.taskEntries.size()]))
-                {
-                    //Task priorities cannot be changed in a normal way, so grab the task, remove it, and re-add it
-                    action = entry.action;
-                    tasks.removeTask(action);
-                    tasks.addTask(entry.priority + offset, action);
-                }
-            }
-
-            //Finally, add the new tasks
-            targetTasks.addTask(newTaskPriority, new AISearchLastKnownPosition(living, 1));
+            targetTasks.addTask(77777, new AISearchLastKnownPosition(living, 1));
         }
     }
 }

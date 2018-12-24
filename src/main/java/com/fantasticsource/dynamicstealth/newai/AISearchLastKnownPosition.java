@@ -1,13 +1,14 @@
 package com.fantasticsource.dynamicstealth.newai;
 
 import com.fantasticsource.dynamicstealth.DynamicStealth;
+import com.fantasticsource.dynamicstealth.Pair;
 import com.fantasticsource.dynamicstealth.Threat;
 import com.fantasticsource.dynamicstealth.ai.AITargetEdit;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.TrigLookupTable;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathPoint;
@@ -18,7 +19,6 @@ import static com.fantasticsource.dynamicstealth.DynamicStealthConfig.*;
 
 public class AISearchLastKnownPosition extends EntityAIBase
 {
-    private final AIStoreKnownPosition knownPositionAI;
     private final EntityLiving searcher;
     private final PathNavigate navigator;
 
@@ -29,6 +29,7 @@ public class AISearchLastKnownPosition extends EntityAIBase
     private Vec3d lastPos = null, nextPos = null;
     private double startAngle, angleDif, pathAngle;
     private static TrigLookupTable trigTable = DynamicStealth.TRIG_TABLE;
+    public BlockPos lastKnownPosition = null;
 
 
     public AISearchLastKnownPosition(EntityLiving living, double speedIn)
@@ -37,46 +38,76 @@ public class AISearchLastKnownPosition extends EntityAIBase
         navigator = living.getNavigator();
         speed = speedIn;
 
-        knownPositionAI = findKnownPositionAI();
-        if (knownPositionAI == null) throw new IllegalArgumentException("AISearchLastKnownPosition may only be added to an entity that already has an AIStoreKnownPosition in its targetTasks");
-
         setMutexBits(3);
     }
-
-    private AIStoreKnownPosition findKnownPositionAI()
-    {
-        for (EntityAITasks.EntityAITaskEntry entry : searcher.targetTasks.taskEntries)
-        {
-            if (entry.action instanceof AIStoreKnownPosition) return (AIStoreKnownPosition) entry.action;
-        }
-        return null;
-    }
-
 
     @Override
     public boolean shouldExecute()
     {
-        if (AITargetEdit.isSuitableTarget(searcher, knownPositionAI.target))
+        //Sync attack/revenge target to threat target
+        Pair<EntityLivingBase, Integer> threatProperties = Threat.get(searcher);
+        EntityLivingBase threatTarget = threatProperties.getKey();
+        int threat = threatProperties.getValue();
+
+        if (threatTarget == null || threat == 0)
         {
-            searcher.setAttackTarget(knownPositionAI.target);
-            knownPositionAI.lastKnownPosition = knownPositionAI.target.getPosition();
+            //No active threat target
+            EntityLivingBase attackTarget = searcher.getAttackTarget();
+            if (attackTarget != null)
+            {
+                //Hopefully this always only means we've just noticed a new, valid target
+                Threat.set(searcher, attackTarget, a8_threatSystem.targetSpottedThreat);
+                lastKnownPosition = attackTarget.getPosition();
+            }
+        }
+        else
+        {
+            //Active threat target exists
+        }
+
+        if (AITargetEdit.isSuitableTarget(searcher, threatTarget))
+        {
+            searcher.setAttackTarget(threatTarget);
+            lastKnownPosition = threatTarget.getPosition();
+
+            clearSearchPath();
+
             return false;
         }
 
-        return Threat.getThreat(searcher) > a8_threatSystem.unseenMinimumThreat;
+        searcher.setAttackTarget(null);
+        if (Threat.getThreat(searcher) > a8_threatSystem.unseenMinimumThreat) return true;
+        else
+        {
+            Threat.setThreat(searcher, threat - a8_threatSystem.unseenTargetDegredationRate);
+
+            clearSearchPath();
+
+            return false;
+        }
+    }
+
+    private void clearSearchPath()
+    {
+        if (path != null && path.equals(navigator.getPath()))
+        {
+            navigator.clearPath();
+            searcher.rotationYaw = searcher.rotationYawHead;
+        }
+        path = null;
     }
 
     @Override
     public void startExecuting()
     {
-        if (knownPositionAI.lastKnownPosition != null)
+        if (lastKnownPosition != null)
         {
             phase = 0;
 
             timeAtPos = 0;
             lastPos = null;
 
-            path = navigator.getPathToPos(knownPositionAI.lastKnownPosition);
+            path = navigator.getPathToPos(lastKnownPosition);
             navigator.setPath(path, speed);
         }
         else
@@ -109,7 +140,7 @@ public class AISearchLastKnownPosition extends EntityAIBase
 
             lastPos = currentPos;
 
-            if (timeAtPos > 60 || (searcher.onGround && navigator.noPath() && !newPath(knownPositionAI.lastKnownPosition)))
+            if (timeAtPos > 60 || (searcher.onGround && navigator.noPath() && !newPath(lastKnownPosition)))
             {
                 phase = 1;
 
@@ -229,23 +260,6 @@ public class AISearchLastKnownPosition extends EntityAIBase
         path = newPath;
         navigator.setPath(path, speed);
         return true;
-    }
-
-    @Override
-    public void resetTask()
-    {
-        if (!AITargetEdit.isSuitableTarget(searcher, knownPositionAI.target))
-        {
-            knownPositionAI.lastKnownPosition = null;
-            knownPositionAI.target = null;
-        }
-
-        if (path != null && path.equals(navigator.getPath())) navigator.clearPath();
-        path = null;
-
-        searcher.rotationYaw = searcher.rotationYawHead;
-
-        Threat.remove(searcher);
     }
 
     public BlockPos randomPath(BlockPos position, int xz, int y)

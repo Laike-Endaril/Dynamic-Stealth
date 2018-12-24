@@ -1,8 +1,8 @@
 RELEVANT TO FAERUN HEROES ==============================================
 
-Implement threat system
-...When target is NOT NULL, make sure to only attack/search for specified target (in targeting AI classes; right now by default it will attack any found)
+Test threat system...
 ...When target is null and a target is spotted, set threat to inital "spotted" threat
+...When target is NOT NULL, make sure to only attack/search for specified target (in targeting AI classes; right now by default it will attack any found)
 ...Make sure entities only turn their head when damaged if their target is hitting them (or they have no target)
 
 How should the hooks into the system function?  Direct method access?  Custom forge events?  Something else?
