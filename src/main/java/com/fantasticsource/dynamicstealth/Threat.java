@@ -89,9 +89,13 @@ public class Threat
 
     public static void set(EntityLiving searcher, EntityLivingBase target, int threat)
     {
-        Pair<EntityLivingBase, Integer> entry = threatMap.get(searcher);
-        if (entry != null) entry.set(target, threat);
-        else threatMap.put(searcher, new Pair<>(target, threat));
+        if (threat <= 0) remove(searcher);
+        else
+        {
+            Pair<EntityLivingBase, Integer> entry = threatMap.get(searcher);
+            if (entry != null) entry.set(target, threat);
+            else threatMap.put(searcher, new Pair<>(target, threat));
+        }
     }
 
     public static void setTarget(EntityLiving searcher, EntityLivingBase target)
@@ -103,8 +107,12 @@ public class Threat
 
     public static void setThreat(EntityLiving searcher, int threat)
     {
-        Pair<EntityLivingBase, Integer> entry = threatMap.get(searcher);
-        if (entry != null) entry.setValue(threat);
-        else threatMap.put(searcher, new Pair<>(null, threat));
+        if (threat <= 0) remove(searcher);
+        else
+        {
+            Pair<EntityLivingBase, Integer> entry = threatMap.get(searcher);
+            if (entry != null) entry.setValue(threat);
+            else threatMap.put(searcher, new Pair<>(null, threat));
+        }
     }
 }
