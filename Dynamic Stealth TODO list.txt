@@ -1,8 +1,8 @@
 RELEVANT TO FAERUN HEROES ==============================================
 
-How should the hooks into the system function?  Direct method access?  Custom forge events?  Something else?
+Change behavior of CNPCs so that they don't have to see you to speak?
 
-Fix issue with Dynamic Stealth preventing CNPC dialogs
+How should the hooks into the system function?  Direct method access?  Custom forge events?  Something else?
 
 Make owned entities change their threat based on their owner's actions (eg. see AIHurtByTargetEdit and AIOwnerHurtByTargetEdit)
 
