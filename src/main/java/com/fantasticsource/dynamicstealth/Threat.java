@@ -32,7 +32,8 @@ public class Threat
 
     private static boolean checkRemoveSearcher(Map.Entry<EntityLiving, Pair<EntityLivingBase, Integer>> entry)
     {
-        return !entry.getKey().world.loadedEntityList.contains(entry);
+        EntityLiving searcher = entry.getKey();
+        return !searcher.world.loadedEntityList.contains(searcher);
     }
 
 
