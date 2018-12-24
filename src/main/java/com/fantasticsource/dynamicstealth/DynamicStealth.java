@@ -170,7 +170,7 @@ public class DynamicStealth
             Pair<EntityLivingBase, Integer> threatEntry = Threat.get(livingTarget);
             EntityLivingBase threatTarget = threatEntry.getKey();
             int threat = threatEntry.getValue();
-            if (threatTarget == null)
+            if (threatTarget == null || threat == 0)
             {
                 //Hit by entity when out-of-combat
                 Threat.set(livingTarget, livingBaseSource, (int) (event.getAmount() * a8_threatSystem.attackedThreatMultiplierInitial / livingTarget.getMaxHealth()));
