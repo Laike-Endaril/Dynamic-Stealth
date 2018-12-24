@@ -28,20 +28,20 @@ public class DynamicStealthConfig
 
     public static class ThreatSystem
     {
-        @Config.Name("'Attacked' Threat Multiplier (Initial Attack)")
+        @Config.Name("Initial Attack Multiplier")
         @Comment({"When an out-of-combat entity is attacked, its threat is set to the damage taken times this, divided by its max HP"})
         @Config.RangeDouble(min = 1)
-        public double attackedThreatMultiplierInitial = 100;
+        public double attackedThreatMultiplierInitial = 1000;
 
-        @Config.Name("'Attacked' Threat Multiplier (Attacked By Current Target)")
+        @Config.Name("'Attacked By Same' Multiplier")
         @Comment({"When an in-combat entity is attacked by its current target, its threat is increased by the damage taken times this, divided by its max HP"})
         @Config.RangeDouble(min = 1)
-        public double attackedThreatMultiplierTarget = 50;
+        public double attackedThreatMultiplierTarget = 1000;
 
-        @Config.Name("'Attacked' Threat Multiplier (Initial Attack)")
+        @Config.Name("'Attacked By Other' Multiplier")
         @Comment({"When an in-combat entity is attacked by something that is *not* its current target, its threat is decreased by damage taken times this, divided by its max HP"})
         @Config.RangeDouble(min = 1)
-        public double attackedThreatMultiplierOther = 50;
+        public double attackedThreatMultiplierOther = 1000;
 
         @Config.Name("Initial 'Target Spotted' Threat")
         @Comment({"When an out-of-combat entity spots a valid target, its threat is set to this"})
@@ -57,6 +57,17 @@ public class DynamicStealthConfig
         @Comment({"Every time an entity updates and their target's position is unknown, this is subtracted from their threat"})
         @Config.RangeInt(min = 1)
         public int unseenTargetDegredationRate = 1;
+
+        @Config.Name("Debug Mode")
+        @Comment({
+                "If enabled, threat debug messages are printed in real-time in the console",
+                "",
+                "If there is a lot of combat going on, this can get extremly verbose instantly, so I only suggest using this for small, controlled tests",
+                "",
+                "Output is in the form 'searcher      target     threatLevel'"
+        })
+        @Config.RangeInt(min = 1)
+        public boolean debug = false;
     }
 
 
