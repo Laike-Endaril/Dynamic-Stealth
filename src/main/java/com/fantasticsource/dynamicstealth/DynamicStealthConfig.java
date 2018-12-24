@@ -46,7 +46,7 @@ public class DynamicStealthConfig
         @Config.Name("Initial 'Target Spotted' Threat")
         @Comment({"When an out-of-combat entity spots a valid target, its threat is set to this"})
         @Config.RangeInt(min = 1)
-        public int targetSpottedThreat = 1;
+        public int targetSpottedThreat = 100;
 
         @Config.Name("Unseen Target Minimum Threat Level")
         @Comment({"If an entity's threat level falls below this and they don't see their target, they go out-of-combat / stop searching"})
