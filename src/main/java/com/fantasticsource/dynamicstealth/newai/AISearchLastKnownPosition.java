@@ -69,13 +69,24 @@ public class AISearchLastKnownPosition extends EntityAIBase
     @Override
     public void startExecuting()
     {
-        phase = 0;
+        if (knownPositionAI.lastKnownPosition != null)
+        {
+            phase = 0;
 
-        timeAtPos = 0;
-        lastPos = null;
+            timeAtPos = 0;
+            lastPos = null;
 
-        path = navigator.getPathToPos(knownPositionAI.lastKnownPosition);
-        navigator.setPath(path, speed);
+            path = navigator.getPathToPos(knownPositionAI.lastKnownPosition);
+            navigator.setPath(path, speed);
+        }
+        else
+        {
+            phase = 1;
+
+            startAngle = searcher.rotationYawHead;
+            spinDirection = searcher.getRNG().nextBoolean();
+            angleDif = 0;
+        }
     }
 
     @Override
