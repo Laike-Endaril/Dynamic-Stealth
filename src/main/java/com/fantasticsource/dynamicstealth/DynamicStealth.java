@@ -13,16 +13,23 @@ import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.init.MobEffects;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.world.ChunkEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.apache.logging.log4j.Logger;
@@ -30,7 +37,6 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
 import java.util.Set;
 
 import static com.fantasticsource.dynamicstealth.DynamicStealthConfig.*;
@@ -94,6 +100,47 @@ public class DynamicStealth
     }
 
     @SubscribeEvent
+    public static void despawn(LivingSpawnEvent.AllowDespawn event)
+    {
+        EntityLivingBase livingBase = event.getEntityLiving();
+        Event.Result result = event.getResult();
+        if (livingBase instanceof EntityLiving && result != Event.Result.DENY && result != Event.Result.DEFAULT)
+        {
+            Threat.remove((EntityLiving) livingBase);
+        }
+    }
+
+    @SubscribeEvent
+    public static void entityDead(LivingDeathEvent event)
+    {
+        EntityLivingBase deadOne = event.getEntityLiving();
+        if (deadOne instanceof EntityLiving) Threat.remove((EntityLiving) deadOne);
+    }
+
+    @SubscribeEvent
+    public static void chunkUnload(ChunkEvent.Unload event)
+    {
+        Chunk chunk = event.getChunk();
+        Set<Entity>[] sets = chunk.getEntityLists();
+        for (Set<Entity> set : sets)
+        {
+            for (Entity entity : set)
+            {
+                if (entity instanceof EntityLiving) Threat.remove((EntityLiving) entity);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void worldUnload(WorldEvent.Unload event)
+    {
+        for (Entity entity : event.getWorld().loadedEntityList)
+        {
+            if (entity instanceof EntityLiving) Threat.remove((EntityLiving) entity);
+        }
+    }
+
+    @SubscribeEvent
     public static void entityAttacked(LivingHurtEvent event) throws InvocationTargetException, IllegalAccessException
     {
         EntityLivingBase target = event.getEntityLiving();
@@ -137,7 +184,9 @@ public class DynamicStealth
 
             if (updateTarget)
             {
-                //Set vanilla targeting
+                //Threat targeting already updated
+
+                //Update vanilla targeting
                 livingTarget.setRevengeTarget(livingBaseSource);
                 livingTarget.setAttackTarget(livingBaseSource);
 
