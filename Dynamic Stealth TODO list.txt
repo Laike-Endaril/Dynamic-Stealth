@@ -3,8 +3,13 @@ RELEVANT TO FAERUN HEROES ==============================================
 Implement threat system
 ...When target is NOT NULL, make sure to only attack/search for specified target (in targeting AI classes; right now by default it will attack any found)
 ...When target is null and a target is spotted, set threat to inital "spotted" threat
+...Make sure entities only turn their head when damaged if their target is hitting them (or they have no target)
+
+How should the hooks into the system function?  Direct method access?  Custom forge events?  Something else?
 
 Fix issue with Dynamic Stealth preventing CNPC dialogs
+
+Make owned entities change their threat based on their owner's actions (eg. see AIHurtByTargetEdit and AIOwnerHurtByTargetEdit)
 
 Fix mobs not moving to last known position before searching when too far away...
 ...Create function which, when beyond normal pathfinding range...
