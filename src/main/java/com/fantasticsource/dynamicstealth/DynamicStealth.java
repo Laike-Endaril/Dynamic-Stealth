@@ -115,7 +115,11 @@ public class DynamicStealth
     public static void entityDead(LivingDeathEvent event)
     {
         EntityLivingBase deadOne = event.getEntityLiving();
-        if (deadOne instanceof EntityLiving) Threat.remove((EntityLiving) deadOne);
+        if (deadOne != null)
+        {
+            Threat.removeTargetFromAll(deadOne);
+            if (deadOne instanceof EntityLiving) Threat.remove((EntityLiving) deadOne);
+        }
     }
 
     @SubscribeEvent

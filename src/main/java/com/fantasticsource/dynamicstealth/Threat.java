@@ -27,12 +27,22 @@ public class Threat
 
     private static void removeUnusedEntities()
     {
-        threatMap.entrySet().removeIf(Threat::checkRemove);
+        threatMap.entrySet().removeIf(Threat::checkRemoveSearcher);
     }
 
-    private static boolean checkRemove(Map.Entry<EntityLiving, Pair<EntityLivingBase, Integer>> entry)
+    private static boolean checkRemoveSearcher(Map.Entry<EntityLiving, Pair<EntityLivingBase, Integer>> entry)
     {
         return !entry.getKey().world.loadedEntityList.contains(entry);
+    }
+
+
+    public static void removeTargetFromAll(EntityLivingBase target)
+    {
+        for (Map.Entry<EntityLiving, Pair<EntityLivingBase, Integer>> entry : threatMap.entrySet())
+        {
+            Pair<EntityLivingBase, Integer> properties = entry.getValue();
+            if (properties.getKey() == target) properties.setKey(null);
+        }
     }
 
 
