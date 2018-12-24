@@ -12,6 +12,17 @@ public class Threat
     private static Map<EntityLiving, Pair<EntityLivingBase, Integer>> threatMap = new LinkedHashMap<>(200);
 
 
+    public static void removeUnusedEntities()
+    {
+        threatMap.entrySet().removeIf(Threat::checkRemove);
+    }
+
+    private static boolean checkRemove(Map.Entry<EntityLiving, Pair<EntityLivingBase, Integer>> entry)
+    {
+        return !entry.getKey().world.loadedEntityList.contains(entry);
+    }
+
+
     public static void remove(EntityLiving searcher)
     {
         threatMap.remove(searcher);

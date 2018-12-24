@@ -31,6 +31,7 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.apache.logging.log4j.Logger;
 
@@ -138,6 +139,12 @@ public class DynamicStealth
         {
             if (entity instanceof EntityLiving) Threat.remove((EntityLiving) entity);
         }
+    }
+
+    @SubscribeEvent
+    public static void serverTick(TickEvent.ServerTickEvent event)
+    {
+        Threat.removeUnusedEntities();
     }
 
     @SubscribeEvent
