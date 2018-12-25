@@ -1,16 +1,16 @@
-package com.fantasticsource.dynamicstealth.ai;
+package com.fantasticsource.dynamicstealth.server.ai;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAIOwnerHurtTarget;
+import net.minecraft.entity.ai.EntityAIOwnerHurtByTarget;
 import net.minecraft.entity.passive.EntityTameable;
 
-public class AIOwnerHurtTargetEdit extends AITargetEdit
+public class AIOwnerHurtByTargetEdit extends AITargetEdit
 {
     EntityTameable tameable;
     EntityLivingBase ownerEnemy;
     private int timestamp;
 
-    public AIOwnerHurtTargetEdit(EntityAIOwnerHurtTarget oldAI) throws IllegalAccessException
+    public AIOwnerHurtByTargetEdit(EntityAIOwnerHurtByTarget oldAI) throws IllegalAccessException
     {
         super(oldAI);
         tameable = (EntityTameable) attacker;
@@ -25,8 +25,8 @@ public class AIOwnerHurtTargetEdit extends AITargetEdit
         EntityLivingBase owner = tameable.getOwner();
         if (owner == null) return false;
 
-        ownerEnemy = owner.getLastAttackedEntity();
-        return owner.getLastAttackedEntityTime() != timestamp && isSuitableTarget(ownerEnemy) && tameable.shouldAttackEntity(ownerEnemy, owner);
+        ownerEnemy = owner.getRevengeTarget();
+        return owner.getRevengeTimer() != timestamp && isSuitableTarget(ownerEnemy) && tameable.shouldAttackEntity(ownerEnemy, owner);
     }
 
     @Override
@@ -34,8 +34,8 @@ public class AIOwnerHurtTargetEdit extends AITargetEdit
     {
         attacker.setAttackTarget(ownerEnemy);
 
-        EntityLivingBase entitylivingbase = tameable.getOwner();
-        if (entitylivingbase != null) timestamp = entitylivingbase.getLastAttackedEntityTime();
+        EntityLivingBase owner = tameable.getOwner();
+        if (owner != null) timestamp = owner.getRevengeTimer();
 
         super.startExecuting();
     }

@@ -3,7 +3,7 @@ package com.fantasticsource.dynamicstealth.server.newai;
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.tools.datastructures.Pair;
 import com.fantasticsource.dynamicstealth.server.Threat;
-import com.fantasticsource.dynamicstealth.ai.AITargetEdit;
+import com.fantasticsource.dynamicstealth.server.ai.AITargetEdit;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.TrigLookupTable;
 import net.minecraft.entity.EntityLiving;

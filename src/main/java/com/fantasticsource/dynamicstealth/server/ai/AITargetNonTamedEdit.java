@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth.ai;
+package com.fantasticsource.dynamicstealth.server.ai;
 
 import net.minecraft.entity.ai.EntityAITargetNonTamed;
 import net.minecraft.entity.passive.EntityTameable;
