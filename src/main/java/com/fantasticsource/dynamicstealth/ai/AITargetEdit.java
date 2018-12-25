@@ -95,7 +95,7 @@ public abstract class AITargetEdit extends EntityAIBase
 
     protected boolean isSuitableTarget(@Nullable EntityLivingBase target)
     {
-        if (nearbyOnly && !canEasilyReach(target)) return false;
+        if (target == null || (nearbyOnly && !canEasilyReach(target))) return false;
 
         return isSuitableTarget(attacker, target) && attacker.isWithinHomeDistanceFromPosition(new BlockPos(target));
     }
