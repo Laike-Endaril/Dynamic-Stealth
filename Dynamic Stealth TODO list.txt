@@ -68,6 +68,7 @@ Re-add and implement "noticed" visibility multiplier
 Add touch-based detection (within very close range)
 Add sound-based detection
 Add smell-based detection (wolves, cats, bears)
+...Add the ability for entities to smell not only other living entities, but also ground items, etc.
 
 
 
@@ -97,6 +98,8 @@ MOD COMPATIBILITY ======================================================
 
 Do I even need to replace any vanilla AI tasks anymore?  I'm not sure I have a need to do so at this point...
 ...test this sometime (on a new branch ofc)
+
+*IF* It's still necessary for me to replace AI tasks, look into possible compat issue between DS and BWM AI tasks
 
 Many cases might be solvable with more selective AI replacements on my part, depending on what other mods are installed.
 Even a simple required-after may suffice, because if the other mod has already replaced the vanilla AI, then my mod will not find/replace that AI anyway
