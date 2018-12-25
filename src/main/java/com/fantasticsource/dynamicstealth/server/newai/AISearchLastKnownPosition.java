@@ -140,7 +140,7 @@ public class AISearchLastKnownPosition extends EntityAIBase
 
             lastPos = currentPos;
 
-            if (timeAtPos > 60 || (searcher.onGround && navigator.noPath() && !newPath(lastKnownPosition)))
+            if (timeAtPos > 60 || lastKnownPosition == null || (searcher.onGround && navigator.noPath() && !newPath(lastKnownPosition)))
             {
                 phase = 1;
 
