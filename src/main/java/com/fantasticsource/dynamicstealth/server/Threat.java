@@ -1,10 +1,11 @@
-package com.fantasticsource.dynamicstealth;
+package com.fantasticsource.dynamicstealth.server;
+
+import com.fantasticsource.tools.datastructures.Pair;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 
 public class Threat
 {
@@ -18,18 +19,6 @@ public class Threat
 
     public static void update()
     {
-        if (DynamicStealthConfig.a8_threatSystem.debug && threatMap.size() > 0)
-        {
-            System.out.println("=====================================================================================");
-            for (Map.Entry<EntityLiving, Pair<EntityLivingBase, Integer>> entry : threatMap.entrySet())
-            {
-                Pair<EntityLivingBase, Integer> properties = entry.getValue();
-                System.out.println((entry.getKey() == null ? "null" : entry.getKey().getName()) + "\t\t\t" + (properties.getKey() == null ? "null" : properties.getKey().getName()) + "\t\t\t" + properties.getValue());
-            }
-            System.out.println("=====================================================================================");
-            System.out.println();
-        }
-
         if (--timer == 0)
         {
             timer = ITERATION_FREQUENCY;

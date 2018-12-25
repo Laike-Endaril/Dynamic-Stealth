@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth;
+package com.fantasticsource.tools.datastructures;
 
 public class Pair<K, V>
 {

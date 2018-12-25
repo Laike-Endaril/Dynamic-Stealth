@@ -1,5 +1,6 @@
-package com.fantasticsource.dynamicstealth;
+package com.fantasticsource.dynamicstealth.server;
 
+import com.fantasticsource.mctools.Speedometer;
 import com.fantasticsource.tools.Tools;
 import com.google.common.collect.Lists;
 import net.minecraft.entity.Entity;
@@ -19,12 +20,15 @@ import net.minecraft.util.math.Vec3d;
 
 import java.util.List;
 
-import static com.fantasticsource.dynamicstealth.DynamicStealth.TRIG_TABLE;
-import static com.fantasticsource.dynamicstealth.DynamicStealthConfig.*;
-import static com.fantasticsource.dynamicstealth.EntityData.*;
+import static com.fantasticsource.dynamicstealth.common.DynamicStealth.TRIG_TABLE;
+import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.*;
+import static com.fantasticsource.dynamicstealth.server.EntityVisionData.*;
 
 public class EntitySensesEdit extends EntitySenses
 {
+    private static final ServerSettings.Senses senses = serverSettings.senses;
+    private static final ServerSettings.Senses.Vision vision = senses.vision;
+
     EntityLivingBase entity;
     List<Entity> seenEntities = Lists.<Entity>newArrayList();
     List<Entity> unseenEntities = Lists.<Entity>newArrayList();
@@ -93,7 +97,7 @@ public class EntitySensesEdit extends EntitySenses
 
 
         //Glowing (absolute, after Angles)
-        if (g_absolutes.seeGlowing && target.isGlowing()) return false;
+        if (vision.g_absolutes.seeGlowing && target.isGlowing()) return false;
 
 
         //LOS check (absolute, after Angles, after Glowing)
@@ -104,7 +108,7 @@ public class EntitySensesEdit extends EntitySenses
         double lightFactor = light(target);
         if (searcher.getActivePotionEffect(MobEffects.NIGHT_VISION) != null || naturalNightVision(searcher))
         {
-            lightFactor = Math.min(15, lightFactor + c_lighting.nightVisionAddition);
+            lightFactor = Math.min(15, lightFactor + vision.c_lighting.nightVisionAddition);
         }
 
         if (lightFactor <= lightLow(searcher)) return true;
@@ -117,17 +121,17 @@ public class EntitySensesEdit extends EntitySenses
 
 
         //Blindness (multiplier)
-        double blindnessMultiplier = searcher.getActivePotionEffect(MobEffects.BLINDNESS) != null ? a_stealthMultipliers.blindnessMultiplier : 1;
+        double blindnessMultiplier = searcher.getActivePotionEffect(MobEffects.BLINDNESS) != null ? vision.a_stealthMultipliers.blindnessMultiplier : 1;
 
 
         //Invisibility (multiplier)
         boolean isLivingBase = target instanceof EntityLivingBase;
         EntityLivingBase targetLiving = isLivingBase ? (EntityLivingBase) target : null;
-        double invisibilityMultiplier = isLivingBase && targetLiving.getActivePotionEffect(MobEffects.INVISIBILITY) != null ? a_stealthMultipliers.invisibilityMultiplier : 1;
+        double invisibilityMultiplier = isLivingBase && targetLiving.getActivePotionEffect(MobEffects.INVISIBILITY) != null ? vision.a_stealthMultipliers.invisibilityMultiplier : 1;
 
 
         //Crouching (multiplier)
-        double crouchingMultiplier = target.isSneaking() ? a_stealthMultipliers.crouchingMultiplier : 1;
+        double crouchingMultiplier = target.isSneaking() ? vision.a_stealthMultipliers.crouchingMultiplier : 1;
 
 
         //Mob Heads (multiplier)
@@ -140,19 +144,19 @@ public class EntitySensesEdit extends EntitySenses
                 int damage = helmet.getItemDamage();
                 if (target instanceof EntitySkeleton && damage == 0 || target instanceof EntityWitherSkeleton && damage == 1 || target instanceof EntityZombie && damage == 2 || target instanceof EntityCreeper && damage == 4)
                 {
-                    mobHeadMultiplier = a_stealthMultipliers.mobHeadMultiplier;
+                    mobHeadMultiplier = vision.a_stealthMultipliers.mobHeadMultiplier;
                 }
             }
-            else if ((helmet.getItem() == Item.getItemFromBlock(Blocks.PUMPKIN) && helmet.getItem() == Item.getItemFromBlock(Blocks.LIT_PUMPKIN)) && target instanceof EntitySnowman) mobHeadMultiplier = a_stealthMultipliers.mobHeadMultiplier;
+            else if ((helmet.getItem() == Item.getItemFromBlock(Blocks.PUMPKIN) && helmet.getItem() == Item.getItemFromBlock(Blocks.LIT_PUMPKIN)) && target instanceof EntitySnowman) mobHeadMultiplier = vision.a_stealthMultipliers.mobHeadMultiplier;
         }
 
 
         //Armor
-        double armorMultiplier = isLivingBase ? Math.max(0, 1 + b_visibilityMultipliers.armorMultiplierCumulative * targetLiving.getTotalArmorValue()) : 1;
+        double armorMultiplier = isLivingBase ? Math.max(0, 1 + vision.b_visibilityMultipliers.armorMultiplierCumulative * targetLiving.getTotalArmorValue()) : 1;
 
 
         //Fire
-        double fireMultiplier = !isLivingBase ? 1 : !targetLiving.isBurning() ? 1 : b_visibilityMultipliers.onFireMultiplier;
+        double fireMultiplier = !isLivingBase ? 1 : !targetLiving.isBurning() ? 1 : vision.b_visibilityMultipliers.onFireMultiplier;
 
 
         //Combine multipliers

@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth;
+package com.fantasticsource.dynamicstealth.server;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

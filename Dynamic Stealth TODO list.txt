@@ -1,8 +1,8 @@
 RELEVANT TO FAERUN HEROES ==============================================
 
-Change behavior of CNPCs so that they don't have to see you to speak?
+Send packets from server to client for updating the HUD
 
-How should the hooks into the system function?  Direct method access?  Custom forge events?  Something else?
+How should the hooks into the system function?  Direct method access?  Custom forge events?  Something else?  ...attributes?
 
 Make owned entities change their threat based on their owner's actions (eg. see AIHurtByTargetEdit and AIOwnerHurtByTargetEdit)
 
@@ -16,14 +16,6 @@ This system, if improved upon, could be used for most pathfinding and should imp
 
 
 CONFIG FILE ============================================================
-
-Add threat system config options for...
-...update frequency
-...unseen target degredation multiplier
-...unseen target minimum threat
-
-Add AI config options for...
-...attention span
 
 Add entity-specific config options for...
 ...head turn speed
@@ -39,11 +31,10 @@ Add visible indicators when mobs detect you, lose you, etc (somewhat similar to 
 "?" when starting to search an area
 "..." when target is lost (giving up search / going out-of-combat)
 
-Add stealth HUD that shows SOME stealth aspect levels...
+Add to HUD...
 ...light
 ...speed
 ...combined stealth multiplier?
-For now, just show it as a vertical math equation
 
 Don't send entity data of unseen entities to players, including potion effects.
 Make sure entities that *were* seen and are no longer seen are..."gone" on client-side
@@ -54,10 +45,9 @@ Add the ability to see mob FOVs (as a cone render), maybe when under a potion ef
 
 AI =====================================================================
 
-Make search AI use the same speeds used by attack AIs
+Make search AI use the same speeds as attack AIs
 
 Figure out why entities sometimes have a delayed reaction when they should see you (when not yet alerted)
-...maybe the targetTasks don't update as often as normal tasks?
 
 Can probably combine the two below into a single AI task...
 ...Replace EntityAILookIdle with a new version that has gradual head rotation, instead of just removing it
@@ -104,6 +94,9 @@ If they kill a player while disguised, it still says the player was killed by a 
 
 
 MOD COMPATIBILITY ======================================================
+
+Do I even need to replace any vanilla AI tasks anymore?  I'm not sure I have a need to do so at this point...
+...test this sometime (on a new branch ofc)
 
 Many cases might be solvable with more selective AI replacements on my part, depending on what other mods are installed.
 Even a simple required-after may suffice, because if the other mod has already replaced the vanilla AI, then my mod will not find/replace that AI anyway

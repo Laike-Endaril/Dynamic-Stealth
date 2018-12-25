@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth;
+package com.fantasticsource.mctools;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;

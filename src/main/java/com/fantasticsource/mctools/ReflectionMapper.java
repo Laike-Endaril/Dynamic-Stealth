@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth;
+package com.fantasticsource.mctools;
 
 import java.io.*;
 import java.lang.reflect.Field;

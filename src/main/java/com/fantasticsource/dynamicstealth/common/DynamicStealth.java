@@ -1,9 +1,15 @@
-package com.fantasticsource.dynamicstealth;
+package com.fantasticsource.dynamicstealth.common;
 
 import com.fantasticsource.dynamicstealth.ai.*;
-import com.fantasticsource.dynamicstealth.newai.AISearchLastKnownPosition;
+import com.fantasticsource.dynamicstealth.client.HUD;
+import com.fantasticsource.dynamicstealth.server.EntitySensesEdit;
+import com.fantasticsource.dynamicstealth.server.Threat;
+import com.fantasticsource.dynamicstealth.server.newai.AISearchLastKnownPosition;
+import com.fantasticsource.mctools.Speedometer;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.TrigLookupTable;
+import com.fantasticsource.tools.datastructures.Pair;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -13,6 +19,7 @@ import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.init.MobEffects;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
@@ -38,7 +45,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
-import static com.fantasticsource.dynamicstealth.DynamicStealthConfig.*;
+import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.*;
 
 @Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, acceptableRemoteVersions = "*")
 public class DynamicStealth
@@ -66,10 +73,10 @@ public class DynamicStealth
     {
         logger = event.getModLog();
 
-        if (e_angles.angleSmall > e_angles.angleLarge) throw new IllegalArgumentException("angleLarge must be greater than or equal to angleSmall");
-        if (f_distances.distanceNear > f_distances.distanceFar) throw new IllegalArgumentException("distanceFar must be greater than or equal to distanceNear");
-        if (c_lighting.lightLow > c_lighting.lightHigh) throw new IllegalArgumentException("lightHigh must be greater than or equal to lightLow");
-        if (d_speeds.speedLow > d_speeds.speedHigh) throw new IllegalArgumentException("speedHigh must be greater than or equal to speedLow");
+        if (serverSettings.senses.vision.e_angles.angleSmall > serverSettings.senses.vision.e_angles.angleLarge) throw new IllegalArgumentException("angleLarge must be greater than or equal to angleSmall");
+        if (serverSettings.senses.vision.f_distances.distanceNear > serverSettings.senses.vision.f_distances.distanceFar) throw new IllegalArgumentException("distanceFar must be greater than or equal to distanceNear");
+        if (serverSettings.senses.vision.c_lighting.lightLow > serverSettings.senses.vision.c_lighting.lightHigh) throw new IllegalArgumentException("lightHigh must be greater than or equal to lightLow");
+        if (serverSettings.senses.vision.d_speeds.speedLow > serverSettings.senses.vision.d_speeds.speedHigh) throw new IllegalArgumentException("speedHigh must be greater than or equal to speedLow");
 
         sensesField = ReflectionTool.getField(EntityLiving.class, "field_70723_bA", "senses");
         abstractSkeletonAIArrowAttackField = ReflectionTool.getField(AbstractSkeleton.class, "field_85037_d", "aiArrowAttack");
@@ -97,6 +104,17 @@ public class DynamicStealth
             ConfigManager.sync(MODID, Config.Type.INSTANCE);
         }
     }
+
+
+    @SubscribeEvent
+    public static void drawGUI(RenderGameOverlayEvent.Post event)
+    {
+        if (event.getType() == RenderGameOverlayEvent.ElementType.EXPERIENCE)
+        {
+            new HUD(Minecraft.getMinecraft());
+        }
+    }
+
 
     @SubscribeEvent
     public static void despawn(LivingSpawnEvent.AllowDespawn event)
@@ -149,6 +167,7 @@ public class DynamicStealth
         Threat.update();
     }
 
+
     @SubscribeEvent
     public static void entityAttacked(LivingHurtEvent event) throws InvocationTargetException, IllegalAccessException
     {
@@ -173,14 +192,14 @@ public class DynamicStealth
                 //Hit by entity when no target is set; this includes...
                 //...getting hit while out-of-combat
                 //...getting hit after previous target has been killed
-                Threat.set(livingTarget, livingBaseSource, (int) (event.getAmount() * a8_threatSystem.attackedThreatMultiplierInitial / livingTarget.getMaxHealth()));
+                Threat.set(livingTarget, livingBaseSource, (int) (event.getAmount() * serverSettings.threat.attackedThreatMultiplierInitial / livingTarget.getMaxHealth()));
             }
             else if (threatTarget != source)
             {
                 //In combat, and hit by an entity besides our threat target
                 double threatChangeFactor = event.getAmount() / livingTarget.getMaxHealth();
-                threat -= threatChangeFactor * a8_threatSystem.attackedThreatMultiplierOther;
-                if (threat <= 0) Threat.set(livingTarget, livingBaseSource, (int) (threatChangeFactor * a8_threatSystem.attackedThreatMultiplierInitial));
+                threat -= threatChangeFactor * serverSettings.threat.attackedThreatMultiplierOther;
+                if (threat <= 0) Threat.set(livingTarget, livingBaseSource, (int) (threatChangeFactor * serverSettings.threat.attackedThreatMultiplierInitial));
                 else
                 {
                     Threat.setThreat(livingTarget, threat);
@@ -190,7 +209,7 @@ public class DynamicStealth
             else
             {
                 //In combat, and hit by threat target
-                Threat.setThreat(livingTarget, threat + (int) (event.getAmount() * a8_threatSystem.attackedThreatMultiplierTarget / livingTarget.getMaxHealth()));
+                Threat.setThreat(livingTarget, threat + (int) (event.getAmount() * serverSettings.threat.attackedThreatMultiplierTarget / livingTarget.getMaxHealth()));
             }
 
             if (updateTarget)
@@ -241,12 +260,12 @@ public class DynamicStealth
         if (source instanceof EntityLivingBase)
         {
             EntityLivingBase sourceBase = (EntityLivingBase) source;
-            if (z_otherSettings.removeInvisibilityOnHit)
+            if (serverSettings.z_otherSettings.removeInvisibilityOnHit)
             {
                 sourceBase.removePotionEffect(MobEffects.INVISIBILITY);
                 target.removePotionEffect(MobEffects.INVISIBILITY);
             }
-            if (z_otherSettings.removeBlindnessOnHit)
+            if (serverSettings.z_otherSettings.removeBlindnessOnHit)
             {
                 sourceBase.removePotionEffect(MobEffects.BLINDNESS);
                 target.removePotionEffect(MobEffects.BLINDNESS);

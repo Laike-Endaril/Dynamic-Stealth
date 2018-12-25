@@ -1,8 +1,8 @@
-package com.fantasticsource.dynamicstealth.newai;
+package com.fantasticsource.dynamicstealth.server.newai;
 
-import com.fantasticsource.dynamicstealth.DynamicStealth;
-import com.fantasticsource.dynamicstealth.Pair;
-import com.fantasticsource.dynamicstealth.Threat;
+import com.fantasticsource.dynamicstealth.common.DynamicStealth;
+import com.fantasticsource.tools.datastructures.Pair;
+import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.dynamicstealth.ai.AITargetEdit;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.TrigLookupTable;
@@ -15,7 +15,7 @@ import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-import static com.fantasticsource.dynamicstealth.DynamicStealthConfig.*;
+import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.*;
 
 public class AISearchLastKnownPosition extends EntityAIBase
 {
@@ -56,7 +56,7 @@ public class AISearchLastKnownPosition extends EntityAIBase
             if (attackTarget != null)
             {
                 //Hopefully this always only means we've just noticed a new, valid target
-                Threat.set(searcher, attackTarget, a8_threatSystem.targetSpottedThreat);
+                Threat.set(searcher, attackTarget, serverSettings.threat.targetSpottedThreat);
                 lastKnownPosition = attackTarget.getPosition();
             }
         }
@@ -76,10 +76,10 @@ public class AISearchLastKnownPosition extends EntityAIBase
         }
 
         searcher.setAttackTarget(null);
-        if (Threat.getThreat(searcher) > a8_threatSystem.unseenMinimumThreat) return true;
+        if (Threat.getThreat(searcher) > serverSettings.threat.unseenMinimumThreat) return true;
         else
         {
-            Threat.setThreat(searcher, threat - a8_threatSystem.unseenTargetDegredationRate);
+            Threat.setThreat(searcher, threat - serverSettings.threat.unseenTargetDegredationRate);
 
             clearSearchPath();
 
@@ -155,11 +155,11 @@ public class AISearchLastKnownPosition extends EntityAIBase
         {
             navigator.clearPath();
 
-            if (spinDirection) angleDif += a5_ai.headTurnSpeed;
-            else angleDif -= a5_ai.headTurnSpeed;
+            if (spinDirection) angleDif += serverSettings.ai.headTurnSpeed;
+            else angleDif -= serverSettings.ai.headTurnSpeed;
 
             double angleRad = Tools.degtorad(startAngle + angleDif);
-            searcher.getLookHelper().setLookPosition(searcher.posX - trigTable.sin(angleRad), searcher.posY + searcher.getEyeHeight(), searcher.posZ + trigTable.cos(angleRad), a5_ai.headTurnSpeed, a5_ai.headTurnSpeed);
+            searcher.getLookHelper().setLookPosition(searcher.posX - trigTable.sin(angleRad), searcher.posY + searcher.getEyeHeight(), searcher.posZ + trigTable.cos(angleRad), serverSettings.ai.headTurnSpeed, serverSettings.ai.headTurnSpeed);
 
             if (Math.abs(angleDif) >= 360)
             {
@@ -191,7 +191,7 @@ public class AISearchLastKnownPosition extends EntityAIBase
             }
             else
             {
-                searcher.getLookHelper().setLookPosition(nextPos.x, searcher.posY + searcher.getEyeHeight(), nextPos.z, a5_ai.headTurnSpeed, a5_ai.headTurnSpeed);
+                searcher.getLookHelper().setLookPosition(nextPos.x, searcher.posY + searcher.getEyeHeight(), nextPos.z, serverSettings.ai.headTurnSpeed, serverSettings.ai.headTurnSpeed);
             }
         }
 
@@ -216,7 +216,7 @@ public class AISearchLastKnownPosition extends EntityAIBase
             }
         }
 
-        Threat.setThreat(searcher, (Threat.getThreat(searcher) - a8_threatSystem.unseenTargetDegredationRate));
+        Threat.setThreat(searcher, (Threat.getThreat(searcher) - serverSettings.threat.unseenTargetDegredationRate));
     }
 
     private boolean findPathAngle()
