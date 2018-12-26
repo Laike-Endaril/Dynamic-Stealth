@@ -116,3 +116,5 @@ Check issue with Vampirism, where hunters attack the player regardless of whethe
 Check Special AI Revival
 
 Check Rough Mobs 2
+
+Check Epic Siege Mod
