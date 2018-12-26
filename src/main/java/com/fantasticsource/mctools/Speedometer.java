@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
@@ -108,12 +109,12 @@ public class Speedometer
             if (packetClass == CPacketPlayer.Position.class)
             {
                 CPacketPlayer.Position data = (CPacketPlayer.Position) msg;
-                Speedometer.update(player, new Vec3d(data.getX(Double.NaN), data.getY(Double.NaN), data.getZ(Double.NaN)));
+                FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> Speedometer.update(player, new Vec3d(data.getX(Double.NaN), data.getY(Double.NaN), data.getZ(Double.NaN))));
             }
             else if (packetClass == CPacketPlayer.PositionRotation.class)
             {
                 CPacketPlayer.PositionRotation data = (CPacketPlayer.PositionRotation) msg;
-                Speedometer.update(player, new Vec3d(data.getX(Double.NaN), data.getY(Double.NaN), data.getZ(Double.NaN)));
+                FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> Speedometer.update(player, new Vec3d(data.getX(Double.NaN), data.getY(Double.NaN), data.getZ(Double.NaN))));
             }
 
             ctx.fireChannelRead(msg);
