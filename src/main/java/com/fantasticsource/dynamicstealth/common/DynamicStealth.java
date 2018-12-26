@@ -17,6 +17,8 @@ import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.entity.passive.EntityRabbit;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -36,6 +38,7 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.apache.logging.log4j.Logger;
@@ -66,6 +69,7 @@ public class DynamicStealth
     {
         MinecraftForge.EVENT_BUS.register(DynamicStealth.class);
         MinecraftForge.EVENT_BUS.register(Speedometer.class);
+        MinecraftForge.EVENT_BUS.register(Network.class);
     }
 
     @EventHandler
@@ -104,6 +108,8 @@ public class DynamicStealth
         if (event.getModID().equals(MODID))
         {
             ConfigManager.sync(MODID, Config.Type.INSTANCE);
+
+            Threat.sendAll(serverSettings.threat.allowClientHUD);
         }
     }
 
@@ -115,6 +121,14 @@ public class DynamicStealth
         {
             new HUD(Minecraft.getMinecraft());
         }
+    }
+
+
+    @SubscribeEvent
+    public static void playerLogged(PlayerEvent.PlayerLoggedOutEvent event)
+    {
+        EntityPlayer player = event.player;
+        if (player instanceof EntityPlayerMP) Threat.watchers.remove((EntityPlayerMP) player);
     }
 
 

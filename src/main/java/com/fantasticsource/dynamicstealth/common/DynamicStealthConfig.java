@@ -1,6 +1,5 @@
 package com.fantasticsource.dynamicstealth.common;
 
-import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.Comment;
 

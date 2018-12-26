@@ -1,15 +1,18 @@
 package com.fantasticsource.dynamicstealth.server;
 
-import com.fantasticsource.dynamicstealth.common.DynamicStealthConfig;
 import com.fantasticsource.dynamicstealth.common.Network;
-import com.fantasticsource.tools.datastructures.Pair;
+import com.fantasticsource.mctools.MCTools;
+import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraft.util.math.Vec3d;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import static com.fantasticsource.dynamicstealth.common.DynamicStealth.TRIG_TABLE;
 
 public class Threat
 {
@@ -21,7 +24,9 @@ public class Threat
     private static Map<EntityLiving, ThreatData> threatMap = new LinkedHashMap<>(200);
 
     //Watcher (player watching a searcher), searcher
-    private static Map<EntityPlayerMP, ThreatData> watchedByPlayerMap = new LinkedHashMap<>(20);
+    private static Map<EntityPlayerMP, ThreatData> watcherMap = new LinkedHashMap<>(20);
+
+    public static Watchers watchers = new Watchers();
 
 
     public static void update()
@@ -32,35 +37,17 @@ public class Threat
             removeAllUnused();
         }
 
-        if (DynamicStealthConfig.serverSettings.threat.allowClientHUD == 2)
+        for (Map.Entry<EntityPlayerMP, ThreatData> entry : watcherMap.entrySet())
         {
-            for (Map.Entry<EntityPlayerMP, ThreatData> entry : watchedByPlayerMap.entrySet())
+            ThreatData oldThreatData = entry.getValue();
+            if (oldThreatData != null && oldThreatData.searcher != null)
             {
-                ThreatData oldThreatData = entry.getValue();
-                ThreatData newThreatData = threatMap.get(oldThreatData.searcher);
+                ThreatData newThreatData = Threat.get(oldThreatData.searcher);
 
-                if (oldThreatData.threatLevel != newThreatData.threatLevel || oldThreatData.target != newThreatData.target || oldThreatData.searcher != newThreatData.searcher)
+                if (!oldThreatData.equals(newThreatData))
                 {
-                    Network.sendThreatData(entry.getKey(), newThreatData.searcher, newThreatData.target, newThreatData.threatLevel);
+                    Network.sendThreatData(entry.getKey(), newThreatData);
                     entry.setValue(newThreatData.copy());
-                }
-            }
-        }
-        else if (DynamicStealthConfig.serverSettings.threat.allowClientHUD == 1)
-        {
-            for (Map.Entry<EntityPlayerMP, ThreatData> entry : watchedByPlayerMap.entrySet())
-            {
-                EntityPlayerMP player = entry.getKey();
-                if (FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().canSendCommands(player.getGameProfile()))
-                {
-                    ThreatData oldThreatData = entry.getValue();
-                    ThreatData newThreatData = threatMap.get(oldThreatData.searcher);
-
-                    if (oldThreatData.threatLevel != newThreatData.threatLevel || oldThreatData.target != newThreatData.target || oldThreatData.searcher != newThreatData.searcher)
-                    {
-                        Network.sendThreatData(player, newThreatData.searcher, newThreatData.target, newThreatData.threatLevel);
-                        entry.setValue(newThreatData.copy());
-                    }
                 }
             }
         }
@@ -68,7 +55,7 @@ public class Threat
 
     private static void removeAllUnused()
     {
-        watchedByPlayerMap.entrySet().removeIf(Threat::checkRemoveWatcher);
+        watcherMap.entrySet().removeIf(Threat::checkRemoveWatcher);
         threatMap.entrySet().removeIf(Threat::checkRemoveSearcher);
     }
 
@@ -105,7 +92,7 @@ public class Threat
     {
         ThreatData threatData = threatMap.get(searcher);
         if (threatData != null) return threatData;
-        return new ThreatData(null, null, 0);
+        return new ThreatData(searcher, null, 0);
     }
 
     public static EntityLivingBase getTarget(EntityLiving searcher)
@@ -157,6 +144,73 @@ public class Threat
     }
 
 
+    public static void sendAll(int allowHUDMode)
+    {
+        if (allowHUDMode == 2)
+        {
+            for (Map.Entry<EntityPlayerMP, ThreatData> entry : watcherMap.entrySet())
+            {
+                Network.sendThreatData(entry.getKey(), entry.getValue(), true);
+            }
+        }
+        else if (allowHUDMode == 1)
+        {
+            for (Map.Entry<EntityPlayerMP, ThreatData> entry : watcherMap.entrySet())
+            {
+                EntityPlayerMP player = entry.getKey();
+                if (MCTools.isOP(player))
+                Network.sendThreatData(player, null, null, 0, true);
+            }
+        }
+        else
+        {
+            for (Map.Entry<EntityPlayerMP, ThreatData> entry : watcherMap.entrySet())
+            {
+                Network.sendThreatData(entry.getKey(), null, null, 0, true);
+            }
+        }
+    }
+
+
+    public static EntityLiving focusedEntity(EntityPlayerMP player, double x, double y, double z, float yaw, float pitch)
+    {
+        ExplicitPriorityQueue<EntityLiving> queue = new ExplicitPriorityQueue<>(10);
+
+        for (Entity entity : player.world.loadedEntityList)
+        {
+            if (entity instanceof EntityLiving && entity != player)
+            {
+                double distSquared = player.getDistanceSq(entity);
+                if (distSquared <= 900)
+                {
+                    //Can see in 360*, but forward still has higher priority
+
+                    double angleDif = Vec3d.fromPitchYaw(pitch, yaw).normalize().dotProduct(new Vec3d(entity.posX - x, entity.posY - y, entity.posZ - z).normalize());
+
+                    //And because Vec3d.fromPitchYaw occasionally returns values barely out of the range of (-1, 1)...
+                    if (angleDif < -1) angleDif = -1;
+                    else if (angleDif > 1) angleDif = 1;
+
+                    angleDif = TRIG_TABLE.arccos(angleDif) / Math.PI; //0 in front, 1 in back
+
+                    queue.add((EntityLiving) entity, Math.pow(angleDif, 2) * distSquared);
+                }
+            }
+        }
+
+        boolean usePlayerSenses = false; //TODO When the "player senses" system is ready, replace this with the server config setting
+
+        if (usePlayerSenses)
+        {
+            EntityLiving result = queue.poll();
+            while(result != null && EntitySensesEdit.stealthCheck(player, result)) result = queue.poll();
+            return result;
+        }
+
+        return queue.poll();
+    }
+
+
     public static class ThreatData
     {
         public EntityLiving searcher;
@@ -173,6 +227,49 @@ public class Threat
         public ThreatData copy()
         {
             return new ThreatData(searcher, target, threatLevel);
+        }
+
+        public boolean equals(ThreatData threatData)
+        {
+            return threatData != null && threatData.searcher == searcher && threatData.target == target && threatData.threatLevel == threatLevel;
+        }
+    }
+
+
+    public static class Watchers
+    {
+        public ThreatData get(EntityPlayerMP player)
+        {
+            return watcherMap.get(player);
+        }
+
+        public void set(EntityPlayerMP player, EntityLiving searcher)
+        {
+            if (player != null)
+            {
+                ThreatData oldData = watcherMap.get(player);
+
+                if (searcher == null)
+                {
+                    if (oldData != null && oldData.searcher != null) Network.sendThreatData(player, null, null, 0);
+                    watcherMap.remove(player);
+                }
+                else
+                {
+                    ThreatData newData = Threat.get(searcher);
+
+                    if (!newData.equals(oldData))
+                    {
+                        watcherMap.put(player, newData);
+                        Network.sendThreatData(player, newData);
+                    }
+                }
+            }
+        }
+
+        public void remove(EntityPlayerMP player)
+        {
+            watcherMap.remove(player);
         }
     }
 }
