@@ -1,6 +1,10 @@
 RELEVANT TO FAERUN HEROES ==============================================
 
-Send packets from server to client for updating the HUD
+Set players' watched entities...
+...when their position/rotation updates (same packet as Speedometer?)
+...Find all EntityLiving within Distance (Far)
+...Sort them by angledif * distancesq (least first; explicitpriorityqueue)
+...Iterate through and find first one that the player canSee()
 
 How should the hooks into the system function?  Direct method access?  Custom forge events?  Something else?  ...attributes?
 
