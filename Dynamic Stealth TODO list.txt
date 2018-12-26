@@ -1,21 +1,13 @@
 RELEVANT TO FAERUN HEROES ==============================================
 
-Set players' watched entities...
-...when their position/rotation updates (same packet as Speedometer?)
-...Find all EntityLiving within Distance (Far)
-...Sort them by angledif * distancesq (least first; explicitpriorityqueue)
-...Iterate through and find first one that the player canSee()
-
 How should the hooks into the system function?  Direct method access?  Custom forge events?  Something else?  ...attributes?
+
+
+
+THREAT SYSTEM ==========================================================
 
 Make owned entities change their threat based on their owner's actions (eg. see AIHurtByTargetEdit and AIOwnerHurtByTargetEdit)
 
-Fix mobs not moving to last known position before searching when too far away...
-...Create function which, when beyond normal pathfinding range...
-...finds a partial path instead of a full path, and follows it...
-...then if not at the final destination, finds another partial path and follow it...
-...etc.
-This system, if improved upon, could be used for most pathfinding and should improve pathfinding performance
 
 
 
@@ -40,9 +32,6 @@ Add to HUD...
 ...speed
 ...combined stealth multiplier?
 
-Don't send entity data of unseen entities to players, including potion effects.
-Make sure entities that *were* seen and are no longer seen are..."gone" on client-side
-
 Add the ability to see mob FOVs (as a cone render), maybe when under a potion effect or something
 
 
@@ -59,9 +48,23 @@ Can probably combine the two below into a single AI task...
 
 Make it so mobs on the same team can tell each other where you are / where they last saw you
 
+Fix mobs not moving to last known position before searching when too far away...
+...Create function which, when beyond normal pathfinding range...
+...finds a partial path instead of a full path, and follows it...
+...then if not at the final destination, finds another partial path and follow it...
+...etc.
+This system, if improved upon, could be used for most pathfinding and should improve pathfinding performance
+
 
 
 SENSES =================================================================
+
+Improve vision detection by allowing entities to see parts of other entities besides just their eyes (right now they only "have LOS" if they have LOS to each others' eyes)
+
+Add and implement server-side usePlayerSenses config option...
+...Don't send entity data of unseen entities to players, including potion effects.
+...Replace usePlayerSenses dummy var in Threat class
+...Make sure entities that *were* seen and are no longer seen are..."gone" on client-side
 
 Make it so mobs can see through glass (but maybe not quite yet; for now it's good for watching/debugging their behavior when they're searching for you)
 
