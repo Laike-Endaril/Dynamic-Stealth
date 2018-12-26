@@ -1,3 +1,17 @@
+BUG FIXES ==============================================================
+
+Fix threat HUD not updating threat level sometimes
+...maybe the value in watchmap is getting replaced without packet send?
+
+Fix mobs not moving to last known position before searching when too far away...
+...Create function which, when beyond normal pathfinding range...
+...finds a partial path instead of a full path, and follows it...
+...then if not at the final destination, finds another partial path and follow it...
+...etc.
+This system, if improved upon, could be used for most pathfinding and should improve pathfinding performance
+
+
+
 RELEVANT TO FAERUN HEROES ==============================================
 
 How should the hooks into the system function?  Direct method access?  Custom forge events?  Something else?  ...attributes?
@@ -20,6 +34,9 @@ Add entity-specific config options for...
 
 
 VISUAL INDICATORS ======================================================
+
+Make HUD display orange instead of yellow when it has threat but no target
+Make HUD display yellow when it has threat and target but can't see target (and is currently searching)
 
 Add visible indicators when mobs detect you, lose you, etc (somewhat similar to Mark of the Ninja)
 "!" when target spotted
@@ -47,13 +64,6 @@ Can probably combine the two below into a single AI task...
 ...Change "wandering" AI so that it can't instantly flip a 180 (force it to turn gradually before moving in the chosen direction)
 
 Make it so mobs on the same team can tell each other where you are / where they last saw you
-
-Fix mobs not moving to last known position before searching when too far away...
-...Create function which, when beyond normal pathfinding range...
-...finds a partial path instead of a full path, and follows it...
-...then if not at the final destination, finds another partial path and follow it...
-...etc.
-This system, if improved upon, could be used for most pathfinding and should improve pathfinding performance
 
 
 
@@ -103,13 +113,7 @@ If they kill a player while disguised, it still says the player was killed by a 
 
 MOD COMPATIBILITY ======================================================
 
-Do I even need to replace any vanilla AI tasks anymore?  I'm not sure I have a need to do so at this point...
-...test this sometime (on a new branch ofc)
-
-*IF* It's still necessary for me to replace AI tasks, look into possible compat issue between DS and BWM AI tasks
-
-Many cases might be solvable with more selective AI replacements on my part, depending on what other mods are installed.
-Even a simple required-after may suffice, because if the other mod has already replaced the vanilla AI, then my mod will not find/replace that AI anyway
+Check issue with BWM AI tasks, specifically for HC Hunting
 
 Check issue with Vampirism, where hunters attack the player regardless of whether they're a vampire or not when my mod is installed
 
