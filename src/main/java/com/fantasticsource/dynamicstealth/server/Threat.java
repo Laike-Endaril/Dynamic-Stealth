@@ -1,8 +1,12 @@
 package com.fantasticsource.dynamicstealth.server;
 
+import com.fantasticsource.dynamicstealth.common.DynamicStealthConfig;
+import com.fantasticsource.dynamicstealth.common.Network;
 import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -13,8 +17,11 @@ public class Threat
 
     private static int timer = ITERATION_FREQUENCY;
 
-    //Searcher EntityLiving, current target EntityLiving, current threat
-    private static Map<EntityLiving, Pair<EntityLivingBase, Integer>> threatMap = new LinkedHashMap<>(200);
+    //Searcher, target, threat level
+    private static Map<EntityLiving, ThreatData> threatMap = new LinkedHashMap<>(200);
+
+    //Watcher (player watching a searcher), searcher
+    private static Map<EntityPlayerMP, ThreatData> watchedByPlayerMap = new LinkedHashMap<>(20);
 
 
     public static void update()
@@ -22,28 +29,68 @@ public class Threat
         if (--timer == 0)
         {
             timer = ITERATION_FREQUENCY;
-            removeUnusedEntities();
+            removeAllUnused();
+        }
+
+        if (DynamicStealthConfig.serverSettings.threat.allowClientHUD == 2)
+        {
+            for (Map.Entry<EntityPlayerMP, ThreatData> entry : watchedByPlayerMap.entrySet())
+            {
+                ThreatData oldThreatData = entry.getValue();
+                ThreatData newThreatData = threatMap.get(oldThreatData.searcher);
+
+                if (oldThreatData.threatLevel != newThreatData.threatLevel || oldThreatData.target != newThreatData.target || oldThreatData.searcher != newThreatData.searcher)
+                {
+                    Network.sendThreatData(entry.getKey(), newThreatData.searcher, newThreatData.target, newThreatData.threatLevel);
+                    entry.setValue(newThreatData.copy());
+                }
+            }
+        }
+        else if (DynamicStealthConfig.serverSettings.threat.allowClientHUD == 1)
+        {
+            for (Map.Entry<EntityPlayerMP, ThreatData> entry : watchedByPlayerMap.entrySet())
+            {
+                EntityPlayerMP player = entry.getKey();
+                if (FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().canSendCommands(player.getGameProfile()))
+                {
+                    ThreatData oldThreatData = entry.getValue();
+                    ThreatData newThreatData = threatMap.get(oldThreatData.searcher);
+
+                    if (oldThreatData.threatLevel != newThreatData.threatLevel || oldThreatData.target != newThreatData.target || oldThreatData.searcher != newThreatData.searcher)
+                    {
+                        Network.sendThreatData(player, newThreatData.searcher, newThreatData.target, newThreatData.threatLevel);
+                        entry.setValue(newThreatData.copy());
+                    }
+                }
+            }
         }
     }
 
-    private static void removeUnusedEntities()
+    private static void removeAllUnused()
     {
+        watchedByPlayerMap.entrySet().removeIf(Threat::checkRemoveWatcher);
         threatMap.entrySet().removeIf(Threat::checkRemoveSearcher);
     }
 
-    private static boolean checkRemoveSearcher(Map.Entry<EntityLiving, Pair<EntityLivingBase, Integer>> entry)
+    private static boolean checkRemoveSearcher(Map.Entry<EntityLiving, ThreatData> entry)
     {
         EntityLiving searcher = entry.getKey();
         return !searcher.world.loadedEntityList.contains(searcher);
     }
 
+    private static boolean checkRemoveWatcher(Map.Entry<EntityPlayerMP, ThreatData> entry)
+    {
+        EntityPlayerMP watcher = entry.getKey();
+        return !watcher.world.loadedEntityList.contains(watcher);
+    }
+
 
     public static void removeTargetFromAll(EntityLivingBase target)
     {
-        for (Map.Entry<EntityLiving, Pair<EntityLivingBase, Integer>> entry : threatMap.entrySet())
+        for (Map.Entry<EntityLiving, ThreatData> entry : threatMap.entrySet())
         {
-            Pair<EntityLivingBase, Integer> properties = entry.getValue();
-            if (properties.getKey() == target) properties.setKey(null);
+            ThreatData threatData = entry.getValue();
+            if (threatData.target == target) threatData.target = null;
         }
     }
 
@@ -54,24 +101,24 @@ public class Threat
     }
 
 
-    public static Pair<EntityLivingBase, Integer> get(EntityLiving searcher)
+    public static ThreatData get(EntityLiving searcher)
     {
-        Pair<EntityLivingBase, Integer> entry = threatMap.get(searcher);
-        if (entry != null) return entry;
-        return new Pair<>(null, 0);
+        ThreatData threatData = threatMap.get(searcher);
+        if (threatData != null) return threatData;
+        return new ThreatData(null, null, 0);
     }
 
     public static EntityLivingBase getTarget(EntityLiving searcher)
     {
-        Pair<EntityLivingBase, Integer> entry = threatMap.get(searcher);
-        if (entry != null) return entry.getKey();
+        ThreatData threatData = threatMap.get(searcher);
+        if (threatData != null) return threatData.searcher;
         return null;
     }
 
     public static Integer getThreat(EntityLiving searcher)
     {
-        Pair<EntityLivingBase, Integer> entry = threatMap.get(searcher);
-        if (entry != null) return entry.getValue();
+        ThreatData threatData = threatMap.get(searcher);
+        if (threatData != null) return threatData.threatLevel;
         return 0;
     }
 
@@ -81,17 +128,21 @@ public class Threat
         if (threat <= 0) remove(searcher);
         else
         {
-            Pair<EntityLivingBase, Integer> entry = threatMap.get(searcher);
-            if (entry != null) entry.set(target, threat);
-            else threatMap.put(searcher, new Pair<>(target, threat));
+            ThreatData threatData = threatMap.get(searcher);
+            if (threatData != null)
+            {
+                threatData.target = target;
+                threatData.threatLevel = threat;
+            }
+            else threatMap.put(searcher, new ThreatData(searcher, target, threat));
         }
     }
 
     public static void setTarget(EntityLiving searcher, EntityLivingBase target)
     {
-        Pair<EntityLivingBase, Integer> entry = threatMap.get(searcher);
-        if (entry != null) entry.setKey(target);
-        else threatMap.put(searcher, new Pair<>(target, 0));
+        ThreatData threatData = threatMap.get(searcher);
+        if (threatData != null) threatData.target = target;
+        else threatMap.put(searcher, new ThreatData(searcher, target, 0));
     }
 
     public static void setThreat(EntityLiving searcher, int threat)
@@ -99,9 +150,29 @@ public class Threat
         if (threat <= 0) remove(searcher);
         else
         {
-            Pair<EntityLivingBase, Integer> entry = threatMap.get(searcher);
-            if (entry != null) entry.setValue(threat);
-            else threatMap.put(searcher, new Pair<>(null, threat));
+            ThreatData threatData = threatMap.get(searcher);
+            if (threatData != null) threatData.threatLevel = threat;
+            else threatMap.put(searcher, new ThreatData(searcher, null, threat));
+        }
+    }
+
+
+    public static class ThreatData
+    {
+        public EntityLiving searcher;
+        public EntityLivingBase target;
+        public int threatLevel;
+
+        public ThreatData(EntityLiving searcherIn, EntityLivingBase targetIn, int threatLevelIn)
+        {
+            searcher = searcherIn;
+            target = targetIn;
+            threatLevel = threatLevelIn;
+        }
+
+        public ThreatData copy()
+        {
+            return new ThreatData(searcher, target, threatLevel);
         }
     }
 }

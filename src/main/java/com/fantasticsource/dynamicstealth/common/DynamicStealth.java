@@ -73,6 +73,8 @@ public class DynamicStealth
     {
         logger = event.getModLog();
 
+        Network.init();
+
         if (serverSettings.senses.vision.e_angles.angleSmall > serverSettings.senses.vision.e_angles.angleLarge) throw new IllegalArgumentException("angleLarge must be greater than or equal to angleSmall");
         if (serverSettings.senses.vision.f_distances.distanceNear > serverSettings.senses.vision.f_distances.distanceFar) throw new IllegalArgumentException("distanceFar must be greater than or equal to distanceNear");
         if (serverSettings.senses.vision.c_lighting.lightLow > serverSettings.senses.vision.c_lighting.lightHigh) throw new IllegalArgumentException("lightHigh must be greater than or equal to lightLow");
@@ -184,9 +186,9 @@ public class DynamicStealth
             boolean updateTarget = true;
 
             //Threat
-            Pair<EntityLivingBase, Integer> threatEntry = Threat.get(livingTarget);
-            EntityLivingBase threatTarget = threatEntry.getKey();
-            int threat = threatEntry.getValue();
+            Threat.ThreatData threatData = Threat.get(livingTarget);
+            EntityLivingBase threatTarget = threatData.target;
+            int threat = threatData.threatLevel;
             if (threatTarget == null || threat == 0)
             {
                 //Hit by entity when no target is set; this includes...

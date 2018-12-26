@@ -1,7 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.newai;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
-import com.fantasticsource.tools.datastructures.Pair;
 import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.dynamicstealth.server.ai.AITargetEdit;
 import com.fantasticsource.tools.Tools;
@@ -15,7 +14,7 @@ import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.*;
+import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
 
 public class AISearchLastKnownPosition extends EntityAIBase
 {
@@ -45,9 +44,9 @@ public class AISearchLastKnownPosition extends EntityAIBase
     public boolean shouldExecute()
     {
         //Sync attack/revenge target to threat target
-        Pair<EntityLivingBase, Integer> threatProperties = Threat.get(searcher);
-        EntityLivingBase threatTarget = threatProperties.getKey();
-        int threat = threatProperties.getValue();
+        Threat.ThreatData threatData = Threat.get(searcher);
+        EntityLivingBase threatTarget = threatData.target;
+        int threat = threatData.threatLevel;
 
         if (threatTarget == null || threat == 0)
         {
