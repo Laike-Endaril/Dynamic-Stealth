@@ -265,7 +265,7 @@ public class Threat
 
                     if (!newData.equals(oldData))
                     {
-                        watcherMap.put(player, newData);
+                        watcherMap.put(player, newData.copy());
                         Network.sendThreatData(player, newData);
                     }
                 }
