@@ -24,6 +24,8 @@ Make owned entities change their threat based on their owner's actions (eg. see 
 
 CONFIG FILE ============================================================
 
+See if MC restart can be removed from some options
+
 Add entity-specific config options for...
 ...head turn speed
 ...attention span
@@ -51,6 +53,8 @@ Add the ability to see mob FOVs (as a cone render), maybe when under a potion ef
 
 
 AI =====================================================================
+
+Can predicates be used in a way that allows for reduced AI task replacement?
 
 Make search AI use the same speeds as attack AIs
 
