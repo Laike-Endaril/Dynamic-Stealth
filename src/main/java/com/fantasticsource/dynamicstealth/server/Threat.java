@@ -233,6 +233,11 @@ public class Threat
         {
             return threatData != null && threatData.searcher == searcher && threatData.target == target && threatData.threatLevel == threatLevel;
         }
+
+        public String toString()
+        {
+            return searcher + ", " + target + ", " + threatLevel;
+        }
     }
 
 
