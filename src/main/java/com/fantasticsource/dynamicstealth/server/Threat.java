@@ -216,12 +216,15 @@ public class Threat
         public EntityLiving searcher;
         public EntityLivingBase target;
         public int threatLevel;
+        public String searcherName;
 
         public ThreatData(EntityLiving searcherIn, EntityLivingBase targetIn, int threatLevelIn)
         {
             searcher = searcherIn;
             target = targetIn;
             threatLevel = threatLevelIn;
+
+            searcherName = searcher.getName();
         }
 
         public ThreatData copy()
@@ -231,12 +234,12 @@ public class Threat
 
         public boolean equals(ThreatData threatData)
         {
-            return threatData != null && threatData.searcher == searcher && threatData.target == target && threatData.threatLevel == threatLevel;
+            return threatData != null && threatData.searcher == searcher && threatData.target == target && threatData.threatLevel == threatLevel && threatData.searcherName.equals(searcherName);
         }
 
         public String toString()
         {
-            return searcher + ", " + target + ", " + threatLevel;
+            return searcherName + ", " + target.getName() + ", " + threatLevel;
         }
     }
 
