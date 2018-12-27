@@ -26,6 +26,7 @@ import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.ChunkEvent;
@@ -41,6 +42,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
@@ -115,6 +118,7 @@ public class DynamicStealth
 
 
     @SubscribeEvent
+    @SideOnly(Side.CLIENT)
     public static void drawGUI(RenderGameOverlayEvent.Post event)
     {
         if (event.getType() == RenderGameOverlayEvent.ElementType.EXPERIENCE)
@@ -125,6 +129,7 @@ public class DynamicStealth
 
 
     @SubscribeEvent
+    @SideOnly(Side.SERVER)
     public static void playerLogged(PlayerEvent.PlayerLoggedOutEvent event)
     {
         EntityPlayer player = event.player;
@@ -133,6 +138,7 @@ public class DynamicStealth
 
 
     @SubscribeEvent
+    @SideOnly(Side.SERVER)
     public static void despawn(LivingSpawnEvent.AllowDespawn event)
     {
         EntityLivingBase livingBase = event.getEntityLiving();
@@ -144,6 +150,7 @@ public class DynamicStealth
     }
 
     @SubscribeEvent
+    @SideOnly(Side.SERVER)
     public static void entityDead(LivingDeathEvent event)
     {
         EntityLivingBase deadOne = event.getEntityLiving();
@@ -155,6 +162,7 @@ public class DynamicStealth
     }
 
     @SubscribeEvent
+    @SideOnly(Side.SERVER)
     public static void chunkUnload(ChunkEvent.Unload event)
     {
         Chunk chunk = event.getChunk();
@@ -169,6 +177,7 @@ public class DynamicStealth
     }
 
     @SubscribeEvent
+    @SideOnly(Side.SERVER)
     public static void worldUnload(WorldEvent.Unload event)
     {
         for (Entity entity : event.getWorld().loadedEntityList)
@@ -178,6 +187,7 @@ public class DynamicStealth
     }
 
     @SubscribeEvent
+    @SideOnly(Side.SERVER)
     public static void serverTick(TickEvent.ServerTickEvent event)
     {
         Threat.update();
@@ -185,6 +195,7 @@ public class DynamicStealth
 
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SideOnly(Side.SERVER)
     public static void entityAttacked(LivingHurtEvent event) throws InvocationTargetException, IllegalAccessException
     {
         EntityLivingBase target = event.getEntityLiving();
@@ -290,6 +301,7 @@ public class DynamicStealth
     }
 
     @SubscribeEvent
+    @SideOnly(Side.SERVER)
     public static void setSensesAndTasks(EntityJoinWorldEvent event) throws Exception
     {
         if (event != null)
