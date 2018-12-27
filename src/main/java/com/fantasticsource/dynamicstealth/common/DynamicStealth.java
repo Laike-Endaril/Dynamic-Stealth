@@ -290,44 +290,41 @@ public class DynamicStealth
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void setSensesAndTasks(EntityJoinWorldEvent event) throws Exception
     {
         if (event != null)
         {
             Entity entity = event.getEntity();
-            if (entity != null)
+            if (entity instanceof EntityLiving) setSensesAndTasks((EntityLiving) entity);
+        }
+    }
+
+    public static void setSensesAndTasks(EntityLiving living)
+    {
+        //Set the new senses handler for all living entities (not including players)
+        try
+        {
+            sensesField.set(living, new EntitySensesEdit(living));
+
+            if (living instanceof AbstractSkeleton)
             {
-                if (entity instanceof EntityLiving)
-                {
-                    EntityLiving living = (EntityLiving) entity;
-
-                    //Set the new senses handler for all living entities (not including players)
-                    try
-                    {
-                        sensesField.set(living, new EntitySensesEdit(living));
-
-                        if (living instanceof AbstractSkeleton)
-                        {
-                            abstractSkeletonAIArrowAttackField.set(living, new AIAttackRangedBowEdit<AbstractSkeleton>((EntityAIAttackRangedBow) abstractSkeletonAIArrowAttackField.get(living)));
-                            abstractSkeletonAIAttackOnCollideField.set(living, new AIAttackMeleeEdit((EntityAIAttackMelee) abstractSkeletonAIAttackOnCollideField.get(living)));
-                        }
-                    }
-                    catch (ReflectionHelper.UnableToFindFieldException | ReflectionHelper.UnableToAccessFieldException e)
-                    {
-                        e.printStackTrace();
-                        FMLCommonHandler.instance().exitJava(137, false);
-                    }
-
-                    //Entity AI task replacements
-                    replaceTasks(living.tasks, living);
-                    replaceTasks(living.targetTasks, living);
-
-                    //Entity AI task additions
-                    addTasks(living.targetTasks, living.tasks, living);
-                }
+                abstractSkeletonAIArrowAttackField.set(living, new AIAttackRangedBowEdit<AbstractSkeleton>((EntityAIAttackRangedBow) abstractSkeletonAIArrowAttackField.get(living)));
+                abstractSkeletonAIAttackOnCollideField.set(living, new AIAttackMeleeEdit((EntityAIAttackMelee) abstractSkeletonAIAttackOnCollideField.get(living)));
             }
         }
+        catch (ReflectionHelper.UnableToFindFieldException | ReflectionHelper.UnableToAccessFieldException e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(137, false);
+        }
+
+        //Entity AI task replacements
+        replaceTasks(living.tasks, living);
+        replaceTasks(living.targetTasks, living);
+
+        //Entity AI task additions
+        addTasks(living.targetTasks, living.tasks, living);
     }
 
     private static void replaceTasks(EntityAITasks tasks, EntityLiving living) throws Exception
