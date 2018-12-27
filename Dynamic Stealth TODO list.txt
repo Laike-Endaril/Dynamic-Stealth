@@ -1,9 +1,19 @@
 BUG FIXES ==============================================================
 
-Make temporary BackStab compat module (BackStab issue #4)?
+Fix threat HUD not displaying for players on dedicated server...
+...position/rotation packets from client -> player have classtype of PooledUnsafeDirectByteBuf and are not being handled correctly
+
+Fix issue with Speedometer on dedicated server...
+...position/rotation packets from client -> player have classtype of PooledUnsafeDirectByteBuf and are not being handled correctly
+
+Look into issue #4
+
+Fix passive mobs (don't set their threat when they are damaged, and test)
+
+Make temporary BackStab compat module? (BackStab issue #4 and #2)
 
 Fix mobs in search mode periodically NOT doing the search, but going back to it later?
-...noticed with spider, and so far I think it is specific to spiders
+...noticed with spider, and so far I think it is specific to spiders?
 
 Fix mobs not moving to last known position before searching when too far away...
 ...Create function which, when beyond normal pathfinding range...
