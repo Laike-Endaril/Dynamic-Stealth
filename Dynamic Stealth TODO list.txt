@@ -1,8 +1,10 @@
 BUG FIXES ==============================================================
 
-Fix CNPC issues with new logic in stealth AI's shouldExecute function?
+Fix mobs in search mode periodically NOT doing the search, but going back to it later?  Need to debug phases.  Noticed with spider
 
-Fix HUD not updating when searcher name is changed (eg. by CNPC wand)
+Fix CNPC issues; I think one or more of their non-targeting tasks are probably defining a target
+
+Fix HUD not updating when searcher name is changed (eg. by CNPC wand); need to compare entity NAMES instead of entities somewhere
 
 Fix mobs not moving to last known position before searching when too far away...
 ...Create function which, when beyond normal pathfinding range...

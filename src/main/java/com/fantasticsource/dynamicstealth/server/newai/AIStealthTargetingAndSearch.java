@@ -43,47 +43,76 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
     @Override
     public boolean shouldExecute()
     {
-        //Sync attack/revenge target to threat target
         Threat.ThreatData threatData = Threat.get(searcher);
-        EntityLivingBase threatTarget = threatData.target;
         int threat = threatData.threatLevel;
 
-        if (threatTarget == null || threat == 0)
+        if (threat <= 0)
         {
-            //No active threat target
             EntityLivingBase attackTarget = searcher.getAttackTarget();
-            if (attackTarget != null)
+            if (AITargetEdit.isSuitableTarget(searcher, attackTarget))
             {
                 //Hopefully this always only means we've just noticed a new, valid target
                 Threat.set(searcher, attackTarget, serverSettings.threat.targetSpottedThreat);
                 lastKnownPosition = attackTarget.getPosition();
+                clearSearchPath();
+                return false;
             }
+
+            //No suitable target, old or new, and threat is <= 0
+            searcher.setAttackTarget(null);
+            return false;
         }
-        else
+
+        //Threat > 0
+
+        EntityLivingBase threatTarget = threatData.target;
+
+        if (threatTarget == null)
         {
-            //Active threat target exists
+            EntityLivingBase attackTarget = searcher.getAttackTarget();
+            if (AITargetEdit.isSuitableTarget(searcher, attackTarget))
+            {
+                //Hopefully this always only means we've just noticed a new, valid target
+                Threat.set(searcher, attackTarget, serverSettings.threat.targetSpottedThreat);
+                lastKnownPosition = attackTarget.getPosition();
+                clearSearchPath();
+                return false;
+            }
+
+            //No suitable target, old or new, but threat is > 0
+            searcher.setAttackTarget(null);
+            return threat > serverSettings.threat.unseenMinimumThreat;
         }
+
+        //Threat > 0 and threatTarget != null...we have an existing target from before
 
         if (AITargetEdit.isSuitableTarget(searcher, threatTarget))
         {
-            searcher.setAttackTarget(threatTarget);
+            //Existing target's current position is known
             lastKnownPosition = threatTarget.getPosition();
-
             clearSearchPath();
-
+            searcher.setAttackTarget(threatTarget);
             return false;
         }
 
+        //Target's current position is unknown
         searcher.setAttackTarget(null);
-        if (Threat.getThreat(searcher) > serverSettings.threat.unseenMinimumThreat) return true;
-        else
+        unseenTargetDegredation(threat);
+
+        if (threat >= serverSettings.threat.unseenMinimumThreat)
         {
-            Threat.setThreat(searcher, threat - serverSettings.threat.unseenTargetDegredationRate);
-
-            clearSearchPath();
-
-            return false;
+            return true;
         }
+
+        clearSearchPath();
+        return false;
+    }
+
+    private int unseenTargetDegredation(int threat)
+    {
+        int result = Math.max(0, threat - serverSettings.threat.unseenTargetDegredationRate);
+        Threat.setThreat(searcher, result);
+        return result;
     }
 
     private void clearSearchPath()
@@ -214,8 +243,6 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
                 angleDif = 0;
             }
         }
-
-        Threat.setThreat(searcher, (Threat.getThreat(searcher) - serverSettings.threat.unseenTargetDegredationRate));
     }
 
     private boolean findPathAngle()
