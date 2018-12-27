@@ -16,7 +16,7 @@ import net.minecraft.util.math.Vec3d;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
 
-public class AISearchLastKnownPosition extends EntityAIBase
+public class AIStealthTargetingAndSearch extends EntityAIBase
 {
     private final EntityLiving searcher;
     private final PathNavigate navigator;
@@ -31,7 +31,7 @@ public class AISearchLastKnownPosition extends EntityAIBase
     public BlockPos lastKnownPosition = null;
 
 
-    public AISearchLastKnownPosition(EntityLiving living, double speedIn)
+    public AIStealthTargetingAndSearch(EntityLiving living, double speedIn)
     {
         searcher = living;
         navigator = living.getNavigator();

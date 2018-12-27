@@ -1,10 +1,11 @@
 package com.fantasticsource.dynamicstealth.common;
 
 import com.fantasticsource.dynamicstealth.client.HUD;
+import com.fantasticsource.dynamicstealth.compat.CompatCNPC;
 import com.fantasticsource.dynamicstealth.server.EntitySensesEdit;
 import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.dynamicstealth.server.ai.*;
-import com.fantasticsource.dynamicstealth.server.newai.AISearchLastKnownPosition;
+import com.fantasticsource.dynamicstealth.server.newai.AIStealthTargetingAndSearch;
 import com.fantasticsource.mctools.Speedometer;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.TrigLookupTable;
@@ -26,15 +27,16 @@ import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -101,6 +103,12 @@ public class DynamicStealth
         aiPigmanTargetAggressorClass = ReflectionTool.getInternalClass(EntityPigZombie.class, "AITargetAggressor");
         aiVindicatorJohnnyAttackClass = ReflectionTool.getInternalClass(EntityVindicator.class, "AIJohnnyAttack");
         aiBearHurtByTargetClass = ReflectionTool.getInternalClass(EntityPolarBear.class, "AIHurtByTarget");
+    }
+
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event)
+    {
+        if (Loader.isModLoaded("customnpcs")) MinecraftForge.EVENT_BUS.register(CompatCNPC.class);
     }
 
     @SubscribeEvent
@@ -263,9 +271,9 @@ public class DynamicStealth
 
                     for (EntityAITasks.EntityAITaskEntry task : livingTarget.targetTasks.taskEntries)
                     {
-                        if (task.action instanceof AISearchLastKnownPosition)
+                        if (task.action instanceof AIStealthTargetingAndSearch)
                         {
-                            AISearchLastKnownPosition searchAI = (AISearchLastKnownPosition) task.action;
+                            AIStealthTargetingAndSearch searchAI = (AIStealthTargetingAndSearch) task.action;
                             int distance = (int) Math.sqrt(source.getDistanceSq(target));
                             searchAI.lastKnownPosition = searchAI.randomPath(source.getPosition(), distance / 2, distance / 4);
                         }
@@ -391,7 +399,7 @@ public class DynamicStealth
     {
         if (!(living instanceof EntitySlime))
         {
-            targetTasks.addTask(77777, new AISearchLastKnownPosition(living, 1));
+            targetTasks.addTask(77777, new AIStealthTargetingAndSearch(living, 1));
         }
     }
 }
