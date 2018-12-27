@@ -18,7 +18,7 @@ public class CompatCNPC
         if (entity instanceof EntityLiving)
         {
             EntityLiving living = (EntityLiving) entity;
-            for (EntityAITasks.EntityAITaskEntry task : living.targetTasks.taskEntries)
+            for (EntityAITasks.EntityAITaskEntry task : living.tasks.taskEntries)
             {
                 if (task.action instanceof AIStealthTargetingAndSearch) return;
             }

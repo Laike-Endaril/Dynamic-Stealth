@@ -269,7 +269,7 @@ public class DynamicStealth
 
                     livingTarget.getNavigator().clearPath();
 
-                    for (EntityAITasks.EntityAITaskEntry task : livingTarget.targetTasks.taskEntries)
+                    for (EntityAITasks.EntityAITaskEntry task : livingTarget.tasks.taskEntries)
                     {
                         if (task.action instanceof AIStealthTargetingAndSearch)
                         {
@@ -399,7 +399,7 @@ public class DynamicStealth
     {
         if (!(living instanceof EntitySlime))
         {
-            targetTasks.addTask(77777, new AIStealthTargetingAndSearch(living, 1));
+            tasks.addTask(-7777777, new AIStealthTargetingAndSearch(living, 1));
         }
     }
 }

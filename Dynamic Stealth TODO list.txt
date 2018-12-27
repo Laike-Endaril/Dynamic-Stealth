@@ -2,18 +2,15 @@ BUG FIXES ==============================================================
 
 Make temporary BackStab compat module (BackStab issue #4)?
 
-Fix mobs in search mode periodically NOT doing the search, but going back to it later?  Need to debug phases.  Noticed with spider
-
-Fix CNPC issues; I think...
-...one or more of their non-targeting tasks are probably defining a target...and/or...
-...maybe their target is saved during one of their target tasks and then referenced instead of their non-target task referencing getAttackTarget
+Fix mobs in search mode periodically NOT doing the search, but going back to it later?
+...noticed with spider, and so far I think it is specific to spiders
 
 Fix mobs not moving to last known position before searching when too far away...
 ...Create function which, when beyond normal pathfinding range...
 ...finds a partial path instead of a full path, and follows it...
 ...then if not at the final destination, finds another partial path and follow it...
 ...etc.
-This system, if improved upon, could be used for most pathfinding and should improve pathfinding performance
+This system, if improved upon, could be used for most pathfinding and should improve pathfinding performance (by splitting it up and calculating parts at different times)
 
 
 
