@@ -300,7 +300,7 @@ public class DynamicStealth
         }
     }
 
-    public static void setSensesAndTasks(EntityLiving living)
+    public static void setSensesAndTasks(EntityLiving living) throws Exception
     {
         //Set the new senses handler for all living entities (not including players)
         try
