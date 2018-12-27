@@ -1,5 +1,7 @@
 BUG FIXES ==============================================================
 
+Fix HUD not updating when searcher name is changed (eg. by CNPC wand)
+
 Fix mobs not moving to last known position before searching when too far away...
 ...Create function which, when beyond normal pathfinding range...
 ...finds a partial path instead of a full path, and follows it...
@@ -10,6 +12,9 @@ This system, if improved upon, could be used for most pathfinding and should imp
 
 
 RELEVANT TO FAERUN HEROES ==============================================
+
+Look into any CNPC compat issues...
+...My AI task is not being called.  Does it exist in the task list?  Is it due to mutex bit override?
 
 How should the hooks into the system function?  Direct method access?  Custom forge events?  Something else?  ...attributes?
 
@@ -123,3 +128,5 @@ Check Special AI Revival
 Check Rough Mobs 2
 
 Check Epic Siege Mod
+
+Possibly change music using ActualMusic when going into battle, etc
