@@ -2,7 +2,9 @@ BUG FIXES ==============================================================
 
 Fix mobs in search mode periodically NOT doing the search, but going back to it later?  Need to debug phases.  Noticed with spider
 
-Fix CNPC issues; I think one or more of their non-targeting tasks are probably defining a target
+Fix CNPC issues; I think...
+...one or more of their non-targeting tasks are probably defining a target...and/or...
+...maybe their target is saved during one of their target tasks and then referenced instead of their non-target task referencing getAttackTarget
 
 Fix HUD not updating when searcher name is changed (eg. by CNPC wand); need to compare entity NAMES instead of entities somewhere
 
