@@ -1,3 +1,22 @@
+CURRENTLY WORKING ON ===================================================
+
+Make it so "friendly" CNPCs are detected as passive
+
+Implement max threat
+
+Make it so entities that are damaged but don't see a target have a null target
+
+Update HUD colors...
+...Red = Targetting YOU, and currently knows where you are!
+...Orange = Has threat, but no target OR targetting you, but doesn't know where you are
+...Yellow = Targetting something else
+...Blue = Not targeting anything, and threat is 0 (no change required)
+...Green = Passive (no change required)
+
+Post in Nop showcase
+
+
+
 BUG FIXES ==============================================================
 
 Fix mobs in search mode periodically NOT doing the search, but going back to it later...
@@ -20,10 +39,6 @@ How should the hooks into the system function?  Direct method access?  Custom fo
 
 THREAT SYSTEM ==========================================================
 
-Implement max threat
-
-Make it so entities that are damaged but don't see a target have a null target
-
 Make owned entities change their threat based on their owner's actions (eg. see AIHurtByTargetEdit and AIOwnerHurtByTargetEdit)
 
 Add threat levels for players...
@@ -42,9 +57,6 @@ Add entity-specific config options for...
 
 
 VISUAL INDICATORS ======================================================
-
-Make HUD display orange instead of yellow when it has threat but no target
-Make HUD display yellow when it has threat and target but can't see target (and is currently searching)
 
 Add visible indicators when mobs detect you, lose you, etc (somewhat similar to Mark of the Ninja)
 "!" when target spotted
