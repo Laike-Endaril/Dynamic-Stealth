@@ -8,6 +8,7 @@ public class DynamicStealthConfig
 {
     @Config.Name("Client Settings")
     public static ClientSettings clientSettings = new ClientSettings();
+
     public static class ClientSettings
     {
         @Config.Name("Threat System")
@@ -28,6 +29,7 @@ public class DynamicStealthConfig
 
     @Config.Name("Server Settings")
     public static ServerSettings serverSettings = new ServerSettings();
+
     public static class ServerSettings
     {
         @Config.Name("AI")
@@ -404,10 +406,16 @@ public class DynamicStealthConfig
             @Comment({"When an out-of-combat entity is attacked, its threat is set to the damage taken times this, divided by its max HP"})
             @Config.RangeDouble(min = 1)
             public double attackedThreatMultiplierInitial = 1000;
+
             @Config.Name("Initial 'Target Spotted' Threat")
             @Comment({"When an out-of-combat entity spots a valid target, its threat is set to this"})
             @Config.RangeInt(min = 1)
             public int targetSpottedThreat = 100;
+
+            @Config.Name("Maximum Threat")
+            @Comment({"If an entity's threat level falls below this and they don't see their target, they go out-of-combat / stop searching"})
+            @Config.RangeInt(min = 1)
+            public int maxThreat = 1000;
 
             @Config.Name("Unseen Target Minimum Threat Level")
             @Comment({"If an entity's threat level falls below this and they don't see their target, they go out-of-combat / stop searching"})
