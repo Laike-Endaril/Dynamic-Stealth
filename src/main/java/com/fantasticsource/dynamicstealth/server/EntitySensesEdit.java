@@ -8,7 +8,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntitySenses;
 import net.minecraft.entity.monster.*;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
@@ -21,7 +21,8 @@ import net.minecraft.util.math.Vec3d;
 import java.util.List;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealth.TRIG_TABLE;
-import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.*;
+import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.ServerSettings;
+import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.dynamicstealth.server.EntityVisionData.*;
 
 public class EntitySensesEdit extends EntitySenses
@@ -70,7 +71,7 @@ public class EntitySensesEdit extends EntitySenses
     {
         //Hard checks (absolute)
         if (searcher == null || target == null) return true;
-        if (target instanceof EntityPlayer && ((EntityPlayer) target).capabilities.disableDamage) return true;
+        if (target instanceof EntityPlayerMP && ((EntityPlayerMP) target).capabilities.disableDamage) return true;
         if (!target.isEntityAlive() || angleLarge(searcher) == 0) return true;
 
 

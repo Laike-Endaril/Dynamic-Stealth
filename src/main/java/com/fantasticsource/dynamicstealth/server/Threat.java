@@ -8,6 +8,8 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -29,7 +31,8 @@ public class Threat
     public static Watchers watchers = new Watchers();
 
 
-    public static void update()
+    @SubscribeEvent
+    public static void update(TickEvent.ServerTickEvent event)
     {
         if (--timer == 0)
         {
@@ -50,6 +53,17 @@ public class Threat
                     entry.setValue(newThreatData.copy());
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void playerTick(TickEvent.PlayerTickEvent event)
+    {
+        if (event.player instanceof EntityPlayerMP)
+        {
+            EntityPlayerMP player = (EntityPlayerMP)event.player;
+            EntityLiving searcher = focusedEntityLiving(player);
+            Threat.watchers.set(player, searcher);
         }
     }
 
@@ -144,7 +158,7 @@ public class Threat
     }
 
 
-    public static void sendAll(int allowHUDMode)
+    public static void sendToAll(int allowHUDMode)
     {
         if (allowHUDMode == 2)
         {
@@ -158,8 +172,8 @@ public class Threat
             for (Map.Entry<EntityPlayerMP, ThreatData> entry : watcherMap.entrySet())
             {
                 EntityPlayerMP player = entry.getKey();
-                if (MCTools.isOP(player))
-                Network.sendThreatData(player, null, null, 0, true);
+                if (MCTools.isOP(player)) Network.sendThreatData(entry.getKey(), entry.getValue(), true);
+                else Network.sendThreatData(player, null, null, 0, true);
             }
         }
         else
@@ -172,7 +186,7 @@ public class Threat
     }
 
 
-    public static EntityLiving focusedEntity(EntityPlayerMP player, double x, double y, double z, float yaw, float pitch)
+    public static EntityLiving focusedEntityLiving(EntityPlayerMP player)
     {
         ExplicitPriorityQueue<EntityLiving> queue = new ExplicitPriorityQueue<>(10);
 
@@ -185,7 +199,7 @@ public class Threat
                 {
                     //Can see in 360*, but forward still has higher priority
 
-                    double angleDif = Vec3d.fromPitchYaw(pitch, yaw).normalize().dotProduct(new Vec3d(entity.posX - x, entity.posY - y, entity.posZ - z).normalize());
+                    double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, entity.posY - player.posY, entity.posZ - player.posZ).normalize());
 
                     //And because Vec3d.fromPitchYaw occasionally returns values barely out of the range of (-1, 1)...
                     if (angleDif < -1) angleDif = -1;

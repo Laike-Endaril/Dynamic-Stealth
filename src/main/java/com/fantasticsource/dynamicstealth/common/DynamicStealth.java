@@ -42,7 +42,6 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.apache.logging.log4j.Logger;
 
@@ -73,6 +72,7 @@ public class DynamicStealth
         MinecraftForge.EVENT_BUS.register(DynamicStealth.class);
         MinecraftForge.EVENT_BUS.register(Speedometer.class);
         MinecraftForge.EVENT_BUS.register(Network.class);
+        MinecraftForge.EVENT_BUS.register(Threat.class);
     }
 
     @EventHandler
@@ -118,7 +118,7 @@ public class DynamicStealth
         {
             ConfigManager.sync(MODID, Config.Type.INSTANCE);
 
-            Threat.sendAll(serverSettings.threat.allowClientHUD);
+            Threat.sendToAll(serverSettings.threat.allowClientHUD);
         }
     }
 
@@ -184,12 +184,6 @@ public class DynamicStealth
         {
             if (entity instanceof EntityLiving) Threat.remove((EntityLiving) entity);
         }
-    }
-
-    @SubscribeEvent
-    public static void serverTick(TickEvent.ServerTickEvent event)
-    {
-        Threat.update();
     }
 
 

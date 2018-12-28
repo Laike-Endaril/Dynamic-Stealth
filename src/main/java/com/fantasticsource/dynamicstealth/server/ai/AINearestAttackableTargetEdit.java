@@ -6,7 +6,6 @@ import com.google.common.base.Predicate;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
@@ -41,7 +40,7 @@ public class AINearestAttackableTargetEdit<T extends EntityLivingBase> extends A
         if (targetChance > 0 && attacker.getRNG().nextInt(targetChance) != 0) return false;
 
         List<T> list;
-        if (targetClass != EntityPlayer.class && targetClass != EntityPlayerMP.class)
+        if (!EntityPlayer.class.isAssignableFrom(targetClass))
         {
             list = attacker.world.getEntitiesWithinAABB(targetClass, getTargetableArea(getFollowDistance()), targetEntitySelector);
         }

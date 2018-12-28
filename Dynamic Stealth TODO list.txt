@@ -1,11 +1,10 @@
 BUG FIXES ==============================================================
 
-Fix threat HUD not displaying for players on dedicated server...
-...position/rotation packets from client -> player have classtype of PooledUnsafeDirectByteBuf and are not being handled correctly
+Test threat and speedometer in all server/client combinations
 
 Tweak Speedometer smoothing now that it updates every player tick
 
-Look into issue #4
+Look into issue #4 (TaN HUD incompat)
 
 Fix passive mobs (don't set their threat when they are damaged, and test)
 
