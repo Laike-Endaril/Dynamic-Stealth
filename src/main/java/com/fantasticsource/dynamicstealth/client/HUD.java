@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
+import org.lwjgl.opengl.GL11;
 
 public class HUD extends Gui
 {
@@ -50,6 +51,8 @@ public class HUD extends Gui
                     drawString(fontRender, "" + threatLevel, (int) (width * 0.75), height - 10, 0xFF0000);
                 }
             }
+
+            GL11.glColor4f(1, 1, 1, 1);
         }
     }
 }

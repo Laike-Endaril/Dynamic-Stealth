@@ -1,10 +1,6 @@
 BUG FIXES ==============================================================
 
-Test threat and speedometer in all server/client combinations
-
-Tweak Speedometer smoothing now that it updates every player tick
-
-Look into issue #4 (TaN HUD incompat)
+Make Speedometer account for dim changes/teleports
 
 Fix passive mobs (don't set their threat when they are damaged, and test)
 
@@ -125,6 +121,12 @@ If they kill a player while disguised, it still says the player was killed by a 
 
 
 
+MUSIC ==================================================================
+
+Possibly change music using ActualMusic when going into battle, etc
+
+
+
 MOD COMPATIBILITY ======================================================
 
 Check issue with BWM AI tasks, specifically for HC Hunting
@@ -136,5 +138,3 @@ Check Special AI Revival
 Check Rough Mobs 2
 
 Check Epic Siege Mod
-
-Possibly change music using ActualMusic when going into battle, etc
