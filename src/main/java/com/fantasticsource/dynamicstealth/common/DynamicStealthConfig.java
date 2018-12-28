@@ -413,9 +413,13 @@ public class DynamicStealthConfig
             public int targetSpottedThreat = 100;
 
             @Config.Name("Maximum Threat")
-            @Comment({"If an entity's threat level falls below this and they don't see their target, they go out-of-combat / stop searching"})
+            @Comment({"The maximum threat level an entity can reach"})
             @Config.RangeInt(min = 1)
             public int maxThreat = 1000;
+
+            @Config.Name("Recognize Passives Automatically")
+            @Comment({"If enabled, clients' threat HUDs will display green for passive mobs"})
+            public boolean recognizePassive = true;
 
             @Config.Name("Unseen Target Minimum Threat Level")
             @Comment({"If an entity's threat level falls below this and they don't see their target, they go out-of-combat / stop searching"})
