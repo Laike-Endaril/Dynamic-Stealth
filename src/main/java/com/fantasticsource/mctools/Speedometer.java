@@ -1,16 +1,12 @@
 package com.fantasticsource.mctools;
 
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,66 +17,63 @@ public class Speedometer
     //...player motion is smoothed over several updates, but other entities are not
     //...when teleporting long distances, players return an inaccurate, extremely high value until it's out of the smoothing system (currently 5 updates; about 1/4 second)
 
-    public static Map<EntityPlayer, Entry> playerMap = new HashMap<>(1000);
+    public static Map<EntityPlayerMP, Entry> playerMap = new HashMap<>(1000);
 
     @SubscribeEvent
-    public static void playerLogin(PlayerEvent.PlayerLoggedInEvent event)
+    public static void playerUpdate(TickEvent.PlayerTickEvent event)
     {
-        Channel channel = ((EntityPlayerMP) event.player).connection.netManager.channel();
-        channel.pipeline().addFirst(new PlayerPackets(event.player));
+        EntityPlayer player = event.player;
+        if (event.phase == TickEvent.Phase.END && player instanceof EntityPlayerMP) update((EntityPlayerMP) player);
     }
 
     @SubscribeEvent
     public static void playerLogout(PlayerEvent.PlayerLoggedOutEvent event)
     {
-        playerMap.remove(event.player);
+        if (event.player instanceof EntityPlayerMP) playerMap.remove(event.player);
     }
 
     public static double getSpeed(Entity entity)
     {
-        if (entity instanceof EntityPlayer)
+        if (entity instanceof EntityPlayerMP)
         {
             Entry entry = playerMap.get(entity);
             return entry == null ? 0 : entry.calculatedSpeed;
         }
 
-        double res = new Vec3d(entity.prevPosX, entity.prevPosY, entity.prevPosZ).distanceTo(entity.getPositionVector()) * 20;
-        return res;
+        return new Vec3d(entity.prevPosX, entity.prevPosY, entity.prevPosZ).distanceTo(entity.getPositionVector()) * 20;
     }
 
-    public static double update(EntityPlayer player, Vec3d newPosition)
+    public static double update(EntityPlayerMP player)
     {
-        long time = System.nanoTime();
-        Entry entry = playerMap.get(player);
+        Vec3d newVec = player.getPositionVector();
 
-        if (entry != null)
+        Entry entry = playerMap.get(player);
+        if (entry == null)
         {
-            double speed = entry.position.distanceTo(newPosition) / (double) (time - entry.time) * 1e9;
-            entry.set(newPosition, time, speed);
-            return entry.calculatedSpeed;
+            playerMap.put(player, new Entry(newVec));
+            System.out.println(0);
+            return 0;
         }
 
-        playerMap.put(player, new Entry(newPosition, time));
-        return 0;
+        entry.set(newVec, entry.position.distanceTo(newVec) * 20);
+        System.out.println(player.getName() + ", " + entry.calculatedSpeed);
+        return entry.calculatedSpeed;
     }
 
     public static class Entry
     {
         public Vec3d position;
-        public long time;
-        public double[] speeds = {0, 0, 0, 0, 0};
+        private double[] speeds = {0, 0, 0, 0, 0};
         public double calculatedSpeed = 0;
 
-        public Entry(Vec3d position, long time)
+        public Entry(Vec3d position)
         {
             this.position = position;
-            this.time = time;
         }
 
-        public void set(Vec3d position, long time, double speed)
+        public void set(Vec3d position, double speed)
         {
             this.position = position;
-            this.time = time;
             calculatedSpeed = 0;
             for (int i = speeds.length - 1; i > 0; i--)
             {
@@ -89,35 +82,6 @@ public class Speedometer
             }
             speeds[0] = speed;
             calculatedSpeed = (calculatedSpeed + speed) / speeds.length;
-        }
-    }
-
-    public static class PlayerPackets extends SimpleChannelInboundHandler
-    {
-        EntityPlayer player;
-
-        public PlayerPackets(EntityPlayer player)
-        {
-            super(false);
-            this.player = player;
-        }
-
-        @Override
-        protected void channelRead0(ChannelHandlerContext ctx, Object msg)
-        {
-            Class packetClass = msg.getClass();
-            if (packetClass == CPacketPlayer.Position.class)
-            {
-                CPacketPlayer.Position data = (CPacketPlayer.Position) msg;
-                FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> Speedometer.update(player, new Vec3d(data.getX(Double.NaN), data.getY(Double.NaN), data.getZ(Double.NaN))));
-            }
-            else if (packetClass == CPacketPlayer.PositionRotation.class)
-            {
-                CPacketPlayer.PositionRotation data = (CPacketPlayer.PositionRotation) msg;
-                FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() -> Speedometer.update(player, new Vec3d(data.getX(Double.NaN), data.getY(Double.NaN), data.getZ(Double.NaN))));
-            }
-
-            ctx.fireChannelRead(msg);
         }
     }
 }
