@@ -6,7 +6,6 @@ import com.fantasticsource.dynamicstealth.server.EntitySensesEdit;
 import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.dynamicstealth.server.ai.*;
 import com.fantasticsource.dynamicstealth.server.newai.AIStealthTargetingAndSearch;
-import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.Speedometer;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.TrigLookupTable;
@@ -52,7 +51,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
-import static com.fantasticsource.mctools.MCTools.*;
+import static com.fantasticsource.mctools.MCTools.isPassive;
 
 @Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, acceptableRemoteVersions = "*")
 public class DynamicStealth
