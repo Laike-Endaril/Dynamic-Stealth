@@ -6,6 +6,7 @@ import com.fantasticsource.dynamicstealth.server.EntitySensesEdit;
 import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.dynamicstealth.server.ai.*;
 import com.fantasticsource.dynamicstealth.server.newai.AIStealthTargetingAndSearch;
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.Speedometer;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.TrigLookupTable;
@@ -51,6 +52,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
+import static com.fantasticsource.mctools.MCTools.*;
 
 @Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, acceptableRemoteVersions = "*")
 public class DynamicStealth
@@ -203,32 +205,35 @@ public class DynamicStealth
             boolean updateTarget = true;
 
             //Threat
-            Threat.ThreatData threatData = Threat.get(livingTarget);
-            EntityLivingBase threatTarget = threatData.target;
-            int threat = threatData.threatLevel;
-            if (threatTarget == null || threat == 0)
+            if (!isPassive(livingTarget))
             {
-                //Hit by entity when no target is set; this includes...
-                //...getting hit while out-of-combat
-                //...getting hit after previous target has been killed
-                Threat.set(livingTarget, livingBaseSource, (int) (event.getAmount() * serverSettings.threat.attackedThreatMultiplierInitial / livingTarget.getMaxHealth()));
-            }
-            else if (threatTarget != source)
-            {
-                //In combat, and hit by an entity besides our threat target
-                double threatChangeFactor = event.getAmount() / livingTarget.getMaxHealth();
-                threat -= threatChangeFactor * serverSettings.threat.attackedThreatMultiplierOther;
-                if (threat <= 0) Threat.set(livingTarget, livingBaseSource, (int) (threatChangeFactor * serverSettings.threat.attackedThreatMultiplierInitial));
+                Threat.ThreatData threatData = Threat.get(livingTarget);
+                EntityLivingBase threatTarget = threatData.target;
+                int threat = threatData.threatLevel;
+                if (threatTarget == null || threat == 0)
+                {
+                    //Hit by entity when no target is set; this includes...
+                    //...getting hit while out-of-combat
+                    //...getting hit after previous target has been killed
+                    Threat.set(livingTarget, livingBaseSource, (int) (event.getAmount() * serverSettings.threat.attackedThreatMultiplierInitial / livingTarget.getMaxHealth()));
+                }
+                else if (threatTarget != source)
+                {
+                    //In combat, and hit by an entity besides our threat target
+                    double threatChangeFactor = event.getAmount() / livingTarget.getMaxHealth();
+                    threat -= threatChangeFactor * serverSettings.threat.attackedThreatMultiplierOther;
+                    if (threat <= 0) Threat.set(livingTarget, livingBaseSource, (int) (threatChangeFactor * serverSettings.threat.attackedThreatMultiplierInitial));
+                    else
+                    {
+                        Threat.setThreat(livingTarget, threat);
+                        updateTarget = false;
+                    }
+                }
                 else
                 {
-                    Threat.setThreat(livingTarget, threat);
-                    updateTarget = false;
+                    //In combat, and hit by threat target
+                    Threat.setThreat(livingTarget, threat + (int) (event.getAmount() * serverSettings.threat.attackedThreatMultiplierTarget / livingTarget.getMaxHealth()));
                 }
-            }
-            else
-            {
-                //In combat, and hit by threat target
-                Threat.setThreat(livingTarget, threat + (int) (event.getAmount() * serverSettings.threat.attackedThreatMultiplierTarget / livingTarget.getMaxHealth()));
             }
 
             if (updateTarget)
@@ -236,7 +241,7 @@ public class DynamicStealth
                 //Threat targeting already updated
 
                 //Update vanilla targeting
-                livingTarget.setAttackTarget(livingBaseSource);
+                if (!isPassive(livingTarget)) livingTarget.setAttackTarget(livingBaseSource);
 
                 //Look toward damage
                 float newYaw = (float) (TRIG_TABLE.arctanFullcircle(target.posZ, target.posX, source.posZ, source.posX) / Math.PI * 180);
