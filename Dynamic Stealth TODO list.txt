@@ -1,7 +1,5 @@
 BUG FIXES ==============================================================
 
-Make Speedometer account for dim changes/teleports
-
 Make temporary BackStab compat module? (BackStab issue #4 and #2)
 
 Fix mobs in search mode periodically NOT doing the search, but going back to it later?
