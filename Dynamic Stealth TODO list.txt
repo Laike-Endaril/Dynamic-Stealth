@@ -3,8 +3,7 @@ BUG FIXES ==============================================================
 Fix threat HUD not displaying for players on dedicated server...
 ...position/rotation packets from client -> player have classtype of PooledUnsafeDirectByteBuf and are not being handled correctly
 
-Fix issue with Speedometer on dedicated server...
-...position/rotation packets from client -> player have classtype of PooledUnsafeDirectByteBuf and are not being handled correctly
+Tweak Speedometer smoothing now that it updates every player tick
 
 Look into issue #4
 
