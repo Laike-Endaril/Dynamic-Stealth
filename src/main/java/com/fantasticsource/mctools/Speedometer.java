@@ -51,12 +51,10 @@ public class Speedometer
         if (entry == null)
         {
             playerMap.put(player, new Entry(newVec));
-            System.out.println(0);
             return 0;
         }
 
         entry.set(newVec, entry.position.distanceTo(newVec) * 20);
-        System.out.println(player.getName() + ", " + entry.calculatedSpeed);
         return entry.calculatedSpeed;
     }
 
