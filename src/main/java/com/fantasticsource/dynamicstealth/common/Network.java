@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth.common;
 
 import com.fantasticsource.dynamicstealth.client.HUD;
 import com.fantasticsource.dynamicstealth.server.Threat;
+import com.fantasticsource.mctools.MCTools;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLiving;
@@ -16,6 +17,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
 import static com.fantasticsource.dynamicstealth.client.HUD.EMPTY;
+import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.*;
 import static com.fantasticsource.mctools.MCTools.isOP;
 
 public class Network
@@ -48,10 +50,10 @@ public class Network
 
     public static void sendThreatData(EntityPlayerMP player, EntityLiving searcher, EntityLivingBase target, int threatLevel, boolean permissionOverride)
     {
-        int mode = DynamicStealthConfig.serverSettings.threat.allowClientHUD;
+        int mode = serverSettings.threat.allowClientHUD;
         if (permissionOverride || mode == 2 || (mode == 1 && isOP(player)))
         {
-            WRAPPER.sendTo(new ThreatPacket(searcher == null ? EMPTY : searcher.getName(), target == null ? EMPTY : target.getName(), threatLevel), player);
+            WRAPPER.sendTo(new ThreatPacket(searcher == null ? EMPTY : searcher.getName(), target == null ? EMPTY : target.getName(), threatLevel, searcher != null && serverSettings.threat.recognizePassive && MCTools.isPassive(searcher)), player);
         }
     }
 
@@ -59,16 +61,18 @@ public class Network
     {
         String searcher, target;
         int threatLevel;
+        boolean isPassive = false;
 
         public ThreatPacket() //This seems to be required, even if unused
         {
         }
 
-        public ThreatPacket(String searcherIn, String targetIn, int threatLevelIn)
+        public ThreatPacket(String searcherIn, String targetIn, int threatLevelIn, boolean isPassiveIn)
         {
             searcher = searcherIn;
             target = targetIn;
             threatLevel = threatLevelIn;
+            isPassive = isPassiveIn;
         }
 
         @Override
@@ -77,6 +81,7 @@ public class Network
             ByteBufUtils.writeUTF8String(buf, searcher);
             ByteBufUtils.writeUTF8String(buf, target);
             buf.writeInt(threatLevel);
+            buf.writeBoolean(isPassive);
         }
 
         @Override
@@ -85,6 +90,7 @@ public class Network
             searcher = ByteBufUtils.readUTF8String(buf);
             target = ByteBufUtils.readUTF8String(buf);
             threatLevel = buf.readInt();
+            isPassive = buf.readBoolean();
         }
     }
 
@@ -100,6 +106,7 @@ public class Network
                     HUD.threatSearcher = packet.searcher;
                     HUD.threatTarget = packet.target;
                     HUD.threatLevel = packet.threatLevel;
+                    HUD.searcherIsPassive = packet.isPassive;
                 });
             }
 

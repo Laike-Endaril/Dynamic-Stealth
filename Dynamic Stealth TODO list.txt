@@ -1,8 +1,6 @@
 BUG FIXES ==============================================================
 
-Make temporary BackStab compat module? (BackStab issue #4 and #2)
-
-Fix mobs in search mode periodically NOT doing the search, but going back to it later?
+Fix mobs in search mode periodically NOT doing the search, but going back to it later...
 ...noticed with spider, and so far I think it is specific to spiders?
 
 Fix mobs not moving to last known position before searching when too far away...
@@ -22,8 +20,15 @@ How should the hooks into the system function?  Direct method access?  Custom fo
 
 THREAT SYSTEM ==========================================================
 
+Implement max threat
+
+Make it so entities that are damaged but don't see a target have a null target
+
 Make owned entities change their threat based on their owner's actions (eg. see AIHurtByTargetEdit and AIOwnerHurtByTargetEdit)
 
+Add threat levels for players...
+...Add player detection to threat HUD with a server option for disabled / enabled within FOV / enabled
+...Add HUD elements for YOUR threat
 
 
 
@@ -33,7 +38,6 @@ See if MC restart can be removed from some options
 
 Add entity-specific config options for...
 ...head turn speed
-...attention span
 
 
 
@@ -127,10 +131,12 @@ MOD COMPATIBILITY ======================================================
 
 Check issue with BWM AI tasks, specifically for HC Hunting
 
-Check issue with Vampirism, where hunters attack the player regardless of whether they're a vampire or not when my mod is installed
+Check issue with Vampirism, where hunters attack the player regardless of whether they're a vampire or not when DS is installed
 
 Check Special AI Revival
 
 Check Rough Mobs 2
 
 Check Epic Siege Mod
+
+Make temporary BackStab compat module? (BackStab issue #4 and #2)
