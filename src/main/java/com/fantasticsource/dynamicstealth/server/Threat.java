@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server;
 
+import com.fantasticsource.dynamicstealth.common.DynamicStealthConfig;
 import com.fantasticsource.dynamicstealth.common.Network;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
@@ -15,6 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealth.TRIG_TABLE;
+import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.*;
 
 public class Threat
 {
@@ -129,6 +131,8 @@ public class Threat
         if (threat <= 0) remove(searcher);
         else
         {
+            if (threat > serverSettings.threat.maxThreat) threat = serverSettings.threat.maxThreat;
+
             ThreatData threatData = threatMap.get(searcher);
             if (threatData != null)
             {
@@ -151,6 +155,8 @@ public class Threat
         if (threat <= 0) remove(searcher);
         else
         {
+            if (threat > serverSettings.threat.maxThreat) threat = serverSettings.threat.maxThreat;
+
             ThreatData threatData = threatMap.get(searcher);
             if (threatData != null) threatData.threatLevel = threat;
             else threatMap.put(searcher, new ThreatData(searcher, null, threat));
