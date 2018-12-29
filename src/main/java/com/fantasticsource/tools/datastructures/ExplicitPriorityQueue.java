@@ -27,6 +27,12 @@ public class ExplicitPriorityQueue<T>
         return result == null ? null : (T) ((Entry) result).object;
     }
 
+    public double peekPriority()
+    {
+        Object result = queue.peek();
+        return result == null ? Double.NaN : ((Entry) result).priority;
+    }
+
     public T poll()
     {
         Object result = queue.poll();
