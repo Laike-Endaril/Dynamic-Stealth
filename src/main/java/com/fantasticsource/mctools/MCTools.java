@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAITasks;
+import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
@@ -19,6 +20,8 @@ public class MCTools
     public static boolean isPassive(EntityLiving living)
     {
         //TODO This will probably need improvement at some point, mostly for mod compat, but possibly also for vanilla
+        if (living instanceof EntityGuardian) return false;
+        
         for (EntityAITasks.EntityAITaskEntry task : living.targetTasks.taskEntries)
         {
             if (task.action instanceof EntityAIHurtByTarget
