@@ -53,26 +53,25 @@ public class Network
         int mode = serverSettings.threat.allowClientHUD;
         if (permissionOverride || mode == 2 || (mode == 1 && isOP(player)))
         {
-            WRAPPER.sendTo(new ThreatPacket(searcher == null ? EMPTY : searcher.getName(), target == null ? EMPTY : target.getName(), threatLevel, searcher != null && serverSettings.threat.recognizePassive && MCTools.isPassive(searcher)), player);
+            WRAPPER.sendTo(new ThreatPacket(searcher == null ? EMPTY : searcher.getName(), target == null ? EMPTY : target.getName(), threatLevel, HUD.getColor(player, searcher, target, threatLevel)), player);
         }
     }
 
     public static class ThreatPacket implements IMessage
     {
         String searcher, target;
-        int threatLevel;
-        boolean isPassive = false;
+        int threatLevel, color;
 
         public ThreatPacket() //This seems to be required, even if unused
         {
         }
 
-        public ThreatPacket(String searcherIn, String targetIn, int threatLevelIn, boolean isPassiveIn)
+        public ThreatPacket(String searcherIn, String targetIn, int threatLevelIn, int colorIn)
         {
             searcher = searcherIn;
             target = targetIn;
             threatLevel = threatLevelIn;
-            isPassive = isPassiveIn;
+            color = colorIn;
         }
 
         @Override
@@ -81,7 +80,7 @@ public class Network
             ByteBufUtils.writeUTF8String(buf, searcher);
             ByteBufUtils.writeUTF8String(buf, target);
             buf.writeInt(threatLevel);
-            buf.writeBoolean(isPassive);
+            buf.writeInt(color);
         }
 
         @Override
@@ -90,7 +89,7 @@ public class Network
             searcher = ByteBufUtils.readUTF8String(buf);
             target = ByteBufUtils.readUTF8String(buf);
             threatLevel = buf.readInt();
-            isPassive = buf.readBoolean();
+            color = buf.readInt();
         }
     }
 
@@ -106,7 +105,7 @@ public class Network
                     HUD.threatSearcher = packet.searcher;
                     HUD.threatTarget = packet.target;
                     HUD.threatLevel = packet.threatLevel;
-                    HUD.searcherIsPassive = packet.isPassive;
+                    HUD.color = packet.color;
                 });
             }
 
