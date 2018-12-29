@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
+Change HUD so it only displays a color and a percentage
+
 Update HUD colors...
 ...Red = Targetting YOU, and currently knows where you are!
 ...Orange = Has threat, but no target OR targetting you, but doesn't know where you are
