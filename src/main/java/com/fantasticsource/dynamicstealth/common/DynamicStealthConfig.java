@@ -416,22 +416,22 @@ public class DynamicStealthConfig
             @Config.Name("'Attacked By Same' Multiplier")
             @Comment({"When an in-combat entity is attacked by its current target, its threat is increased by the damage taken times this, divided by its max HP"})
             @Config.RangeDouble(min = 1)
-            public double attackedThreatMultiplierTarget = 1000;
+            public double attackedThreatMultiplierTarget = 6000;
 
             @Config.Name("'Attacked By Other' Multiplier")
             @Comment({"When an in-combat entity is attacked by something that is *not* its current target, its threat is decreased by damage taken times this, divided by its max HP"})
             @Config.RangeDouble(min = 1)
-            public double attackedThreatMultiplierOther = 1000;
+            public double attackedThreatMultiplierOther = 6000;
 
             @Config.Name("Initial Attack Multiplier")
             @Comment({"When an out-of-combat entity is attacked, its threat is set to the damage taken times this, divided by its max HP"})
             @Config.RangeDouble(min = 1)
-            public double attackedThreatMultiplierInitial = 1000;
+            public double attackedThreatMultiplierInitial = 6000;
 
             @Config.Name("Initial 'Target Spotted' Threat")
             @Comment({"When an out-of-combat entity spots a valid target, its threat is set to this"})
             @Config.RangeInt(min = 1)
-            public int targetSpottedThreat = 100;
+            public int targetSpottedThreat = 300;
 
             @Config.Name("Maximum Threat")
             @Comment({"The maximum threat level an entity can reach"})
