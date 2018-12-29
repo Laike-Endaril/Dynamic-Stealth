@@ -12,6 +12,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
+import javax.annotation.Nonnull;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -104,6 +105,7 @@ public class Threat
     }
 
 
+    @Nonnull
     public static ThreatData get(EntityLiving searcher)
     {
         ThreatData threatData = threatMap.get(searcher);

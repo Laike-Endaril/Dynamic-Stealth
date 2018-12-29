@@ -131,6 +131,9 @@ public class EntitySensesEdit extends EntitySenses
         double invisibilityMultiplier = isLivingBase && targetLiving.getActivePotionEffect(MobEffects.INVISIBILITY) != null ? vision.a_stealthMultipliers.invisibilityMultiplier : 1;
 
 
+        //Alerted multiplier
+        double alertMultiplier = searcher instanceof EntityLiving && Threat.get((EntityLiving) searcher).threatLevel > 0 ? vision.b_visibilityMultipliers.alertMultiplier : 1;
+
         //Crouching (multiplier)
         double crouchingMultiplier = target.isSneaking() ? vision.a_stealthMultipliers.crouchingMultiplier : 1;
 
@@ -162,7 +165,7 @@ public class EntitySensesEdit extends EntitySenses
 
         //Combine multipliers
         double stealthMultiplier = Tools.min(blindnessMultiplier, invisibilityMultiplier, crouchingMultiplier, mobHeadMultiplier);
-        double visibilityMultiplier = Tools.max(armorMultiplier, fireMultiplier);
+        double visibilityMultiplier = Tools.max(armorMultiplier, fireMultiplier, alertMultiplier);
         double combinedMultiplier = Math.max(0, Math.min(1, stealthMultiplier * visibilityMultiplier));
 
 
