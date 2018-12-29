@@ -14,7 +14,7 @@ import java.util.List;
 
 public class AINearestAttackableTargetEdit<T extends EntityLivingBase> extends AITargetEdit
 {
-    private static Field targetClassField, targetChanceField, targetEntitySelectorField;
+    private static Field targetClassField, targetEntitySelectorField;
 
     static
     {
@@ -22,7 +22,6 @@ public class AINearestAttackableTargetEdit<T extends EntityLivingBase> extends A
     }
 
     public Class<T> targetClass;
-    public int targetChance;
     public Predicate<? super T> targetEntitySelector;
     public T targetEntity;
 
@@ -30,15 +29,12 @@ public class AINearestAttackableTargetEdit<T extends EntityLivingBase> extends A
     {
         super(oldAI);
         targetClass = (Class) targetClassField.get(oldAI);
-        targetChance = (int) targetChanceField.get(oldAI);
         targetEntitySelector = (Predicate<? super T>) targetEntitySelectorField.get(oldAI);
     }
 
     @Override
     public boolean shouldExecute()
     {
-        if (targetChance > 0 && attacker.getRNG().nextInt(targetChance) != 0) return false;
-
         List<T> list;
         if (!EntityPlayer.class.isAssignableFrom(targetClass))
         {
@@ -81,7 +77,6 @@ public class AINearestAttackableTargetEdit<T extends EntityLivingBase> extends A
         try
         {
             targetClassField = ReflectionTool.getField(EntityAINearestAttackableTarget.class, "field_75307_b", "targetClass");
-            targetChanceField = ReflectionTool.getField(EntityAINearestAttackableTarget.class, "field_75308_c", "targetChance");
             targetEntitySelectorField = ReflectionTool.getField(EntityAINearestAttackableTarget.class, "field_82643_g", "targetEntitySelector");
         }
         catch (Exception e)

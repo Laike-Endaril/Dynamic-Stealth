@@ -11,7 +11,6 @@ public class AITargetNonTamedEdit extends AINearestAttackableTargetEdit
     {
         super(oldAI);
         tameable = (EntityTameable) attacker;
-        targetChance = 10;
     }
 
     @Override

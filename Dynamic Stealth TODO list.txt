@@ -29,9 +29,9 @@ THREAT SYSTEM ==========================================================
 
 Make owned entities change their threat based on their owner's actions (eg. see AIHurtByTargetEdit and AIOwnerHurtByTargetEdit)
 
-Add threat levels for players...
-...Add player detection to threat HUD with a server option for disabled / enabled within FOV / enabled
-...Add HUD elements for YOUR threat
+Add threat levels for players
+Add player detection to threat HUD with a server option for disabled / enabled within FOV / enabled
+Add HUD elements for YOUR threat
 
 
 
@@ -62,12 +62,6 @@ Add the ability to see mob FOVs (as a 3D render), maybe when under a potion effe
 
 
 AI =====================================================================
-
-Can predicates be used in a way that allows for reduced AI task replacement?
-
-Make search AI use the same speeds as attack AIs
-
-Figure out why entities sometimes have a delayed reaction when they should see you (when not yet alerted)
 
 Can probably combine the two below into a single AI task...
 ...Replace EntityAILookIdle with a new version that has gradual head rotation, instead of just removing it
