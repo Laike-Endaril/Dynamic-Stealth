@@ -1,11 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Make it so "friendly" CNPCs are detected as passive
-
-Implement max threat
-
-Make it so entities that are damaged but don't see a target have a null target
-
 Update HUD colors...
 ...Red = Targetting YOU, and currently knows where you are!
 ...Orange = Has threat, but no target OR targetting you, but doesn't know where you are

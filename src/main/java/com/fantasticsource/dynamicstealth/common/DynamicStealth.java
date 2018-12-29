@@ -202,6 +202,7 @@ public class DynamicStealth
             EntityLiving livingTarget = (EntityLiving) target;
             EntityLivingBase livingBaseSource = (EntityLivingBase) source;
             boolean updateTarget = true;
+            boolean newThreatTarget = false;
 
             //Threat
             if (!isPassive(livingTarget))
@@ -215,13 +216,19 @@ public class DynamicStealth
                     //...getting hit while out-of-combat
                     //...getting hit after previous target has been killed
                     Threat.set(livingTarget, livingBaseSource, (int) (event.getAmount() * serverSettings.threat.attackedThreatMultiplierInitial / livingTarget.getMaxHealth()));
+                    newThreatTarget = true;
                 }
                 else if (threatTarget != source)
                 {
                     //In combat, and hit by an entity besides our threat target
                     double threatChangeFactor = event.getAmount() / livingTarget.getMaxHealth();
                     threat -= threatChangeFactor * serverSettings.threat.attackedThreatMultiplierOther;
-                    if (threat <= 0) Threat.set(livingTarget, livingBaseSource, (int) (threatChangeFactor * serverSettings.threat.attackedThreatMultiplierInitial));
+                    if (threat <= 0)
+                    {
+                        //Switching targets
+                        Threat.set(livingTarget, livingBaseSource, (int) (threatChangeFactor * serverSettings.threat.attackedThreatMultiplierInitial));
+                        newThreatTarget = true;
+                    }
                     else
                     {
                         Threat.setThreat(livingTarget, threat);
@@ -278,6 +285,8 @@ public class DynamicStealth
                     }
                 }
             }
+
+            if (newThreatTarget && !livingTarget.getEntitySenses().canSee(livingBaseSource)) Threat.setTarget(livingTarget, null);
         }
 
         if (source instanceof EntityLivingBase)
