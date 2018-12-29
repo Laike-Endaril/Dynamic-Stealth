@@ -9,8 +9,6 @@ Update HUD colors...
 ...Blue = Not targeting anything, and threat is 0 (no change required)
 ...Green = Passive (no change required)
 
-Post in Nop showcase
-
 
 
 BUG FIXES ==============================================================
