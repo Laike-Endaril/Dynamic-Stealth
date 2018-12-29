@@ -120,6 +120,7 @@ public class DynamicStealthConfig
 
                 public class VisibilityMultipliers
                 {
+                    @Config.Name("Armor Multiplier (Cumulative)")
                     @Comment({
                             "An entity's visibility is multiplied by 1 + (this setting * armor)",
                             "",
@@ -128,16 +129,26 @@ public class DynamicStealthConfig
                             "If set to 0.25, an entity with 20 armor (full diamond) is 5x as likely to be seen"
                     })
                     @Config.RangeDouble(min = 0)
-                    @Config.Name("Armor Multiplier (Cumulative)")
                     public double armorMultiplierCumulative = 0.25;
+
+                    @Config.Name("'Alert' Multiplier")
+                    @Comment({
+                            "If an entity is alert, their visual perception is multiplied by this",
+                            "",
+                            "If set to 1, there is no effect",
+                            "",
+                            "If set to 2, an alerted entity can generally see targets twice as easily (but still not beyond Distance (Far))"
+                    })
+                    @Config.RangeDouble(min = 1)
+                    public double alertMultiplier = 1.25;
 
                     @Config.Name("'On Fire' Multiplier")
                     @Comment({
-                            "An entity's visibility is multiplied by 1 + (this setting * armor)",
+                            "If an entity is on fire, their visibility is multiplied by this",
                             "",
-                            "If set to 0, there is no effect",
+                            "If set to 1, there is no effect",
                             "",
-                            "If set to 0.5, an entity with 20 armor (full diamond) is 10x as likely to be seen"
+                            "If set to 2, they are twice as easy to see when on fire"
                     })
                     @Config.RangeDouble(min = 1)
                     public double onFireMultiplier = 1.5;

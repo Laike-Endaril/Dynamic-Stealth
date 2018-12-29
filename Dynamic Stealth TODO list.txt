@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
+Implement "noticed" visibility multiplier
+
 Add per-entity HUD which only displays a color and a percentage...
 ...make it an in-world render?  Maybe rendering from the livingentity render?
 
@@ -57,7 +59,7 @@ Add to HUD...
 ...speed
 ...combined stealth multiplier?
 
-Add the ability to see mob FOVs (as a cone render), maybe when under a potion effect or something
+Add the ability to see mob FOVs (as a 3D render), maybe when under a potion effect or something
 
 
 
@@ -89,8 +91,6 @@ Add and implement server-side usePlayerSenses config option...
 Make it so mobs can see through glass (but maybe not quite yet; for now it's good for watching/debugging their behavior when they're searching for you)
 
 Separate the horizontal and vertical FOV angles, so that each can be configured separately
-
-Re-add and implement "noticed" visibility multiplier
 
 Add touch-based detection (within very close range)
 Add sound-based detection
