@@ -3,6 +3,7 @@ package com.fantasticsource.dynamicstealth.server.newai;
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.dynamicstealth.server.ai.AITargetEdit;
+import com.fantasticsource.dynamicstealth.server.configdata.EntityAIData;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.TrigLookupTable;
 import net.minecraft.entity.EntityLiving;
@@ -29,6 +30,7 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
     private double startAngle, angleDif, pathAngle;
     private static TrigLookupTable trigTable = DynamicStealth.TRIG_TABLE;
     public BlockPos lastKnownPosition = null;
+    private int headTurnSpeed;
 
 
     public AIStealthTargetingAndSearch(EntityLiving living, double speedIn)
@@ -36,6 +38,8 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
         searcher = living;
         navigator = living.getNavigator();
         speed = speedIn;
+
+        headTurnSpeed = EntityAIData.headTurnSpeed(searcher);
 
         setMutexBits(3);
     }
@@ -181,11 +185,11 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
         {
             navigator.clearPath();
 
-            if (spinDirection) angleDif += serverSettings.ai.headTurnSpeed;
-            else angleDif -= serverSettings.ai.headTurnSpeed;
+            if (spinDirection) angleDif += headTurnSpeed;
+            else angleDif -= headTurnSpeed;
 
             double angleRad = Tools.degtorad(startAngle + angleDif);
-            searcher.getLookHelper().setLookPosition(searcher.posX - trigTable.sin(angleRad), searcher.posY + searcher.getEyeHeight(), searcher.posZ + trigTable.cos(angleRad), serverSettings.ai.headTurnSpeed, serverSettings.ai.headTurnSpeed);
+            searcher.getLookHelper().setLookPosition(searcher.posX - trigTable.sin(angleRad), searcher.posY + searcher.getEyeHeight(), searcher.posZ + trigTable.cos(angleRad), headTurnSpeed, headTurnSpeed);
 
             if (Math.abs(angleDif) >= 360)
             {
@@ -217,7 +221,7 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
             }
             else
             {
-                searcher.getLookHelper().setLookPosition(nextPos.x, searcher.posY + searcher.getEyeHeight(), nextPos.z, serverSettings.ai.headTurnSpeed, serverSettings.ai.headTurnSpeed);
+                searcher.getLookHelper().setLookPosition(nextPos.x, searcher.posY + searcher.getEyeHeight(), nextPos.z, headTurnSpeed, headTurnSpeed);
             }
         }
 
