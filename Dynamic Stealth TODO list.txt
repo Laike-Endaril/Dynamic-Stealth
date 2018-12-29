@@ -1,13 +1,14 @@
 CURRENTLY WORKING ON ===================================================
 
-Change HUD so it only displays a color and a percentage
-
 Update HUD colors...
 ...Red = Targetting YOU, and currently knows where you are!
 ...Orange = Has threat, but no target OR targetting you, but doesn't know where you are
 ...Yellow = Targetting something else
 ...Blue = Not targeting anything, and threat is 0 (no change required)
 ...Green = Passive (no change required)
+
+Add per-entity HUD which only displays a color and a percentage...
+...make it an in-world render?  Maybe rendering from the livingentity render?
 
 
 
@@ -136,8 +137,6 @@ Possibly change music using ActualMusic when going into battle, etc
 MOD COMPATIBILITY ======================================================
 
 Check issue with BWM AI tasks, specifically for HC Hunting
-
-Check issue with Vampirism, where hunters attack the player regardless of whether they're a vampire or not when DS is installed
 
 Check Special AI Revival
 

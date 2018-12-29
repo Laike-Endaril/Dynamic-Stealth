@@ -46,7 +46,7 @@ public class AINearestAttackableTargetEdit<T extends EntityLivingBase> extends A
         }
         else
         {
-            list = (List<T>) attacker.world.playerEntities;
+            list = attacker.world.getPlayers(targetClass, targetEntitySelector);
         }
 
         if (list.isEmpty()) return false;
