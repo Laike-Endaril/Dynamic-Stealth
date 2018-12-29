@@ -26,7 +26,6 @@ public class HUD extends Gui
     public static String threatSearcher = EMPTY;
     public static String threatTarget = EMPTY;
     public static int threatLevel = 0;
-    public static boolean searcherIsPassive = false;
 
     public HUD(Minecraft mc)
     {

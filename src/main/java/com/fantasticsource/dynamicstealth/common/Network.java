@@ -2,7 +2,6 @@ package com.fantasticsource.dynamicstealth.common;
 
 import com.fantasticsource.dynamicstealth.client.HUD;
 import com.fantasticsource.dynamicstealth.server.Threat;
-import com.fantasticsource.mctools.MCTools;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLiving;
@@ -17,7 +16,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
 import static com.fantasticsource.dynamicstealth.client.HUD.EMPTY;
-import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.*;
+import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.mctools.MCTools.isOP;
 
 public class Network

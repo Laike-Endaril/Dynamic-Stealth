@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai;
 
+import com.fantasticsource.dynamicstealth.server.configdata.EntityVisionData;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import com.google.common.base.Predicates;
@@ -15,8 +16,6 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
-
 public class AIWatchClosestEdit extends EntityAIBase
 {
     private static Field entityField, watchedClassField, chanceField;
@@ -30,7 +29,6 @@ public class AIWatchClosestEdit extends EntityAIBase
     public Entity target;
     public int lookTime;
     public final float chance;
-    public static float range = serverSettings.senses.vision.f_distances.distanceFar;
     public Class<? extends Entity> watchedClass;
 
     public AIWatchClosestEdit(EntityAIWatchClosest oldAI) throws IllegalAccessException
@@ -65,6 +63,7 @@ public class AIWatchClosestEdit extends EntityAIBase
 
         List<Entity> list;
         ExplicitPriorityQueue<Entity> queue;
+        double range = EntityVisionData.distanceFar(entity);
         if (watchedClass == EntityPlayer.class)
         {
             list = entity.world.getEntitiesWithinAABB(EntityPlayer.class, entity.getEntityBoundingBox().grow(range, 4D, range));

@@ -29,15 +29,9 @@ THREAT SYSTEM ==========================================================
 
 Make owned entities change their threat based on their owner's actions (eg. see AIHurtByTargetEdit and AIOwnerHurtByTargetEdit)
 
-Add threat levels for players
-Add player detection to threat HUD with a server option for disabled / enabled within FOV / enabled
-Add HUD elements for YOUR threat
-
 
 
 CONFIG FILE ============================================================
-
-See if MC restart can be removed from some options
 
 
 

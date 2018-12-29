@@ -187,7 +187,6 @@ public class DynamicStealthConfig
                             "Entities are harder to see in light levels lower than this"
                     })
                     @Config.RangeInt(min = 0, max = 15)
-                    @Config.RequiresMcRestart
                     public int lightHigh = 8;
 
                     @Config.Name("Light (Low/Dark)")
@@ -197,13 +196,11 @@ public class DynamicStealthConfig
                             "Inclusive, so if set to 0, then in 0 lighting, entities cannot be seen by other entities"
                     })
                     @Config.RangeInt(min = -1, max = 15)
-                    @Config.RequiresMcRestart
                     public int lightLow = -1;
 
                     @Config.Name("Night Vision Awareness Bonus")
                     @Comment({"When an entity has the nightvision effect, this value is added to their perceived light levels (and then set to 15 if larger than 15)"})
                     @Config.RangeInt(min = 0, max = 15)
-                    @Config.RequiresMcRestart
                     public int nightVisionAddition = 15;
                 }
 
@@ -216,12 +213,10 @@ public class DynamicStealthConfig
                 {
                     @Config.Name("Speed (High/Fast)")
                     @Comment({"If moving at this speed or above, an entity has the maximum speed penalty to their stealth rating"})
-                    @Config.RequiresMcRestart
                     public double speedHigh = 5.6;
 
                     @Config.Name("Speed (Low/Slow)")
                     @Comment({"At or below this speed, an entity has no speed penalty to their stealth rating"})
-                    @Config.RequiresMcRestart
                     public double speedLow = 0;
                 }
 
@@ -243,7 +238,6 @@ public class DynamicStealthConfig
                             "Cannot be smaller than angleSmall"
                     })
                     @Config.RangeInt(min = 0, max = 180)
-                    @Config.RequiresMcRestart
                     public int angleLarge = 85;
 
                     @Config.Name("Angle (Small/Thin; Far)")
@@ -261,7 +255,6 @@ public class DynamicStealthConfig
                             "Cannot be larger than angleLarge"
                     })
                     @Config.RangeInt(min = 0, max = 180)
-                    @Config.RequiresMcRestart
                     public int angleSmall = 30;
                 }
 
@@ -283,7 +276,6 @@ public class DynamicStealthConfig
                             "Some mobs are not affected at all, for the same reason as stated above, including endermen and the ender dragon"
                     })
                     @Config.RangeInt(min = 0)
-                    @Config.RequiresMcRestart
                     public int distanceFar = 40;
 
                     @Config.Name("Distance (Near)")
@@ -297,7 +289,6 @@ public class DynamicStealthConfig
                             "...some mobs are not affected at all, for the same reason as stated above, including endermen and the ender dragon"
                     })
                     @Config.RangeInt(min = 0)
-                    @Config.RequiresMcRestart
                     public int distanceNear = 5;
                 }
 

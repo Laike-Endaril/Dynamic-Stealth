@@ -3,6 +3,8 @@ package com.fantasticsource.dynamicstealth.server.configdata;
 import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
@@ -19,6 +21,24 @@ public class EntityVisionData
     public static Map<Class<? extends Entity>, Pair<Integer, Integer>> entityDistances = new HashMap<>();
     public static Map<Class<? extends Entity>, Pair<Integer, Integer>> entityLighting = new HashMap<>();
     public static Map<Class<? extends Entity>, Pair<Double, Double>> entitySpeeds = new HashMap<>();
+
+    public static void postInit(FMLPostInitializationEvent event)
+    {
+        update();
+    }
+
+    public static void postConfig(ConfigChangedEvent.PostConfigChangedEvent event)
+    {
+        update();
+    }
+
+    private static void update()
+    {
+        if (serverSettings.senses.vision.e_angles.angleSmall > serverSettings.senses.vision.e_angles.angleLarge) throw new IllegalArgumentException("angleLarge must be greater than or equal to angleSmall");
+        if (serverSettings.senses.vision.f_distances.distanceNear > serverSettings.senses.vision.f_distances.distanceFar) throw new IllegalArgumentException("distanceFar must be greater than or equal to distanceNear");
+        if (serverSettings.senses.vision.c_lighting.lightLow > serverSettings.senses.vision.c_lighting.lightHigh) throw new IllegalArgumentException("lightHigh must be greater than or equal to lightLow");
+        if (serverSettings.senses.vision.d_speeds.speedLow > serverSettings.senses.vision.d_speeds.speedHigh) throw new IllegalArgumentException("speedHigh must be greater than or equal to speedLow");
+    }
 
     static
     {

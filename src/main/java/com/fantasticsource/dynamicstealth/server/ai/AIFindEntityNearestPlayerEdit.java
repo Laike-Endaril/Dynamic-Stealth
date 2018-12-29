@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai;
 
+import com.fantasticsource.dynamicstealth.server.configdata.EntityVisionData;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import net.minecraft.entity.EntityCreature;
@@ -41,7 +42,7 @@ public class AIFindEntityNearestPlayerEdit extends EntityAIBase
     @Override
     public boolean shouldExecute()
     {
-        double range = serverSettings.senses.vision.f_distances.distanceFar;
+        double range = EntityVisionData.distanceFar(searcher);
         List<EntityPlayer> list = searcher.world.getEntitiesWithinAABB(EntityPlayer.class, searcher.getEntityBoundingBox().grow(range, 4D, range));
 
         if (list.isEmpty()) return false;

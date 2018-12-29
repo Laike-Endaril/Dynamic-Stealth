@@ -5,6 +5,7 @@ import com.fantasticsource.dynamicstealth.compat.CompatCNPC;
 import com.fantasticsource.dynamicstealth.server.EntitySensesEdit;
 import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.dynamicstealth.server.ai.*;
+import com.fantasticsource.dynamicstealth.server.configdata.EntityVisionData;
 import com.fantasticsource.dynamicstealth.server.newai.AIStealthTargetingAndSearch;
 import com.fantasticsource.mctools.Speedometer;
 import com.fantasticsource.tools.ReflectionTool;
@@ -44,8 +45,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.apache.logging.log4j.Logger;
+import scala.collection.parallel.ParIterableLike;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
@@ -70,6 +71,7 @@ public class DynamicStealth
 
     public DynamicStealth()
     {
+        MinecraftForge.EVENT_BUS.register(EntityVisionData.class);
         MinecraftForge.EVENT_BUS.register(DynamicStealth.class);
         MinecraftForge.EVENT_BUS.register(Speedometer.class);
         MinecraftForge.EVENT_BUS.register(Network.class);
@@ -77,16 +79,11 @@ public class DynamicStealth
     }
 
     @EventHandler
-    public void preInit(FMLPreInitializationEvent event) throws NoSuchFieldException, IllegalAccessException, IOException
+    public void preInit(FMLPreInitializationEvent event) throws NoSuchFieldException, IllegalAccessException
     {
         logger = event.getModLog();
 
         Network.init();
-
-        if (serverSettings.senses.vision.e_angles.angleSmall > serverSettings.senses.vision.e_angles.angleLarge) throw new IllegalArgumentException("angleLarge must be greater than or equal to angleSmall");
-        if (serverSettings.senses.vision.f_distances.distanceNear > serverSettings.senses.vision.f_distances.distanceFar) throw new IllegalArgumentException("distanceFar must be greater than or equal to distanceNear");
-        if (serverSettings.senses.vision.c_lighting.lightLow > serverSettings.senses.vision.c_lighting.lightHigh) throw new IllegalArgumentException("lightHigh must be greater than or equal to lightLow");
-        if (serverSettings.senses.vision.d_speeds.speedLow > serverSettings.senses.vision.d_speeds.speedHigh) throw new IllegalArgumentException("speedHigh must be greater than or equal to speedLow");
 
         sensesField = ReflectionTool.getField(EntityLiving.class, "field_70723_bA", "senses");
         abstractSkeletonAIArrowAttackField = ReflectionTool.getField(AbstractSkeleton.class, "field_85037_d", "aiArrowAttack");
