@@ -41,6 +41,25 @@ public class DynamicStealthConfig
             @Comment({"How quickly entities' heads spin during eg. a search sequence"})
             @Config.RangeInt(min = 1, max = 180)
             public int headTurnSpeed = 3;
+
+            @Config.Name("Entity-Specific Settings (Advanced)")
+            public EntityAISettings y_entityOverrides = new EntityAISettings();
+
+            public class EntityAISettings
+            {
+                @Config.Name("Head Turn Speed")
+                @Comment({
+                        "How quickly entities' heads spin during eg. a search sequence",
+                        "",
+                        "entityID, headTurnSpeed",
+                        "",
+                        "eg...",
+                        "",
+                        "minecraft:skeleton, 5"
+                })
+                @Config.RequiresMcRestart
+                public String[] headTurnSpeed = new String[]{"ghast, 10"};
+            }
         }
 
 
@@ -300,9 +319,9 @@ public class DynamicStealthConfig
 
 
                 @Config.Name("Entity-Specific Settings (Advanced)")
-                public EntitySettings y_entityOverrides = new EntitySettings();
+                public EntityVisionSettings y_entityOverrides = new EntityVisionSettings();
 
-                public class EntitySettings
+                public class EntityVisionSettings
                 {
                     @Config.Name("Angle")
                     @Comment({
