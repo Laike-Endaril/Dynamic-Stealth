@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Implement "noticed" visibility multiplier
-
 Add per-entity HUD which only displays a color and a percentage...
 ...make it an in-world render?  Maybe rendering from the livingentity render?
 
