@@ -15,6 +15,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.*;
+import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.entity.passive.EntityRabbit;
@@ -403,7 +404,7 @@ public class DynamicStealth
 
     private static void addTasks(EntityAITasks targetTasks, EntityAITasks tasks, EntityLiving living)
     {
-        if (!(living instanceof EntitySlime))
+        if (!Threat.bypassesThreat(living))
         {
             tasks.addTask(-7777777, new AIStealthTargetingAndSearch(living, 1));
         }

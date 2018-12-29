@@ -21,6 +21,7 @@ public class HUD extends Gui
     public static final int COLOR_PASSIVE = 0x00CC00;
 
     public static final String EMPTY = "----------";
+    public static final String UNKNOWN = "???";
 
     public static int color = COLOR_NULL;
     public static String threatSearcher = EMPTY;
@@ -55,6 +56,12 @@ public class HUD extends Gui
                     drawString(fontRender, threatSearcher, (int) (width * 0.75), height - 30, color);
                     drawString(fontRender, EMPTY, (int) (width * 0.75), height - 20, color);
                     drawString(fontRender, "" + threatLevel, (int) (width * 0.75), height - 10, color);
+                }
+                else if (threatLevel == -1)
+                {
+                    drawString(fontRender, threatSearcher, (int) (width * 0.75), height - 30, COLOR_ALERT);
+                    drawString(fontRender, UNKNOWN, (int) (width * 0.75), height - 20, COLOR_ALERT);
+                    drawString(fontRender, UNKNOWN, (int) (width * 0.75), height - 10, COLOR_ALERT);
                 }
                 else
                 {

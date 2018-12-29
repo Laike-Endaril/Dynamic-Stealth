@@ -325,7 +325,12 @@ public class DynamicStealthConfig
                             "minecraft:skeleton, 90, 45"
                     })
                     @Config.RequiresMcRestart
-                    public String[] angle = new String[]{"ghast, 90, 0"};
+                    public String[] angle = new String[]
+                            {
+                                    "ghast, 90, 0",
+                                    "wither, 90, 0",
+                                    "ender_dragon, 90, 0"
+                            };
 
                     @Config.Name("Distance")
                     @Comment({
@@ -338,7 +343,12 @@ public class DynamicStealthConfig
                             "minecraft:skeleton, 40, 3"
                     })
                     @Config.RequiresMcRestart
-                    public String[] distance = new String[]{"ghast, 80, 20"};
+                    public String[] distance = new String[]
+                            {
+                                    "ghast, 80, 20",
+                                    "wither, 100, 30",
+                                    "ender_dragon, 100, 60"
+                            };
 
                     @Config.Name("Lighting")
                     @Comment({
@@ -351,28 +361,33 @@ public class DynamicStealthConfig
                             "minecraft:skeleton, 15, -1"
                     })
                     @Config.RequiresMcRestart
-                    public String[] lighting = new String[]{"ghast, 0, -1"};
+                    public String[] lighting = new String[]
+                            {
+                                    "ghast, 0, -1",
+                                    "wither, 0, -1",
+                                    "ender_dragon, 0, -1"
+                            };
 
                     @Config.Name("Natural Night Vision")
                     @Comment({"Entities in this list ALWAYS get the night vision bonus"})
                     @Config.RequiresMcRestart
                     public String[] naturalNightVisionMobs = new String[]{
-                            "minecraft:squid",
-                            "minecraft:guardian",
-                            "minecraft:elder_guardian",
-                            "minecraft:sheep",
-                            "minecraft:cow",
-                            "minecraft:mooshroom",
-                            "minecraft:ocelot",
-                            "minecraft:wolf",
-                            "minecraft:polar_bear",
-                            "minecraft:silverfish",
-                            "minecraft:endermite",
-                            "minecraft:enderman",
-                            "minecraft:ender_dragon",
-                            "minecraft:wither",
-                            "minecraft:vex",
-                            "minecraft:ghast"
+                            "squid",
+                            "guardian",
+                            "elder_guardian",
+                            "sheep",
+                            "cow",
+                            "mooshroom",
+                            "ocelot",
+                            "wolf",
+                            "polar_bear",
+                            "silverfish",
+                            "endermite",
+                            "enderman",
+                            "ender_dragon",
+                            "wither",
+                            "vex",
+                            "ghast"
                     };
 
                     @Config.Name("Speed")

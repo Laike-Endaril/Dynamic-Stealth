@@ -52,7 +52,8 @@ public class Network
         int mode = serverSettings.threat.allowClientHUD;
         if (permissionOverride || mode == 2 || (mode == 1 && isOP(player)))
         {
-            WRAPPER.sendTo(new ThreatPacket(searcher == null ? EMPTY : searcher.getName(), target == null ? EMPTY : target.getName(), threatLevel, HUD.getColor(player, searcher, target, threatLevel)), player);
+            if (Threat.bypassesThreat(searcher)) WRAPPER.sendTo(new ThreatPacket(searcher.getName(), "", -1, 0), player);
+            else WRAPPER.sendTo(new ThreatPacket(searcher == null ? EMPTY : searcher.getName(), target == null ? EMPTY : target.getName(), threatLevel, HUD.getColor(player, searcher, target, threatLevel)), player);
         }
     }
 

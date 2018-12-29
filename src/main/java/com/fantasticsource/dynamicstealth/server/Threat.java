@@ -7,6 +7,8 @@ import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -130,6 +132,8 @@ public class Threat
 
     public static void set(EntityLiving searcher, EntityLivingBase target, int threat)
     {
+        if (bypassesThreat(searcher)) return;
+
         if (threat <= 0) remove(searcher);
         else
         {
@@ -147,6 +151,8 @@ public class Threat
 
     public static void setTarget(EntityLiving searcher, EntityLivingBase target)
     {
+        if (bypassesThreat(searcher)) return;
+
         ThreatData threatData = threatMap.get(searcher);
         if (threatData != null) threatData.target = target;
         else threatMap.put(searcher, new ThreatData(searcher, target, 0));
@@ -154,6 +160,8 @@ public class Threat
 
     public static void setThreat(EntityLiving searcher, int threat)
     {
+        if (bypassesThreat(searcher)) return;
+
         if (threat <= 0) remove(searcher);
         else
         {
@@ -230,6 +238,12 @@ public class Threat
         }
 
         return queue.poll();
+    }
+
+
+    public static boolean bypassesThreat(EntityLivingBase livingBase)
+    {
+        return livingBase instanceof EntityDragon || livingBase instanceof EntitySlime;
     }
 
 
