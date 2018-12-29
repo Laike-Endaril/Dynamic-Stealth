@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth.server;
+package com.fantasticsource.dynamicstealth.server.configdata;
 
 import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.entity.Entity;
@@ -14,12 +14,6 @@ import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.*;
 
 public class EntityVisionData
 {
-    private static int angleRange = serverSettings.senses.vision.e_angles.angleLarge - serverSettings.senses.vision.e_angles.angleSmall;
-    private static int lightRange = serverSettings.senses.vision.c_lighting.lightHigh - serverSettings.senses.vision.c_lighting.lightLow;
-    private static double speedRange = serverSettings.senses.vision.d_speeds.speedHigh - serverSettings.senses.vision.d_speeds.speedLow;
-    private static int distanceRange = serverSettings.senses.vision.f_distances.distanceFar - serverSettings.senses.vision.f_distances.distanceNear;
-    private static int distanceFarSquared = (int) Math.pow(serverSettings.senses.vision.f_distances.distanceFar, 2);
-
     public static ArrayList<Class<? extends Entity>> naturalNightvisionEntities = new ArrayList<>();
     public static Map<Class<? extends Entity>, Pair<Integer, Integer>> entityAngles = new HashMap<>();
     public static Map<Class<? extends Entity>, Pair<Integer, Integer>> entityDistances = new HashMap<>();
@@ -118,12 +112,6 @@ public class EntityVisionData
         return pair == null ? serverSettings.senses.vision.e_angles.angleSmall : pair.getValue();
     }
 
-    public static int angleRange(Entity searcher)
-    {
-        Pair<Integer, Integer> pair = entityAngles.get(searcher.getClass());
-        return pair == null ? angleRange : pair.getKey() - pair.getValue();
-    }
-
 
     public static int distanceFar(Entity searcher)
     {
@@ -135,18 +123,6 @@ public class EntityVisionData
     {
         Pair<Integer, Integer> pair = entityDistances.get(searcher.getClass());
         return pair == null ? serverSettings.senses.vision.f_distances.distanceNear : pair.getValue();
-    }
-
-    public static int distanceRange(Entity searcher)
-    {
-        Pair<Integer, Integer> pair = entityDistances.get(searcher.getClass());
-        return pair == null ? distanceRange : pair.getKey() - pair.getValue();
-    }
-
-    public static int distanceFarSquared(Entity searcher)
-    {
-        Pair<Integer, Integer> pair = entityDistances.get(searcher.getClass());
-        return pair == null ? distanceFarSquared : (int) Math.pow(pair.getKey(), 2);
     }
 
 
@@ -162,12 +138,6 @@ public class EntityVisionData
         return pair == null ? serverSettings.senses.vision.c_lighting.lightLow : pair.getValue();
     }
 
-    public static int lightRange(Entity searcher)
-    {
-        Pair<Integer, Integer> pair = entityLighting.get(searcher.getClass());
-        return pair == null ? lightRange : pair.getKey() - pair.getValue();
-    }
-
 
     public static double speedHigh(Entity searcher)
     {
@@ -179,11 +149,5 @@ public class EntityVisionData
     {
         Pair<Double, Double> pair = entitySpeeds.get(searcher.getClass());
         return pair == null ? serverSettings.senses.vision.d_speeds.speedLow : pair.getValue();
-    }
-
-    public static double speedRange(Entity searcher)
-    {
-        Pair<Double, Double> pair = entitySpeeds.get(searcher.getClass());
-        return pair == null ? speedRange : pair.getKey() - pair.getValue();
     }
 }

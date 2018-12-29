@@ -23,7 +23,7 @@ import java.util.List;
 import static com.fantasticsource.dynamicstealth.common.DynamicStealth.TRIG_TABLE;
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.ServerSettings;
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
-import static com.fantasticsource.dynamicstealth.server.EntityVisionData.*;
+import static com.fantasticsource.dynamicstealth.server.configdata.EntityVisionData.*;
 
 public class EntitySensesEdit extends EntitySenses
 {
@@ -72,15 +72,19 @@ public class EntitySensesEdit extends EntitySenses
         //Hard checks (absolute)
         if (searcher == null || target == null) return true;
         if (target instanceof EntityPlayerMP && ((EntityPlayerMP) target).capabilities.disableDamage) return true;
-        if (!target.isEntityAlive() || angleLarge(searcher) == 0) return true;
+
+        int angleLarge = angleLarge(searcher);
+        if (!target.isEntityAlive() || angleLarge == 0) return true;
 
 
         //Angles and Distances (absolute, base FOV)
         double distSquared = searcher.getDistanceSq(target);
-        if (distSquared > distanceFarSquared(searcher)) return true;
+        int distanceFar = distanceFar(searcher);
+        if (distSquared > Math.pow(distanceFar, 2)) return true;
 
         double distanceThreshold;
-        if (angleSmall(searcher) == 180) distanceThreshold = distanceFar(searcher);
+        int angleSmall = angleSmall(searcher);
+        if (angleSmall == 180) distanceThreshold = distanceFar;
         else
         {
             //Using previous values here to give the player a chance, because client-side rendering always runs behind what's actually happening
@@ -91,9 +95,13 @@ public class EntitySensesEdit extends EntitySenses
             else if (angleDif > 1) angleDif = 1;
 
             angleDif = Tools.radtodeg(TRIG_TABLE.arccos(angleDif)); //0 in front, 180 in back
-            if (angleDif > angleLarge(searcher)) return true;
-            if (angleDif < angleSmall(searcher)) distanceThreshold = distanceFar(searcher);
-            else distanceThreshold = distanceNear(searcher) + distanceRange(searcher) * (angleLarge(searcher) - angleDif) / angleRange(searcher);
+            if (angleDif > angleLarge) return true;
+            if (angleDif < angleSmall) distanceThreshold = distanceFar;
+            else
+            {
+                int distanceNear = distanceNear(searcher);
+                distanceThreshold = distanceNear + (distanceFar - distanceNear) * (angleLarge - angleDif) / (angleLarge - angleSmall);
+            }
         }
 
 
@@ -112,13 +120,17 @@ public class EntitySensesEdit extends EntitySenses
             lightFactor = Math.min(15, lightFactor + vision.c_lighting.nightVisionAddition);
         }
 
-        if (lightFactor <= lightLow(searcher)) return true;
-        lightFactor = lightFactor >= lightHigh(searcher) ? 1 : lightFactor / lightRange(searcher);
+        int lightLow = lightLow(searcher);
+        if (lightFactor <= lightLow) return true;
+        int lightHigh = lightHigh(searcher);
+        lightFactor = lightFactor >= lightHigh ? 1 : lightFactor / (lightHigh - lightLow);
 
 
         //Speeds (factor)
         double speedFactor = Speedometer.getSpeed(target);
-        speedFactor = speedFactor >= speedHigh(searcher) ? 1 : speedFactor <= speedLow(searcher) ? 0 : (speedFactor - speedLow(searcher)) / speedRange(searcher);
+        double speedLow = speedLow(searcher);
+        double speedHigh = speedHigh(searcher);
+        speedFactor = speedFactor >= speedHigh ? 1 : speedFactor <= speedLow ? 0 : (speedFactor - speedLow) / (speedHigh - speedLow);
 
 
         //Blindness (multiplier)
