@@ -13,7 +13,7 @@ Fix mobs in search mode periodically NOT doing the search, but going back to it 
 Fix mobs not moving to last known position before searching when too far away...
 ...Create function which, when beyond normal pathfinding range...
 ...finds a partial path instead of a full path, and follows it...
-...then if not at the final destination, finds another partial path and follow it...
+...then if not at the final destination, finds another partial path and follows it...
 ...etc.
 This system, if improved upon, could be used for most pathfinding and should improve pathfinding performance (by splitting it up and calculating parts at different times)
 
@@ -32,6 +32,10 @@ Make owned entities change their threat based on their owner's actions (eg. see 
 
 
 CONFIG FILE ============================================================
+
+Add threat bypass option
+
+Add entity-specific threat bypass option
 
 
 
