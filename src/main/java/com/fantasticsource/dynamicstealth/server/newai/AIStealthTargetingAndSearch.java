@@ -80,8 +80,7 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
             }
 
             //No suitable target, old or new, but threat is > 0
-            searcher.setAttackTarget(null);
-            return threat > serverSettings.threat.unseenMinimumThreat;
+            return unseenTargetDegredation(threat);
         }
 
         //Threat > 0 and threatTarget != null...we have an existing target from before
@@ -96,23 +95,22 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
         }
 
         //Target's current position is unknown
-        searcher.setAttackTarget(null);
-        unseenTargetDegredation(threat);
-
-        if (threat >= serverSettings.threat.unseenMinimumThreat)
-        {
-            return true;
-        }
-
-        clearSearchPath();
-        return false;
+        return unseenTargetDegredation(threat);
     }
 
-    private int unseenTargetDegredation(int threat)
+    private boolean unseenTargetDegredation(int threat)
     {
+        searcher.setAttackTarget(null);
+
         int result = Math.max(0, threat - serverSettings.threat.unseenTargetDegredationRate);
+        if (result < serverSettings.threat.unseenMinimumThreat)
+        {
+            result = 0;
+            clearSearchPath();
+        }
+
         Threat.setThreat(searcher, result);
-        return result;
+        return result > 0;
     }
 
     private void clearSearchPath()
