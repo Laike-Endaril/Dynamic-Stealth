@@ -58,7 +58,7 @@ public class DynamicStealth
 {
     public static final String MODID = "dynamicstealth";
     public static final String NAME = "Dynamic Stealth";
-    public static final String VERSION = "1.12.2.012";
+    public static final String VERSION = "1.12.2.013";
 
     private static Logger logger;
 
