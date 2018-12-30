@@ -64,7 +64,8 @@ public class DynamicStealth
 
     private static Field sensesField, abstractSkeletonAIArrowAttackField, abstractSkeletonAIAttackOnCollideField;
     private static Class aiSlimeFaceRandomClass, aiEvilAttackClass, aiBearMeleeClass, aiSpiderAttackClass, aiSpiderTargetClass, aiBearAttackPlayerClass, aiLlamaDefendTarget,
-            aiPigmanHurtByAggressorClass, aiLlamaHurtByTargetClass, aiPigmanTargetAggressorClass, aiVindicatorJohnnyAttackClass, aiBearHurtByTargetClass, aiGuardianAttackClass;
+            aiPigmanHurtByAggressorClass, aiLlamaHurtByTargetClass, aiPigmanTargetAggressorClass, aiVindicatorJohnnyAttackClass, aiBearHurtByTargetClass, aiGuardianAttackClass,
+            aiBlazeFireballAttackClass;
 
     public static final TrigLookupTable TRIG_TABLE = new TrigLookupTable(1024);
 
@@ -101,6 +102,7 @@ public class DynamicStealth
         aiVindicatorJohnnyAttackClass = ReflectionTool.getInternalClass(EntityVindicator.class, "AIJohnnyAttack");
         aiBearHurtByTargetClass = ReflectionTool.getInternalClass(EntityPolarBear.class, "AIHurtByTarget");
         aiGuardianAttackClass = ReflectionTool.getInternalClass(EntityGuardian.class, "AIGuardianAttack");
+        aiBlazeFireballAttackClass = ReflectionTool.getInternalClass(EntityBlaze.class, "AIFireballAttack");
     }
 
     @EventHandler
@@ -391,6 +393,7 @@ public class DynamicStealth
             else if (actionClass == aiSlimeFaceRandomClass) replaceTask(tasks, task, new AISlimeFaceRandomEdit((EntitySlime) living));
             else if (actionClass == EntityAIOcelotAttack.class) replaceTask(tasks, task, new AIOcelotAttackEdit(living));
             else if (actionClass == aiGuardianAttackClass) replaceTask(tasks, task, new AIGuardianAttackEdit((EntityGuardian) living));
+            else if (actionClass == aiBlazeFireballAttackClass) replaceTask(tasks, task, new AIFireballAttackEdit((EntityBlaze) living));
         }
     }
 
