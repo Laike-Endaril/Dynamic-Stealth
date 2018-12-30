@@ -25,6 +25,7 @@ public class AIAttackMeleeEdit extends EntityAIAttackMelee
     double speed;
     Path path;
     protected final int attackInterval = 20;
+    private EntityLivingBase target;
 
     public AIAttackMeleeEdit(EntityAIAttackMelee oldAI) throws IllegalAccessException
     {
@@ -38,7 +39,7 @@ public class AIAttackMeleeEdit extends EntityAIAttackMelee
     @Override
     public boolean shouldExecute()
     {
-        EntityLivingBase target = attacker.getAttackTarget();
+        target = attacker.getAttackTarget();
 
         if (!AITargetEdit.isSuitableTarget(attacker, target)) return false;
 
@@ -51,7 +52,6 @@ public class AIAttackMeleeEdit extends EntityAIAttackMelee
     @Override
     public boolean shouldContinueExecuting()
     {
-        EntityLivingBase target = attacker.getAttackTarget();
         if (target == null || !target.isEntityAlive()) return false;
 
         attacker.getMoveHelper().setMoveTo(target.posX, target.posY, target.posZ, speed);
@@ -69,9 +69,6 @@ public class AIAttackMeleeEdit extends EntityAIAttackMelee
     public void updateTask()
     {
         attacker.getNavigator().setPath(path, speed);
-
-        EntityLivingBase target = attacker.getAttackTarget();
-        attacker.getLookHelper().setLookPositionWithEntity(target, 30.0F, 30.0F);
 
         double distSquared = attacker.getDistanceSq(target.posX, target.getEntityBoundingBox().minY, target.posZ);
 
