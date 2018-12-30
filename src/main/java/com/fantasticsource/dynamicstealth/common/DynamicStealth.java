@@ -86,6 +86,7 @@ public class DynamicStealth
         Network.init();
 
         sensesField = ReflectionTool.getField(EntityLiving.class, "field_70723_bA", "senses");
+
         abstractSkeletonAIArrowAttackField = ReflectionTool.getField(AbstractSkeleton.class, "field_85037_d", "aiArrowAttack");
         abstractSkeletonAIAttackOnCollideField = ReflectionTool.getField(AbstractSkeleton.class, "field_85038_e", "aiAttackOnCollide");
 
@@ -305,7 +306,7 @@ public class DynamicStealth
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void setSensesAndTasks(EntityJoinWorldEvent event) throws Exception
+    public static void entityJoin(EntityJoinWorldEvent event) throws Exception
     {
         if (event != null)
         {
