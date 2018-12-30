@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth.common;
 
 import com.fantasticsource.dynamicstealth.client.HUD;
 import com.fantasticsource.dynamicstealth.compat.CompatCNPC;
+import com.fantasticsource.dynamicstealth.server.EntityLookHelperEdit;
 import com.fantasticsource.dynamicstealth.server.EntitySensesEdit;
 import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.dynamicstealth.server.ai.*;
@@ -62,7 +63,7 @@ public class DynamicStealth
 
     private static Logger logger;
 
-    private static Field sensesField, abstractSkeletonAIArrowAttackField, abstractSkeletonAIAttackOnCollideField;
+    private static Field sensesField, lookHelperField, abstractSkeletonAIArrowAttackField, abstractSkeletonAIAttackOnCollideField;
     private static Class aiSlimeFaceRandomClass, aiEvilAttackClass, aiBearMeleeClass, aiSpiderAttackClass, aiSpiderTargetClass, aiBearAttackPlayerClass, aiLlamaDefendTarget,
             aiPigmanHurtByAggressorClass, aiLlamaHurtByTargetClass, aiPigmanTargetAggressorClass, aiVindicatorJohnnyAttackClass, aiBearHurtByTargetClass, aiGuardianAttackClass,
             aiBlazeFireballAttackClass;
@@ -86,6 +87,7 @@ public class DynamicStealth
         Network.init();
 
         sensesField = ReflectionTool.getField(EntityLiving.class, "field_70723_bA", "senses");
+        lookHelperField = ReflectionTool.getField(EntityLiving.class, "field_70749_g", "lookHelper");
 
         abstractSkeletonAIArrowAttackField = ReflectionTool.getField(AbstractSkeleton.class, "field_85037_d", "aiArrowAttack");
         abstractSkeletonAIAttackOnCollideField = ReflectionTool.getField(AbstractSkeleton.class, "field_85038_e", "aiAttackOnCollide");
@@ -311,16 +313,17 @@ public class DynamicStealth
         if (event != null)
         {
             Entity entity = event.getEntity();
-            if (entity instanceof EntityLiving) setSensesAndTasks((EntityLiving) entity);
+            if (entity instanceof EntityLiving) setSensesTasksAndLookHelper((EntityLiving) entity);
         }
     }
 
-    public static void setSensesAndTasks(EntityLiving living) throws Exception
+    public static void setSensesTasksAndLookHelper(EntityLiving living) throws Exception
     {
         //Set the new senses handler for all living entities (not including players)
         try
         {
             sensesField.set(living, new EntitySensesEdit(living));
+            lookHelperField.set(living, new EntityLookHelperEdit(living));
 
             if (living instanceof AbstractSkeleton)
             {

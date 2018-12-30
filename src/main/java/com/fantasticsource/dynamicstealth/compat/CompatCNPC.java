@@ -7,7 +7,7 @@ import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import static com.fantasticsource.dynamicstealth.common.DynamicStealth.setSensesAndTasks;
+import static com.fantasticsource.dynamicstealth.common.DynamicStealth.setSensesTasksAndLookHelper;
 
 public class CompatCNPC
 {
@@ -22,7 +22,7 @@ public class CompatCNPC
             {
                 if (task.action instanceof AIStealthTargetingAndSearch) return;
             }
-            setSensesAndTasks(living);
+            setSensesTasksAndLookHelper(living);
         }
     }
 }
