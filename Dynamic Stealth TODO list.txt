@@ -1,11 +1,20 @@
 CURRENTLY WORKING ON ===================================================
 
+Fix crashes caused by other devs' ai not checking their attack target for null before accessing it in their updateTask() methods...
+...might be able to fix it by selectively setting task.using to false for certain tasks if the attack target is null
+...if a fix besides AI replacement is found, some existing vanilla AI replacement may no longer be necessary
+...applies to com.lycanitesmobs.core.entity.ai.EntityAIAttackMelee
+...applies to net.shadowmage.ancientwarfare.npc.ai.vehicle.NpcAIAimVehicle
+
 Add per-entity HUD which only displays a color and a percentage...
 ...make it an in-world render?  Maybe rendering from the livingentity render?
 
 
 
 BUG FIXES ==============================================================
+
+Look into possible bug where "entities don't always notice you right away"...
+...I'm guessing this was probably a modded mob, with a custom AI based on one of the vanilla AIs with a "chance" of seeing you
 
 Fix mobs in search mode periodically NOT doing the search, but going back to it later...
 ...noticed with spider, and so far I think it is specific to spiders?
