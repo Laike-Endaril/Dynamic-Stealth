@@ -1,7 +1,8 @@
 CURRENTLY WORKING ON ===================================================
 
 Fix crashes caused by other devs' ai not checking their attack target for null before accessing it in their updateTask() methods...
-...might be able to fix it by selectively setting task.using to false for certain tasks if the attack target is null
+...might be able to fix it by selectively resetting tasks or setting task.using to false for certain tasks if the attack target is null
+...might also be able to fix by replacing the vanilla task handler
 ...if a fix besides AI replacement is found, some existing vanilla AI replacement may no longer be necessary
 ...applies to com.lycanitesmobs.core.entity.ai.EntityAIAttackMelee
 ...applies to net.shadowmage.ancientwarfare.npc.ai.vehicle.NpcAIAimVehicle
