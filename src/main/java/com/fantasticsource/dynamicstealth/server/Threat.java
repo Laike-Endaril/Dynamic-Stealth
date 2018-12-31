@@ -228,9 +228,7 @@ public class Threat
             }
         }
 
-        boolean usePlayerSenses = false; //TODO When the "player senses" system is ready, replace this with the server config setting
-
-        if (usePlayerSenses)
+        if (serverSettings.senses.usePlayerSenses)
         {
             EntityLiving result = queue.poll();
             while(result != null && EntitySensesEdit.stealthCheck(player, result)) result = queue.poll();

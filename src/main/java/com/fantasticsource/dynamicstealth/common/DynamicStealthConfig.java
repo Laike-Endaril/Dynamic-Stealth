@@ -68,6 +68,14 @@ public class DynamicStealthConfig
 
         public class Senses
         {
+            @Config.Name("Use player senses")
+            @Comment({
+                    "If enabled, stealth mechanics work on players",
+                    "",
+                    "Right now, this only applies to the threat HUD"
+            })
+            public boolean usePlayerSenses = true;
+
             @Config.Name("Vision")
             public Vision vision = new Vision();
 
