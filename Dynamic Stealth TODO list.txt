@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
+Make sure creepers getting stuck on rustic wildberry bushes is a rustic thing and not a DS thing
+
 Add per-entity HUD which only displays a color and a percentage...
 ...make it an in-world render?  Maybe rendering from the livingentity render?
 
@@ -116,8 +118,6 @@ Possibly change music using ActualMusic when going into battle, etc
 
 
 MOD COMPATIBILITY ======================================================
-
-Check issue with BWM AI tasks, specifically for HC Hunting
 
 Check Special AI Revival
 
