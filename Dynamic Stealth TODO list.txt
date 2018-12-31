@@ -88,9 +88,9 @@ SENSES =================================================================
 
 Improve vision detection by allowing entities to see parts of other entities besides just their eyes (right now they only "have LOS" if they have LOS to each others' eyes)
 
-Add and implement server-side usePlayerSenses config option...
-...Don't send entity data of unseen entities to players, including potion effects.
-...Replace usePlayerSenses dummy var in Threat class
+Implement server-side usePlayerSenses config option...
+...Make entities that *are* seen easily visible on client (because your character saw them)
+...Don't send entity data of unseen entities to players, including potion effects
 ...Make sure entities that *were* seen and are no longer seen are..."gone" on client-side
 
 Add touch-based detection (within very close range)
