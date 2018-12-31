@@ -221,7 +221,7 @@ public class Threat
                     if (angleDif < -1) angleDif = -1;
                     else if (angleDif > 1) angleDif = 1;
 
-                    angleDif = TRIG_TABLE.arccos(angleDif) / Math.PI; //0 in front, 1 in back
+                    angleDif = TRIG_TABLE.arccos(angleDif); //0 in front, pi in back
 
                     queue.add((EntityLiving) entity, Math.pow(angleDif, 2) * distSquared);
                 }

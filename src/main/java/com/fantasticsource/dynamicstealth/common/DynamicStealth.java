@@ -205,9 +205,10 @@ public class DynamicStealth
             EntityLivingBase livingBaseSource = (EntityLivingBase) source;
             boolean updateTarget = true;
             boolean newThreatTarget = false;
+            boolean passive = isPassive(livingTarget);
 
             //Threat
-            if (!isPassive(livingTarget))
+            if (!passive)
             {
                 Threat.ThreatData threatData = Threat.get(livingTarget);
                 EntityLivingBase threatTarget = threatData.target;
@@ -249,7 +250,7 @@ public class DynamicStealth
                 //Threat targeting already updated
 
                 //Update vanilla targeting
-                if (!isPassive(livingTarget)) livingTarget.setAttackTarget(livingBaseSource);
+                if (!passive) livingTarget.setAttackTarget(livingBaseSource);
 
                 //Look toward damage
                 float newYaw = (float) (TRIG_TABLE.arctanFullcircle(target.posZ, target.posX, source.posZ, source.posX) / Math.PI * 180);
