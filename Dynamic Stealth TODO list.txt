@@ -1,6 +1,11 @@
 CURRENTLY WORKING ON ===================================================
 
-Make sure creepers getting stuck on rustic wildberry bushes is a rustic thing and not a DS thing
+Look into possible bug where "entities don't always notice you right away"...
+...I'm guessing this was probably a modded mob, with a custom AI based on one of the vanilla AIs with a "chance" of seeing you
+Probably in one of these mods, as they were the ones running for the user...
+...Special AI Revival
+...Rough Mobs 2
+...Epic Siege Mod
 
 Fix most of Lycanite's Mobs being detected as passive
 
@@ -21,9 +26,6 @@ Fix crashes due to null attack target syndrome...
 
 
 BUG FIXES ==============================================================
-
-Look into possible bug where "entities don't always notice you right away"...
-...I'm guessing this was probably a modded mob, with a custom AI based on one of the vanilla AIs with a "chance" of seeing you
 
 Fix mobs in search mode periodically NOT doing the search, but going back to it later...
 ...noticed with spider, and so far I think it is specific to spiders?
@@ -118,9 +120,14 @@ Add armor/baubles that improve stealth/anti-stealth attributes
 
 MOBS ===================================================================
 
-NINJAS (probably a separate mod)
-Make ninjas sometimes disguise themselves as players who play on the server, but with slight typos in the nametag
-If they kill a player while disguised, it still says the player was killed by a ninja, to help prevent confused players raging at each other
+Ninjas...
+...Ninjas try to use stealth mechanics
+...Make ninjas sometimes disguise themselves as players who play on the server, but with slight typos in the nametag
+...If they kill a player while disguised, it still says the player was killed by a ninja, to help prevent confused players raging at each other
+
+Gray Men...
+...Gray men are considered invisible if you are facing them directly
+...When they were visible, but are no longer visible, stop sending updates to client, but *don't* tell client to remove them; this should cause an illusion that they are holding still
 
 
 
@@ -131,11 +138,5 @@ Possibly change music using ActualMusic when going into battle, etc
 
 
 MOD COMPATIBILITY ======================================================
-
-Check Special AI Revival
-
-Check Rough Mobs 2
-
-Check Epic Siege Mod
 
 Make temporary BackStab compat module? (BackStab issue #4 and #2)
