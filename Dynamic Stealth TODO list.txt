@@ -2,8 +2,21 @@ CURRENTLY WORKING ON ===================================================
 
 Make sure creepers getting stuck on rustic wildberry bushes is a rustic thing and not a DS thing
 
+Fix most of Lycanite's Mobs being detected as passive
+
 Add per-entity HUD which only displays a color and a percentage...
 ...make it an in-world render?  Maybe rendering from the livingentity render?
+
+
+
+ONGOING TASKS ==========================================================
+
+Fix specific non-passive mobs being detected as passive...
+...All or most of Lycanite's Mobs
+...check for others
+
+Fix crashes due to null attack target syndrome...
+...(not currently aware of any unfixed)
 
 
 
