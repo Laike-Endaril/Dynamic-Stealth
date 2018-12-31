@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.server.newai;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
+import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.dynamicstealth.server.ai.AITargetEdit;
 import com.fantasticsource.dynamicstealth.server.configdata.EntityAIData;
@@ -16,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
+import static com.fantasticsource.dynamicstealth.compat.Compat.*;
 
 public class AIStealthTargetingAndSearch extends EntityAIBase
 {
@@ -64,6 +66,7 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
 
             //No suitable target, old or new, and threat is <= 0
             searcher.setAttackTarget(null);
+            cancelTasksRequiringAttackTarget(searcher.tasks);
             return false;
         }
 
@@ -84,6 +87,7 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
             }
 
             //No suitable target, old or new, but threat is > 0
+            cancelTasksRequiringAttackTarget(searcher.tasks);
             return unseenTargetDegredation(threat);
         }
 
@@ -99,6 +103,7 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
         }
 
         //Target's current position is unknown
+        cancelTasksRequiringAttackTarget(searcher.tasks);
         return unseenTargetDegredation(threat);
     }
 
