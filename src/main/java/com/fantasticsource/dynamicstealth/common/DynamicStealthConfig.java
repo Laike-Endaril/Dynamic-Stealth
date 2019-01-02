@@ -354,10 +354,10 @@ public class DynamicStealthConfig
                     @Config.RequiresMcRestart
                     public String[] distance = new String[]
                             {
-                                    "ghast, 80, 20",
+                                    "ghast, 50, 20",
                                     "wither, 100, 30",
                                     "ender_dragon, 100, 60",
-                                    "player, 150, 10"
+                                    "player, 50, 5"
                             };
 
                     @Config.Name("Lighting")
