@@ -1,9 +1,15 @@
 CURRENTLY WORKING ON ===================================================
 
-Make sure light levels are being detected correctly when on the surface at nighttime...
-...with only DS
-...with HC Darkness added in
-...with HC Darkness and Grue added in
+Add per-entity HUD which only displays a color and a percentage...
+...make server send data for applicable entities
+...make client accept said data and store it
+...render the stored data
+...delete the stored data if the client disconnects from the server it is on
+...make it one or both of...
+1. an in-world render, maybe rendering from the livingentity render
+2. a HUD render, but using correct scaling (like nameplates).  Can also make them not overlap each other using this method
+
+Make HUD clear its data when the client disconnects from the server it is on
 
 Look into possible bug where "entities don't always notice you right away"...
 ...I'm guessing this was probably a modded mob, with a custom AI based on one of the vanilla AIs with a "chance" of seeing you
@@ -13,9 +19,6 @@ Probably in one of these mods, as they were the ones running for the user...
 ...Epic Siege Mod
 
 Fix most of Lycanite's Mobs being detected as passive
-
-Add per-entity HUD which only displays a color and a percentage...
-...make it an in-world render?  Maybe rendering from the livingentity render?
 
 
 
@@ -31,6 +34,8 @@ Fix crashes due to null attack target syndrome...
 
 
 BUG FIXES ==============================================================
+
+Go through all code and make sure it only executes on the necessary side
 
 Fix mobs in search mode periodically NOT doing the search, but going back to it later...
 ...noticed with spider, and so far I think it is specific to spiders?
