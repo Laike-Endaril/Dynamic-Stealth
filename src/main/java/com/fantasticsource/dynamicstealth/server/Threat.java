@@ -4,6 +4,7 @@ import com.fantasticsource.dynamicstealth.common.Network;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
@@ -247,7 +248,7 @@ public class Threat
 
     public static boolean bypassesThreat(EntityLivingBase livingBase)
     {
-        return livingBase instanceof EntityDragon || livingBase instanceof EntitySlime;
+        return livingBase != null && !(livingBase instanceof EntityLiving) || livingBase instanceof EntityDragon || livingBase instanceof EntitySlime;
     }
 
 
