@@ -18,6 +18,7 @@ public class EntityAIData
     {
         EntityEntry entry;
         String[] tokens;
+        String token;
 
         for (String string : serverSettings.ai.y_entityOverrides.headTurnSpeed)
         {
@@ -25,8 +26,9 @@ public class EntityAIData
             if (tokens.length != 2) System.err.println("Wrong number of arguments for entity-specific head turn speed override; please check example in tooltip");
             else
             {
-                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(tokens[0].trim()));
-                if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
+                token = tokens[0].trim();
+                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(token));
+                if (entry == null) System.err.println("ResourceLocation for entity \"" + token + "\" not found!");
                 else
                 {
                     entityHeadTurnSpeeds.put(entry.getEntityClass(), Integer.parseInt(tokens[1].trim()));

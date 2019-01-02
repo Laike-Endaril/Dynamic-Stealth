@@ -44,6 +44,7 @@ public class EntityVisionData
     {
         EntityEntry entry;
         String[] tokens;
+        String token;
 
         for (String string : serverSettings.senses.vision.y_entityOverrides.naturalNightVisionMobs)
         {
@@ -58,8 +59,9 @@ public class EntityVisionData
             if (tokens.length != 3) System.err.println("Wrong number of arguments for entity-specific angle override; please check example in tooltip");
             else
             {
-                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(tokens[0].trim()));
-                if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
+                token = tokens[0].trim();
+                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(token));
+                if (entry == null) System.err.println("ResourceLocation for entity \"" + token + "\" not found!");
                 else
                 {
                     entityAngles.put(entry.getEntityClass(), new Pair<>(Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
@@ -73,8 +75,9 @@ public class EntityVisionData
             if (tokens.length != 3) System.err.println("Wrong number of arguments for entity-specific distance override; please check example in tooltip");
             else
             {
-                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(tokens[0].trim()));
-                if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
+                token = tokens[0].trim();
+                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(token));
+                if (entry == null) System.err.println("ResourceLocation for entity \"" + token + "\" not found!");
                 else
                 {
                     entityDistances.put(entry.getEntityClass(), new Pair<>(Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
@@ -88,8 +91,9 @@ public class EntityVisionData
             if (tokens.length != 3) System.err.println("Wrong number of arguments for entity-specific lighting override; please check example in tooltip");
             else
             {
-                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(tokens[0].trim()));
-                if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
+                token = tokens[0].trim();
+                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(token));
+                if (entry == null) System.err.println("ResourceLocation for entity \"" + token + "\" not found!");
                 else
                 {
                     entityLighting.put(entry.getEntityClass(), new Pair<>(Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
@@ -103,8 +107,9 @@ public class EntityVisionData
             if (tokens.length != 3) System.err.println("Wrong number of arguments for entity-specific speed override; please check example in tooltip");
             else
             {
-                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(tokens[0].trim()));
-                if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
+                token = tokens[0].trim();
+                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(token));
+                if (entry == null) System.err.println("ResourceLocation for entity \"" + token + "\" not found!");
                 else
                 {
                     entitySpeeds.put(entry.getEntityClass(), new Pair<>(Double.parseDouble(tokens[1].trim()), Double.parseDouble(tokens[2].trim())));
