@@ -76,7 +76,7 @@ public class HUD extends Gui
     }
 
 
-    public static int getColor(EntityPlayer player, EntityLiving searcher, EntityLivingBase target, int threatLevel)
+    public static int getColor(EntityPlayer player, EntityLivingBase searcher, EntityLivingBase target, int threatLevel)
     {
         if (searcher == null) return COLOR_NULL;
         if (DynamicStealthConfig.serverSettings.threat.recognizePassive && MCTools.isPassive(searcher)) return COLOR_PASSIVE;

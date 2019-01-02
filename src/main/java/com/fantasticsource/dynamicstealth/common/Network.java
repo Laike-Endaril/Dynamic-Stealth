@@ -42,12 +42,12 @@ public class Network
         sendThreatData(player, threatData.searcher, threatData.target, threatData.threatLevel, permissionOverride);
     }
 
-    public static void sendThreatData(EntityPlayerMP player, EntityLiving searcher, EntityLivingBase target, int threatLevel)
+    public static void sendThreatData(EntityPlayerMP player, EntityLivingBase searcher, EntityLivingBase target, int threatLevel)
     {
         sendThreatData(player, searcher, target, threatLevel, false);
     }
 
-    public static void sendThreatData(EntityPlayerMP player, EntityLiving searcher, EntityLivingBase target, int threatLevel, boolean permissionOverride)
+    public static void sendThreatData(EntityPlayerMP player, EntityLivingBase searcher, EntityLivingBase target, int threatLevel, boolean permissionOverride)
     {
         int mode = serverSettings.threat.allowClientHUD;
         if (permissionOverride || mode == 2 || (mode == 1 && isOP(player)))

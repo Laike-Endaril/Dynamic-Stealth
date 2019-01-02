@@ -57,7 +57,7 @@ public class EntitySensesEdit extends EntitySenses
 
         entity.world.profiler.startSection("canSee");
 
-        boolean seen = !stealthCheck(entity, entityIn);
+        boolean seen = stealthLevel(entity, entityIn) <= 1;
 
         entity.world.profiler.endSection();
 
@@ -67,20 +67,20 @@ public class EntitySensesEdit extends EntitySenses
         return seen;
     }
 
-    public static boolean stealthCheck(EntityLivingBase searcher, Entity target)
+    public static double stealthLevel(EntityLivingBase searcher, Entity target)
     {
         //Hard checks (absolute)
-        if (searcher == null || target == null) return true;
-        if (target instanceof EntityPlayerMP && ((EntityPlayerMP) target).capabilities.disableDamage) return true;
+        if (searcher == null || target == null) return 2;
+        if (target instanceof EntityPlayerMP && ((EntityPlayerMP) target).capabilities.disableDamage) return 2;
 
         int angleLarge = angleLarge(searcher);
-        if (!target.isEntityAlive() || angleLarge == 0) return true;
+        if (!target.isEntityAlive() || angleLarge == 0) return 2;
 
 
         //Angles and Distances (absolute, base FOV)
         double distSquared = searcher.getDistanceSq(target);
         int distanceFar = distanceFar(searcher);
-        if (distSquared > Math.pow(distanceFar, 2)) return true;
+        if (distSquared > Math.pow(distanceFar, 2)) return 2;
 
         double distanceThreshold;
         int angleSmall = angleSmall(searcher);
@@ -95,7 +95,7 @@ public class EntitySensesEdit extends EntitySenses
             else if (angleDif > 1) angleDif = 1;
 
             angleDif = Tools.radtodeg(TRIG_TABLE.arccos(angleDif)); //0 in front, 180 in back
-            if (angleDif > angleLarge) return true;
+            if (angleDif > angleLarge) return 2;
             if (angleDif < angleSmall) distanceThreshold = distanceFar;
             else
             {
@@ -106,11 +106,11 @@ public class EntitySensesEdit extends EntitySenses
 
 
         //Glowing (absolute, after Angles)
-        if (vision.g_absolutes.seeGlowing && target.isGlowing()) return false;
+        if (vision.g_absolutes.seeGlowing && target.isGlowing()) return 0;
 
 
         //LOS check (absolute, after Angles, after Glowing)
-        if (!los(searcher, target)) return true;
+        if (!los(searcher, target)) return 2;
 
 
         //Lighting (absolute, factor, after Angles, after Glowing, after LOS)
@@ -121,7 +121,7 @@ public class EntitySensesEdit extends EntitySenses
         }
 
         int lightLow = lightLow(searcher);
-        if (lightFactor <= lightLow) return true;
+        if (lightFactor <= lightLow) return 2;
         int lightHigh = lightHigh(searcher);
         lightFactor = lightFactor >= lightHigh ? 1 : lightFactor / (lightHigh - lightLow);
 
@@ -183,7 +183,7 @@ public class EntitySensesEdit extends EntitySenses
 
         //Final calculation
         //Average the factors, apply the average as a multiplier to distanceThreshold, check distance between entities against threshold, and return
-        return Math.sqrt(distSquared) >= distanceThreshold * (lightFactor + speedFactor) / 2 * combinedMultiplier;
+        return Math.sqrt(distSquared) / (distanceThreshold * (lightFactor + speedFactor) / 2 * combinedMultiplier);
     }
 
     public static double lightLevelTotal(Entity entity)
