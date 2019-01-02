@@ -1,5 +1,10 @@
 CURRENTLY WORKING ON ===================================================
 
+Make sure light levels are being detected correctly when on the surface at nighttime...
+...with only DS
+...with HC Darkness added in
+...with HC Darkness and Grue added in
+
 Look into possible bug where "entities don't always notice you right away"...
 ...I'm guessing this was probably a modded mob, with a custom AI based on one of the vanilla AIs with a "chance" of seeing you
 Probably in one of these mods, as they were the ones running for the user...
