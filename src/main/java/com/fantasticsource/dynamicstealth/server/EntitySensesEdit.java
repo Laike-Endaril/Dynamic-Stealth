@@ -114,7 +114,7 @@ public class EntitySensesEdit extends EntitySenses
 
 
         //Lighting (absolute, factor, after Angles, after Glowing, after LOS)
-        double lightFactor = light(target);
+        double lightFactor = lightLevelTotal(target);
         if (searcher.getActivePotionEffect(MobEffects.NIGHT_VISION) != null || naturalNightVision(searcher))
         {
             lightFactor = Math.min(15, lightFactor + vision.c_lighting.nightVisionAddition);
@@ -186,7 +186,7 @@ public class EntitySensesEdit extends EntitySenses
         return Math.sqrt(distSquared) >= distanceThreshold * (lightFactor + speedFactor) / 2 * combinedMultiplier;
     }
 
-    public static double light(Entity entity)
+    public static double lightLevelTotal(Entity entity)
     {
         BlockPos blockpos = new BlockPos(entity.posX, entity.getEntityBoundingBox().minY, entity.posZ);
         return entity.world.getLightFromNeighbors(blockpos);
