@@ -337,7 +337,8 @@ public class DynamicStealthConfig
                             {
                                     "ghast, 90, 0",
                                     "wither, 90, 0",
-                                    "ender_dragon, 90, 0"
+                                    "ender_dragon, 90, 0",
+                                    "player, 70, 0"
                             };
 
                     @Config.Name("Distance")
@@ -355,7 +356,8 @@ public class DynamicStealthConfig
                             {
                                     "ghast, 80, 20",
                                     "wither, 100, 30",
-                                    "ender_dragon, 100, 60"
+                                    "ender_dragon, 100, 60",
+                                    "player, 150, 10"
                             };
 
                     @Config.Name("Lighting")

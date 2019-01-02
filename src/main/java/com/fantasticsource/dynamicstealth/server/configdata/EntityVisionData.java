@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth.server.configdata;
 
 import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -48,9 +49,13 @@ public class EntityVisionData
 
         for (String string : serverSettings.senses.vision.y_entityOverrides.naturalNightVisionMobs)
         {
-            entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(string));
-            if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
-            else naturalNightvisionEntities.add(entry.getEntityClass());
+            if (string.equals("player")) naturalNightvisionEntities.add(EntityPlayerMP.class);
+            else
+            {
+                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(string));
+                if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
+                else naturalNightvisionEntities.add(entry.getEntityClass());
+            }
         }
 
         for (String string : serverSettings.senses.vision.y_entityOverrides.angle)
@@ -60,11 +65,15 @@ public class EntityVisionData
             else
             {
                 token = tokens[0].trim();
-                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(token));
-                if (entry == null) System.err.println("ResourceLocation for entity \"" + token + "\" not found!");
+                if (token.equals("player")) entityAngles.put(EntityPlayerMP.class, new Pair<>(Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
                 else
                 {
-                    entityAngles.put(entry.getEntityClass(), new Pair<>(Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
+                    entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(token));
+                    if (entry == null) System.err.println("ResourceLocation for entity \"" + token + "\" not found!");
+                    else
+                    {
+                        entityAngles.put(entry.getEntityClass(), new Pair<>(Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
+                    }
                 }
             }
         }
@@ -76,11 +85,15 @@ public class EntityVisionData
             else
             {
                 token = tokens[0].trim();
-                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(token));
-                if (entry == null) System.err.println("ResourceLocation for entity \"" + token + "\" not found!");
+                if (token.equals("player")) entityDistances.put(EntityPlayerMP.class, new Pair<>(Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
                 else
                 {
-                    entityDistances.put(entry.getEntityClass(), new Pair<>(Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
+                    entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(token));
+                    if (entry == null) System.err.println("ResourceLocation for entity \"" + token + "\" not found!");
+                    else
+                    {
+                        entityDistances.put(entry.getEntityClass(), new Pair<>(Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
+                    }
                 }
             }
         }
@@ -92,11 +105,15 @@ public class EntityVisionData
             else
             {
                 token = tokens[0].trim();
-                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(token));
-                if (entry == null) System.err.println("ResourceLocation for entity \"" + token + "\" not found!");
+                if (token.equals("player")) entityLighting.put(EntityPlayerMP.class, new Pair<>(Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
                 else
                 {
-                    entityLighting.put(entry.getEntityClass(), new Pair<>(Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
+                    entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(token));
+                    if (entry == null) System.err.println("ResourceLocation for entity \"" + token + "\" not found!");
+                    else
+                    {
+                        entityLighting.put(entry.getEntityClass(), new Pair<>(Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
+                    }
                 }
             }
         }
@@ -108,11 +125,15 @@ public class EntityVisionData
             else
             {
                 token = tokens[0].trim();
-                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(token));
-                if (entry == null) System.err.println("ResourceLocation for entity \"" + token + "\" not found!");
+                if (token.equals("player")) entitySpeeds.put(EntityPlayerMP.class, new Pair<>(Double.parseDouble(tokens[1].trim()), Double.parseDouble(tokens[2].trim())));
                 else
                 {
-                    entitySpeeds.put(entry.getEntityClass(), new Pair<>(Double.parseDouble(tokens[1].trim()), Double.parseDouble(tokens[2].trim())));
+                    entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(token));
+                    if (entry == null) System.err.println("ResourceLocation for entity \"" + token + "\" not found!");
+                    else
+                    {
+                        entitySpeeds.put(entry.getEntityClass(), new Pair<>(Double.parseDouble(tokens[1].trim()), Double.parseDouble(tokens[2].trim())));
+                    }
                 }
             }
         }
