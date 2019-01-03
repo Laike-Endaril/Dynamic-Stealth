@@ -9,6 +9,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -248,7 +249,7 @@ public class Threat
 
     public static boolean bypassesThreat(EntityLivingBase livingBase)
     {
-        return livingBase != null && !(livingBase instanceof EntityLiving) || livingBase instanceof EntityDragon || livingBase instanceof EntitySlime;
+        return livingBase instanceof EntityPlayer || livingBase instanceof EntityDragon || livingBase instanceof EntitySlime;
     }
 
 
