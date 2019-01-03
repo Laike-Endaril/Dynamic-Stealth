@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Test new version of isPassive() - might be able to remove other TODO entry ("Fix most of Lycanite's Mobs being detected as passive")
-
 Add per-entity HUD which only displays a color and a percentage...
 ...make server send data for applicable entities
 ...make client accept said data and store it
@@ -12,8 +10,6 @@ Add per-entity HUD which only displays a color and a percentage...
 2. a HUD render, but using correct scaling (like nameplates).  Can also make them not overlap each other using this method
 
 Make HUD clear its data when the client disconnects from the server it is on
-
-Fix most of Lycanite's Mobs being detected as passive
 
 
 
@@ -59,6 +55,10 @@ Make owned entities change their threat based on their owner's actions (eg. see 
 
 
 CONFIG FILE ============================================================
+
+Add entity-specific isPassive option...
+...doesn't make an entity passive or non-passive; just makes the system detect it as passive or non-passive
+...add ebwizardry:wizard as non-passive
 
 Add threat bypass option...
 ...make sure HUD detects the option correctly
@@ -148,12 +148,15 @@ Possibly change music using ActualMusic when going into battle, etc
 
 MOD COMPATIBILITY ======================================================
 
+Lycanite's Mobs can still attack through walls; probably using different LOS
+
 Look into crash with Deadly Mobs and its haunted cows...
 ...https://paste.ee/p/gnVtK
 ...apparently haunted cows are also not supposed to look haunted until they get hit
 
 Make temporary BackStab compat module? (BackStab issue #4 and #2)
 
-Look into issue where "entities don't always notice you right away" with Epic Siege Mod...
+Look into issue where "entities don't always notice you right away"...
+...Epic Siege Mod
+...Mo' Creatures
 ...I'm guessing this is probably due to a custom AI based on one of the vanilla AIs with a "chance" of seeing you
-
