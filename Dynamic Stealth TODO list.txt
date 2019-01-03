@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
+Test new version of isPassive() - might be able to remove other TODO entry ("Fix most of Lycanite's Mobs being detected as passive")
+
 Add per-entity HUD which only displays a color and a percentage...
 ...make server send data for applicable entities
 ...make client accept said data and store it
@@ -58,9 +60,11 @@ Make owned entities change their threat based on their owner's actions (eg. see 
 
 CONFIG FILE ============================================================
 
-Add threat bypass option
+Add threat bypass option...
+...make sure HUD detects the option correctly
 
-Add entity-specific threat bypass option
+Add entity-specific threat bypass option...
+...make sure HUD detects the option correctly
 
 
 
@@ -143,6 +147,10 @@ Possibly change music using ActualMusic when going into battle, etc
 
 
 MOD COMPATIBILITY ======================================================
+
+Look into crash with Deadly Mobs and its haunted cows...
+...https://paste.ee/p/gnVtK
+...apparently haunted cows are also not supposed to look haunted until they get hit
 
 Make temporary BackStab compat module? (BackStab issue #4 and #2)
 
