@@ -4,11 +4,14 @@ import com.fantasticsource.dynamicstealth.server.ai.AIHurtByTargetEdit;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAITasks;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.monster.EntityGuardian;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
@@ -22,16 +25,10 @@ public class MCTools
     public static boolean isPassive(EntityLivingBase living)
     {
         //TODO This will probably need improvement at some point, mostly for mod compat, but possibly also for vanilla
-        if (!(living instanceof EntityLiving)
-        || living instanceof EntityGuardian
-        || living instanceof EntityDragon) return false;
+        if (living == null) return false;
 
-        for (EntityAITasks.EntityAITaskEntry task : ((EntityLiving) living).targetTasks.taskEntries)
-        {
-            if (task.action instanceof EntityAIHurtByTarget
-            || task.action instanceof AIHurtByTargetEdit) return false;
-        }
-        return true;
+        IAttributeInstance damage = living.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
+        return damage == null || damage.getAttributeValue() <= 0;
     }
 
     public static void printTasks(EntityLiving living)
