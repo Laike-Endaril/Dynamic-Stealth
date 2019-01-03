@@ -60,7 +60,7 @@ public class AIFireballAttackEdit extends EntityAIBase
         else if (d0 < getFollowDistance() * getFollowDistance())
         {
             double d1 = target.posX - blaze.posX;
-            double d2 = target.getEntityBoundingBox().minY + (double)(target.height / 2.0F) - (blaze.posY + (double)(blaze.height / 2.0F));
+            double d2 = target.getEntityBoundingBox().minY + (double) (target.height / 2.0F) - (blaze.posY + (double) (blaze.height / 2.0F));
             double d3 = target.posZ - blaze.posZ;
 
             if (attackTime <= 0)
@@ -86,12 +86,12 @@ public class AIFireballAttackEdit extends EntityAIBase
                 if (attackStep > 1)
                 {
                     float f = MathHelper.sqrt(MathHelper.sqrt(d0)) * 0.5F;
-                    blaze.world.playEvent(null, 1018, new BlockPos((int)blaze.posX, (int)blaze.posY, (int)blaze.posZ), 0);
+                    blaze.world.playEvent(null, 1018, new BlockPos((int) blaze.posX, (int) blaze.posY, (int) blaze.posZ), 0);
 
                     for (int i = 0; i < 1; ++i)
                     {
-                        EntitySmallFireball entitysmallfireball = new EntitySmallFireball(blaze.world, blaze, d1 + blaze.getRNG().nextGaussian() * (double)f, d2, d3 + blaze.getRNG().nextGaussian() * (double)f);
-                        entitysmallfireball.posY = blaze.posY + (double)(blaze.height / 2.0F) + 0.5D;
+                        EntitySmallFireball entitysmallfireball = new EntitySmallFireball(blaze.world, blaze, d1 + blaze.getRNG().nextGaussian() * (double) f, d2, d3 + blaze.getRNG().nextGaussian() * (double) f);
+                        entitysmallfireball.posY = blaze.posY + (double) (blaze.height / 2.0F) + 0.5D;
                         blaze.world.spawnEntity(entitysmallfireball);
                     }
                 }

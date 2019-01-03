@@ -40,33 +40,6 @@ public class EntitySensesEdit extends EntitySenses
         entity = entityIn;
     }
 
-    @Override
-    public void clearSensingCache()
-    {
-        seenEntities.clear();
-        unseenEntities.clear();
-    }
-
-    @Override
-    public boolean canSee(Entity entityIn)
-    {
-        //This should actually include not only sight, but all other senses as well, since it's the one and only sense method called by vanilla classes
-
-        if (seenEntities.contains(entityIn)) return true;
-        if (unseenEntities.contains(entityIn)) return false;
-
-        entity.world.profiler.startSection("canSee");
-
-        boolean seen = stealthLevel(entity, entityIn) <= 1;
-
-        entity.world.profiler.endSection();
-
-        if (seen) seenEntities.add(entityIn);
-        else unseenEntities.add(entityIn);
-
-        return seen;
-    }
-
     public static double stealthLevel(EntityLivingBase searcher, Entity target)
     {
         //Hard checks (absolute)
@@ -195,5 +168,32 @@ public class EntitySensesEdit extends EntitySenses
     public static boolean los(Entity searcher, Entity target)
     {
         return LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), new Vec3d(target.posX, target.posY + target.getEyeHeight(), target.posZ), false, true);
+    }
+
+    @Override
+    public void clearSensingCache()
+    {
+        seenEntities.clear();
+        unseenEntities.clear();
+    }
+
+    @Override
+    public boolean canSee(Entity entityIn)
+    {
+        //This should actually include not only sight, but all other senses as well, since it's the one and only sense method called by vanilla classes
+
+        if (seenEntities.contains(entityIn)) return true;
+        if (unseenEntities.contains(entityIn)) return false;
+
+        entity.world.profiler.startSection("canSee");
+
+        boolean seen = stealthLevel(entity, entityIn) <= 1;
+
+        entity.world.profiler.endSection();
+
+        if (seen) seenEntities.add(entityIn);
+        else unseenEntities.add(entityIn);
+
+        return seen;
     }
 }

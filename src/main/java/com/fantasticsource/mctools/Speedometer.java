@@ -103,8 +103,8 @@ public class Speedometer
     public static class Entry
     {
         public Vec3d position;
-        private double[] speeds = {0, 0, 0, 0, 0};
         public double calculatedSpeed = 0;
+        private double[] speeds = {0, 0, 0, 0, 0};
 
         public Entry(Vec3d position)
         {

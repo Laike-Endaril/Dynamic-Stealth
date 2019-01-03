@@ -27,6 +27,11 @@ public class AIBearAttackEdit extends AIAttackMeleeEdit
         bear = (EntityPolarBear) attacker;
     }
 
+    public static void initReflections()
+    {
+        playWarningSoundMethod = ReflectionTool.getMethod(EntityPolarBear.class, "func_189796_de", "playWarningSound");
+    }
+
     @Override
     protected void checkAndPerformAttack(EntityLivingBase target, double distSquared)
     {
@@ -78,11 +83,5 @@ public class AIBearAttackEdit extends AIAttackMeleeEdit
     protected double getAttackReachSqr(EntityLivingBase attackTarget)
     {
         return 4 + attackTarget.width;
-    }
-
-
-    public static void initReflections()
-    {
-        playWarningSoundMethod = ReflectionTool.getMethod(EntityPolarBear.class, "func_189796_de", "playWarningSound");
     }
 }

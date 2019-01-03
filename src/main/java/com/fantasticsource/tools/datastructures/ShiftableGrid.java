@@ -1,6 +1,6 @@
 package com.fantasticsource.tools.datastructures;
 
-import static com.fantasticsource.tools.Tools.*;
+import static com.fantasticsource.tools.Tools.mod;
 
 @SuppressWarnings("unused")
 public class ShiftableGrid<T>

@@ -16,10 +16,9 @@ import org.apache.logging.log4j.Logger;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.*;
-
 public class AIFindEntityNearestPlayerEdit extends EntityAIBase
 {
+    private static final Logger LOGGER = LogManager.getLogger();
     private static Field entityLivingField;
 
     static
@@ -27,8 +26,6 @@ public class AIFindEntityNearestPlayerEdit extends EntityAIBase
         initReflections();
     }
 
-
-    private static final Logger LOGGER = LogManager.getLogger();
     private final EntityLiving searcher;
     private EntityLivingBase target;
 
@@ -37,6 +34,19 @@ public class AIFindEntityNearestPlayerEdit extends EntityAIBase
         searcher = (EntityLiving) entityLivingField.get(oldAI);
 
         if (searcher instanceof EntityCreature) LOGGER.warn("Use NearestAttackableTargetGoal.class for PathfinderMob mobs!");
+    }
+
+    private static void initReflections()
+    {
+        try
+        {
+            entityLivingField = ReflectionTool.getField(EntityAIFindEntityNearestPlayer.class, "field_179434_b", "entityLiving");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(125, false);
+        }
     }
 
     @Override
@@ -74,19 +84,5 @@ public class AIFindEntityNearestPlayerEdit extends EntityAIBase
     {
         searcher.setAttackTarget(null);
         super.startExecuting();
-    }
-
-
-    private static void initReflections()
-    {
-        try
-        {
-            entityLivingField = ReflectionTool.getField(EntityAIFindEntityNearestPlayer.class, "field_179434_b", "entityLiving");
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(125, false);
-        }
     }
 }

@@ -34,6 +34,19 @@ public class AIDefendVillageEdit extends AITargetEdit
         setMutexBits(1);
     }
 
+    private static void initReflections()
+    {
+        try
+        {
+            villageReputationsField = ReflectionTool.getField(Village.class, "field_82693_j", "playerReputation");
+        }
+        catch (NoSuchFieldException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(135, false);
+        }
+    }
+
     @Override
     public boolean shouldExecute()
     {
@@ -89,19 +102,5 @@ public class AIDefendVillageEdit extends AITargetEdit
     {
         irongolem.setAttackTarget(villageAgressorTarget);
         super.startExecuting();
-    }
-
-
-    private static void initReflections()
-    {
-        try
-        {
-            villageReputationsField = ReflectionTool.getField(Village.class, "field_82693_j", "playerReputation");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(135, false);
-        }
     }
 }

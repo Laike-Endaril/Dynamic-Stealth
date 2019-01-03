@@ -21,8 +21,8 @@ public class AIHurtByTargetEdit extends AITargetEdit
 
 
     private final boolean entityCallsForHelp;
-    private int revengeTimerOld;
     private final Class<?>[] excludedReinforcementTypes;
+    private int revengeTimerOld;
 
     public AIHurtByTargetEdit(EntityAIHurtByTarget oldAI) throws IllegalAccessException
     {
@@ -30,6 +30,20 @@ public class AIHurtByTargetEdit extends AITargetEdit
         entityCallsForHelp = (boolean) entityCallsForHelpField.get(oldAI);
         excludedReinforcementTypes = (Class<?>[]) excludedReinforcementTypesField.get(oldAI);
         setMutexBits(1);
+    }
+
+    private static void initReflections()
+    {
+        try
+        {
+            entityCallsForHelpField = ReflectionTool.getField(EntityAIHurtByTarget.class, "field_75312_a", "entityCallsForHelp");
+            excludedReinforcementTypesField = ReflectionTool.getField(EntityAIHurtByTarget.class, "field_179447_c", "excludedReinforcementTypes");
+        }
+        catch (NoSuchFieldException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(129, false);
+        }
     }
 
     @Override
@@ -80,20 +94,5 @@ public class AIHurtByTargetEdit extends AITargetEdit
         attacker.setAttackTarget(target);
         attacker.getMoveHelper().setMoveTo(target.posX, target.posY, target.posZ, attacker.getMoveHelper().getSpeed());
         attacker.getLookHelper().setLookPositionWithEntity(target, 180, 180);
-    }
-
-
-    private static void initReflections()
-    {
-        try
-        {
-            entityCallsForHelpField = ReflectionTool.getField(EntityAIHurtByTarget.class, "field_75312_a", "entityCallsForHelp");
-            excludedReinforcementTypesField = ReflectionTool.getField(EntityAIHurtByTarget.class, "field_179447_c", "excludedReinforcementTypes");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(129, false);
-        }
     }
 }

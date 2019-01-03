@@ -1,7 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.newai;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
-import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.dynamicstealth.server.ai.AITargetEdit;
 import com.fantasticsource.dynamicstealth.server.configdata.EntityAIData;
@@ -17,21 +16,20 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
-import static com.fantasticsource.dynamicstealth.compat.Compat.*;
+import static com.fantasticsource.dynamicstealth.compat.Compat.cancelTasksRequiringAttackTarget;
 
 public class AIStealthTargetingAndSearch extends EntityAIBase
 {
+    private static TrigLookupTable trigTable = DynamicStealth.TRIG_TABLE;
     private final EntityLiving searcher;
     private final PathNavigate navigator;
-
-    private int phase, timeAtPos;
     public double speed;
-    private boolean spinDirection;
     public Path path = null;
+    public BlockPos lastKnownPosition = null;
+    private int phase, timeAtPos;
+    private boolean spinDirection;
     private Vec3d lastPos = null, nextPos = null;
     private double startAngle, angleDif, pathAngle;
-    private static TrigLookupTable trigTable = DynamicStealth.TRIG_TABLE;
-    public BlockPos lastKnownPosition = null;
     private int headTurnSpeed;
 
 

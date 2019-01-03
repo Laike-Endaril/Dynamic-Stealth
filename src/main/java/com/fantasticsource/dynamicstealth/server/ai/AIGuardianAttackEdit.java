@@ -26,8 +26,8 @@ public class AIGuardianAttackEdit extends EntityAIBase
 
 
     private final EntityGuardian guardian;
-    private int tickCounter;
     private final boolean isElder;
+    private int tickCounter;
     private EntityLivingBase target = null;
 
     public AIGuardianAttackEdit(EntityGuardian guardianIn)
@@ -35,6 +35,20 @@ public class AIGuardianAttackEdit extends EntityAIBase
         guardian = guardianIn;
         isElder = guardian instanceof EntityElderGuardian;
         setMutexBits(3);
+    }
+
+    private static void initReflections()
+    {
+        try
+        {
+            targetEntityField = ReflectionTool.getField(EntityGuardian.class, "field_184723_b", "TARGET_ENTITY");
+            wanderField = ReflectionTool.getField(EntityGuardian.class, "field_175481_bq", "wander");
+        }
+        catch (NoSuchFieldException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(140, false);
+        }
     }
 
     public boolean shouldExecute()
@@ -115,21 +129,6 @@ public class AIGuardianAttackEdit extends EntityAIBase
             target.attackEntityFrom(DamageSource.causeIndirectMagicDamage(guardian, guardian), f);
             target.attackEntityFrom(DamageSource.causeMobDamage(guardian), (float) guardian.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
             guardian.setAttackTarget(null);
-        }
-    }
-
-
-    private static void initReflections()
-    {
-        try
-        {
-            targetEntityField = ReflectionTool.getField(EntityGuardian.class, "field_184723_b", "TARGET_ENTITY");
-            wanderField = ReflectionTool.getField(EntityGuardian.class, "field_175481_bq", "wander");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(140, false);
         }
     }
 }

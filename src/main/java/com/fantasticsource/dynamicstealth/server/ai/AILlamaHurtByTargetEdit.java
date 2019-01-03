@@ -28,6 +28,21 @@ public class AILlamaHurtByTargetEdit extends AIHurtByTargetEdit
         llama = (EntityLlama) attacker;
     }
 
+    private static void initReflections()
+    {
+        setDidSpitMethod = ReflectionTool.getMethod(EntityLlama.class, "func_190714_x", "setDidSpit");
+
+        try
+        {
+            didSpitField = ReflectionTool.getField(EntityLlama.class, "field_190723_bJ", "didSpit");
+        }
+        catch (NoSuchFieldException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(131, false);
+        }
+    }
+
     @Override
     public boolean shouldContinueExecuting()
     {
@@ -46,21 +61,5 @@ public class AILlamaHurtByTargetEdit extends AIHurtByTargetEdit
         }
 
         return super.shouldContinueExecuting();
-    }
-
-
-    private static void initReflections()
-    {
-        setDidSpitMethod = ReflectionTool.getMethod(EntityLlama.class, "func_190714_x", "setDidSpit");
-
-        try
-        {
-            didSpitField = ReflectionTool.getField(EntityLlama.class, "field_190723_bJ", "didSpit");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(131, false);
-        }
     }
 }

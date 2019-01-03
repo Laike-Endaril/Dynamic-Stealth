@@ -8,6 +8,8 @@ public class DynamicStealthConfig
 {
     @Config.Name("Client Settings")
     public static ClientSettings clientSettings = new ClientSettings();
+    @Config.Name("Server Settings")
+    public static ServerSettings serverSettings = new ServerSettings();
 
     public static class ClientSettings
     {
@@ -27,13 +29,22 @@ public class DynamicStealthConfig
         }
     }
 
-    @Config.Name("Server Settings")
-    public static ServerSettings serverSettings = new ServerSettings();
-
     public static class ServerSettings
     {
         @Config.Name("AI")
         public AI ai = new AI();
+        @Config.Name("Senses")
+        public Senses senses = new Senses();
+        @Config.Name("Threat System")
+        @Comment({
+                "The threat system decides when an entity switches from one attack target to another",
+                "",
+                "This is similar to threat systems found in some MMORPGs"
+        })
+        public ThreatSystem threat = new ThreatSystem();
+        @Config.Name("Other Settings")
+        @Comment({"Stuff that doesn't fit in other categories"})
+        public OtherSettings z_otherSettings = new OtherSettings();
 
         public class AI
         {
@@ -62,10 +73,6 @@ public class DynamicStealthConfig
             }
         }
 
-
-        @Config.Name("Senses")
-        public Senses senses = new Senses();
-
         public class Senses
         {
             @Config.Name("Use player senses")
@@ -88,6 +95,30 @@ public class DynamicStealthConfig
                         "Whichever of these multipliers is currently giving the best (lowest) multiplier is used"
                 })
                 public StealthMultipliers a_stealthMultipliers = new StealthMultipliers();
+                @Config.Name("Visibility Multipliers")
+                @Comment({
+                        "Contains multipliers that decrease stealth / increase awareness",
+                        "",
+                        "Whichever of these multipliers is currently giving the worst (highest) multiplier is used"
+                })
+                public VisibilityMultipliers b_visibilityMultipliers = new VisibilityMultipliers();
+                @Config.Name("Lighting")
+                @Comment({"How much of an effect lighting has on stealth.  Nightvision is in here as well"})
+                public Lighting c_lighting = new Lighting();
+                @Config.Name("Speed")
+                @Comment({"How much of an effect an entity's speed has on stealth"})
+                public Speeds d_speeds = new Speeds();
+                @Config.Name("Angle")
+                @Comment({"FOV angles"})
+                public Angles e_angles = new Angles();
+                @Config.Name("Distance")
+                @Comment({"FOV distances"})
+                public Distance f_distances = new Distance();
+                @Config.Name("Absolute Cases")
+                @Comment({"Special cases, eg. glowing"})
+                public Absolutes g_absolutes = new Absolutes();
+                @Config.Name("Entity-Specific Settings (Advanced)")
+                public EntityVisionSettings y_entityOverrides = new EntityVisionSettings();
 
                 public class StealthMultipliers
                 {
@@ -136,15 +167,6 @@ public class DynamicStealthConfig
                     public double blindnessMultiplier = 0.5;
                 }
 
-
-                @Config.Name("Visibility Multipliers")
-                @Comment({
-                        "Contains multipliers that decrease stealth / increase awareness",
-                        "",
-                        "Whichever of these multipliers is currently giving the worst (highest) multiplier is used"
-                })
-                public VisibilityMultipliers b_visibilityMultipliers = new VisibilityMultipliers();
-
                 public class VisibilityMultipliers
                 {
                     @Config.Name("Armor Multiplier (Cumulative)")
@@ -181,11 +203,6 @@ public class DynamicStealthConfig
                     public double onFireMultiplier = 1.5;
                 }
 
-
-                @Config.Name("Lighting")
-                @Comment({"How much of an effect lighting has on stealth.  Nightvision is in here as well"})
-                public Lighting c_lighting = new Lighting();
-
                 public class Lighting
                 {
                     @Config.Name("Light (High/Bright)")
@@ -212,11 +229,6 @@ public class DynamicStealthConfig
                     public int nightVisionAddition = 15;
                 }
 
-
-                @Config.Name("Speed")
-                @Comment({"How much of an effect an entity's speed has on stealth"})
-                public Speeds d_speeds = new Speeds();
-
                 public class Speeds
                 {
                     @Config.Name("Speed (High/Fast)")
@@ -227,11 +239,6 @@ public class DynamicStealthConfig
                     @Comment({"At or below this speed, an entity has no speed penalty to their stealth rating"})
                     public double speedLow = 0;
                 }
-
-
-                @Config.Name("Angle")
-                @Comment({"FOV angles"})
-                public Angles e_angles = new Angles();
 
                 public class Angles
                 {
@@ -266,11 +273,6 @@ public class DynamicStealthConfig
                     public int angleSmall = 30;
                 }
 
-
-                @Config.Name("Distance")
-                @Comment({"FOV distances"})
-                public Distance f_distances = new Distance();
-
                 public class Distance
                 {
                     @Config.Name("Distance (Far)")
@@ -300,11 +302,6 @@ public class DynamicStealthConfig
                     public int distanceNear = 5;
                 }
 
-
-                @Config.Name("Absolute Cases")
-                @Comment({"Special cases, eg. glowing"})
-                public Absolutes g_absolutes = new Absolutes();
-
                 public class Absolutes
                 {
                     @Config.Name("See Glowing?")
@@ -315,10 +312,6 @@ public class DynamicStealthConfig
                     })
                     public boolean seeGlowing = true;
                 }
-
-
-                @Config.Name("Entity-Specific Settings (Advanced)")
-                public EntityVisionSettings y_entityOverrides = new EntityVisionSettings();
 
                 public class EntityVisionSettings
                 {
@@ -416,15 +409,6 @@ public class DynamicStealthConfig
             }
         }
 
-
-        @Config.Name("Threat System")
-        @Comment({
-                "The threat system decides when an entity switches from one attack target to another",
-                "",
-                "This is similar to threat systems found in some MMORPGs"
-        })
-        public ThreatSystem threat = new ThreatSystem();
-
         public class ThreatSystem
         {
             @Config.Name("Allow HUD display on clients")
@@ -477,11 +461,6 @@ public class DynamicStealthConfig
             @Config.RangeInt(min = 1)
             public int unseenTargetDegredationRate = 1;
         }
-
-
-        @Config.Name("Other Settings")
-        @Comment({"Stuff that doesn't fit in other categories"})
-        public OtherSettings z_otherSettings = new OtherSettings();
 
         public class OtherSettings
         {

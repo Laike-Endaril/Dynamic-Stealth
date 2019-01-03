@@ -25,10 +25,10 @@ public class AIWatchClosestEdit extends EntityAIBase
         initReflections();
     }
 
+    public final float chance;
     public EntityLiving entity;
     public Entity target;
     public int lookTime;
-    public final float chance;
     public Class<? extends Entity> watchedClass;
 
     public AIWatchClosestEdit(EntityAIWatchClosest oldAI) throws IllegalAccessException
@@ -45,6 +45,20 @@ public class AIWatchClosestEdit extends EntityAIBase
         if (isEntityAIWatchClosest2) setMutexBits(3);
     }
 
+    private static void initReflections()
+    {
+        try
+        {
+            entityField = ReflectionTool.getField(EntityAIWatchClosest.class, "field_75332_b", "entity");
+            watchedClassField = ReflectionTool.getField(EntityAIWatchClosest.class, "field_75329_f", "watchedClass");
+            chanceField = ReflectionTool.getField(EntityAIWatchClosest.class, "field_75331_e", "chance");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(123, false);
+        }
+    }
 
     @Override
     public boolean shouldExecute()
@@ -113,21 +127,5 @@ public class AIWatchClosestEdit extends EntityAIBase
     {
         entity.getLookHelper().setLookPosition(target.posX, target.posY + target.getEyeHeight(), target.posZ, entity.getHorizontalFaceSpeed(), entity.getVerticalFaceSpeed());
         --lookTime;
-    }
-
-
-    private static void initReflections()
-    {
-        try
-        {
-            entityField = ReflectionTool.getField(EntityAIWatchClosest.class, "field_75332_b", "entity");
-            watchedClassField = ReflectionTool.getField(EntityAIWatchClosest.class, "field_75329_f", "watchedClass");
-            chanceField = ReflectionTool.getField(EntityAIWatchClosest.class, "field_75331_e", "chance");
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(123, false);
-        }
     }
 }

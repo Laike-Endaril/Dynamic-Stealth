@@ -1,17 +1,12 @@
 package com.fantasticsource.mctools;
 
-import com.fantasticsource.dynamicstealth.server.ai.AIHurtByTargetEdit;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.boss.EntityDragon;
-import net.minecraft.entity.monster.EntityGuardian;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
@@ -45,7 +40,7 @@ public class MCTools
         {
             queue.add(task.action, task.priority);
         }
-        while(queue.size() > 0)
+        while (queue.size() > 0)
         {
             priority = queue.peekPriority();
             ai = queue.poll();
@@ -59,7 +54,7 @@ public class MCTools
         {
             queue.add(task.action, task.priority);
         }
-        while(queue.size() > 0)
+        while (queue.size() > 0)
         {
             priority = queue.peekPriority();
             ai = queue.poll();

@@ -25,14 +25,14 @@ public class AIParrotFollowEdit extends EntityAIBase //In vanilla, this is only 
 
     private final EntityLiving searcher;
     private final Predicate<EntityLiving> followPredicate;
-    private EntityLiving target;
     private final double speedModifier;
     private final PathNavigate navigator;
+    private final float stopDistance;
+    private final float areaSize;
+    private EntityLiving target;
     private Path path = null;
     private int timeToRecalcPath;
-    private final float stopDistance;
     private float oldWaterCost;
-    private final float areaSize;
 
     public AIParrotFollowEdit(EntityAIFollow oldAI) throws IllegalAccessException
     {
@@ -50,6 +50,22 @@ public class AIParrotFollowEdit extends EntityAIBase //In vanilla, this is only 
         }
 
         setMutexBits(3);
+    }
+
+    private static void initReflections()
+    {
+        try
+        {
+            entityField = ReflectionTool.getField(EntityAIFollow.class, "field_192372_a", "entity");
+            speedModifierField = ReflectionTool.getField(EntityAIFollow.class, "field_192375_d", "speedModifier");
+            stopDistanceField = ReflectionTool.getField(EntityAIFollow.class, "field_192378_g", "stopDistance");
+            areaSizeField = ReflectionTool.getField(EntityAIFollow.class, "field_192380_i", "areaSize");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(121, false);
+        }
     }
 
     @Override
@@ -130,23 +146,6 @@ public class AIParrotFollowEdit extends EntityAIBase //In vanilla, this is only 
                     }
                 }
             }
-        }
-    }
-
-
-    private static void initReflections()
-    {
-        try
-        {
-            entityField = ReflectionTool.getField(EntityAIFollow.class, "field_192372_a", "entity");
-            speedModifierField = ReflectionTool.getField(EntityAIFollow.class, "field_192375_d", "speedModifier");
-            stopDistanceField = ReflectionTool.getField(EntityAIFollow.class, "field_192378_g", "stopDistance");
-            areaSizeField = ReflectionTool.getField(EntityAIFollow.class, "field_192380_i", "areaSize");
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(121, false);
         }
     }
 }

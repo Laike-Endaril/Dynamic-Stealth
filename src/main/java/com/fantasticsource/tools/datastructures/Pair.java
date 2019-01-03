@@ -15,15 +15,15 @@ public class Pair<K, V>
         return key;
     }
 
-    public V getValue()
-    {
-        return value;
-    }
-
     public Pair<K, V> setKey(K key)
     {
         this.key = key;
         return this;
+    }
+
+    public V getValue()
+    {
+        return value;
     }
 
     public Pair<K, V> setValue(V value)

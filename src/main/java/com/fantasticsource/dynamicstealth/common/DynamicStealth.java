@@ -60,15 +60,12 @@ public class DynamicStealth
     public static final String MODID = "dynamicstealth";
     public static final String NAME = "Dynamic Stealth";
     public static final String VERSION = "1.12.2.017";
-
+    public static final TrigLookupTable TRIG_TABLE = new TrigLookupTable(1024);
     private static Logger logger;
-
     private static Field sensesField, lookHelperField, abstractSkeletonAIArrowAttackField, abstractSkeletonAIAttackOnCollideField;
     private static Class aiSlimeFaceRandomClass, aiEvilAttackClass, aiBearMeleeClass, aiSpiderAttackClass, aiSpiderTargetClass, aiBearAttackPlayerClass, aiLlamaDefendTarget,
             aiPigmanHurtByAggressorClass, aiLlamaHurtByTargetClass, aiPigmanTargetAggressorClass, aiVindicatorJohnnyAttackClass, aiBearHurtByTargetClass, aiGuardianAttackClass,
             aiBlazeFireballAttackClass;
-
-    public static final TrigLookupTable TRIG_TABLE = new TrigLookupTable(1024);
 
     public DynamicStealth()
     {
@@ -77,41 +74,6 @@ public class DynamicStealth
         MinecraftForge.EVENT_BUS.register(Speedometer.class);
         MinecraftForge.EVENT_BUS.register(Network.class);
         MinecraftForge.EVENT_BUS.register(Threat.class);
-    }
-
-    @EventHandler
-    public void preInit(FMLPreInitializationEvent event) throws NoSuchFieldException, IllegalAccessException
-    {
-        logger = event.getModLog();
-
-        Network.init();
-
-        sensesField = ReflectionTool.getField(EntityLiving.class, "field_70723_bA", "senses");
-        lookHelperField = ReflectionTool.getField(EntityLiving.class, "field_70749_g", "lookHelper");
-
-        abstractSkeletonAIArrowAttackField = ReflectionTool.getField(AbstractSkeleton.class, "field_85037_d", "aiArrowAttack");
-        abstractSkeletonAIAttackOnCollideField = ReflectionTool.getField(AbstractSkeleton.class, "field_85038_e", "aiAttackOnCollide");
-
-        aiSlimeFaceRandomClass = ReflectionTool.getInternalClass(EntitySlime.class, "AISlimeFaceRandom");
-        aiEvilAttackClass = ReflectionTool.getInternalClass(EntityRabbit.class, "AIEvilAttack");
-        aiBearMeleeClass = ReflectionTool.getInternalClass(EntityPolarBear.class, "AIMeleeAttack");
-        aiSpiderAttackClass = ReflectionTool.getInternalClass(EntitySpider.class, "AISpiderAttack");
-        aiSpiderTargetClass = ReflectionTool.getInternalClass(EntitySpider.class, "AISpiderTarget");
-        aiBearAttackPlayerClass = ReflectionTool.getInternalClass(EntityPolarBear.class, "AIAttackPlayer");
-        aiLlamaDefendTarget = ReflectionTool.getInternalClass(EntityLlama.class, "AIDefendTarget");
-        aiPigmanHurtByAggressorClass = ReflectionTool.getInternalClass(EntityPigZombie.class, "AIHurtByAggressor");
-        aiLlamaHurtByTargetClass = ReflectionTool.getInternalClass(EntityLlama.class, "AIHurtByTarget");
-        aiPigmanTargetAggressorClass = ReflectionTool.getInternalClass(EntityPigZombie.class, "AITargetAggressor");
-        aiVindicatorJohnnyAttackClass = ReflectionTool.getInternalClass(EntityVindicator.class, "AIJohnnyAttack");
-        aiBearHurtByTargetClass = ReflectionTool.getInternalClass(EntityPolarBear.class, "AIHurtByTarget");
-        aiGuardianAttackClass = ReflectionTool.getInternalClass(EntityGuardian.class, "AIGuardianAttack");
-        aiBlazeFireballAttackClass = ReflectionTool.getInternalClass(EntityBlaze.class, "AIFireballAttack");
-    }
-
-    @EventHandler
-    public void postInit(FMLPostInitializationEvent event)
-    {
-        if (Loader.isModLoaded("customnpcs")) MinecraftForge.EVENT_BUS.register(CompatCNPC.class);
     }
 
     @SubscribeEvent
@@ -125,7 +87,6 @@ public class DynamicStealth
         }
     }
 
-
     @SubscribeEvent
     public static void drawGUI(RenderGameOverlayEvent.Post event)
     {
@@ -135,14 +96,12 @@ public class DynamicStealth
         }
     }
 
-
     @SubscribeEvent
     public static void playerLogged(PlayerEvent.PlayerLoggedOutEvent event)
     {
         EntityPlayer player = event.player;
         if (player instanceof EntityPlayerMP) Threat.watchers.remove((EntityPlayerMP) player);
     }
-
 
     @SubscribeEvent
     public static void despawn(LivingSpawnEvent.AllowDespawn event)
@@ -188,7 +147,6 @@ public class DynamicStealth
             if (entity instanceof EntityLiving) Threat.remove((EntityLiving) entity);
         }
     }
-
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void entityAttacked(LivingHurtEvent event) throws InvocationTargetException, IllegalAccessException
@@ -415,5 +373,40 @@ public class DynamicStealth
         {
             tasks.addTask(-7777777, new AIStealthTargetingAndSearch(living, 1));
         }
+    }
+
+    @EventHandler
+    public void preInit(FMLPreInitializationEvent event) throws NoSuchFieldException, IllegalAccessException
+    {
+        logger = event.getModLog();
+
+        Network.init();
+
+        sensesField = ReflectionTool.getField(EntityLiving.class, "field_70723_bA", "senses");
+        lookHelperField = ReflectionTool.getField(EntityLiving.class, "field_70749_g", "lookHelper");
+
+        abstractSkeletonAIArrowAttackField = ReflectionTool.getField(AbstractSkeleton.class, "field_85037_d", "aiArrowAttack");
+        abstractSkeletonAIAttackOnCollideField = ReflectionTool.getField(AbstractSkeleton.class, "field_85038_e", "aiAttackOnCollide");
+
+        aiSlimeFaceRandomClass = ReflectionTool.getInternalClass(EntitySlime.class, "AISlimeFaceRandom");
+        aiEvilAttackClass = ReflectionTool.getInternalClass(EntityRabbit.class, "AIEvilAttack");
+        aiBearMeleeClass = ReflectionTool.getInternalClass(EntityPolarBear.class, "AIMeleeAttack");
+        aiSpiderAttackClass = ReflectionTool.getInternalClass(EntitySpider.class, "AISpiderAttack");
+        aiSpiderTargetClass = ReflectionTool.getInternalClass(EntitySpider.class, "AISpiderTarget");
+        aiBearAttackPlayerClass = ReflectionTool.getInternalClass(EntityPolarBear.class, "AIAttackPlayer");
+        aiLlamaDefendTarget = ReflectionTool.getInternalClass(EntityLlama.class, "AIDefendTarget");
+        aiPigmanHurtByAggressorClass = ReflectionTool.getInternalClass(EntityPigZombie.class, "AIHurtByAggressor");
+        aiLlamaHurtByTargetClass = ReflectionTool.getInternalClass(EntityLlama.class, "AIHurtByTarget");
+        aiPigmanTargetAggressorClass = ReflectionTool.getInternalClass(EntityPigZombie.class, "AITargetAggressor");
+        aiVindicatorJohnnyAttackClass = ReflectionTool.getInternalClass(EntityVindicator.class, "AIJohnnyAttack");
+        aiBearHurtByTargetClass = ReflectionTool.getInternalClass(EntityPolarBear.class, "AIHurtByTarget");
+        aiGuardianAttackClass = ReflectionTool.getInternalClass(EntityGuardian.class, "AIGuardianAttack");
+        aiBlazeFireballAttackClass = ReflectionTool.getInternalClass(EntityBlaze.class, "AIFireballAttack");
+    }
+
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event)
+    {
+        if (Loader.isModLoaded("customnpcs")) MinecraftForge.EVENT_BUS.register(CompatCNPC.class);
     }
 }

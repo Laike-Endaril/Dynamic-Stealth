@@ -23,6 +23,19 @@ public class AIJohnnyAttackEdit extends AINearestAttackableTargetEdit<EntityLivi
         super(oldAI);
     }
 
+    private static void initReflections()
+    {
+        try
+        {
+            johnnyField = ReflectionTool.getField(EntityVindicator.class, "field_190643_b", "johnny");
+        }
+        catch (NoSuchFieldException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(133, false);
+        }
+    }
+
     @Override
     public boolean shouldExecute()
     {
@@ -35,20 +48,6 @@ public class AIJohnnyAttackEdit extends AINearestAttackableTargetEdit<EntityLivi
             e.printStackTrace();
             FMLCommonHandler.instance().exitJava(134, false);
             return false;
-        }
-    }
-
-
-    private static void initReflections()
-    {
-        try
-        {
-            johnnyField = ReflectionTool.getField(EntityVindicator.class, "field_190643_b", "johnny");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(133, false);
         }
     }
 }

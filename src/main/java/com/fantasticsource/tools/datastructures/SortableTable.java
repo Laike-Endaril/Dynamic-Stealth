@@ -20,6 +20,43 @@ public class SortableTable
         }
     }
 
+    public static void test()
+    {
+        SortableTable st = new SortableTable(String.class, Integer.class);
+
+        st.label(0, "Name");
+        st.label(1, "Age");
+
+        st.add("Kyle", 27);
+        st.add("Charlie", 19);
+        st.add("Baby", 0);
+        st.add("Joe", 32);
+        st.add("Grandpa", 90);
+
+        System.out.println("Original table...");
+        st.print();
+
+        System.out.println();
+        st.startSorting(1);
+        System.out.println("Sorted by age (ascending)...");
+        st.print();
+
+        System.out.println();
+        st.add("Gerry", 26);
+        System.out.println("Added entry; table automatically puts it in right spot...");
+        st.print();
+
+        System.out.println();
+        st.startSorting(0, false);
+        System.out.println("Sorted by name (descending)...");
+        st.print();
+
+        System.out.println();
+        st.set(st.indexOf("Grandpa", 0), "Artemis", 90);
+        System.out.println("Changed 'Grandpa' to 'Artemis'; table automatically resorts just that one entry...");
+        st.print();
+    }
+
     public void add(Object... item)
     {
         if (item.length != columns.length) throw new IllegalArgumentException("Item length (" + item.length + ") must match number of columns (" + columns.length + ")");
@@ -251,16 +288,15 @@ public class SortableTable
         return result.toString();
     }
 
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public void print()
     {
         System.out.print(toString());
     }
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
     private class Column
     {
@@ -408,42 +444,5 @@ public class SortableTable
             if (comparison != CLASS) return "" + values[index];
             return values[index].getClass().getSimpleName();
         }
-    }
-
-    public static void test()
-    {
-        SortableTable st = new SortableTable(String.class, Integer.class);
-
-        st.label(0, "Name");
-        st.label(1, "Age");
-
-        st.add("Kyle", 27);
-        st.add("Charlie", 19);
-        st.add("Baby", 0);
-        st.add("Joe", 32);
-        st.add("Grandpa", 90);
-
-        System.out.println("Original table...");
-        st.print();
-
-        System.out.println();
-        st.startSorting(1);
-        System.out.println("Sorted by age (ascending)...");
-        st.print();
-
-        System.out.println();
-        st.add("Gerry", 26);
-        System.out.println("Added entry; table automatically puts it in right spot...");
-        st.print();
-
-        System.out.println();
-        st.startSorting(0, false);
-        System.out.println("Sorted by name (descending)...");
-        st.print();
-
-        System.out.println();
-        st.set(st.indexOf("Grandpa", 0), "Artemis", 90);
-        System.out.println("Changed 'Grandpa' to 'Artemis'; table automatically resorts just that one entry...");
-        st.print();
     }
 }

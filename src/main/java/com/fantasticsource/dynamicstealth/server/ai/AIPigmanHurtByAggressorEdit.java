@@ -25,6 +25,11 @@ public class AIPigmanHurtByAggressorEdit extends AIHurtByTargetEdit
         super(oldAI);
     }
 
+    private static void initReflections()
+    {
+        pigmanBecomeAngryAtMethod = ReflectionTool.getMethod(EntityPigZombie.class, "func_70835_c", "becomeAngryAt");
+    }
+
     @Override
     protected void setEntityAttackTarget(EntityCreature attacker, EntityLivingBase target)
     {
@@ -42,11 +47,5 @@ public class AIPigmanHurtByAggressorEdit extends AIHurtByTargetEdit
                 FMLCommonHandler.instance().exitJava(130, false);
             }
         }
-    }
-
-
-    private static void initReflections()
-    {
-        pigmanBecomeAngryAtMethod = ReflectionTool.getMethod(EntityPigZombie.class, "func_70835_c", "becomeAngryAt");
     }
 }

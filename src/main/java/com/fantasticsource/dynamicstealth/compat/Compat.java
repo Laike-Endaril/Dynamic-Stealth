@@ -11,6 +11,7 @@ import java.util.Set;
 public class Compat
 {
     private static Field executingTasksField;
+
     static
     {
         initReflections();
@@ -24,7 +25,7 @@ public class Compat
             EntityAIBase ai = task.action;
             String aiClassname = ai.getClass().getName();
             if (aiClassname.equals("com.lycanitesmobs.core.entity.ai.EntityAIAttackMelee")
-                || aiClassname.equals("net.shadowmage.ancientwarfare.npc.ai.vehicle.NpcAIAimVehicle"))
+                    || aiClassname.equals("net.shadowmage.ancientwarfare.npc.ai.vehicle.NpcAIAimVehicle"))
             {
                 //Hard reset; set using to false, call resetTask(), and remove task from executingTasks
                 task.using = false;

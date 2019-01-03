@@ -24,13 +24,13 @@ public class AIAttackRangedEdit extends EntityAIBase
 
     private final EntityLiving attacker;
     private final IRangedAttackMob rangedAttacker;
-    private EntityLivingBase target;
-    private int timer;
     private final double entityMoveSpeed;
-    private int seeTime;
     private final int attackIntervalMin, attackIntervalRange;
     private final float attackRadius;
     private final float attackRadiusSquared;
+    private EntityLivingBase target;
+    private int timer;
+    private int seeTime;
     private Path path = null;
 
     public AIAttackRangedEdit(EntityAIAttackRanged oldAI) throws IllegalAccessException
@@ -47,6 +47,23 @@ public class AIAttackRangedEdit extends EntityAIBase
         timer = -1;
 
         setMutexBits(3);
+    }
+
+    private static void initReflections()
+    {
+        try
+        {
+            rangedAttackEntityHostField = ReflectionTool.getField(EntityAIAttackRanged.class, "field_82641_b", "rangedAttackEntityHost");
+            entityMoveSpeedField = ReflectionTool.getField(EntityAIAttackRanged.class, "field_75321_e", "entityMoveSpeed");
+            attackRadiusField = ReflectionTool.getField(EntityAIAttackRanged.class, "field_96562_i", "attackRadius");
+            attackIntervalMinField = ReflectionTool.getField(EntityAIAttackRanged.class, "field_96561_g", "attackIntervalMin");
+            maxRangedAttackTimeField = ReflectionTool.getField(EntityAIAttackRanged.class, "field_75325_h", "maxRangedAttackTime");
+        }
+        catch (NoSuchFieldException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(138, false);
+        }
     }
 
     @Override
@@ -109,24 +126,6 @@ public class AIAttackRangedEdit extends EntityAIBase
         {
             float distanceFactor = MathHelper.sqrt(distSquared) / attackRadius;
             timer = MathHelper.floor(attackIntervalMin + distanceFactor * attackIntervalRange);
-        }
-    }
-
-
-    private static void initReflections()
-    {
-        try
-        {
-            rangedAttackEntityHostField = ReflectionTool.getField(EntityAIAttackRanged.class, "field_82641_b", "rangedAttackEntityHost");
-            entityMoveSpeedField = ReflectionTool.getField(EntityAIAttackRanged.class, "field_75321_e", "entityMoveSpeed");
-            attackRadiusField = ReflectionTool.getField(EntityAIAttackRanged.class, "field_96562_i", "attackRadius");
-            attackIntervalMinField = ReflectionTool.getField(EntityAIAttackRanged.class, "field_96561_g", "attackIntervalMin");
-            maxRangedAttackTimeField = ReflectionTool.getField(EntityAIAttackRanged.class, "field_75325_h", "maxRangedAttackTime");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(138, false);
         }
     }
 }

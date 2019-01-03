@@ -35,6 +35,47 @@ public abstract class AITargetEdit extends EntityAIBase
         nearbyOnly = (boolean) nearbyOnlyField.get(oldAI);
     }
 
+    public static boolean isSuitableTarget(EntityLiving attacker, @Nullable EntityLivingBase target)
+    {
+        if (target == null || target == attacker || !target.isEntityAlive() || !attacker.canAttackClass(target.getClass()) || attacker.isOnSameTeam(target))
+        {
+            return false;
+        }
+
+        if (attacker instanceof IEntityOwnable && ((IEntityOwnable) attacker).getOwnerId() != null)
+        {
+            if (target instanceof IEntityOwnable && ((IEntityOwnable) attacker).getOwnerId().equals(((IEntityOwnable) target).getOwnerId()))
+            {
+                return false;
+            }
+
+            if (target == ((IEntityOwnable) attacker).getOwner())
+            {
+                return false;
+            }
+        }
+        else if (target instanceof EntityPlayer && ((EntityPlayer) target).capabilities.disableDamage)
+        {
+            return false;
+        }
+
+        return attacker.getEntitySenses().canSee(target);
+    }
+
+    private static void initReflections()
+    {
+        try
+        {
+            nearbyOnlyField = ReflectionTool.getField(EntityAITarget.class, "field_75303_a", "nearbyOnly");
+            taskOwnerField = ReflectionTool.getField(EntityAITarget.class, "field_75299_d", "taskOwner");
+        }
+        catch (NoSuchFieldException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(128, false);
+        }
+    }
+
     @Override
     public boolean shouldContinueExecuting()
     {
@@ -66,33 +107,6 @@ public abstract class AITargetEdit extends EntityAIBase
         target = null;
     }
 
-    public static boolean isSuitableTarget(EntityLiving attacker, @Nullable EntityLivingBase target)
-    {
-        if (target == null || target == attacker || !target.isEntityAlive() || !attacker.canAttackClass(target.getClass()) || attacker.isOnSameTeam(target))
-        {
-            return false;
-        }
-
-        if (attacker instanceof IEntityOwnable && ((IEntityOwnable) attacker).getOwnerId() != null)
-        {
-            if (target instanceof IEntityOwnable && ((IEntityOwnable) attacker).getOwnerId().equals(((IEntityOwnable) target).getOwnerId()))
-            {
-                return false;
-            }
-
-            if (target == ((IEntityOwnable) attacker).getOwner())
-            {
-                return false;
-            }
-        }
-        else if (target instanceof EntityPlayer && ((EntityPlayer) target).capabilities.disableDamage)
-        {
-            return false;
-        }
-
-        return attacker.getEntitySenses().canSee(target);
-    }
-
     protected boolean isSuitableTarget(@Nullable EntityLivingBase target)
     {
         if (target == null || (nearbyOnly && !canEasilyReach(target))) return false;
@@ -112,20 +126,5 @@ public abstract class AITargetEdit extends EntityAIBase
         int i = pathpoint.x - MathHelper.floor(target.posX);
         int j = pathpoint.z - MathHelper.floor(target.posZ);
         return (i * i + j * j) <= 2.25;
-    }
-
-
-    private static void initReflections()
-    {
-        try
-        {
-            nearbyOnlyField = ReflectionTool.getField(EntityAITarget.class, "field_75303_a", "nearbyOnly");
-            taskOwnerField = ReflectionTool.getField(EntityAITarget.class, "field_75299_d", "taskOwner");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(128, false);
-        }
     }
 }

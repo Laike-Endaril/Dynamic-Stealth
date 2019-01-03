@@ -4,7 +4,6 @@ import com.fantasticsource.dynamicstealth.client.HUD;
 import com.fantasticsource.dynamicstealth.server.Threat;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.ByteBufUtils;

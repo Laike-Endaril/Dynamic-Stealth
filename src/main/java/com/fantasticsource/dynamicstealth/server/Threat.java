@@ -4,8 +4,6 @@ import com.fantasticsource.dynamicstealth.common.Network;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.monster.EntitySlime;
@@ -21,22 +19,17 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealth.TRIG_TABLE;
-import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.*;
+import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
 
 public class Threat
 {
     private static final int ITERATION_FREQUENCY = 72000; //Server ticks
-
+    public static Watchers watchers = new Watchers();
     private static int timer = ITERATION_FREQUENCY;
-
     //Searcher, target, threat level
     private static Map<EntityLivingBase, ThreatData> threatMap = new LinkedHashMap<>(200);
-
     //Watcher (player watching a searcher), searcher
     private static Map<EntityPlayerMP, ThreatData> watcherMap = new LinkedHashMap<>(20);
-
-    public static Watchers watchers = new Watchers();
-
 
     @SubscribeEvent
     public static void update(TickEvent.ServerTickEvent event)
@@ -68,7 +61,7 @@ public class Threat
     {
         if (event.side == Side.SERVER)
         {
-            EntityPlayerMP player = (EntityPlayerMP)event.player;
+            EntityPlayerMP player = (EntityPlayerMP) event.player;
             EntityLivingBase searcher = seenEntities(player).poll();
             Threat.watchers.set(player, searcher);
         }

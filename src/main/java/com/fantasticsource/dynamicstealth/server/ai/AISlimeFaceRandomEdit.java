@@ -11,14 +11,6 @@ import java.util.Random;
 
 public class AISlimeFaceRandomEdit extends EntityAIBase
 {
-    public final EntitySlime slime;
-
-    public float dirPrevious, dirChange;
-    public int dirChangeMin = 10, dirChangeMax = 40, dirChangeRange = dirChangeMax - dirChangeMin;
-
-    public int timer, timeMin = 5, timeMax = 40, timeRange = timeMax - timeMin;
-    public int timer2, turnTime = 60;
-
     private static Class slimeMoveHelperClass;
     private static Method slimeMoveHelperSetDirectionMethod;
 
@@ -27,6 +19,12 @@ public class AISlimeFaceRandomEdit extends EntityAIBase
         initReflections();
     }
 
+    public final EntitySlime slime;
+    public float dirPrevious, dirChange;
+    public int dirChangeMin = 10, dirChangeMax = 40, dirChangeRange = dirChangeMax - dirChangeMin;
+    public int timer, timeMin = 5, timeMax = 40, timeRange = timeMax - timeMin;
+    public int timer2, turnTime = 60;
+
 
     public AISlimeFaceRandomEdit(EntitySlime slimeIn)
     {
@@ -34,6 +32,12 @@ public class AISlimeFaceRandomEdit extends EntityAIBase
         timer = timeMin + slime.getRNG().nextInt(timeRange);
 
         setMutexBits(2);
+    }
+
+    private static void initReflections()
+    {
+        slimeMoveHelperClass = ReflectionTool.getInternalClass(EntitySlime.class, "SlimeMoveHelper");
+        slimeMoveHelperSetDirectionMethod = ReflectionTool.getMethod(slimeMoveHelperClass, "func_179920_a", "setDirection");
     }
 
     @Override
@@ -104,12 +108,5 @@ public class AISlimeFaceRandomEdit extends EntityAIBase
     public void resetTimer()
     {
         timer = timeMin + slime.getRNG().nextInt(timeRange);
-    }
-
-
-    private static void initReflections()
-    {
-        slimeMoveHelperClass = ReflectionTool.getInternalClass(EntitySlime.class, "SlimeMoveHelper");
-        slimeMoveHelperSetDirectionMethod = ReflectionTool.getMethod(slimeMoveHelperClass, "func_179920_a", "setDirection");
     }
 }

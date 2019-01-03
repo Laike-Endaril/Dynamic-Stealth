@@ -46,6 +46,22 @@ public class AIAttackRangedBowEdit<T extends EntityMob & IRangedAttackMob> exten
         setMutexBits(3);
     }
 
+    private static void initReflections()
+    {
+        try
+        {
+            entityField = ReflectionTool.getField(EntityAIAttackRangedBow.class, "field_188499_a", "entity");
+            moveSpeedAmpField = ReflectionTool.getField(EntityAIAttackRangedBow.class, "field_188500_b", "moveSpeedAmp");
+            attackCooldownField = ReflectionTool.getField(EntityAIAttackRangedBow.class, "field_188501_c", "attackCooldown");
+            maxAttackDistanceField = ReflectionTool.getField(EntityAIAttackRangedBow.class, "field_188502_d", "maxAttackDistance");
+        }
+        catch (NoSuchFieldException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(139, false);
+        }
+    }
+
     @Override
     public void setAttackCooldown(int ticks)
     {
@@ -151,23 +167,6 @@ public class AIAttackRangedBowEdit<T extends EntityMob & IRangedAttackMob> exten
         else if (--timer <= 0)
         {
             attacker.setActiveHand(EnumHand.MAIN_HAND);
-        }
-    }
-
-
-    private static void initReflections()
-    {
-        try
-        {
-            entityField = ReflectionTool.getField(EntityAIAttackRangedBow.class, "field_188499_a", "entity");
-            moveSpeedAmpField = ReflectionTool.getField(EntityAIAttackRangedBow.class, "field_188500_b", "moveSpeedAmp");
-            attackCooldownField = ReflectionTool.getField(EntityAIAttackRangedBow.class, "field_188501_c", "attackCooldown");
-            maxAttackDistanceField = ReflectionTool.getField(EntityAIAttackRangedBow.class, "field_188502_d", "maxAttackDistance");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(139, false);
         }
     }
 }

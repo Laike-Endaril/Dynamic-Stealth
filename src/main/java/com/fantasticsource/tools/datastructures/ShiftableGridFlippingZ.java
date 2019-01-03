@@ -1,6 +1,6 @@
 package com.fantasticsource.tools.datastructures;
 
-import static com.fantasticsource.tools.Tools.*;
+import static com.fantasticsource.tools.Tools.mod;
 
 @SuppressWarnings({"UnusedParameters", "unused"})
 public class ShiftableGridFlippingZ<T> extends ShiftableGrid<T>

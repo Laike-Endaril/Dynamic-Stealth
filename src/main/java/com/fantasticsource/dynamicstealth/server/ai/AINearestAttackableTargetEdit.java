@@ -32,6 +32,20 @@ public class AINearestAttackableTargetEdit<T extends EntityLivingBase> extends A
         targetEntitySelector = (Predicate<? super T>) targetEntitySelectorField.get(oldAI);
     }
 
+    private static void initReflections()
+    {
+        try
+        {
+            targetClassField = ReflectionTool.getField(EntityAINearestAttackableTarget.class, "field_75307_b", "targetClass");
+            targetEntitySelectorField = ReflectionTool.getField(EntityAINearestAttackableTarget.class, "field_82643_g", "targetEntitySelector");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(122, false);
+        }
+    }
+
     @Override
     public boolean shouldExecute()
     {
@@ -69,20 +83,5 @@ public class AINearestAttackableTargetEdit<T extends EntityLivingBase> extends A
     {
         attacker.setAttackTarget(targetEntity);
         super.startExecuting();
-    }
-
-
-    private static void initReflections()
-    {
-        try
-        {
-            targetClassField = ReflectionTool.getField(EntityAINearestAttackableTarget.class, "field_75307_b", "targetClass");
-            targetEntitySelectorField = ReflectionTool.getField(EntityAINearestAttackableTarget.class, "field_82643_g", "targetEntitySelector");
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(122, false);
-        }
     }
 }
