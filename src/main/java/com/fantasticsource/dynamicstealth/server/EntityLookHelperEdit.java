@@ -1,10 +1,14 @@
 package com.fantasticsource.dynamicstealth.server;
 
+import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+
+import java.lang.reflect.InvocationTargetException;
 
 public class EntityLookHelperEdit extends EntityLookHelper
 {
@@ -20,6 +24,16 @@ public class EntityLookHelperEdit extends EntityLookHelper
     {
         super(entitylivingIn);
         entity = entitylivingIn;
+
+        try
+        {
+            DynamicStealth.makeLivingLookDirection(entity, (float) (Math.random() * 360));
+        }
+        catch (InvocationTargetException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(146, false);
+        }
     }
 
     public void setLookPositionWithEntity(Entity entityIn, float deltaYaw, float deltaPitch)

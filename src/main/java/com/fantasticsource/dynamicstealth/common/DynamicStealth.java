@@ -22,6 +22,7 @@ import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -213,24 +214,9 @@ public class DynamicStealth
 
                 //Look toward damage
                 float newYaw = (float) (TRIG_TABLE.arctanFullcircle(target.posZ, target.posX, source.posZ, source.posX) / Math.PI * 180);
-                target.rotationYaw = newYaw;
-                target.prevRotationYaw = newYaw;
-                target.rotationYawHead = newYaw;
-                target.prevRotationYawHead = newYaw;
+                makeLivingLookDirection(livingTarget, newYaw);
 
-                if (target instanceof EntitySlime)
-                {
-                    //Look toward damage (slime)
-                    for (EntityAITasks.EntityAITaskEntry task : ((EntitySlime) target).tasks.taskEntries)
-                    {
-                        if (task.action instanceof AISlimeFaceRandomEdit)
-                        {
-                            ((AISlimeFaceRandomEdit) task.action).setDirection(newYaw, true);
-                            break;
-                        }
-                    }
-                }
-                else
+                if (!(livingTarget instanceof EntitySlime))
                 {
                     //This is mostly for setting/resetting things when eg. you hit an entity that is in the middle of a task, and they don't see you (even after you hit them)
 
@@ -241,7 +227,7 @@ public class DynamicStealth
                         if (task.action instanceof AIStealthTargetingAndSearch)
                         {
                             AIStealthTargetingAndSearch searchAI = (AIStealthTargetingAndSearch) task.action;
-                            int distance = (int) Math.sqrt(source.getDistanceSq(target));
+                            int distance = (int) Math.sqrt(source.getDistanceSq(livingTarget));
                             searchAI.lastKnownPosition = searchAI.randomPath(source.getPosition(), distance / 2, distance / 4);
                         }
                     }
@@ -267,17 +253,36 @@ public class DynamicStealth
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void entityJoin(EntityJoinWorldEvent event) throws Exception
+    public static void makeLivingLookDirection(EntityLiving living, float directionDegrees) throws InvocationTargetException, IllegalAccessException
     {
-        if (event != null)
+        living.rotationYaw = directionDegrees;
+        living.prevRotationYaw = directionDegrees;
+        living.rotationYawHead = directionDegrees;
+        living.prevRotationYawHead = directionDegrees;
+
+        if (living instanceof EntitySlime)
         {
-            Entity entity = event.getEntity();
-            if (entity instanceof EntityLiving) setSensesTasksAndLookHelper((EntityLiving) entity);
+            //Look toward damage (slime)
+            for (EntityAITasks.EntityAITaskEntry task : ((EntitySlime) living).tasks.taskEntries)
+            {
+                if (task.action instanceof AISlimeFaceRandomEdit)
+                {
+                    ((AISlimeFaceRandomEdit) task.action).setDirection(directionDegrees, true);
+                    break;
+                }
+            }
         }
     }
 
-    public static void setSensesTasksAndLookHelper(EntityLiving living) throws Exception
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void entityJoin(EntityJoinWorldEvent event) throws Exception
+    {
+        Entity entity = event.getEntity();
+        if (entity instanceof EntityLiving) entityJoinWorldInit((EntityLiving) entity);
+    }
+
+    public static void entityJoinWorldInit(EntityLiving living) throws Exception
     {
         //Set the new senses handler for all living entities (not including players)
         try
