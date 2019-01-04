@@ -144,6 +144,8 @@ MOD COMPATIBILITY ======================================================
 
 Lycanite's Mobs can still attack through walls; probably using different LOS
 
+Lycanite's Mobs have their own EntityAILookIdle which needs removing/replacing
+
 Look into crash with Deadly Mobs and its haunted cows...
 ...https://paste.ee/p/gnVtK
 ...apparently haunted cows are also not supposed to look haunted until they get hit
