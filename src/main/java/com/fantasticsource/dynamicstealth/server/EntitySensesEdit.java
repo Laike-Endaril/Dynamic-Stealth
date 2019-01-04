@@ -8,6 +8,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntitySenses;
 import net.minecraft.entity.monster.*;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -78,8 +79,12 @@ public class EntitySensesEdit extends EntitySenses
         }
 
 
+        //Setup for checks against EntityLivingBase-only targets
+        boolean isLivingBase = target instanceof EntityLivingBase;
+        EntityLivingBase targetLiving = isLivingBase ? (EntityLivingBase) target : null;
+
         //Glowing (absolute, after Angles)
-        if (vision.g_absolutes.seeGlowing && target.isGlowing()) return 0;
+        if (vision.g_absolutes.seeGlowing && isLivingBase && targetLiving.getActivePotionEffect(MobEffects.GLOWING) != null) return 0;
 
 
         //LOS check (absolute, after Angles, after Glowing)
@@ -111,8 +116,6 @@ public class EntitySensesEdit extends EntitySenses
 
 
         //Invisibility (multiplier)
-        boolean isLivingBase = target instanceof EntityLivingBase;
-        EntityLivingBase targetLiving = isLivingBase ? (EntityLivingBase) target : null;
         double invisibilityMultiplier = isLivingBase && targetLiving.getActivePotionEffect(MobEffects.INVISIBILITY) != null ? vision.a_stealthMultipliers.invisibilityMultiplier : 1;
 
 
