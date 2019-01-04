@@ -8,6 +8,8 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.lwjgl.opengl.GL11;
 
 public class HUD extends Gui
@@ -74,6 +76,14 @@ public class HUD extends Gui
         }
     }
 
+    @SubscribeEvent
+    public static void clearHUD(FMLNetworkEvent.ClientDisconnectionFromServerEvent event)
+    {
+        color = COLOR_NULL;
+        threatSearcher = EMPTY;
+        threatTarget = EMPTY;
+        threatLevel = 0;
+    }
 
     public static int getColor(EntityPlayer player, EntityLivingBase searcher, EntityLivingBase target, int threatLevel)
     {

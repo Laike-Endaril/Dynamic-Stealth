@@ -74,6 +74,7 @@ public class DynamicStealth
         MinecraftForge.EVENT_BUS.register(Speedometer.class);
         MinecraftForge.EVENT_BUS.register(Network.class);
         MinecraftForge.EVENT_BUS.register(Threat.class);
+        MinecraftForge.EVENT_BUS.register(HUD.class);
     }
 
     @SubscribeEvent

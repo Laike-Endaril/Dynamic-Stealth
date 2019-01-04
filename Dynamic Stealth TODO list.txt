@@ -9,8 +9,6 @@ Add per-entity HUD which only displays a color and a percentage...
 1. an in-world render, maybe rendering from the livingentity render
 2. a HUD render, but using correct scaling (like nameplates).  Can also make them not overlap each other using this method
 
-Make HUD clear its data when the client disconnects from the server it is on
-
 
 
 ONGOING TASKS ==========================================================
