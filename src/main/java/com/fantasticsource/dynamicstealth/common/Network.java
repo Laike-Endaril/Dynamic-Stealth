@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
+import static com.fantasticsource.dynamicstealth.client.HUD.COLOR_NULL;
 import static com.fantasticsource.dynamicstealth.client.HUD.EMPTY;
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.mctools.MCTools.isOP;
@@ -51,8 +52,9 @@ public class Network
         int mode = serverSettings.threat.allowClientHUD;
         if (permissionOverride || mode == 2 || (mode == 1 && isOP(player)))
         {
-            if (Threat.bypassesThreat(searcher)) WRAPPER.sendTo(new ThreatPacket(searcher.getName(), "", -1, 0), player);
-            else WRAPPER.sendTo(new ThreatPacket(searcher == null ? EMPTY : searcher.getName(), target == null ? EMPTY : target.getName(), threatLevel, HUD.getColor(player, searcher, target, threatLevel)), player);
+            if (searcher == null) WRAPPER.sendTo(new ThreatPacket(EMPTY, EMPTY, 0, COLOR_NULL), player);
+            else if (Threat.bypassesThreat(searcher)) WRAPPER.sendTo(new ThreatPacket(searcher.getName(), "", -1, 0), player);
+            else WRAPPER.sendTo(new ThreatPacket(searcher.getName(), target == null ? EMPTY : target.getName(), threatLevel, HUD.getColor(player, searcher, target, threatLevel)), player);
         }
     }
 
