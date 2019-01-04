@@ -15,9 +15,8 @@ Make HUD clear its data when the client disconnects from the server it is on
 
 ONGOING TASKS ==========================================================
 
-Fix specific non-passive mobs being detected as passive...
-...All or most of Lycanite's Mobs
-...check for others
+Fix any mobs that are incorrectly detected as passive / non-passive...
+...if this is still an issue, maybe look into whether journeymap handles it well or not and use it as reference?
 
 Fix crashes due to null attack target syndrome...
 ...(not currently aware of any unfixed)
