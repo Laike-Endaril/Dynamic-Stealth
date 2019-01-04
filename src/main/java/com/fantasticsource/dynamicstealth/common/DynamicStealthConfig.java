@@ -432,6 +432,10 @@ public class DynamicStealthConfig
             @Config.RangeDouble(min = 1)
             public double attackedThreatMultiplierOther = 6000;
 
+            @Config.Name("Bypass Threat System (Global)")
+            @Comment({"If enabled, all entities should bypass the threat system"})
+            public boolean bypassThreatSystem = false;
+
             @Config.Name("Initial Attack Multiplier")
             @Comment({"When an out-of-combat entity is attacked, its threat is set to the damage taken times this, divided by its max HP"})
             @Config.RangeDouble(min = 1)

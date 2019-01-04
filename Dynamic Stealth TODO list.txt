@@ -1,8 +1,10 @@
 CURRENTLY WORKING ON ===================================================
 
 Add per-entity HUD which only displays a color and a percentage...
-...make server send data for applicable entities
+...have server store list of applicable entities
+...when list changes, send only changed data
 ...make client accept said data and store it
+
 ...render the stored data
 ...delete the stored data if the client disconnects from the server it is on
 ...make it one or both of...
@@ -56,9 +58,6 @@ CONFIG FILE ============================================================
 Add entity-specific isPassive option...
 ...doesn't make an entity passive or non-passive; just makes the system detect it as passive or non-passive
 ...add ebwizardry:wizard as non-passive
-
-Add threat bypass option...
-...make sure HUD detects the option correctly
 
 Add entity-specific threat bypass option...
 ...make sure HUD detects the option correctly
