@@ -6,6 +6,7 @@ import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -242,7 +243,7 @@ public class Threat
 
     public static boolean bypassesThreat(EntityLivingBase livingBase)
     {
-        return serverSettings.threat.bypassThreatSystem || livingBase instanceof EntityPlayer || livingBase instanceof EntityDragon || livingBase instanceof EntitySlime;
+        return serverSettings.threat.bypassThreatSystem || livingBase instanceof EntityPlayer || livingBase instanceof EntityEnderman || livingBase instanceof EntityDragon || livingBase instanceof EntitySlime;
     }
 
 
