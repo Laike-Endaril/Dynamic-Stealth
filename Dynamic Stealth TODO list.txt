@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
+Make guardians NOT attack squid
+
 Add per-entity HUD which only displays a color and a percentage...
 ...have server store list of applicable entities
 ...when list changes, send only changed data
@@ -58,7 +60,7 @@ Add entity-specific isPassive option...
 ...add ebwizardry:wizard as non-passive
 
 Add entity-specific threat bypass option...
-...make sure HUD detects the option correctly
+...then transfer all current threat bypasses to it as default config options
 
 
 
