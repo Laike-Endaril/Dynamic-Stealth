@@ -202,10 +202,11 @@ public class Threat
     {
         ExplicitPriorityQueue<EntityLivingBase> queue = new ExplicitPriorityQueue<>(10);
         double stealthLevel;
+        Entity[] loadedEntities = player.world.loadedEntityList.toArray(new Entity[player.world.loadedEntityList.size()]);
 
         if (serverSettings.senses.usePlayerSenses)
         {
-            for (Entity entity : player.world.loadedEntityList)
+            for (Entity entity : loadedEntities)
             {
                 if (entity instanceof EntityLivingBase && entity != player)
                 {
@@ -216,7 +217,7 @@ public class Threat
         }
         else
         {
-            for (Entity entity : player.world.loadedEntityList)
+            for (Entity entity : loadedEntities)
             {
                 if (entity instanceof EntityLivingBase && entity != player)
                 {
