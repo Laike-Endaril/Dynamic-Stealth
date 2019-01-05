@@ -190,7 +190,7 @@ public class Threat
 
     public static boolean bypassesThreat(EntityLivingBase livingBase)
     {
-        return serverSettings.threat.bypassThreatSystem || livingBase == null || livingBase instanceof EntityPlayer || livingBase instanceof EntityEnderman || livingBase instanceof EntityDragon || livingBase instanceof EntitySlime;
+        return serverSettings.threat.bypassThreatSystem || livingBase == null || livingBase instanceof EntityPlayer || livingBase instanceof EntityDragon || livingBase instanceof EntitySlime;
     }
 
 
