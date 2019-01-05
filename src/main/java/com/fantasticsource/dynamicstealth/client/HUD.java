@@ -24,10 +24,10 @@ public class HUD extends Gui
     public static final String EMPTY = "----------";
     public static final String UNKNOWN = "???";
 
-    public static int color = COLOR_NULL;
-    public static String threatSearcher = EMPTY;
-    public static String threatTarget = EMPTY;
-    public static int threatLevel = 0;
+    public static String detailSearcher = EMPTY;
+    public static String detailTarget = EMPTY;
+    public static int detailThreatLevel = 0;
+    public static int detailColor = COLOR_NULL;
 
     public HUD(Minecraft mc)
     {
@@ -38,37 +38,37 @@ public class HUD extends Gui
 
         if (DynamicStealthConfig.clientSettings.threat.displayHUD)
         {
-            if (threatSearcher.equals(EMPTY))
+            if (detailSearcher.equals(EMPTY))
             {
-                drawString(fontRender, EMPTY, (int) (width * 0.75), height - 30, color);
-                drawString(fontRender, EMPTY, (int) (width * 0.75), height - 20, color);
-                drawString(fontRender, EMPTY, (int) (width * 0.75), height - 10, color);
+                drawString(fontRender, EMPTY, (int) (width * 0.75), height - 30, detailColor);
+                drawString(fontRender, EMPTY, (int) (width * 0.75), height - 20, detailColor);
+                drawString(fontRender, EMPTY, (int) (width * 0.75), height - 10, detailColor);
             }
             else
             {
-                if (threatLevel == 0)
+                if (detailThreatLevel == 0)
                 {
-                    drawString(fontRender, threatSearcher, (int) (width * 0.75), height - 30, color);
-                    drawString(fontRender, EMPTY, (int) (width * 0.75), height - 20, color);
-                    drawString(fontRender, EMPTY, (int) (width * 0.75), height - 10, color);
+                    drawString(fontRender, detailSearcher, (int) (width * 0.75), height - 30, detailColor);
+                    drawString(fontRender, EMPTY, (int) (width * 0.75), height - 20, detailColor);
+                    drawString(fontRender, EMPTY, (int) (width * 0.75), height - 10, detailColor);
                 }
-                else if (threatTarget.equals(EMPTY))
+                else if (detailTarget.equals(EMPTY))
                 {
-                    drawString(fontRender, threatSearcher, (int) (width * 0.75), height - 30, color);
-                    drawString(fontRender, EMPTY, (int) (width * 0.75), height - 20, color);
-                    drawString(fontRender, "" + threatLevel, (int) (width * 0.75), height - 10, color);
+                    drawString(fontRender, detailSearcher, (int) (width * 0.75), height - 30, detailColor);
+                    drawString(fontRender, EMPTY, (int) (width * 0.75), height - 20, detailColor);
+                    drawString(fontRender, "" + detailThreatLevel, (int) (width * 0.75), height - 10, detailColor);
                 }
-                else if (threatLevel == -1)
+                else if (detailThreatLevel == -1) //Special code for threat bypass mode
                 {
-                    drawString(fontRender, threatSearcher, (int) (width * 0.75), height - 30, COLOR_ALERT);
+                    drawString(fontRender, detailSearcher, (int) (width * 0.75), height - 30, COLOR_ALERT);
                     drawString(fontRender, UNKNOWN, (int) (width * 0.75), height - 20, COLOR_ALERT);
                     drawString(fontRender, UNKNOWN, (int) (width * 0.75), height - 10, COLOR_ALERT);
                 }
                 else
                 {
-                    drawString(fontRender, threatSearcher, (int) (width * 0.75), height - 30, color);
-                    drawString(fontRender, threatTarget, (int) (width * 0.75), height - 20, color);
-                    drawString(fontRender, "" + threatLevel, (int) (width * 0.75), height - 10, color);
+                    drawString(fontRender, detailSearcher, (int) (width * 0.75), height - 30, detailColor);
+                    drawString(fontRender, detailTarget, (int) (width * 0.75), height - 20, detailColor);
+                    drawString(fontRender, "" + detailThreatLevel, (int) (width * 0.75), height - 10, detailColor);
                 }
             }
 
@@ -79,10 +79,10 @@ public class HUD extends Gui
     @SubscribeEvent
     public static void clearHUD(FMLNetworkEvent.ClientDisconnectionFromServerEvent event)
     {
-        color = COLOR_NULL;
-        threatSearcher = EMPTY;
-        threatTarget = EMPTY;
-        threatLevel = 0;
+        detailColor = COLOR_NULL;
+        detailSearcher = EMPTY;
+        detailTarget = EMPTY;
+        detailThreatLevel = 0;
     }
 
     public static int getColor(EntityPlayer player, EntityLivingBase searcher, EntityLivingBase target, int threatLevel)

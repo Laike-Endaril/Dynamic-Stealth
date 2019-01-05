@@ -40,13 +40,13 @@ public class Network
             {
                 boolean detailHUD = serverSettings.threat.hud.allowClientDetailHUD > 0;
                 int onPointHUDMode = serverSettings.threat.hud.opOnPointHUD;
-                if (detailHUD || onPointHUDMode > 0) WRAPPER.sendTo(new HUDPacket(queue, detailHUD, onPointHUDMode), player);
+                if (detailHUD || onPointHUDMode > 0) WRAPPER.sendTo(new HUDPacket(player, queue, detailHUD, onPointHUDMode), player);
             }
             else
             {
                 boolean detailHUD = serverSettings.threat.hud.allowClientDetailHUD > 1;
                 int onPointHUDMode = serverSettings.threat.hud.normalOnPointHUD;
-                if (detailHUD || onPointHUDMode > 0) WRAPPER.sendTo(new HUDPacket(queue, detailHUD, onPointHUDMode), player);
+                if (detailHUD || onPointHUDMode > 0) WRAPPER.sendTo(new HUDPacket(player, queue, detailHUD, onPointHUDMode), player);
             }
         }
     }
@@ -57,6 +57,11 @@ public class Network
         ExplicitPriorityQueue<EntityLivingBase> queue;
         boolean detailHUD;
         int onPointHUDMode;
+
+        String detailSearcherName;
+        String detailTargetName;
+        int detailThreatLevel;
+        int detailColor;
 
         public HUDPacket() //This seems to be required, even if unused
         {
@@ -117,7 +122,25 @@ public class Network
         @Override
         public void fromBytes(ByteBuf buf)
         {
-            //TODO
+            detailHUD = buf.readBoolean();
+            onPointHUDMode = buf.readInt();
+
+            if (detailHUD)
+            {
+                detailSearcherName = ByteBufUtils.readUTF8String(buf);
+                detailTargetName = ByteBufUtils.readUTF8String(buf);
+                detailThreatLevel = buf.readInt();
+                detailColor = buf.readInt();
+            }
+
+            if (onPointHUDMode == 2)
+            {
+                //TODO Receive limited data for all entities
+            }
+            else if (onPointHUDMode == 1 && !detailHUD)
+            {
+                //TODO Receive limited data for one entity
+            }
         }
     }
 
@@ -130,7 +153,10 @@ public class Network
             {
                 Minecraft.getMinecraft().addScheduledTask(() ->
                 {
-                    //TODO Set data within HUD
+                    detailSearcher = packet.detailSearcherName;
+                    detailTarget = packet.detailTargetName;
+                    detailThreatLevel = packet.detailThreatLevel;
+                    detailColor = packet.detailColor;
                 });
             }
 
