@@ -84,7 +84,7 @@ public class DynamicStealth
         {
             ConfigManager.sync(MODID, Config.Type.INSTANCE);
 
-            Threat.sendToAll(serverSettings.threat.allowClientHUD);
+            Threat.sendToAll(serverSettings.threat.hud.allowClientDetailHUD);
         }
     }
 

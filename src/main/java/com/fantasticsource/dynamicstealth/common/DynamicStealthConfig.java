@@ -411,16 +411,8 @@ public class DynamicStealthConfig
 
         public class ThreatSystem
         {
-            @Config.Name("Allow HUD display on clients")
-            @Comment({
-                    "If enabled, clients are allowed to turn on a HUD for displaying threat information",
-                    "",
-                    "0 means disabled for all players",
-                    "1 means enabled for OP players ONLY",
-                    "2 means enabled for all players"
-            })
-            @Config.RangeInt(min = 0, max = 2)
-            public int allowClientHUD = 2;
+            @Config.Name("Client HUD allowances")
+            public HUD hud = new HUD();
 
             @Config.Name("'Attacked By Same' Multiplier")
             @Comment({"When an in-combat entity is attacked by its current target, its threat is increased by the damage taken times this, divided by its max HP"})
@@ -464,6 +456,43 @@ public class DynamicStealthConfig
             @Comment({"Every time an entity updates and their target's position is unknown, this is subtracted from their threat"})
             @Config.RangeInt(min = 1)
             public int unseenTargetDegredationRate = 1;
+
+            public class HUD
+            {
+                @Config.Name("Allow detailed HUD on clients")
+                @Comment({
+                        "If enabled, clients are allowed to turn on a HUD for displaying detailed threat information for a single target",
+                        "",
+                        "0 means disabled for all players",
+                        "1 means enabled for OP players ONLY",
+                        "2 means enabled for all players"
+                })
+                @Config.RangeInt(min = 0, max = 2)
+                public int allowClientDetailHUD = 2;
+
+                @Config.Name("Normal player multiHUD")
+                @Comment({
+                        "Controls how the per-entity threat HUD can be used on clients (for normal/non-OP players)",
+                        "",
+                        "0 means disabled",
+                        "1 means enabled for targeted entity ONLY",
+                        "2 means enabled for all seen entities"
+                })
+                @Config.RangeInt(min = 0, max = 2)
+                public int normalMultiHUD = 2;
+
+                @Config.Name("OP player multiHUD")
+                @Comment({
+                        "Controls how the per-entity threat HUD can be used on clients (for OP players)",
+                        "",
+                        "0 means disabled",
+                        "1 means enabled for targeted entity ONLY",
+                        "2 means enabled for all seen entities"
+                })
+                @Config.RangeInt(min = 0, max = 2)
+                public int opMultiHUD = 2;
+
+            }
         }
 
         public class OtherSettings

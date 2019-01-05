@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Make guardians NOT attack squid
-
 Add per-entity HUD which only displays a color and a percentage...
 ...have server store list of applicable entities
 ...when list changes, send only changed data
@@ -12,6 +10,8 @@ Add per-entity HUD which only displays a color and a percentage...
 ...make it one or both of...
 1. an in-world render, maybe rendering from the livingentity render
 2. a HUD render, but using correct scaling (like nameplates).  Can also make them not overlap each other using this method
+
+Make guardians NOT attack squid
 
 
 

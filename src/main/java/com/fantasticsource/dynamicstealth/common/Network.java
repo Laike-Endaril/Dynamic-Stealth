@@ -49,7 +49,7 @@ public class Network
 
     public static void sendThreatData(EntityPlayerMP player, EntityLivingBase searcher, EntityLivingBase target, int threatLevel, boolean permissionOverride)
     {
-        int mode = serverSettings.threat.allowClientHUD;
+        int mode = serverSettings.threat.hud.allowClientDetailHUD;
         if (permissionOverride || mode == 2 || (mode == 1 && isOP(player)))
         {
             if (searcher == null) WRAPPER.sendTo(new ThreatPacket(EMPTY, EMPTY, 0, COLOR_NULL), player);
