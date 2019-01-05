@@ -1,14 +1,11 @@
 CURRENTLY WORKING ON ===================================================
 
 Add per-entity HUD which only displays a color and a percentage...
-...finish the new packet formation and transmission
-...make client accept new packet type
-
-...render the stored data
-...delete the stored data if the client disconnects from the server it is on
-...make it one or both of...
+...render the stored data, as one or both of...
 1. an in-world render, maybe rendering from the livingentity render
 2. a HUD render, but using correct scaling (like nameplates).  Can also make them not overlap each other using this method
+
+Make it so targetless entities can still build threat (beyond the initial value)
 
 
 

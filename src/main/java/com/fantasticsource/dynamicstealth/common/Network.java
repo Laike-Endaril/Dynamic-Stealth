@@ -1,6 +1,5 @@
 package com.fantasticsource.dynamicstealth.common;
 
-import com.fantasticsource.dynamicstealth.client.HUD;
 import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import io.netty.buffer.ByteBuf;
@@ -14,6 +13,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
+
+import java.util.ArrayList;
 
 import static com.fantasticsource.dynamicstealth.client.HUD.*;
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
@@ -60,8 +61,11 @@ public class Network
 
         String detailSearcherName;
         String detailTargetName;
-        int detailThreatLevel;
+        int detailPercent;
         int detailColor;
+
+        //Output / client side only
+        ArrayList<OnPointData> onPointList = new ArrayList<>(10);
 
         public HUDPacket() //This seems to be required, even if unused
         {
@@ -78,69 +82,130 @@ public class Network
         @Override
         public void toBytes(ByteBuf buf)
         {
+            EntityLivingBase searcher;
+            int maxThreat = serverSettings.threat.maxThreat;
+
             buf.writeBoolean(detailHUD);
             buf.writeInt(onPointHUDMode);
 
-            EntityLivingBase searcher;
             if (detailHUD)
             {
                 searcher = queue.poll();
-                if (searcher == null)
-                {
-                    ByteBufUtils.writeUTF8String(buf, EMPTY);
-                    ByteBufUtils.writeUTF8String(buf, EMPTY);
-                    buf.writeInt(0);
-                    buf.writeInt(COLOR_NULL);
-                }
+                if (searcher == null) buf.writeInt(COLOR_NULL); //if color == COLOR_NULL then searcher is null
                 else if (bypassesThreat(searcher))
                 {
-                    ByteBufUtils.writeUTF8String(buf, searcher.getName());
-                    ByteBufUtils.writeUTF8String(buf, UNKNOWN);
-                    buf.writeInt(-1);
                     buf.writeInt(COLOR_ALERT);
+                    buf.writeInt(-1); //else if threatLevel == -1 then searcher bypasses threat
+                    ByteBufUtils.writeUTF8String(buf, searcher.getName());
+
+                    if (onPointHUDMode > 0) buf.writeInt(searcher.getEntityId());
                 }
                 else
                 {
                     Threat.ThreatData data = Threat.get(searcher);
+
+                    buf.writeInt(getColor(player, searcher, data.target, data.threatLevel)); //else this is a normal entry
+                    buf.writeInt((int) (100D * data.threatLevel / maxThreat));
+
                     ByteBufUtils.writeUTF8String(buf, searcher.getName());
                     ByteBufUtils.writeUTF8String(buf, data.target == null ? EMPTY : data.target.getName());
-                    buf.writeInt(data.threatLevel);
-                    buf.writeInt(HUD.getColor(player, searcher, data.target, data.threatLevel));
+
+                    if (onPointHUDMode > 0) buf.writeInt(searcher.getEntityId());
+                }
+            }
+            else //!detailHUD
+            {
+                if (onPointHUDMode == 1)
+                {
+                    searcher = queue.poll();
+                    if (searcher == null) buf.writeInt(COLOR_NULL);
+                    else
+                    {
+                        Threat.ThreatData data = Threat.get(searcher);
+
+                        buf.writeInt(getColor(player, searcher, data.target, data.threatLevel));
+                        buf.writeInt(searcher.getEntityId());
+                        buf.writeInt((int) (100D * data.threatLevel / maxThreat));
+                    }
                 }
             }
 
             if (onPointHUDMode == 2)
             {
-                //TODO Send limited data for all entities; use IDs instead of names
-            }
-            else if (onPointHUDMode == 1 && !detailHUD)
-            {
-                //TODO Send limited data for one entity; use IDs instead of names
+                buf.writeInt(queue.size());
+
+                while (queue.size() > 0)
+                {
+                    searcher = queue.poll();
+                    if (searcher == null) buf.writeInt(COLOR_NULL);
+                    else
+                    {
+                        Threat.ThreatData data = Threat.get(searcher);
+
+                        buf.writeInt(getColor(player, searcher, data.target, data.threatLevel));
+                        buf.writeInt(searcher.getEntityId());
+                        buf.writeInt((int) (100D * data.threatLevel / maxThreat));
+                    }
+                }
             }
         }
 
         @Override
         public void fromBytes(ByteBuf buf)
         {
+            onPointList.clear();
+            int color;
+
             detailHUD = buf.readBoolean();
             onPointHUDMode = buf.readInt();
 
             if (detailHUD)
             {
-                detailSearcherName = ByteBufUtils.readUTF8String(buf);
-                detailTargetName = ByteBufUtils.readUTF8String(buf);
-                detailThreatLevel = buf.readInt();
                 detailColor = buf.readInt();
+
+                if (detailColor != COLOR_NULL)
+                {
+                    detailPercent = buf.readInt();
+
+                    detailSearcherName = ByteBufUtils.readUTF8String(buf);
+                    detailTargetName = detailPercent == -1 ? UNKNOWN : ByteBufUtils.readUTF8String(buf);
+
+                    if (onPointHUDMode > 0) onPointList.add(new OnPointData(buf.readInt(), detailColor, detailPercent));
+                }
+            }
+            else
+            {
+                if (onPointHUDMode == 1)
+                {
+                    color = buf.readInt();
+                    if (color == COLOR_NULL) onPointList.add(new OnPointData(-1, COLOR_NULL, -1));
+                    else onPointList.add(new OnPointData(buf.readInt(), color, buf.readInt()));
+                }
             }
 
             if (onPointHUDMode == 2)
             {
-                //TODO Receive limited data for all entities
+                for (int i = buf.readInt(); i > 0; i--)
+                {
+                    color = buf.readInt();
+                    if (color == COLOR_NULL) onPointList.add(new OnPointData(-1, COLOR_NULL, -1));
+                    else onPointList.add(new OnPointData(buf.readInt(), color, buf.readInt()));
+                }
             }
-            else if (onPointHUDMode == 1 && !detailHUD)
-            {
-                //TODO Receive limited data for one entity
-            }
+        }
+    }
+
+    public static class OnPointData
+    {
+        public int entityID;
+        public int color;
+        public int percent;
+
+        public OnPointData(int idIn, int colorIn, int percentIn)
+        {
+            entityID = idIn;
+            color = colorIn;
+            percent = percentIn;
         }
     }
 
@@ -153,10 +218,23 @@ public class Network
             {
                 Minecraft.getMinecraft().addScheduledTask(() ->
                 {
-                    detailSearcher = packet.detailSearcherName;
-                    detailTarget = packet.detailTargetName;
-                    detailThreatLevel = packet.detailThreatLevel;
                     detailColor = packet.detailColor;
+
+                    if (detailColor == COLOR_NULL)
+                    {
+                        detailPercent = -1;
+                        detailSearcher = EMPTY;
+                        detailTarget = EMPTY;
+                    }
+                    else
+                    {
+                        detailSearcher = packet.detailSearcherName;
+                        detailPercent = packet.detailPercent;
+
+                        detailTarget = detailPercent == -1 ? EMPTY : packet.detailTargetName;
+                    }
+
+                    onPointDataList = packet.onPointList;
                 });
             }
 

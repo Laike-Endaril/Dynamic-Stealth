@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.client;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealthConfig;
+import com.fantasticsource.dynamicstealth.common.Network;
 import com.fantasticsource.mctools.MCTools;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -11,6 +12,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
 
 public class HUD extends Gui
 {
@@ -26,8 +29,10 @@ public class HUD extends Gui
 
     public static String detailSearcher = EMPTY;
     public static String detailTarget = EMPTY;
-    public static int detailThreatLevel = 0;
+    public static int detailPercent = 0;
     public static int detailColor = COLOR_NULL;
+
+    public static ArrayList<Network.OnPointData> onPointDataList;
 
     public HUD(Minecraft mc)
     {
@@ -46,7 +51,7 @@ public class HUD extends Gui
             }
             else
             {
-                if (detailThreatLevel == 0)
+                if (detailPercent == 0)
                 {
                     drawString(fontRender, detailSearcher, (int) (width * 0.75), height - 30, detailColor);
                     drawString(fontRender, EMPTY, (int) (width * 0.75), height - 20, detailColor);
@@ -56,9 +61,9 @@ public class HUD extends Gui
                 {
                     drawString(fontRender, detailSearcher, (int) (width * 0.75), height - 30, detailColor);
                     drawString(fontRender, EMPTY, (int) (width * 0.75), height - 20, detailColor);
-                    drawString(fontRender, "" + detailThreatLevel, (int) (width * 0.75), height - 10, detailColor);
+                    drawString(fontRender, detailPercent + "%", (int) (width * 0.75), height - 10, detailColor);
                 }
-                else if (detailThreatLevel == -1) //Special code for threat bypass mode
+                else if (detailPercent == -1) //Special code for threat bypass mode
                 {
                     drawString(fontRender, detailSearcher, (int) (width * 0.75), height - 30, COLOR_ALERT);
                     drawString(fontRender, UNKNOWN, (int) (width * 0.75), height - 20, COLOR_ALERT);
@@ -68,7 +73,7 @@ public class HUD extends Gui
                 {
                     drawString(fontRender, detailSearcher, (int) (width * 0.75), height - 30, detailColor);
                     drawString(fontRender, detailTarget, (int) (width * 0.75), height - 20, detailColor);
-                    drawString(fontRender, "" + detailThreatLevel, (int) (width * 0.75), height - 10, detailColor);
+                    drawString(fontRender, detailPercent + "%", (int) (width * 0.75), height - 10, detailColor);
                 }
             }
 
@@ -82,7 +87,9 @@ public class HUD extends Gui
         detailColor = COLOR_NULL;
         detailSearcher = EMPTY;
         detailTarget = EMPTY;
-        detailThreatLevel = 0;
+        detailPercent = 0;
+
+        onPointDataList.clear();
     }
 
     public static int getColor(EntityPlayer player, EntityLivingBase searcher, EntityLivingBase target, int threatLevel)
