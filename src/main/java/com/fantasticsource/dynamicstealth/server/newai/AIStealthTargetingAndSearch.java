@@ -47,6 +47,8 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
     @Override
     public boolean shouldExecute()
     {
+        if (Threat.bypassesThreat(searcher)) return false;
+
         Threat.ThreatData threatData = Threat.get(searcher);
         int threat = threatData.threatLevel;
 
