@@ -1,5 +1,10 @@
 CURRENTLY WORKING ON ===================================================
 
+Fix incompat between DS and controlled burn...
+...move mctools and tools to a new lib mod and remove them from DS and controlled burn
+...have DS and controlled burn reference the lib
+...require correct version of lib mod in DS and controlled burn
+
 Add per-entity HUD which only displays a color and a percentage...
 ...render the stored data, as one or both of...
 1. an in-world render, maybe rendering from the livingentity render
