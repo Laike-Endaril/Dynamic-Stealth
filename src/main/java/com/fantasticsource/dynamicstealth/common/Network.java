@@ -16,7 +16,6 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.ArrayList;
 
-import static com.fantasticsource.dynamicstealth.client.HUD.getColor;
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.dynamicstealth.common.HUDData.*;
 import static com.fantasticsource.dynamicstealth.server.Threat.bypassesThreat;

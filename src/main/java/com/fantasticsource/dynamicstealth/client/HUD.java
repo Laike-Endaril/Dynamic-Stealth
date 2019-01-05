@@ -1,13 +1,10 @@
 package com.fantasticsource.dynamicstealth.client;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealthConfig;
-import com.fantasticsource.mctools.MCTools;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.lwjgl.opengl.GL11;
@@ -72,15 +69,5 @@ public class HUD extends Gui
         detailPercent = 0;
 
         onPointDataList.clear();
-    }
-
-    public static int getColor(EntityPlayer player, EntityLivingBase searcher, EntityLivingBase target, int threatLevel)
-    {
-        if (searcher == null) return COLOR_NULL;
-        if (DynamicStealthConfig.serverSettings.threat.recognizePassive && MCTools.isPassive(searcher)) return COLOR_PASSIVE;
-        if (threatLevel <= 0) return COLOR_IDLE;
-        if (target == null) return COLOR_ALERT;
-        if (target == player) return COLOR_ATTACKING_YOU;
-        return COLOR_ATTACKING_OTHER;
     }
 }
