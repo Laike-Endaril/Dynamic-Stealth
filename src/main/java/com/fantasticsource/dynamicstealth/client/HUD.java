@@ -1,7 +1,7 @@
 package com.fantasticsource.dynamicstealth.client;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealthConfig;
-import com.fantasticsource.dynamicstealth.common.Network;
+import com.fantasticsource.dynamicstealth.common.HUDData;
 import com.fantasticsource.mctools.MCTools;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -13,27 +13,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
+import static com.fantasticsource.dynamicstealth.common.HUDData.*;
 
 public class HUD extends Gui
 {
-    public static final int COLOR_NULL = 0x777777;
-    public static final int COLOR_ATTACKING_YOU = 0xFF0000;
-    public static final int COLOR_ALERT = 0xFF8800;
-    public static final int COLOR_ATTACKING_OTHER = 0xFFFF00;
-    public static final int COLOR_IDLE = 0x4444FF;
-    public static final int COLOR_PASSIVE = 0x00CC00;
-
-    public static final String EMPTY = "----------";
-    public static final String UNKNOWN = "???";
-
-    public static String detailSearcher = EMPTY;
-    public static String detailTarget = EMPTY;
-    public static int detailPercent = 0;
-    public static int detailColor = COLOR_NULL;
-
-    public static ArrayList<Network.OnPointData> onPointDataList;
-
     public HUD(Minecraft mc)
     {
         ScaledResolution sr = new ScaledResolution(mc);

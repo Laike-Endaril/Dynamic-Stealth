@@ -8,6 +8,7 @@ import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.dynamicstealth.server.ai.*;
 import com.fantasticsource.dynamicstealth.server.configdata.EntityVisionData;
 import com.fantasticsource.dynamicstealth.server.newai.AIStealthTargetingAndSearch;
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.Speedometer;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.TrigLookupTable;
@@ -45,6 +46,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Field;
@@ -74,7 +76,7 @@ public class DynamicStealth
         MinecraftForge.EVENT_BUS.register(Speedometer.class);
         MinecraftForge.EVENT_BUS.register(Network.class);
         MinecraftForge.EVENT_BUS.register(Threat.class);
-        MinecraftForge.EVENT_BUS.register(HUD.class);
+        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) MinecraftForge.EVENT_BUS.register(HUD.class);
     }
 
     @SubscribeEvent
