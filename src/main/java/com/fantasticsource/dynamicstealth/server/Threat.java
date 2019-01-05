@@ -1,12 +1,10 @@
 package com.fantasticsource.dynamicstealth.server;
 
 import com.fantasticsource.dynamicstealth.common.Network;
-import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
-import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;

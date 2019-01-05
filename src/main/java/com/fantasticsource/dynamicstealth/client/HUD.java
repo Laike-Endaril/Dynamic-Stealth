@@ -1,7 +1,6 @@
 package com.fantasticsource.dynamicstealth.client;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealthConfig;
-import com.fantasticsource.dynamicstealth.common.HUDData;
 import com.fantasticsource.mctools.MCTools;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
