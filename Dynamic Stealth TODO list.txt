@@ -1,9 +1,8 @@
 CURRENTLY WORKING ON ===================================================
 
 Add per-entity HUD which only displays a color and a percentage...
-...have server store list of applicable entities
-...when list changes, send only changed data
-...make client accept said data and store it
+...finish the new packet formation and transmission
+...make client accept new packet type
 
 ...render the stored data
 ...delete the stored data if the client disconnects from the server it is on

@@ -1,12 +1,11 @@
 package com.fantasticsource.dynamicstealth.common;
 
 import com.fantasticsource.dynamicstealth.client.HUD;
-import com.fantasticsource.dynamicstealth.server.Threat;
+import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -14,8 +13,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
-import static com.fantasticsource.dynamicstealth.client.HUD.COLOR_NULL;
-import static com.fantasticsource.dynamicstealth.client.HUD.EMPTY;
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.mctools.MCTools.isOP;
 
@@ -27,86 +24,102 @@ public class Network
 
     public static void init()
     {
-        WRAPPER.registerMessage(ThreatPacketHandler.class, ThreatPacket.class, discriminator++, Side.CLIENT);
+        WRAPPER.registerMessage(ThreatPacketHandler.class, HUDPacket.class, discriminator++, Side.CLIENT);
     }
 
 
-    public static void sendThreatData(EntityPlayerMP player, Threat.ThreatData threatData)
+    public static void sendThreatData(EntityPlayerMP player, ExplicitPriorityQueue<EntityLivingBase> queue)
     {
-        if (threatData == null) sendThreatData(player, null, null, 0);
-        else sendThreatData(player, threatData.searcher, threatData.target, threatData.threatLevel, false);
-    }
-
-    public static void sendThreatData(EntityPlayerMP player, Threat.ThreatData threatData, boolean permissionOverride)
-    {
-        sendThreatData(player, threatData.searcher, threatData.target, threatData.threatLevel, permissionOverride);
-    }
-
-    public static void sendThreatData(EntityPlayerMP player, EntityLivingBase searcher, EntityLivingBase target, int threatLevel)
-    {
-        sendThreatData(player, searcher, target, threatLevel, false);
-    }
-
-    public static void sendThreatData(EntityPlayerMP player, EntityLivingBase searcher, EntityLivingBase target, int threatLevel, boolean permissionOverride)
-    {
-        int mode = serverSettings.threat.hud.allowClientDetailHUD;
-        if (permissionOverride || mode == 2 || (mode == 1 && isOP(player)))
+        if (player != null && player.world.loadedEntityList.contains(player))
         {
-            if (searcher == null) WRAPPER.sendTo(new ThreatPacket(EMPTY, EMPTY, 0, COLOR_NULL), player);
-            else if (Threat.bypassesThreat(searcher)) WRAPPER.sendTo(new ThreatPacket(searcher.getName(), "", -1, 0), player);
-            else WRAPPER.sendTo(new ThreatPacket(searcher.getName(), target == null ? EMPTY : target.getName(), threatLevel, HUD.getColor(player, searcher, target, threatLevel)), player);
+            if (isOP(player))
+            {
+                boolean detailHUD = serverSettings.threat.hud.allowClientDetailHUD > 0;
+                int onPointHUDMode = serverSettings.threat.hud.opOnPointHUD;
+                if (detailHUD || onPointHUDMode > 0) WRAPPER.sendTo(new HUDPacket(queue.toArray(), detailHUD, onPointHUDMode), player);
+            }
+            else
+            {
+                boolean detailHUD = serverSettings.threat.hud.allowClientDetailHUD > 1;
+                int onPointHUDMode = serverSettings.threat.hud.normalOnPointHUD;
+                if (detailHUD || onPointHUDMode > 0) WRAPPER.sendTo(new HUDPacket(queue.toArray(), detailHUD, onPointHUDMode), player);
+            }
         }
     }
 
-    public static class ThreatPacket implements IMessage
+    public static class HUDPacket implements IMessage
     {
-        String searcher, target;
-        int threatLevel, color;
+        EntityLivingBase[] entities;
+        boolean detailHUD;
+        int onPointHUDMode;
 
-        public ThreatPacket() //This seems to be required, even if unused
+        public HUDPacket() //This seems to be required, even if unused
         {
         }
 
-        public ThreatPacket(String searcherIn, String targetIn, int threatLevelIn, int colorIn)
+        public HUDPacket(EntityLivingBase[] entitiesIn, boolean detailHUDIn, int onPointHUDModeIn)
         {
-            searcher = searcherIn;
-            target = targetIn;
-            threatLevel = threatLevelIn;
-            color = colorIn;
+            entities = entitiesIn;
+            detailHUD = detailHUDIn;
+            onPointHUDMode = onPointHUDModeIn;
+
+//            if (searcher == null) WRAPPER.sendTo(new HUDPacket(EMPTY, EMPTY, 0, COLOR_NULL), player);
+//            else if (Threat.bypassesThreat(searcher)) WRAPPER.sendTo(new HUDPacket(searcher.getName(), "", -1, 0), player);
+//            else WRAPPER.sendTo(new HUDPacket(searcher.getName(), target == null ? EMPTY : target.getName(), threatLevel, HUD.getColor(player, searcher, target, threatLevel)), player);
+//
+//
+//
+//            searcher = searcherIn;
+//            target = targetIn;
+//            threatLevel = threatLevelIn;
+//            color = colorIn;
         }
 
         @Override
         public void toBytes(ByteBuf buf)
         {
-            ByteBufUtils.writeUTF8String(buf, searcher);
-            ByteBufUtils.writeUTF8String(buf, target);
-            buf.writeInt(threatLevel);
-            buf.writeInt(color);
+            buf.writeBoolean(detailHUD);
+            buf.writeInt(onPointHUDMode);
+
+            if (detailHUD)
+            {
+                //TODO Send detailed data for one entry
+            }
+
+            if (onPointHUDMode == 2)
+            {
+                //TODO Send limited data for all entries
+            }
+            else if (onPointHUDMode == 1 && !detailHUD)
+            {
+                //TODO Send limited data for one entry
+            }
+//            ByteBufUtils.writeUTF8String(buf, searcher);
+//            ByteBufUtils.writeUTF8String(buf, target);
+//            buf.writeInt(threatLevel);
+//            buf.writeInt(color);
         }
 
         @Override
         public void fromBytes(ByteBuf buf)
         {
-            searcher = ByteBufUtils.readUTF8String(buf);
-            target = ByteBufUtils.readUTF8String(buf);
-            threatLevel = buf.readInt();
-            color = buf.readInt();
+//            searcher = ByteBufUtils.readUTF8String(buf);
+//            target = ByteBufUtils.readUTF8String(buf);
+//            threatLevel = buf.readInt();
+//            color = buf.readInt();
         }
     }
 
-    public static class ThreatPacketHandler implements IMessageHandler<ThreatPacket, IMessage>
+    public static class ThreatPacketHandler implements IMessageHandler<HUDPacket, IMessage>
     {
         @Override
-        public IMessage onMessage(ThreatPacket packet, MessageContext ctx)
+        public IMessage onMessage(HUDPacket packet, MessageContext ctx)
         {
             if (ctx.side == Side.CLIENT)
             {
                 Minecraft.getMinecraft().addScheduledTask(() ->
                 {
-                    HUD.threatSearcher = packet.searcher;
-                    HUD.threatTarget = packet.target;
-                    HUD.threatLevel = packet.threatLevel;
-                    HUD.color = packet.color;
+                    //TODO
                 });
             }
 

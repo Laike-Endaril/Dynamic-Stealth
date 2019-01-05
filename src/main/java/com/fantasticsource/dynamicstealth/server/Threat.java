@@ -25,12 +25,9 @@ import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.ser
 public class Threat
 {
     private static final int ITERATION_FREQUENCY = 72000; //Server ticks
-    public static Watchers watchers = new Watchers();
     private static int timer = ITERATION_FREQUENCY;
     //Searcher, target, threat level
     private static Map<EntityLivingBase, ThreatData> threatMap = new LinkedHashMap<>(200);
-    //Watcher (player watching a searcher), searcher
-    private static Map<EntityPlayerMP, ThreatData> watcherMap = new LinkedHashMap<>(20);
 
     @SubscribeEvent
     public static void update(TickEvent.ServerTickEvent event)
@@ -40,21 +37,6 @@ public class Threat
             timer = ITERATION_FREQUENCY;
             removeAllUnused();
         }
-
-        for (Map.Entry<EntityPlayerMP, ThreatData> entry : watcherMap.entrySet())
-        {
-            ThreatData oldThreatData = entry.getValue();
-            if (oldThreatData != null && oldThreatData.searcher != null)
-            {
-                ThreatData newThreatData = Threat.get(oldThreatData.searcher);
-
-                if (!oldThreatData.equals(newThreatData))
-                {
-                    Network.sendThreatData(entry.getKey(), newThreatData);
-                    entry.setValue(newThreatData.copy());
-                }
-            }
-        }
     }
 
     @SubscribeEvent
@@ -63,14 +45,13 @@ public class Threat
         if (event.side == Side.SERVER)
         {
             EntityPlayerMP player = (EntityPlayerMP) event.player;
-            EntityLivingBase searcher = seenEntities(player).poll();
-            Threat.watchers.set(player, searcher);
+            Network.sendThreatData(player, seenEntities(player));
         }
     }
 
+
     private static void removeAllUnused()
     {
-        watcherMap.entrySet().removeIf(Threat::checkRemoveWatcher);
         threatMap.entrySet().removeIf(Threat::checkRemoveSearcher);
     }
 
@@ -79,13 +60,6 @@ public class Threat
         EntityLivingBase searcher = entry.getKey();
         return !searcher.world.loadedEntityList.contains(searcher);
     }
-
-    private static boolean checkRemoveWatcher(Map.Entry<EntityPlayerMP, ThreatData> entry)
-    {
-        EntityPlayerMP watcher = entry.getKey();
-        return !watcher.world.loadedEntityList.contains(watcher);
-    }
-
 
     public static void removeTargetFromAll(EntityLivingBase target)
     {
@@ -170,34 +144,6 @@ public class Threat
     }
 
 
-    public static void sendToAll(int allowHUDMode)
-    {
-        if (allowHUDMode == 2)
-        {
-            for (Map.Entry<EntityPlayerMP, ThreatData> entry : watcherMap.entrySet())
-            {
-                Network.sendThreatData(entry.getKey(), entry.getValue(), true);
-            }
-        }
-        else if (allowHUDMode == 1)
-        {
-            for (Map.Entry<EntityPlayerMP, ThreatData> entry : watcherMap.entrySet())
-            {
-                EntityPlayerMP player = entry.getKey();
-                if (MCTools.isOP(player)) Network.sendThreatData(entry.getKey(), entry.getValue(), true);
-                else Network.sendThreatData(player, null, null, 0, true);
-            }
-        }
-        else
-        {
-            for (Map.Entry<EntityPlayerMP, ThreatData> entry : watcherMap.entrySet())
-            {
-                Network.sendThreatData(entry.getKey(), null, null, 0, true);
-            }
-        }
-    }
-
-
     public static ExplicitPriorityQueue<EntityLivingBase> seenEntities(EntityPlayerMP player)
     {
         ExplicitPriorityQueue<EntityLivingBase> queue = new ExplicitPriorityQueue<>(10);
@@ -277,44 +223,6 @@ public class Threat
         public String toString()
         {
             return searcherName + ", " + target.getName() + ", " + threatLevel;
-        }
-    }
-
-
-    public static class Watchers
-    {
-        public ThreatData get(EntityPlayerMP player)
-        {
-            return watcherMap.get(player);
-        }
-
-        public void set(EntityPlayerMP player, EntityLivingBase searcher)
-        {
-            if (player != null)
-            {
-                ThreatData oldData = watcherMap.get(player);
-
-                if (searcher == null)
-                {
-                    if (oldData != null && oldData.searcher != null) Network.sendThreatData(player, null, null, 0);
-                    watcherMap.remove(player);
-                }
-                else
-                {
-                    ThreatData newData = Threat.get(searcher);
-
-                    if (!newData.equals(oldData))
-                    {
-                        watcherMap.put(player, newData.copy());
-                        Network.sendThreatData(player, newData);
-                    }
-                }
-            }
-        }
-
-        public void remove(EntityPlayerMP player)
-        {
-            watcherMap.remove(player);
         }
     }
 }

@@ -80,12 +80,7 @@ public class DynamicStealth
     @SubscribeEvent
     public static void saveConfig(ConfigChangedEvent.OnConfigChangedEvent event)
     {
-        if (event.getModID().equals(MODID))
-        {
-            ConfigManager.sync(MODID, Config.Type.INSTANCE);
-
-            Threat.sendToAll(serverSettings.threat.hud.allowClientDetailHUD);
-        }
+        if (event.getModID().equals(MODID)) ConfigManager.sync(MODID, Config.Type.INSTANCE);
     }
 
     @SubscribeEvent
@@ -98,20 +93,13 @@ public class DynamicStealth
     }
 
     @SubscribeEvent
-    public static void playerLogged(PlayerEvent.PlayerLoggedOutEvent event)
-    {
-        EntityPlayer player = event.player;
-        if (player instanceof EntityPlayerMP) Threat.watchers.remove((EntityPlayerMP) player);
-    }
-
-    @SubscribeEvent
     public static void despawn(LivingSpawnEvent.AllowDespawn event)
     {
         EntityLivingBase livingBase = event.getEntityLiving();
         Event.Result result = event.getResult();
         if (livingBase instanceof EntityLiving && result != Event.Result.DENY && result != Event.Result.DEFAULT)
         {
-            Threat.remove((EntityLiving) livingBase);
+            Threat.remove(livingBase);
         }
     }
 

@@ -470,27 +470,27 @@ public class DynamicStealthConfig
                 @Config.RangeInt(min = 0, max = 2)
                 public int allowClientDetailHUD = 2;
 
-                @Config.Name("Normal player multiHUD")
+                @Config.Name("On-Point HUD for normal players")
                 @Comment({
-                        "Controls how the per-entity threat HUD can be used on clients (for normal/non-OP players)",
+                        "Controls how the on-point, per-entity threat HUD can be used on clients (for normal/non-OP players)",
                         "",
                         "0 means disabled",
                         "1 means enabled for targeted entity ONLY",
                         "2 means enabled for all seen entities"
                 })
                 @Config.RangeInt(min = 0, max = 2)
-                public int normalMultiHUD = 2;
+                public int normalOnPointHUD = 2;
 
-                @Config.Name("OP player multiHUD")
+                @Config.Name("On-Point HUD for OP players")
                 @Comment({
-                        "Controls how the per-entity threat HUD can be used on clients (for OP players)",
+                        "Controls how the on-point, per-entity threat HUD can be used on clients (for OP players)",
                         "",
                         "0 means disabled",
                         "1 means enabled for targeted entity ONLY",
                         "2 means enabled for all seen entities"
                 })
                 @Config.RangeInt(min = 0, max = 2)
-                public int opMultiHUD = 2;
+                public int opOnPointHUD = 2;
 
             }
         }
