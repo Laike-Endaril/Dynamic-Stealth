@@ -1,11 +1,13 @@
 package com.fantasticsource.dynamicstealth.common;
 
 import com.fantasticsource.dynamicstealth.client.HUD;
+import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -13,7 +15,9 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
+import static com.fantasticsource.dynamicstealth.client.HUD.*;
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
+import static com.fantasticsource.dynamicstealth.server.Threat.bypassesThreat;
 import static com.fantasticsource.mctools.MCTools.isOP;
 
 public class Network
@@ -36,20 +40,21 @@ public class Network
             {
                 boolean detailHUD = serverSettings.threat.hud.allowClientDetailHUD > 0;
                 int onPointHUDMode = serverSettings.threat.hud.opOnPointHUD;
-                if (detailHUD || onPointHUDMode > 0) WRAPPER.sendTo(new HUDPacket(queue.toArray(), detailHUD, onPointHUDMode), player);
+                if (detailHUD || onPointHUDMode > 0) WRAPPER.sendTo(new HUDPacket(queue, detailHUD, onPointHUDMode), player);
             }
             else
             {
                 boolean detailHUD = serverSettings.threat.hud.allowClientDetailHUD > 1;
                 int onPointHUDMode = serverSettings.threat.hud.normalOnPointHUD;
-                if (detailHUD || onPointHUDMode > 0) WRAPPER.sendTo(new HUDPacket(queue.toArray(), detailHUD, onPointHUDMode), player);
+                if (detailHUD || onPointHUDMode > 0) WRAPPER.sendTo(new HUDPacket(queue, detailHUD, onPointHUDMode), player);
             }
         }
     }
 
     public static class HUDPacket implements IMessage
     {
-        EntityLivingBase[] entities;
+        EntityPlayerMP player;
+        ExplicitPriorityQueue<EntityLivingBase> queue;
         boolean detailHUD;
         int onPointHUDMode;
 
@@ -57,22 +62,12 @@ public class Network
         {
         }
 
-        public HUDPacket(EntityLivingBase[] entitiesIn, boolean detailHUDIn, int onPointHUDModeIn)
+        public HUDPacket(EntityPlayerMP playerIn, ExplicitPriorityQueue<EntityLivingBase> queueIn, boolean detailHUDIn, int onPointHUDModeIn)
         {
-            entities = entitiesIn;
+            player = playerIn;
+            queue = queueIn;
             detailHUD = detailHUDIn;
             onPointHUDMode = onPointHUDModeIn;
-
-//            if (searcher == null) WRAPPER.sendTo(new HUDPacket(EMPTY, EMPTY, 0, COLOR_NULL), player);
-//            else if (Threat.bypassesThreat(searcher)) WRAPPER.sendTo(new HUDPacket(searcher.getName(), "", -1, 0), player);
-//            else WRAPPER.sendTo(new HUDPacket(searcher.getName(), target == null ? EMPTY : target.getName(), threatLevel, HUD.getColor(player, searcher, target, threatLevel)), player);
-//
-//
-//
-//            searcher = searcherIn;
-//            target = targetIn;
-//            threatLevel = threatLevelIn;
-//            color = colorIn;
         }
 
         @Override
@@ -81,32 +76,48 @@ public class Network
             buf.writeBoolean(detailHUD);
             buf.writeInt(onPointHUDMode);
 
+            EntityLivingBase searcher;
             if (detailHUD)
             {
-                //TODO Send detailed data for one entry
+                searcher = queue.poll();
+                if (searcher == null)
+                {
+                    ByteBufUtils.writeUTF8String(buf, EMPTY);
+                    ByteBufUtils.writeUTF8String(buf, EMPTY);
+                    buf.writeInt(0);
+                    buf.writeInt(COLOR_NULL);
+                }
+                else if (bypassesThreat(searcher))
+                {
+                    ByteBufUtils.writeUTF8String(buf, searcher.getName());
+                    ByteBufUtils.writeUTF8String(buf, UNKNOWN);
+                    buf.writeInt(-1);
+                    buf.writeInt(COLOR_ALERT);
+                }
+                else
+                {
+                    Threat.ThreatData data = Threat.get(searcher);
+                    ByteBufUtils.writeUTF8String(buf, searcher.getName());
+                    ByteBufUtils.writeUTF8String(buf, data.target == null ? EMPTY : data.target.getName());
+                    buf.writeInt(data.threatLevel);
+                    buf.writeInt(HUD.getColor(player, searcher, data.target, data.threatLevel));
+                }
             }
 
             if (onPointHUDMode == 2)
             {
-                //TODO Send limited data for all entries
+                //TODO Send limited data for all entities; use IDs instead of names
             }
             else if (onPointHUDMode == 1 && !detailHUD)
             {
-                //TODO Send limited data for one entry
+                //TODO Send limited data for one entity; use IDs instead of names
             }
-//            ByteBufUtils.writeUTF8String(buf, searcher);
-//            ByteBufUtils.writeUTF8String(buf, target);
-//            buf.writeInt(threatLevel);
-//            buf.writeInt(color);
         }
 
         @Override
         public void fromBytes(ByteBuf buf)
         {
-//            searcher = ByteBufUtils.readUTF8String(buf);
-//            target = ByteBufUtils.readUTF8String(buf);
-//            threatLevel = buf.readInt();
-//            color = buf.readInt();
+            //TODO
         }
     }
 
@@ -119,7 +130,7 @@ public class Network
             {
                 Minecraft.getMinecraft().addScheduledTask(() ->
                 {
-                    //TODO
+                    //TODO Set data within HUD
                 });
             }
 
