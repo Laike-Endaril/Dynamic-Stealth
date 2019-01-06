@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.client;
 
+import com.fantasticsource.tools.datastructures.Color;
 import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -9,7 +10,6 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.client.event.RenderLivingEvent;
@@ -19,6 +19,10 @@ import org.lwjgl.opengl.GL11;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.clientSettings;
 import static com.fantasticsource.dynamicstealth.common.HUDData.*;
+import static net.minecraft.client.renderer.vertex.DefaultVertexFormats.*;
+import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_QUADS;
+import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
 
 public class HUD extends Gui
 {
@@ -67,28 +71,28 @@ public class HUD extends Gui
         GlStateManager.scale(-0.025, -0.025, 0.025);
 
         GlStateManager.disableLighting();
-        GlStateManager.depthMask(false);
 
+        GlStateManager.depthMask(false);
         GlStateManager.disableDepth();
 
         GlStateManager.enableBlend();
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         GlStateManager.disableTexture2D();
+
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_COLOR);
-        bufferbuilder.pos((double) (-50 - 1), -1, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-        bufferbuilder.pos((double) (-50 - 1), 8, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-        bufferbuilder.pos((double) (50 + 1), 8, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-        bufferbuilder.pos((double) (50 + 1), -1, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+        Color c = new Color(color, true);
+        int r = c.r(), g = c.g(), b = c.b(), a = c.a();
+        bufferbuilder.begin(GL_QUADS, POSITION_COLOR);
+        bufferbuilder.pos(-8, -8, 0).color(r, g, b, a).endVertex();
+        bufferbuilder.pos(-8, 8, 0).color(r, g, b, a).endVertex();
+        bufferbuilder.pos(8, 8, 0).color(r, g, b, a).endVertex();
+        bufferbuilder.pos(8, -8, 0).color(r, g, b, a).endVertex();
         tessellator.draw();
+
         GlStateManager.enableTexture2D();
-
-//            fontRendererIn.drawString(str, -fontRendererIn.getStringWidth(str) / 2, 0, 553648127);
         GlStateManager.enableDepth();
-
         GlStateManager.depthMask(true);
-//            fontRendererIn.drawString(str, -fontRendererIn.getStringWidth(str) / 2, 0, -1);
         GlStateManager.enableLighting();
         GlStateManager.disableBlend();
         GlStateManager.color(1, 1, 1, 1);
