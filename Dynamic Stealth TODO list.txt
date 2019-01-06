@@ -1,9 +1,8 @@
 CURRENTLY WORKING ON ===================================================
 
-Add per-entity HUD which only displays a color and a percentage...
-...render the stored data, as one or both of...
-1. an in-world render, maybe rendering from the livingentity render
-2. a HUD render, but using correct scaling (like nameplates).  Can also make them not overlap each other using this method
+Make HUD.drawOnPointHUDElement()...
+...draw the icon instead of colored box
+...draw on top of shadows
 
 Look into https://github.com/rafradek/Mods/issues/47
 
