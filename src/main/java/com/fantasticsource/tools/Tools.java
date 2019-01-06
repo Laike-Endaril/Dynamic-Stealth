@@ -21,7 +21,7 @@ public class Tools
         return result;
     }
 
-    public static double min(float... values)
+    public static float min(float... values)
     {
         float result = Float.MAX_VALUE;
         for (float value : values)
