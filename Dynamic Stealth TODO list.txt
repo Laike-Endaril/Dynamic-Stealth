@@ -7,6 +7,8 @@ Add per-entity HUD which only displays a color and a percentage...
 
 Make it so targetless entities can still build threat (beyond the initial value)
 
+Check out github issue #9 (configurable stealth buffs feature request)
+
 
 
 ONGOING TASKS ==========================================================
