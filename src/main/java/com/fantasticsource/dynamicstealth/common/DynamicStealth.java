@@ -108,7 +108,7 @@ public class DynamicStealth
         if (deadOne != null)
         {
             Threat.removeTargetFromAll(deadOne);
-            if (deadOne instanceof EntityLiving) Threat.remove((EntityLiving) deadOne);
+            if (deadOne instanceof EntityLiving) Threat.remove(deadOne);
         }
     }
 
