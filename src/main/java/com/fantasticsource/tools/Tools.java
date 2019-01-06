@@ -21,6 +21,16 @@ public class Tools
         return result;
     }
 
+    public static double min(float... values)
+    {
+        float result = Float.MAX_VALUE;
+        for (float value : values)
+        {
+            if (value < result) result = value;
+        }
+        return result;
+    }
+
     public static double min(double... values)
     {
         double result = Double.MAX_VALUE;
@@ -35,6 +45,16 @@ public class Tools
     {
         int result = Integer.MIN_VALUE;
         for (int value : values)
+        {
+            if (value > result) result = value;
+        }
+        return result;
+    }
+
+    public static float max(float... values)
+    {
+        float result = Float.MIN_VALUE;
+        for (float value : values)
         {
             if (value > result) result = value;
         }
