@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
+Fix on-point hud drawing wrong colors
+
 Make HUD.drawOnPointHUDElement()...
 ...draw the icon instead of colored box
 ...draw on top of shadows
