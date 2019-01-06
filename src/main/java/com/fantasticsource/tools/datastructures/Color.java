@@ -15,20 +15,46 @@ public class Color
         setColor(color);
     }
 
+    public Color(int color, boolean noAlpha)
+    {
+        if (noAlpha) setColorNoAlpha(color);
+        else setColor(color);
+    }
+
+
     public Color(int r, int g, int b, int a)
     {
         setColor(r, g, b, a);
     }
+
+    public Color(int r, int g, int b)
+    {
+        setColor(r, g, b);
+    }
+
 
     public Color(float r, float g, float b, float a)
     {
         setColor(r, g, b, a);
     }
 
+    public Color(float r, float g, float b)
+    {
+        setColor(r, g, b);
+    }
+
+
     public Color(String hex)
     {
         setColor(hex);
     }
+
+    public Color(String hex, boolean noAlpha)
+    {
+        if (noAlpha) setColorNoAlpha(hex);
+        else setColor(hex);
+    }
+
 
     public Color copy()
     {
@@ -55,6 +81,11 @@ public class Color
         return this;
     }
 
+    public Color setColorNoAlpha(int color)
+    {
+        return setColor((color << 8) | 0xff);
+    }
+
     public Color setColor(int r, int g, int b, int a)
     {
         this.r = min(max(r, 0), 255);
@@ -72,6 +103,11 @@ public class Color
         hex = Integer.toHexString(intValue);
 
         return this;
+    }
+
+    public Color setColor(int r, int g, int b)
+    {
+        return setColor(r, g, b, 255);
     }
 
     public Color setColor(float r, float g, float b, float a)
@@ -93,6 +129,11 @@ public class Color
         return this;
     }
 
+    public Color setColor(float r, float g, float b)
+    {
+        return setColor(r, g, b, 1);
+    }
+
     public Color setColor(String hex)
     {
         this.hex = hex;
@@ -110,6 +151,11 @@ public class Color
         af = (float) a / 255;
 
         return this;
+    }
+
+    public Color setColorNoAlpha(String hex)
+    {
+        return setColor(hex + "ff");
     }
 
 
