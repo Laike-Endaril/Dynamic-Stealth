@@ -5,6 +5,8 @@ Add per-entity HUD which only displays a color and a percentage...
 1. an in-world render, maybe rendering from the livingentity render
 2. a HUD render, but using correct scaling (like nameplates).  Can also make them not overlap each other using this method
 
+Look into https://github.com/rafradek/Mods/issues/47
+
 Make it so targetless entities can still build threat (beyond the initial value)
 
 Check out github issue #9 (configurable stealth buffs feature request)

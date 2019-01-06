@@ -23,9 +23,18 @@ public class DynamicStealthConfig
 
         public class ThreatSystem
         {
-            @Config.Name("Display HUD")
-            @Comment({"If set to true AND threat HUD is allowed by server, displays a HUD containing threat system information"})
-            public boolean displayHUD = true;
+            @Config.Name("Display Detail HUD")
+            @Comment({"If set to true AND threat detail HUD is allowed by server, displays a HUD containing threat system information"})
+            public boolean displayDetailHUD = true;
+
+            @Config.Name("Max On-Point HUD Count")
+            @Comment({
+                    "The maximum number of on-point HUDs to display",
+                    "",
+                    "The actual number of HUDs displayed will vary depending on targets in range and server settings"
+            })
+            @Config.RangeInt(min = 0)
+            public int onPointHUDMax = 9999;
         }
     }
 

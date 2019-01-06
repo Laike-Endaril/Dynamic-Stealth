@@ -1,10 +1,11 @@
 package com.fantasticsource.dynamicstealth.common;
 
 import com.fantasticsource.mctools.MCTools;
+import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 
-import java.util.ArrayList;
+import java.util.Map;
 
 public class HUDData
 {
@@ -23,7 +24,7 @@ public class HUDData
     public static int detailPercent = 0;
     public static int detailColor = COLOR_NULL;
 
-    public static ArrayList<Network.OnPointData> onPointDataList;
+    public static Map<Integer, Pair<Integer, Integer>> onPointDataMap;
 
     public static int getColor(EntityPlayer player, EntityLivingBase searcher, EntityLivingBase target, int threatLevel)
     {

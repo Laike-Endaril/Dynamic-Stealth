@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth.common;
 
 import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
+import com.fantasticsource.tools.datastructures.Pair;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
@@ -14,7 +15,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.dynamicstealth.common.HUDData.*;
@@ -65,7 +67,7 @@ public class Network
         int detailColor;
 
         //Output / client side only
-        ArrayList<OnPointData> onPointList = new ArrayList<>(10);
+        Map<Integer, Pair<Integer, Integer>> onPointMap = new LinkedHashMap<>(10);
 
         public HUDPacket() //This seems to be required, even if unused
         {
@@ -153,7 +155,7 @@ public class Network
         @Override
         public void fromBytes(ByteBuf buf)
         {
-            onPointList.clear();
+            onPointMap.clear();
             int color;
 
             detailHUD = buf.readBoolean();
@@ -170,7 +172,7 @@ public class Network
                     detailSearcherName = ByteBufUtils.readUTF8String(buf);
                     detailTargetName = detailPercent == -1 ? UNKNOWN : ByteBufUtils.readUTF8String(buf);
 
-                    if (onPointHUDMode > 0) onPointList.add(new OnPointData(buf.readInt(), detailColor, detailPercent));
+                    if (onPointHUDMode > 0) onPointMap.put(buf.readInt(), new Pair<>(detailColor, detailPercent));
                 }
             }
             else
@@ -178,8 +180,7 @@ public class Network
                 if (onPointHUDMode == 1)
                 {
                     color = buf.readInt();
-                    if (color == COLOR_NULL) onPointList.add(new OnPointData(-1, COLOR_NULL, -1));
-                    else onPointList.add(new OnPointData(buf.readInt(), color, buf.readInt()));
+                    if (color != COLOR_NULL) onPointMap.put(buf.readInt(), new Pair<>(color, buf.readInt()));
                 }
             }
 
@@ -188,8 +189,7 @@ public class Network
                 for (int i = buf.readInt(); i > 0; i--)
                 {
                     color = buf.readInt();
-                    if (color == COLOR_NULL) onPointList.add(new OnPointData(-1, COLOR_NULL, -1));
-                    else onPointList.add(new OnPointData(buf.readInt(), color, buf.readInt()));
+                    if (color != COLOR_NULL) onPointMap.put(buf.readInt(), new Pair<>(color, buf.readInt()));
                 }
             }
         }
@@ -234,7 +234,7 @@ public class Network
                         detailTarget = detailPercent == -1 ? EMPTY : packet.detailTargetName;
                     }
 
-                    onPointDataList = packet.onPointList;
+                    onPointDataMap = packet.onPointMap;
                 });
             }
 
