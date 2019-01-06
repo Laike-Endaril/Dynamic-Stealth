@@ -113,58 +113,58 @@ public class Color
     }
 
 
-    public int getInt()
+    public int color()
     {
         return intValue;
     }
 
-    public int getR()
+    public int r()
     {
         return r;
     }
 
-    public int getG()
+    public int g()
     {
         return g;
     }
 
-    public int getB()
+    public int b()
     {
         return b;
     }
 
-    public int getA()
+    public int a()
     {
         return a;
     }
 
-    public float getRF()
+    public float rf()
     {
         return rf;
     }
 
-    public float getGF()
+    public float gf()
     {
         return gf;
     }
 
-    public float getBF()
+    public float bf()
     {
         return bf;
     }
 
-    public float getAF()
+    public float af()
     {
         return af;
     }
 
-    public String getString()
+    public String hex()
     {
         return hex;
     }
 
     public String toString()
     {
-        return getString();
+        return hex();
     }
 }
