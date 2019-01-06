@@ -79,15 +79,16 @@ public class HUD extends Gui
         GlStateManager.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         GlStateManager.disableTexture2D();
 
+        Color c = new Color(color, true);
+        GlStateManager.color(c.r(), c.g(), c.b(), c.a());
+
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
-        Color c = new Color(color, true);
-        int r = c.r(), g = c.g(), b = c.b(), a = c.a();
-        bufferbuilder.begin(GL_QUADS, POSITION_COLOR);
-        bufferbuilder.pos(-8, -8, 0).color(r, g, b, a).endVertex();
-        bufferbuilder.pos(-8, 8, 0).color(r, g, b, a).endVertex();
-        bufferbuilder.pos(8, 8, 0).color(r, g, b, a).endVertex();
-        bufferbuilder.pos(8, -8, 0).color(r, g, b, a).endVertex();
+        bufferbuilder.begin(GL_QUADS, POSITION);
+        bufferbuilder.pos(-8, -8, 0).endVertex();
+        bufferbuilder.pos(-8, 8, 0).endVertex();
+        bufferbuilder.pos(8, 8, 0).endVertex();
+        bufferbuilder.pos(8, -8, 0).endVertex();
         tessellator.draw();
 
         GlStateManager.enableTexture2D();
