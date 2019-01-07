@@ -58,7 +58,18 @@ public class HUD extends Gui
         EntityLivingBase livingBase = event.getEntity();
         OnPointData data = onPointDataMap.get(livingBase.getEntityId());
 
-        if (data != null && data.priority < clientSettings.threat.onPointHUDMax) drawOnPointHUDElement(event.getRenderer().getRenderManager(), event.getX(), event.getY(), event.getZ(), livingBase, data.color, data.percent);
+        if (data != null && data.priority < clientSettings.threat.onPointHUDMax && onPointFilter(data.color, data.percent)) drawOnPointHUDElement(event.getRenderer().getRenderManager(), event.getX(), event.getY(), event.getZ(), livingBase, data.color, data.percent);
+    }
+
+    private static boolean onPointFilter(int color, int percent)
+    {
+        if (percent == -1) return clientSettings.threat.filter.showBypass;
+        if (color == COLOR_PASSIVE) return clientSettings.threat.filter.showPassive;
+        if (color == COLOR_IDLE) return clientSettings.threat.filter.showIdle;
+        if (color == COLOR_ALERT) return clientSettings.threat.filter.showAlert;
+        if (color == COLOR_ATTACKING_YOU) return clientSettings.threat.filter.showAttackingYou;
+        if (color == COLOR_ATTACKING_OTHER) return clientSettings.threat.filter.showAttackingOther;
+        return false;
     }
 
     private static void drawOnPointHUDElement(RenderManager renderManager, double x, double y, double z, Entity entity, int color, int percent)

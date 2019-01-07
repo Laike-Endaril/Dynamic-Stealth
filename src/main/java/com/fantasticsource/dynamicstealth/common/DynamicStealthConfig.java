@@ -36,6 +36,36 @@ public class DynamicStealthConfig
             @Config.RangeInt(min = 0)
             public int onPointHUDMax = 9999;
 
+            @Config.Name("On-point HUD Filter")
+            public OnPointHUDFilter filter = new OnPointHUDFilter();
+
+            public class OnPointHUDFilter
+            {
+                @Config.Name("Passive")
+                @Comment({"If true, on-point indicators appear for passive mobs"})
+                public boolean showPassive = true;
+
+                @Config.Name("Bypass")
+                @Comment({"If true, on-point indicators appear for mobs that bypass the threat system"})
+                public boolean showBypass = true;
+
+                @Config.Name("Idle")
+                @Comment({"If true, on-point indicators appear for idle mobs"})
+                public boolean showIdle = true;
+
+                @Config.Name("Attacking Other")
+                @Comment({"If true, on-point indicators appear for mobs which are attacking something besides you"})
+                public boolean showAttackingOther = true;
+
+                @Config.Name("Alert")
+                @Comment({"If true, on-point indicators appear for alerted mobs who are actively searching for a target"})
+                public boolean showAlert = true;
+
+                @Config.Name("Attacking You")
+                @Comment({"If true, on-point indicators appear for mobs that are attacking YOU"})
+                public boolean showAttackingYou = true;
+            }
+
             @Config.Name("On-point HUD Style")
             public OnPointHUDStyle onPointHUDStyle = new OnPointHUDStyle();
 
