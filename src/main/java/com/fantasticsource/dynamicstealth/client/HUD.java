@@ -68,9 +68,25 @@ public class HUD extends Gui
         Color c = new Color(color, true);
         int r = c.r(), g = c.g(), b = c.b();
 
+        boolean depth = clientSettings.threat.onPointHUDStyle.depth;
+        double scale = clientSettings.threat.onPointHUDStyle.scale;
+        double halfSize2D = TEX_SIZE / 4D * scale;
+        double hOff2D = clientSettings.threat.onPointHUDStyle.horizontalOffset2D;
+        double vOff2D = clientSettings.threat.onPointHUDStyle.verticalOffset2D;
+
+
         GlStateManager.disableLighting();
-        GlStateManager.enableDepth();
-        GlStateManager.depthMask(true);
+
+        if (depth)
+        {
+            GlStateManager.enableDepth();
+            GlStateManager.depthMask(true);
+        }
+        else
+        {
+            GlStateManager.disableDepth();
+        }
+
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -79,10 +95,10 @@ public class HUD extends Gui
 
         GlStateManager.pushMatrix();
 
-        GlStateManager.translate(x, y + entity.height / 2, z);
+        GlStateManager.translate(x, y + entity.height * clientSettings.threat.onPointHUDStyle.verticalPercent - (clientSettings.threat.onPointHUDStyle.accountForSneak && entity.isSneaking() ? 0.25 : 0) + clientSettings.threat.onPointHUDStyle.verticalOffset, z);
         GlStateManager.rotate(-viewerYaw, 0, 1, 0);
-        GlStateManager.rotate((float) (renderManager.options.thirdPersonView == 2 ? -1 : 1) * viewerPitch, 1, 0, 0);
-        GlStateManager.translate(entity.width * 1.415, 0, 0);
+        GlStateManager.rotate(renderManager.options.thirdPersonView == 2 ? -viewerPitch : viewerPitch, 1, 0, 0);
+        GlStateManager.translate(entity.width * clientSettings.threat.onPointHUDStyle.horizontalPercent, 0, 0);
         GlStateManager.scale(-0.025, -0.025, 0.025);
 
         Tessellator tessellator = Tessellator.getInstance();
@@ -90,52 +106,59 @@ public class HUD extends Gui
         bufferbuilder.begin(GL_QUADS, POSITION_TEX_LMAP_COLOR);
 
         //Fill
+        double left = -halfSize2D + hOff2D;
+        double right = halfSize2D + hOff2D;
+        double top = -halfSize2D + vOff2D;
+        double bottom = halfSize2D + vOff2D;
         if (color == COLOR_PASSIVE || color == COLOR_IDLE || percent == -1)
         {
             //Fill for states that are always 100%
-            bufferbuilder.pos(-8, -4, 0).tex(UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(-8, 4, 0).tex(UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(0, 4, 0).tex(0.5 - UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(0, -4, 0).tex(0.5 - UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(left, top, 0).tex(UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(left, bottom, 0).tex(UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(right, bottom, 0).tex(0.5 - UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(right, top, 0).tex(0.5 - UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
         }
         else
         {
             double amount = (double) percent / 100;
-            double level = 4D - 8D * amount;
+            double level = bottom - halfSize2D * 2 * amount;
             double uvLevel = 0.5 - UV_HALF_PIXEL - UV_SUBTEX_SIZE * amount;
 
             //Background fill
-            bufferbuilder.pos(-8, -4, 0).tex(UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
-            bufferbuilder.pos(-8, level, 0).tex(UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
-            bufferbuilder.pos(0, level, 0).tex(0.5 - UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
-            bufferbuilder.pos(0, -4, 0).tex(0.5 - UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
+            bufferbuilder.pos(left, top, 0).tex(UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
+            bufferbuilder.pos(left, level, 0).tex(UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
+            bufferbuilder.pos(right, level, 0).tex(0.5 - UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
+            bufferbuilder.pos(right, top, 0).tex(0.5 - UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
 
             //Threat level fill
-            bufferbuilder.pos(-8, level, 0).tex(UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(-8, 4, 0).tex(UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(0, 4, 0).tex(0.5 - UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(0, level, 0).tex(0.5 - UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(left, level, 0).tex(UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(left, bottom, 0).tex(UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(right, bottom, 0).tex(0.5 - UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(right, level, 0).tex(0.5 - UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
         }
 
         //Outline and eyes
         if (color == COLOR_ATTACKING_YOU || color == COLOR_ALERT)
         {
-            bufferbuilder.pos(-8, -4, 0).tex(UV_HALF_PIXEL, 0.5 + UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(-8, 4, 0).tex(UV_HALF_PIXEL, 1 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(0, 4, 0).tex(0.5 - UV_HALF_PIXEL, 1 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(0, -4, 0).tex(0.5 - UV_HALF_PIXEL, 0.5 + UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(left, top, 0).tex(UV_HALF_PIXEL, 0.5 + UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(left, bottom, 0).tex(UV_HALF_PIXEL, 1 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(right, bottom, 0).tex(0.5 - UV_HALF_PIXEL, 1 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(right, top, 0).tex(0.5 - UV_HALF_PIXEL, 0.5 + UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
         }
         else
         {
-            bufferbuilder.pos(-8, -4, 0).tex(0.5 + UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(-8, 4, 0).tex(0.5 + UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(0, 4, 0).tex(1 - UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(0, -4, 0).tex(1 - UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(left, top, 0).tex(0.5 + UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(left, bottom, 0).tex(0.5 + UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(right, bottom, 0).tex(1 - UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(right, top, 0).tex(1 - UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
         }
 
         tessellator.draw();
 
         GlStateManager.disableBlend();
+
+        if (!depth) GlStateManager.enableDepth();
+
         GlStateManager.enableLighting();
 
         GlStateManager.popMatrix();
