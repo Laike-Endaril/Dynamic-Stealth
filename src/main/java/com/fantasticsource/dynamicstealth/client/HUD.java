@@ -63,36 +63,36 @@ public class HUD extends Gui
         float viewerYaw = renderManager.playerViewY;
         float viewerPitch = renderManager.playerViewX;
 
-        GlStateManager.pushMatrix();
-
-        GlStateManager.translate(x, y, z);
-        GlStateManager.rotate(-viewerYaw, 0, 1, 0);
-        GlStateManager.rotate((float) (renderManager.options.thirdPersonView == 2 ? -1 : 1) * viewerPitch, 1, 0, 0);
-        GlStateManager.scale(-0.025, -0.025, 0.025);
+        Color c = new Color(color, true);
+        GlStateManager.color(c.rf(), c.gf(), c.bf(), c.af());
 
         GlStateManager.disableLighting();
-        GlStateManager.depthMask(false);
-        GlStateManager.disableDepth();
+        GlStateManager.enableDepth();
+        GlStateManager.depthMask(true);
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
         GlStateManager.disableTexture2D();
 
-        Color c = new Color(color, true);
-        GlStateManager.color(c.r(), c.g(), c.b(), c.a());
+        GlStateManager.pushMatrix();
+
+        GlStateManager.translate(x, y + entity.height / 2, z);
+        GlStateManager.rotate(-viewerYaw, 0, 1, 0);
+        GlStateManager.rotate((float) (renderManager.options.thirdPersonView == 2 ? -1 : 1) * viewerPitch, 1, 0, 0);
+        GlStateManager.translate(entity.width * 1.415, 0, 0);
+        GlStateManager.scale(-0.025, -0.025, 0.025);
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         bufferbuilder.begin(GL_QUADS, POSITION);
-        bufferbuilder.pos(-8, -8, 0).endVertex();
-        bufferbuilder.pos(-8, 8, 0).endVertex();
-        bufferbuilder.pos(8, 8, 0).endVertex();
-        bufferbuilder.pos(8, -8, 0).endVertex();
+        bufferbuilder.pos(-8, -4, 0).endVertex();
+        bufferbuilder.pos(-8, 4, 0).endVertex();
+        bufferbuilder.pos(0, 4, 0).endVertex();
+        bufferbuilder.pos(0, -4, 0).endVertex();
         tessellator.draw();
 
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
-        GlStateManager.enableDepth();
-        GlStateManager.depthMask(true);
         GlStateManager.enableLighting();
 
         GlStateManager.popMatrix();

@@ -1,10 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-Make HUD.drawOnPointHUDElement()...
-...draw on top of shadows
-...draw the icon instead of colored box
-
-Tweak threat level colors if need be
+Make on-point HUD draw the icon instead of colored box
 
 Look into https://github.com/rafradek/Mods/issues/47
 
@@ -42,12 +38,6 @@ This system, if improved upon, could be used for most pathfinding and should imp
 
 
 
-RELEVANT TO FAERUN HEROES ==============================================
-
-How should the hooks into the system function?  Direct method access?  Custom forge events?  Something else?  ...attributes?
-
-
-
 THREAT SYSTEM ==========================================================
 
 Make owned entities change their threat based on their owner's actions (eg. see AIHurtByTargetEdit and AIOwnerHurtByTargetEdit)
@@ -66,6 +56,10 @@ Add entity-specific threat bypass option...
 
 
 VISUAL INDICATORS ======================================================
+
+Figure out why detail HUD draws colors brighter than on-point HUD
+
+Improve on-point HUD to make it visible in more circumstances (without getting in the way)
 
 Add visible indicators when mobs detect you, lose you, etc (somewhat similar to Mark of the Ninja)
 "!" when target spotted
