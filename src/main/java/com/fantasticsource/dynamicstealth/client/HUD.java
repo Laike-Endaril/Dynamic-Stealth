@@ -20,10 +20,8 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.clientSettings;
 import static com.fantasticsource.dynamicstealth.common.HUDData.*;
-import static net.minecraft.client.renderer.vertex.DefaultVertexFormats.*;
-import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.GL_QUADS;
-import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
+import static net.minecraft.client.renderer.vertex.DefaultVertexFormats.POSITION_TEX_COLOR;
+import static org.lwjgl.opengl.GL11.*;
 
 public class HUD extends Gui
 {

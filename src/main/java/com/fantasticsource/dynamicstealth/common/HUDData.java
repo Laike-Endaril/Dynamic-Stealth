@@ -1,6 +1,5 @@
 package com.fantasticsource.dynamicstealth.common;
 
-import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.entity.EntityLivingBase;
@@ -8,8 +7,8 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.Map;
 
-import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.*;
-import static com.fantasticsource.dynamicstealth.server.Threat.*;
+import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
+import static com.fantasticsource.dynamicstealth.server.Threat.bypassesThreat;
 
 public class HUDData
 {
