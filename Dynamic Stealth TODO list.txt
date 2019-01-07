@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
+Fix localization on detail HUD
+
 Look into https://github.com/rafradek/Mods/issues/47
 
 Make it so targetless entities can still build threat (beyond the initial value)
