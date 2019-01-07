@@ -1,5 +1,7 @@
 package com.fantasticsource.dynamicstealth.client;
 
+import com.fantasticsource.dynamicstealth.common.DynamicStealth;
+import com.fantasticsource.tools.PNG;
 import com.fantasticsource.tools.datastructures.Color;
 import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.client.Minecraft;
@@ -12,6 +14,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
@@ -26,6 +29,8 @@ import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
 
 public class HUD extends Gui
 {
+    private static final ResourceLocation ICON_LOCATION = new ResourceLocation(DynamicStealth.MODID, "Indicator.png");
+
     public HUD(Minecraft mc)
     {
         ScaledResolution sr = new ScaledResolution(mc);
