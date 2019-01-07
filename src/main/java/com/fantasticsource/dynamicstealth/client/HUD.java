@@ -50,7 +50,7 @@ public class HUD extends Gui
     }
 
     @SubscribeEvent
-    public static void entityRender(RenderLivingEvent.Specials.Post event)
+    public static void entityRender(RenderLivingEvent.Post event)
     {
         EntityLivingBase livingBase = event.getEntity();
         Pair<Integer, Integer> data = onPointDataMap.get(livingBase.getEntityId());
