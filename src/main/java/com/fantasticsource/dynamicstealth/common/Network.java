@@ -139,12 +139,18 @@ public class Network
                 while (queue.size() > 0)
                 {
                     searcher = queue.poll();
-                    if (searcher == null) buf.writeInt(COLOR_NULL);
+                    if (searcher == null) buf.writeInt(COLOR_NULL); //if color == COLOR_NULL then searcher is null
+                    else if (bypassesThreat(searcher))
+                    {
+                        buf.writeInt(COLOR_ALERT);
+                        buf.writeInt(searcher.getEntityId());
+                        buf.writeInt(-1); //else if threatLevel == -1 then searcher bypasses threat
+                    }
                     else
                     {
                         Threat.ThreatData data = Threat.get(searcher);
 
-                        buf.writeInt(getColor(player, searcher, data.target, data.threatLevel));
+                        buf.writeInt(getColor(player, searcher, data.target, data.threatLevel)); //else this is a normal entry
                         buf.writeInt(searcher.getEntityId());
                         buf.writeInt((int) (100D * data.threatLevel / maxThreat));
                     }
