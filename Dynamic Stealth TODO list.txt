@@ -1,10 +1,10 @@
 CURRENTLY WORKING ON ===================================================
 
-Fix on-point hud drawing wrong colors
-
 Make HUD.drawOnPointHUDElement()...
-...draw the icon instead of colored box
 ...draw on top of shadows
+...draw the icon instead of colored box
+
+Tweak threat level colors if need be
 
 Look into https://github.com/rafradek/Mods/issues/47
 

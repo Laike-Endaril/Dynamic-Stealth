@@ -64,17 +64,15 @@ public class HUD extends Gui
         float viewerPitch = renderManager.playerViewX;
 
         GlStateManager.pushMatrix();
+
         GlStateManager.translate(x, y, z);
-        GlStateManager.glNormal3f(0, 1, 0);
         GlStateManager.rotate(-viewerYaw, 0, 1, 0);
         GlStateManager.rotate((float) (renderManager.options.thirdPersonView == 2 ? -1 : 1) * viewerPitch, 1, 0, 0);
         GlStateManager.scale(-0.025, -0.025, 0.025);
 
         GlStateManager.disableLighting();
-
         GlStateManager.depthMask(false);
         GlStateManager.disableDepth();
-
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         GlStateManager.disableTexture2D();
@@ -92,12 +90,14 @@ public class HUD extends Gui
         tessellator.draw();
 
         GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
         GlStateManager.enableDepth();
         GlStateManager.depthMask(true);
         GlStateManager.enableLighting();
-        GlStateManager.disableBlend();
-        GlStateManager.color(1, 1, 1, 1);
+
         GlStateManager.popMatrix();
+
+        GlStateManager.color(1, 1, 1, 1);
     }
 
     private void drawDetailHUD(int width, int height, FontRenderer fontRender)

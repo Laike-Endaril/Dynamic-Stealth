@@ -1,11 +1,15 @@
 package com.fantasticsource.dynamicstealth.common;
 
+import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.Map;
+
+import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.*;
+import static com.fantasticsource.dynamicstealth.server.Threat.*;
 
 public class HUDData
 {
@@ -29,7 +33,8 @@ public class HUDData
     public static int getColor(EntityPlayer player, EntityLivingBase searcher, EntityLivingBase target, int threatLevel)
     {
         if (searcher == null) return COLOR_NULL;
-        if (DynamicStealthConfig.serverSettings.threat.recognizePassive && MCTools.isPassive(searcher)) return COLOR_PASSIVE;
+        if (bypassesThreat(searcher)) return COLOR_ALERT;
+        if (serverSettings.threat.recognizePassive && MCTools.isPassive(searcher)) return COLOR_PASSIVE;
         if (threatLevel <= 0) return COLOR_IDLE;
         if (target == null) return COLOR_ALERT;
         if (target == player) return COLOR_ATTACKING_YOU;
