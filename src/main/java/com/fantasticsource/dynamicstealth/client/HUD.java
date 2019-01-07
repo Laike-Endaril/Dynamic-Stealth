@@ -1,7 +1,6 @@
 package com.fantasticsource.dynamicstealth.client;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
-import com.fantasticsource.tools.PNG;
 import com.fantasticsource.tools.datastructures.Color;
 import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.client.Minecraft;
@@ -18,7 +17,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
-import org.lwjgl.opengl.GL11;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.clientSettings;
 import static com.fantasticsource.dynamicstealth.common.HUDData.*;
@@ -29,7 +27,11 @@ import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
 
 public class HUD extends Gui
 {
-    private static final ResourceLocation ICON_LOCATION = new ResourceLocation(DynamicStealth.MODID, "Indicator.png");
+    private static final ResourceLocation ICON_LOCATION = new ResourceLocation(DynamicStealth.MODID, "indicator.png");
+    private static final int TEX_SIZE = 32;
+
+    private static final double UV_HALF_PIXEL = 0.5 / TEX_SIZE, UV_SUBTEX_SIZE = 0.5 - UV_HALF_PIXEL * 2;
+
 
     public HUD(Minecraft mc)
     {
@@ -67,9 +69,8 @@ public class HUD extends Gui
     {
         float viewerYaw = renderManager.playerViewY;
         float viewerPitch = renderManager.playerViewX;
-
         Color c = new Color(color, true);
-        GlStateManager.color(c.rf(), c.gf(), c.bf(), c.af());
+        int r = c.r(), g = c.g(), b = c.b();
 
         GlStateManager.disableLighting();
         GlStateManager.enableDepth();
@@ -77,7 +78,8 @@ public class HUD extends Gui
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        GlStateManager.disableTexture2D();
+        GlStateManager.enableTexture2D();
+        Minecraft.getMinecraft().renderEngine.bindTexture(ICON_LOCATION);
 
         GlStateManager.pushMatrix();
 
@@ -89,14 +91,54 @@ public class HUD extends Gui
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
-        bufferbuilder.begin(GL_QUADS, POSITION);
-        bufferbuilder.pos(-8, -4, 0).endVertex();
-        bufferbuilder.pos(-8, 4, 0).endVertex();
-        bufferbuilder.pos(0, 4, 0).endVertex();
-        bufferbuilder.pos(0, -4, 0).endVertex();
+        bufferbuilder.begin(GL_QUADS, POSITION_TEX_COLOR);
+
+        //Fill
+        if (color == COLOR_PASSIVE || color == COLOR_IDLE || percent == -1)
+        {
+            //Fill for states that are always 100%
+            bufferbuilder.pos(-8, -4, 0).tex(UV_HALF_PIXEL, UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(-8, 4, 0).tex(UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(0, 4, 0).tex(0.5 - UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(0, -4, 0).tex(0.5 - UV_HALF_PIXEL, UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
+        }
+        else
+        {
+            double amount = (double) percent / 100;
+            double level = 4D - 8D * amount;
+            double uvLevel = 0.5 - UV_HALF_PIXEL - UV_SUBTEX_SIZE * amount;
+
+            //Background fill
+            bufferbuilder.pos(-8, -4, 0).tex(UV_HALF_PIXEL, UV_HALF_PIXEL).color(255, 255, 255, 255).endVertex();
+            bufferbuilder.pos(-8, level, 0).tex(UV_HALF_PIXEL, uvLevel).color(255, 255, 255, 255).endVertex();
+            bufferbuilder.pos(0, level, 0).tex(0.5 - UV_HALF_PIXEL, uvLevel).color(255, 255, 255, 255).endVertex();
+            bufferbuilder.pos(0, -4, 0).tex(0.5 - UV_HALF_PIXEL, UV_HALF_PIXEL).color(255, 255, 255, 255).endVertex();
+
+            //Threat level fill
+            bufferbuilder.pos(-8, level, 0).tex(UV_HALF_PIXEL, uvLevel).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(-8, 4, 0).tex(UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(0, 4, 0).tex(0.5 - UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(0, level, 0).tex(0.5 - UV_HALF_PIXEL, uvLevel).color(r, g, b, 255).endVertex();
+        }
+
+        //Outline and eyes
+        if (color == COLOR_ATTACKING_YOU || color == COLOR_ALERT)
+        {
+            bufferbuilder.pos(-8, -4, 0).tex(UV_HALF_PIXEL, 0.5 + UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(-8, 4, 0).tex(UV_HALF_PIXEL, 1 - UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(0, 4, 0).tex(0.5 - UV_HALF_PIXEL, 1 - UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(0, -4, 0).tex(0.5 - UV_HALF_PIXEL, 0.5 + UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
+        }
+        else
+        {
+            bufferbuilder.pos(-8, -4, 0).tex(0.5 + UV_HALF_PIXEL, UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(-8, 4, 0).tex(0.5 + UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(0, 4, 0).tex(1 - UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(0, -4, 0).tex(1 - UV_HALF_PIXEL, UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
+        }
+
         tessellator.draw();
 
-        GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
         GlStateManager.enableLighting();
 
