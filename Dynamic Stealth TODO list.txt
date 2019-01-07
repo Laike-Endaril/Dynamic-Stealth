@@ -1,6 +1,9 @@
 CURRENTLY WORKING ON ===================================================
 
-Fix localization on detail HUD
+Fix localization on detail HUD...
+...if player, display as-is
+...else if localization exists, display localized
+...else display as-is
 
 Look into https://github.com/rafradek/Mods/issues/47
 
