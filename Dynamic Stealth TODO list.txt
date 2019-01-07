@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Improve on-point HUD to make it visible in more circumstances (without getting in the way)
-
 Look into https://github.com/rafradek/Mods/issues/47
 
 Make it so targetless entities can still build threat (beyond the initial value)
