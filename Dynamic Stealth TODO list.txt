@@ -1,7 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-Fix on-point HUD so it doesn't use light levels...
-...not sure how it's happening, but if you light a skeleton on fire at nighttime, his indicator lights up too
+Improve on-point HUD to make it visible in more circumstances (without getting in the way)
 
 Look into https://github.com/rafradek/Mods/issues/47
 
@@ -57,8 +56,6 @@ Add entity-specific threat bypass option...
 
 
 VISUAL INDICATORS ======================================================
-
-Improve on-point HUD to make it visible in more circumstances (without getting in the way)
 
 Add visible indicators when mobs detect you, lose you, etc (somewhat similar to Mark of the Ninja)
 "!" when target spotted

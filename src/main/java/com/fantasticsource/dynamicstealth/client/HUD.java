@@ -18,9 +18,12 @@ import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.clientSettings;
 import static com.fantasticsource.dynamicstealth.common.HUDData.*;
-import static net.minecraft.client.renderer.vertex.DefaultVertexFormats.POSITION_TEX_COLOR;
+import static net.minecraft.client.renderer.vertex.DefaultVertexFormats.POSITION_TEX_LMAP_COLOR;
 import static org.lwjgl.opengl.GL11.*;
 
 public class HUD extends Gui
@@ -29,6 +32,8 @@ public class HUD extends Gui
     private static final int TEX_SIZE = 32;
 
     private static final double UV_HALF_PIXEL = 0.5 / TEX_SIZE, UV_SUBTEX_SIZE = 0.5 - UV_HALF_PIXEL * 2;
+
+    private Map<Integer, Tessellator> tessellatorMap = new LinkedHashMap<>();
 
 
     public HUD(Minecraft mc)
@@ -89,16 +94,16 @@ public class HUD extends Gui
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
-        bufferbuilder.begin(GL_QUADS, POSITION_TEX_COLOR);
+        bufferbuilder.begin(GL_QUADS, POSITION_TEX_LMAP_COLOR);
 
         //Fill
         if (color == COLOR_PASSIVE || color == COLOR_IDLE || percent == -1)
         {
             //Fill for states that are always 100%
-            bufferbuilder.pos(-8, -4, 0).tex(UV_HALF_PIXEL, UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(-8, 4, 0).tex(UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(0, 4, 0).tex(0.5 - UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(0, -4, 0).tex(0.5 - UV_HALF_PIXEL, UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(-8, -4, 0).tex(UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(-8, 4, 0).tex(UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(0, 4, 0).tex(0.5 - UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(0, -4, 0).tex(0.5 - UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
         }
         else
         {
@@ -107,32 +112,32 @@ public class HUD extends Gui
             double uvLevel = 0.5 - UV_HALF_PIXEL - UV_SUBTEX_SIZE * amount;
 
             //Background fill
-            bufferbuilder.pos(-8, -4, 0).tex(UV_HALF_PIXEL, UV_HALF_PIXEL).color(255, 255, 255, 255).endVertex();
-            bufferbuilder.pos(-8, level, 0).tex(UV_HALF_PIXEL, uvLevel).color(255, 255, 255, 255).endVertex();
-            bufferbuilder.pos(0, level, 0).tex(0.5 - UV_HALF_PIXEL, uvLevel).color(255, 255, 255, 255).endVertex();
-            bufferbuilder.pos(0, -4, 0).tex(0.5 - UV_HALF_PIXEL, UV_HALF_PIXEL).color(255, 255, 255, 255).endVertex();
+            bufferbuilder.pos(-8, -4, 0).tex(UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
+            bufferbuilder.pos(-8, level, 0).tex(UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
+            bufferbuilder.pos(0, level, 0).tex(0.5 - UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
+            bufferbuilder.pos(0, -4, 0).tex(0.5 - UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
 
             //Threat level fill
-            bufferbuilder.pos(-8, level, 0).tex(UV_HALF_PIXEL, uvLevel).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(-8, 4, 0).tex(UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(0, 4, 0).tex(0.5 - UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(0, level, 0).tex(0.5 - UV_HALF_PIXEL, uvLevel).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(-8, level, 0).tex(UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(-8, 4, 0).tex(UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(0, 4, 0).tex(0.5 - UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(0, level, 0).tex(0.5 - UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
         }
 
         //Outline and eyes
         if (color == COLOR_ATTACKING_YOU || color == COLOR_ALERT)
         {
-            bufferbuilder.pos(-8, -4, 0).tex(UV_HALF_PIXEL, 0.5 + UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(-8, 4, 0).tex(UV_HALF_PIXEL, 1 - UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(0, 4, 0).tex(0.5 - UV_HALF_PIXEL, 1 - UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(0, -4, 0).tex(0.5 - UV_HALF_PIXEL, 0.5 + UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(-8, -4, 0).tex(UV_HALF_PIXEL, 0.5 + UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(-8, 4, 0).tex(UV_HALF_PIXEL, 1 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(0, 4, 0).tex(0.5 - UV_HALF_PIXEL, 1 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(0, -4, 0).tex(0.5 - UV_HALF_PIXEL, 0.5 + UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
         }
         else
         {
-            bufferbuilder.pos(-8, -4, 0).tex(0.5 + UV_HALF_PIXEL, UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(-8, 4, 0).tex(0.5 + UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(0, 4, 0).tex(1 - UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(0, -4, 0).tex(1 - UV_HALF_PIXEL, UV_HALF_PIXEL).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(-8, -4, 0).tex(0.5 + UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(-8, 4, 0).tex(0.5 + UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(0, 4, 0).tex(1 - UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(0, -4, 0).tex(1 - UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
         }
 
         tessellator.draw();
