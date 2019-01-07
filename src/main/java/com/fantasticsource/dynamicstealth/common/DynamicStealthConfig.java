@@ -38,6 +38,8 @@ public class DynamicStealthConfig
 
             @Config.Name("On-point HUD Filter")
             public OnPointHUDFilter filter = new OnPointHUDFilter();
+            @Config.Name("On-point HUD Style")
+            public OnPointHUDStyle onPointHUDStyle = new OnPointHUDStyle();
 
             public class OnPointHUDFilter
             {
@@ -65,9 +67,6 @@ public class DynamicStealthConfig
                 @Comment({"If true, on-point indicators appear for mobs that are attacking YOU"})
                 public boolean showAttackingYou = true;
             }
-
-            @Config.Name("On-point HUD Style")
-            public OnPointHUDStyle onPointHUDStyle = new OnPointHUDStyle();
 
             public class OnPointHUDStyle
             {
