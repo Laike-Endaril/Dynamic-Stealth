@@ -35,7 +35,7 @@ public class HUD extends Gui
 
         drawDetailHUD(width, height, fontRender);
 
-        GL11.glColor4f(1, 1, 1, 1);
+        GlStateManager.color(1, 1, 1, 1);
     }
 
     @SubscribeEvent
