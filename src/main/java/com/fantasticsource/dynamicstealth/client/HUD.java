@@ -18,9 +18,6 @@ import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.clientSettings;
 import static com.fantasticsource.dynamicstealth.common.HUDData.*;
 import static net.minecraft.client.renderer.vertex.DefaultVertexFormats.POSITION_TEX_LMAP_COLOR;
@@ -32,9 +29,6 @@ public class HUD extends Gui
     private static final int TEX_SIZE = 32;
 
     private static final double UV_HALF_PIXEL = 0.5 / TEX_SIZE, UV_SUBTEX_SIZE = 0.5 - UV_HALF_PIXEL * 2;
-
-    private Map<Integer, Tessellator> tessellatorMap = new LinkedHashMap<>();
-
 
     public HUD(Minecraft mc)
     {

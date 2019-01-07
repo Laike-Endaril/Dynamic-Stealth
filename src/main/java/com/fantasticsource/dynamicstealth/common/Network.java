@@ -201,20 +201,6 @@ public class Network
         }
     }
 
-    public static class OnPointData
-    {
-        public int entityID;
-        public int color;
-        public int percent;
-
-        public OnPointData(int idIn, int colorIn, int percentIn)
-        {
-            entityID = idIn;
-            color = colorIn;
-            percent = percentIn;
-        }
-    }
-
     public static class ThreatPacketHandler implements IMessageHandler<HUDPacket, IMessage>
     {
         @Override
