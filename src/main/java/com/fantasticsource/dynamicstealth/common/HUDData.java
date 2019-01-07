@@ -1,7 +1,6 @@
 package com.fantasticsource.dynamicstealth.common;
 
 import com.fantasticsource.mctools.MCTools;
-import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -27,7 +26,7 @@ public class HUDData
     public static int detailPercent = 0;
     public static int detailColor = COLOR_NULL;
 
-    public static Map<Integer, Pair<Integer, Integer>> onPointDataMap;
+    public static Map<Integer, OnPointData> onPointDataMap;
 
     public static int getColor(EntityPlayer player, EntityLivingBase searcher, EntityLivingBase target, int threatLevel)
     {
@@ -38,5 +37,17 @@ public class HUDData
         if (target == null) return COLOR_ALERT;
         if (target == player) return COLOR_ATTACKING_YOU;
         return COLOR_ATTACKING_OTHER;
+    }
+
+    public static class OnPointData
+    {
+        public int color, percent, priority;
+
+        public OnPointData(int color, int percent, int priority)
+        {
+            this.color = color;
+            this.percent = percent;
+            this.priority = priority;
+        }
     }
 }

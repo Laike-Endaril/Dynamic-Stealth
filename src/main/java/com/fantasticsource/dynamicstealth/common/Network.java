@@ -2,7 +2,6 @@ package com.fantasticsource.dynamicstealth.common;
 
 import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
-import com.fantasticsource.tools.datastructures.Pair;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
@@ -67,7 +66,7 @@ public class Network
         int detailColor;
 
         //Output / client side only
-        Map<Integer, Pair<Integer, Integer>> onPointMap = new LinkedHashMap<>(10);
+        Map<Integer, OnPointData> onPointMap = new LinkedHashMap<>(10);
 
         public HUDPacket() //This seems to be required, even if unused
         {
@@ -163,6 +162,7 @@ public class Network
         {
             onPointMap.clear();
             int color;
+            int priority = 0;
 
             detailHUD = buf.readBoolean();
             onPointHUDMode = buf.readInt();
@@ -178,7 +178,7 @@ public class Network
                     detailSearcherName = ByteBufUtils.readUTF8String(buf);
                     detailTargetName = detailPercent == -1 ? UNKNOWN : ByteBufUtils.readUTF8String(buf);
 
-                    if (onPointHUDMode > 0) onPointMap.put(buf.readInt(), new Pair<>(detailColor, detailPercent));
+                    if (onPointHUDMode > 0) onPointMap.put(buf.readInt(), new OnPointData(detailColor, detailPercent, priority++));
                 }
             }
             else
@@ -186,7 +186,7 @@ public class Network
                 if (onPointHUDMode == 1)
                 {
                     color = buf.readInt();
-                    if (color != COLOR_NULL) onPointMap.put(buf.readInt(), new Pair<>(color, buf.readInt()));
+                    if (color != COLOR_NULL) onPointMap.put(buf.readInt(), new OnPointData(color, buf.readInt(), priority++));
                 }
             }
 
@@ -195,7 +195,7 @@ public class Network
                 for (int i = buf.readInt(); i > 0; i--)
                 {
                     color = buf.readInt();
-                    if (color != COLOR_NULL) onPointMap.put(buf.readInt(), new Pair<>(color, buf.readInt()));
+                    if (color != COLOR_NULL) onPointMap.put(buf.readInt(), new OnPointData(color, buf.readInt(), priority++));
                 }
             }
         }

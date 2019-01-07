@@ -2,7 +2,6 @@ package com.fantasticsource.dynamicstealth.client;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.tools.datastructures.Color;
-import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -57,9 +56,9 @@ public class HUD extends Gui
     public static void entityRender(RenderLivingEvent.Post event)
     {
         EntityLivingBase livingBase = event.getEntity();
-        Pair<Integer, Integer> data = onPointDataMap.get(livingBase.getEntityId());
+        OnPointData data = onPointDataMap.get(livingBase.getEntityId());
 
-        if (data != null) drawOnPointHUDElement(event.getRenderer().getRenderManager(), event.getX(), event.getY(), event.getZ(), livingBase, data.getKey(), data.getValue());
+        if (data != null && data.priority < clientSettings.threat.onPointHUDMax) drawOnPointHUDElement(event.getRenderer().getRenderManager(), event.getX(), event.getY(), event.getZ(), livingBase, data.color, data.percent);
     }
 
     private static void drawOnPointHUDElement(RenderManager renderManager, double x, double y, double z, Entity entity, int color, int percent)
