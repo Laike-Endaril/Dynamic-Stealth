@@ -1,13 +1,14 @@
 package com.fantasticsource.dynamicstealth.common;
 
 import com.fantasticsource.dynamicstealth.client.HUD;
+import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatCNPC;
+import com.fantasticsource.dynamicstealth.server.AIStealthTargetingAndSearch;
 import com.fantasticsource.dynamicstealth.server.EntityLookHelperEdit;
 import com.fantasticsource.dynamicstealth.server.EntitySensesEdit;
 import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.dynamicstealth.server.aiedits.*;
 import com.fantasticsource.dynamicstealth.server.configdata.EntityVisionData;
-import com.fantasticsource.dynamicstealth.server.AIStealthTargetingAndSearch;
 import com.fantasticsource.mctools.Speedometer;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.TrigLookupTable;
@@ -398,6 +399,13 @@ public class DynamicStealth
     @EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
-        if (Loader.isModLoaded("customnpcs")) MinecraftForge.EVENT_BUS.register(CompatCNPC.class);
+        if (Loader.isModLoaded("lycanitesmobs")) Compat.lycanites = true;
+        if (Loader.isModLoaded("ancientwarfare")) Compat.ancientwarfare = true;
+        if (Loader.isModLoaded("rafradek_tf2_weapons")) Compat.tf2stuff = true;
+        if (Loader.isModLoaded("customnpcs"))
+        {
+            Compat.customnpcs = true;
+            MinecraftForge.EVENT_BUS.register(CompatCNPC.class);
+        }
     }
 }

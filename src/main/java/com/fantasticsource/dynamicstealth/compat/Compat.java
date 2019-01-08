@@ -1,7 +1,6 @@
 package com.fantasticsource.dynamicstealth.compat;
 
 import com.fantasticsource.tools.ReflectionTool;
-import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
@@ -10,6 +9,8 @@ import java.util.Set;
 
 public class Compat
 {
+    public static boolean lycanites = false, ancientwarfare = false, customnpcs = false, tf2stuff = false;
+
     private static Field executingTasksField;
 
     static
@@ -20,28 +21,40 @@ public class Compat
 
     public static void cancelTasksRequiringAttackTarget(EntityAITasks tasks)
     {
-        for (EntityAITasks.EntityAITaskEntry task : tasks.taskEntries)
+        if (fixBadNullTargetHandling())
         {
-            EntityAIBase ai = task.action;
-            String aiClassname = ai.getClass().getName();
-            if (aiClassname.equals("com.lycanitesmobs.core.entity.ai.EntityAIAttackMelee")
-                    || aiClassname.equals("net.shadowmage.ancientwarfare.npc.ai.vehicle.NpcAIAimVehicle"))
+            for (EntityAITasks.EntityAITaskEntry task : tasks.taskEntries)
             {
-                //Hard reset; set using to false, call resetTask(), and remove task from executingTasks
-                task.using = false;
-                task.action.resetTask();
-                try
+                if (badNullTargetHandling(task.action.getClass().getName()))
                 {
-                    Set<EntityAITasks.EntityAITaskEntry> executingTasks = (Set<EntityAITasks.EntityAITaskEntry>) executingTasksField.get(tasks);
-                    executingTasks.remove(task);
-                }
-                catch (IllegalAccessException e)
-                {
-                    e.printStackTrace();
-                    FMLCommonHandler.instance().exitJava(145, false);
+                    //Hard reset; set using to false, call resetTask(), and remove task from executingTasks
+                    task.using = false;
+                    task.action.resetTask();
+                    try
+                    {
+                        Set<EntityAITasks.EntityAITaskEntry> executingTasks = (Set<EntityAITasks.EntityAITaskEntry>) executingTasksField.get(tasks);
+                        executingTasks.remove(task);
+                    }
+                    catch (IllegalAccessException e)
+                    {
+                        e.printStackTrace();
+                        FMLCommonHandler.instance().exitJava(145, false);
+                    }
                 }
             }
         }
+    }
+
+
+    private static boolean fixBadNullTargetHandling()
+    {
+        return lycanites || ancientwarfare;
+    }
+
+    private static boolean badNullTargetHandling(String aiClassname)
+    {
+        return (lycanites && aiClassname.equals("com.lycanitesmobs.core.entity.ai.EntityAIAttackMelee"))
+                || (ancientwarfare && aiClassname.equals("net.shadowmage.ancientwarfare.npc.ai.vehicle.NpcAIAimVehicle"));
     }
 
 
