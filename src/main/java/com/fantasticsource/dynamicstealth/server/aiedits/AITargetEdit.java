@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth.server.ai;
+package com.fantasticsource.dynamicstealth.server.aiedits;
 
 import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.entity.*;

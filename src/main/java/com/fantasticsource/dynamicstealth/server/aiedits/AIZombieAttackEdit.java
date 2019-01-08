@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth.server.ai;
+package com.fantasticsource.dynamicstealth.server.aiedits;
 
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.monster.EntityZombie;

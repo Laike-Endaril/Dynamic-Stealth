@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth.server.ai;
+package com.fantasticsource.dynamicstealth.server.aiedits;
 
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;

@@ -1,8 +1,7 @@
 package com.fantasticsource.dynamicstealth.server;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
-import com.fantasticsource.dynamicstealth.server.Threat;
-import com.fantasticsource.dynamicstealth.server.ai.AITargetEdit;
+import com.fantasticsource.dynamicstealth.server.aiedits.AITargetEdit;
 import com.fantasticsource.dynamicstealth.server.configdata.EntityAIData;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.TrigLookupTable;

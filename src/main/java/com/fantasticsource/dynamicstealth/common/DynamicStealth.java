@@ -5,7 +5,7 @@ import com.fantasticsource.dynamicstealth.compat.CompatCNPC;
 import com.fantasticsource.dynamicstealth.server.EntityLookHelperEdit;
 import com.fantasticsource.dynamicstealth.server.EntitySensesEdit;
 import com.fantasticsource.dynamicstealth.server.Threat;
-import com.fantasticsource.dynamicstealth.server.ai.*;
+import com.fantasticsource.dynamicstealth.server.aiedits.*;
 import com.fantasticsource.dynamicstealth.server.configdata.EntityVisionData;
 import com.fantasticsource.dynamicstealth.server.AIStealthTargetingAndSearch;
 import com.fantasticsource.mctools.Speedometer;
