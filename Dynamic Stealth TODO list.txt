@@ -11,15 +11,7 @@ Make it so targetless entities can still build threat (beyond the initial value)
 
 Check out github issue #9 (configurable stealth buffs feature request)
 
-
-
-ONGOING TASKS ==========================================================
-
-Fix any mobs that are incorrectly detected as passive / non-passive...
-...if this is still an issue, maybe look into whether journeymap handles it well or not and use it as reference?
-
-Fix crashes due to null attack target syndrome...
-...(not currently aware of any unfixed)
+Add stealth-based attributes for armor (ie, actual attributes; like how armor ratings are an attribute, I think?)
 
 
 
@@ -112,8 +104,6 @@ Add a stealth guidebook
 Add smoke bombs which block LOS
 
 Add hand mirror, which allows you to peek around corners (changes camera position while in use, based on which hand it is in)
-
-Add stealth-based attributes for armor (ie, actual attributes; like how armor ratings are an attribute, I think?)
 
 Add armor/baubles that improve stealth/anti-stealth attributes
 
