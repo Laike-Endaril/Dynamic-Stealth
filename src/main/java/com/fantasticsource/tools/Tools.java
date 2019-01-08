@@ -72,7 +72,7 @@ public class Tools
     }
 
 
-    public static void printStack(Thread thread, int maxNodes)
+    public static void printStackTrace(Thread thread, int maxNodes)
     {
         StackTraceElement[] stack = thread.getStackTrace();
         for (int i = 0; i < maxNodes && i < stack.length; i++)
@@ -81,9 +81,14 @@ public class Tools
         }
     }
 
-    public static void printStack(Thread thread)
+    public static void printStackTrace(Thread thread)
     {
-        printStack(thread, Integer.MAX_VALUE);
+        printStackTrace(thread, Integer.MAX_VALUE);
+    }
+
+    public static void printStackTrace()
+    {
+        printStackTrace(Thread.currentThread());
     }
 
     public static boolean stackContainsSubstring(Thread thread, String subString)
@@ -96,6 +101,11 @@ public class Tools
             if (element.getClassName().toLowerCase().contains(subString)) return true;
         }
         return false;
+    }
+
+    public static boolean stackContainsSubstring(String substring)
+    {
+        return stackContainsSubstring(Thread.currentThread(), substring);
     }
 
 
