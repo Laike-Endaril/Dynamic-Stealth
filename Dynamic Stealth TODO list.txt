@@ -1,5 +1,11 @@
 CURRENTLY WORKING ON ===================================================
 
+Add entity-specific threat bypass option...
+...then transfer all current threat bypasses to it as default config options
+
+Rafradek said he did a fix, so keep an eye out for an update to TF2 Stuff https://github.com/rafradek/Mods/issues/47...
+...and change code accordingly when it's released
+
 Add stealth-based attributes for armor (ie, actual attributes; like how armor ratings are an attribute, I think?)
 
 Check out github issue #9 (configurable stealth buffs feature request)
@@ -35,9 +41,6 @@ CONFIG FILE ============================================================
 Add entity-specific isPassive option...
 ...doesn't make an entity passive or non-passive; just makes the system detect it as passive or non-passive
 ...add ebwizardry:wizard as non-passive
-
-Add entity-specific threat bypass option...
-...then transfer all current threat bypasses to it as default config options
 
 
 
