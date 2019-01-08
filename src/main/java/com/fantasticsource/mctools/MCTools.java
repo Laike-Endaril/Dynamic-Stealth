@@ -22,6 +22,7 @@ public class MCTools
         //TODO This will probably need improvement at some point, mostly for mod compat, but possibly also for vanilla
         if (living == null) return false;
 
+        //getEntityAttribute is incorrectly tagged as @Nonnull; it can and will return a null value sometimes
         IAttributeInstance damage = living.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         return damage == null || damage.getAttributeValue() <= 0;
     }
