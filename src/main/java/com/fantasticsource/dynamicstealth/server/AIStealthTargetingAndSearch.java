@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth.server.ai.newai;
+package com.fantasticsource.dynamicstealth.server;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.dynamicstealth.server.Threat;

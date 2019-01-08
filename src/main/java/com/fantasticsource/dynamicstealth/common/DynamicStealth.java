@@ -7,7 +7,7 @@ import com.fantasticsource.dynamicstealth.server.EntitySensesEdit;
 import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.dynamicstealth.server.ai.*;
 import com.fantasticsource.dynamicstealth.server.configdata.EntityVisionData;
-import com.fantasticsource.dynamicstealth.server.ai.newai.AIStealthTargetingAndSearch;
+import com.fantasticsource.dynamicstealth.server.AIStealthTargetingAndSearch;
 import com.fantasticsource.mctools.Speedometer;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.TrigLookupTable;

@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.compat;
 
-import com.fantasticsource.dynamicstealth.server.ai.newai.AIStealthTargetingAndSearch;
+import com.fantasticsource.dynamicstealth.server.AIStealthTargetingAndSearch;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAITasks;
