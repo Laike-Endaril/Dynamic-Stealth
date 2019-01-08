@@ -11,6 +11,8 @@ Make it so targetless entities can still build threat (beyond the initial value)
 
 Check out github issue #9 (configurable stealth buffs feature request)
 
+Add stealth-based attributes for armor (ie, actual attributes; like how armor ratings are an attribute, I think?)
+
 
 
 ONGOING TASKS ==========================================================
@@ -112,8 +114,6 @@ Add a stealth guidebook
 Add smoke bombs which block LOS
 
 Add hand mirror, which allows you to peek around corners (changes camera position while in use, based on which hand it is in)
-
-Add stealth-based attributes for armor (ie, actual attributes; like how armor ratings are an attribute, I think?)
 
 Add armor/baubles that improve stealth/anti-stealth attributes
 

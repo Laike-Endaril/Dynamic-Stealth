@@ -57,7 +57,7 @@ public class DynamicStealth
 {
     public static final String MODID = "dynamicstealth";
     public static final String NAME = "Dynamic Stealth";
-    public static final String VERSION = "1.12.2.025";
+    public static final String VERSION = "1.12.2.025a";
     public static final TrigLookupTable TRIG_TABLE = new TrigLookupTable(1024);
     private static Logger logger;
     private static Field sensesField, lookHelperField, abstractSkeletonAIArrowAttackField, abstractSkeletonAIAttackOnCollideField;
@@ -67,12 +67,19 @@ public class DynamicStealth
 
     public DynamicStealth()
     {
-        MinecraftForge.EVENT_BUS.register(EntityVisionData.class);
         MinecraftForge.EVENT_BUS.register(DynamicStealth.class);
-        MinecraftForge.EVENT_BUS.register(Speedometer.class);
         MinecraftForge.EVENT_BUS.register(Network.class);
-        MinecraftForge.EVENT_BUS.register(Threat.class);
-        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) MinecraftForge.EVENT_BUS.register(HUD.class);
+
+        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+        {
+            MinecraftForge.EVENT_BUS.register(HUD.class);
+        }
+        else
+        {
+            MinecraftForge.EVENT_BUS.register(EntityVisionData.class);
+            MinecraftForge.EVENT_BUS.register(Speedometer.class);
+            MinecraftForge.EVENT_BUS.register(Threat.class);
+        }
     }
 
     @SubscribeEvent
