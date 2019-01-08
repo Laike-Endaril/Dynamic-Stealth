@@ -55,10 +55,13 @@ public class HUD extends Gui
     @SubscribeEvent
     public static void entityRender(RenderLivingEvent.Post event)
     {
-        EntityLivingBase livingBase = event.getEntity();
-        OnPointData data = onPointDataMap.get(livingBase.getEntityId());
+        if (onPointDataMap != null)
+        {
+            EntityLivingBase livingBase = event.getEntity();
+            OnPointData data = onPointDataMap.get(livingBase.getEntityId());
 
-        if (data != null && data.priority < clientSettings.threat.onPointHUDMax && onPointFilter(data.color, data.percent)) drawOnPointHUDElement(event.getRenderer().getRenderManager(), event.getX(), event.getY(), event.getZ(), livingBase, data.color, data.percent);
+            if (data != null && data.priority < clientSettings.threat.onPointHUDMax && onPointFilter(data.color, data.percent)) drawOnPointHUDElement(event.getRenderer().getRenderManager(), event.getX(), event.getY(), event.getZ(), livingBase, data.color, data.percent);
+        }
     }
 
     private static boolean onPointFilter(int color, int percent)
