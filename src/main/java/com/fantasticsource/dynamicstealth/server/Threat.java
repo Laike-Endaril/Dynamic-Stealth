@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.server;
 
 import com.fantasticsource.dynamicstealth.common.Network;
+import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -188,7 +189,7 @@ public class Threat
 
     public static boolean bypassesThreat(EntityLivingBase livingBase)
     {
-        return serverSettings.threat.bypassThreatSystem || livingBase == null || livingBase instanceof EntityPlayer || livingBase instanceof EntityDragon || livingBase instanceof EntitySlime;
+        return serverSettings.threat.bypassThreatSystem || livingBase == null || livingBase instanceof EntityPlayer || livingBase instanceof EntityDragon || livingBase instanceof EntitySlime || (Compat.tf2stuff && livingBase.getClass().getName().equals("rafradek.TF2weapons.entity.mercenary.EntityMedic"));
     }
 
 
