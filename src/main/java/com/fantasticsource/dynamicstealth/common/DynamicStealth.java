@@ -164,7 +164,8 @@ public class DynamicStealth
                     //Hit by entity when no target is set; this includes...
                     //...getting hit while out-of-combat
                     //...getting hit after previous target has been killed
-                    Threat.set(livingTarget, livingBaseSource, (int) (event.getAmount() * serverSettings.threat.attackedThreatMultiplierInitial / livingTarget.getMaxHealth()));
+                    //...getting hit when no target has been seen so far
+                    Threat.set(livingTarget, livingBaseSource, threat + (int) (event.getAmount() * serverSettings.threat.attackedThreatMultiplierInitial / livingTarget.getMaxHealth()));
                     newThreatTarget = true;
                 }
                 else if (threatTarget != source)

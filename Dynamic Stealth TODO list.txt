@@ -5,8 +5,6 @@ Fix localization on detail HUD...
 ...else if localization exists, display localized
 ...else display as-is
 
-Make it so targetless entities can still build threat (beyond the initial value)
-
 Check out github issue #9 (configurable stealth buffs feature request)
 
 Add stealth-based attributes for armor (ie, actual attributes; like how armor ratings are an attribute, I think?)
