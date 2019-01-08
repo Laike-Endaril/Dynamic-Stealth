@@ -23,6 +23,7 @@ public class EntityVisionData
     public static Map<Class<? extends Entity>, Pair<Integer, Integer>> entityLighting = new HashMap<>();
     public static Map<Class<? extends Entity>, Pair<Double, Double>> entitySpeeds = new HashMap<>();
 
+
     static
     {
         EntityEntry entry;

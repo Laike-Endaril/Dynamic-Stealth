@@ -551,6 +551,28 @@ public class DynamicStealthConfig
             @Config.RangeInt(min = 1)
             public int unseenTargetDegredationRate = 1;
 
+            @Config.Name("Entity-Specific Settings (Advanced)")
+            public EntityThreatSettings y_entityOverrides = new EntityThreatSettings();
+
+            public class EntityThreatSettings
+            {
+                @Config.Name("Threat Bypass")
+                @Comment({
+                        "Entities in this bypass the threat system",
+                        "",
+                        "This means they will not use the search AI, will appear with ???? as their target and threat level in the detail HUD, and always appear as full alert in the on-point HUD",
+                        "",
+                        "For some entities, this option is necessary for them to work right, such as slimes.  For others, like the ender dragon and other players, it has no effect besides how they appear in the HUD"
+                })
+                @Config.RequiresMcRestart
+                public String[] threatBypass = new String[]{
+                        "player",
+                        "ender_dragon",
+                        "slime",
+                        "rafradek_tf2_weapons:medic"
+                };
+            }
+
             public class HUD
             {
                 @Config.Name("Allow detailed HUD on clients")

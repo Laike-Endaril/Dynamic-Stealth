@@ -1,8 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Add entity-specific threat bypass option...
-...then transfer all current threat bypasses to it as default config options
-
 Rafradek said he did a fix, so keep an eye out for an update to TF2 Stuff https://github.com/rafradek/Mods/issues/47...
 ...and change code accordingly when it's released
 
