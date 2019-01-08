@@ -1,13 +1,8 @@
 CURRENTLY WORKING ON ===================================================
 
-Fix localization on detail HUD...
-...if player, display as-is
-...else if localization exists, display localized
-...else display as-is
+Add stealth-based attributes for armor (ie, actual attributes; like how armor ratings are an attribute, I think?)
 
 Check out github issue #9 (configurable stealth buffs feature request)
-
-Add stealth-based attributes for armor (ie, actual attributes; like how armor ratings are an attribute, I think?)
 
 
 

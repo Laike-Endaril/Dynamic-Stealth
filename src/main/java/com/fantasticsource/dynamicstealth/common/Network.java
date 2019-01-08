@@ -4,6 +4,7 @@ import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -220,10 +221,10 @@ public class Network
                     }
                     else
                     {
-                        detailSearcher = packet.detailSearcherName;
+                        detailSearcher = I18n.format(packet.detailSearcherName);
                         detailPercent = packet.detailPercent;
 
-                        detailTarget = detailPercent == -1 ? EMPTY : packet.detailTargetName;
+                        detailTarget = detailPercent == -1 ? EMPTY : I18n.format(packet.detailTargetName);
                     }
 
                     onPointDataMap = packet.onPointMap;
