@@ -402,7 +402,6 @@ public class DynamicStealth
     {
         if (Loader.isModLoaded("lycanitesmobs")) Compat.lycanites = true;
         if (Loader.isModLoaded("ancientwarfare")) Compat.ancientwarfare = true;
-        if (Loader.isModLoaded("rafradek_tf2_weapons")) Compat.tf2stuff = true;
         if (Loader.isModLoaded("customnpcs"))
         {
             Compat.customnpcs = true;

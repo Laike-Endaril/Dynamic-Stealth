@@ -25,8 +25,15 @@ public class EntityThreatData
             else
             {
                 entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(string));
-                if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
-                else threatBypass.add(entry.getEntityClass());
+
+                if (entry == null)
+                {
+                    if (!EntityThreatDefaults.threatBypassDefaults.contains(string)) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
+                }
+                else
+                {
+                    threatBypass.add(entry.getEntityClass());
+                }
             }
         }
     }

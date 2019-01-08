@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.common;
 
+import com.fantasticsource.dynamicstealth.server.configdata.EntityThreatDefaults;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.Comment;
 
@@ -565,12 +566,7 @@ public class DynamicStealthConfig
                         "For some entities, this option is necessary for them to work right, such as slimes.  For others, like the ender dragon and other players, it has no effect besides how they appear in the HUD"
                 })
                 @Config.RequiresMcRestart
-                public String[] threatBypass = new String[]{
-                        "player",
-                        "ender_dragon",
-                        "slime",
-                        "rafradek_tf2_weapons:medic"
-                };
+                public String[] threatBypass = EntityThreatDefaults.threatBypassDefaults.toArray(new String[EntityThreatDefaults.threatBypassDefaults.size()]);
             }
 
             public class HUD
