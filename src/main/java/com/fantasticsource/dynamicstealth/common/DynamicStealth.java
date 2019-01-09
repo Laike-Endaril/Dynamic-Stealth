@@ -3,10 +3,7 @@ package com.fantasticsource.dynamicstealth.common;
 import com.fantasticsource.dynamicstealth.client.HUD;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatCNPC;
-import com.fantasticsource.dynamicstealth.server.AIStealthTargetingAndSearch;
-import com.fantasticsource.dynamicstealth.server.EntityLookHelperEdit;
-import com.fantasticsource.dynamicstealth.server.EntitySensesEdit;
-import com.fantasticsource.dynamicstealth.server.Threat;
+import com.fantasticsource.dynamicstealth.server.*;
 import com.fantasticsource.dynamicstealth.server.aiedits.*;
 import com.fantasticsource.dynamicstealth.server.configdata.EntityVisionData;
 import com.fantasticsource.mctools.Speedometer;
@@ -58,7 +55,9 @@ public class DynamicStealth
     public static final String MODID = "dynamicstealth";
     public static final String NAME = "Dynamic Stealth";
     public static final String VERSION = "1.12.2.027";
+
     public static final TrigLookupTable TRIG_TABLE = new TrigLookupTable(1024);
+
     private static Logger logger;
     private static Field sensesField, lookHelperField, abstractSkeletonAIArrowAttackField, abstractSkeletonAIAttackOnCollideField;
     private static Class aiSlimeFaceRandomClass, aiEvilAttackClass, aiBearMeleeClass, aiSpiderAttackClass, aiSpiderTargetClass, aiBearAttackPlayerClass, aiLlamaDefendTarget,
@@ -72,7 +71,14 @@ public class DynamicStealth
         MinecraftForge.EVENT_BUS.register(Speedometer.class);
         MinecraftForge.EVENT_BUS.register(Network.class);
         MinecraftForge.EVENT_BUS.register(Threat.class);
-        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) MinecraftForge.EVENT_BUS.register(HUD.class);
+        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+        {
+            MinecraftForge.EVENT_BUS.register(HUD.class);
+        }
+        else //Server-side only
+        {
+            Attributes.init();
+        }
     }
 
     @SubscribeEvent
@@ -265,7 +271,13 @@ public class DynamicStealth
     public static void entityJoin(EntityJoinWorldEvent event) throws Exception
     {
         Entity entity = event.getEntity();
-        if (entity instanceof EntityLiving) entityJoinWorldInit((EntityLiving) entity);
+        if (entity instanceof EntityLivingBase)
+        {
+            //Add new stealth-related attributes
+            Attributes.addAttributes((EntityLivingBase) entity);
+
+            if (entity instanceof EntityLiving) entityJoinWorldInit((EntityLiving) entity);
+        }
     }
 
     public static void entityJoinWorldInit(EntityLiving living) throws Exception
