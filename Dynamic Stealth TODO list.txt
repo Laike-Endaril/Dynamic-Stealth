@@ -33,14 +33,6 @@ Make owned entities change their threat based on their owner's actions (eg. see 
 
 
 
-CONFIG FILE ============================================================
-
-Add entity-specific isPassive option...
-...doesn't make an entity passive or non-passive; just makes the system detect it as passive or non-passive
-...add ebwizardry:wizard as non-passive
-
-
-
 VISUAL INDICATORS ======================================================
 
 Add visible indicators when mobs detect you, lose you, etc (somewhat similar to Mark of the Ninja)
