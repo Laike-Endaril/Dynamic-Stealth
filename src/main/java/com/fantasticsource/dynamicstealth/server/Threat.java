@@ -197,21 +197,21 @@ public class Threat
         return false;
     }
 
-    public static boolean isPassive(EntityLivingBase living)
+    public static boolean isPassive(EntityLivingBase livingBase)
     {
-        if (living == null) return false;
+        if (livingBase == null || bypassesThreat(livingBase)) return false;
 
         for (Class<? extends Entity> clss : EntityThreatData.isPassive)
         {
-            if (clss.isAssignableFrom(living.getClass())) return true;
+            if (clss.isAssignableFrom(livingBase.getClass())) return true;
         }
 
         for (Class<? extends Entity> clss : EntityThreatData.isNonPassive)
         {
-            if (clss.isAssignableFrom(living.getClass())) return false;
+            if (clss.isAssignableFrom(livingBase.getClass())) return false;
         }
 
-        return MCTools.isPassive(living);
+        return MCTools.isPassive(livingBase);
     }
 
 

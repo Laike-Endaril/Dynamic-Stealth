@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Figure out why slimes don't use attributes correctly
-
 Add localization for stealth attributes
 
 Implement server-side usePlayerSenses config option...

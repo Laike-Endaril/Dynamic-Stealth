@@ -119,7 +119,7 @@ public class EntitySensesEdit extends EntitySenses
 
 
         //Alerted multiplier
-        double alertMultiplier = searcher instanceof EntityLiving && Threat.get((EntityLiving) searcher).threatLevel > 0 ? vision.b_visibilityMultipliers.alertMultiplier : 1;
+        double alertMultiplier = searcher instanceof EntityLiving && Threat.get(searcher).threatLevel > 0 ? vision.b_visibilityMultipliers.alertMultiplier : 1;
 
         //Crouching (multiplier)
         double crouchingMultiplier = target.isSneaking() ? vision.a_stealthMultipliers.crouchingMultiplier : 1;
