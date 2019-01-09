@@ -1,9 +1,14 @@
 CURRENTLY WORKING ON ===================================================
 
+Apply stealth-based vision attributes
+
+Implement server-side usePlayerSenses config option...
+...Make entities that *are* seen easily visible on client (because your character saw them)
+...Don't send entity data of unseen entities to players, including potion effects
+...Make sure entities that *were* seen and are no longer seen are..."gone" on client-side
+
 Rafradek said he did a fix, so keep an eye out for an update to TF2 Stuff https://github.com/rafradek/Mods/issues/47...
 ...and change code accordingly when it's released
-
-Add stealth-based attributes for armor (ie, actual attributes; like how armor ratings are an attribute, I think?)
 
 Check out github issue #9 (configurable stealth buffs feature request)
 
@@ -62,17 +67,19 @@ Make it so mobs on the same team can tell each other where you are / where they 
 
 SENSES =================================================================
 
+Implement alertmultiplier for threat bypass entities if they've seen the target within the last 20 ticks
+
 Improve vision detection by allowing entities to see parts of other entities besides just their eyes (right now they only "have LOS" if they have LOS to each others' eyes)
 
-Implement server-side usePlayerSenses config option...
-...Make entities that *are* seen easily visible on client (because your character saw them)
-...Don't send entity data of unseen entities to players, including potion effects
-...Make sure entities that *were* seen and are no longer seen are..."gone" on client-side
-
 Add touch-based detection (within very close range)
+Apply stealth-based touch attribute
+
 Add sound-based detection
-Add smell-based detection (wolves, cats, bears)
+Apply stealth-based sound attributes
+
+Add scent-based detection (wolves, cats, bears)
 ...Add the ability for entities to smell not only other living entities, but also ground items, etc.
+Apply stealth-based scent attributes
 
 Make it so mobs can see through glass (but maybe not quite yet; for now it's good for watching/debugging their behavior when they're searching for you)
 
