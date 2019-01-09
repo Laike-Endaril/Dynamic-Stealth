@@ -153,12 +153,13 @@ public class EntitySensesEdit extends EntitySenses
         //Combine multipliers
         double stealthMultiplier = Tools.min(blindnessMultiplier, invisibilityMultiplier, crouchingMultiplier, mobHeadMultiplier);
         double visibilityMultiplier = Tools.max(armorMultiplier, fireMultiplier, alertMultiplier);
-        double combinedMultiplier = Math.max(0, Math.min(1, stealthMultiplier * visibilityMultiplier));
+        double baseMultiplier = Tools.min(Tools.max((lightFactor + speedFactor) / 2 * stealthMultiplier * visibilityMultiplier, 0), 1);
+
+        double attributeMultiplier = Tools.max(searcher.getEntityAttribute(Attributes.SIGHT).getAttributeValue(), 0) * Tools.max(targetLiving.getEntityAttribute(Attributes.VISIBILITY).getAttributeValue(), 0) / 10000;
 
 
         //Final calculation
-        //Average the factors, apply the average as a multiplier to distanceThreshold, check distance between entities against threshold, and return
-        return Math.sqrt(distSquared) / (distanceThreshold * (lightFactor + speedFactor) / 2 * combinedMultiplier);
+        return Math.sqrt(distSquared) / (distanceThreshold * baseMultiplier * attributeMultiplier);
     }
 
     public static double lightLevelTotal(Entity entity)
