@@ -15,8 +15,6 @@ public class Attributes
     public static RangedAttribute SCENT_REDUCTION = new RangedAttribute(null, DynamicStealth.MODID + ".scentReduction", 100, 0, Double.MAX_VALUE);
     public static RangedAttribute SMELLING = new RangedAttribute(null, DynamicStealth.MODID + ".smelling", 100, 0, Double.MAX_VALUE);
 
-    public static RangedAttribute FEEL = new RangedAttribute(null, DynamicStealth.MODID + ".feel", 100, 0, Double.MAX_VALUE);
-
     public static void init()
     {
         //This method indirectly initializes the attributes defined above
@@ -33,7 +31,5 @@ public class Attributes
 
         livingBase.getAttributeMap().registerAttribute(Attributes.SCENT_REDUCTION);
         livingBase.getAttributeMap().registerAttribute(Attributes.SMELLING);
-
-        livingBase.getAttributeMap().registerAttribute(Attributes.FEEL);
     }
 }
