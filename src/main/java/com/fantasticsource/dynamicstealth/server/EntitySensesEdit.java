@@ -155,7 +155,8 @@ public class EntitySensesEdit extends EntitySenses
         double visibilityMultiplier = Tools.max(armorMultiplier, fireMultiplier, alertMultiplier);
         double baseMultiplier = Tools.min(Tools.max((lightFactor + speedFactor) / 2 * stealthMultiplier * visibilityMultiplier, 0), 1);
 
-        double attributeMultiplier = Tools.max(searcher.getEntityAttribute(Attributes.SIGHT).getAttributeValue(), 0) * Tools.max(targetLiving.getEntityAttribute(Attributes.VISIBILITY).getAttributeValue(), 0) / 10000;
+        double visReduction = targetLiving.getEntityAttribute(Attributes.VISIBILITY_REDUCTION).getAttributeValue();
+        double attributeMultiplier = visReduction == 0 ? Double.MAX_VALUE : searcher.getEntityAttribute(Attributes.SIGHT).getAttributeValue() / visReduction;
 
 
         //Final calculation

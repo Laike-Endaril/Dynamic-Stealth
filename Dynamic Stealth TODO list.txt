@@ -1,6 +1,8 @@
 CURRENTLY WORKING ON ===================================================
 
-Apply stealth-based vision attributes
+Figure out why slimes don't use attributes correctly
+
+Add localization for stealth attributes
 
 Implement server-side usePlayerSenses config option...
 ...Make entities that *are* seen easily visible on client (because your character saw them)

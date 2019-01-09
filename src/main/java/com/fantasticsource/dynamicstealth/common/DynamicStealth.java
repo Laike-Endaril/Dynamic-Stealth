@@ -23,6 +23,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
+import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -75,10 +76,8 @@ public class DynamicStealth
         {
             MinecraftForge.EVENT_BUS.register(HUD.class);
         }
-        else //Server-side only
-        {
-            Attributes.init();
-        }
+
+        Attributes.init();
     }
 
     @SubscribeEvent
@@ -267,15 +266,23 @@ public class DynamicStealth
     }
 
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void entityJoin(EntityJoinWorldEvent event) throws Exception
+    @SubscribeEvent
+    public static void entityConstructing(EntityEvent.EntityConstructing event)
     {
         Entity entity = event.getEntity();
         if (entity instanceof EntityLivingBase)
         {
             //Add new stealth-related attributes
             Attributes.addAttributes((EntityLivingBase) entity);
+        }
+    }
 
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void entityJoin(EntityJoinWorldEvent event) throws Exception
+    {
+        Entity entity = event.getEntity();
+        if (entity instanceof EntityLivingBase)
+        {
             if (entity instanceof EntityLiving) entityJoinWorldInit((EntityLiving) entity);
         }
     }
