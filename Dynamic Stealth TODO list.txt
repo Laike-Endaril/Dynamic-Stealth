@@ -52,8 +52,6 @@ Add the ability to see mob FOVs (as a 3D render), maybe when under a potion effe
 
 AI =====================================================================
 
-Make guardians NOT attack squid
-
 Can probably combine the two below into a single AI task...
 ...Replace EntityAILookIdle with a new version that has gradual head rotation, instead of just removing it
 ...Change "wandering" AI so that it can't instantly flip a 180 (force it to turn gradually before moving in the chosen direction)
