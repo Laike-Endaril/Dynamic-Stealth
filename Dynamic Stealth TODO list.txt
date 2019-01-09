@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Add localization for stealth attributes
-
 Implement server-side usePlayerSenses config option...
 ...Make entities that *are* seen easily visible on client (because your character saw them)
 ...Don't send entity data of unseen entities to players, including potion effects
