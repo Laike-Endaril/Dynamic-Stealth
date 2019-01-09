@@ -64,7 +64,10 @@ public class EntityThreatData
                     else
                     {
                         entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(token));
-                        if (entry == null) System.err.println("ResourceLocation for entity \"" + token + "\" not found!");
+                        if (entry == null)
+                        {
+                            if (!EntityThreatDefaults.passiveDefaults.contains(string)) System.err.println("ResourceLocation for entity \"" + token + "\" not found!");
+                        }
                         else
                         {
                             if (mode == 1) isPassive.add(entry.getEntityClass());
