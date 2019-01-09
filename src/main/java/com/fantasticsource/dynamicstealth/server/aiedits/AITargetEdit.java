@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.aiedits;
 
+import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -41,6 +42,8 @@ public abstract class AITargetEdit extends EntityAIBase
         {
             return false;
         }
+
+        if (Threat.isPassive(attacker)) return false;
 
         if (attacker instanceof IEntityOwnable && ((IEntityOwnable) attacker).getOwnerId() != null)
         {

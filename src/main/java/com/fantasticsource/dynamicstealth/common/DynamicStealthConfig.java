@@ -567,6 +567,19 @@ public class DynamicStealthConfig
                 })
                 @Config.RequiresMcRestart
                 public String[] threatBypass = EntityThreatDefaults.threatBypassDefaults.toArray(new String[EntityThreatDefaults.threatBypassDefaults.size()]);
+
+                @Config.Name("Passiveness")
+                @Comment({
+                        "Sets whether the threat system detects and entity as passive or not",
+                        "",
+                        "entityID, passivity",
+                        "",
+                        "eg...",
+                        "",
+                        "minecraft:skeleton, true"
+                })
+                @Config.RequiresMcRestart
+                public String[] isPassive = EntityThreatDefaults.passiveDefaults.toArray(new String[EntityThreatDefaults.passiveDefaults.size()]);
             }
 
             public class HUD

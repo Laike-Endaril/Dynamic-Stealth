@@ -1,14 +1,11 @@
 package com.fantasticsource.dynamicstealth.server;
 
 import com.fantasticsource.dynamicstealth.common.Network;
-import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.server.configdata.EntityThreatData;
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.boss.EntityDragon;
-import net.minecraft.entity.monster.EntitySlime;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -198,6 +195,23 @@ public class Threat
         }
 
         return false;
+    }
+
+    public static boolean isPassive(EntityLivingBase living)
+    {
+        if (living == null) return false;
+
+        for (Class<? extends Entity> clss : EntityThreatData.isPassive)
+        {
+            if (clss.isAssignableFrom(living.getClass())) return true;
+        }
+
+        for (Class<? extends Entity> clss : EntityThreatData.isNonPassive)
+        {
+            if (clss.isAssignableFrom(living.getClass())) return false;
+        }
+
+        return MCTools.isPassive(living);
     }
 
 

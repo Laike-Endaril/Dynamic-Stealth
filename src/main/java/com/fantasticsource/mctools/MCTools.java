@@ -19,7 +19,7 @@ public class MCTools
 
     public static boolean isPassive(EntityLivingBase living)
     {
-        //TODO This will probably need improvement at some point, mostly for mod compat, but possibly also for vanilla
+        //This is not 100% accurate for modded entities, so having an entity-specific config override is suggested
         if (living == null) return false;
 
         //getEntityAttribute is incorrectly tagged as @Nonnull; it can and will return a null value sometimes

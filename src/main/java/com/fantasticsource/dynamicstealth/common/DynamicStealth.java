@@ -51,7 +51,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
-import static com.fantasticsource.mctools.MCTools.isPassive;
 
 @Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, acceptableRemoteVersions = "*")
 public class DynamicStealth
@@ -151,7 +150,7 @@ public class DynamicStealth
             EntityLivingBase livingBaseSource = (EntityLivingBase) source;
             boolean updateTarget = true;
             boolean newThreatTarget = false;
-            boolean passive = isPassive(livingTarget);
+            boolean passive = Threat.isPassive(livingTarget);
 
             //Threat
             if (!passive)

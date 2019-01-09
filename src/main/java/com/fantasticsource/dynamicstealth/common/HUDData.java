@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.common;
 
-import com.fantasticsource.mctools.MCTools;
+import com.fantasticsource.dynamicstealth.server.Threat;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -32,7 +32,7 @@ public class HUDData
     {
         if (searcher == null) return COLOR_NULL;
         if (bypassesThreat(searcher)) return COLOR_ALERT;
-        if (serverSettings.threat.recognizePassive && MCTools.isPassive(searcher)) return COLOR_PASSIVE;
+        if (serverSettings.threat.recognizePassive && Threat.isPassive(searcher)) return COLOR_PASSIVE;
         if (threatLevel <= 0) return COLOR_IDLE;
         if (target == null) return COLOR_ALERT;
         if (target == player) return COLOR_ATTACKING_YOU;

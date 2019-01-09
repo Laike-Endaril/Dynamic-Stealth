@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class EntityThreatDefaults
 {
     public static ArrayList<String> threatBypassDefaults = new ArrayList<>();
+    public static ArrayList<String> passiveDefaults = new ArrayList<>();
 
     static
     {
