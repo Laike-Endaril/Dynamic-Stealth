@@ -34,13 +34,14 @@ public class EntityTrackerEdit extends EntityTracker
     private final WorldServer world;
     private final Set<EntityTrackerEntry> entries = Sets.newHashSet();
     private final IntHashMap<EntityTrackerEntry> trackedEntityHashTable = new IntHashMap<>();
-    private int maxTrackingDistanceThreshold;
+    private int maxDistance;
 
-    public EntityTrackerEdit(WorldServer theWorldIn)
+    public EntityTrackerEdit(WorldServer worldIn)
     {
-        super(theWorldIn);
-        world = theWorldIn;
-        maxTrackingDistanceThreshold = theWorldIn.getMinecraftServer().getPlayerList().getEntityViewDistance();
+        super(worldIn);
+
+        world = worldIn;
+        maxDistance = worldIn.getMinecraftServer().getPlayerList().getEntityViewDistance();
     }
 
     public void track(Entity entityIn)
@@ -192,7 +193,7 @@ public class EntityTrackerEdit extends EntityTracker
                 throw new IllegalStateException("Entity is already tracked!");
             }
 
-            EntityTrackerEntryEdit entitytrackerentry = new EntityTrackerEntryEdit(entityIn, trackingRange, maxTrackingDistanceThreshold, updateFrequency, sendVelocityUpdates);
+            EntityTrackerEntryEdit entitytrackerentry = new EntityTrackerEntryEdit(entityIn, trackingRange, maxDistance, updateFrequency, sendVelocityUpdates);
             entries.add(entitytrackerentry);
             trackedEntityHashTable.addKey(entityIn.getEntityId(), entitytrackerentry);
             entitytrackerentry.updatePlayerEntities(world.playerEntities);
@@ -352,24 +353,24 @@ public class EntityTrackerEdit extends EntityTracker
             }
         }
 
-        for (Entity entity1 : list)
+        for (Entity entity : list)
         {
-            player.connection.sendPacket(new SPacketEntityAttach(entity1, ((EntityLiving) entity1).getLeashHolder()));
+            player.connection.sendPacket(new SPacketEntityAttach(entity, ((EntityLiving) entity).getLeashHolder()));
         }
 
-        for (Entity entity2 : list1)
+        for (Entity entity : list1)
         {
-            player.connection.sendPacket(new SPacketSetPassengers(entity2));
+            player.connection.sendPacket(new SPacketSetPassengers(entity));
         }
     }
 
-    public void setViewDistance(int p_187252_1_)
+    public void setViewDistance(int distance)
     {
-        maxTrackingDistanceThreshold = (p_187252_1_ - 1) * 16;
+        maxDistance = (distance - 1) * 16;
 
         for (EntityTrackerEntry entitytrackerentry : entries)
         {
-            entitytrackerentry.setMaxRange(maxTrackingDistanceThreshold);
+            entitytrackerentry.setMaxRange(maxDistance);
         }
     }
 }

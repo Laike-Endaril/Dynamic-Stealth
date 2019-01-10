@@ -68,11 +68,13 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
         maxRange = maxRangeIn;
         updateFrequency = updateFrequencyIn;
         sendVelocityUpdates = sendVelocityUpdatesIn;
+
         encodedPosX = EntityTracker.getPositionLong(entityIn.posX);
         encodedPosY = EntityTracker.getPositionLong(entityIn.posY);
         encodedPosZ = EntityTracker.getPositionLong(entityIn.posZ);
         encodedRotationYaw = MathHelper.floor(entityIn.rotationYaw * 256.0F / 360.0F);
         encodedRotationPitch = MathHelper.floor(entityIn.rotationPitch * 256.0F / 360.0F);
+
         lastHeadMotion = MathHelper.floor(entityIn.getRotationYawHead() * 256.0F / 360.0F);
         onGround = entityIn.onGround;
     }
@@ -91,7 +93,7 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
     {
         playerEntitiesUpdated = false;
 
-        if (!updatedPlayerVisibility || trackedEntity.getDistanceSq(lastTrackedEntityPosX, lastTrackedEntityPosY, lastTrackedEntityPosZ) > 16.0D)
+        if (!updatedPlayerVisibility || trackedEntity.getDistanceSq(lastTrackedEntityPosX, lastTrackedEntityPosY, lastTrackedEntityPosZ) > 16)
         {
             lastTrackedEntityPosX = trackedEntity.posX;
             lastTrackedEntityPosY = trackedEntity.posY;
@@ -211,10 +213,9 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
                     double d0 = trackedEntity.motionX - lastTrackedEntityMotionX;
                     double d1 = trackedEntity.motionY - lastTrackedEntityMotionY;
                     double d2 = trackedEntity.motionZ - motionZ;
-                    double d3 = 0.02D;
                     double d4 = d0 * d0 + d1 * d1 + d2 * d2;
 
-                    if (d4 > 4.0E-4D || d4 > 0.0D && trackedEntity.motionX == 0.0D && trackedEntity.motionY == 0.0D && trackedEntity.motionZ == 0.0D)
+                    if (d4 > 4.0E-4D || d4 > 0 && trackedEntity.motionX == 0 && trackedEntity.motionY == 0 && trackedEntity.motionZ == 0)
                     {
                         lastTrackedEntityMotionX = trackedEntity.motionX;
                         lastTrackedEntityMotionY = trackedEntity.motionY;
@@ -430,8 +431,8 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
 
     public boolean isVisibleTo(EntityPlayerMP playerMP)
     {
-        double d0 = playerMP.posX - (double) encodedPosX / 4096.0D;
-        double d1 = playerMP.posZ - (double) encodedPosZ / 4096.0D;
+        double d0 = playerMP.posX - (double) encodedPosX / 4096;
+        double d1 = playerMP.posZ - (double) encodedPosZ / 4096;
         int i = Math.min(range, maxRange);
         return d0 >= (double) (-i) && d0 <= (double) i && d1 >= (double) (-i) && d1 <= (double) i && trackedEntity.isSpectatedByPlayer(playerMP);
     }
@@ -492,7 +493,7 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
         else if (trackedEntity instanceof EntityFishHook)
         {
             Entity entity2 = ((EntityFishHook) trackedEntity).getAngler();
-            return new SPacketSpawnObject(trackedEntity, 90, entity2 == null ? trackedEntity.getEntityId() : entity2.getEntityId());
+            return new SPacketSpawnObject(trackedEntity, 90, entity2.getEntityId());
         }
         else if (trackedEntity instanceof EntitySpectralArrow)
         {
@@ -560,17 +561,17 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
                 spacketspawnobject = new SPacketSpawnObject(trackedEntity, i, 0);
             }
 
-            spacketspawnobject.setSpeedX((int) (entityfireball.accelerationX * 8000.0D));
-            spacketspawnobject.setSpeedY((int) (entityfireball.accelerationY * 8000.0D));
-            spacketspawnobject.setSpeedZ((int) (entityfireball.accelerationZ * 8000.0D));
+            spacketspawnobject.setSpeedX((int) (entityfireball.accelerationX * 8000));
+            spacketspawnobject.setSpeedY((int) (entityfireball.accelerationY * 8000));
+            spacketspawnobject.setSpeedZ((int) (entityfireball.accelerationZ * 8000));
             return spacketspawnobject;
         }
         else if (trackedEntity instanceof EntityShulkerBullet)
         {
             SPacketSpawnObject spacketspawnobject1 = new SPacketSpawnObject(trackedEntity, 67, 0);
-            spacketspawnobject1.setSpeedX((int) (trackedEntity.motionX * 8000.0D));
-            spacketspawnobject1.setSpeedY((int) (trackedEntity.motionY * 8000.0D));
-            spacketspawnobject1.setSpeedZ((int) (trackedEntity.motionZ * 8000.0D));
+            spacketspawnobject1.setSpeedX((int) (trackedEntity.motionX * 8000));
+            spacketspawnobject1.setSpeedY((int) (trackedEntity.motionY * 8000));
+            spacketspawnobject1.setSpeedZ((int) (trackedEntity.motionZ * 8000));
             return spacketspawnobject1;
         }
         else if (trackedEntity instanceof EntityEgg)
