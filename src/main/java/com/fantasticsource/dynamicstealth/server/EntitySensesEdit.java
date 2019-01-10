@@ -80,10 +80,10 @@ public class EntitySensesEdit extends EntitySenses
 
         //Setup for checks against EntityLivingBase-only targets
         boolean isLivingBase = target instanceof EntityLivingBase;
-        EntityLivingBase targetLiving = isLivingBase ? (EntityLivingBase) target : null;
+        EntityLivingBase targetLivingBase = isLivingBase ? (EntityLivingBase) target : null;
 
         //Glowing (absolute, after Angles)
-        if (vision.g_absolutes.seeGlowing && isLivingBase && targetLiving.getActivePotionEffect(MobEffects.GLOWING) != null) return 0;
+        if (vision.g_absolutes.seeGlowing && isLivingBase && targetLivingBase.getActivePotionEffect(MobEffects.GLOWING) != null) return 0;
 
 
         //LOS check (absolute, after Angles, after Glowing)
@@ -115,7 +115,7 @@ public class EntitySensesEdit extends EntitySenses
 
 
         //Invisibility (multiplier)
-        double invisibilityMultiplier = isLivingBase && targetLiving.getActivePotionEffect(MobEffects.INVISIBILITY) != null ? vision.a_stealthMultipliers.invisibilityMultiplier : 1;
+        double invisibilityMultiplier = isLivingBase && targetLivingBase.getActivePotionEffect(MobEffects.INVISIBILITY) != null ? vision.a_stealthMultipliers.invisibilityMultiplier : 1;
 
 
         //Alerted multiplier
@@ -129,7 +129,7 @@ public class EntitySensesEdit extends EntitySenses
         double mobHeadMultiplier = 1;
         if (isLivingBase)
         {
-            ItemStack helmet = targetLiving.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+            ItemStack helmet = targetLivingBase.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
             if (helmet.getItem() == Items.SKULL)
             {
                 int damage = helmet.getItemDamage();
@@ -143,11 +143,11 @@ public class EntitySensesEdit extends EntitySenses
 
 
         //Armor
-        double armorMultiplier = isLivingBase ? Math.max(0, 1 + vision.b_visibilityMultipliers.armorMultiplierCumulative * targetLiving.getTotalArmorValue()) : 1;
+        double armorMultiplier = isLivingBase ? Math.max(0, 1 + vision.b_visibilityMultipliers.armorMultiplierCumulative * targetLivingBase.getTotalArmorValue()) : 1;
 
 
         //Fire
-        double fireMultiplier = !isLivingBase ? 1 : !targetLiving.isBurning() ? 1 : vision.b_visibilityMultipliers.onFireMultiplier;
+        double fireMultiplier = !isLivingBase ? 1 : !targetLivingBase.isBurning() ? 1 : vision.b_visibilityMultipliers.onFireMultiplier;
 
 
         //Combine multipliers
@@ -155,7 +155,7 @@ public class EntitySensesEdit extends EntitySenses
         double visibilityMultiplier = Tools.max(armorMultiplier, fireMultiplier, alertMultiplier);
         double baseMultiplier = Tools.min(Tools.max((lightFactor + speedFactor) / 2 * stealthMultiplier * visibilityMultiplier, 0), 1);
 
-        double visReduction = targetLiving.getEntityAttribute(Attributes.VISIBILITY_REDUCTION).getAttributeValue();
+        double visReduction = !isLivingBase ? 0 : targetLivingBase.getEntityAttribute(Attributes.VISIBILITY_REDUCTION).getAttributeValue();
         double attributeMultiplier = visReduction == 0 ? Double.MAX_VALUE : searcher.getEntityAttribute(Attributes.SIGHT).getAttributeValue() / visReduction;
 
 

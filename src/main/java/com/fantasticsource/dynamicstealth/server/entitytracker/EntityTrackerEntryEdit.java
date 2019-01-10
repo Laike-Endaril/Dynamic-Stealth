@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.entitytracker;
 
+import com.fantasticsource.dynamicstealth.server.EntitySensesEdit;
 import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
@@ -33,6 +34,7 @@ import java.util.Set;
 public class EntityTrackerEntryEdit extends EntityTrackerEntry
 {
     private static final Logger LOGGER = LogManager.getLogger();
+
     public final Set<EntityPlayerMP> trackingPlayers = Sets.newHashSet();
 
     private final Entity trackedEntity;
@@ -40,33 +42,38 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
     private final EntityLivingBase livingBase;
     private final EntityPlayerMP player;
 
-    private final int range;
     private final int updateFrequency;
-    private final boolean sendVelocityUpdates;
     public int updateCounter;
+    private final boolean sendVelocityUpdates;
     public boolean playerEntitiesUpdated;
-    private int maxRange;
+    private boolean updatedPlayerVisibility;
+    private int ticksSinceLastForcedTeleport;
+
     private long encodedPosX;
     private long encodedPosY;
     private long encodedPosZ;
+
     private int encodedRotationYaw;
     private int encodedRotationPitch;
+
     private int lastHeadMotion;
+
     private double lastMotionX;
     private double lastMotionY;
     private double lastMotionZ;
+
     private double lastX;
     private double lastY;
     private double lastZ;
-    private boolean updatedPlayerVisibility;
-    private int ticksSinceLastForcedTeleport;
+
     private List<Entity> passengers = Collections.emptyList();
     private boolean ridingEntity;
     private boolean onGround;
 
-    public EntityTrackerEntryEdit(Entity entityIn, int rangeIn, int maxRangeIn, int updateFrequencyIn, boolean sendVelocityUpdatesIn)
+
+    public EntityTrackerEntryEdit(Entity entityIn, int maxRangeIn, int currentRangeIn, int updateFrequencyIn, boolean sendVelocityUpdatesIn)
     {
-        super(entityIn, rangeIn, maxRangeIn, updateFrequencyIn, sendVelocityUpdatesIn);
+        super(entityIn, maxRangeIn, currentRangeIn, updateFrequencyIn, sendVelocityUpdatesIn);
 
         trackedEntity = entityIn;
         isLivingBase = trackedEntity instanceof EntityLivingBase;
@@ -74,8 +81,6 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
         livingBase = isLivingBase ? (EntityLivingBase) trackedEntity : null;
         player = isPlayer ? (EntityPlayerMP) trackedEntity : null;
 
-        range = rangeIn;
-        maxRange = maxRangeIn;
         updateFrequency = updateFrequencyIn;
         sendVelocityUpdates = sendVelocityUpdatesIn;
 
@@ -329,21 +334,21 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
         }
     }
 
-    public void updatePlayerEntity(EntityPlayerMP playerMP)
+    public void updatePlayerEntity(EntityPlayerMP player)
     {
-        if (playerMP != trackedEntity)
+        if (trackedEntity != player)
         {
-            if (isVisibleTo(playerMP))
+            if (isVisibleTo(player))
             {
-                if (!trackingPlayers.contains(playerMP) && (isPlayerWatchingThisChunk(playerMP) || trackedEntity.forceSpawn))
+                if (!trackingPlayers.contains(player) && (isPlayerWatchingThisChunk(player) || trackedEntity.forceSpawn))
                 {
-                    trackingPlayers.add(playerMP);
+                    trackingPlayers.add(player);
                     Packet<?> packet = createSpawnPacket();
-                    playerMP.connection.sendPacket(packet);
+                    player.connection.sendPacket(packet);
 
                     if (!trackedEntity.getDataManager().isEmpty())
                     {
-                        playerMP.connection.sendPacket(new SPacketEntityMetadata(trackedEntity.getEntityId(), trackedEntity.getDataManager(), true));
+                        player.connection.sendPacket(new SPacketEntityMetadata(trackedEntity.getEntityId(), trackedEntity.getDataManager(), true));
                     }
 
                     boolean flag = sendVelocityUpdates;
@@ -355,7 +360,7 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
 
                         if (!collection.isEmpty())
                         {
-                            playerMP.connection.sendPacket(new SPacketEntityProperties(trackedEntity.getEntityId(), collection));
+                            player.connection.sendPacket(new SPacketEntityProperties(trackedEntity.getEntityId(), collection));
                         }
 
                         if (livingBase.isElytraFlying())
@@ -370,7 +375,7 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
 
                     if (flag && !(packet instanceof SPacketSpawnMob))
                     {
-                        playerMP.connection.sendPacket(new SPacketEntityVelocity(trackedEntity.getEntityId(), trackedEntity.motionX, trackedEntity.motionY, trackedEntity.motionZ));
+                        player.connection.sendPacket(new SPacketEntityVelocity(trackedEntity.getEntityId(), trackedEntity.motionX, trackedEntity.motionY, trackedEntity.motionZ));
                     }
 
                     if (isLivingBase)
@@ -381,55 +386,52 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
 
                             if (!itemstack.isEmpty())
                             {
-                                playerMP.connection.sendPacket(new SPacketEntityEquipment(trackedEntity.getEntityId(), entityequipmentslot, itemstack));
+                                player.connection.sendPacket(new SPacketEntityEquipment(trackedEntity.getEntityId(), entityequipmentslot, itemstack));
                             }
                         }
                     }
 
-                    if (isPlayer && player.isPlayerSleeping())
+                    if (isPlayer && this.player.isPlayerSleeping())
                     {
-                        playerMP.connection.sendPacket(new SPacketUseBed(player, new BlockPos(trackedEntity)));
+                        player.connection.sendPacket(new SPacketUseBed(this.player, new BlockPos(trackedEntity)));
                     }
 
                     if (isLivingBase)
                     {
                         for (PotionEffect potioneffect : livingBase.getActivePotionEffects())
                         {
-                            playerMP.connection.sendPacket(new SPacketEntityEffect(trackedEntity.getEntityId(), potioneffect));
+                            player.connection.sendPacket(new SPacketEntityEffect(trackedEntity.getEntityId(), potioneffect));
                         }
                     }
 
                     if (!trackedEntity.getPassengers().isEmpty())
                     {
-                        playerMP.connection.sendPacket(new SPacketSetPassengers(trackedEntity));
+                        player.connection.sendPacket(new SPacketSetPassengers(trackedEntity));
                     }
 
                     if (trackedEntity.isRiding())
                     {
-                        playerMP.connection.sendPacket(new SPacketSetPassengers(trackedEntity.getRidingEntity()));
+                        player.connection.sendPacket(new SPacketSetPassengers(trackedEntity.getRidingEntity()));
                     }
 
-                    trackedEntity.addTrackingPlayer(playerMP);
-                    playerMP.addEntity(trackedEntity);
-                    ForgeEventFactory.onStartEntityTracking(trackedEntity, playerMP);
+                    trackedEntity.addTrackingPlayer(player);
+                    player.addEntity(trackedEntity);
+                    ForgeEventFactory.onStartEntityTracking(trackedEntity, player);
                 }
             }
-            else if (trackingPlayers.contains(playerMP))
+            else if (trackingPlayers.contains(player))
             {
-                trackingPlayers.remove(playerMP);
-                trackedEntity.removeTrackingPlayer(playerMP);
-                playerMP.removeEntity(trackedEntity);
-                ForgeEventFactory.onStopEntityTracking(trackedEntity, playerMP);
+                trackingPlayers.remove(player);
+                trackedEntity.removeTrackingPlayer(player);
+                player.removeEntity(trackedEntity);
+                ForgeEventFactory.onStopEntityTracking(trackedEntity, player);
             }
         }
     }
 
     public boolean isVisibleTo(EntityPlayerMP playerMP)
     {
-        double d0 = playerMP.posX - (double) encodedPosX / 4096;
-        double d1 = playerMP.posZ - (double) encodedPosZ / 4096;
-        int i = Math.min(range, maxRange);
-        return d0 >= (double) (-i) && d0 <= (double) i && d1 >= (double) (-i) && d1 <= (double) i && trackedEntity.isSpectatedByPlayer(playerMP);
+        return EntitySensesEdit.stealthLevel(playerMP, trackedEntity) <= 1;
     }
 
     private boolean isPlayerWatchingThisChunk(EntityPlayerMP playerMP)
@@ -543,7 +545,6 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
 
     public void setMaxRange(int maxRangeIn)
     {
-        maxRange = maxRangeIn;
     }
 
     public void resetPlayerVisibility()
