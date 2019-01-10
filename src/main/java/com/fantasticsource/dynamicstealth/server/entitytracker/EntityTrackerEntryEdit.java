@@ -55,9 +55,9 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
     private double lastMotionX;
     private double lastMotionY;
     private double lastMotionZ;
-    private double lastTrackedEntityPosX;
-    private double lastTrackedEntityPosY;
-    private double lastTrackedEntityPosZ;
+    private double lastX;
+    private double lastY;
+    private double lastZ;
     private boolean updatedPlayerVisibility;
     private int ticksSinceLastForcedTeleport;
     private List<Entity> passengers = Collections.emptyList();
@@ -103,13 +103,15 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
     {
         playerEntitiesUpdated = false;
 
-        if (!updatedPlayerVisibility || trackedEntity.getDistanceSq(lastTrackedEntityPosX, lastTrackedEntityPosY, lastTrackedEntityPosZ) > 16)
+        if (!updatedPlayerVisibility || trackedEntity.getDistanceSq(lastX, lastY, lastZ) > 16)
         {
-            lastTrackedEntityPosX = trackedEntity.posX;
-            lastTrackedEntityPosY = trackedEntity.posY;
-            lastTrackedEntityPosZ = trackedEntity.posZ;
+            lastX = trackedEntity.posX;
+            lastY = trackedEntity.posY;
+            lastZ = trackedEntity.posZ;
+
             updatedPlayerVisibility = true;
             playerEntitiesUpdated = true;
+
             updatePlayerEntities(players);
         }
 
@@ -437,9 +439,9 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
 
     public void updatePlayerEntities(List<EntityPlayer> players)
     {
-        for (int i = 0; i < players.size(); ++i)
+        for (EntityPlayer player : players)
         {
-            updatePlayerEntity((EntityPlayerMP) players.get(i));
+            updatePlayerEntity((EntityPlayerMP) player);
         }
     }
 

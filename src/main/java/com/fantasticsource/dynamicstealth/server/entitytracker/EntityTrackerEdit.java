@@ -27,6 +27,7 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -62,10 +63,7 @@ public class EntityTrackerEdit extends EntityTracker
 
             for (EntityTrackerEntry entitytrackerentry : entries)
             {
-                if (entitytrackerentry.getTrackedEntity() != entityplayermp)
-                {
-                    entitytrackerentry.updatePlayerEntity(entityplayermp);
-                }
+                entitytrackerentry.updatePlayerEntity(entityplayermp);
             }
         }
         else if (entityIn instanceof EntityFishHook)
@@ -252,7 +250,7 @@ public class EntityTrackerEdit extends EntityTracker
 
     public void tick()
     {
-        List<EntityPlayerMP> list = Lists.newArrayList();
+        List<EntityPlayerMP> list = new ArrayList<>();
 
         for (EntityTrackerEntry entitytrackerentry : entries)
         {
@@ -269,14 +267,11 @@ public class EntityTrackerEdit extends EntityTracker
             }
         }
 
-        for (EntityPlayerMP entityplayermp : list)
+        for (EntityPlayerMP player : list)
         {
-            for (EntityTrackerEntry entitytrackerentry : entries)
+            for (EntityTrackerEntry trackerEntry : entries)
             {
-                if (entitytrackerentry.getTrackedEntity() != entityplayermp)
-                {
-                    entitytrackerentry.updatePlayerEntity(entityplayermp);
-                }
+                trackerEntry.updatePlayerEntity(player);
             }
         }
     }
