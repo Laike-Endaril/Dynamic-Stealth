@@ -34,7 +34,12 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
 {
     private static final Logger LOGGER = LogManager.getLogger();
     public final Set<EntityPlayerMP> trackingPlayers = Sets.newHashSet();
+
     private final Entity trackedEntity;
+    private final boolean isLivingBase, isPlayer;
+    private final EntityLivingBase livingBase;
+    private final EntityPlayerMP player;
+
     private final int range;
     private final int updateFrequency;
     private final boolean sendVelocityUpdates;
@@ -47,9 +52,9 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
     private int encodedRotationYaw;
     private int encodedRotationPitch;
     private int lastHeadMotion;
-    private double lastTrackedEntityMotionX;
-    private double lastTrackedEntityMotionY;
-    private double motionZ;
+    private double lastMotionX;
+    private double lastMotionY;
+    private double lastMotionZ;
     private double lastTrackedEntityPosX;
     private double lastTrackedEntityPosY;
     private double lastTrackedEntityPosZ;
@@ -64,6 +69,11 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
         super(entityIn, rangeIn, maxRangeIn, updateFrequencyIn, sendVelocityUpdatesIn);
 
         trackedEntity = entityIn;
+        isLivingBase = trackedEntity instanceof EntityLivingBase;
+        isPlayer = trackedEntity instanceof EntityPlayerMP;
+        livingBase = isLivingBase ? (EntityLivingBase) trackedEntity : null;
+        player = isPlayer ? (EntityPlayerMP) trackedEntity : null;
+
         range = rangeIn;
         maxRange = maxRangeIn;
         updateFrequency = updateFrequencyIn;
@@ -169,7 +179,7 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
                 long k = i2 - encodedPosY;
                 long l = j2 - encodedPosZ;
                 Packet<?> packet1 = null;
-                boolean flag = j * j + k * k + l * l >= 128L || updateCounter % 60 == 0;
+                boolean flag = j * j + k * k + l * l >= 128 || updateCounter % 60 == 0;
                 boolean flag1 = Math.abs(k2 - encodedRotationYaw) >= 1 || Math.abs(i - encodedRotationPitch) >= 1;
 
                 if (updateCounter > 0 || trackedEntity instanceof EntityArrow)
@@ -201,26 +211,16 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
                     }
                 }
 
-                boolean flag2 = sendVelocityUpdates;
-
-                if (trackedEntity instanceof EntityLivingBase && ((EntityLivingBase) trackedEntity).isElytraFlying())
+                if (updateCounter > 0 && (sendVelocityUpdates || (isLivingBase && livingBase.isElytraFlying())))
                 {
-                    flag2 = true;
-                }
+                    double distSquared = Math.pow(trackedEntity.motionX - lastMotionX, 2) + Math.pow(trackedEntity.motionY - lastMotionY, 2) + Math.pow(trackedEntity.motionZ - lastMotionZ, 2);
 
-                if (flag2 && updateCounter > 0)
-                {
-                    double d0 = trackedEntity.motionX - lastTrackedEntityMotionX;
-                    double d1 = trackedEntity.motionY - lastTrackedEntityMotionY;
-                    double d2 = trackedEntity.motionZ - motionZ;
-                    double d4 = d0 * d0 + d1 * d1 + d2 * d2;
-
-                    if (d4 > .0004 || (d4 > 0 && trackedEntity.motionX == 0 && trackedEntity.motionY == 0 && trackedEntity.motionZ == 0))
+                    if (distSquared > .0004 || (distSquared > 0 && trackedEntity.motionX == 0 && trackedEntity.motionY == 0 && trackedEntity.motionZ == 0))
                     {
-                        lastTrackedEntityMotionX = trackedEntity.motionX;
-                        lastTrackedEntityMotionY = trackedEntity.motionY;
-                        motionZ = trackedEntity.motionZ;
-                        sendPacketToTrackedPlayers(new SPacketEntityVelocity(trackedEntity.getEntityId(), lastTrackedEntityMotionX, lastTrackedEntityMotionY, motionZ));
+                        lastMotionX = trackedEntity.motionX;
+                        lastMotionY = trackedEntity.motionY;
+                        lastMotionZ = trackedEntity.motionZ;
+                        sendPacketToTrackedPlayers(new SPacketEntityVelocity(trackedEntity.getEntityId(), lastMotionX, lastMotionY, lastMotionZ));
                     }
                 }
 
@@ -276,9 +276,9 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
             sendToTrackingAndSelf(new SPacketEntityMetadata(trackedEntity.getEntityId(), entitydatamanager, false));
         }
 
-        if (trackedEntity instanceof EntityLivingBase)
+        if (isLivingBase)
         {
-            AttributeMap attributemap = (AttributeMap) ((EntityLivingBase) trackedEntity).getAttributeMap();
+            AttributeMap attributemap = (AttributeMap) livingBase.getAttributeMap();
             Set<IAttributeInstance> set = attributemap.getDirtyInstances();
 
             if (!set.isEmpty())
@@ -302,9 +302,9 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
     {
         sendPacketToTrackedPlayers(packetIn);
 
-        if (trackedEntity instanceof EntityPlayerMP)
+        if (isPlayer)
         {
-            ((EntityPlayerMP) trackedEntity).connection.sendPacket(packetIn);
+            player.connection.sendPacket(packetIn);
         }
     }
 
@@ -346,9 +346,9 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
 
                     boolean flag = sendVelocityUpdates;
 
-                    if (trackedEntity instanceof EntityLivingBase)
+                    if (isLivingBase)
                     {
-                        AttributeMap attributemap = (AttributeMap) ((EntityLivingBase) trackedEntity).getAttributeMap();
+                        AttributeMap attributemap = (AttributeMap) livingBase.getAttributeMap();
                         Collection<IAttributeInstance> collection = attributemap.getWatchedAttributes();
 
                         if (!collection.isEmpty())
@@ -356,26 +356,26 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
                             playerMP.connection.sendPacket(new SPacketEntityProperties(trackedEntity.getEntityId(), collection));
                         }
 
-                        if (((EntityLivingBase) trackedEntity).isElytraFlying())
+                        if (livingBase.isElytraFlying())
                         {
                             flag = true;
                         }
                     }
 
-                    lastTrackedEntityMotionX = trackedEntity.motionX;
-                    lastTrackedEntityMotionY = trackedEntity.motionY;
-                    motionZ = trackedEntity.motionZ;
+                    lastMotionX = trackedEntity.motionX;
+                    lastMotionY = trackedEntity.motionY;
+                    lastMotionZ = trackedEntity.motionZ;
 
                     if (flag && !(packet instanceof SPacketSpawnMob))
                     {
                         playerMP.connection.sendPacket(new SPacketEntityVelocity(trackedEntity.getEntityId(), trackedEntity.motionX, trackedEntity.motionY, trackedEntity.motionZ));
                     }
 
-                    if (trackedEntity instanceof EntityLivingBase)
+                    if (isLivingBase)
                     {
                         for (EntityEquipmentSlot entityequipmentslot : EntityEquipmentSlot.values())
                         {
-                            ItemStack itemstack = ((EntityLivingBase) trackedEntity).getItemStackFromSlot(entityequipmentslot);
+                            ItemStack itemstack = livingBase.getItemStackFromSlot(entityequipmentslot);
 
                             if (!itemstack.isEmpty())
                             {
@@ -384,21 +384,14 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
                         }
                     }
 
-                    if (trackedEntity instanceof EntityPlayer)
+                    if (isPlayer && player.isPlayerSleeping())
                     {
-                        EntityPlayer entityplayer = (EntityPlayer) trackedEntity;
-
-                        if (entityplayer.isPlayerSleeping())
-                        {
-                            playerMP.connection.sendPacket(new SPacketUseBed(entityplayer, new BlockPos(trackedEntity)));
-                        }
+                        playerMP.connection.sendPacket(new SPacketUseBed(player, new BlockPos(trackedEntity)));
                     }
 
-                    if (trackedEntity instanceof EntityLivingBase)
+                    if (isLivingBase)
                     {
-                        EntityLivingBase entitylivingbase = (EntityLivingBase) trackedEntity;
-
-                        for (PotionEffect potioneffect : entitylivingbase.getActivePotionEffects())
+                        for (PotionEffect potioneffect : livingBase.getActivePotionEffects())
                         {
                             playerMP.connection.sendPacket(new SPacketEntityEffect(trackedEntity.getEntityId(), potioneffect));
                         }
@@ -460,14 +453,14 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
         Packet pkt = FMLNetworkHandler.getEntitySpawningPacket(trackedEntity);
         if (pkt != null) return pkt;
 
-        if (trackedEntity instanceof EntityPlayerMP)
+        if (isPlayer)
         {
-            return new SPacketSpawnPlayer((EntityPlayer) trackedEntity);
+            return new SPacketSpawnPlayer(player);
         }
         else if (trackedEntity instanceof IAnimals)
         {
             lastHeadMotion = MathHelper.floor(trackedEntity.getRotationYawHead() * 256 / 360);
-            return new SPacketSpawnMob((EntityLivingBase) trackedEntity);
+            return new SPacketSpawnMob(livingBase);
         }
         else if (trackedEntity instanceof EntityPainting)
         {
