@@ -33,10 +33,15 @@ import java.util.Set;
 public class EntityTrackerEdit extends EntityTracker
 {
     private static final Logger LOGGER = LogManager.getLogger();
-    private final WorldServer world;
+
+
     private final Set<EntityTrackerEntry> entries = Sets.newHashSet();
     private final IntHashMap<EntityTrackerEntry> trackedEntityHashTable = new IntHashMap<>();
+    private final WorldServer world;
+
+
     private int maxDistance;
+
 
     public EntityTrackerEdit(WorldServer worldIn)
     {
@@ -236,12 +241,12 @@ public class EntityTrackerEdit extends EntityTracker
             }
         }
 
-        EntityTrackerEntry entitytrackerentry1 = trackedEntityHashTable.removeObject(entityIn.getEntityId());
+        EntityTrackerEntry entitytrackerentry = trackedEntityHashTable.removeObject(entityIn.getEntityId());
 
-        if (entitytrackerentry1 != null)
+        if (entitytrackerentry != null)
         {
-            entries.remove(entitytrackerentry1);
-            entitytrackerentry1.sendDestroyEntityPacketToTrackedPlayers();
+            entries.remove(entitytrackerentry);
+            entitytrackerentry.sendDestroyEntityPacketToTrackedPlayers();
         }
     }
 
@@ -264,15 +269,13 @@ public class EntityTrackerEdit extends EntityTracker
             }
         }
 
-        for (int i = 0; i < list.size(); ++i)
+        for (EntityPlayerMP entityplayermp : list)
         {
-            EntityPlayerMP entityplayermp = list.get(i);
-
-            for (EntityTrackerEntry entitytrackerentry1 : entries)
+            for (EntityTrackerEntry entitytrackerentry : entries)
             {
-                if (entitytrackerentry1.getTrackedEntity() != entityplayermp)
+                if (entitytrackerentry.getTrackedEntity() != entityplayermp)
                 {
-                    entitytrackerentry1.updatePlayerEntity(entityplayermp);
+                    entitytrackerentry.updatePlayerEntity(entityplayermp);
                 }
             }
         }
