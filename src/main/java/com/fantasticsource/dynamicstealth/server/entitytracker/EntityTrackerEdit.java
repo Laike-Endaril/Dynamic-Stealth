@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth.server;
+package com.fantasticsource.dynamicstealth.server.entitytracker;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -11,6 +11,7 @@ import net.minecraft.entity.item.*;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.IAnimals;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.*;
 import net.minecraft.network.Packet;
@@ -18,11 +19,9 @@ import net.minecraft.network.play.server.SPacketEntityAttach;
 import net.minecraft.network.play.server.SPacketSetPassengers;
 import net.minecraft.util.IntHashMap;
 import net.minecraft.util.ReportedException;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,7 +33,7 @@ public class EntityTrackerEdit extends EntityTracker
     private static final Logger LOGGER = LogManager.getLogger();
     private final WorldServer world;
     private final Set<EntityTrackerEntry> entries = Sets.newHashSet();
-    private final IntHashMap<EntityTrackerEntry> trackedEntityHashTable = new IntHashMap<EntityTrackerEntry>();
+    private final IntHashMap<EntityTrackerEntry> trackedEntityHashTable = new IntHashMap<>();
     private int maxTrackingDistanceThreshold;
 
     public EntityTrackerEdit(WorldServer theWorldIn)
@@ -44,27 +43,14 @@ public class EntityTrackerEdit extends EntityTracker
         maxTrackingDistanceThreshold = theWorldIn.getMinecraftServer().getPlayerList().getEntityViewDistance();
     }
 
-    public static long getPositionLong(double value)
-    {
-        return MathHelper.lfloor(value * 4096.0D);
-    }
-
-    @SideOnly(Side.CLIENT)
-    public static void updateServerPosition(Entity entityIn, double x, double y, double z)
-    {
-        entityIn.serverPosX = getPositionLong(x);
-        entityIn.serverPosY = getPositionLong(y);
-        entityIn.serverPosZ = getPositionLong(z);
-    }
-
     public void track(Entity entityIn)
     {
-        if (net.minecraftforge.fml.common.registry.EntityRegistry.instance().tryTrackingEntity(this, entityIn)) return;
+        if (EntityRegistry.instance().tryTrackingEntity(this, entityIn)) return;
 
         if (entityIn instanceof EntityPlayerMP)
         {
             track(entityIn, 512, 2);
-            EntityPlayerMP entityplayermp = (EntityPlayerMP)entityIn;
+            EntityPlayerMP entityplayermp = (EntityPlayerMP) entityIn;
 
             for (EntityTrackerEntry entitytrackerentry : entries)
             {
@@ -206,7 +192,7 @@ public class EntityTrackerEdit extends EntityTracker
                 throw new IllegalStateException("Entity is already tracked!");
             }
 
-            EntityTrackerEntry entitytrackerentry = new EntityTrackerEntry(entityIn, trackingRange, maxTrackingDistanceThreshold, updateFrequency, sendVelocityUpdates);
+            EntityTrackerEntryEdit entitytrackerentry = new EntityTrackerEntryEdit(entityIn, trackingRange, maxTrackingDistanceThreshold, updateFrequency, sendVelocityUpdates);
             entries.add(entitytrackerentry);
             trackedEntityHashTable.addKey(entityIn.getEntityId(), entitytrackerentry);
             entitytrackerentry.updatePlayerEntities(world.playerEntities);
@@ -239,7 +225,7 @@ public class EntityTrackerEdit extends EntityTracker
     {
         if (entityIn instanceof EntityPlayerMP)
         {
-            EntityPlayerMP entityplayermp = (EntityPlayerMP)entityIn;
+            EntityPlayerMP entityplayermp = (EntityPlayerMP) entityIn;
 
             for (EntityTrackerEntry entitytrackerentry : entries)
             {
@@ -270,7 +256,7 @@ public class EntityTrackerEdit extends EntityTracker
 
                 if (entity instanceof EntityPlayerMP)
                 {
-                    list.add((EntityPlayerMP)entity);
+                    list.add((EntityPlayerMP) entity);
                 }
             }
         }
@@ -314,7 +300,7 @@ public class EntityTrackerEdit extends EntityTracker
         }
     }
 
-    public Set<? extends net.minecraft.entity.player.EntityPlayer> getTrackingPlayers(Entity entity)
+    public Set<? extends EntityPlayer> getTrackingPlayers(Entity entity)
     {
         EntityTrackerEntry entry = trackedEntityHashTable.lookup(entity.getEntityId());
         if (entry == null)
@@ -354,7 +340,7 @@ public class EntityTrackerEdit extends EntityTracker
             {
                 entitytrackerentry.updatePlayerEntity(player);
 
-                if (entity instanceof EntityLiving && ((EntityLiving)entity).getLeashHolder() != null)
+                if (entity instanceof EntityLiving)
                 {
                     list.add(entity);
                 }
@@ -368,7 +354,7 @@ public class EntityTrackerEdit extends EntityTracker
 
         for (Entity entity1 : list)
         {
-            player.connection.sendPacket(new SPacketEntityAttach(entity1, ((EntityLiving)entity1).getLeashHolder()));
+            player.connection.sendPacket(new SPacketEntityAttach(entity1, ((EntityLiving) entity1).getLeashHolder()));
         }
 
         for (Entity entity2 : list1)

@@ -6,6 +6,7 @@ import com.fantasticsource.dynamicstealth.compat.CompatCNPC;
 import com.fantasticsource.dynamicstealth.server.*;
 import com.fantasticsource.dynamicstealth.server.aiedits.*;
 import com.fantasticsource.dynamicstealth.server.configdata.EntityVisionData;
+import com.fantasticsource.dynamicstealth.server.entitytracker.EntityTrackerEdit;
 import com.fantasticsource.mctools.Speedometer;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.TrigLookupTable;
