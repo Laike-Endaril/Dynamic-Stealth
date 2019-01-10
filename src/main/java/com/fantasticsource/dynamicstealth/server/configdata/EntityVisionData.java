@@ -23,6 +23,8 @@ public class EntityVisionData
     public static Map<Class<? extends Entity>, Pair<Integer, Integer>> entityLighting = new HashMap<>();
     public static Map<Class<? extends Entity>, Pair<Double, Double>> entitySpeeds = new HashMap<>();
 
+    public static int playerMaxVisionDistance = serverSettings.senses.vision.f_distances.distanceFar;
+
 
     static
     {
@@ -68,7 +70,11 @@ public class EntityVisionData
             else
             {
                 token = tokens[0].trim();
-                if (token.equals("player")) entityDistances.put(EntityPlayerMP.class, new Pair<>(Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
+                if (token.equals("player"))
+                {
+                    playerMaxVisionDistance = Integer.parseInt(tokens[1].trim());
+                    entityDistances.put(EntityPlayerMP.class, new Pair<>(playerMaxVisionDistance, Integer.parseInt(tokens[2].trim())));
+                }
                 else
                 {
                     entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(token));
