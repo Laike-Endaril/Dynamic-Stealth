@@ -198,10 +198,10 @@ public class EntityTrackerEdit extends EntityTracker
                 throw new IllegalStateException("Entity is already tracked!");
             }
 
-            EntityTrackerEntryEdit entitytrackerentry = new EntityTrackerEntryEdit(entityIn, trackingRange, maxDistance, updateFrequency, sendVelocityUpdates);
-            entries.add(entitytrackerentry);
-            trackedEntityHashTable.addKey(entityIn.getEntityId(), entitytrackerentry);
-            entitytrackerentry.updatePlayerEntities(world.playerEntities);
+            EntityTrackerEntryEdit entityEntry = new EntityTrackerEntryEdit(entityIn, trackingRange, maxDistance, updateFrequency, sendVelocityUpdates);
+            entries.add(entityEntry);
+            trackedEntityHashTable.addKey(entityIn.getEntityId(), entityEntry);
+            entityEntry.updatePlayerEntities(world.playerEntities);
         }
         catch (Throwable throwable)
         {
