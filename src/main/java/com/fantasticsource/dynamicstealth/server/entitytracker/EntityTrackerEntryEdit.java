@@ -72,10 +72,10 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
         encodedPosX = EntityTracker.getPositionLong(entityIn.posX);
         encodedPosY = EntityTracker.getPositionLong(entityIn.posY);
         encodedPosZ = EntityTracker.getPositionLong(entityIn.posZ);
-        encodedRotationYaw = MathHelper.floor(entityIn.rotationYaw * 256.0F / 360.0F);
-        encodedRotationPitch = MathHelper.floor(entityIn.rotationPitch * 256.0F / 360.0F);
+        encodedRotationYaw = MathHelper.floor(entityIn.rotationYaw * 256 / 360);
+        encodedRotationPitch = MathHelper.floor(entityIn.rotationPitch * 256 / 360);
 
-        lastHeadMotion = MathHelper.floor(entityIn.getRotationYawHead() * 256.0F / 360.0F);
+        lastHeadMotion = MathHelper.floor(entityIn.getRotationYawHead() * 256 / 360);
         onGround = entityIn.onGround;
     }
 
@@ -140,8 +140,8 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
         {
             if (trackedEntity.isRiding())
             {
-                int j1 = MathHelper.floor(trackedEntity.rotationYaw * 256.0F / 360.0F);
-                int l1 = MathHelper.floor(trackedEntity.rotationPitch * 256.0F / 360.0F);
+                int j1 = MathHelper.floor(trackedEntity.rotationYaw * 256 / 360);
+                int l1 = MathHelper.floor(trackedEntity.rotationPitch * 256 / 360);
                 boolean flag3 = Math.abs(j1 - encodedRotationYaw) >= 1 || Math.abs(l1 - encodedRotationPitch) >= 1;
 
                 if (flag3)
@@ -163,8 +163,8 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
                 long i1 = EntityTracker.getPositionLong(trackedEntity.posX);
                 long i2 = EntityTracker.getPositionLong(trackedEntity.posY);
                 long j2 = EntityTracker.getPositionLong(trackedEntity.posZ);
-                int k2 = MathHelper.floor(trackedEntity.rotationYaw * 256.0F / 360.0F);
-                int i = MathHelper.floor(trackedEntity.rotationPitch * 256.0F / 360.0F);
+                int k2 = MathHelper.floor(trackedEntity.rotationYaw * 256 / 360);
+                int i = MathHelper.floor(trackedEntity.rotationPitch * 256 / 360);
                 long j = i1 - encodedPosX;
                 long k = i2 - encodedPosY;
                 long l = j2 - encodedPosZ;
@@ -215,7 +215,7 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
                     double d2 = trackedEntity.motionZ - motionZ;
                     double d4 = d0 * d0 + d1 * d1 + d2 * d2;
 
-                    if (d4 > 4.0E-4D || d4 > 0 && trackedEntity.motionX == 0 && trackedEntity.motionY == 0 && trackedEntity.motionZ == 0)
+                    if (d4 > .0004 || (d4 > 0 && trackedEntity.motionX == 0 && trackedEntity.motionY == 0 && trackedEntity.motionZ == 0))
                     {
                         lastTrackedEntityMotionX = trackedEntity.motionX;
                         lastTrackedEntityMotionY = trackedEntity.motionY;
@@ -247,7 +247,7 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
                 ridingEntity = false;
             }
 
-            int k1 = MathHelper.floor(trackedEntity.getRotationYawHead() * 256.0F / 360.0F);
+            int k1 = MathHelper.floor(trackedEntity.getRotationYawHead() * 256 / 360);
 
             if (Math.abs(k1 - lastHeadMotion) >= 1)
             {
@@ -466,7 +466,7 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
         }
         else if (trackedEntity instanceof IAnimals)
         {
-            lastHeadMotion = MathHelper.floor(trackedEntity.getRotationYawHead() * 256.0F / 360.0F);
+            lastHeadMotion = MathHelper.floor(trackedEntity.getRotationYawHead() * 256 / 360);
             return new SPacketSpawnMob((EntityLivingBase) trackedEntity);
         }
         else if (trackedEntity instanceof EntityPainting)
