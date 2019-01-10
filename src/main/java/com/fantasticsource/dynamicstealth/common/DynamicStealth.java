@@ -18,6 +18,8 @@ import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.init.MobEffects;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -60,7 +62,7 @@ public class DynamicStealth
     public static final TrigLookupTable TRIG_TABLE = new TrigLookupTable(1024);
 
     private static Logger logger;
-    private static Field sensesField, lookHelperField, abstractSkeletonAIArrowAttackField, abstractSkeletonAIAttackOnCollideField;
+    private static Field sensesField, lookHelperField, abstractSkeletonAIArrowAttackField, abstractSkeletonAIAttackOnCollideField, worldServerEntityTrackerField;
     private static Class aiSlimeFaceRandomClass, aiEvilAttackClass, aiBearMeleeClass, aiSpiderAttackClass, aiSpiderTargetClass, aiBearAttackPlayerClass, aiLlamaDefendTarget,
             aiPigmanHurtByAggressorClass, aiLlamaHurtByTargetClass, aiPigmanTargetAggressorClass, aiVindicatorJohnnyAttackClass, aiBearHurtByTargetClass, aiGuardianAttackClass,
             aiBlazeFireballAttackClass;
@@ -139,6 +141,18 @@ public class DynamicStealth
             if (entity instanceof EntityLiving) Threat.remove((EntityLiving) entity);
         }
     }
+
+
+    @SubscribeEvent
+    public static void worldLoad(WorldEvent.Load event) throws IllegalAccessException
+    {
+        World world = event.getWorld();
+        if (world instanceof WorldServer)
+        {
+            worldServerEntityTrackerField.set(world, new EntityTrackerEdit((WorldServer) world));
+        }
+    }
+
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void entityAttacked(LivingHurtEvent event) throws InvocationTargetException, IllegalAccessException
@@ -395,6 +409,7 @@ public class DynamicStealth
 
         sensesField = ReflectionTool.getField(EntityLiving.class, "field_70723_bA", "senses");
         lookHelperField = ReflectionTool.getField(EntityLiving.class, "field_70749_g", "lookHelper");
+        worldServerEntityTrackerField = ReflectionTool.getField(WorldServer.class, "field_73062_L", "entityTracker");
 
         abstractSkeletonAIArrowAttackField = ReflectionTool.getField(AbstractSkeleton.class, "field_85037_d", "aiArrowAttack");
         abstractSkeletonAIAttackOnCollideField = ReflectionTool.getField(AbstractSkeleton.class, "field_85038_e", "aiAttackOnCollide");
