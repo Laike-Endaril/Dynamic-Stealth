@@ -148,7 +148,7 @@ public class DynamicStealth
     public static void worldLoad(WorldEvent.Load event) throws IllegalAccessException
     {
         World world = event.getWorld();
-        if (world instanceof WorldServer)
+        if (world instanceof WorldServer && serverSettings.senses.usePlayerSenses)
         {
             worldServerEntityTrackerField.set(world, new EntityTrackerEdit((WorldServer) world));
         }
