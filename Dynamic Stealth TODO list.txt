@@ -1,9 +1,11 @@
 CURRENTLY WORKING ON ===================================================
 
-Implement server-side usePlayerSenses config option...
-...Make entities that *are* seen easily visible on client (because your character saw them)
-...Don't send entity data of unseen entities to players, including potion effects
-...Make sure entities that *were* seen and are no longer seen are..."gone" on client-side
+For each player, store the queue of all entities seen by that player each world tick
+Use said data for EVERYTHING; for HUD, for entity tracker, and for all DS's internal systems
+Fix eg. horses that are standing still not disappearing/appearing when crossing over the "seen" boundary as the player moves
+
+Make entities that *are* seen easily visible on client (because your character saw them)
+Don't send entity data of unseen entities to players, including potion effects
 
 Rafradek said he did a fix, so keep an eye out for an update to TF2 Stuff https://github.com/rafradek/Mods/issues/47...
 ...and change code accordingly when it's released
@@ -115,6 +117,8 @@ Possibly change music using ActualMusic when going into battle, etc
 
 
 MOD COMPATIBILITY ======================================================
+
+Techgun mobs don't build damage threat, because techguns is cancelling the LivingHurtEvent
 
 Lycanite's Mobs can still attack through walls; probably using different LOS
 
