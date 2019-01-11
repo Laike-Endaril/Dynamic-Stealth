@@ -81,8 +81,8 @@ public class HUD extends Gui
         int r = c.r(), g = c.g(), b = c.b();
 
         boolean depth = clientSettings.threat.onPointHUDStyle.depth;
-        double scale = clientSettings.threat.onPointHUDStyle.scale;
-        double halfSize2D = TEX_SIZE / 4D * scale;
+        double scale = clientSettings.threat.onPointHUDStyle.scale * 0.025;
+        double halfSize2D = TEX_SIZE / 4D;
         double hOff2D = clientSettings.threat.onPointHUDStyle.horizontalOffset2D;
         double vOff2D = clientSettings.threat.onPointHUDStyle.verticalOffset2D;
 
@@ -115,7 +115,10 @@ public class HUD extends Gui
             GlStateManager.rotate(renderManager.options.thirdPersonView == 2 ? -viewerPitch : viewerPitch, 1, 0, 0);
             GlStateManager.translate(entity.width * clientSettings.threat.onPointHUDStyle.horizontalPercent, 0, 0);
 
-            GlStateManager.scale(-0.025, -0.025, 0.025);
+            scale *= cnpcScale;
+            GlStateManager.scale(-scale, -scale, scale);
+
+            vOff2D -= 45;
         }
         else
         {
@@ -123,7 +126,7 @@ public class HUD extends Gui
             GlStateManager.rotate(-viewerYaw, 0, 1, 0);
             GlStateManager.rotate(renderManager.options.thirdPersonView == 2 ? -viewerPitch : viewerPitch, 1, 0, 0);
             GlStateManager.translate(entity.width * clientSettings.threat.onPointHUDStyle.horizontalPercent, 0, 0);
-            GlStateManager.scale(-0.025, -0.025, 0.025);
+            GlStateManager.scale(-scale, -scale, scale);
         }
 
         Tessellator tessellator = Tessellator.getInstance();
