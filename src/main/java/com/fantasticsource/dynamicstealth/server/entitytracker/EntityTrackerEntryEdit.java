@@ -43,8 +43,8 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
     private final EntityPlayerMP player;
 
     private final int updateFrequency;
-    public int updateCounter;
     private final boolean sendVelocityUpdates;
+    public int updateCounter;
     public boolean playerEntitiesUpdated;
     private boolean updatedPlayerVisibility;
     private int ticksSinceLastForcedTeleport;

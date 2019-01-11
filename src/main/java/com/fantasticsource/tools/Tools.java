@@ -117,7 +117,7 @@ public class Tools
         if (clss == null) return null;
 
         List<Class> classList = new ArrayList<>();
-        while(clss != null)
+        while (clss != null)
         {
             classList.add(clss);
             clss = clss.getSuperclass();
@@ -132,7 +132,7 @@ public class Tools
         {
             System.out.println("===================================");
             System.out.println(clss.getSimpleName() + " Classtree:");
-            while(clss != null)
+            while (clss != null)
             {
                 System.out.println(clss.getName());
                 clss = clss.getSuperclass();
