@@ -4,8 +4,11 @@ import sun.misc.Cleaner;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @SuppressWarnings("unused")
@@ -106,6 +109,49 @@ public class Tools
     public static boolean stackContainsSubstring(String substring)
     {
         return stackContainsSubstring(Thread.currentThread(), substring);
+    }
+
+
+    public static List<Class> getClassTree(Class clss)
+    {
+        if (clss == null) return null;
+
+        List<Class> classList = new ArrayList<>();
+        while(clss != null)
+        {
+            classList.add(clss);
+            clss = clss.getSuperclass();
+        }
+        return classList;
+    }
+
+    public static void printClassTree(Class clss)
+    {
+        if (clss == null) System.out.println("Class given was null");
+        else
+        {
+            System.out.println("===================================");
+            System.out.println(clss.getSimpleName() + " Classtree:");
+            while(clss != null)
+            {
+                System.out.println(clss.getName());
+                clss = clss.getSuperclass();
+            }
+            System.out.println("===================================");
+        }
+    }
+
+
+    public static void printMethods(Class clss)
+    {
+        if (clss == null) System.out.println("Class given was null");
+        else
+        {
+            System.out.println("===================================");
+            System.out.println(clss.getSimpleName() + " Methods:");
+            for (Method method : clss.getDeclaredMethods()) System.out.println(method);
+            System.out.println("===================================");
+        }
     }
 
 
