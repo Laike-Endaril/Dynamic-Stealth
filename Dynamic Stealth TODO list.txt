@@ -1,5 +1,8 @@
 CURRENTLY WORKING ON ===================================================
 
+Fix nameplate sync with CNPCs of different sizes...
+...does CNPC use something accessible in vanilla code for the scaling?
+
 For each player, store the queue of all entities seen by that player each world tick
 Use said data for EVERYTHING; for HUD, for entity tracker, and for all DS's internal systems
 Fix eg. horses that are standing still not disappearing/appearing when crossing over the "seen" boundary as the player moves
