@@ -165,7 +165,7 @@ public class Threat
                 if (entity instanceof EntityLivingBase && entity != player)
                 {
                     double distSquared = player.getDistanceSq(entity);
-                    if (distSquared <= 2500)
+                    if (distSquared <= 2500 && EntitySensesEdit.los(player, entity))
                     {
                         double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, entity.posY - player.posY, entity.posZ - player.posZ).normalize());
 
