@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.client;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
+import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.tools.datastructures.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -106,11 +107,24 @@ public class HUD extends Gui
 
         GlStateManager.pushMatrix();
 
-        GlStateManager.translate(x, y + entity.height * clientSettings.threat.onPointHUDStyle.verticalPercent - (clientSettings.threat.onPointHUDStyle.accountForSneak && entity.isSneaking() ? 0.25 : 0) + clientSettings.threat.onPointHUDStyle.verticalOffset, z);
-        GlStateManager.rotate(-viewerYaw, 0, 1, 0);
-        GlStateManager.rotate(renderManager.options.thirdPersonView == 2 ? -viewerPitch : viewerPitch, 1, 0, 0);
-        GlStateManager.translate(entity.width * clientSettings.threat.onPointHUDStyle.horizontalPercent, 0, 0);
-        GlStateManager.scale(-0.025, -0.025, 0.025);
+        if (Compat.customnpcs && entity.getClass().getName().equals("noppes.npcs.entity.EntityCustomNpc"))
+        {
+            double cnpcScale = entity.height / 1.8;
+            GlStateManager.translate(x, y + entity.height * clientSettings.threat.onPointHUDStyle.verticalPercent + clientSettings.threat.onPointHUDStyle.verticalOffset - 0.5 - 0.108 * cnpcScale, z);
+            GlStateManager.rotate(-viewerYaw, 0, 1, 0);
+            GlStateManager.rotate(renderManager.options.thirdPersonView == 2 ? -viewerPitch : viewerPitch, 1, 0, 0);
+            GlStateManager.translate(entity.width * clientSettings.threat.onPointHUDStyle.horizontalPercent, 0, 0);
+
+            GlStateManager.scale(-0.025, -0.025, 0.025);
+        }
+        else
+        {
+            GlStateManager.translate(x, y + entity.height * clientSettings.threat.onPointHUDStyle.verticalPercent - (clientSettings.threat.onPointHUDStyle.accountForSneak && entity.isSneaking() ? 0.25 : 0) + clientSettings.threat.onPointHUDStyle.verticalOffset, z);
+            GlStateManager.rotate(-viewerYaw, 0, 1, 0);
+            GlStateManager.rotate(renderManager.options.thirdPersonView == 2 ? -viewerPitch : viewerPitch, 1, 0, 0);
+            GlStateManager.translate(entity.width * clientSettings.threat.onPointHUDStyle.horizontalPercent, 0, 0);
+            GlStateManager.scale(-0.025, -0.025, 0.025);
+        }
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
