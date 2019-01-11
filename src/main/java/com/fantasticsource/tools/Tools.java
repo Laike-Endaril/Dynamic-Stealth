@@ -155,6 +155,19 @@ public class Tools
     }
 
 
+    public static void printFields(Class clss)
+    {
+        if (clss == null) System.out.println("Class given was null");
+        else
+        {
+            System.out.println("===================================");
+            System.out.println(clss.getSimpleName() + " Fields:");
+            for (Field field : clss.getDeclaredFields()) System.out.println(field);
+            System.out.println("===================================");
+        }
+    }
+
+
     public static byte choose(byte... choices)
     {
         return choices[(int) Math.floor(Math.random() * choices.length)];
