@@ -4,6 +4,7 @@ import com.fantasticsource.dynamicstealth.server.Threat;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
@@ -26,7 +27,7 @@ public class HUDData
     public static int detailPercent = 0;
     public static int detailColor = COLOR_NULL;
 
-    public static Map<Integer, OnPointData> onPointDataMap;
+    public static Map<Integer, OnPointData> onPointDataMap = new LinkedHashMap<>();
 
     public static int getColor(EntityPlayer player, EntityLivingBase searcher, EntityLivingBase target, int threatLevel)
     {
