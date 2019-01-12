@@ -22,6 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.lwjgl.Sys;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -129,17 +130,16 @@ public class Sight
     public static ExplicitPriorityQueue<EntityLivingBase> seenEntities(EntityPlayerMP player, double maxDistSquaredIfNotUsingPlayerSenses)
     {
         ExplicitPriorityQueue<EntityLivingBase> queue = playerSeenThisTickMap.get(player);
-        if (queue == null)
-        {
-            queue = seenEntities2(player, maxDistSquaredIfNotUsingPlayerSenses);
-            playerSeenThisTickMap.put(player, queue);
-        }
-        return queue;
+        if (queue != null) return queue.clone();
+
+        ExplicitPriorityQueue<EntityLivingBase>[] queues = seenEntities2(player, maxDistSquaredIfNotUsingPlayerSenses);
+        playerSeenThisTickMap.put(player, queues[1]);
+        return queues[0];
     }
 
-    private static ExplicitPriorityQueue<EntityLivingBase> seenEntities2(EntityPlayerMP player, double maxDistSquaredIfNotUsingPlayerSenses)
+    private static ExplicitPriorityQueue<EntityLivingBase>[] seenEntities2(EntityPlayerMP player, double maxDistSquaredIfNotUsingPlayerSenses)
     {
-        ExplicitPriorityQueue<EntityLivingBase> queue = new ExplicitPriorityQueue<>(10);
+        ExplicitPriorityQueue<EntityLivingBase>[] queues = new ExplicitPriorityQueue[]{new ExplicitPriorityQueue<>(10), new ExplicitPriorityQueue<>(10)};
         double stealthLevel;
         Entity[] loadedEntities = player.world.loadedEntityList.toArray(new Entity[player.world.loadedEntityList.size()]);
 
@@ -150,7 +150,11 @@ public class Sight
                 if (entity instanceof EntityLivingBase && entity != player)
                 {
                     stealthLevel = visualStealthLevel(player, entity, true, true);
-                    if (stealthLevel <= 1) queue.add((EntityLivingBase) entity, stealthLevel);
+                    if (stealthLevel <= 1)
+                    {
+                        queues[0].add((EntityLivingBase) entity, stealthLevel);
+                        queues[1].add((EntityLivingBase) entity, stealthLevel);
+                    }
                 }
             }
         }
@@ -176,7 +180,8 @@ public class Sight
                         if (angleDif / Math.PI * 180 <= 70)
                         {
                             double priority = Math.pow(angleDif, 2) * distSquared;
-                            queue.add((EntityLivingBase) entity, priority);
+                            queues[0].add((EntityLivingBase) entity, priority);
+                            queues[1].add((EntityLivingBase) entity, priority);
                             map.put(entity, new Pair<>(priority, currentTick));
                         }
                     }
@@ -184,7 +189,7 @@ public class Sight
             }
         }
 
-        return queue;
+        return queues;
     }
 
 
