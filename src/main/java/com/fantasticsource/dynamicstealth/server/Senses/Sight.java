@@ -22,8 +22,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -38,22 +38,24 @@ public class Sight
     private static final DynamicStealthConfig.ServerSettings.Senses senses = serverSettings.senses;
     private static final DynamicStealthConfig.ServerSettings.Senses.Vision vision = senses.vision;
 
-    public static long currentTick;
+    public static long currentTick = 0;
 
 
     //For each searcher                , map of entities, last reported stealth level, and when last stealth level was recorded
     private static Map<EntityLivingBase, Map<Entity, Pair<Double, Long>>> entityRecentlySeenMap = new LinkedHashMap<>();
 
     private static Map<EntityPlayerMP, ExplicitPriorityQueue<EntityLivingBase>> playerSeenThisTickMap = new LinkedHashMap<>();
+    private static Map<EntityLiving, ArrayList<EntityLivingBase>> entitySeenThisTickMap = new LinkedHashMap<>();
 
 
     @SubscribeEvent
-    public static void update(TickEvent.WorldTickEvent event)
+    public static void update(TickEvent.ServerTickEvent event)
     {
-        if (event.side == Side.SERVER && event.phase == TickEvent.Phase.END)
+        if (event.phase == TickEvent.Phase.END)
         {
-            currentTick = event.world.getTotalWorldTime();
+            currentTick++;
             playerSeenThisTickMap.clear();
+            entitySeenThisTickMap.clear();
             entityRecentlySeenMap.entrySet().removeIf(e -> entityRemoveIfEmpty(e.getValue()));
         }
     }
