@@ -21,11 +21,6 @@ public class EntitySensesEdit extends EntitySenses
         this.searcher = searcher;
     }
 
-    public static double stealthLevel(EntityLivingBase searcher, Entity target, boolean useCache, boolean updateCache)
-    {
-        return Sight.visualStealthLevel(searcher, target, useCache, updateCache);
-    }
-
     @Override
     public void clearSensingCache()
     {
@@ -39,7 +34,7 @@ public class EntitySensesEdit extends EntitySenses
         if (seenEntities.contains(target)) return true;
         if (unseenEntities.contains(target)) return false;
 
-        boolean result = stealthLevel(searcher, target, true, true) <= 1;
+        boolean result = Sight.visualStealthLevel(searcher, target, true, true) <= 1;
 
         if (result) seenEntities.add(target);
         else unseenEntities.add(target);

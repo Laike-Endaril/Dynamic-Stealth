@@ -1,7 +1,6 @@
 package com.fantasticsource.dynamicstealth.server;
 
 import com.fantasticsource.dynamicstealth.common.Network;
-import com.fantasticsource.dynamicstealth.server.Senses.EntitySensesEdit;
 import com.fantasticsource.dynamicstealth.server.Senses.Sight;
 import com.fantasticsource.dynamicstealth.server.configdata.EntityThreatData;
 import com.fantasticsource.mctools.MCTools;
@@ -155,7 +154,7 @@ public class Threat
             {
                 if (entity instanceof EntityLivingBase && entity != player)
                 {
-                    stealthLevel = EntitySensesEdit.stealthLevel(player, entity, true, true);
+                    stealthLevel = Sight.visualStealthLevel(player, entity, true, true);
                     if (stealthLevel <= 1) queue.add((EntityLivingBase) entity, stealthLevel);
                 }
             }
