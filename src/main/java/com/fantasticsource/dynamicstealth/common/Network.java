@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.common;
 
+import com.fantasticsource.dynamicstealth.server.Senses.Sight;
 import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import io.netty.buffer.ByteBuf;
@@ -7,6 +8,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -35,21 +38,26 @@ public class Network
     }
 
 
-    public static void sendThreatData(EntityPlayerMP player, ExplicitPriorityQueue<EntityLivingBase> queue)
+    @SubscribeEvent
+    public static void sendHUDData(TickEvent.PlayerTickEvent event)
     {
-        if (player != null && player.world.loadedEntityList.contains(player))
+        if (event.side == Side.SERVER)
         {
-            if (isOP(player))
+            EntityPlayerMP player = (EntityPlayerMP) event.player;
+            if (player != null && player.world.loadedEntityList.contains(player))
             {
-                boolean detailHUD = serverSettings.threat.hud.allowClientDetailHUD > 0;
-                int onPointHUDMode = serverSettings.threat.hud.opOnPointHUD;
-                if (detailHUD || onPointHUDMode > 0) WRAPPER.sendTo(new HUDPacket(player, queue, detailHUD, onPointHUDMode), player);
-            }
-            else
-            {
-                boolean detailHUD = serverSettings.threat.hud.allowClientDetailHUD > 1;
-                int onPointHUDMode = serverSettings.threat.hud.normalOnPointHUD;
-                if (detailHUD || onPointHUDMode > 0) WRAPPER.sendTo(new HUDPacket(player, queue, detailHUD, onPointHUDMode), player);
+                if (isOP(player))
+                {
+                    boolean detailHUD = serverSettings.threat.hud.allowClientDetailHUD > 0;
+                    int onPointHUDMode = serverSettings.threat.hud.opOnPointHUD;
+                    if (detailHUD || onPointHUDMode > 0) WRAPPER.sendTo(new HUDPacket(player, Sight.seenEntities(player, 2500), detailHUD, onPointHUDMode), player);
+                }
+                else
+                {
+                    boolean detailHUD = serverSettings.threat.hud.allowClientDetailHUD > 1;
+                    int onPointHUDMode = serverSettings.threat.hud.normalOnPointHUD;
+                    if (detailHUD || onPointHUDMode > 0) WRAPPER.sendTo(new HUDPacket(player, Sight.seenEntities(player, 2500), detailHUD, onPointHUDMode), player);
+                }
             }
         }
     }

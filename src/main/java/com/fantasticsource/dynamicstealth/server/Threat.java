@@ -1,15 +1,11 @@
 package com.fantasticsource.dynamicstealth.server;
 
-import com.fantasticsource.dynamicstealth.common.Network;
-import com.fantasticsource.dynamicstealth.server.Senses.Sight;
 import com.fantasticsource.dynamicstealth.server.configdata.EntityThreatData;
 import com.fantasticsource.mctools.MCTools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nonnull;
 import java.util.LinkedHashMap;
@@ -31,16 +27,6 @@ public class Threat
         {
             timer = ITERATION_FREQUENCY;
             removeAllUnused();
-        }
-    }
-
-    @SubscribeEvent
-    public static void playerTick(TickEvent.PlayerTickEvent event)
-    {
-        if (event.side == Side.SERVER)
-        {
-            EntityPlayerMP player = (EntityPlayerMP) event.player;
-            Network.sendThreatData(player, Sight.seenEntities(player));
         }
     }
 

@@ -42,7 +42,7 @@ public class Sight
 
 
     //For each searcher                , map of entities, last reported stealth level, and when last stealth level was recorded
-    private static Map<EntityLivingBase, Map<Entity, Pair<Double, Long>>> entityRecentlySeenMap = new LinkedHashMap<>();
+    private static Map<EntityLivingBase, Map<Entity, Pair<Double, Long>>> recentlySeenMap = new LinkedHashMap<>();
 
     private static Map<EntityPlayerMP, ExplicitPriorityQueue<EntityLivingBase>> playerSeenThisTickMap = new LinkedHashMap<>();
     private static Map<EntityLiving, ArrayList<EntityLivingBase>> entitySeenThisTickMap = new LinkedHashMap<>();
@@ -56,7 +56,7 @@ public class Sight
             currentTick++;
             playerSeenThisTickMap.clear();
             entitySeenThisTickMap.clear();
-            entityRecentlySeenMap.entrySet().removeIf(e -> entityRemoveIfEmpty(e.getValue()));
+            recentlySeenMap.entrySet().removeIf(e -> entityRemoveIfEmpty(e.getValue()));
         }
     }
 
@@ -72,7 +72,7 @@ public class Sight
     {
         if (searcher == null || target == null) return false;
 
-        Map<Entity, Pair<Double, Long>> map = entityRecentlySeenMap.get(searcher);
+        Map<Entity, Pair<Double, Long>> map = recentlySeenMap.get(searcher);
         if (map == null) return false;
 
         Pair<Double, Long> data = map.get(target);
@@ -87,7 +87,7 @@ public class Sight
 
     public static double visualStealthLevel(EntityLivingBase searcher, Entity target, boolean useCache, boolean updateCache)
     {
-        Map<Entity, Pair<Double, Long>> map = entityRecentlySeenMap.get(searcher);
+        Map<Entity, Pair<Double, Long>> map = recentlySeenMap.get(searcher);
 
         if (useCache && map != null)
         {
@@ -104,7 +104,7 @@ public class Sight
             if (map == null)
             {
                 map = new LinkedHashMap<>();
-                entityRecentlySeenMap.put(searcher, map);
+                recentlySeenMap.put(searcher, map);
             }
 
             map.put(target, new Pair<>(result, currentTick));
@@ -126,18 +126,18 @@ public class Sight
     }
 
 
-    public static ExplicitPriorityQueue<EntityLivingBase> seenEntities(EntityPlayerMP player)
+    public static ExplicitPriorityQueue<EntityLivingBase> seenEntities(EntityPlayerMP player, double maxDistSquaredIfNotUsingPlayerSenses)
     {
         ExplicitPriorityQueue<EntityLivingBase> queue = playerSeenThisTickMap.get(player);
         if (queue == null)
         {
-            queue = seenEntities2(player);
+            queue = seenEntities2(player, maxDistSquaredIfNotUsingPlayerSenses);
             playerSeenThisTickMap.put(player, queue);
         }
         return queue;
     }
 
-    private static ExplicitPriorityQueue<EntityLivingBase> seenEntities2(EntityPlayerMP player)
+    private static ExplicitPriorityQueue<EntityLivingBase> seenEntities2(EntityPlayerMP player, double maxDistSquaredIfNotUsingPlayerSenses)
     {
         ExplicitPriorityQueue<EntityLivingBase> queue = new ExplicitPriorityQueue<>(10);
         double stealthLevel;
@@ -156,12 +156,14 @@ public class Sight
         }
         else
         {
+            Map<Entity, Pair<Double, Long>> map = recentlySeenMap.computeIfAbsent(player, k -> new LinkedHashMap<>());
+
             for (Entity entity : loadedEntities)
             {
                 if (entity instanceof EntityLivingBase && entity != player)
                 {
                     double distSquared = player.getDistanceSq(entity);
-                    if (distSquared <= 2500 && los(player, entity))
+                    if (distSquared <= maxDistSquaredIfNotUsingPlayerSenses && los(player, entity))
                     {
                         double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, entity.posY - player.posY, entity.posZ - player.posZ).normalize());
 
@@ -171,7 +173,12 @@ public class Sight
 
                         angleDif = TRIG_TABLE.arccos(angleDif); //0 in front, pi in back
 
-                        if (angleDif / Math.PI * 180 <= 70) queue.add((EntityLivingBase) entity, Math.pow(angleDif, 2) * distSquared);
+                        if (angleDif / Math.PI * 180 <= 70)
+                        {
+                            double priority = Math.pow(angleDif, 2) * distSquared;
+                            queue.add((EntityLivingBase) entity, priority);
+                            map.put(entity, new Pair<>(priority, currentTick));
+                        }
                     }
                 }
             }
