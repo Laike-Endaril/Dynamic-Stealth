@@ -22,6 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -47,14 +48,14 @@ public class Sight
     @SubscribeEvent
     public static void update(TickEvent.WorldTickEvent event)
     {
-        if (event.phase == TickEvent.Phase.END)
+        if (event.side == Side.SERVER && event.phase == TickEvent.Phase.END)
         {
             currentTick = event.world.getTotalWorldTime();
-            seenEntities.entrySet().removeIf(e -> update(e.getValue()));
+            seenEntities.entrySet().removeIf(e -> removeIfEmpty(e.getValue()));
         }
     }
 
-    private static boolean update(Map<Entity, Pair<Double, Long>> seenMap)
+    private static boolean removeIfEmpty(Map<Entity, Pair<Double, Long>> seenMap)
     {
         if (seenMap == null) return true;
         seenMap.entrySet().removeIf(e -> currentTick - e.getValue().getValue() >= DROP_SEEN_DELAY);
@@ -110,17 +111,17 @@ public class Sight
     private static double visualStealthLevel(EntityLivingBase searcher, Entity target)
     {
         //Hard checks (absolute)
-        if (searcher == null || target == null) return 2;
-        if (target instanceof EntityPlayerMP && ((EntityPlayerMP) target).capabilities.disableDamage) return 2;
+        if (searcher == null || target == null) return 777;
+        if (target instanceof EntityPlayerMP && ((EntityPlayerMP) target).capabilities.disableDamage) return 777;
 
         int angleLarge = angleLarge(searcher);
-        if (!target.isEntityAlive() || angleLarge == 0) return 2;
+        if (!target.isEntityAlive() || angleLarge == 0) return 777;
 
 
         //Angles and Distances (absolute, base FOV)
         double distSquared = searcher.getDistanceSq(target);
         int distanceFar = distanceFar(searcher);
-        if (distSquared > Math.pow(distanceFar, 2)) return 2;
+        if (distSquared > Math.pow(distanceFar, 2)) return 777;
 
         double distanceThreshold;
         int angleSmall = angleSmall(searcher);
@@ -135,7 +136,7 @@ public class Sight
             else if (angleDif > 1) angleDif = 1;
 
             angleDif = Tools.radtodeg(TRIG_TABLE.arccos(angleDif)); //0 in front, 180 in back
-            if (angleDif > angleLarge) return 2;
+            if (angleDif > angleLarge) return 777;
             if (angleDif < angleSmall) distanceThreshold = distanceFar;
             else
             {
@@ -154,7 +155,7 @@ public class Sight
 
 
         //LOS check (absolute, after Angles, after Glowing)
-        if (!los(searcher, target)) return 2;
+        if (!los(searcher, target)) return 777;
 
 
         //Lighting (absolute, factor, after Angles, after Glowing, after LOS)
@@ -165,7 +166,7 @@ public class Sight
         }
 
         int lightLow = lightLow(searcher);
-        if (lightFactor <= lightLow) return 2;
+        if (lightFactor <= lightLow) return 777;
         int lightHigh = lightHigh(searcher);
         lightFactor = lightFactor >= lightHigh ? 1 : lightFactor / (lightHigh - lightLow);
 
