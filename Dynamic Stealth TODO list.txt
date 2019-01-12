@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
+Figure out why new caching system in Sight class is breaking stealth mechanics
+
 Use Sight data for EVERYTHING; for HUD, for entity tracker, and for all DS's internal systems
 Fix eg. horses that are standing still not disappearing/appearing when crossing over the "seen" boundary as the player moves
 

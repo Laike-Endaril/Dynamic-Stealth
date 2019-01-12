@@ -77,29 +77,28 @@ public class Sight
 
     public static double visualStealthLevel(EntityLivingBase searcher, Entity target, boolean useCache, boolean updateCache)
     {
-        Map<Entity, Pair<Double, Long>> map = seenEntities.get(searcher);
+//        Map<Entity, Pair<Double, Long>> map = seenEntities.get(searcher);
 
-        if (useCache && map != null)
-        {
-            Pair<Double, Long> data = map.get(target);
-            if (data != null && data.getValue() == currentTick) return data.getKey();
-        }
+//        if (useCache && map != null)
+//        {
+//            Pair<Double, Long> data = map.get(target);
+//            if (data != null && data.getValue() == currentTick) return data.getKey();
+//        }
 
-        double result;
         searcher.world.profiler.startSection("DS Vision");
-        result = visualStealthLevel(searcher, target);
+        double result = visualStealthLevel(searcher, target);
         searcher.world.profiler.endSection();
 
-        if (updateCache)
-        {
-            if (map == null)
-            {
-                map = new LinkedHashMap<>();
-                seenEntities.put(searcher, map);
-            }
-
-            map.put(target, new Pair<>(result, currentTick));
-        }
+//        if (updateCache)
+//        {
+//            if (map == null)
+//            {
+//                map = new LinkedHashMap<>();
+//                seenEntities.put(searcher, map);
+//            }
+//
+//            map.put(target, new Pair<>(result, currentTick));
+//        }
 
         return result;
     }
