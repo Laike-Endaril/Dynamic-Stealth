@@ -37,7 +37,7 @@ public class Sight
     private static final DynamicStealthConfig.ServerSettings.Senses senses = serverSettings.senses;
     private static final DynamicStealthConfig.ServerSettings.Senses.Vision vision = senses.vision;
 
-    public static long currentTick = Minecraft.getMinecraft().world.getTotalWorldTime();
+    public static long currentTick;
 
 
     //For each searcher                , map of entities, last reported stealth level, and when last stealth level was recorded
