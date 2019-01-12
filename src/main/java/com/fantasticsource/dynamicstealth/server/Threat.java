@@ -23,7 +23,7 @@ public class Threat
     @SubscribeEvent
     public static void update(TickEvent.ServerTickEvent event)
     {
-        if (--timer == 0)
+        if (event.phase == TickEvent.Phase.START && --timer == 0)
         {
             timer = ITERATION_FREQUENCY;
             removeAllUnused();
