@@ -3,6 +3,7 @@ package com.fantasticsource.tools.datastructures;
 import java.util.PriorityQueue;
 import java.util.function.Predicate;
 
+@SuppressWarnings("unchecked")
 public class ExplicitPriorityQueue<T>
 {
     private PriorityQueue<Entry> queue;
@@ -29,25 +30,25 @@ public class ExplicitPriorityQueue<T>
 
     public T peek()
     {
-        Object result = queue.peek();
-        return result == null ? null : ((Entry) result).object;
+        Entry<T> result = queue.peek();
+        return result == null ? null : result.object;
     }
 
     public double peekPriority()
     {
-        Object result = queue.peek();
-        return result == null ? Double.NaN : ((Entry) result).priority;
+        Entry<T> result = queue.peek();
+        return result == null ? Double.NaN : result.priority;
     }
 
     public T poll()
     {
-        Object result = queue.poll();
-        return result == null ? null : ((Entry) result).object;
+        Entry<T> result = queue.poll();
+        return result == null ? null : result.object;
     }
 
-    public T[] toArray()
+    public Entry<T>[] toArray()
     {
-        return (T[]) queue.toArray();
+        return (Entry<T>[]) queue.toArray();
     }
 
     public void clear()
@@ -65,12 +66,27 @@ public class ExplicitPriorityQueue<T>
         return queue.isEmpty();
     }
 
-    public class Entry implements Comparable<Entry>
+    public ExplicitPriorityQueue<T> clone()
     {
-        public T object;
+        ExplicitPriorityQueue<T> clone = new ExplicitPriorityQueue<>(size());
+        Entry<T>[] array = queue.toArray(new Entry[size()]);
+        for (Entry<T> entry : array) clone.add(entry);
+        return clone;
+    }
+
+    private void add(Entry<T> entry)
+    {
+        queue.add(entry);
+    }
+
+
+
+    public class Entry<A> implements Comparable<Entry>
+    {
+        public A object;
         public double priority;
 
-        Entry(T object, double priority)
+        Entry(A object, double priority)
         {
             this.object = object;
             this.priority = priority;
