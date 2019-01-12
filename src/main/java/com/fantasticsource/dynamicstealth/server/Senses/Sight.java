@@ -42,7 +42,9 @@ public class Sight
 
 
     //For each searcher                , map of entities, last reported stealth level, and when last stealth level was recorded
-    private static Map<EntityLivingBase, Map<Entity, Pair<Double, Long>>> seenEntities = new LinkedHashMap<>();
+    private static Map<EntityLivingBase, Map<Entity, Pair<Double, Long>>> entityRecentlySeenMap = new LinkedHashMap<>();
+
+    private static Map<EntityPlayerMP, ExplicitPriorityQueue<EntityLivingBase>> playerSeenThisTickMap = new LinkedHashMap<>();
 
 
     @SubscribeEvent
@@ -51,11 +53,12 @@ public class Sight
         if (event.side == Side.SERVER && event.phase == TickEvent.Phase.END)
         {
             currentTick = event.world.getTotalWorldTime();
-            seenEntities.entrySet().removeIf(e -> removeIfEmpty(e.getValue()));
+            playerSeenThisTickMap.clear();
+            entityRecentlySeenMap.entrySet().removeIf(e -> entityRemoveIfEmpty(e.getValue()));
         }
     }
 
-    private static boolean removeIfEmpty(Map<Entity, Pair<Double, Long>> seenMap)
+    private static boolean entityRemoveIfEmpty(Map<Entity, Pair<Double, Long>> seenMap)
     {
         if (seenMap == null) return true;
         seenMap.entrySet().removeIf(e -> currentTick - e.getValue().getValue() >= DROP_SEEN_DELAY);
@@ -65,24 +68,24 @@ public class Sight
 
     public static boolean recentlySeen(EntityLivingBase searcher, Entity target)
     {
-        Map<Entity, Pair<Double, Long>> map = seenEntities.get(searcher);
+        if (searcher == null || target == null) return false;
+
+        Map<Entity, Pair<Double, Long>> map = entityRecentlySeenMap.get(searcher);
         if (map == null) return false;
 
         Pair<Double, Long> data = map.get(target);
         if (data == null) return false;
 
         if (currentTick - data.getValue() < DROP_SEEN_DELAY) return true;
-        else
-        {
-            map.remove(target);
-            return false;
-        }
+
+        map.remove(target);
+        return false;
     }
 
 
     public static double visualStealthLevel(EntityLivingBase searcher, Entity target, boolean useCache, boolean updateCache)
     {
-        Map<Entity, Pair<Double, Long>> map = seenEntities.get(searcher);
+        Map<Entity, Pair<Double, Long>> map = entityRecentlySeenMap.get(searcher);
 
         if (useCache && map != null)
         {
@@ -99,7 +102,7 @@ public class Sight
             if (map == null)
             {
                 map = new LinkedHashMap<>();
-                seenEntities.put(searcher, map);
+                entityRecentlySeenMap.put(searcher, map);
             }
 
             map.put(target, new Pair<>(result, currentTick));
@@ -108,10 +111,77 @@ public class Sight
         return result;
     }
 
+
+    public static double lightLevelTotal(Entity entity)
+    {
+        BlockPos blockpos = new BlockPos(entity.posX, entity.getEntityBoundingBox().minY, entity.posZ);
+        return entity.world.getLightFromNeighbors(blockpos);
+    }
+
+    public static boolean los(Entity searcher, Entity target)
+    {
+        return LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), new Vec3d(target.posX, target.posY + target.getEyeHeight(), target.posZ), false, true);
+    }
+
+
+    public static ExplicitPriorityQueue<EntityLivingBase> seenEntities(EntityPlayerMP player)
+    {
+        ExplicitPriorityQueue<EntityLivingBase> queue = playerSeenThisTickMap.get(player);
+        if (queue == null)
+        {
+            queue = seenEntities2(player);
+            playerSeenThisTickMap.put(player, queue);
+        }
+        return queue;
+    }
+
+    private static ExplicitPriorityQueue<EntityLivingBase> seenEntities2(EntityPlayerMP player)
+    {
+        ExplicitPriorityQueue<EntityLivingBase> queue = new ExplicitPriorityQueue<>(10);
+        double stealthLevel;
+        Entity[] loadedEntities = player.world.loadedEntityList.toArray(new Entity[player.world.loadedEntityList.size()]);
+
+        if (serverSettings.senses.usePlayerSenses)
+        {
+            for (Entity entity : loadedEntities)
+            {
+                if (entity instanceof EntityLivingBase && entity != player)
+                {
+                    stealthLevel = visualStealthLevel(player, entity, true, true);
+                    if (stealthLevel <= 1) queue.add((EntityLivingBase) entity, stealthLevel);
+                }
+            }
+        }
+        else
+        {
+            for (Entity entity : loadedEntities)
+            {
+                if (entity instanceof EntityLivingBase && entity != player)
+                {
+                    double distSquared = player.getDistanceSq(entity);
+                    if (distSquared <= 2500 && los(player, entity))
+                    {
+                        double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, entity.posY - player.posY, entity.posZ - player.posZ).normalize());
+
+                        //And because Vec3d.fromPitchYaw occasionally returns values barely out of the range of (-1, 1)...
+                        if (angleDif < -1) angleDif = -1;
+                        else if (angleDif > 1) angleDif = 1;
+
+                        angleDif = TRIG_TABLE.arccos(angleDif); //0 in front, pi in back
+
+                        if (angleDif / Math.PI * 180 <= 70) queue.add((EntityLivingBase) entity, Math.pow(angleDif, 2) * distSquared);
+                    }
+                }
+            }
+        }
+
+        return queue;
+    }
+
+
     private static double visualStealthLevel(EntityLivingBase searcher, Entity target)
     {
         //Hard checks (absolute)
-        if (searcher == null || target == null) return 777;
         if (target instanceof EntityPlayerMP && ((EntityPlayerMP) target).capabilities.disableDamage) return 777;
 
         int angleLarge = angleLarge(searcher);
@@ -232,60 +302,5 @@ public class Sight
 
         //Final calculation
         return Math.sqrt(distSquared) / (distanceThreshold * baseMultiplier * attributeMultiplier);
-    }
-
-    public static double lightLevelTotal(Entity entity)
-    {
-        BlockPos blockpos = new BlockPos(entity.posX, entity.getEntityBoundingBox().minY, entity.posZ);
-        return entity.world.getLightFromNeighbors(blockpos);
-    }
-
-    public static boolean los(Entity searcher, Entity target)
-    {
-        return LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), new Vec3d(target.posX, target.posY + target.getEyeHeight(), target.posZ), false, true);
-    }
-
-
-    public static ExplicitPriorityQueue<EntityLivingBase> seenEntities(EntityPlayerMP player)
-    {
-        ExplicitPriorityQueue<EntityLivingBase> queue = new ExplicitPriorityQueue<>(10);
-        double stealthLevel;
-        Entity[] loadedEntities = player.world.loadedEntityList.toArray(new Entity[player.world.loadedEntityList.size()]);
-
-        if (serverSettings.senses.usePlayerSenses)
-        {
-            for (Entity entity : loadedEntities)
-            {
-                if (entity instanceof EntityLivingBase && entity != player)
-                {
-                    stealthLevel = visualStealthLevel(player, entity, true, true);
-                    if (stealthLevel <= 1) queue.add((EntityLivingBase) entity, stealthLevel);
-                }
-            }
-        }
-        else
-        {
-            for (Entity entity : loadedEntities)
-            {
-                if (entity instanceof EntityLivingBase && entity != player)
-                {
-                    double distSquared = player.getDistanceSq(entity);
-                    if (distSquared <= 2500 && los(player, entity))
-                    {
-                        double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, entity.posY - player.posY, entity.posZ - player.posZ).normalize());
-
-                        //And because Vec3d.fromPitchYaw occasionally returns values barely out of the range of (-1, 1)...
-                        if (angleDif < -1) angleDif = -1;
-                        else if (angleDif > 1) angleDif = 1;
-
-                        angleDif = TRIG_TABLE.arccos(angleDif); //0 in front, pi in back
-
-                        if (angleDif / Math.PI * 180 <= 70) queue.add((EntityLivingBase) entity, Math.pow(angleDif, 2) * distSquared);
-                    }
-                }
-            }
-        }
-
-        return queue;
     }
 }

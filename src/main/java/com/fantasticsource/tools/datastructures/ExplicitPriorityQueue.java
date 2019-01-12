@@ -1,6 +1,7 @@
 package com.fantasticsource.tools.datastructures;
 
 import java.util.PriorityQueue;
+import java.util.function.Predicate;
 
 public class ExplicitPriorityQueue<T>
 {
@@ -21,10 +22,15 @@ public class ExplicitPriorityQueue<T>
         queue.add(new Entry(object, priority));
     }
 
+    public void removeIf(Predicate<Entry> predicate)
+    {
+        queue.removeIf(predicate);
+    }
+
     public T peek()
     {
         Object result = queue.peek();
-        return result == null ? null : (T) ((Entry) result).object;
+        return result == null ? null : ((Entry) result).object;
     }
 
     public double peekPriority()
@@ -36,7 +42,7 @@ public class ExplicitPriorityQueue<T>
     public T poll()
     {
         Object result = queue.poll();
-        return result == null ? null : (T) ((Entry) result).object;
+        return result == null ? null : ((Entry) result).object;
     }
 
     public T[] toArray()
@@ -59,10 +65,10 @@ public class ExplicitPriorityQueue<T>
         return queue.isEmpty();
     }
 
-    private class Entry implements Comparable<Entry>
+    public class Entry implements Comparable<Entry>
     {
-        T object;
-        double priority;
+        public T object;
+        public double priority;
 
         Entry(T object, double priority)
         {
