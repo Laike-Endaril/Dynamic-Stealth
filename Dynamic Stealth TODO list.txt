@@ -1,9 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-Use (quite possibly cached) Sight data for...
-...HUD
-...entity tracker
-...all DS's internal systems
+Use sight data for entity tracker in a relatively direct manner, at least for living entities
 
 Fix eg. horses that are standing still not disappearing/appearing when crossing over the "seen" boundary as the player moves
 
