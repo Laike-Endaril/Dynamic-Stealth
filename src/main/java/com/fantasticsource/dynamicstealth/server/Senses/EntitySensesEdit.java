@@ -41,11 +41,4 @@ public class EntitySensesEdit extends EntitySenses
 
         return result;
     }
-
-    public boolean recentlySeen(Entity target)
-    {
-        if (seenEntities.contains(target)) return true;
-        if (unseenEntities.contains(target)) return false;
-        return Sight.recentlySeen(searcher, target);
-    }
 }
