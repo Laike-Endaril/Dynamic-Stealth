@@ -4,11 +4,9 @@ import com.fantasticsource.dynamicstealth.common.Network;
 import com.fantasticsource.dynamicstealth.server.Senses.Sight;
 import com.fantasticsource.dynamicstealth.server.configdata.EntityThreatData;
 import com.fantasticsource.mctools.MCTools;
-import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -17,7 +15,6 @@ import javax.annotation.Nonnull;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static com.fantasticsource.dynamicstealth.common.DynamicStealth.TRIG_TABLE;
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
 
 public class Threat

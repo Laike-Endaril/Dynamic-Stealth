@@ -7,7 +7,6 @@ import com.fantasticsource.mctools.Speedometer;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import com.fantasticsource.tools.datastructures.Pair;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -21,6 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.LinkedHashMap;
@@ -44,10 +44,14 @@ public class Sight
     private static Map<EntityLivingBase, Map<Entity, Pair<Double, Long>>> seenEntities = new LinkedHashMap<>();
 
 
+    @SubscribeEvent
     public static void update(TickEvent.WorldTickEvent event)
     {
-        currentTick = Minecraft.getMinecraft().world.getTotalWorldTime();
-        seenEntities.entrySet().removeIf(e -> update(e.getValue()));
+        if (event.phase == TickEvent.Phase.END)
+        {
+            currentTick = event.world.getTotalWorldTime();
+            seenEntities.entrySet().removeIf(e -> update(e.getValue()));
+        }
     }
 
     private static boolean update(Map<Entity, Pair<Double, Long>> seenMap)
@@ -77,28 +81,28 @@ public class Sight
 
     public static double visualStealthLevel(EntityLivingBase searcher, Entity target, boolean useCache, boolean updateCache)
     {
-//        Map<Entity, Pair<Double, Long>> map = seenEntities.get(searcher);
+        Map<Entity, Pair<Double, Long>> map = seenEntities.get(searcher);
 
-//        if (useCache && map != null)
-//        {
-//            Pair<Double, Long> data = map.get(target);
-//            if (data != null && data.getValue() == currentTick) return data.getKey();
-//        }
+        if (useCache && map != null)
+        {
+            Pair<Double, Long> data = map.get(target);
+            if (data != null && data.getValue() == currentTick) return data.getKey();
+        }
 
-        searcher.world.profiler.startSection("DS Vision");
+        searcher.world.profiler.startSection("DS Sight checks");
         double result = visualStealthLevel(searcher, target);
         searcher.world.profiler.endSection();
 
-//        if (updateCache)
-//        {
-//            if (map == null)
-//            {
-//                map = new LinkedHashMap<>();
-//                seenEntities.put(searcher, map);
-//            }
-//
-//            map.put(target, new Pair<>(result, currentTick));
-//        }
+        if (updateCache)
+        {
+            if (map == null)
+            {
+                map = new LinkedHashMap<>();
+                seenEntities.put(searcher, map);
+            }
+
+            map.put(target, new Pair<>(result, currentTick));
+        }
 
         return result;
     }
