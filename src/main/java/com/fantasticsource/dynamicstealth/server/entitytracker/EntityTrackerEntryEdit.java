@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.entitytracker;
 
-import com.fantasticsource.dynamicstealth.server.EntitySensesEdit;
+import com.fantasticsource.dynamicstealth.server.Senses.Sight;
 import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
@@ -431,7 +431,7 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
 
     public boolean isVisibleTo(EntityPlayerMP playerMP)
     {
-        return EntitySensesEdit.stealthLevel(playerMP, trackedEntity) <= 1;
+        return Sight.visualStealthLevel(playerMP, trackedEntity, true, true) <= 1;
     }
 
     private boolean isPlayerWatchingThisChunk(EntityPlayerMP playerMP)

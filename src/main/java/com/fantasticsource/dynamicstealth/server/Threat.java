@@ -1,6 +1,8 @@
 package com.fantasticsource.dynamicstealth.server;
 
 import com.fantasticsource.dynamicstealth.common.Network;
+import com.fantasticsource.dynamicstealth.server.Senses.EntitySensesEdit;
+import com.fantasticsource.dynamicstealth.server.Senses.Sight;
 import com.fantasticsource.dynamicstealth.server.configdata.EntityThreatData;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
@@ -153,7 +155,7 @@ public class Threat
             {
                 if (entity instanceof EntityLivingBase && entity != player)
                 {
-                    stealthLevel = EntitySensesEdit.stealthLevel(player, entity);
+                    stealthLevel = EntitySensesEdit.stealthLevel(player, entity, true, true);
                     if (stealthLevel <= 1) queue.add((EntityLivingBase) entity, stealthLevel);
                 }
             }
@@ -165,7 +167,7 @@ public class Threat
                 if (entity instanceof EntityLivingBase && entity != player)
                 {
                     double distSquared = player.getDistanceSq(entity);
-                    if (distSquared <= 2500 && EntitySensesEdit.los(player, entity))
+                    if (distSquared <= 2500 && Sight.los(player, entity))
                     {
                         double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, entity.posY - player.posY, entity.posZ - player.posZ).normalize());
 

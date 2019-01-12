@@ -3,7 +3,12 @@ package com.fantasticsource.dynamicstealth.common;
 import com.fantasticsource.dynamicstealth.client.HUD;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatCNPC;
-import com.fantasticsource.dynamicstealth.server.*;
+import com.fantasticsource.dynamicstealth.server.AIStealthTargetingAndSearch;
+import com.fantasticsource.dynamicstealth.server.Attributes;
+import com.fantasticsource.dynamicstealth.server.EntityLookHelperEdit;
+import com.fantasticsource.dynamicstealth.server.Senses.EntitySensesEdit;
+import com.fantasticsource.dynamicstealth.server.Senses.Sight;
+import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.dynamicstealth.server.aiedits.*;
 import com.fantasticsource.dynamicstealth.server.configdata.EntityVisionData;
 import com.fantasticsource.dynamicstealth.server.entitytracker.EntityTrackerEdit;
@@ -75,6 +80,7 @@ public class DynamicStealth
         MinecraftForge.EVENT_BUS.register(Speedometer.class);
         MinecraftForge.EVENT_BUS.register(Network.class);
         MinecraftForge.EVENT_BUS.register(Threat.class);
+        MinecraftForge.EVENT_BUS.register(Sight.class);
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
         {
             MinecraftForge.EVENT_BUS.register(HUD.class);

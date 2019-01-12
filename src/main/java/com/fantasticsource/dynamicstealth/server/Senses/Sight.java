@@ -1,12 +1,15 @@
-package com.fantasticsource.dynamicstealth.server;
+package com.fantasticsource.dynamicstealth.server.Senses;
 
+import com.fantasticsource.dynamicstealth.common.DynamicStealthConfig;
+import com.fantasticsource.dynamicstealth.server.Attributes;
+import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.mctools.Speedometer;
 import com.fantasticsource.tools.Tools;
-import com.google.common.collect.Lists;
+import com.fantasticsource.tools.datastructures.Pair;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntitySenses;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -17,30 +20,90 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealth.TRIG_TABLE;
-import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.ServerSettings;
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.dynamicstealth.server.configdata.EntityVisionData.*;
 
-public class EntitySensesEdit extends EntitySenses
+public class Sight
 {
-    private static final ServerSettings.Senses senses = serverSettings.senses;
-    private static final ServerSettings.Senses.Vision vision = senses.vision;
+    private static final int DROP_SEEN_DELAY = 60;
 
-    EntityLivingBase entity;
-    List<Entity> seenEntities = Lists.<Entity>newArrayList();
-    List<Entity> unseenEntities = Lists.<Entity>newArrayList();
+    private static final DynamicStealthConfig.ServerSettings.Senses senses = serverSettings.senses;
+    private static final DynamicStealthConfig.ServerSettings.Senses.Vision vision = senses.vision;
 
-    public EntitySensesEdit(EntityLiving entityIn)
+    public static long currentTick = Minecraft.getMinecraft().world.getTotalWorldTime();
+
+
+    //For each searcher                , map of entities, last reported stealth level, and when last stealth level was recorded
+    private static Map<EntityLivingBase, Map<Entity, Pair<Double, Long>>> seenEntities = new LinkedHashMap<>();
+
+
+    public static void update(TickEvent.WorldTickEvent event)
     {
-        super(null);
-        entity = entityIn;
+        currentTick = Minecraft.getMinecraft().world.getTotalWorldTime();
+        seenEntities.entrySet().removeIf(e -> update(e.getValue()));
     }
 
-    public static double stealthLevel(EntityLivingBase searcher, Entity target)
+    private static boolean update(Map<Entity, Pair<Double, Long>> seenMap)
+    {
+        if (seenMap == null) return true;
+        seenMap.entrySet().removeIf(e -> currentTick - e.getValue().getValue() >= DROP_SEEN_DELAY);
+        return seenMap.size() == 0;
+    }
+
+
+    public static boolean recentlySeen(EntityLivingBase searcher, Entity target)
+    {
+        Map<Entity, Pair<Double, Long>> map = seenEntities.get(searcher);
+        if (map == null) return false;
+
+        Pair<Double, Long> data = map.get(target);
+        if (data == null) return false;
+
+        if (currentTick - data.getValue() < DROP_SEEN_DELAY) return true;
+        else
+        {
+            map.remove(target);
+            return false;
+        }
+    }
+
+
+    public static double visualStealthLevel(EntityLivingBase searcher, Entity target, boolean useCache, boolean updateCache)
+    {
+        Map<Entity, Pair<Double, Long>> map = seenEntities.get(searcher);
+
+        if (useCache && map != null)
+        {
+            Pair<Double, Long> data = map.get(target);
+            if (data != null && data.getValue() == currentTick) return data.getKey();
+        }
+
+        double result;
+        searcher.world.profiler.startSection("DS Vision");
+        result = visualStealthLevel(searcher, target);
+        searcher.world.profiler.endSection();
+
+        if (updateCache)
+        {
+            if (map == null)
+            {
+                map = new LinkedHashMap<>();
+                seenEntities.put(searcher, map);
+            }
+
+            map.put(target, new Pair<>(result, currentTick));
+        }
+
+        return result;
+    }
+
+    private static double visualStealthLevel(EntityLivingBase searcher, Entity target)
     {
         //Hard checks (absolute)
         if (searcher == null || target == null) return 2;
@@ -121,6 +184,9 @@ public class EntitySensesEdit extends EntitySenses
         //Alerted multiplier
         double alertMultiplier = searcher instanceof EntityLiving && Threat.get(searcher).threatLevel > 0 ? vision.b_visibilityMultipliers.alertMultiplier : 1;
 
+        //Seen multiplier
+        double seenMultiplier = Sight.recentlySeen(searcher, target) ? vision.b_visibilityMultipliers.seenMultiplier : 1;
+
         //Crouching (multiplier)
         double crouchingMultiplier = target.isSneaking() ? vision.a_stealthMultipliers.crouchingMultiplier : 1;
 
@@ -152,7 +218,7 @@ public class EntitySensesEdit extends EntitySenses
 
         //Combine multipliers
         double stealthMultiplier = Tools.min(blindnessMultiplier, invisibilityMultiplier, crouchingMultiplier, mobHeadMultiplier);
-        double visibilityMultiplier = Tools.max(armorMultiplier, fireMultiplier, alertMultiplier);
+        double visibilityMultiplier = Tools.max(armorMultiplier, fireMultiplier, alertMultiplier, seenMultiplier);
         double baseMultiplier = Tools.min(Tools.max((lightFactor + speedFactor) / 2 * stealthMultiplier * visibilityMultiplier, 0), 1);
 
         double visReduction = !isLivingBase ? 0 : targetLivingBase.getEntityAttribute(Attributes.VISIBILITY_REDUCTION).getAttributeValue();
@@ -172,32 +238,5 @@ public class EntitySensesEdit extends EntitySenses
     public static boolean los(Entity searcher, Entity target)
     {
         return LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), new Vec3d(target.posX, target.posY + target.getEyeHeight(), target.posZ), false, true);
-    }
-
-    @Override
-    public void clearSensingCache()
-    {
-        seenEntities.clear();
-        unseenEntities.clear();
-    }
-
-    @Override
-    public boolean canSee(Entity entityIn)
-    {
-        //This should actually include not only sight, but all other senses as well, since it's the one and only sense method called by vanilla classes
-
-        if (seenEntities.contains(entityIn)) return true;
-        if (unseenEntities.contains(entityIn)) return false;
-
-        entity.world.profiler.startSection("canSee");
-
-        boolean seen = stealthLevel(entity, entityIn) <= 1;
-
-        entity.world.profiler.endSection();
-
-        if (seen) seenEntities.add(entityIn);
-        else unseenEntities.add(entityIn);
-
-        return seen;
     }
 }

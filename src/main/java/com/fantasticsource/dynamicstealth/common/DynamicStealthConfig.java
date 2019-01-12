@@ -286,6 +286,17 @@ public class DynamicStealthConfig
                     @Config.RangeDouble(min = 1)
                     public double alertMultiplier = 1.25;
 
+                    @Config.Name("'Seen' Multiplier")
+                    @Comment({
+                            "If an entity has recently seen its target, their visual perception is multiplied by this",
+                            "",
+                            "If set to 1, there is no effect",
+                            "",
+                            "If set to 2, the searcher can generally see targets twice as easily (but still not beyond Distance (Far))"
+                    })
+                    @Config.RangeDouble(min = 1)
+                    public double seenMultiplier = 2;
+
                     @Config.Name("'On Fire' Multiplier")
                     @Comment({
                             "If an entity is on fire, their visibility is multiplied by this",
