@@ -176,6 +176,7 @@ public class DynamicStealthConfig
                     "",
                     "Right now, this only applies to the threat HUD"
             })
+            @Config.RequiresMcRestart
             public boolean usePlayerSenses = true;
 
             @Config.Name("Vision")
