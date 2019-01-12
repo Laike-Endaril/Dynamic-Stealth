@@ -43,7 +43,7 @@ public class Threat
         if (event.side == Side.SERVER)
         {
             EntityPlayerMP player = (EntityPlayerMP) event.player;
-            Network.sendThreatData(player, seenEntities(player));
+            Network.sendThreatData(player, Sight.seenEntities(player));
         }
     }
 
@@ -139,50 +139,6 @@ public class Threat
             if (threatData != null) threatData.threatLevel = threat;
             else threatMap.put(searcher, new ThreatData(searcher, null, threat));
         }
-    }
-
-
-    public static ExplicitPriorityQueue<EntityLivingBase> seenEntities(EntityPlayerMP player)
-    {
-        ExplicitPriorityQueue<EntityLivingBase> queue = new ExplicitPriorityQueue<>(10);
-        double stealthLevel;
-        Entity[] loadedEntities = player.world.loadedEntityList.toArray(new Entity[player.world.loadedEntityList.size()]);
-
-        if (serverSettings.senses.usePlayerSenses)
-        {
-            for (Entity entity : loadedEntities)
-            {
-                if (entity instanceof EntityLivingBase && entity != player)
-                {
-                    stealthLevel = Sight.visualStealthLevel(player, entity, true, true);
-                    if (stealthLevel <= 1) queue.add((EntityLivingBase) entity, stealthLevel);
-                }
-            }
-        }
-        else
-        {
-            for (Entity entity : loadedEntities)
-            {
-                if (entity instanceof EntityLivingBase && entity != player)
-                {
-                    double distSquared = player.getDistanceSq(entity);
-                    if (distSquared <= 2500 && Sight.los(player, entity))
-                    {
-                        double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, entity.posY - player.posY, entity.posZ - player.posZ).normalize());
-
-                        //And because Vec3d.fromPitchYaw occasionally returns values barely out of the range of (-1, 1)...
-                        if (angleDif < -1) angleDif = -1;
-                        else if (angleDif > 1) angleDif = 1;
-
-                        angleDif = TRIG_TABLE.arccos(angleDif); //0 in front, pi in back
-
-                        if (angleDif / Math.PI * 180 <= 70) queue.add((EntityLivingBase) entity, Math.pow(angleDif, 2) * distSquared);
-                    }
-                }
-            }
-        }
-
-        return queue;
     }
 
 

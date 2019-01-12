@@ -5,6 +5,7 @@ import com.fantasticsource.dynamicstealth.server.Attributes;
 import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.mctools.Speedometer;
 import com.fantasticsource.tools.Tools;
+import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -185,7 +186,7 @@ public class Sight
         double alertMultiplier = searcher instanceof EntityLiving && Threat.get(searcher).threatLevel > 0 ? vision.b_visibilityMultipliers.alertMultiplier : 1;
 
         //Seen multiplier
-        double seenMultiplier = Sight.recentlySeen(searcher, target) ? vision.b_visibilityMultipliers.seenMultiplier : 1;
+        double seenMultiplier = recentlySeen(searcher, target) ? vision.b_visibilityMultipliers.seenMultiplier : 1;
 
         //Crouching (multiplier)
         double crouchingMultiplier = target.isSneaking() ? vision.a_stealthMultipliers.crouchingMultiplier : 1;
@@ -238,5 +239,49 @@ public class Sight
     public static boolean los(Entity searcher, Entity target)
     {
         return LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), new Vec3d(target.posX, target.posY + target.getEyeHeight(), target.posZ), false, true);
+    }
+
+
+    public static ExplicitPriorityQueue<EntityLivingBase> seenEntities(EntityPlayerMP player)
+    {
+        ExplicitPriorityQueue<EntityLivingBase> queue = new ExplicitPriorityQueue<>(10);
+        double stealthLevel;
+        Entity[] loadedEntities = player.world.loadedEntityList.toArray(new Entity[player.world.loadedEntityList.size()]);
+
+        if (serverSettings.senses.usePlayerSenses)
+        {
+            for (Entity entity : loadedEntities)
+            {
+                if (entity instanceof EntityLivingBase && entity != player)
+                {
+                    stealthLevel = visualStealthLevel(player, entity, true, true);
+                    if (stealthLevel <= 1) queue.add((EntityLivingBase) entity, stealthLevel);
+                }
+            }
+        }
+        else
+        {
+            for (Entity entity : loadedEntities)
+            {
+                if (entity instanceof EntityLivingBase && entity != player)
+                {
+                    double distSquared = player.getDistanceSq(entity);
+                    if (distSquared <= 2500 && los(player, entity))
+                    {
+                        double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, entity.posY - player.posY, entity.posZ - player.posZ).normalize());
+
+                        //And because Vec3d.fromPitchYaw occasionally returns values barely out of the range of (-1, 1)...
+                        if (angleDif < -1) angleDif = -1;
+                        else if (angleDif > 1) angleDif = 1;
+
+                        angleDif = TRIG_TABLE.arccos(angleDif); //0 in front, pi in back
+
+                        if (angleDif / Math.PI * 180 <= 70) queue.add((EntityLivingBase) entity, Math.pow(angleDif, 2) * distSquared);
+                    }
+                }
+            }
+        }
+
+        return queue;
     }
 }
