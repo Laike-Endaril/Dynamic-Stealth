@@ -22,7 +22,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.lwjgl.Sys;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -88,6 +87,8 @@ public class Sight
 
     public static double visualStealthLevel(EntityLivingBase searcher, Entity target, boolean useCache, boolean updateCache)
     {
+        if (searcher == null || target == null || !searcher.world.isBlockLoaded(searcher.getPosition()) || !target.world.isBlockLoaded(target.getPosition())) return -777;
+
         Map<Entity, Pair<Double, Long>> map = recentlySeenMap.get(searcher);
 
         if (useCache && map != null)
@@ -118,6 +119,7 @@ public class Sight
     public static double lightLevelTotal(Entity entity)
     {
         BlockPos blockpos = new BlockPos(entity.posX, entity.getEntityBoundingBox().minY, entity.posZ);
+        if (!entity.world.isAreaLoaded(entity.getPosition(), 1)) return 0;
         return entity.world.getLightFromNeighbors(blockpos);
     }
 
