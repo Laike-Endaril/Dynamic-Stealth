@@ -106,9 +106,11 @@ public class EntityTrackerEdit extends EntityTracker
                 throw new IllegalStateException("Entity is already tracked!");
             }
 
-            EntityTrackerEntry entityEntry = entityIn instanceof EntityLivingBase ? new LivingBaseEntityTrackerEntry(entityIn, trackingRange, maxDistance, updateFrequency, sendVelocityUpdates) : new EntityTrackerEntry(entityIn, trackingRange, maxDistance, updateFrequency, sendVelocityUpdates);
+            boolean isLivingBase = entityIn instanceof EntityLivingBase;
+            EntityTrackerEntry entityEntry = isLivingBase ? new LivingBaseEntityTrackerEntry(entityIn, trackingRange, maxDistance, updateFrequency, sendVelocityUpdates) : new EntityTrackerEntry(entityIn, trackingRange, maxDistance, updateFrequency, sendVelocityUpdates);
             entries.add(entityEntry);
             trackedEntityMap.addKey(entityIn.getEntityId(), entityEntry);
+            if (!isLivingBase) entityEntry.updatePlayerEntities(world.playerEntities);
         }
         catch (Throwable throwable)
         {
