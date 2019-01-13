@@ -257,7 +257,7 @@ public class LivingBaseEntityTrackerEntry extends EntityTrackerEntry
     {
         //TODO this is not happening often enough for living entities
         //TODO this should happen exactly once every tick for every player
-        if (livingBase != player)
+        if (player != livingBase)
         {
             if (isVisibleTo(player))
             {
