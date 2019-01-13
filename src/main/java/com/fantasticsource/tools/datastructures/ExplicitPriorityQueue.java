@@ -80,7 +80,6 @@ public class ExplicitPriorityQueue<T>
     }
 
 
-
     public class Entry<A> implements Comparable<Entry>
     {
         public A object;
