@@ -174,7 +174,7 @@ public class DynamicStealthConfig
             @Comment({
                     "If enabled, stealth mechanics work on players",
                     "",
-                    "Right now, this only applies to the threat HUD"
+                    "Basically if this is turned on and that skeleton is holding still in the dark, you might not be able to see him until you get close"
             })
             @Config.RequiresMcRestart
             public boolean usePlayerSenses = true;
