@@ -60,128 +60,37 @@ public class EntityTrackerEdit extends EntityTracker
         {
             track(entityIn, 512, 2);
             EntityPlayerMP entityplayermp = (EntityPlayerMP) entityIn;
-
-            for (EntityTrackerEntry entitytrackerentry : entries)
-            {
-                entitytrackerentry.updatePlayerEntity(entityplayermp);
-            }
+            for (EntityTrackerEntry entitytrackerentry : entries) entitytrackerentry.updatePlayerEntity(entityplayermp);
         }
-        else if (entityIn instanceof EntityFishHook)
-        {
-            track(entityIn, 64, 5, true);
-        }
-        else if (entityIn instanceof EntityArrow)
-        {
-            track(entityIn, 64, 20, false);
-        }
-        else if (entityIn instanceof EntitySmallFireball)
-        {
-            track(entityIn, 64, 10, false);
-        }
-        else if (entityIn instanceof EntityFireball)
-        {
-            track(entityIn, 64, 10, true);
-        }
-        else if (entityIn instanceof EntitySnowball)
-        {
-            track(entityIn, 64, 10, true);
-        }
-        else if (entityIn instanceof EntityLlamaSpit)
-        {
-            track(entityIn, 64, 10, false);
-        }
-        else if (entityIn instanceof EntityEnderPearl)
-        {
-            track(entityIn, 64, 10, true);
-        }
-        else if (entityIn instanceof EntityEnderEye)
-        {
-            track(entityIn, 64, 4, true);
-        }
-        else if (entityIn instanceof EntityEgg)
-        {
-            track(entityIn, 64, 10, true);
-        }
-        else if (entityIn instanceof EntityPotion)
-        {
-            track(entityIn, 64, 10, true);
-        }
-        else if (entityIn instanceof EntityExpBottle)
-        {
-            track(entityIn, 64, 10, true);
-        }
-        else if (entityIn instanceof EntityFireworkRocket)
-        {
-            track(entityIn, 64, 10, true);
-        }
-        else if (entityIn instanceof EntityItem)
-        {
-            track(entityIn, 64, 20, true);
-        }
-        else if (entityIn instanceof EntityMinecart)
-        {
-            track(entityIn, 80, 3, true);
-        }
-        else if (entityIn instanceof EntityBoat)
-        {
-            track(entityIn, 80, 3, true);
-        }
-        else if (entityIn instanceof EntitySquid)
-        {
-            track(entityIn, 64, 3, true);
-        }
-        else if (entityIn instanceof EntityWither)
-        {
-            track(entityIn, 80, 3, false);
-        }
-        else if (entityIn instanceof EntityShulkerBullet)
-        {
-            track(entityIn, 80, 3, true);
-        }
-        else if (entityIn instanceof EntityBat)
-        {
-            track(entityIn, 80, 3, false);
-        }
-        else if (entityIn instanceof EntityDragon)
-        {
-            track(entityIn, 160, 3, true);
-        }
-        else if (entityIn instanceof IAnimals)
-        {
-            track(entityIn, 80, 3, true);
-        }
-        else if (entityIn instanceof EntityTNTPrimed)
-        {
-            track(entityIn, 160, 10, true);
-        }
-        else if (entityIn instanceof EntityFallingBlock)
-        {
-            track(entityIn, 160, 20, true);
-        }
-        else if (entityIn instanceof EntityHanging)
-        {
-            track(entityIn, 160, Integer.MAX_VALUE, false);
-        }
-        else if (entityIn instanceof EntityArmorStand)
-        {
-            track(entityIn, 160, 3, true);
-        }
-        else if (entityIn instanceof EntityXPOrb)
-        {
-            track(entityIn, 160, 20, true);
-        }
-        else if (entityIn instanceof EntityAreaEffectCloud)
-        {
-            track(entityIn, 160, Integer.MAX_VALUE, true);
-        }
-        else if (entityIn instanceof EntityEnderCrystal)
-        {
-            track(entityIn, 256, Integer.MAX_VALUE, false);
-        }
-        else if (entityIn instanceof EntityEvokerFangs)
-        {
-            track(entityIn, 160, 2, false);
-        }
+        else if (entityIn instanceof EntityFishHook) track(entityIn, 64, 5, true);
+        else if (entityIn instanceof EntityArrow) track(entityIn, 64, 20, false);
+        else if (entityIn instanceof EntitySmallFireball) track(entityIn, 64, 10, false);
+        else if (entityIn instanceof EntityFireball) track(entityIn, 64, 10, true);
+        else if (entityIn instanceof EntitySnowball) track(entityIn, 64, 10, true);
+        else if (entityIn instanceof EntityLlamaSpit) track(entityIn, 64, 10, false);
+        else if (entityIn instanceof EntityEnderPearl) track(entityIn, 64, 10, true);
+        else if (entityIn instanceof EntityEnderEye) track(entityIn, 64, 4, true);
+        else if (entityIn instanceof EntityEgg) track(entityIn, 64, 10, true);
+        else if (entityIn instanceof EntityPotion) track(entityIn, 64, 10, true);
+        else if (entityIn instanceof EntityExpBottle) track(entityIn, 64, 10, true);
+        else if (entityIn instanceof EntityFireworkRocket) track(entityIn, 64, 10, true);
+        else if (entityIn instanceof EntityItem) track(entityIn, 64, 20, true);
+        else if (entityIn instanceof EntityMinecart) track(entityIn, 80, 3, true);
+        else if (entityIn instanceof EntityBoat) track(entityIn, 80, 3, true);
+        else if (entityIn instanceof EntitySquid) track(entityIn, 64, 3, true);
+        else if (entityIn instanceof EntityWither) track(entityIn, 80, 3, false);
+        else if (entityIn instanceof EntityShulkerBullet) track(entityIn, 80, 3, true);
+        else if (entityIn instanceof EntityBat) track(entityIn, 80, 3, false);
+        else if (entityIn instanceof EntityDragon) track(entityIn, 160, 3, true);
+        else if (entityIn instanceof IAnimals) track(entityIn, 80, 3, true);
+        else if (entityIn instanceof EntityTNTPrimed) track(entityIn, 160, 10, true);
+        else if (entityIn instanceof EntityFallingBlock) track(entityIn, 160, 20, true);
+        else if (entityIn instanceof EntityHanging) track(entityIn, 160, Integer.MAX_VALUE, false);
+        else if (entityIn instanceof EntityArmorStand) track(entityIn, 160, 3, true);
+        else if (entityIn instanceof EntityXPOrb) track(entityIn, 160, 20, true);
+        else if (entityIn instanceof EntityAreaEffectCloud) track(entityIn, 160, Integer.MAX_VALUE, true);
+        else if (entityIn instanceof EntityEnderCrystal) track(entityIn, 256, Integer.MAX_VALUE, false);
+        else if (entityIn instanceof EntityEvokerFangs) track(entityIn, 160, 2, false);
     }
 
     public void track(Entity entityIn, int trackingRange, int updateFrequency)
