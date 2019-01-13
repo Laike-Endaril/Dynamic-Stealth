@@ -40,9 +40,13 @@ public class LivingBaseEntityTrackerEntry extends EntityTrackerEntry
     private final boolean isPlayer;
     private final EntityPlayerMP player;
 
-    private final int updateFrequency;
-    private final boolean sendVelocityUpdates;
     public int updateCounter;
+    private final int updateFrequency;
+    private int ticksSinceLastForcedTeleport;
+    private boolean onGround;
+    private boolean ridingEntity;
+
+    private final boolean sendVelocityUpdates;
     private boolean updatedPlayerVisibility;
 
     private long encodedPosX;
@@ -75,6 +79,7 @@ public class LivingBaseEntityTrackerEntry extends EntityTrackerEntry
 
         this.updateFrequency = updateFrequency;
         this.sendVelocityUpdates = sendVelocityUpdates;
+        onGround = entity.onGround;
 
         encodedPosX = EntityTracker.getPositionLong(entity.posX);
         encodedPosY = EntityTracker.getPositionLong(entity.posY);
@@ -133,9 +138,11 @@ public class LivingBaseEntityTrackerEntry extends EntityTrackerEntry
                 encodedPosY = EntityTracker.getPositionLong(livingBase.posY);
                 encodedPosZ = EntityTracker.getPositionLong(livingBase.posZ);
                 sendMetadata();
+                ridingEntity = true;
             }
             else
             {
+                ++this.ticksSinceLastForcedTeleport;
                 long i1 = EntityTracker.getPositionLong(livingBase.posX);
                 long i2 = EntityTracker.getPositionLong(livingBase.posY);
                 long j2 = EntityTracker.getPositionLong(livingBase.posZ);
@@ -144,8 +151,38 @@ public class LivingBaseEntityTrackerEntry extends EntityTrackerEntry
                 long j = i1 - encodedPosX;
                 long k = i2 - encodedPosY;
                 long l = j2 - encodedPosZ;
+                Packet<?> packet1 = null;
                 boolean flag = j * j + k * k + l * l >= 128 || updateCounter % 60 == 0;
                 boolean flag1 = Math.abs(k2 - encodedRotationYaw) >= 1 || Math.abs(i - encodedRotationPitch) >= 1;
+
+                if (updateCounter > 0)
+                {
+                    if (j >= -32768L && j < 32768L && k >= -32768L && k < 32768L && l >= -32768L && l < 32768L && ticksSinceLastForcedTeleport <= 400 && !ridingEntity && onGround == livingBase.onGround)
+                    {
+                        if ((!flag || !flag1))
+                        {
+                            if (flag)
+                            {
+                                packet1 = new SPacketEntity.S15PacketEntityRelMove(livingBase.getEntityId(), j, k, l, livingBase.onGround);
+                            }
+                            else if (flag1)
+                            {
+                                packet1 = new SPacketEntity.S16PacketEntityLook(livingBase.getEntityId(), (byte) k2, (byte) i, livingBase.onGround);
+                            }
+                        }
+                        else
+                        {
+                            packet1 = new SPacketEntity.S17PacketEntityLookMove(livingBase.getEntityId(), j, k, l, (byte) k2, (byte) i, livingBase.onGround);
+                        }
+                    }
+                    else
+                    {
+                        onGround = livingBase.onGround;
+                        ticksSinceLastForcedTeleport = 0;
+                        resetPlayerVisibility();
+                        packet1 = new SPacketEntityTeleport(livingBase);
+                    }
+                }
 
                 if (updateCounter > 0 && (sendVelocityUpdates || livingBase.isElytraFlying()))
                 {
@@ -156,6 +193,11 @@ public class LivingBaseEntityTrackerEntry extends EntityTrackerEntry
                         lastMotionZ = livingBase.motionZ;
                         sendPacketToTrackedPlayers(new SPacketEntityVelocity(livingBase.getEntityId(), livingBase.motionX, livingBase.motionY, livingBase.motionZ));
                     }
+                }
+
+                if (packet1 != null)
+                {
+                    this.sendPacketToTrackedPlayers(packet1);
                 }
 
                 sendMetadata();
@@ -172,6 +214,8 @@ public class LivingBaseEntityTrackerEntry extends EntityTrackerEntry
                     encodedRotationYaw = k2;
                     encodedRotationPitch = i;
                 }
+
+                ridingEntity = false;
             }
 
             int k1 = MathHelper.floor(livingBase.getRotationYawHead() * 256 / 360);
