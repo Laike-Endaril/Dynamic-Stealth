@@ -71,27 +71,27 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
     private boolean onGround;
 
 
-    public EntityTrackerEntryEdit(Entity entityIn, int maxRangeIn, int currentRangeIn, int updateFrequencyIn, boolean sendVelocityUpdatesIn)
+    public EntityTrackerEntryEdit(Entity entity, int maxRange, int currentRange, int updateFrequency, boolean sendVelocityUpdates)
     {
-        super(entityIn, maxRangeIn, currentRangeIn, updateFrequencyIn, sendVelocityUpdatesIn);
+        super(entity, maxRange, currentRange, updateFrequency, sendVelocityUpdates);
 
-        trackedEntity = entityIn;
+        trackedEntity = entity;
         isLivingBase = trackedEntity instanceof EntityLivingBase;
         isPlayer = trackedEntity instanceof EntityPlayerMP;
         livingBase = isLivingBase ? (EntityLivingBase) trackedEntity : null;
         player = isPlayer ? (EntityPlayerMP) trackedEntity : null;
 
-        updateFrequency = updateFrequencyIn;
-        sendVelocityUpdates = sendVelocityUpdatesIn;
+        this.updateFrequency = updateFrequency;
+        this.sendVelocityUpdates = sendVelocityUpdates;
 
-        encodedPosX = EntityTracker.getPositionLong(entityIn.posX);
-        encodedPosY = EntityTracker.getPositionLong(entityIn.posY);
-        encodedPosZ = EntityTracker.getPositionLong(entityIn.posZ);
-        encodedRotationYaw = MathHelper.floor(entityIn.rotationYaw * 256 / 360);
-        encodedRotationPitch = MathHelper.floor(entityIn.rotationPitch * 256 / 360);
+        encodedPosX = EntityTracker.getPositionLong(entity.posX);
+        encodedPosY = EntityTracker.getPositionLong(entity.posY);
+        encodedPosZ = EntityTracker.getPositionLong(entity.posZ);
+        encodedRotationYaw = MathHelper.floor(entity.rotationYaw * 256 / 360);
+        encodedRotationPitch = MathHelper.floor(entity.rotationPitch * 256 / 360);
 
-        lastHeadMotion = MathHelper.floor(entityIn.getRotationYawHead() * 256 / 360);
-        onGround = entityIn.onGround;
+        lastHeadMotion = MathHelper.floor(entity.getRotationYawHead() * 256 / 360);
+        onGround = entity.onGround;
     }
 
     public boolean equals(Object entityTrackerEntry)
