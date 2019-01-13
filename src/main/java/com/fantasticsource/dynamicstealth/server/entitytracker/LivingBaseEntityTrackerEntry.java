@@ -430,11 +430,6 @@ public class LivingBaseEntityTrackerEntry extends EntityTrackerEntry
         return Sight.visualStealthLevel(playerMP, trackedEntity, true, true) <= 1;
     }
 
-    private boolean isPlayerWatchingThisChunk(EntityPlayerMP playerMP)
-    {
-        return playerMP.getServerWorld().getPlayerChunkMap().isPlayerWatchingChunk(playerMP, trackedEntity.chunkCoordX, trackedEntity.chunkCoordZ);
-    }
-
     public void updatePlayerEntities(List<EntityPlayer> players)
     {
         //Don't need this anymore since it happens every tick
@@ -449,73 +444,12 @@ public class LivingBaseEntityTrackerEntry extends EntityTrackerEntry
 
 
         if (isPlayer) return new SPacketSpawnPlayer(player);
-        if (trackedEntity instanceof EntityItem) return new SPacketSpawnObject(trackedEntity, 2, 1);
-        if (trackedEntity instanceof EntityXPOrb) return new SPacketSpawnExperienceOrb((EntityXPOrb) trackedEntity);
-        if (trackedEntity instanceof EntityPainting) return new SPacketSpawnPainting((EntityPainting) trackedEntity);
-        if (trackedEntity instanceof EntityBoat) return new SPacketSpawnObject(trackedEntity, 1);
-        if (trackedEntity instanceof EntitySnowball) return new SPacketSpawnObject(trackedEntity, 61);
-        if (trackedEntity instanceof EntityLlamaSpit) return new SPacketSpawnObject(trackedEntity, 68);
-        if (trackedEntity instanceof EntityPotion) return new SPacketSpawnObject(trackedEntity, 73);
-        if (trackedEntity instanceof EntityExpBottle) return new SPacketSpawnObject(trackedEntity, 75);
-        if (trackedEntity instanceof EntityEnderPearl) return new SPacketSpawnObject(trackedEntity, 65);
-        if (trackedEntity instanceof EntityEnderEye) return new SPacketSpawnObject(trackedEntity, 72);
-        if (trackedEntity instanceof EntityFireworkRocket) return new SPacketSpawnObject(trackedEntity, 76);
-        if (trackedEntity instanceof EntityEgg) return new SPacketSpawnObject(trackedEntity, 62);
-        if (trackedEntity instanceof EntityEvokerFangs) return new SPacketSpawnObject(trackedEntity, 79);
-        if (trackedEntity instanceof EntityTNTPrimed) return new SPacketSpawnObject(trackedEntity, 50);
-        if (trackedEntity instanceof EntityEnderCrystal) return new SPacketSpawnObject(trackedEntity, 51);
         if (trackedEntity instanceof EntityArmorStand) return new SPacketSpawnObject(trackedEntity, 78);
-        if (trackedEntity instanceof EntityAreaEffectCloud) return new SPacketSpawnObject(trackedEntity, 3);
-
-        if (trackedEntity instanceof EntityFallingBlock) return new SPacketSpawnObject(trackedEntity, 70, Block.getStateId(((EntityFallingBlock) trackedEntity).getBlock()));
-        if (trackedEntity instanceof EntityMinecart) return new SPacketSpawnObject(trackedEntity, 10, ((EntityMinecart) trackedEntity).getType().getId());
-        if (trackedEntity instanceof EntityFishHook) return new SPacketSpawnObject(trackedEntity, 90, ((EntityFishHook) trackedEntity).getAngler().getEntityId());
-        if (trackedEntity instanceof EntityLeashKnot) return new SPacketSpawnObject(trackedEntity, 77, 0, ((EntityLeashKnot) trackedEntity).getHangingPosition());
 
         if (trackedEntity instanceof IAnimals)
         {
             lastHeadMotion = MathHelper.floor(trackedEntity.getRotationYawHead() * 256 / 360);
             return new SPacketSpawnMob(livingBase);
-        }
-
-        if (trackedEntity instanceof EntityArrow)
-        {
-            Entity shooter = ((EntityArrow) trackedEntity).shootingEntity;
-            return new SPacketSpawnObject(trackedEntity, trackedEntity instanceof EntitySpectralArrow ? 91 : 60, 1 + (shooter == null ? trackedEntity.getEntityId() : shooter.getEntityId()));
-        }
-
-        if (trackedEntity instanceof EntityItemFrame)
-        {
-            EntityItemFrame entityitemframe = (EntityItemFrame) trackedEntity;
-            return new SPacketSpawnObject(trackedEntity, 71, entityitemframe.facingDirection.getHorizontalIndex(), entityitemframe.getHangingPosition());
-        }
-
-        if (trackedEntity instanceof EntityShulkerBullet)
-        {
-            SPacketSpawnObject packet = new SPacketSpawnObject(trackedEntity, 67, 0);
-            packet.setSpeedX((int) (trackedEntity.motionX * 8000));
-            packet.setSpeedY((int) (trackedEntity.motionY * 8000));
-            packet.setSpeedZ((int) (trackedEntity.motionZ * 8000));
-            return packet;
-        }
-
-        if (trackedEntity instanceof EntityFireball)
-        {
-            SPacketSpawnObject packet;
-            EntityFireball entityfireball = (EntityFireball) trackedEntity;
-            EntityLivingBase shooter = entityfireball.shootingEntity;
-
-            int type = 63;
-            if (trackedEntity instanceof EntitySmallFireball) type = 64;
-            else if (trackedEntity instanceof EntityDragonFireball) type = 93;
-            else if (trackedEntity instanceof EntityWitherSkull) type = 66;
-
-            packet = new SPacketSpawnObject(trackedEntity, type, shooter == null ? 0 : shooter.getEntityId());
-
-            packet.setSpeedX((int) (entityfireball.accelerationX * 8000));
-            packet.setSpeedY((int) (entityfireball.accelerationY * 8000));
-            packet.setSpeedZ((int) (entityfireball.accelerationZ * 8000));
-            return packet;
         }
 
         throw new IllegalArgumentException("Don't know how to send packet for " + trackedEntity.getClass() + "!");
