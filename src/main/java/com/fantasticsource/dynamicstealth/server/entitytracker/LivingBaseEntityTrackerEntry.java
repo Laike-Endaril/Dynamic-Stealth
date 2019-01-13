@@ -31,7 +31,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public class EntityTrackerEntryEdit extends EntityTrackerEntry
+public class LivingBaseEntityTrackerEntry extends EntityTrackerEntry
 {
     private static final Logger LOGGER = LogManager.getLogger();
 
@@ -45,7 +45,6 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
     private final int updateFrequency;
     private final boolean sendVelocityUpdates;
     public int updateCounter;
-    public boolean playerEntitiesUpdated;
     private boolean updatedPlayerVisibility;
     private int ticksSinceLastForcedTeleport;
 
@@ -71,7 +70,7 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
     private boolean onGround;
 
 
-    public EntityTrackerEntryEdit(Entity entity, int maxRange, int currentRange, int updateFrequency, boolean sendVelocityUpdates)
+    public LivingBaseEntityTrackerEntry(Entity entity, int maxRange, int currentRange, int updateFrequency, boolean sendVelocityUpdates)
     {
         super(entity, maxRange, currentRange, updateFrequency, sendVelocityUpdates);
 
@@ -96,7 +95,7 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
 
     public boolean equals(Object entityTrackerEntry)
     {
-        return entityTrackerEntry instanceof EntityTrackerEntryEdit && ((EntityTrackerEntryEdit) entityTrackerEntry).trackedEntity.getEntityId() == trackedEntity.getEntityId();
+        return entityTrackerEntry instanceof LivingBaseEntityTrackerEntry && ((LivingBaseEntityTrackerEntry) entityTrackerEntry).trackedEntity.getEntityId() == trackedEntity.getEntityId();
     }
 
     public int hashCode()
@@ -106,8 +105,6 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
 
     public void updatePlayerList(List<EntityPlayer> players)
     {
-        playerEntitiesUpdated = false;
-
         if (!updatedPlayerVisibility || trackedEntity.getDistanceSq(lastX, lastY, lastZ) > 16)
         {
             lastX = trackedEntity.posX;
@@ -115,9 +112,6 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
             lastZ = trackedEntity.posZ;
 
             updatedPlayerVisibility = true;
-            playerEntitiesUpdated = true;
-
-            updatePlayerEntities(players);
         }
 
         List<Entity> list = trackedEntity.getPassengers();
@@ -336,11 +330,13 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
 
     public void updatePlayerEntity(EntityPlayerMP player)
     {
+        //TODO this is not happening often enough for living entities
+        //TODO this should happen exactly once every tick for every player
         if (trackedEntity != player)
         {
             if (isVisibleTo(player))
             {
-                if (!trackingPlayers.contains(player) && (isPlayerWatchingThisChunk(player) || trackedEntity.forceSpawn))
+                if (!trackingPlayers.contains(player))
                 {
                     trackingPlayers.add(player);
                     Packet<?> packet = createSpawnPacket();
@@ -441,10 +437,7 @@ public class EntityTrackerEntryEdit extends EntityTrackerEntry
 
     public void updatePlayerEntities(List<EntityPlayer> players)
     {
-        for (EntityPlayer player : players)
-        {
-            updatePlayerEntity((EntityPlayerMP) player);
-        }
+        //Don't need this anymore since it happens every tick
     }
 
     private Packet<?> createSpawnPacket()

@@ -106,10 +106,9 @@ public class EntityTrackerEdit extends EntityTracker
                 throw new IllegalStateException("Entity is already tracked!");
             }
 
-            EntityTrackerEntryEdit entityEntry = new EntityTrackerEntryEdit(entityIn, trackingRange, maxDistance, updateFrequency, sendVelocityUpdates);
+            EntityTrackerEntry entityEntry = entityIn instanceof EntityLivingBase ? new LivingBaseEntityTrackerEntry(entityIn, trackingRange, maxDistance, updateFrequency, sendVelocityUpdates) : new EntityTrackerEntry(entityIn, trackingRange, maxDistance, updateFrequency, sendVelocityUpdates);
             entries.add(entityEntry);
             trackedEntityMap.addKey(entityIn.getEntityId(), entityEntry);
-            entityEntry.updatePlayerEntities(world.playerEntities);
         }
         catch (Throwable throwable)
         {
@@ -186,17 +185,7 @@ public class EntityTrackerEdit extends EntityTracker
 
     public void updateVisibility(EntityPlayerMP player)
     {
-        for (EntityTrackerEntry entitytrackerentry : entries)
-        {
-            if (entitytrackerentry.getTrackedEntity() == player)
-            {
-                entitytrackerentry.updatePlayerEntities(world.playerEntities);
-            }
-            else
-            {
-                entitytrackerentry.updatePlayerEntity(player);
-            }
-        }
+        //Only called from updatePotionMetadata(), and I'm going to be updating this stuff every tick, so don't need it
     }
 
     public void sendToTracking(Entity entityIn, Packet<?> packetIn)
