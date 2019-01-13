@@ -59,7 +59,7 @@ public class EntityTrackerEdit extends EntityTracker
         {
             track(entityIn, 512, 2);
             EntityPlayerMP entityplayermp = (EntityPlayerMP) entityIn;
-            for (EntityTrackerEntry entitytrackerentry : entries) entitytrackerentry.updatePlayerEntity(entityplayermp);
+            for (EntityTrackerEntry trackerEntry : entries) trackerEntry.updatePlayerEntity(entityplayermp);
         }
         else if (entityIn instanceof EntityFishHook) track(entityIn, 64, 5, true);
         else if (entityIn instanceof EntityArrow) track(entityIn, 64, 20, false);
@@ -232,13 +232,13 @@ public class EntityTrackerEdit extends EntityTracker
         List<Entity> list = new ArrayList<>();
         List<Entity> list1 = new ArrayList<>();
 
-        for (EntityTrackerEntry entitytrackerentry : entries)
+        for (EntityTrackerEntry trackerEntry : entries)
         {
-            Entity entity = entitytrackerentry.getTrackedEntity();
+            Entity entity = trackerEntry.getTrackedEntity();
 
             if (entity != player && entity.chunkCoordX == chunkIn.x && entity.chunkCoordZ == chunkIn.z)
             {
-                entitytrackerentry.updatePlayerEntity(player);
+                trackerEntry.updatePlayerEntity(player);
 
                 if (entity instanceof EntityLiving)
                 {

@@ -255,7 +255,6 @@ public class LivingBaseEntityTrackerEntry extends EntityTrackerEntry
 
     public void updatePlayerEntity(EntityPlayerMP player)
     {
-        //TODO this is not happening often enough for living entities
         //TODO this should happen exactly once every tick for every player
         if (player != livingBase)
         {
@@ -306,36 +305,48 @@ public class LivingBaseEntityTrackerEntry extends EntityTrackerEntry
                         }
                     }
 
+                    //Send packet to set entity to display as sleeping in a bed
                     if (isPlayer && this.player.isPlayerSleeping())
                     {
                         player.connection.sendPacket(new SPacketUseBed(this.player, new BlockPos(livingBase)));
                     }
 
+                    //Send visual potion effects
                     for (PotionEffect potioneffect : livingBase.getActivePotionEffects())
                     {
                         player.connection.sendPacket(new SPacketEntityEffect(livingBase.getEntityId(), potioneffect));
                     }
 
+                    //Send riding entities
                     if (!livingBase.getPassengers().isEmpty())
                     {
                         player.connection.sendPacket(new SPacketSetPassengers(livingBase));
                     }
 
+                    //Send ridden entity
                     if (livingBase.isRiding())
                     {
-                        player.connection.sendPacket(new SPacketSetPassengers(livingBase.getRidingEntity()));
+                        player.connection.sendPacket(new SPacketSetPassengers(livingBase.getRidingEntity())); //getRidingEntity DOES NOT GET THE RIDING ENTITY!  It gets the RIDDEN entity (these are opposites, ppl...)
                     }
 
+                    //External data alterations
                     livingBase.addTrackingPlayer(player);
                     player.addEntity(livingBase);
+
+                    //Fire forge event
                     ForgeEventFactory.onStartEntityTracking(livingBase, player);
                 }
             }
             else if (trackingPlayers.contains(player))
             {
+                //Internal data alterations
                 trackingPlayers.remove(player);
+
+                //External data alterations
                 livingBase.removeTrackingPlayer(player);
                 player.removeEntity(livingBase);
+
+                //Fire forge event
                 ForgeEventFactory.onStopEntityTracking(livingBase, player);
             }
         }
