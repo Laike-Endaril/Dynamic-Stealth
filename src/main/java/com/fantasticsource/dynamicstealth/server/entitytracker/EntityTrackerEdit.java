@@ -2,8 +2,6 @@ package com.fantasticsource.dynamicstealth.server.entitytracker;
 
 import com.fantasticsource.dynamicstealth.server.configdata.EntityVisionData;
 import com.fantasticsource.tools.Tools;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.*;
@@ -28,6 +26,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -36,8 +35,8 @@ public class EntityTrackerEdit extends EntityTracker
     private static final Logger LOGGER = LogManager.getLogger();
 
 
-    private final Set<EntityTrackerEntry> entries = Sets.newHashSet();
-    private final IntHashMap<EntityTrackerEntry> trackedEntityHashTable = new IntHashMap<>();
+    private final Set<EntityTrackerEntry> entries = new HashSet<>();
+    private final IntHashMap<EntityTrackerEntry> trackedEntityMap = new IntHashMap<>();
     private final WorldServer world;
 
 
@@ -82,7 +81,7 @@ public class EntityTrackerEdit extends EntityTracker
         else if (entityIn instanceof EntityShulkerBullet) track(entityIn, 80, 3, true);
         else if (entityIn instanceof EntityBat) track(entityIn, 80, 3, false);
         else if (entityIn instanceof EntityDragon) track(entityIn, 160, 3, true);
-        else if (entityIn instanceof IAnimals) track(entityIn, 80, 3, true);
+        else if (entityIn instanceof IAnimals) track(entityIn, 80, 3, true); //This includes most vanilla mobs, hostile or not.  May not want to change ordering as it might include things above it in this list
         else if (entityIn instanceof EntityTNTPrimed) track(entityIn, 160, 10, true);
         else if (entityIn instanceof EntityFallingBlock) track(entityIn, 160, 20, true);
         else if (entityIn instanceof EntityHanging) track(entityIn, 160, Integer.MAX_VALUE, false);
@@ -102,14 +101,14 @@ public class EntityTrackerEdit extends EntityTracker
     {
         try
         {
-            if (trackedEntityHashTable.containsItem(entityIn.getEntityId()))
+            if (trackedEntityMap.containsItem(entityIn.getEntityId()))
             {
                 throw new IllegalStateException("Entity is already tracked!");
             }
 
             EntityTrackerEntryEdit entityEntry = new EntityTrackerEntryEdit(entityIn, trackingRange, maxDistance, updateFrequency, sendVelocityUpdates);
             entries.add(entityEntry);
-            trackedEntityHashTable.addKey(entityIn.getEntityId(), entityEntry);
+            trackedEntityMap.addKey(entityIn.getEntityId(), entityEntry);
             entityEntry.updatePlayerEntities(world.playerEntities);
         }
         catch (Throwable throwable)
@@ -130,7 +129,7 @@ public class EntityTrackerEdit extends EntityTracker
             });
 
             entityIn.addEntityCrashInfo(crashreportcategory);
-            trackedEntityHashTable.lookup(entityIn.getEntityId()).getTrackedEntity().addEntityCrashInfo(crashreport.makeCategory("Entity That Is Already Tracked"));
+            trackedEntityMap.lookup(entityIn.getEntityId()).getTrackedEntity().addEntityCrashInfo(crashreport.makeCategory("Entity That Is Already Tracked"));
 
             LOGGER.error("\"Silently\" catching entity tracking error.", new ReportedException(crashreport));
         }
@@ -148,7 +147,7 @@ public class EntityTrackerEdit extends EntityTracker
             }
         }
 
-        EntityTrackerEntry entitytrackerentry = trackedEntityHashTable.removeObject(entityIn.getEntityId());
+        EntityTrackerEntry entitytrackerentry = trackedEntityMap.removeObject(entityIn.getEntityId());
 
         if (entitytrackerentry != null)
         {
@@ -202,7 +201,7 @@ public class EntityTrackerEdit extends EntityTracker
 
     public void sendToTracking(Entity entityIn, Packet<?> packetIn)
     {
-        EntityTrackerEntry entitytrackerentry = trackedEntityHashTable.lookup(entityIn.getEntityId());
+        EntityTrackerEntry entitytrackerentry = trackedEntityMap.lookup(entityIn.getEntityId());
 
         if (entitytrackerentry != null)
         {
@@ -212,7 +211,7 @@ public class EntityTrackerEdit extends EntityTracker
 
     public Set<? extends EntityPlayer> getTrackingPlayers(Entity entity)
     {
-        EntityTrackerEntry entry = trackedEntityHashTable.lookup(entity.getEntityId());
+        EntityTrackerEntry entry = trackedEntityMap.lookup(entity.getEntityId());
         if (entry == null)
             return java.util.Collections.emptySet();
         else
@@ -221,7 +220,7 @@ public class EntityTrackerEdit extends EntityTracker
 
     public void sendToTrackingAndSelf(Entity entityIn, Packet<?> packetIn)
     {
-        EntityTrackerEntry entitytrackerentry = trackedEntityHashTable.lookup(entityIn.getEntityId());
+        EntityTrackerEntry entitytrackerentry = trackedEntityMap.lookup(entityIn.getEntityId());
 
         if (entitytrackerentry != null)
         {
@@ -239,8 +238,8 @@ public class EntityTrackerEdit extends EntityTracker
 
     public void sendLeashedEntitiesInChunk(EntityPlayerMP player, Chunk chunkIn)
     {
-        List<Entity> list = Lists.newArrayList();
-        List<Entity> list1 = Lists.newArrayList();
+        List<Entity> list = new ArrayList<>();
+        List<Entity> list1 = new ArrayList<>();
 
         for (EntityTrackerEntry entitytrackerentry : entries)
         {
