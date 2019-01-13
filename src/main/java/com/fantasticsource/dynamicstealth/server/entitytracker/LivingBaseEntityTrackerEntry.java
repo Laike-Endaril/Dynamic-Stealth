@@ -149,14 +149,12 @@ public class LivingBaseEntityTrackerEntry extends EntityTrackerEntry
 
                 if (updateCounter > 0 && (sendVelocityUpdates || livingBase.isElytraFlying()))
                 {
-                    double distSquared = Math.pow(livingBase.motionX - lastMotionX, 2) + Math.pow(livingBase.motionY - lastMotionY, 2) + Math.pow(livingBase.motionZ - lastMotionZ, 2);
-
-                    if (distSquared > .0004 || (distSquared > 0 && livingBase.motionX == 0 && livingBase.motionY == 0 && livingBase.motionZ == 0))
+                    if (lastMotionX != livingBase.motionX || lastMotionY != livingBase.motionY || lastMotionZ != livingBase.motionZ)
                     {
                         lastMotionX = livingBase.motionX;
                         lastMotionY = livingBase.motionY;
                         lastMotionZ = livingBase.motionZ;
-                        sendPacketToTrackedPlayers(new SPacketEntityVelocity(livingBase.getEntityId(), lastMotionX, lastMotionY, lastMotionZ));
+                        sendPacketToTrackedPlayers(new SPacketEntityVelocity(livingBase.getEntityId(), livingBase.motionX, livingBase.motionY, livingBase.motionZ));
                     }
                 }
 
@@ -271,8 +269,6 @@ public class LivingBaseEntityTrackerEntry extends EntityTrackerEntry
                         player.connection.sendPacket(new SPacketEntityMetadata(livingBase.getEntityId(), livingBase.getDataManager(), true));
                     }
 
-                    boolean flag = sendVelocityUpdates;
-
                     AttributeMap attributemap = (AttributeMap) livingBase.getAttributeMap();
                     Collection<IAttributeInstance> collection = attributemap.getWatchedAttributes();
 
@@ -281,20 +277,17 @@ public class LivingBaseEntityTrackerEntry extends EntityTrackerEntry
                         player.connection.sendPacket(new SPacketEntityProperties(livingBase.getEntityId(), collection));
                     }
 
-                    if (livingBase.isElytraFlying())
-                    {
-                        flag = true;
-                    }
-
                     lastMotionX = livingBase.motionX;
                     lastMotionY = livingBase.motionY;
                     lastMotionZ = livingBase.motionZ;
 
-                    if (flag && !(packet instanceof SPacketSpawnMob))
+                    //Send velocity; SPacketSpawnMob already contains velocities
+                    if (!(packet instanceof SPacketSpawnMob) && (sendVelocityUpdates || livingBase.isElytraFlying()))
                     {
                         player.connection.sendPacket(new SPacketEntityVelocity(livingBase.getEntityId(), livingBase.motionX, livingBase.motionY, livingBase.motionZ));
                     }
 
+                    //Send equipment
                     for (EntityEquipmentSlot entityequipmentslot : EntityEquipmentSlot.values())
                     {
                         ItemStack itemstack = livingBase.getItemStackFromSlot(entityequipmentslot);
