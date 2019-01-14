@@ -12,6 +12,7 @@ import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.dynamicstealth.server.aiedits.*;
 import com.fantasticsource.dynamicstealth.server.configdata.EntityVisionData;
 import com.fantasticsource.dynamicstealth.server.entitytracker.EntityTrackerEdit;
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.Speedometer;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.TrigLookupTable;
@@ -302,7 +303,7 @@ public class DynamicStealth
     public static void entityJoin(EntityJoinWorldEvent event) throws Exception
     {
         Entity entity = event.getEntity();
-        if (entity instanceof EntityLivingBase)
+        if (entity instanceof EntityLivingBase && !MCTools.isClient(entity.world))
         {
             if (entity instanceof EntityLiving) entityJoinWorldInit((EntityLiving) entity);
         }
