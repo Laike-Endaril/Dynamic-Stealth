@@ -85,13 +85,8 @@ public class DynamicStealth
         MinecraftForge.EVENT_BUS.register(Sight.class);
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
         {
-            System.out.println("Client");
             MinecraftForge.EVENT_BUS.register(HUD.class);
             MinecraftForge.EVENT_BUS.register(RenderAlterer.class);
-        }
-        else
-        {
-            System.out.println("Server");
         }
 
         Attributes.init();

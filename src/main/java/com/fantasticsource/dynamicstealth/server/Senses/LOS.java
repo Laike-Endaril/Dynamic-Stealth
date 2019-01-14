@@ -1,7 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.Senses;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockSlime;
 import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.material.Material;
