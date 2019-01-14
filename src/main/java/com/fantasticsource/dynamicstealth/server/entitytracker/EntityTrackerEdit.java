@@ -206,7 +206,7 @@ public class EntityTrackerEdit extends EntityTracker
 
     public void sendLeashedEntitiesInChunk(EntityPlayerMP player, Chunk chunkIn)
     {
-        for (EntityTrackerEntry trackerEntry : entries)
+        for (EntityTrackerEntry trackerEntry : entries) //TODO something causing concurrent exception here
         {
             Entity entity = trackerEntry.getTrackedEntity();
 

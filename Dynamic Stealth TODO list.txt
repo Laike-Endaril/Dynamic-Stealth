@@ -1,6 +1,8 @@
 CURRENTLY WORKING ON ===================================================
 
-Make it so entities recently seen by players are sent?
+Fix concurrent exception in EntityTrackerEdit
+
+Fix recentlySeen() for players, and for other entities too if that is also glitched; currently returns true when it should not
 
 Make entities that *are* seen easily visible on client (because your character saw them); eg. not rendered as invisible
 
