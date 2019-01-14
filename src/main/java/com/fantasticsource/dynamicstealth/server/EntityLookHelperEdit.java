@@ -27,7 +27,6 @@ public class EntityLookHelperEdit extends EntityLookHelper
 
         if (!entity.world.isRemote)
         {
-            System.out.println("accepted");
             try
             {
                 DynamicStealth.makeLivingLookDirection(entity, (float) (Math.random() * 360));
@@ -38,7 +37,6 @@ public class EntityLookHelperEdit extends EntityLookHelper
                 FMLCommonHandler.instance().exitJava(146, false);
             }
         }
-        else System.out.println("denied");
     }
 
     public void setLookPositionWithEntity(Entity entityIn, float deltaYaw, float deltaPitch)
