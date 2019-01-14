@@ -103,7 +103,15 @@ public class EntityTrackerEdit extends EntityTracker
             }
 
             boolean isLivingBase = entityIn instanceof EntityLivingBase;
-            EntityTrackerEntry entityEntry = isLivingBase ? new LivingBaseEntityTrackerEntry(entityIn, trackingRange, maxDistance, updateFrequency, sendVelocityUpdates) : new EntityTrackerEntry(entityIn, trackingRange, maxDistance, updateFrequency, sendVelocityUpdates);
+            EntityTrackerEntry entityEntry;
+            if (entityIn instanceof EntityDragon)
+            {
+                entityEntry = new EntityTrackerEntry(entityIn, trackingRange, Integer.MAX_VALUE, updateFrequency, sendVelocityUpdates);
+            }
+            else
+            {
+                entityEntry = isLivingBase ? new LivingBaseEntityTrackerEntry(entityIn, trackingRange, maxDistance, updateFrequency, sendVelocityUpdates) : new EntityTrackerEntry(entityIn, trackingRange, maxDistance, updateFrequency, sendVelocityUpdates);
+            }
             entries.add(entityEntry);
             trackedEntityMap.addKey(entityIn.getEntityId(), entityEntry);
             if (!isLivingBase) entityEntry.updatePlayerEntities(world.playerEntities);
