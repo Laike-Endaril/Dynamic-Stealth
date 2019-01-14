@@ -88,6 +88,7 @@ public class Sight
     public static double visualStealthLevel(EntityLivingBase searcher, Entity target, boolean useCache, boolean updateCache)
     {
         if (searcher == null || target == null || !searcher.world.isBlockLoaded(searcher.getPosition()) || !target.world.isBlockLoaded(target.getPosition())) return -777;
+        if (searcher.world != target.world) return 777;
 
         Map<Entity, Pair<Double, Long>> map = recentlySeenMap.get(searcher);
 
@@ -199,6 +200,8 @@ public class Sight
     {
         //Hard checks (absolute)
         if (target instanceof EntityPlayerMP && ((EntityPlayerMP) target).capabilities.disableDamage) return 777;
+
+        if (searcher.world != target.world) return 777;
 
         int angleLarge = angleLarge(searcher);
         if (!target.isEntityAlive() || angleLarge == 0) return 777;
