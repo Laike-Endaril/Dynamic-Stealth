@@ -1,11 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-Use sight data for entity tracker in a relatively direct manner, at least for living entities
-
-Fix eg. horses that are standing still not disappearing/appearing when crossing over the "seen" boundary as the player moves
-
-Make entities that *are* seen easily visible on client (because your character saw them)
-Don't send entity data of unseen entities to players, including potion effects
+Make entities that *are* seen easily visible on client (because your character saw them); eg. not rendered as invisible
 
 Rafradek said he did a fix, so keep an eye out for an update to TF2 Stuff https://github.com/rafradek/Mods/issues/47...
 ...and change code accordingly when it's released
