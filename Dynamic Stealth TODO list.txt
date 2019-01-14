@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Check to make sure recentlySeen() is working correctly
-
 Make entities that *are* seen easily visible on client (because your character saw them); eg. not rendered as invisible
 
 Rafradek said he did a fix, so keep an eye out for an update to TF2 Stuff https://github.com/rafradek/Mods/issues/47...

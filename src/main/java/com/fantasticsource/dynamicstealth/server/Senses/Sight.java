@@ -6,7 +6,6 @@ import com.fantasticsource.dynamicstealth.server.Threat;
 import com.fantasticsource.mctools.Speedometer;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
-import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -33,7 +32,7 @@ import static com.fantasticsource.dynamicstealth.server.configdata.EntityVisionD
 
 public class Sight
 {
-    private static final int DROP_SEEN_DELAY = 60;
+    private static final int SEEN_RECENT_TIMER = 60;
 
     private static final DynamicStealthConfig.ServerSettings.Senses senses = serverSettings.senses;
     private static final DynamicStealthConfig.ServerSettings.Senses.Vision vision = senses.vision;
@@ -41,8 +40,7 @@ public class Sight
     public static long currentTick = 0;
 
 
-    //For each searcher                , map of entities, last reported stealth level, and when last stealth level was recorded
-    private static Map<EntityLivingBase, Map<Entity, Pair<Double, Long>>> recentlySeenMap = new LinkedHashMap<>();
+    private static Map<EntityLivingBase, Map<Entity, SeenData>> recentlySeenMap = new LinkedHashMap<>();
 
     private static Map<EntityPlayerMP, ExplicitPriorityQueue<EntityLivingBase>> playerSeenThisTickMap = new LinkedHashMap<>();
     private static Map<EntityLiving, ArrayList<EntityLivingBase>> entitySeenThisTickMap = new LinkedHashMap<>();
@@ -56,15 +54,16 @@ public class Sight
             currentTick++;
             playerSeenThisTickMap.clear();
             entitySeenThisTickMap.clear();
-            recentlySeenMap.entrySet().removeIf(e -> entityRemoveIfEmpty(e.getValue()));
+            recentlySeenMap.entrySet().removeIf(Sight::entityRemoveIfEmpty);
         }
     }
 
-    private static boolean entityRemoveIfEmpty(Map<Entity, Pair<Double, Long>> seenMap)
+    private static boolean entityRemoveIfEmpty(Map.Entry<EntityLivingBase, Map<Entity, SeenData>> entry)
     {
-        if (seenMap == null) return true;
-        seenMap.entrySet().removeIf(e -> currentTick - e.getValue().getValue() >= DROP_SEEN_DELAY);
-        return seenMap.size() == 0;
+        if (entry.getKey().isDead) return true;
+
+        entry.getValue().entrySet().removeIf(e -> e.getKey().isDead);
+        return false;
     }
 
 
@@ -72,16 +71,13 @@ public class Sight
     {
         if (searcher == null || target == null) return false;
 
-        Map<Entity, Pair<Double, Long>> map = recentlySeenMap.get(searcher);
+        Map<Entity, SeenData> map = recentlySeenMap.get(searcher);
         if (map == null) return false;
 
-        Pair<Double, Long> data = map.get(target);
+        SeenData data = map.get(target);
         if (data == null) return false;
 
-        if (currentTick - data.getValue() < DROP_SEEN_DELAY) return true;
-
-        map.remove(target);
-        return false;
+        return data.seen && currentTick - data.lastSeenTime < SEEN_RECENT_TIMER;
     }
 
 
@@ -90,12 +86,12 @@ public class Sight
         if (searcher == null || target == null || !searcher.world.isBlockLoaded(searcher.getPosition()) || !target.world.isBlockLoaded(target.getPosition())) return -777;
         if (searcher.world != target.world) return 777;
 
-        Map<Entity, Pair<Double, Long>> map = recentlySeenMap.get(searcher);
+        Map<Entity, SeenData> map = recentlySeenMap.get(searcher);
 
         if (useCache && map != null)
         {
-            Pair<Double, Long> data = map.get(target);
-            if (data != null && data.getValue() == currentTick) return data.getKey();
+            SeenData data = map.get(target);
+            if (data != null && data.lastUpdateTime == currentTick) return data.lastStealthLevel;
         }
 
         searcher.world.profiler.startSection("DS Sight checks");
@@ -108,9 +104,23 @@ public class Sight
             {
                 map = new LinkedHashMap<>();
                 recentlySeenMap.put(searcher, map);
+                map.put(target, new SeenData(result));
             }
-
-            map.put(target, new Pair<>(result, currentTick));
+            else
+            {
+                SeenData data = map.get(target);
+                if (data == null) map.put(target, new SeenData(result));
+                else
+                {
+                    data.lastUpdateTime = currentTick;
+                    data.lastStealthLevel = result;
+                    if (result <= 1)
+                    {
+                        data.seen = true;
+                        data.lastSeenTime = currentTick;
+                    }
+                }
+            }
         }
 
         return result;
@@ -164,7 +174,7 @@ public class Sight
         }
         else
         {
-            Map<Entity, Pair<Double, Long>> map = recentlySeenMap.computeIfAbsent(player, k -> new LinkedHashMap<>());
+            Map<Entity, SeenData> map = recentlySeenMap.computeIfAbsent(player, k -> new LinkedHashMap<>());
 
             for (Entity entity : loadedEntities)
             {
@@ -186,7 +196,7 @@ public class Sight
                             double priority = Math.pow(angleDif, 2) * distSquared;
                             queues[0].add((EntityLivingBase) entity, priority);
                             queues[1].add((EntityLivingBase) entity, priority);
-                            map.put(entity, new Pair<>(priority, currentTick));
+                            map.put(entity, new SeenData(priority, true));
                         }
                     }
                 }
@@ -322,5 +332,28 @@ public class Sight
 
         //Final calculation
         return Math.sqrt(distSquared) / (distanceThreshold * baseMultiplier * attributeMultiplier);
+    }
+
+    private static class SeenData
+    {
+        boolean seen = false;
+        long lastSeenTime;
+        long lastUpdateTime = currentTick;
+        double lastStealthLevel;
+
+        SeenData(double stealthLevel)
+        {
+            this(stealthLevel, false);
+        }
+
+        SeenData(double stealthLevel, boolean forceSeen)
+        {
+            lastStealthLevel = stealthLevel;
+            if (forceSeen || stealthLevel <= 1)
+            {
+                seen = true;
+                lastSeenTime = currentTick;
+            }
+        }
     }
 }
