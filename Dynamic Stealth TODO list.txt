@@ -37,6 +37,8 @@ Make owned entities change their threat based on their owner's actions (eg. see 
 
 VISUAL INDICATORS ======================================================
 
+Add optional "damaged from" indicator, which draws an edge-of-screen arrow pointing the direction damage was recently received from
+
 Add optional reticle which draws on focused entity (if there is one, and it is visible)
 
 Add target locking (press button to lock/unlock on current target)
