@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
+Make it so entities recently seen by players are sent?
+
 Make entities that *are* seen easily visible on client (because your character saw them); eg. not rendered as invisible
 
 Rafradek said he did a fix, so keep an eye out for an update to TF2 Stuff https://github.com/rafradek/Mods/issues/47...
