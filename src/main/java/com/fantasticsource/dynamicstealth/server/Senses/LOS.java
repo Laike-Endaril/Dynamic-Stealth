@@ -138,7 +138,6 @@ public class LOS
         if (material == Material.FIRE) return true;
         if (material == Material.PORTAL) return true;
         if (material == Material.BARRIER) return true;
-        if (material == Material.GRASS) return true;
         if (material == Material.PLANTS) return true;
         if (material == Material.WEB) return true;
         if (material == Material.VINE) return true;
