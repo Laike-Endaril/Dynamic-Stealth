@@ -25,15 +25,20 @@ public class EntityLookHelperEdit extends EntityLookHelper
         super(entitylivingIn);
         entity = entitylivingIn;
 
-        try
+        if (!entity.world.isRemote)
         {
-            DynamicStealth.makeLivingLookDirection(entity, (float) (Math.random() * 360));
+            System.out.println("accepted");
+            try
+            {
+                DynamicStealth.makeLivingLookDirection(entity, (float) (Math.random() * 360));
+            }
+            catch (InvocationTargetException | IllegalAccessException e)
+            {
+                e.printStackTrace();
+                FMLCommonHandler.instance().exitJava(146, false);
+            }
         }
-        catch (InvocationTargetException | IllegalAccessException e)
-        {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(146, false);
-        }
+        else System.out.println("denied");
     }
 
     public void setLookPositionWithEntity(Entity entityIn, float deltaYaw, float deltaPitch)

@@ -39,14 +39,12 @@ public class LivingBaseEntityTrackerEntry extends EntityTrackerEntry
     private final EntityLivingBase livingBase;
     private final boolean isPlayer;
     private final EntityPlayerMP player;
-
-    public int updateCounter;
     private final int updateFrequency;
+    private final boolean sendVelocityUpdates;
+    public int updateCounter;
     private int ticksSinceLastForcedTeleport;
     private boolean onGround;
     private boolean ridingEntity;
-
-    private final boolean sendVelocityUpdates;
     private boolean updatedPlayerVisibility;
 
     private long encodedPosX;
