@@ -39,7 +39,7 @@ public class LOS
 
 
         IBlockState blockState = world.getBlockState(blockPos);
-        if ((!ignoreBlockWithoutBoundingBox || blockState.getMaterial() == Material.PORTAL || blockState.getCollisionBoundingBox(world, blockPos) != Block.NULL_AABB))
+        if (!canSeeThrough(blockState.getMaterial()) && (!ignoreBlockWithoutBoundingBox || blockState.getCollisionBoundingBox(world, blockPos) != Block.NULL_AABB))
         {
             if (blockState.collisionRayTrace(world, blockPos, vec, vecEnd) != null) return false;
         }
@@ -112,15 +112,20 @@ public class LOS
             if (!world.isBlockLoaded(blockPos)) return false;
 
             blockState = world.getBlockState(blockPos);
-            if (!ignoreBlockWithoutBoundingBox || blockState.getMaterial() == Material.PORTAL || blockState.getCollisionBoundingBox(world, blockPos) != Block.NULL_AABB)
+            if (!canSeeThrough(blockState.getMaterial()) && (!ignoreBlockWithoutBoundingBox || blockState.getCollisionBoundingBox(world, blockPos) != Block.NULL_AABB))
             {
-                if (blockState.getBlock().canCollideCheck(blockState, stopOnLiquid))
-                {
-                    if (blockState.collisionRayTrace(world, blockPos, vec, vecEnd) != null) return false;
-                }
+                if (blockState.collisionRayTrace(world, blockPos, vec, vecEnd) != null) return false;
             }
         }
 
         return false; //Too far to see
+    }
+
+    public static boolean canSeeThrough(Material material)
+    {
+        if (material == Material.PORTAL) return true;
+        if (material == Material.GLASS) return true;
+
+        return false;
     }
 }
