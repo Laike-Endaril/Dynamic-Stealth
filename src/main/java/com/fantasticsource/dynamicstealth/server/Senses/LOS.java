@@ -39,7 +39,7 @@ public class LOS
 
 
         IBlockState blockState = world.getBlockState(blockPos);
-        if ((!ignoreBlockWithoutBoundingBox || blockState.getCollisionBoundingBox(world, blockPos) != Block.NULL_AABB) && blockState.getBlock().canCollideCheck(blockState, stopOnLiquid))
+        if ((!ignoreBlockWithoutBoundingBox || blockState.getMaterial() == Material.PORTAL || blockState.getCollisionBoundingBox(world, blockPos) != Block.NULL_AABB))
         {
             if (blockState.collisionRayTrace(world, blockPos, vec, vecEnd) != null) return false;
         }
