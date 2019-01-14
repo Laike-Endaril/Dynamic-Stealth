@@ -126,6 +126,7 @@ public class Sight
 
     public static boolean los(Entity searcher, Entity target)
     {
+        if (searcher.world != target.world) return false;
         return LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), new Vec3d(target.posX, target.posY + target.getEyeHeight(), target.posZ), false, true);
     }
 
