@@ -45,14 +45,8 @@ public class EntityLookHelperEdit extends EntityLookHelper
         {
             posX = entityIn.posX;
 
-            if (entityIn instanceof EntityLivingBase)
-            {
-                posY = entityIn.posY + (double) entityIn.getEyeHeight();
-            }
-            else
-            {
-                posY = (entityIn.getEntityBoundingBox().minY + entityIn.getEntityBoundingBox().maxY) / 2.0D;
-            }
+            if (entityIn instanceof EntityLivingBase) posY = entityIn.posY + (double) entityIn.getEyeHeight();
+            else posY = (entityIn.getEntityBoundingBox().minY + entityIn.getEntityBoundingBox().maxY) / 2;
 
             posZ = entityIn.posZ;
             deltaLookYaw = deltaYaw;
@@ -73,7 +67,7 @@ public class EntityLookHelperEdit extends EntityLookHelper
 
     public void onUpdateLook()
     {
-        entity.rotationPitch = 0.0F;
+        entity.rotationPitch = 0;
 
         if (isLooking)
         {
@@ -89,33 +83,26 @@ public class EntityLookHelperEdit extends EntityLookHelper
         }
         else
         {
-            entity.rotationYawHead = updateRotation(entity.rotationYawHead, entity.renderYawOffset, 10.0F);
+            entity.rotationYawHead = updateRotation(entity.rotationYawHead, entity.renderYawOffset, 10);
         }
 
         float f2 = MathHelper.wrapDegrees(entity.rotationYawHead - entity.renderYawOffset);
 
         if (!entity.getNavigator().noPath())
         {
-            if (f2 < -75.0F)
-            {
-                entity.rotationYawHead = entity.renderYawOffset - 75.0F;
-            }
-
-            if (f2 > 75.0F)
-            {
-                entity.rotationYawHead = entity.renderYawOffset + 75.0F;
-            }
+            if (f2 < -75) entity.rotationYawHead = entity.renderYawOffset - 75;
+            else if (f2 > 75) entity.rotationYawHead = entity.renderYawOffset + 75;
         }
     }
 
-    private float updateRotation(float p_75652_1_, float p_75652_2_, float p_75652_3_)
+    private float updateRotation(float angleStart, float angleGoal, float maxAmount)
     {
-        float f = MathHelper.wrapDegrees(p_75652_2_ - p_75652_1_);
+        float f = MathHelper.wrapDegrees(angleGoal - angleStart);
 
-        if (f > p_75652_3_) f = p_75652_3_;
-        else if (f < -p_75652_3_) f = -p_75652_3_;
+        if (f > maxAmount) f = maxAmount;
+        else if (f < -maxAmount) f = -maxAmount;
 
-        return p_75652_1_ + f;
+        return angleStart + f;
     }
 
     public boolean getIsLooking()
