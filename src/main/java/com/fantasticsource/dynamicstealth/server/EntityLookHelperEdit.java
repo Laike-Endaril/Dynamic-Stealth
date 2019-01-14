@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.server;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
+import com.fantasticsource.mctools.MCTools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -25,7 +26,7 @@ public class EntityLookHelperEdit extends EntityLookHelper
         super(entitylivingIn);
         entity = entitylivingIn;
 
-        if (!entity.world.isRemote)
+        if (!MCTools.isClient(entity.world))
         {
             try
             {
