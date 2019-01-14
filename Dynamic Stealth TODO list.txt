@@ -37,6 +37,10 @@ Make owned entities change their threat based on their owner's actions (eg. see 
 
 VISUAL INDICATORS ======================================================
 
+Add optional reticle which draws on focused entity (if there is one, and it is visible)
+
+Add target locking (press button to lock/unlock on current target)
+
 Add visible indicators when mobs detect you, lose you, etc (somewhat similar to Mark of the Ninja)
 "!" when target spotted
 "!?" when target not sensed, includes when "remotely alerted" due to "reinforcement calling"
