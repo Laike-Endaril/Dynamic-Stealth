@@ -2,6 +2,8 @@ CURRENTLY WORKING ON ===================================================
 
 Make entities that *are* seen easily visible on client (because your character saw them); eg. not rendered as invisible
 
+Make it so the raytrace can see through glass
+
 Rafradek said he did a fix, so keep an eye out for an update to TF2 Stuff https://github.com/rafradek/Mods/issues/47...
 ...and change code accordingly when it's released
 
@@ -79,8 +81,6 @@ Apply stealth-based sound attributes
 Add scent-based detection (wolves, cats, bears)
 ...Add the ability for entities to smell not only other living entities, but also ground items, etc.
 Apply stealth-based scent attributes
-
-Make it so mobs can see through glass (but maybe not quite yet; for now it's good for watching/debugging their behavior when they're searching for you)
 
 
 
