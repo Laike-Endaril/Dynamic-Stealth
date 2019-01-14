@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.common;
 
 import com.fantasticsource.dynamicstealth.client.HUD;
+import com.fantasticsource.dynamicstealth.client.RenderAlterer;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatCNPC;
 import com.fantasticsource.dynamicstealth.server.AIStealthTargetingAndSearch;
@@ -84,7 +85,13 @@ public class DynamicStealth
         MinecraftForge.EVENT_BUS.register(Sight.class);
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
         {
+            System.out.println("Client");
             MinecraftForge.EVENT_BUS.register(HUD.class);
+            MinecraftForge.EVENT_BUS.register(RenderAlterer.class);
+        }
+        else
+        {
+            System.out.println("Server");
         }
 
         Attributes.init();

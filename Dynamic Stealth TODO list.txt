@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Make entities that *are* seen easily visible on client (because your character saw them); eg. not rendered as invisible
-
 Add config option for "Can See Through" Materials
 Add config option for "Can See Through" Blocks
 
