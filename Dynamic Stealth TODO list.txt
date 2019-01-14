@@ -43,12 +43,6 @@ Add optional reticle which draws on focused entity (if there is one, and it is v
 
 Add target locking (press button to lock/unlock on current target)
 
-Add visible indicators when mobs detect you, lose you, etc (somewhat similar to Mark of the Ninja)
-"!" when target spotted
-"!?" when target not sensed, includes when "remotely alerted" due to "reinforcement calling"
-"?" when starting to search an area
-"..." when target is lost (giving up search / going out-of-combat)
-
 Add to HUD...
 ...light
 ...speed
@@ -70,12 +64,11 @@ Make it so mobs on the same team can tell each other where you are / where they 
 
 SENSES =================================================================
 
-Implement alertmultiplier for threat bypass entities if they've seen the target within the last 20 ticks
-
 Improve vision detection by allowing entities to see parts of other entities besides just their eyes (right now they only "have LOS" if they have LOS to each others' eyes)
 
 Add touch-based detection (within very close range)
-Apply stealth-based touch attribute
+Add general config option for touch-based detection
+Add entity-specific config option for touch-based detection
 
 Add sound-based detection
 Apply stealth-based sound attributes
