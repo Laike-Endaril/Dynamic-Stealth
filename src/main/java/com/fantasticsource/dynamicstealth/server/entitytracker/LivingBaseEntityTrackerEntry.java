@@ -295,7 +295,6 @@ public class LivingBaseEntityTrackerEntry extends EntityTrackerEntry
 
     public void updatePlayerEntity(EntityPlayerMP player)
     {
-        //TODO this should happen exactly once every tick for every player
         if (player != livingBase)
         {
             if (isVisibleTo(player))
@@ -389,13 +388,7 @@ public class LivingBaseEntityTrackerEntry extends EntityTrackerEntry
 
     public boolean isVisibleTo(EntityPlayerMP playerMP)
     {
-        if (Sight.visualStealthLevel(playerMP, livingBase, true, true) <= 1) return true;
-
-        if (Sight.recentlySeen(playerMP, livingBase) && livingBase.getName().equals("Name Ta")) System.out.println("recently seen");
-
-        if (Sight.recentlySeen(playerMP, livingBase) && Sight.los(playerMP, livingBase)) return true;
-
-        return false;
+        return Sight.visualStealthLevel(playerMP, livingBase, true, true) <= 1;
     }
 
     public void updatePlayerEntities(List<EntityPlayer> players)

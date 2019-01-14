@@ -1,8 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-Fix concurrent exception in EntityTrackerEdit
-
-Fix recentlySeen() for players, and for other entities too if that is also glitched; currently returns true when it should not
+Check to make sure recentlySeen() is working correctly
 
 Make entities that *are* seen easily visible on client (because your character saw them); eg. not rendered as invisible
 

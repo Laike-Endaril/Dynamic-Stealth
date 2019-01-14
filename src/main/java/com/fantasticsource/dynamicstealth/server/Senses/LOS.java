@@ -18,6 +18,8 @@ public class LOS
     //Yes I'm lazy, I know
     public static boolean rayTraceBlocks(World world, Vec3d vec, Vec3d vecEnd, boolean stopOnLiquid, boolean ignoreBlockWithoutBoundingBox)
     {
+        if (!world.isAreaLoaded(new BlockPos(vec), 1) || !world.isAreaLoaded(new BlockPos(vecEnd), 1)) return false;
+
         if (vec.x < vecEnd.x)
         {
             Vec3d swap = vec;
