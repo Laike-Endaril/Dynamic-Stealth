@@ -18,8 +18,6 @@ public class LOS
     //Yes I'm lazy, I know
     public static boolean rayTraceBlocks(World world, Vec3d vec, Vec3d vecEnd, boolean stopOnLiquid, boolean ignoreBlockWithoutBoundingBox)
     {
-        if (!world.isAreaLoaded(new BlockPos(vec), 1) || !world.isAreaLoaded(new BlockPos(vecEnd), 1)) return false;
-
         if (vec.x < vecEnd.x)
         {
             Vec3d swap = vec;
@@ -37,6 +35,9 @@ public class LOS
 
         //Check starting block
         BlockPos blockPos = new BlockPos(x, y, z);
+        if (!world.isBlockLoaded(blockPos)) return false;
+
+
         IBlockState blockState = world.getBlockState(blockPos);
         if ((!ignoreBlockWithoutBoundingBox || blockState.getCollisionBoundingBox(world, blockPos) != Block.NULL_AABB) && blockState.getBlock().canCollideCheck(blockState, stopOnLiquid))
         {
@@ -108,6 +109,8 @@ public class LOS
             z = MathHelper.floor(vec.z) - (enumfacing == EnumFacing.SOUTH ? 1 : 0);
 
             blockPos = new BlockPos(x, y, z);
+            if (!world.isBlockLoaded(blockPos)) return false;
+
             blockState = world.getBlockState(blockPos);
             if (!ignoreBlockWithoutBoundingBox || blockState.getMaterial() == Material.PORTAL || blockState.getCollisionBoundingBox(world, blockPos) != Block.NULL_AABB)
             {
