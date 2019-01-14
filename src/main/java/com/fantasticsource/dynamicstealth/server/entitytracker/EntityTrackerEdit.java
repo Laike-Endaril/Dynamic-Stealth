@@ -15,8 +15,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.*;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.SPacketEntityAttach;
-import net.minecraft.network.play.server.SPacketSetPassengers;
 import net.minecraft.util.IntHashMap;
 import net.minecraft.util.ReportedException;
 import net.minecraft.world.WorldServer;
@@ -25,9 +23,7 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class EntityTrackerEdit extends EntityTracker
@@ -159,29 +155,10 @@ public class EntityTrackerEdit extends EntityTracker
 
     public void tick()
     {
-        List<EntityPlayerMP> list = new ArrayList<>();
-
-        for (EntityTrackerEntry entitytrackerentry : entries)
+        for (EntityTrackerEntry trackerEntry : entries)
         {
-            entitytrackerentry.updatePlayerList(world.playerEntities);
-
-            if (entitytrackerentry.playerEntitiesUpdated)
-            {
-                Entity entity = entitytrackerentry.getTrackedEntity();
-
-                if (entity instanceof EntityPlayerMP)
-                {
-                    list.add((EntityPlayerMP) entity);
-                }
-            }
-        }
-
-        for (EntityPlayerMP player : list)
-        {
-            for (EntityTrackerEntry trackerEntry : entries)
-            {
-                trackerEntry.updatePlayerEntity(player);
-            }
+            trackerEntry.updatePlayerList(world.playerEntities);
+            for (EntityPlayer player : world.playerEntities) trackerEntry.updatePlayerEntity((EntityPlayerMP) player);
         }
     }
 
@@ -229,9 +206,6 @@ public class EntityTrackerEdit extends EntityTracker
 
     public void sendLeashedEntitiesInChunk(EntityPlayerMP player, Chunk chunkIn)
     {
-        List<Entity> list = new ArrayList<>();
-        List<Entity> list1 = new ArrayList<>();
-
         for (EntityTrackerEntry trackerEntry : entries)
         {
             Entity entity = trackerEntry.getTrackedEntity();
@@ -239,27 +213,7 @@ public class EntityTrackerEdit extends EntityTracker
             if (entity != player && entity.chunkCoordX == chunkIn.x && entity.chunkCoordZ == chunkIn.z)
             {
                 trackerEntry.updatePlayerEntity(player);
-
-                if (entity instanceof EntityLiving)
-                {
-                    list.add(entity);
-                }
-
-                if (!entity.getPassengers().isEmpty())
-                {
-                    list1.add(entity);
-                }
             }
-        }
-
-        for (Entity entity : list)
-        {
-            player.connection.sendPacket(new SPacketEntityAttach(entity, ((EntityLiving) entity).getLeashHolder()));
-        }
-
-        for (Entity entity : list1)
-        {
-            player.connection.sendPacket(new SPacketSetPassengers(entity));
         }
     }
 
