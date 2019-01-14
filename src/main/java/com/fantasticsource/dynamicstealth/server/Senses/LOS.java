@@ -1,6 +1,9 @@
 package com.fantasticsource.dynamicstealth.server.Senses;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDoor;
+import net.minecraft.block.BlockSlime;
+import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
@@ -39,7 +42,7 @@ public class LOS
 
 
         IBlockState blockState = world.getBlockState(blockPos);
-        if (!canSeeThrough(blockState.getMaterial()) && (!ignoreBlockWithoutBoundingBox || blockState.getCollisionBoundingBox(world, blockPos) != Block.NULL_AABB))
+        if (!canSeeThrough(blockState) && (!ignoreBlockWithoutBoundingBox || blockState.getCollisionBoundingBox(world, blockPos) != Block.NULL_AABB))
         {
             if (blockState.collisionRayTrace(world, blockPos, vec, vecEnd) != null) return false;
         }
@@ -112,7 +115,7 @@ public class LOS
             if (!world.isBlockLoaded(blockPos)) return false;
 
             blockState = world.getBlockState(blockPos);
-            if (!canSeeThrough(blockState.getMaterial()) && (!ignoreBlockWithoutBoundingBox || blockState.getCollisionBoundingBox(world, blockPos) != Block.NULL_AABB))
+            if (!canSeeThrough(blockState) && (!ignoreBlockWithoutBoundingBox || blockState.getCollisionBoundingBox(world, blockPos) != Block.NULL_AABB))
             {
                 if (blockState.collisionRayTrace(world, blockPos, vec, vecEnd) != null) return false;
             }
@@ -121,8 +124,10 @@ public class LOS
         return false; //Too far to see
     }
 
-    public static boolean canSeeThrough(Material material)
+    public static boolean canSeeThrough(IBlockState blockState)
     {
+        Material material = blockState.getMaterial();
+
         if (material == Material.LEAVES) return true;
         if (material == Material.GLASS) return true;
         if (material == Material.ICE) return true;
@@ -137,6 +142,11 @@ public class LOS
         if (material == Material.PLANTS) return true;
         if (material == Material.WEB) return true;
         if (material == Material.VINE) return true;
+
+        //Special blocks that don't follow the rules
+        if (blockState.getBlock() instanceof BlockSlime) return true;
+        if (blockState.getBlock() instanceof BlockDoor) return true;
+        if (blockState.getBlock() instanceof BlockTrapDoor) return true;
 
         return false;
     }

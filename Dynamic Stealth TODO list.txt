@@ -2,7 +2,8 @@ CURRENTLY WORKING ON ===================================================
 
 Make entities that *are* seen easily visible on client (because your character saw them); eg. not rendered as invisible
 
-Make it so the raytrace can see through glass
+Add config option for "Can See Through" Materials
+Add config option for "Can See Through" Blocks
 
 Rafradek said he did a fix, so keep an eye out for an update to TF2 Stuff https://github.com/rafradek/Mods/issues/47...
 ...and change code accordingly when it's released
