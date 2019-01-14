@@ -16,7 +16,7 @@ public class LOS
     //Fixing this so it doesn't return null when going through diagonal walls in the +X direction (the original version of this in World.java is the reason zombies can hit you through diagonal walls in vanilla)
     //The current version of this should only ever be used as a boolean return (not to return the last block or w/e) because it reverses the vector direction in half of the cases
     //Yes I'm lazy, I know
-    public static boolean rayTraceBlocks(World world, Vec3d vec, Vec3d vecEnd, boolean stopOnLiquid, boolean ignoreBlockWithoutBoundingBox)
+    public static boolean rayTraceBlocks(World world, Vec3d vec, Vec3d vecEnd, boolean ignoreBlockWithoutBoundingBox)
     {
         if (vec.x < vecEnd.x)
         {
@@ -123,8 +123,20 @@ public class LOS
 
     public static boolean canSeeThrough(Material material)
     {
-        if (material == Material.PORTAL) return true;
+        if (material == Material.LEAVES) return true;
         if (material == Material.GLASS) return true;
+        if (material == Material.ICE) return true;
+
+        //These don't usually matter due to the ignoreBlockWithoutBoundingBox thing, but here they are anyway, just in case
+        if (material == Material.AIR) return true;
+        if (material == Material.WATER) return true;
+        if (material == Material.FIRE) return true;
+        if (material == Material.PORTAL) return true;
+        if (material == Material.BARRIER) return true;
+        if (material == Material.GRASS) return true;
+        if (material == Material.PLANTS) return true;
+        if (material == Material.WEB) return true;
+        if (material == Material.VINE) return true;
 
         return false;
     }
