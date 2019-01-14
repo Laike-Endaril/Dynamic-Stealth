@@ -6,6 +6,7 @@ import net.minecraft.block.BlockSlime;
 import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -143,10 +144,22 @@ public class LOS
         if (material == Material.WEB) return true;
         if (material == Material.VINE) return true;
 
+
+        Block block = blockState.getBlock();
+
+        //Special blocks types that don't follow the rules
+        if (block instanceof BlockSlime) return true;
+        if (block instanceof BlockTrapDoor) return true;
+
         //Special blocks that don't follow the rules
-        if (blockState.getBlock() instanceof BlockSlime) return true;
-        if (blockState.getBlock() instanceof BlockDoor) return true;
-        if (blockState.getBlock() instanceof BlockTrapDoor) return true;
+        if (block == Blocks.ACACIA_DOOR) return true;
+        if (block == Blocks.JUNGLE_DOOR) return true;
+
+        //Honeybadger blocks :/
+        if (block == Blocks.OAK_DOOR || block == Blocks.IRON_DOOR)
+        {
+            if ((block.getMetaFromState(blockState) & 8) != 0) return true;
+        }
 
         return false;
     }
