@@ -1,12 +1,12 @@
 CURRENTLY WORKING ON ===================================================
 
+Check out github issue #9 (configurable stealth buffs feature request)
+
 Add config option for "Can See Through" Materials
 Add config option for "Can See Through" Blocks
 
 Rafradek said he did a fix, so keep an eye out for an update to TF2 Stuff https://github.com/rafradek/Mods/issues/47...
 ...and change code accordingly when it's released
-
-Check out github issue #9 (configurable stealth buffs feature request)
 
 
 
