@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.aiedits;
 
-import com.fantasticsource.dynamicstealth.server.Threat;
+import com.fantasticsource.dynamicstealth.server.Threat.Threat;
 import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAIBase;

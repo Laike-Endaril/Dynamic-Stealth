@@ -1,5 +1,6 @@
-package com.fantasticsource.dynamicstealth.server.configdata;
+package com.fantasticsource.dynamicstealth.server.Threat;
 
+import com.fantasticsource.dynamicstealth.server.configdata.EntityThreatDefaults;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;

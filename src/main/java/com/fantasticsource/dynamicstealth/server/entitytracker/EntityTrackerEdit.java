@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.entitytracker;
 
-import com.fantasticsource.dynamicstealth.server.configdata.EntityVisionData;
+import com.fantasticsource.dynamicstealth.server.Senses.EntityVisionData;
 import com.fantasticsource.tools.Tools;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;

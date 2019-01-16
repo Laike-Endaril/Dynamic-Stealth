@@ -1,6 +1,5 @@
-package com.fantasticsource.dynamicstealth.server;
+package com.fantasticsource.dynamicstealth.server.Threat;
 
-import com.fantasticsource.dynamicstealth.server.configdata.EntityThreatData;
 import com.fantasticsource.mctools.MCTools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;

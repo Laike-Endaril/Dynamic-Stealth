@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.aiedits;
 
-import com.fantasticsource.dynamicstealth.server.configdata.EntityVisionData;
+import com.fantasticsource.dynamicstealth.server.Senses.EntityVisionData;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import com.google.common.base.Predicates;
