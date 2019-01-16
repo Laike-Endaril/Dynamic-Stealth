@@ -18,6 +18,8 @@ import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.ser
 public class EntityVisionData
 {
     public static ArrayList<Class<? extends Entity>> naturalNightvisionEntities = new ArrayList<>();
+    public static ArrayList<Class<? extends Entity>> naturalSoulSightEntities = new ArrayList<>();
+
     public static Map<Class<? extends Entity>, Pair<Integer, Integer>> entityAngles = new HashMap<>();
     public static Map<Class<? extends Entity>, Pair<Integer, Integer>> entityDistances = new HashMap<>();
     public static Map<Class<? extends Entity>, Pair<Integer, Integer>> entityLighting = new HashMap<>();
@@ -40,6 +42,17 @@ public class EntityVisionData
                 entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(string));
                 if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
                 else naturalNightvisionEntities.add(entry.getEntityClass());
+            }
+        }
+
+        for (String string : serverSettings.senses.vision.y_entityOverrides.naturalSoulSightMobs)
+        {
+            if (string.equals("player")) naturalSoulSightEntities.add(EntityPlayerMP.class);
+            else
+            {
+                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(string));
+                if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
+                else naturalSoulSightEntities.add(entry.getEntityClass());
             }
         }
 
@@ -146,9 +159,15 @@ public class EntityVisionData
         if (serverSettings.senses.vision.d_speeds.speedLow > serverSettings.senses.vision.d_speeds.speedHigh) throw new IllegalArgumentException("speedHigh must be greater than or equal to speedLow");
     }
 
+
     public static boolean naturalNightVision(Entity searcher)
     {
         return naturalNightvisionEntities.contains(searcher.getClass());
+    }
+
+    public static boolean naturalSoulSight(Entity searcher)
+    {
+        return naturalSoulSightEntities.contains(searcher.getClass());
     }
 
 

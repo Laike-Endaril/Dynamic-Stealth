@@ -9,7 +9,6 @@ import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -216,7 +215,7 @@ public class Sight
         if (searcher.world != target.world || !target.isEntityAlive()) return 777;
 
         //Soul Sight (absolute)
-        if (searcher instanceof EntityEndermite || searcher instanceof EntityEnderman || searcher instanceof EntityDragon) return 0;
+        if (naturalSoulSight(searcher)) return 0;
 
 
         //Angles and Distances (absolute, base FOV)

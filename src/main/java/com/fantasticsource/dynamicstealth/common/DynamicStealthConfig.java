@@ -530,6 +530,21 @@ public class DynamicStealthConfig
                                     "ghast"
                             };
 
+                    @Config.Name("Natural Soul Sight")
+                    @Comment(
+                            {
+                                    "Entities in this list pretty much see everything",
+                                    "",
+                                    "Adding the player keyword to this list makes all players see all entities as if they had glowing (visible through walls)"
+                            })
+                    @Config.RequiresMcRestart
+                    public String[] naturalSoulSightMobs = new String[]
+                            {
+                                    "endermite",
+                                    "enderman",
+                                    "ender_dragon"
+                            };
+
                     @Config.Name("Speed")
                     @Comment(
                             {

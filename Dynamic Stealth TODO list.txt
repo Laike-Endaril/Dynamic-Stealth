@@ -4,8 +4,9 @@ Check out github issue #9 (configurable stealth buffs feature request)
 
 Look into altering render alpha based on visibility again
 
-Add config option for soul sight
-Add entity specific config for soul sight
+Add global config option for soul sight
+Make it so if the player has soul sight, the server always sends entities to them as glowing
+Add potion effect for soul sight
 
 Add config option for "Can See Through" Materials
 Add config option for "Can See Through" Blocks
