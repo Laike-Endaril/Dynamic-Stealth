@@ -9,6 +9,7 @@ import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -212,13 +213,16 @@ public class Sight
         //Hard checks (absolute)
         if (target instanceof EntityPlayerMP && ((EntityPlayerMP) target).capabilities.disableDamage) return 777;
 
-        if (searcher.world != target.world) return 777;
+        if (searcher.world != target.world || !target.isEntityAlive()) return 777;
 
-        int angleLarge = angleLarge(searcher);
-        if (!target.isEntityAlive() || angleLarge == 0) return 777;
+        //Soul Sight (absolute)
+        if (searcher instanceof EntityEndermite || searcher instanceof EntityEnderman || searcher instanceof EntityDragon) return 0;
 
 
         //Angles and Distances (absolute, base FOV)
+        int angleLarge = angleLarge(searcher);
+        if (angleLarge == 0) return 777;
+
         double distSquared = searcher.getDistanceSq(target);
         int distanceFar = distanceFar(searcher);
         if (distSquared > Math.pow(distanceFar, 2)) return 777;
