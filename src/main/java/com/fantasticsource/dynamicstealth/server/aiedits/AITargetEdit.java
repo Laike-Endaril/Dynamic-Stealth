@@ -45,22 +45,23 @@ public abstract class AITargetEdit extends EntityAIBase
 
         if (Threat.isPassive(attacker)) return false;
 
-        if (attacker instanceof IEntityOwnable && ((IEntityOwnable) attacker).getOwnerId() != null)
+        if (attacker instanceof IEntityOwnable)
         {
-            if (target instanceof IEntityOwnable && ((IEntityOwnable) attacker).getOwnerId().equals(((IEntityOwnable) target).getOwnerId()))
+            Entity attackerOwner = ((IEntityOwnable) attacker).getOwner();
+            if (attackerOwner != null)
             {
-                return false;
-            }
+                //Don't attack your owner
+                if (target == attackerOwner) return false;
 
-            if (target == ((IEntityOwnable) attacker).getOwner())
-            {
-                return false;
+                //Don't attack others owned by the same owner
+                if (target instanceof IEntityOwnable && attackerOwner == ((IEntityOwnable) target).getOwner())
+                {
+                    return false;
+                }
             }
         }
-        else if (target instanceof EntityPlayer && ((EntityPlayer) target).capabilities.disableDamage)
-        {
-            return false;
-        }
+
+        if (target instanceof EntityPlayer && ((EntityPlayer) target).capabilities.disableDamage) return false;
 
         return attacker.getEntitySenses().canSee(target);
     }
