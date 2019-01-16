@@ -4,6 +4,9 @@ Check out github issue #9 (configurable stealth buffs feature request)
 
 Look into altering render alpha based on visibility again
 
+Add config option for soul sight
+Add entity specific config for soul sight
+
 Add config option for "Can See Through" Materials
 Add config option for "Can See Through" Blocks
 
