@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth.client;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.dynamicstealth.compat.Compat;
+import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.datastructures.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -15,8 +16,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
+
+import java.lang.reflect.Field;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.clientSettings;
 import static com.fantasticsource.dynamicstealth.common.HUDData.*;
@@ -27,8 +31,13 @@ public class HUD extends Gui
 {
     private static final ResourceLocation ICON_LOCATION = new ResourceLocation(DynamicStealth.MODID, "indicator.png");
     private static final int TEX_SIZE = 32;
-
     private static final double UV_HALF_PIXEL = 0.5 / TEX_SIZE, UV_SUBTEX_SIZE = 0.5 - UV_HALF_PIXEL * 2;
+    private static Field renderManagerRenderOutlinesField;
+
+    static
+    {
+        initReflections();
+    }
 
     public HUD(Minecraft mc)
     {
@@ -54,14 +63,17 @@ public class HUD extends Gui
     }
 
     @SubscribeEvent
-    public static void entityRender(RenderLivingEvent.Post event)
+    public static void entityRender(RenderLivingEvent.Post event) throws IllegalAccessException
     {
-        EntityLivingBase livingBase = event.getEntity();
-        if (livingBase != null)
+        if (!((boolean) renderManagerRenderOutlinesField.get(event.getRenderer().getRenderManager())))
         {
-            OnPointData data = onPointDataMap.get(livingBase.getEntityId());
+            EntityLivingBase livingBase = event.getEntity();
+            if (livingBase != null)
+            {
+                OnPointData data = onPointDataMap.get(livingBase.getEntityId());
 
-            if (data != null && data.priority < clientSettings.threat.onPointHUDMax && onPointFilter(data.color, data.percent)) drawOnPointHUDElement(event.getRenderer().getRenderManager(), event.getX(), event.getY(), event.getZ(), livingBase, data.color, data.percent);
+                if (data != null && data.priority < clientSettings.threat.onPointHUDMax && onPointFilter(data.color, data.percent)) drawOnPointHUDElement(event.getRenderer().getRenderManager(), event.getX(), event.getY(), event.getZ(), livingBase, data.color, data.percent);
+            }
         }
     }
 
@@ -186,15 +198,28 @@ public class HUD extends Gui
 
         tessellator.draw();
 
+        GlStateManager.popMatrix();
+
         GlStateManager.disableBlend();
 
         if (!depth) GlStateManager.enableDepth();
 
         GlStateManager.enableLighting();
 
-        GlStateManager.popMatrix();
-
         GlStateManager.color(1, 1, 1, 1);
+    }
+
+    private static void initReflections()
+    {
+        try
+        {
+            renderManagerRenderOutlinesField = ReflectionTool.getField(RenderManager.class, "field_178639_r", "field_188301_f", "renderOutlines");
+        }
+        catch (NoSuchFieldException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(147, false);
+        }
     }
 
     private void drawDetailHUD(int width, int height, FontRenderer fontRender)
