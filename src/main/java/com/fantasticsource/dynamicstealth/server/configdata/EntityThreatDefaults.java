@@ -14,8 +14,8 @@ public class EntityThreatDefaults
         threatBypassDefaults.add("ender_dragon");
 
         //Compat; these should be added absolutely, not conditionally
-        threatBypassDefaults.add("rafradek_tf2_weapons:medic");
-
         passiveDefaults.add("ebwizardry:wizard, false");
+
+        threatBypassDefaults.add("rafradek_tf2_weapons:sentry");
     }
 }

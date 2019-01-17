@@ -1,9 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Rafradek released a new version of TF2 Stuff, so see if any compat code is still necessary or not!
-...https://github.com/rafradek/Mods/issues/47
-...Be sure to make sure turrets can't uh...walk...if they're treated "normally" by DS
-
 Look into possible compat issue with "Ice and Fire" where...
 ..."When riding the hypogriphs, I constantly threw and sat back."
 
@@ -118,6 +114,9 @@ Possibly change music using ActualMusic when going into battle, etc
 
 
 MOD COMPATIBILITY ======================================================
+
+Figure out why the TF2 sentry gun constantly loses target with DS installed (if it's not in threat bypass mode)
+Does having DS installed cause TF2 bullet streaks to not show?
 
 Techgun mobs don't build damage threat, because techguns is cancelling the LivingHurtEvent
 
