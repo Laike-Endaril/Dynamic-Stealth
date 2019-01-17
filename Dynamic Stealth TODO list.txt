@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
+Look into crash during Vex attack
+
 Rafradek released a new version of TF2 Stuff, so see if any compat code is still necessary or not!
 ...https://github.com/rafradek/Mods/issues/47
 ...Be sure to make sure turrets can't uh...walk...if they're treated "normally" by DS
