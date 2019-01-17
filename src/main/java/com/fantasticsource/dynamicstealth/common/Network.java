@@ -34,7 +34,7 @@ public class Network
 
     public static void init()
     {
-        WRAPPER.registerMessage(ThreatPacketHandler.class, HUDPacket.class, discriminator++, Side.CLIENT);
+        WRAPPER.registerMessage(HUDPacketHandler.class, HUDPacket.class, discriminator++, Side.CLIENT);
     }
 
 
@@ -210,7 +210,7 @@ public class Network
         }
     }
 
-    public static class ThreatPacketHandler implements IMessageHandler<HUDPacket, IMessage>
+    public static class HUDPacketHandler implements IMessageHandler<HUDPacket, IMessage>
     {
         @Override
         public IMessage onMessage(HUDPacket packet, MessageContext ctx)
