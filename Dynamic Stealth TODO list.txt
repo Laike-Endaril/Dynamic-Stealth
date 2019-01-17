@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Fix on-point HUD render when entity is glowing
-
 Look into altering render alpha based on visibility
 ...trying to trick GlStateManager's cache does not work
 ...reflect-replacing the classes GLStateManager uses to cache the current states does not work
