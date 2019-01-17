@@ -1,17 +1,24 @@
 CURRENTLY WORKING ON ===================================================
 
+Rafradek released a new version of TF2 Stuff, so see if any compat code is still necessary or not!
+...https://github.com/rafradek/Mods/issues/47
+...Be sure to make sure turrets can't uh...walk...if they're treated "normally" by DS
+
+Look into possible compat issue with "Ice and Fire" where...
+..."When riding the hypogriphs, I constantly threw and sat back."
+
+Look into github issue #11 (pathfinding NPE crash; almost certainly another mod which alters the pathfinding)
+
+Look into altering render alpha based on visibility...
+...reflect-replace the classes GLStateManager uses to cache the current states related to alpha
+
 Make it so if the player has soul sight, the server always sends entities to them as glowing
 Add potion effect for soul sight
 
 Check out github issue #9 (configurable stealth buffs feature request)
 
-Look into altering render alpha based on visibility again
-
 Add config option for "Can See Through" Materials
 Add config option for "Can See Through" Blocks
-
-Rafradek said he did a fix, so keep an eye out for an update to TF2 Stuff https://github.com/rafradek/Mods/issues/47...
-...and change code accordingly when it's released
 
 
 
