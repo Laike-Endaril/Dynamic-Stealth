@@ -73,7 +73,7 @@ public class DynamicStealth
     private static Field sensesField, lookHelperField, abstractSkeletonAIArrowAttackField, abstractSkeletonAIAttackOnCollideField, worldServerEntityTrackerField;
     private static Class aiSlimeFaceRandomClass, aiEvilAttackClass, aiBearMeleeClass, aiSpiderAttackClass, aiSpiderTargetClass, aiBearAttackPlayerClass, aiLlamaDefendTarget,
             aiPigmanHurtByAggressorClass, aiLlamaHurtByTargetClass, aiPigmanTargetAggressorClass, aiVindicatorJohnnyAttackClass, aiBearHurtByTargetClass, aiGuardianAttackClass,
-            aiBlazeFireballAttackClass;
+            aiBlazeFireballAttackClass, aiVexChargeAttackClass;
 
     public DynamicStealth()
     {
@@ -393,6 +393,7 @@ public class DynamicStealth
             else if (actionClass == EntityAIOcelotAttack.class) replaceTask(tasks, task, new AIOcelotAttackEdit(living));
             else if (actionClass == aiGuardianAttackClass) replaceTask(tasks, task, new AIGuardianAttackEdit((EntityGuardian) living));
             else if (actionClass == aiBlazeFireballAttackClass) replaceTask(tasks, task, new AIFireballAttackEdit((EntityBlaze) living));
+            else if (actionClass == aiVexChargeAttackClass) replaceTask(tasks, task, new AIVexChargeAttackEdit((EntityVex) living));
         }
     }
 
@@ -438,6 +439,7 @@ public class DynamicStealth
         aiBearHurtByTargetClass = ReflectionTool.getInternalClass(EntityPolarBear.class, "AIHurtByTarget");
         aiGuardianAttackClass = ReflectionTool.getInternalClass(EntityGuardian.class, "AIGuardianAttack");
         aiBlazeFireballAttackClass = ReflectionTool.getInternalClass(EntityBlaze.class, "AIFireballAttack");
+        aiVexChargeAttackClass = ReflectionTool.getInternalClass(EntityVex.class, "AIChargeAttack");
     }
 
     @EventHandler
