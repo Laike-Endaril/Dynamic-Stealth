@@ -1,13 +1,17 @@
 package com.fantasticsource.dynamicstealth.common;
 
+import com.fantasticsource.dynamicstealth.client.RenderAlterer;
+import com.fantasticsource.dynamicstealth.server.Senses.EntityVisionData;
 import com.fantasticsource.dynamicstealth.server.Senses.Sight;
 import com.fantasticsource.dynamicstealth.server.Threat.Threat;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -35,6 +39,7 @@ public class Network
     public static void init()
     {
         WRAPPER.registerMessage(HUDPacketHandler.class, HUDPacket.class, discriminator++, Side.CLIENT);
+        WRAPPER.registerMessage(SoulSightPacketHandler.class, SoulSightPacket.class, discriminator++, Side.CLIENT);
     }
 
 
@@ -61,6 +66,52 @@ public class Network
             }
         }
     }
+
+
+    @SubscribeEvent
+    public static void sendSoulSight(EntityJoinWorldEvent event)
+    {
+        Entity entity = event.getEntity();
+        if (entity instanceof EntityPlayerMP && EntityVisionData.naturalSoulSight(entity)) WRAPPER.sendTo(new SoulSightPacket(true), (EntityPlayerMP) entity);
+    }
+
+    public static class SoulSightPacket implements IMessage
+    {
+        boolean soulSight;
+
+        public SoulSightPacket() //This seems to be required, even if unused
+        {
+        }
+
+        public SoulSightPacket(boolean soulSight)
+        {
+            this.soulSight = soulSight;
+        }
+
+        @Override
+        public void toBytes(ByteBuf buf)
+        {
+            buf.writeBoolean(soulSight);
+        }
+
+        @Override
+        public void fromBytes(ByteBuf buf)
+        {
+            soulSight = buf.readBoolean();
+        }
+    }
+
+    public static class SoulSightPacketHandler implements IMessageHandler<SoulSightPacket, IMessage>
+    {
+        @Override
+        public IMessage onMessage(SoulSightPacket message, MessageContext ctx)
+        {
+            RenderAlterer.soulSight = message.soulSight;
+
+            return null;
+        }
+    }
+
 
     public static class HUDPacket implements IMessage
     {

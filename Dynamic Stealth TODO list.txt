@@ -1,11 +1,9 @@
 CURRENTLY WORKING ON ===================================================
 
+Fix on-point HUD render when entity is glowing
+
 Look into github issue #11 (pathfinding NPE crash; almost certainly another mod which alters the pathfinding)
 
-Look into altering render alpha based on visibility...
-...reflect-replace the classes GLStateManager uses to cache the current states related to alpha
-
-Make it so if the player has soul sight, the server always sends entities to them as glowing
 Add potion effect for soul sight
 
 Check out github issue #9 (configurable stealth buffs feature request)
@@ -36,6 +34,10 @@ Make owned entities change their threat based on their owner's actions (eg. see 
 
 
 VISUAL INDICATORS ======================================================
+
+Look into altering render alpha based on visibility
+...reflect-replacing the classes GLStateManager uses to cache the current states does not work
+...trying to trick GlStateManager's cache does not work
 
 Add optional "damaged from" indicator, which draws an edge-of-screen arrow pointing the direction damage was recently received from
 
