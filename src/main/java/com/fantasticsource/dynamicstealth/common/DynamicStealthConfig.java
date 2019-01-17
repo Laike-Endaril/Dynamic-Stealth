@@ -542,7 +542,8 @@ public class DynamicStealthConfig
                             {
                                     "endermite",
                                     "enderman",
-                                    "ender_dragon"
+                                    "ender_dragon",
+                                    "vex"
                             };
 
                     @Config.Name("Speed")
