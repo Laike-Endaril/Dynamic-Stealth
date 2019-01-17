@@ -1,8 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Look into possible compat issue with "Ice and Fire" where...
-..."When riding the hypogriphs, I constantly threw and sat back."
-
 Look into github issue #11 (pathfinding NPE crash; almost certainly another mod which alters the pathfinding)
 
 Look into altering render alpha based on visibility...

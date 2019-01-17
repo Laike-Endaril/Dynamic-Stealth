@@ -210,6 +210,8 @@ public class Sight
     private static double visualStealthLevel(EntityLivingBase searcher, Entity target)
     {
         //Hard checks (absolute)
+        if (target.getRidingEntity() == searcher || searcher.getRidingEntity() == target) return -777; //getRidingEntity DOES NOT RETURN THE RIDING ENTITY!  It returns the RIDDEN entity!
+
         if (target instanceof EntityPlayerMP && ((EntityPlayerMP) target).capabilities.disableDamage) return 777;
 
         if (searcher.world != target.world || !target.isEntityAlive()) return 777;
