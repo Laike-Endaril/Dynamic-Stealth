@@ -17,7 +17,9 @@ Add config option for "Can See Through" Blocks
 
 BUG FIXES ==============================================================
 
-Fix bug where mobs' body angle is sometimes wrong (seems to happen when damaging a passive, after they move and turn once)
+Fix bug where mobs' body angle is sometimes wrong...
+...when damaging a passive, after they move and turn once
+...when trying to tame a horse by mounting it
 
 Fix mobs in search mode periodically NOT doing the search, but going back to it later...
 ...noticed with spider, and so far I think it is specific to spiders?
