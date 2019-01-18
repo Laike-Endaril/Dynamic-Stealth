@@ -1,6 +1,8 @@
 CURRENTLY WORKING ON ===================================================
 
-Add indicator for where a mob WAS when you last saw it
+Add indicator for where a mob WAS when you last saw it...
+...show the mob, as it was last seen, but black and white with partial transparency
+...make the on-point HUD above it into an X with coloration
 
 Look into github issue #11 (pathfinding NPE crash; almost certainly another mod which alters the pathfinding)
 
