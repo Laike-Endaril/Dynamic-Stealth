@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 public class RenderAlterer
 {
-    public static boolean soulSight = false;
     private static ArrayList<EntityLivingBase> soulSightCache = new ArrayList<>();
 
 
@@ -29,20 +28,22 @@ public class RenderAlterer
             soulSightCache.remove(livingBase);
             livingBase.setGlowing(false);
         }
-        if (soulSight && !livingBase.isGlowing())
+        if (ClientData.soulSight && !livingBase.isGlowing())
         {
             livingBase.setGlowing(true);
             soulSightCache.add(livingBase);
         }
 
 
-        int id = livingBase.getEntityId();
-        if (ClientData.visibilityMap.containsKey(id))
+        //Entity opacity based on visibility
+        if (ClientData.usePlayerSenses)
         {
+            int id = livingBase.getEntityId();
             double min = DynamicStealthConfig.clientSettings.z_otherSettings.mobOpacityMin;
+            double range = ClientData.visibilityMap.containsKey(id) ? ClientData.visibilityMap.get(id) : 0;
 
             GlStateManager.enableBlend();
-            GlStateManager.color(1, 1, 1, (float) (min + (1d - min) * ClientData.visibilityMap.get(id)));
+            GlStateManager.color(1, 1, 1, (float) (min + (1d - min) * range));
         }
     }
 

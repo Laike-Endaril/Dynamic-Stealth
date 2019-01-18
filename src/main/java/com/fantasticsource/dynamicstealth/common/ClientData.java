@@ -28,6 +28,9 @@ public class ClientData
     public static int detailPercent = 0;
     public static int detailColor = COLOR_NULL;
 
+    public static boolean soulSight = false;
+    public static boolean usePlayerSenses = false;
+
     public static LinkedHashMap<Integer, OnPointData> onPointDataMap = new LinkedHashMap<>();
 
     public static LinkedHashMap<Integer, Float> visibilityMap = new LinkedHashMap<>();
@@ -40,6 +43,9 @@ public class ClientData
         detailSearcher = EMPTY;
         detailTarget = EMPTY;
         detailPercent = 0;
+
+        soulSight = false;
+        usePlayerSenses = false;
 
         onPointDataMap.clear();
         visibilityMap.clear();

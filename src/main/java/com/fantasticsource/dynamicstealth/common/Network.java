@@ -37,7 +37,7 @@ public class Network
     public static void init()
     {
         WRAPPER.registerMessage(HUDPacketHandler.class, HUDPacket.class, discriminator++, Side.CLIENT);
-        WRAPPER.registerMessage(SoulSightPacketHandler.class, SoulSightPacket.class, discriminator++, Side.CLIENT);
+        WRAPPER.registerMessage(ClientInitPacketHandler.class, ClientInitPacket.class, discriminator++, Side.CLIENT);
         WRAPPER.registerMessage(VisibilityPacketHandler.class, VisibilityPacket.class, discriminator++, Side.CLIENT);
     }
 
@@ -70,10 +70,14 @@ public class Network
 
 
     @SubscribeEvent
-    public static void sendSoulSight(EntityJoinWorldEvent event)
+    public static void sendClientInitData(EntityJoinWorldEvent event)
     {
         Entity entity = event.getEntity();
-        if (entity instanceof EntityPlayerMP && EntityVisionData.naturalSoulSight(entity)) WRAPPER.sendTo(new SoulSightPacket(true), (EntityPlayerMP) entity);
+        if (entity instanceof EntityPlayerMP)
+        {
+            EntityPlayerMP player = (EntityPlayerMP) entity;
+            WRAPPER.sendTo(new ClientInitPacket(player), player);
+        }
     }
 
 
@@ -82,7 +86,7 @@ public class Network
         ExplicitPriorityQueue<EntityLivingBase> queue;
         LinkedHashMap<Integer, Float> visibilityMap;
 
-        public VisibilityPacket() //This seems to be required, even if unused
+        public VisibilityPacket() //Required; probably for when the packet is received
         {
         }
 
@@ -133,13 +137,13 @@ public class Network
     public static class VisibilityPacketHandler implements IMessageHandler<VisibilityPacket, IMessage>
     {
         @Override
-        public IMessage onMessage(VisibilityPacket message, MessageContext ctx)
+        public IMessage onMessage(VisibilityPacket packet, MessageContext ctx)
         {
             if (ctx.side == Side.CLIENT)
             {
                 Minecraft.getMinecraft().addScheduledTask(() ->
                 {
-                    ClientData.visibilityMap = message.visibilityMap;
+                    ClientData.visibilityMap = packet.visibilityMap;
                 });
             }
 
@@ -148,42 +152,46 @@ public class Network
     }
 
 
-    public static class SoulSightPacket implements IMessage
+    public static class ClientInitPacket implements IMessage
     {
         boolean soulSight;
+        boolean usePlayerSenses;
 
-        public SoulSightPacket() //This seems to be required, even if unused
+        public ClientInitPacket() //Required; probably for when the packet is received
         {
         }
 
-        public SoulSightPacket(boolean soulSight)
+        public ClientInitPacket(EntityPlayerMP player)
         {
-            this.soulSight = soulSight;
+            soulSight = EntityVisionData.naturalSoulSight(player);
         }
 
         @Override
         public void toBytes(ByteBuf buf)
         {
             buf.writeBoolean(soulSight);
+            buf.writeBoolean(serverSettings.senses.usePlayerSenses);
         }
 
         @Override
         public void fromBytes(ByteBuf buf)
         {
             soulSight = buf.readBoolean();
+            usePlayerSenses = buf.readBoolean();
         }
     }
 
-    public static class SoulSightPacketHandler implements IMessageHandler<SoulSightPacket, IMessage>
+    public static class ClientInitPacketHandler implements IMessageHandler<ClientInitPacket, IMessage>
     {
         @Override
-        public IMessage onMessage(SoulSightPacket message, MessageContext ctx)
+        public IMessage onMessage(ClientInitPacket packet, MessageContext ctx)
         {
             if (ctx.side == Side.CLIENT)
             {
                 Minecraft.getMinecraft().addScheduledTask(() ->
                 {
-                    RenderAlterer.soulSight = message.soulSight;
+                    ClientData.soulSight = packet.soulSight;
+                    ClientData.usePlayerSenses = packet.usePlayerSenses;
                 });
             }
 
@@ -206,7 +214,7 @@ public class Network
 
         LinkedHashMap<Integer, ClientData.OnPointData> onPointMap = new LinkedHashMap<>(10);
 
-        public HUDPacket() //This seems to be required, even if unused
+        public HUDPacket() //Required; probably for when the packet is received
         {
         }
 
