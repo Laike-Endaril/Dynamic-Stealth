@@ -1,6 +1,5 @@
 package com.fantasticsource.dynamicstealth.common;
 
-import com.fantasticsource.dynamicstealth.client.RenderAlterer;
 import com.fantasticsource.dynamicstealth.server.Senses.EntityVisionData;
 import com.fantasticsource.dynamicstealth.server.Senses.Sight;
 import com.fantasticsource.dynamicstealth.server.Threat.Threat;

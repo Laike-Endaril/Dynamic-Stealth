@@ -1,6 +1,8 @@
 CURRENTLY WORKING ON ===================================================
 
-Fix opaque flash when an entity leaves view
+Make dying entities visible
+
+Add indicator for where a mob WAS when you last saw it
 
 Look into github issue #11 (pathfinding NPE crash; almost certainly another mod which alters the pathfinding)
 
