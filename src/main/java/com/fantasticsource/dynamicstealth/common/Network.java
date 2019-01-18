@@ -44,24 +44,27 @@ public class Network
 
 
     @SubscribeEvent
-    public static void sendHUDData(TickEvent.PlayerTickEvent event)
+    public static void sendClientData(TickEvent.PlayerTickEvent event)
     {
         if (event.side == Side.SERVER && event.phase == TickEvent.Phase.END)
         {
             EntityPlayerMP player = (EntityPlayerMP) event.player;
             if (player != null && player.world.loadedEntityList.contains(player))
             {
+                //TODO
+//                if (serverSettings.senses.usePlayerSenses) WRAPPER.sendTo(, player);
+
                 if (isOP(player))
                 {
                     boolean detailHUD = serverSettings.threat.hud.allowClientDetailHUD > 0;
                     int onPointHUDMode = serverSettings.threat.hud.opOnPointHUD;
-                    if (detailHUD || onPointHUDMode > 0) WRAPPER.sendTo(new HUDPacket(player, Sight.seenEntities(player, 2500), detailHUD, onPointHUDMode), player);
+                    if (detailHUD || onPointHUDMode > 0) WRAPPER.sendTo(new HUDPacket(player, Sight.seenEntities(player), detailHUD, onPointHUDMode), player);
                 }
                 else
                 {
                     boolean detailHUD = serverSettings.threat.hud.allowClientDetailHUD > 1;
                     int onPointHUDMode = serverSettings.threat.hud.normalOnPointHUD;
-                    if (detailHUD || onPointHUDMode > 0) WRAPPER.sendTo(new HUDPacket(player, Sight.seenEntities(player, 2500), detailHUD, onPointHUDMode), player);
+                    if (detailHUD || onPointHUDMode > 0) WRAPPER.sendTo(new HUDPacket(player, Sight.seenEntities(player), detailHUD, onPointHUDMode), player);
                 }
             }
         }
