@@ -18,12 +18,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
 import java.lang.reflect.Field;
 
-import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.clientSettings;
 import static com.fantasticsource.dynamicstealth.common.ClientData.*;
+import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.clientSettings;
 import static net.minecraft.client.renderer.vertex.DefaultVertexFormats.POSITION_TEX_LMAP_COLOR;
 import static org.lwjgl.opengl.GL11.*;
 

@@ -7,7 +7,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.dynamicstealth.server.Threat.Threat.bypassesThreat;

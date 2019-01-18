@@ -1,7 +1,7 @@
 package com.fantasticsource.dynamicstealth.client;
 
-import com.fantasticsource.dynamicstealth.common.DynamicStealthConfig;
 import com.fantasticsource.dynamicstealth.common.ClientData;
+import com.fantasticsource.dynamicstealth.common.DynamicStealthConfig;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.client.event.RenderLivingEvent;
