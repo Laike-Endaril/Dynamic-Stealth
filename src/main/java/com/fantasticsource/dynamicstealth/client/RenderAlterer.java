@@ -44,6 +44,11 @@ public class RenderAlterer
             double range = ClientData.visibilityMap.containsKey(id) ? ClientData.visibilityMap.get(id) : 0;
 
             GlStateManager.enableBlend();
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
+            GlStateManager.enableCull();
+            GlStateManager.cullFace(GlStateManager.CullFace.BACK);
+
             GlStateManager.color(1, 1, 1, (float) (min + (1d - min) * range));
         }
     }
