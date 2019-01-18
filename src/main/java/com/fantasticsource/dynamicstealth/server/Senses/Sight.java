@@ -214,7 +214,7 @@ public class Sight
 
         if (target instanceof EntityPlayerMP && ((EntityPlayerMP) target).capabilities.disableDamage) return 777;
 
-        if (searcher.world != target.world || !target.isEntityAlive()) return 777;
+        if (searcher.world != target.world || target.isDead) return 777;
 
         //Soul Sight (absolute)
         if (naturalSoulSight(searcher)) return 0;

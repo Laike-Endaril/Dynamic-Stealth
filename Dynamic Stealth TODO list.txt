@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Make dying entities visible
-
 Add indicator for where a mob WAS when you last saw it
 
 Look into github issue #11 (pathfinding NPE crash; almost certainly another mod which alters the pathfinding)
@@ -16,6 +14,8 @@ Add config option for "Can See Through" Blocks
 
 
 BUG FIXES ==============================================================
+
+Fix bug where mobs' body angle is sometimes wrong (seems to happen when damaging a passive, after they move and turn once)
 
 Fix mobs in search mode periodically NOT doing the search, but going back to it later...
 ...noticed with spider, and so far I think it is specific to spiders?
