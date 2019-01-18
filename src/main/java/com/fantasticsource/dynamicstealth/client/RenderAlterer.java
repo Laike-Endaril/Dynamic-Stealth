@@ -1,7 +1,7 @@
 package com.fantasticsource.dynamicstealth.client;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealthConfig;
-import com.fantasticsource.dynamicstealth.common.HUDData;
+import com.fantasticsource.dynamicstealth.common.ClientData;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.client.event.RenderLivingEvent;
@@ -36,12 +36,13 @@ public class RenderAlterer
         }
 
 
-        HUDData.OnPointData data = HUDData.onPointDataMap.get(livingBase);
-        if (data != null)
+        int id = livingBase.getEntityId();
+        if (ClientData.visibilityMap.containsKey(id))
         {
             double min = DynamicStealthConfig.clientSettings.z_otherSettings.mobOpacityMin;
+
             GlStateManager.enableBlend();
-            GlStateManager.color(1, 1, 1, (float) (min + (1 - min) * 1 /*TODO repace this 1 with visibility float/double*/));
+            GlStateManager.color(1, 1, 1, (float) (min + (1d - min) * ClientData.visibilityMap.get(id)));
         }
     }
 

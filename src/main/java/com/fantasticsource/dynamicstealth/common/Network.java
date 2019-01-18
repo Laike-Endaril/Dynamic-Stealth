@@ -23,10 +23,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
-import static com.fantasticsource.dynamicstealth.common.HUDData.*;
 import static com.fantasticsource.dynamicstealth.server.Threat.Threat.bypassesThreat;
 import static com.fantasticsource.mctools.MCTools.isOP;
 
@@ -40,6 +38,7 @@ public class Network
     {
         WRAPPER.registerMessage(HUDPacketHandler.class, HUDPacket.class, discriminator++, Side.CLIENT);
         WRAPPER.registerMessage(SoulSightPacketHandler.class, SoulSightPacket.class, discriminator++, Side.CLIENT);
+        WRAPPER.registerMessage(VisibilityPacketHandler.class, VisibilityPacket.class, discriminator++, Side.CLIENT);
     }
 
 
@@ -51,20 +50,19 @@ public class Network
             EntityPlayerMP player = (EntityPlayerMP) event.player;
             if (player != null && player.world.loadedEntityList.contains(player))
             {
-                //TODO
-//                if (serverSettings.senses.usePlayerSenses) WRAPPER.sendTo(, player);
+                if (serverSettings.senses.usePlayerSenses) WRAPPER.sendTo(new VisibilityPacket(player), player);
 
                 if (isOP(player))
                 {
                     boolean detailHUD = serverSettings.threat.hud.allowClientDetailHUD > 0;
                     int onPointHUDMode = serverSettings.threat.hud.opOnPointHUD;
-                    if (detailHUD || onPointHUDMode > 0) WRAPPER.sendTo(new HUDPacket(player, Sight.seenEntities(player), detailHUD, onPointHUDMode), player);
+                    if (detailHUD || onPointHUDMode > 0) WRAPPER.sendTo(new HUDPacket(player, detailHUD, onPointHUDMode), player);
                 }
                 else
                 {
                     boolean detailHUD = serverSettings.threat.hud.allowClientDetailHUD > 1;
                     int onPointHUDMode = serverSettings.threat.hud.normalOnPointHUD;
-                    if (detailHUD || onPointHUDMode > 0) WRAPPER.sendTo(new HUDPacket(player, Sight.seenEntities(player), detailHUD, onPointHUDMode), player);
+                    if (detailHUD || onPointHUDMode > 0) WRAPPER.sendTo(new HUDPacket(player, detailHUD, onPointHUDMode), player);
                 }
             }
         }
@@ -77,6 +75,78 @@ public class Network
         Entity entity = event.getEntity();
         if (entity instanceof EntityPlayerMP && EntityVisionData.naturalSoulSight(entity)) WRAPPER.sendTo(new SoulSightPacket(true), (EntityPlayerMP) entity);
     }
+
+
+    public static class VisibilityPacket implements IMessage
+    {
+        ExplicitPriorityQueue<EntityLivingBase> queue;
+        LinkedHashMap<Integer, Float> visibilityMap;
+
+        public VisibilityPacket() //This seems to be required, even if unused
+        {
+        }
+
+        public VisibilityPacket(EntityPlayerMP player)
+        {
+            queue = Sight.seenEntities(player);
+        }
+
+
+        @Override
+        public void toBytes(ByteBuf buf)
+        {
+            int i = queue.size();
+            buf.writeInt(i);
+
+            if (serverSettings.senses.usePlayerSenses)
+            {
+                for (; i > 0; i--)
+                {
+                    buf.writeFloat((float) (1d - queue.peekPriority()));
+                    buf.writeInt(queue.poll().getEntityId());
+                }
+            }
+            else
+            {
+                for (; i > 0; i--)
+                {
+                    buf.writeFloat(1);
+                    buf.writeInt(queue.poll().getEntityId());
+                }
+            }
+        }
+
+        @Override
+        public void fromBytes(ByteBuf buf)
+        {
+            visibilityMap = new LinkedHashMap<>();
+            float visibility;
+
+            for (int i = buf.readInt(); i > 0; i--)
+            {
+                visibility = buf.readFloat();
+                visibilityMap.put(buf.readInt(), visibility);
+            }
+        }
+    }
+
+    public static class VisibilityPacketHandler implements IMessageHandler<VisibilityPacket, IMessage>
+    {
+        @Override
+        public IMessage onMessage(VisibilityPacket message, MessageContext ctx)
+        {
+            if (ctx.side == Side.CLIENT)
+            {
+                Minecraft.getMinecraft().addScheduledTask(() ->
+                {
+                    ClientData.visibilityMap = message.visibilityMap;
+                });
+            }
+
+            return null;
+        }
+    }
+
 
     public static class SoulSightPacket implements IMessage
     {
@@ -109,7 +179,13 @@ public class Network
         @Override
         public IMessage onMessage(SoulSightPacket message, MessageContext ctx)
         {
-            RenderAlterer.soulSight = message.soulSight;
+            if (ctx.side == Side.CLIENT)
+            {
+                Minecraft.getMinecraft().addScheduledTask(() ->
+                {
+                    RenderAlterer.soulSight = message.soulSight;
+                });
+            }
 
             return null;
         }
@@ -128,19 +204,19 @@ public class Network
         int detailPercent;
         int detailColor;
 
-        //Output / client side only
-        Map<Integer, OnPointData> onPointMap = new LinkedHashMap<>(10);
+        LinkedHashMap<Integer, ClientData.OnPointData> onPointMap = new LinkedHashMap<>(10);
 
         public HUDPacket() //This seems to be required, even if unused
         {
         }
 
-        public HUDPacket(EntityPlayerMP playerIn, ExplicitPriorityQueue<EntityLivingBase> queueIn, boolean detailHUDIn, int onPointHUDModeIn)
+        public HUDPacket(EntityPlayerMP player, boolean detailHUD, int onPointHUDMode)
         {
-            player = playerIn;
-            queue = queueIn;
-            detailHUD = detailHUDIn;
-            onPointHUDMode = onPointHUDModeIn;
+            this.player = player;
+            this.detailHUD = detailHUD;
+            this.onPointHUDMode = onPointHUDMode;
+
+            queue = Sight.seenEntities(this.player);
         }
 
         @Override
@@ -155,10 +231,10 @@ public class Network
             if (detailHUD)
             {
                 searcher = queue.poll();
-                if (searcher == null) buf.writeInt(COLOR_NULL); //if color == COLOR_NULL then searcher is null
+                if (searcher == null) buf.writeInt(ClientData.COLOR_NULL); //if color == COLOR_NULL then searcher is null
                 else if (bypassesThreat(searcher))
                 {
-                    buf.writeInt(COLOR_ALERT);
+                    buf.writeInt(ClientData.COLOR_ALERT);
                     buf.writeInt(-1); //else if threatLevel == -1 then searcher bypasses threat
                     ByteBufUtils.writeUTF8String(buf, searcher.getName());
 
@@ -168,11 +244,11 @@ public class Network
                 {
                     Threat.ThreatData data = Threat.get(searcher);
 
-                    buf.writeInt(getColor(player, searcher, data.target, data.threatLevel)); //else this is a normal entry
+                    buf.writeInt(ClientData.getColor(player, searcher, data.target, data.threatLevel)); //else this is a normal entry
                     buf.writeInt((int) (100D * data.threatLevel / maxThreat));
 
                     ByteBufUtils.writeUTF8String(buf, searcher.getName());
-                    ByteBufUtils.writeUTF8String(buf, data.target == null ? EMPTY : data.target.getName());
+                    ByteBufUtils.writeUTF8String(buf, data.target == null ? ClientData.EMPTY : data.target.getName());
 
                     if (onPointHUDMode > 0) buf.writeInt(searcher.getEntityId());
                 }
@@ -182,12 +258,12 @@ public class Network
                 if (onPointHUDMode == 1)
                 {
                     searcher = queue.poll();
-                    if (searcher == null) buf.writeInt(COLOR_NULL);
+                    if (searcher == null) buf.writeInt(ClientData.COLOR_NULL);
                     else
                     {
                         Threat.ThreatData data = Threat.get(searcher);
 
-                        buf.writeInt(getColor(player, searcher, data.target, data.threatLevel));
+                        buf.writeInt(ClientData.getColor(player, searcher, data.target, data.threatLevel));
                         buf.writeInt(searcher.getEntityId());
                         buf.writeInt((int) (100D * data.threatLevel / maxThreat));
                     }
@@ -201,10 +277,10 @@ public class Network
                 while (queue.size() > 0)
                 {
                     searcher = queue.poll();
-                    if (searcher == null) buf.writeInt(COLOR_NULL); //if color == COLOR_NULL then searcher is null
+                    if (searcher == null) buf.writeInt(ClientData.COLOR_NULL); //if color == COLOR_NULL then searcher is null
                     else if (bypassesThreat(searcher))
                     {
-                        buf.writeInt(COLOR_ALERT);
+                        buf.writeInt(ClientData.COLOR_ALERT);
                         buf.writeInt(searcher.getEntityId());
                         buf.writeInt(-1); //else if threatLevel == -1 then searcher bypasses threat
                     }
@@ -212,7 +288,7 @@ public class Network
                     {
                         Threat.ThreatData data = Threat.get(searcher);
 
-                        buf.writeInt(getColor(player, searcher, data.target, data.threatLevel)); //else this is a normal entry
+                        buf.writeInt(ClientData.getColor(player, searcher, data.target, data.threatLevel)); //else this is a normal entry
                         buf.writeInt(searcher.getEntityId());
                         buf.writeInt((int) (100D * data.threatLevel / maxThreat));
                     }
@@ -234,14 +310,14 @@ public class Network
             {
                 detailColor = buf.readInt();
 
-                if (detailColor != COLOR_NULL)
+                if (detailColor != ClientData.COLOR_NULL)
                 {
                     detailPercent = buf.readInt();
 
                     detailSearcherName = ByteBufUtils.readUTF8String(buf);
-                    detailTargetName = detailPercent == -1 ? UNKNOWN : ByteBufUtils.readUTF8String(buf);
+                    detailTargetName = detailPercent == -1 ? ClientData.UNKNOWN : ByteBufUtils.readUTF8String(buf);
 
-                    if (onPointHUDMode > 0) onPointMap.put(buf.readInt(), new OnPointData(detailColor, detailPercent, priority++));
+                    if (onPointHUDMode > 0) onPointMap.put(buf.readInt(), new ClientData.OnPointData(detailColor, detailPercent, priority++));
                 }
             }
             else
@@ -249,7 +325,7 @@ public class Network
                 if (onPointHUDMode == 1)
                 {
                     color = buf.readInt();
-                    if (color != COLOR_NULL) onPointMap.put(buf.readInt(), new OnPointData(color, buf.readInt(), priority++));
+                    if (color != ClientData.COLOR_NULL) onPointMap.put(buf.readInt(), new ClientData.OnPointData(color, buf.readInt(), priority++));
                 }
             }
 
@@ -258,7 +334,7 @@ public class Network
                 for (int i = buf.readInt(); i > 0; i--)
                 {
                     color = buf.readInt();
-                    if (color != COLOR_NULL) onPointMap.put(buf.readInt(), new OnPointData(color, buf.readInt(), priority++));
+                    if (color != ClientData.COLOR_NULL) onPointMap.put(buf.readInt(), new ClientData.OnPointData(color, buf.readInt(), priority++));
                 }
             }
         }
@@ -273,23 +349,23 @@ public class Network
             {
                 Minecraft.getMinecraft().addScheduledTask(() ->
                 {
-                    detailColor = packet.detailColor;
+                    ClientData.detailColor = packet.detailColor;
 
-                    if (detailColor == COLOR_NULL)
+                    if (ClientData.detailColor == ClientData.COLOR_NULL)
                     {
-                        detailPercent = -1;
-                        detailSearcher = EMPTY;
-                        detailTarget = EMPTY;
+                        ClientData.detailPercent = -1;
+                        ClientData.detailSearcher = ClientData.EMPTY;
+                        ClientData.detailTarget = ClientData.EMPTY;
                     }
                     else
                     {
-                        detailSearcher = I18n.format(packet.detailSearcherName);
-                        detailPercent = packet.detailPercent;
+                        ClientData.detailSearcher = I18n.format(packet.detailSearcherName);
+                        ClientData.detailPercent = packet.detailPercent;
 
-                        detailTarget = detailPercent == -1 ? EMPTY : I18n.format(packet.detailTargetName);
+                        ClientData.detailTarget = ClientData.detailPercent == -1 ? ClientData.EMPTY : I18n.format(packet.detailTargetName);
                     }
 
-                    onPointDataMap = packet.onPointMap;
+                    ClientData.onPointDataMap = packet.onPointMap;
                 });
             }
 

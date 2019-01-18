@@ -23,7 +23,7 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import java.lang.reflect.Field;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.clientSettings;
-import static com.fantasticsource.dynamicstealth.common.HUDData.*;
+import static com.fantasticsource.dynamicstealth.common.ClientData.*;
 import static net.minecraft.client.renderer.vertex.DefaultVertexFormats.POSITION_TEX_LMAP_COLOR;
 import static org.lwjgl.opengl.GL11.*;
 
@@ -49,17 +49,6 @@ public class HUD extends Gui
         drawDetailHUD(width, height, fontRender);
 
         GlStateManager.color(1, 1, 1, 1);
-    }
-
-    @SubscribeEvent
-    public static void clearHUD(FMLNetworkEvent.ClientDisconnectionFromServerEvent event)
-    {
-        detailColor = COLOR_NULL;
-        detailSearcher = EMPTY;
-        detailTarget = EMPTY;
-        detailPercent = 0;
-
-        onPointDataMap.clear();
     }
 
     @SubscribeEvent

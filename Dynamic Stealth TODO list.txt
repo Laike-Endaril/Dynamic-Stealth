@@ -1,9 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-Look into altering render alpha based on visibility
-...trying to trick GlStateManager's cache does not work
-...reflect-replacing the classes GLStateManager uses to cache the current states does not work
-...use an AT to change the constructor of GlStateManager.AlphaState to public
+Fix opaque flash when an entity leaves view
 
 Look into github issue #11 (pathfinding NPE crash; almost certainly another mod which alters the pathfinding)
 
