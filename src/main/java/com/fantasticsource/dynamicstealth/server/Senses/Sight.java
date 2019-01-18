@@ -141,17 +141,17 @@ public class Sight
     }
 
 
-    public static ExplicitPriorityQueue<EntityLivingBase> seenEntities(EntityPlayerMP player, double maxDistSquaredIfNotUsingPlayerSenses)
+    public static ExplicitPriorityQueue<EntityLivingBase> seenEntities(EntityPlayerMP player)
     {
         ExplicitPriorityQueue<EntityLivingBase> queue = playerSeenThisTickMap.get(player);
         if (queue != null) return queue.clone();
 
-        ExplicitPriorityQueue<EntityLivingBase>[] queues = seenEntities2(player, maxDistSquaredIfNotUsingPlayerSenses);
+        ExplicitPriorityQueue<EntityLivingBase>[] queues = seenEntities2(player);
         playerSeenThisTickMap.put(player, queues[1]);
         return queues[0];
     }
 
-    private static ExplicitPriorityQueue<EntityLivingBase>[] seenEntities2(EntityPlayerMP player, double maxDistSquaredIfNotUsingPlayerSenses)
+    private static ExplicitPriorityQueue<EntityLivingBase>[] seenEntities2(EntityPlayerMP player)
     {
         ExplicitPriorityQueue<EntityLivingBase>[] queues = new ExplicitPriorityQueue[]{new ExplicitPriorityQueue<>(10), new ExplicitPriorityQueue<>(10)};
         double stealthLevel;
@@ -166,8 +166,8 @@ public class Sight
                     stealthLevel = visualStealthLevel(player, entity, true, true);
                     if (stealthLevel <= 1)
                     {
-                        queues[0].add((EntityLivingBase) entity, stealthLevel);
-                        queues[1].add((EntityLivingBase) entity, stealthLevel);
+                        queues[0].add((EntityLivingBase) entity, stealthLevel); //Returned to external call
+                        queues[1].add((EntityLivingBase) entity, stealthLevel); //Used for playerSeenThisTickMap (result caching)
                     }
                 }
             }
@@ -181,7 +181,7 @@ public class Sight
                 if (entity instanceof EntityLivingBase && entity != player)
                 {
                     double distSquared = player.getDistanceSq(entity);
-                    if (distSquared <= maxDistSquaredIfNotUsingPlayerSenses && los(player, entity))
+                    if (distSquared <= 2500 && los(player, entity))
                     {
                         double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, entity.posY - player.posY, entity.posZ - player.posZ).normalize());
 
@@ -194,8 +194,8 @@ public class Sight
                         if (angleDif / Math.PI * 180 <= 70)
                         {
                             double priority = Math.pow(angleDif, 2) * distSquared;
-                            queues[0].add((EntityLivingBase) entity, priority);
-                            queues[1].add((EntityLivingBase) entity, priority);
+                            queues[0].add((EntityLivingBase) entity, priority); //Returned to external call
+                            queues[1].add((EntityLivingBase) entity, priority); //Used for playerSeenThisTickMap (result caching)
                             map.put(entity, new SeenData(priority, true));
                         }
                     }
