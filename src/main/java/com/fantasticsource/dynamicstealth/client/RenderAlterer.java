@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth.client;
 
 import com.fantasticsource.dynamicstealth.common.ClientData;
 import com.fantasticsource.dynamicstealth.common.DynamicStealthConfig;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.client.event.RenderLivingEvent;
@@ -36,7 +37,7 @@ public class RenderAlterer
 
 
         //Entity opacity based on visibility
-        if (ClientData.usePlayerSenses)
+        if (ClientData.usePlayerSenses && livingBase != Minecraft.getMinecraft().player)
         {
             int id = livingBase.getEntityId();
             double min = DynamicStealthConfig.clientSettings.z_otherSettings.mobOpacityMin;
