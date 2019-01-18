@@ -23,6 +23,25 @@ public class DynamicStealthConfig
                 })
         public ThreatSystem threat = new ThreatSystem();
 
+        @Config.Name("Other Settings")
+        @Comment({"Stuff that doesn't fit in other categories"})
+        public OtherClientSettings z_otherSettings = new OtherClientSettings();
+
+        public class OtherClientSettings
+        {
+            @Config.Name("Minimum Entity Opacity")
+            @Comment(
+                    {
+                            "The opacity of an entity when you just barely see it",
+                            "",
+                            "If set to 0, entities on the edge of your vision are nearly invisible",
+                            "",
+                            "If set to 1, entities always appear at full visibility"
+                    })
+            @Config.RangeDouble(min = 0, max = 1)
+            public double mobOpacityMin = 0;
+        }
+
         public class ThreatSystem
         {
             @Config.Name("Display Detail HUD")
