@@ -46,7 +46,7 @@ public class Network
     @SubscribeEvent
     public static void sendHUDData(TickEvent.PlayerTickEvent event)
     {
-        if (event.side == Side.SERVER)
+        if (event.side == Side.SERVER && event.phase == TickEvent.Phase.END)
         {
             EntityPlayerMP player = (EntityPlayerMP) event.player;
             if (player != null && player.world.loadedEntityList.contains(player))
