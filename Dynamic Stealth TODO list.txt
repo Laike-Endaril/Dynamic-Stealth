@@ -1,5 +1,11 @@
 CURRENTLY WORKING ON ===================================================
 
+Make warning system (somewhat similar to pigmen)...
+...DON'T WARN IF DEAD...might be tricky, may need to schedule a delayed task or add a "warn" ai, since this probably can't be done in damage event
+...entities can warn other entities based on configurable filters; distance, owned entities (t/f), type(s)
+...warned entities who had 0 threat gain threat
+...warned entities who had no target set target and last seen position
+
 Add potion effect for soul sight
 
 Add indicator for where a mob WAS when you last saw it...
@@ -32,12 +38,6 @@ Add config option for "Can See Through" Blocks
 
 
 
-THREAT SYSTEM ==========================================================
-
-Make owned entities change their threat based on their owner's actions (eg. see AIHurtByTargetEdit and AIOwnerHurtByTargetEdit)
-
-
-
 VISUAL INDICATORS ======================================================
 
 Add optional "damaged from" indicator, which draws an edge-of-screen arrow pointing the direction damage was recently received from
@@ -58,8 +58,6 @@ AI =====================================================================
 Can probably combine the two below into a single AI task...
 ...Replace EntityAILookIdle with a new version that has gradual head rotation, instead of just removing it
 ...Change "wandering" AI so that it can't instantly flip a 180 (force it to turn gradually before moving in the chosen direction)
-
-Make it so mobs on the same team can tell each other where you are / where they last saw you
 
 
 
