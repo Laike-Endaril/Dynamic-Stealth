@@ -1,17 +1,10 @@
 CURRENTLY WORKING ON ===================================================
 
+Add potion effect for soul sight
+
 Add indicator for where a mob WAS when you last saw it...
 ...show the mob, as it was last seen, but black and white with partial transparency
 ...make the on-point HUD above it into an X with coloration
-
-Look into github issue #11 (pathfinding NPE crash; almost certainly another mod which alters the pathfinding)
-
-Add potion effect for soul sight
-
-Check out github issue #9 (configurable stealth buffs feature request)
-
-Add config option for "Can See Through" Materials
-Add config option for "Can See Through" Blocks
 
 
 
@@ -30,6 +23,12 @@ Fix mobs not moving to last known position before searching when too far away...
 ...then if not at the final destination, finds another partial path and follows it...
 ...etc.
 This system, if improved upon, could be used for most pathfinding and should improve pathfinding performance (by splitting it up and calculating parts at different times)
+
+
+CONFIG =================================================================
+
+Add config option for "Can See Through" Materials
+Add config option for "Can See Through" Blocks
 
 
 
@@ -51,8 +50,6 @@ Add to HUD...
 ...light
 ...speed
 ...combined stealth multiplier?
-
-Add the ability to see mob FOVs (as a 3D render), maybe when under a potion effect or something
 
 
 
