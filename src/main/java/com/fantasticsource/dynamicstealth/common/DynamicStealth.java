@@ -27,6 +27,7 @@ import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.init.MobEffects;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -261,8 +262,10 @@ public class DynamicStealth
 
 
                 //Warn others
-                if (searchAI != null) WarningSystem.warn(livingTarget, searchAI.lastKnownPosition);
-                else WarningSystem.warn(livingTarget, livingTarget.getPosition());
+                BlockPos warnPos = null;
+                if (searchAI != null) warnPos = searchAI.lastKnownPosition;
+                if (warnPos == null) warnPos = livingTarget.getPosition();
+                WarningSystem.warn(livingTarget, warnPos);
             }
 
 

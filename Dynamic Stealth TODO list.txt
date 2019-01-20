@@ -1,8 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Fix bug where warned entities don't set search area correctly when damage dealt is melee...
-...though they DO set search area correctly if it is a snowball.  Odd.
-
 Add configs for warning system (see TODOs in WarningSystem.java)
 
 Overwrite pigmen to use warning system
