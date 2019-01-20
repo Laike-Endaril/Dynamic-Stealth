@@ -305,7 +305,7 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
         return true;
     }
 
-    public BlockPos randomPath(BlockPos position, int xz, int y)
+    private BlockPos randomPath(BlockPos position, int xz, int y)
     {
         if (xz < 0) xz = -xz;
         if (y < 0) y = -y;
