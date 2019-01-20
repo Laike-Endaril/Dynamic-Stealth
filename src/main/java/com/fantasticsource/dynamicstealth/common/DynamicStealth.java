@@ -17,6 +17,7 @@ import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.Speedometer;
 import com.fantasticsource.tools.ReflectionTool;
+import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.TrigLookupTable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -201,7 +202,7 @@ public class DynamicStealth
                         //...getting hit while out-of-combat
                         //...getting hit after previous target has been killed
                         //...getting hit when no target has been seen so far
-                        Threat.set(livingTarget, livingBaseSource, threat + (int) (event.getAmount() * serverSettings.threat.attackedThreatMultiplierInitial / livingTarget.getMaxHealth()));
+                        Threat.set(livingTarget, livingBaseSource, threat + (int) (Tools.max(event.getAmount(), 1) * serverSettings.threat.attackedThreatMultiplierInitial / livingTarget.getMaxHealth()));
                         newThreatTarget = true;
                     }
                     else if (threatTarget != source)
