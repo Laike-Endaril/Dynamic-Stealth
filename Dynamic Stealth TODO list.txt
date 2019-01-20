@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
+Fix shulkers
+
 Add configs for warning system (see TODOs in WarningSystem.java)
 
 Overwrite pigmen to use warning system
@@ -110,6 +112,8 @@ Possibly change music using ActualMusic when going into battle, etc
 
 
 MOD COMPATIBILITY ======================================================
+
+CNPCs don't change opacity
 
 Figure out why the TF2 sentry gun constantly loses target with DS installed (if it's not in threat bypass mode)
 Does having DS installed cause TF2 bullet streaks to not show?

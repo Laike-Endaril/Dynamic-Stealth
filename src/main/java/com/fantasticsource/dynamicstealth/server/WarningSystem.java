@@ -17,6 +17,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import noppes.npcs.api.NpcAPI;
+import noppes.npcs.api.constants.EntityType;
+import noppes.npcs.api.entity.ICustomNpc;
 import noppes.npcs.api.entity.IEntity;
 
 import java.util.LinkedHashMap;
@@ -114,13 +116,15 @@ public class WarningSystem
                 if (warner.getTeam() != null) return false; // force false if on different teams
             }
 
-            //By type
+            //By type or CNPC data
             IEntity cnpcEntity = Compat.customnpcs ? NpcAPI.Instance().getIEntity(helper) : null;
-            if (cnpcEntity != null)
+            if (cnpcEntity instanceof ICustomNpc)
             {
                 //TODO CNPC filter
+                ICustomNpc cnpc = (ICustomNpc) cnpcEntity;
+//                cnpc.getFaction()
             }
-            else //Not a cnpc thing
+            else //Not a cnpc
             {
                 //TODO add config for types to accept warnings from
                 if (helper.getClass() == warner.getClass()) return true;
