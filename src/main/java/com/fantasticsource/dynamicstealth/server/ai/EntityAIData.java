@@ -6,13 +6,14 @@ import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
 
 public class EntityAIData
 {
-    public static Map<Class<? extends Entity>, Integer> entityHeadTurnSpeeds = new HashMap<>();
+    public static LinkedHashMap<Class<? extends Entity>, Integer> entityHeadTurnSpeeds = new LinkedHashMap<>();
 
     static
     {

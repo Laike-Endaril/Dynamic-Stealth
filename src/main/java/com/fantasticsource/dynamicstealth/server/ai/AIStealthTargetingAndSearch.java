@@ -256,6 +256,12 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
         }
     }
 
+    public void restart(BlockPos newPos) //This is NOT the same as resetTask(); this is just a proxy for me to remember how to reset this correctly from outside the task system
+    {
+        lastKnownPosition = newPos;
+        startExecuting();
+    }
+
     private boolean findPathAngle()
     {
         int length = path.getCurrentPathLength();

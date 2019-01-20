@@ -6,6 +6,7 @@ import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatCNPC;
 import com.fantasticsource.dynamicstealth.server.Attributes;
 import com.fantasticsource.dynamicstealth.server.EntityLookHelperEdit;
+import com.fantasticsource.dynamicstealth.server.WarningSystem;
 import com.fantasticsource.dynamicstealth.server.ai.AIStealthTargetingAndSearch;
 import com.fantasticsource.dynamicstealth.server.ai.edited.*;
 import com.fantasticsource.dynamicstealth.server.entitytracker.EntityTrackerEdit;
@@ -77,20 +78,22 @@ public class DynamicStealth
 
     public DynamicStealth()
     {
+        Attributes.init();
+
         MinecraftForge.EVENT_BUS.register(EntityVisionData.class);
         MinecraftForge.EVENT_BUS.register(DynamicStealth.class);
         MinecraftForge.EVENT_BUS.register(Speedometer.class);
         MinecraftForge.EVENT_BUS.register(Network.class);
         MinecraftForge.EVENT_BUS.register(Threat.class);
         MinecraftForge.EVENT_BUS.register(Sight.class);
+        MinecraftForge.EVENT_BUS.register(WarningSystem.class);
+
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
         {
             MinecraftForge.EVENT_BUS.register(HUD.class);
             MinecraftForge.EVENT_BUS.register(ClientData.class);
             MinecraftForge.EVENT_BUS.register(RenderAlterer.class);
         }
-
-        Attributes.init();
     }
 
     @SubscribeEvent
@@ -174,96 +177,104 @@ public class DynamicStealth
         if (source == null) source = event.getSource().getImmediateSource();
         if (source == null) return;
 
-        if (target instanceof EntityLiving && source instanceof EntityLivingBase)
+        if (source instanceof EntityLivingBase)
         {
-            EntityLiving livingTarget = (EntityLiving) target;
             EntityLivingBase livingBaseSource = (EntityLivingBase) source;
-            boolean updateTarget = true;
-            boolean newThreatTarget = false;
-            boolean passive = Threat.isPassive(livingTarget);
 
-            //Threat
-            if (!passive)
+            if (target instanceof EntityLiving)
             {
-                Threat.ThreatData threatData = Threat.get(livingTarget);
-                EntityLivingBase threatTarget = threatData.target;
-                int threat = threatData.threatLevel;
-                if (threatTarget == null || threat == 0)
+                EntityLiving livingTarget = (EntityLiving) target;
+                boolean updateTarget = true;
+                boolean newThreatTarget = false;
+                boolean passive = Threat.isPassive(livingTarget);
+
+                //Threat
+                if (!passive)
                 {
-                    //Hit by entity when no target is set; this includes...
-                    //...getting hit while out-of-combat
-                    //...getting hit after previous target has been killed
-                    //...getting hit when no target has been seen so far
-                    Threat.set(livingTarget, livingBaseSource, threat + (int) (event.getAmount() * serverSettings.threat.attackedThreatMultiplierInitial / livingTarget.getMaxHealth()));
-                    newThreatTarget = true;
-                }
-                else if (threatTarget != source)
-                {
-                    //In combat, and hit by an entity besides our threat target
-                    double threatChangeFactor = event.getAmount() / livingTarget.getMaxHealth();
-                    threat -= threatChangeFactor * serverSettings.threat.attackedThreatMultiplierOther;
-                    if (threat <= 0)
+                    Threat.ThreatData threatData = Threat.get(livingTarget);
+                    EntityLivingBase threatTarget = threatData.target;
+                    int threat = threatData.threatLevel;
+                    if (threatTarget == null || threat == 0)
                     {
-                        //Switching targets
-                        Threat.set(livingTarget, livingBaseSource, (int) (threatChangeFactor * serverSettings.threat.attackedThreatMultiplierInitial));
+                        //Hit by entity when no target is set; this includes...
+                        //...getting hit while out-of-combat
+                        //...getting hit after previous target has been killed
+                        //...getting hit when no target has been seen so far
+                        Threat.set(livingTarget, livingBaseSource, threat + (int) (event.getAmount() * serverSettings.threat.attackedThreatMultiplierInitial / livingTarget.getMaxHealth()));
                         newThreatTarget = true;
+                    }
+                    else if (threatTarget != source)
+                    {
+                        //In combat, and hit by an entity besides our threat target
+                        double threatChangeFactor = event.getAmount() / livingTarget.getMaxHealth();
+                        threat -= threatChangeFactor * serverSettings.threat.attackedThreatMultiplierOther;
+                        if (threat <= 0)
+                        {
+                            //Switching targets
+                            Threat.set(livingTarget, livingBaseSource, (int) (threatChangeFactor * serverSettings.threat.attackedThreatMultiplierInitial));
+                            newThreatTarget = true;
+                        }
+                        else
+                        {
+                            Threat.setThreat(livingTarget, threat);
+                            updateTarget = false;
+                        }
                     }
                     else
                     {
-                        Threat.setThreat(livingTarget, threat);
-                        updateTarget = false;
+                        //In combat, and hit by threat target
+                        Threat.setThreat(livingTarget, threat + (int) (event.getAmount() * serverSettings.threat.attackedThreatMultiplierTarget / livingTarget.getMaxHealth()));
                     }
                 }
-                else
+
+                AIStealthTargetingAndSearch searchAI = null;
+                if (updateTarget)
                 {
-                    //In combat, and hit by threat target
-                    Threat.setThreat(livingTarget, threat + (int) (event.getAmount() * serverSettings.threat.attackedThreatMultiplierTarget / livingTarget.getMaxHealth()));
-                }
-            }
+                    //Threat targeting already updated
 
-            if (updateTarget)
-            {
-                //Threat targeting already updated
+                    //Update vanilla targeting
+                    if (!passive) livingTarget.setAttackTarget(livingBaseSource);
 
-                //Update vanilla targeting
-                if (!passive) livingTarget.setAttackTarget(livingBaseSource);
+                    //Look toward damage
+                    float newYaw = (float) (TRIG_TABLE.arctanFullcircle(target.posZ, target.posX, source.posZ, source.posX) / Math.PI * 180);
+                    makeLivingLookDirection(livingTarget, newYaw);
 
-                //Look toward damage
-                float newYaw = (float) (TRIG_TABLE.arctanFullcircle(target.posZ, target.posX, source.posZ, source.posX) / Math.PI * 180);
-                makeLivingLookDirection(livingTarget, newYaw);
-
-                if (!(livingTarget instanceof EntitySlime))
-                {
-                    //This is mostly for setting/resetting things when eg. you hit an entity that is in the middle of a task, and they don't see you (even after you hit them)
-
-                    livingTarget.getNavigator().clearPath();
-
-                    for (EntityAITasks.EntityAITaskEntry task : livingTarget.tasks.taskEntries)
+                    if (!(livingTarget instanceof EntitySlime))
                     {
-                        if (task.action instanceof AIStealthTargetingAndSearch)
+                        //This is mostly for setting/resetting things when eg. you hit an entity that is in the middle of a task, and they don't see you (even after you hit them)
+
+                        livingTarget.getNavigator().clearPath();
+
+                        for (EntityAITasks.EntityAITaskEntry task : livingTarget.tasks.taskEntries)
                         {
-                            AIStealthTargetingAndSearch searchAI = (AIStealthTargetingAndSearch) task.action;
-                            int distance = (int) Math.sqrt(source.getDistanceSq(livingTarget));
-                            searchAI.lastKnownPosition = searchAI.randomPath(source.getPosition(), distance / 2, distance / 4);
+                            if (task.action instanceof AIStealthTargetingAndSearch)
+                            {
+                                searchAI = (AIStealthTargetingAndSearch) task.action;
+                                int distance = (int) Math.sqrt(source.getDistanceSq(livingTarget));
+                                searchAI.restart(searchAI.randomPath(source.getPosition(), distance / 2, distance / 4));
+                            }
                         }
                     }
                 }
+
+                if (newThreatTarget && !livingTarget.getEntitySenses().canSee(livingBaseSource)) Threat.setTarget(livingTarget, null);
+
+
+                //Warn others
+                if (searchAI != null) WarningSystem.warn(livingTarget, searchAI.lastKnownPosition);
+                else WarningSystem.warn(livingTarget, livingTarget.getPosition());
             }
 
-            if (newThreatTarget && !livingTarget.getEntitySenses().canSee(livingBaseSource)) Threat.setTarget(livingTarget, null);
-        }
 
-        if (source instanceof EntityLivingBase)
-        {
-            EntityLivingBase sourceBase = (EntityLivingBase) source;
+            //Remove invisibility and blindness if set to do so
             if (serverSettings.z_otherSettings.removeInvisibilityOnHit)
             {
-                sourceBase.removePotionEffect(MobEffects.INVISIBILITY);
+                livingBaseSource.removePotionEffect(MobEffects.INVISIBILITY);
                 target.removePotionEffect(MobEffects.INVISIBILITY);
             }
             if (serverSettings.z_otherSettings.removeBlindnessOnHit)
             {
-                sourceBase.removePotionEffect(MobEffects.BLINDNESS);
+                livingBaseSource.removePotionEffect(MobEffects.BLINDNESS);
                 target.removePotionEffect(MobEffects.BLINDNESS);
             }
         }
