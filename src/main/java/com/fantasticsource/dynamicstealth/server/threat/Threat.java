@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth.server.Threat;
+package com.fantasticsource.dynamicstealth.server.threat;
 
 import com.fantasticsource.mctools.MCTools;
 import net.minecraft.entity.Entity;

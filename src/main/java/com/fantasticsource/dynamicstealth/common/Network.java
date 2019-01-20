@@ -1,8 +1,8 @@
 package com.fantasticsource.dynamicstealth.common;
 
-import com.fantasticsource.dynamicstealth.server.Senses.EntityVisionData;
-import com.fantasticsource.dynamicstealth.server.Senses.Sight;
-import com.fantasticsource.dynamicstealth.server.Threat.Threat;
+import com.fantasticsource.dynamicstealth.server.senses.EntityVisionData;
+import com.fantasticsource.dynamicstealth.server.senses.Sight;
+import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -24,7 +24,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import java.util.LinkedHashMap;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
-import static com.fantasticsource.dynamicstealth.server.Threat.Threat.bypassesThreat;
+import static com.fantasticsource.dynamicstealth.server.threat.Threat.bypassesThreat;
 import static com.fantasticsource.mctools.MCTools.isOP;
 
 public class Network

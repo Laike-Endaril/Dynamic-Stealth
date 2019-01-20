@@ -1,7 +1,7 @@
 package com.fantasticsource.dynamicstealth.server;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
-import com.fantasticsource.dynamicstealth.server.Threat.Threat;
+import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.dynamicstealth.server.aiedits.AITargetEdit;
 import com.fantasticsource.dynamicstealth.server.configdata.EntityAIData;
 import com.fantasticsource.tools.Tools;

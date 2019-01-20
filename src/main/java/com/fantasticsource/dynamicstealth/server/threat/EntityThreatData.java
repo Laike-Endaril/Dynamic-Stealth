@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth.server.Threat;
+package com.fantasticsource.dynamicstealth.server.threat;
 
 import com.fantasticsource.dynamicstealth.server.configdata.EntityThreatDefaults;
 import net.minecraft.entity.Entity;

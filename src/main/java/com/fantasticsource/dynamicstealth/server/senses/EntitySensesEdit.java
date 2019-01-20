@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth.server.Senses;
+package com.fantasticsource.dynamicstealth.server.senses;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;

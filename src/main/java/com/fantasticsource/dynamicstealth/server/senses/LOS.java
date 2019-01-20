@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth.server.Senses;
+package com.fantasticsource.dynamicstealth.server.senses;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlime;

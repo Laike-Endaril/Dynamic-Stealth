@@ -1,8 +1,8 @@
-package com.fantasticsource.dynamicstealth.server.Senses;
+package com.fantasticsource.dynamicstealth.server.senses;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealthConfig;
 import com.fantasticsource.dynamicstealth.server.Attributes;
-import com.fantasticsource.dynamicstealth.server.Threat.Threat;
+import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.Speedometer;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
@@ -28,7 +28,7 @@ import java.util.Map;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealth.TRIG_TABLE;
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
-import static com.fantasticsource.dynamicstealth.server.Senses.EntityVisionData.*;
+import static com.fantasticsource.dynamicstealth.server.senses.EntityVisionData.*;
 
 public class Sight
 {

@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.common;
 
-import com.fantasticsource.dynamicstealth.server.Threat.Threat;
+import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import java.util.LinkedHashMap;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
-import static com.fantasticsource.dynamicstealth.server.Threat.Threat.bypassesThreat;
+import static com.fantasticsource.dynamicstealth.server.threat.Threat.bypassesThreat;
 
 public class ClientData
 {
