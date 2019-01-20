@@ -45,6 +45,8 @@ public abstract class AITargetEdit extends EntityAIBase
 
         if (Threat.isPassive(attacker)) return false;
 
+        if (attacker.isOnSameTeam(target)) return false;
+
         if (attacker instanceof IEntityOwnable)
         {
             Entity attackerOwner = ((IEntityOwnable) attacker).getOwner();
