@@ -16,6 +16,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import noppes.npcs.api.NpcAPI;
+import noppes.npcs.api.entity.IEntity;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -113,7 +115,12 @@ public class WarningSystem
             }
 
             //By type
-            if (!Compat.customnpcs || !helper.getClass().getName().equals("noppes.npcs.entity.EntityCustomNpc"))
+            IEntity cnpcEntity = Compat.customnpcs ? NpcAPI.Instance().getIEntity(helper) : null;
+            if (cnpcEntity != null)
+            {
+                //TODO CNPC filter
+            }
+            else //Not a cnpc thing
             {
                 //TODO add config for types to accept warnings from
                 if (helper.getClass() == warner.getClass()) return true;
