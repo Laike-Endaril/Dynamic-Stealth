@@ -4,7 +4,9 @@ Make warning system (somewhat similar to pigmen)...
 ...DON'T WARN IF DEAD...might be tricky, may need to schedule a delayed task or add a "warn" ai, since this probably can't be done in damage event
 ...entities can warn other entities based on configurable filters; distance, owned entities (t/f), type(s)
 ...warned entities who had 0 threat gain threat
-...warned entities who had no target set target and last seen position
+...warned entities who had no target set last seen position
+
+Add caching to AITargetEdit.isSuitableTarget()
 
 Add potion effect for soul sight
 
