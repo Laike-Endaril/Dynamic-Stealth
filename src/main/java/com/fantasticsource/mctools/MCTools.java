@@ -8,11 +8,17 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class MCTools
 {
+    public static BlockPos randomPos(BlockPos centerPos, int xz, int y)
+    {
+        return centerPos.add(-xz + (int) (Math.random() * xz * 2 + 1), -xz + (int) (Math.random() * xz * 2 + 1), -y + (int) (Math.random() * y * 2 + 1));
+    }
+
     public static boolean isClient(World world)
     {
         return world.isRemote;
