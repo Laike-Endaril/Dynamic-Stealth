@@ -4,6 +4,7 @@ import com.fantasticsource.dynamicstealth.common.DynamicStealthConfig;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.server.ai.AIStealthTargetingAndSearch;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -53,34 +54,38 @@ public class WarningSystem
 
     private static void tryWarn(EntityLivingBase warner, Entity helper, BlockPos warnPos)
     {
-        if (helper instanceof EntityLiving)
+        if (helper != warner && helper instanceof EntityLiving)
         {
             EntityLiving livingHelper = (EntityLiving) helper;
 
             if (!Threat.bypassesThreat(livingHelper) && !Threat.isPassive(livingHelper))
             {
                 Threat.ThreatData data = Threat.get(livingHelper);
-                if (data.target == null && filter(warner, livingHelper))
+                if (data.target == null)
                 {
-                    for (EntityAITasks.EntityAITaskEntry task : livingHelper.tasks.taskEntries)
+                    double distance = Math.sqrt(warner.getDistanceSq(helper));
+                    if (filter(warner, livingHelper, distance))
                     {
-                        if (task.action instanceof AIStealthTargetingAndSearch)
+                        for (EntityAITasks.EntityAITaskEntry task : livingHelper.tasks.taskEntries)
                         {
-                            AIStealthTargetingAndSearch ai = (AIStealthTargetingAndSearch) task.action;
-                            ai.restart(warnPos);
+                            if (task.action instanceof AIStealthTargetingAndSearch)
+                            {
+                                int d = (int) distance;
+                                ((AIStealthTargetingAndSearch) task.action).restart(MCTools.randomPos(warnPos, 4 + d / 2, 2 + d / 4));
+                            }
                         }
-                    }
 
-                    if (data.threatLevel < DynamicStealthConfig.serverSettings.threat.targetSpottedThreat) Threat.setThreat(livingHelper, DynamicStealthConfig.serverSettings.threat.targetSpottedThreat); //TODO add config for "warned" threat level
+                        if (data.threatLevel < DynamicStealthConfig.serverSettings.threat.targetSpottedThreat) Threat.setThreat(livingHelper, DynamicStealthConfig.serverSettings.threat.targetSpottedThreat); //TODO add config for "warned" threat level
+                    }
                 }
             }
         }
     }
 
-    private static boolean filter(EntityLivingBase warner, EntityLiving helper)
+    private static boolean filter(EntityLivingBase warner, EntityLiving helper, double distSquared)
     {
         //Distance
-        if (Math.sqrt(warner.getDistanceSq(helper)) <= 30d * helper.getEntityAttribute(Attributes.HEARING).getAttributeValue() / 100)
+        if (Math.sqrt(distSquared) <= 30d * helper.getEntityAttribute(Attributes.HEARING).getAttributeValue() / 100)
         {
             //Ownership //TODO add t/f config for this
             if (helper instanceof IEntityOwnable)

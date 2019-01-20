@@ -252,7 +252,7 @@ public class DynamicStealth
                             {
                                 searchAI = (AIStealthTargetingAndSearch) task.action;
                                 int distance = (int) Math.sqrt(source.getDistanceSq(livingTarget));
-                                searchAI.restart(searchAI.randomPath(source.getPosition(), distance / 2, distance / 4));
+                                searchAI.restart(MCTools.randomPos(source.getPosition(), distance / 2, distance / 4));
                             }
                         }
                     }
