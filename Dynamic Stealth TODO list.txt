@@ -124,8 +124,6 @@ Look into crash with Deadly Mobs and its haunted cows...
 ...https://paste.ee/p/gnVtK
 ...apparently haunted cows are also not supposed to look haunted until they get hit
 
-Make temporary BackStab compat module? (BackStab issue #4 and #2)
-
 Look into issue where "entities don't always notice you right away"...
 ...Epic Siege Mod
 ...Mo' Creatures
