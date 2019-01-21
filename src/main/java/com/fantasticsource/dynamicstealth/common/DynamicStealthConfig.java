@@ -562,6 +562,7 @@ public class DynamicStealthConfig
                                     "endermite",
                                     "enderman",
                                     "ender_dragon",
+                                    "shulker",
                                     "vex"
                             };
 

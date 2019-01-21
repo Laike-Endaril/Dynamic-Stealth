@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Fix shulkers
-
 Add configs for warning system (see TODOs in WarningSystem.java)
 
 Overwrite pigmen to use warning system

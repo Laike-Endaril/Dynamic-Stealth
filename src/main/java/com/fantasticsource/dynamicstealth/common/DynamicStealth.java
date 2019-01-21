@@ -76,7 +76,7 @@ public class DynamicStealth
     private static Field sensesField, lookHelperField, abstractSkeletonAIArrowAttackField, abstractSkeletonAIAttackOnCollideField, worldServerEntityTrackerField;
     private static Class aiSlimeFaceRandomClass, aiEvilAttackClass, aiBearMeleeClass, aiSpiderAttackClass, aiSpiderTargetClass, aiBearAttackPlayerClass, aiLlamaDefendTarget,
             aiPigmanHurtByAggressorClass, aiLlamaHurtByTargetClass, aiPigmanTargetAggressorClass, aiVindicatorJohnnyAttackClass, aiBearHurtByTargetClass, aiGuardianAttackClass,
-            aiBlazeFireballAttackClass, aiVexChargeAttackClass;
+            aiBlazeFireballAttackClass, aiVexChargeAttackClass, aiShulkerAttackClass, aiShulkerAttackNearestClass, aiShulkerDefenseAttackClass;
 
     public DynamicStealth()
     {
@@ -379,14 +379,15 @@ public class DynamicStealth
             else if (actionClass == aiSpiderAttackClass) replaceTask(tasks, task, new AISpiderAttackEdit((EntityAIAttackMelee) task.action));
             else if (actionClass == EntityAIZombieAttack.class) replaceTask(tasks, task, new AIZombieAttackEdit((EntityAIZombieAttack) task.action));
 
-                //All done (excluded shulker and enderman stuff)
-                //Shulker and Enderman are fine as they are, because they're telepaths, or maybe just because I say so
+                //TODO enderman stuff
             else if (actionClass == EntityAINearestAttackableTarget.class) replaceTask(tasks, task, new AINearestAttackableTargetEdit((EntityAINearestAttackableTarget) task.action));
             else if (actionClass == aiBearAttackPlayerClass) replaceTask(tasks, task, new AIBearAttackPlayerEdit((EntityAINearestAttackableTarget) task.action));
             else if (actionClass == aiSpiderTargetClass) replaceTask(tasks, task, new AISpiderTargetEdit((EntityAINearestAttackableTarget) task.action));
             else if (actionClass == aiLlamaDefendTarget) replaceTask(tasks, task, new AILlamaDefendEdit((EntityAINearestAttackableTarget) task.action));
             else if (actionClass == aiVindicatorJohnnyAttackClass) replaceTask(tasks, task, new AIJohnnyAttackEdit((EntityAINearestAttackableTarget) task.action));
             else if (actionClass == aiPigmanTargetAggressorClass) replaceTask(tasks, task, new AIPigmanTargetAggressorEdit((EntityAINearestAttackableTarget) task.action));
+            else if (actionClass == aiShulkerAttackNearestClass) replaceTask(tasks, task, new AIShulkerAttackNearestEdit((EntityAINearestAttackableTarget) task.action));
+            else if (actionClass == aiShulkerDefenseAttackClass) replaceTask(tasks, task, new AIShulkerDefenseAttackEdit((EntityAINearestAttackableTarget) task.action));
 
                 //All done
             else if (actionClass == EntityAIHurtByTarget.class) replaceTask(tasks, task, new AIHurtByTargetEdit((EntityAIHurtByTarget) task.action));
@@ -410,6 +411,7 @@ public class DynamicStealth
             else if (actionClass == aiGuardianAttackClass) replaceTask(tasks, task, new AIGuardianAttackEdit((EntityGuardian) living));
             else if (actionClass == aiBlazeFireballAttackClass) replaceTask(tasks, task, new AIFireballAttackEdit((EntityBlaze) living));
             else if (actionClass == aiVexChargeAttackClass) replaceTask(tasks, task, new AIVexChargeAttackEdit((EntityVex) living));
+            else if (actionClass == aiShulkerAttackClass) replaceTask(tasks, task, new AIShulkerAttackEdit((EntityShulker) living));
         }
     }
 
@@ -456,6 +458,9 @@ public class DynamicStealth
         aiGuardianAttackClass = ReflectionTool.getInternalClass(EntityGuardian.class, "AIGuardianAttack");
         aiBlazeFireballAttackClass = ReflectionTool.getInternalClass(EntityBlaze.class, "AIFireballAttack");
         aiVexChargeAttackClass = ReflectionTool.getInternalClass(EntityVex.class, "AIChargeAttack");
+        aiShulkerAttackClass = ReflectionTool.getInternalClass(EntityShulker.class, "AIAttack");
+        aiShulkerAttackNearestClass = ReflectionTool.getInternalClass(EntityShulker.class, "AIAttackNearest");
+        aiShulkerDefenseAttackClass = ReflectionTool.getInternalClass(EntityShulker.class, "AIDefenseAttack");
     }
 
     @EventHandler
