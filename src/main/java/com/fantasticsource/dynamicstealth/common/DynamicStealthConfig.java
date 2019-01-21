@@ -153,8 +153,10 @@ public class DynamicStealthConfig
     {
         @Config.Name("AI")
         public AI ai = new AI();
+
         @Config.Name("Senses")
         public Senses senses = new Senses();
+
         @Config.Name("Threat System")
         @Comment(
                 {
@@ -163,9 +165,77 @@ public class DynamicStealthConfig
                         "This is similar to threat systems found in some MMORPGs"
                 })
         public ThreatSystem threat = new ThreatSystem();
+
         @Config.Name("Other Settings")
         @Comment({"Stuff that doesn't fit in other categories"})
         public OtherSettings z_otherSettings = new OtherSettings();
+
+        @Config.Name("Helper System")
+        @Comment("Which entities come to the aid of which other entities")
+        public HelperSystemSettings helperSystemSettings = new HelperSystemSettings();
+
+        public class HelperSystemSettings
+        {
+            @Config.Name("Ownership")
+            public Ownership ownership = new Ownership();
+
+            public class Ownership
+            {
+                @Config.Name("Help Owner")
+                @Comment("Help our owner (if we have one)")
+                public boolean helpOwner = true;
+
+                @Config.Name("Help If Same Owner")
+                @Comment("Help them if we both have the same owner (if we have one)")
+                public boolean helpOtherWithSameOwner = true;
+
+                @Config.Name("Dedicated")
+                @Comment("DON'T help them if they don't have the same owner (if we have one)")
+                public boolean dedicated = true;
+
+                @Config.Name("Help Owned")
+                @Comment("Help them if we own them")
+                public boolean helpOwned = true;
+            }
+
+            @Config.Name("Ownership")
+            public Teams teams = new Teams();
+
+            public class Teams
+            {
+                @Config.Name("Help Same Team")
+                @Comment("Help other entities on our team")
+                public boolean helpSame = true;
+
+                @Config.Name("Don't Help Other Teams")
+                @Comment("Make sure NOT to help entities on other teams")
+                public boolean dontHelpOther = true;
+            }
+
+            @Config.Name("Custom NPCs Factions")
+            @Comment("These settings only matter if Custom NPCs is installed")
+            public CNPCFactions cnpcFactions = new CNPCFactions();
+
+            public class CNPCFactions
+            {
+                @Config.Name("Help If Good Rep")
+                @Comment("Help npcs in the same faction and players with good faction rep")
+                public boolean helpGoodRep = true;
+
+                @Config.Name("Don't Help If Bad Rep")
+                @Comment("Make sure NOT to help those we're hostile to")
+                public boolean dontHelpBadRep = true;
+            }
+
+            @Config.Name("Help Same Entity Type")
+            @Comment(
+                    {
+                            "Whether to help entities of the same type",
+                            "",
+                            "Eg. if set to true, skeletons will help other skeletons (but not zombies)"
+                    })
+            public boolean helpSameType = true;
+        }
 
         public class AI
         {

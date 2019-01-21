@@ -1,6 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-Add configs for warning system (see TODOs in WarningSystem.java)
+Add entity-specific configs for warning system
 
 Overwrite pigmen to use warning system
 
