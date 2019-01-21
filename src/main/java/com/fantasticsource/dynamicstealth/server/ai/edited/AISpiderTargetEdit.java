@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 
@@ -13,6 +14,6 @@ public class AISpiderTargetEdit<T extends EntityLivingBase> extends AINearestAtt
     @Override
     public boolean shouldExecute()
     {
-        return attacker.getBrightness() < 0.5 && super.shouldExecute();
+        return (Threat.getThreat(attacker) > 0 || attacker.getBrightness() < 0.5) && super.shouldExecute();
     }
 }

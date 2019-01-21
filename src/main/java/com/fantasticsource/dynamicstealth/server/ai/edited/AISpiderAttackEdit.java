@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 
@@ -14,14 +15,14 @@ public class AISpiderAttackEdit extends AIAttackMeleeEdit
     @Override
     public boolean shouldContinueExecuting()
     {
-        float f = attacker.getBrightness();
-
-        if (f >= 0.5 && attacker.getRNG().nextInt(100) == 0)
+        Threat.ThreatData data = Threat.get(attacker);
+        if (data.threatLevel <= 0)
         {
             attacker.setAttackTarget(null);
             return false;
         }
 
+        if (attacker.getBrightness() >= 0.5) data.threatLevel--;
         return super.shouldContinueExecuting();
     }
 
