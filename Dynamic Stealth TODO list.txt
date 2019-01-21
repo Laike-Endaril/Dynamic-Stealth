@@ -61,8 +61,6 @@ Can probably combine the two below into a single AI task...
 
 SENSES =================================================================
 
-Improve vision detection by allowing entities to see parts of other entities besides just their eyes (right now they only "have LOS" if they have LOS to each others' eyes)
-
 Add touch-based detection (within very close range)
 Add general config option for touch-based detection
 Add entity-specific config option for touch-based detection
