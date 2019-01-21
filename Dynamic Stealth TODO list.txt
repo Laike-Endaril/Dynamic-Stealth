@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Add entity-specific configs for helper system
-
 Overwrite pigmen to use helper system
 
 Add caching to AITargetEdit.isSuitableTarget()
@@ -35,6 +33,8 @@ CONFIG =================================================================
 
 Add config option for "Can See Through" Materials
 Add config option for "Can See Through" Blocks
+
+Add entity-specific configs for helper system
 
 
 
