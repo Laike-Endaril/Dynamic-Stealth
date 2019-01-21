@@ -1,8 +1,8 @@
 CURRENTLY WORKING ON ===================================================
 
-Add entity-specific configs for warning system
+Add entity-specific configs for helper system
 
-Overwrite pigmen to use warning system
+Overwrite pigmen to use helper system
 
 Add caching to AITargetEdit.isSuitableTarget()
 
