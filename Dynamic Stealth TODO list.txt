@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Overwrite pigmen to use helper system
-
 Add caching to AITargetEdit.isSuitableTarget()
 
 Add potion effect for soul sight
