@@ -191,6 +191,22 @@ public class DynamicStealthConfig
             @Config.Name("Ownership")
             public Ownership ownership = new Ownership();
 
+            @Config.Name("Teams")
+            public Teams teams = new Teams();
+
+            @Config.Name("Custom NPCs Factions")
+            @Comment("These settings only matter if Custom NPCs is installed")
+            public CNPCFactions cnpcFactions = new CNPCFactions();
+
+            @Config.Name("Help Same Entity Type")
+            @Comment(
+                    {
+                            "Whether to help entities of the same type",
+                            "",
+                            "Eg. if set to true, skeletons will help other skeletons (but not zombies)"
+                    })
+            public boolean helpSameType = true;
+
             public class Ownership
             {
                 @Config.Name("Help Owner")
@@ -210,9 +226,6 @@ public class DynamicStealthConfig
                 public boolean helpOwned = true;
             }
 
-            @Config.Name("Ownership")
-            public Teams teams = new Teams();
-
             public class Teams
             {
                 @Config.Name("Help Same Team")
@@ -224,10 +237,6 @@ public class DynamicStealthConfig
                 public boolean dontHelpOther = true;
             }
 
-            @Config.Name("Custom NPCs Factions")
-            @Comment("These settings only matter if Custom NPCs is installed")
-            public CNPCFactions cnpcFactions = new CNPCFactions();
-
             public class CNPCFactions
             {
                 @Config.Name("Help If Good Rep")
@@ -238,15 +247,6 @@ public class DynamicStealthConfig
                 @Comment("Make sure NOT to help those we're hostile to")
                 public boolean dontHelpBadRep = true;
             }
-
-            @Config.Name("Help Same Entity Type")
-            @Comment(
-                    {
-                            "Whether to help entities of the same type",
-                            "",
-                            "Eg. if set to true, skeletons will help other skeletons (but not zombies)"
-                    })
-            public boolean helpSameType = true;
         }
 
         public class AI

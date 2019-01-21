@@ -1,6 +1,5 @@
 package com.fantasticsource.dynamicstealth.server;
 
-import com.fantasticsource.dynamicstealth.common.DynamicStealthConfig;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -12,7 +11,7 @@ import noppes.npcs.api.entity.IEntity;
 import noppes.npcs.api.entity.IPlayer;
 import noppes.npcs.api.handler.data.IFaction;
 
-import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.*;
+import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
 
 public class HelperSystem
 {
