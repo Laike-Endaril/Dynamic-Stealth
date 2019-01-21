@@ -40,6 +40,18 @@ public class DynamicStealthConfig
                     })
             @Config.RangeDouble(min = 0, max = 1)
             public double mobOpacityMin = 0;
+
+            @Config.Name("Full Opacity At...")
+            @Comment(
+                    {
+                            "The stealth rating at or above which an entity is drawn at full opacity",
+                            "",
+                            "If set to 1, entities are only drawn at full opacity in the very best of visibility conditions",
+                            "",
+                            "Decreasing the value makes entities appear opaque at further distances and in lower lighting, etc"
+                    })
+            @Config.RangeDouble(min = 0, max = 1)
+            public double fullOpacityAt = 0.5;
         }
 
         public class ThreatSystem

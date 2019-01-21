@@ -41,7 +41,13 @@ public class RenderAlterer
         {
             int id = livingBase.getEntityId();
             double min = DynamicStealthConfig.clientSettings.z_otherSettings.mobOpacityMin;
-            double range = ClientData.visibilityMap.containsKey(id) ? ClientData.visibilityMap.get(id) : 0;
+            double visibility = ClientData.visibilityMap.containsKey(id) ? ClientData.visibilityMap.get(id) : 0;
+            double maxOpacityAt = DynamicStealthConfig.clientSettings.z_otherSettings.fullOpacityAt;
+            if (visibility != 0)
+            {
+                if (maxOpacityAt == 0) visibility = 1;
+                else visibility /= maxOpacityAt;
+            }
 
             GlStateManager.enableBlend();
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -49,7 +55,7 @@ public class RenderAlterer
             GlStateManager.enableCull();
             GlStateManager.cullFace(GlStateManager.CullFace.BACK);
 
-            GlStateManager.color(1, 1, 1, (float) (min + (1d - min) * range));
+            GlStateManager.color(1, 1, 1, (float) (min + (1d - min) * visibility));
         }
     }
 
