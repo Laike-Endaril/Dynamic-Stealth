@@ -166,13 +166,13 @@ public class DynamicStealthConfig
                 })
         public ThreatSystem threat = new ThreatSystem();
 
-        @Config.Name("Other Settings")
-        @Comment({"Stuff that doesn't fit in other categories"})
-        public OtherSettings z_otherSettings = new OtherSettings();
-
         @Config.Name("Helper System")
         @Comment("Which entities come to the aid of which other entities")
         public HelperSystemSettings helperSystemSettings = new HelperSystemSettings();
+
+        @Config.Name("Other Settings")
+        @Comment({"Stuff that doesn't fit in other categories"})
+        public OtherSettings z_otherSettings = new OtherSettings();
 
         public class HelperSystemSettings
         {
