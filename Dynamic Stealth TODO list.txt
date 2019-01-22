@@ -1,5 +1,9 @@
 CURRENTLY WORKING ON ===================================================
 
+Add touch-based detection (within very close range)
+Add general config option for touch-based detection
+Add entity-specific config option for touch-based detection
+
 Add caching to AITargetEdit.isSuitableTarget()
 
 Add potion effect for soul sight
@@ -60,10 +64,6 @@ Can probably combine the two below into a single AI task...
 
 
 SENSES =================================================================
-
-Add touch-based detection (within very close range)
-Add general config option for touch-based detection
-Add entity-specific config option for touch-based detection
 
 Add sound-based detection
 Apply stealth-based sound attributes
