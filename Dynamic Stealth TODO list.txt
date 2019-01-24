@@ -8,7 +8,15 @@ Add touch-based detection (within very close range)
 Add general config option for touch-based detection
 Add entity-specific config option for touch-based detection
 
-Add creature frustration mechanic, and allow it to trigger potion effects (changeable in the server settings)
+Add "fear" AI task
+...runs away from lastKnownPosition, or if that is somehow null, runs in a random direction
+...constant threat drain (configurable), effect ends when threat hits 0
+...damage does not change threat level while in this mode
+
+Add "unreachable target" mechanic...
+...if the mob has threat, hasn't dealt damage lately, and either (has no target OR cannot reach its target), it changes behavior in a configurable way
+...option to trigger fear effect
+...option to trigger potion effects
 
 Add caching to AITargetEdit.isSuitableTarget()
 
