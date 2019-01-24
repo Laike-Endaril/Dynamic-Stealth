@@ -1,5 +1,9 @@
 CURRENTLY WORKING ON ===================================================
 
+Fix nameplate sync when Neat is installed
+
+Techgun mobs don't build damage threat, because techguns is cancelling the LivingHurtEvent
+
 Add touch-based detection (within very close range)
 Add general config option for touch-based detection
 Add entity-specific config option for touch-based detection
@@ -111,8 +115,6 @@ CNPCs don't change opacity
 
 Figure out why the TF2 sentry gun constantly loses target with DS installed (if it's not in threat bypass mode)
 Does having DS installed cause TF2 bullet streaks to not show?
-
-Techgun mobs don't build damage threat, because techguns is cancelling the LivingHurtEvent
 
 Lycanite's Mobs can still attack through walls; probably using different LOS
 
