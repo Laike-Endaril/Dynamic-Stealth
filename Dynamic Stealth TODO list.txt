@@ -8,6 +8,8 @@ Add touch-based detection (within very close range)
 Add general config option for touch-based detection
 Add entity-specific config option for touch-based detection
 
+Add creature frustration mechanic, and allow it to trigger potion effects (changeable in the server settings)
+
 Add caching to AITargetEdit.isSuitableTarget()
 
 Add potion effect for soul sight
