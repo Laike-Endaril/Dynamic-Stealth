@@ -17,16 +17,13 @@ import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.ser
 
 public class EntityVisionData
 {
+    public static int playerMaxVisionDistance = serverSettings.senses.vision.f_distances.distanceFar;
     private static ArrayList<Class<? extends Entity>> naturalNightvisionEntities = new ArrayList<>();
     private static ArrayList<Class<? extends Entity>> naturalSoulSightEntities = new ArrayList<>();
-
     private static Map<Class<? extends Entity>, Pair<Integer, Integer>> entityAngles = new HashMap<>();
     private static Map<Class<? extends Entity>, Pair<Integer, Integer>> entityDistances = new HashMap<>();
     private static Map<Class<? extends Entity>, Pair<Integer, Integer>> entityLighting = new HashMap<>();
     private static Map<Class<? extends Entity>, Pair<Double, Double>> entitySpeeds = new HashMap<>();
-
-    public static int playerMaxVisionDistance = serverSettings.senses.vision.f_distances.distanceFar;
-
 
     static
     {
