@@ -1,8 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.senses;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockSlime;
-import net.minecraft.block.BlockTrapDoor;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -148,6 +146,8 @@ public class LOS
         //Special blocks types that don't follow the rules
         if (block instanceof BlockSlime) return true;
         if (block instanceof BlockTrapDoor) return true;
+        if (block instanceof BlockFence) return true;
+        if (block instanceof BlockFenceGate) return true;
 
         //Special blocks that don't follow the rules
         if (block == Blocks.ACACIA_DOOR) return true;
