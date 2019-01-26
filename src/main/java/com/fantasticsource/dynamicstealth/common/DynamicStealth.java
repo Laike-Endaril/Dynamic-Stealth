@@ -170,7 +170,7 @@ public class DynamicStealth
     }
 
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
     public static void entityAttacked(LivingHurtEvent event) throws InvocationTargetException, IllegalAccessException
     {
         EntityLivingBase target = event.getEntityLiving();

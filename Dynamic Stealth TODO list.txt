@@ -2,9 +2,6 @@ CURRENTLY WORKING ON ===================================================
 
 Fix nameplate sync when Neat is installed
 
-Techgun mobs don't build damage threat, because techguns is cancelling the LivingHurtEvent...
-...try using receiveCancelled argument in SubscribeEvent tag
-
 Add touch-based detection (within very close range)
 Add general config option for touch-based detection
 Add entity-specific config option for touch-based detection
