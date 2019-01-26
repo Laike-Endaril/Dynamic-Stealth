@@ -509,6 +509,7 @@ public class DynamicStealth
         if (Loader.isModLoaded("lycanitesmobs")) Compat.lycanites = true;
         if (Loader.isModLoaded("ancientwarfare")) Compat.ancientwarfare = true;
         if (Loader.isModLoaded("neat")) Compat.neat = true;
+        if (Loader.isModLoaded("statues")) Compat.statues = true;
         if (Loader.isModLoaded("customnpcs"))
         {
             Compat.customnpcs = true;

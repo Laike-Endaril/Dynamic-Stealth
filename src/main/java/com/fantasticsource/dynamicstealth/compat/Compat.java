@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class Compat
 {
-    public static boolean lycanites = false, ancientwarfare = false, customnpcs = false, neat = false;
+    public static boolean lycanites = false, ancientwarfare = false, customnpcs = false, neat = false, statues = false;
 
     private static Field executingTasksField;
 

@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth.client;
 
 import com.fantasticsource.dynamicstealth.common.ClientData;
 import com.fantasticsource.dynamicstealth.common.DynamicStealthConfig;
+import com.fantasticsource.dynamicstealth.compat.Compat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,6 +21,7 @@ public class RenderAlterer
     {
         //Don't draw seen entities as invisible, because they've been SEEN
         EntityLivingBase livingBase = event.getEntity();
+        if (Compat.statues && livingBase.getClass().getName().contains("party.lemons.statue")) return;
         livingBase.setInvisible(false);
 
 
@@ -62,6 +64,7 @@ public class RenderAlterer
     @SubscribeEvent
     public static void postRender(RenderLivingEvent.Post event)
     {
+        if (Compat.statues && event.getEntity().getClass().getName().contains("party.lemons.statue")) return;
         GlStateManager.color(1, 1, 1, 1);
         GlStateManager.disableBlend();
     }
