@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Improve LOS checks
-
 Add "fear" AI task
 ...runs away from lastKnownPosition, or if that is somehow null, runs in a random direction
 ...constant threat drain (configurable), effect ends when threat hits 0
@@ -84,6 +82,8 @@ Apply stealth-based sound attributes
 Add scent-based detection (wolves, cats, bears)
 ...Add the ability for entities to smell not only other living entities, but also ground items, etc.
 Apply stealth-based scent attributes
+
+Improve LOS checks
 
 
 
