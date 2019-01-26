@@ -1,6 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-Fix nameplate sync when Neat is installed
+Improve LOS checks
 
 Add "fear" AI task
 ...runs away from lastKnownPosition, or if that is somehow null, runs in a random direction

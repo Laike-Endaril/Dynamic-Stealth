@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth.client;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.dynamicstealth.compat.Compat;
+import com.fantasticsource.dynamicstealth.compat.CompatNeat;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.datastructures.Color;
 import net.minecraft.client.Minecraft;
@@ -17,6 +18,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.lang.reflect.Field;
@@ -87,7 +89,7 @@ public class HUD extends Gui
         double scale = clientSettings.threat.onPointHUDStyle.scale * 0.025;
         double halfSize2D = TEX_SIZE / 4D;
         double hOff2D = clientSettings.threat.onPointHUDStyle.horizontalOffset2D;
-        double vOff2D = clientSettings.threat.onPointHUDStyle.verticalOffset2D;
+        double vOff2D = Compat.neat ? clientSettings.threat.onPointHUDStyle.verticalOffset2D - 11 : clientSettings.threat.onPointHUDStyle.verticalOffset2D;
 
 
         GlStateManager.disableLighting();
@@ -110,7 +112,15 @@ public class HUD extends Gui
 
         GlStateManager.pushMatrix();
 
-        if (Compat.customnpcs && entity.getClass().getName().equals("noppes.npcs.entity.EntityCustomNpc"))
+        if (Compat.neat)
+        {
+            GlStateManager.translate(x, y + entity.height * clientSettings.threat.onPointHUDStyle.verticalPercent + clientSettings.threat.onPointHUDStyle.verticalOffset - 0.5 + CompatNeat.heightAboveMob, z);
+            GlStateManager.rotate(-viewerYaw, 0, 1, 0);
+            GlStateManager.rotate(renderManager.options.thirdPersonView == 2 ? -viewerPitch : viewerPitch, 1, 0, 0);
+            GlStateManager.translate(entity.width * clientSettings.threat.onPointHUDStyle.horizontalPercent, 0, 0);
+            GlStateManager.scale(-scale, -scale, scale);
+        }
+        else if (Compat.customnpcs && entity.getClass().getName().equals("noppes.npcs.entity.EntityCustomNpc"))
         {
             double cnpcScale = entity.height / 1.8;
             GlStateManager.translate(x, y + entity.height * clientSettings.threat.onPointHUDStyle.verticalPercent + clientSettings.threat.onPointHUDStyle.verticalOffset - 0.5 - 0.108 * cnpcScale, z);
