@@ -11,6 +11,7 @@ import com.fantasticsource.dynamicstealth.server.ai.AIStealthTargetingAndSearch;
 import com.fantasticsource.dynamicstealth.server.ai.edited.*;
 import com.fantasticsource.dynamicstealth.server.entitytracker.EntityTrackerEdit;
 import com.fantasticsource.dynamicstealth.server.senses.EntitySensesEdit;
+import com.fantasticsource.dynamicstealth.server.senses.EntityTouchData;
 import com.fantasticsource.dynamicstealth.server.senses.EntityVisionData;
 import com.fantasticsource.dynamicstealth.server.senses.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
@@ -24,9 +25,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.*;
+import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.monster.*;
+import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.entity.passive.EntityRabbit;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -53,6 +57,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.Logger;
@@ -166,6 +171,41 @@ public class DynamicStealth
         if (world instanceof WorldServer && serverSettings.senses.usePlayerSenses)
         {
             worldServerEntityTrackerField.set(world, new EntityTrackerEdit((WorldServer) world));
+        }
+    }
+
+
+    @SubscribeEvent
+    public static void entityCollision(TickEvent.WorldTickEvent event) throws InvocationTargetException, IllegalAccessException
+    {
+        if (serverSettings.senses.touch.touchEnabled)
+        {
+            World world = event.world;
+            if (!MCTools.isClient(world))
+            {
+                for (Entity feeler : world.loadedEntityList)
+                {
+                    if (feeler instanceof EntityLivingBase && feeler.isEntityAlive() && !(feeler instanceof EntityArmorStand || feeler instanceof EntityBat) && EntityTouchData.canFeel(feeler))
+                    {
+                        for (Entity felt : world.getEntitiesWithinAABBExcludingEntity(feeler, feeler.getEntityBoundingBox()))
+                        {
+                            if (felt instanceof EntityLivingBase && felt.isEntityAlive() && !(felt instanceof EntityArmorStand || felt instanceof EntityBat))
+                            {
+                                if (feeler instanceof EntityPlayerMP)
+                                {
+                                    //TODO add indicator for players
+                                }
+                                else
+                                {
+                                    EntityLiving feelerLiving = (EntityLiving) feeler;
+                                    makeLivingLookDirection(feelerLiving, (float) Tools.radtodeg(TRIG_TABLE.arctanFullcircle(feeler.posZ, feeler.posX, felt.posZ, felt.posX)));
+                                    feelerLiving.getNavigator().clearPath();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

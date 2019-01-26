@@ -1,9 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Add touch-based detection (within very close range)
-Add general config option for touch-based detection
-Add entity-specific config option for touch-based detection
-
 Fix nameplate sync when Neat is installed
 
 Add "fear" AI task
@@ -56,6 +52,8 @@ Add entity-specific configs for helper system
 
 
 VISUAL INDICATORS ======================================================
+
+Add touch detection indicator for players (see to do in DynamicStealth)
 
 Add optional "damaged from" indicator, which draws an edge-of-screen arrow pointing the direction damage was recently received from
 

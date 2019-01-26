@@ -289,8 +289,27 @@ public class DynamicStealthConfig
             @Config.RequiresMcRestart
             public boolean usePlayerSenses = true;
 
+            @Config.Name("Touch")
+            public Touch touch = new Touch();
             @Config.Name("Vision")
             public Vision vision = new Vision();
+
+            public class Touch
+            {
+                @Config.Name("Enable Touch")
+                @Comment({"If true, entities can feel each other if they bump into one another"})
+                @Config.RequiresMcRestart
+                public boolean touchEnabled = true;
+
+                @Config.Name("Unfeeling")
+                @Comment({"Entities in this list don't notice when something bumps them"})
+                @Config.RequiresMcRestart
+                public String[] unfeelingEntities = new String[]
+                        {
+                                "zombie",
+                                "husk"
+                        };
+            }
 
             public class Vision
             {
