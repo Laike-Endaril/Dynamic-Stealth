@@ -138,17 +138,51 @@ public class Sight
     {
         if (searcher.world != target.world) return false;
 
-        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), new Vec3d(target.posX, target.posY + target.height / 2, target.posZ), true))
+        double halfWidth = target.width / 2;
+        double halfHeight = target.height / 2;
+
+        double x = target.posX;
+        double y = target.posY + halfHeight;
+        double z = target.posZ;
+
+        //Center
+        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), new Vec3d(x, y, z), true))
         {
             return true;
         }
 
-        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), new Vec3d(target.posX, target.posY, target.posZ), true))
+        //+Y
+        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), new Vec3d(x, y + halfHeight, z), true))
         {
             return true;
         }
 
-        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), new Vec3d(target.posX, target.posY + target.height, target.posZ), true))
+        //-Y
+        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), new Vec3d(x, y - halfHeight, z), true))
+        {
+            return true;
+        }
+
+        //+X
+        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), new Vec3d(x + halfWidth, y, z), true))
+        {
+            return true;
+        }
+
+        //-X
+        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), new Vec3d(x - halfWidth, y, z), true))
+        {
+            return true;
+        }
+
+        //+Z
+        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), new Vec3d(x, y, z + halfWidth), true))
+        {
+            return true;
+        }
+
+        //-Z
+        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), new Vec3d(x, y, z - halfWidth), true))
         {
             return true;
         }
@@ -197,7 +231,7 @@ public class Sight
                 if (entity instanceof EntityLivingBase && entity != player)
                 {
                     double distSquared = player.getDistanceSq(entity);
-                    if (distSquared <= 2500 && los(player, entity))
+                    if (distSquared <= Math.pow(playerMaxVisionDistance, 2) && los(player, entity))
                     {
                         double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, entity.posY - player.posY, entity.posZ - player.posZ).normalize());
 
