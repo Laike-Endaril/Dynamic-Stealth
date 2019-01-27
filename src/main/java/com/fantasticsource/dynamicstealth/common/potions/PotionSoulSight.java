@@ -10,8 +10,8 @@ public class PotionSoulSight extends Potion
 {
     public PotionSoulSight()
     {
-        super(false, 0xFFFF77);
-        setPotionName("dynamidstealth.soulSight");
+        super(false, 0xFFFF55);
+        setPotionName(DynamicStealth.MODID + ".soulSight");
         setRegistryName(DynamicStealth.MODID, "soulSight");
     }
 

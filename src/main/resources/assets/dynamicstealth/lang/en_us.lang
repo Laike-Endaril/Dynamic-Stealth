@@ -8,7 +8,7 @@ attribute.name.dynamicstealth.scentReduction=% Scent Reduction
 attribute.name.dynamicstealth.smelling=% Smelling
 
 
-dynamidstealth.soulSight=Soul Sight
+dynamicstealth.soulSight=Soul Sight
 potion.effect.dynamicstealth.soulSight=Potion of Soul Sight
 splash_potion.effect.dynamicstealth.soulSight=Splash Potion of Soul Sight
 lingering_potion.effect.dynamicstealth.soulSight=Lingering Potion of Soul Sight
