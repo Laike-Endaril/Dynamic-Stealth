@@ -1,7 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
 Fix entities not appearing as glowing when soul sight potion is in effect
-Fix localization of soul sight potions
 Add recipes for soul sight potions
 Add icon for soul sight potions
 
