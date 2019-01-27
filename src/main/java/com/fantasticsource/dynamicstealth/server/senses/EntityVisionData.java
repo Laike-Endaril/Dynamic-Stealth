@@ -1,8 +1,9 @@
 package com.fantasticsource.dynamicstealth.server.senses;
 
 import com.fantasticsource.tools.datastructures.Pair;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.MobEffects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -18,12 +19,15 @@ import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.ser
 public class EntityVisionData
 {
     public static int playerMaxVisionDistance = serverSettings.senses.vision.f_distances.distanceFar;
-    private static ArrayList<Class<? extends Entity>> naturalNightvisionEntities = new ArrayList<>();
-    private static ArrayList<Class<? extends Entity>> naturalSoulSightEntities = new ArrayList<>();
-    private static Map<Class<? extends Entity>, Pair<Integer, Integer>> entityAngles = new HashMap<>();
-    private static Map<Class<? extends Entity>, Pair<Integer, Integer>> entityDistances = new HashMap<>();
-    private static Map<Class<? extends Entity>, Pair<Integer, Integer>> entityLighting = new HashMap<>();
-    private static Map<Class<? extends Entity>, Pair<Double, Double>> entitySpeeds = new HashMap<>();
+
+    public static ArrayList<EntityLivingBase> potionSoulSightEntities = new ArrayList<>();
+
+    private static ArrayList<Class<? extends EntityLivingBase>> naturalNightvisionEntities = new ArrayList<>();
+    private static ArrayList<Class<? extends EntityLivingBase>> naturalSoulSightEntities = new ArrayList<>();
+    private static Map<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityAngles = new HashMap<>();
+    private static Map<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityDistances = new HashMap<>();
+    private static Map<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityLighting = new HashMap<>();
+    private static Map<Class<? extends EntityLivingBase>, Pair<Double, Double>> entitySpeeds = new HashMap<>();
 
     static
     {
@@ -38,7 +42,12 @@ public class EntityVisionData
             {
                 entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(string));
                 if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
-                else naturalNightvisionEntities.add(entry.getEntityClass());
+                else
+                {
+                    Class c = entry.getEntityClass();
+                    if (EntityLivingBase.class.isAssignableFrom(c)) naturalNightvisionEntities.add(c);
+                    else System.err.println("Entity \"" + string + "\" does not extend EntityLivingBase!");
+                }
             }
         }
 
@@ -49,7 +58,12 @@ public class EntityVisionData
             {
                 entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(string));
                 if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
-                else naturalSoulSightEntities.add(entry.getEntityClass());
+                else
+                {
+                    Class c = entry.getEntityClass();
+                    if (EntityLivingBase.class.isAssignableFrom(c)) naturalSoulSightEntities.add(c);
+                    else System.err.println("Entity \"" + string + "\" does not extend EntityLivingBase!");
+                }
             }
         }
 
@@ -67,7 +81,9 @@ public class EntityVisionData
                     if (entry == null) System.err.println("ResourceLocation for entity \"" + token + "\" not found!");
                     else
                     {
-                        entityAngles.put(entry.getEntityClass(), new Pair<>(Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
+                        Class c = entry.getEntityClass();
+                        if (EntityLivingBase.class.isAssignableFrom(c)) entityAngles.put(c, new Pair<>(Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
+                        else System.err.println("Entity \"" + string + "\" does not extend EntityLivingBase!");
                     }
                 }
             }
@@ -91,7 +107,9 @@ public class EntityVisionData
                     if (entry == null) System.err.println("ResourceLocation for entity \"" + token + "\" not found!");
                     else
                     {
-                        entityDistances.put(entry.getEntityClass(), new Pair<>(Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
+                        Class c = entry.getEntityClass();
+                        if (EntityLivingBase.class.isAssignableFrom(c)) entityDistances.put(c, new Pair<>(Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
+                        else System.err.println("Entity \"" + string + "\" does not extend EntityLivingBase!");
                     }
                 }
             }
@@ -111,7 +129,9 @@ public class EntityVisionData
                     if (entry == null) System.err.println("ResourceLocation for entity \"" + token + "\" not found!");
                     else
                     {
-                        entityLighting.put(entry.getEntityClass(), new Pair<>(Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
+                        Class c = entry.getEntityClass();
+                        if (EntityLivingBase.class.isAssignableFrom(c)) entityLighting.put(c, new Pair<>(Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
+                        else System.err.println("Entity \"" + string + "\" does not extend EntityLivingBase!");
                     }
                 }
             }
@@ -131,7 +151,9 @@ public class EntityVisionData
                     if (entry == null) System.err.println("ResourceLocation for entity \"" + token + "\" not found!");
                     else
                     {
-                        entitySpeeds.put(entry.getEntityClass(), new Pair<>(Double.parseDouble(tokens[1].trim()), Double.parseDouble(tokens[2].trim())));
+                        Class c = entry.getEntityClass();
+                        if (EntityLivingBase.class.isAssignableFrom(c)) entitySpeeds.put(c, new Pair<>(Double.parseDouble(tokens[1].trim()), Double.parseDouble(tokens[2].trim())));
+                        else System.err.println("Entity \"" + string + "\" does not extend EntityLivingBase!");
                     }
                 }
             }
@@ -157,63 +179,62 @@ public class EntityVisionData
     }
 
 
-    public static boolean naturalNightVision(Entity searcher)
+    public static boolean hasNightVision(EntityLivingBase searcher)
     {
-        return naturalNightvisionEntities.contains(searcher.getClass());
+        return naturalNightvisionEntities.contains(searcher.getClass()) || searcher.getActivePotionEffect(MobEffects.NIGHT_VISION) != null;
     }
 
-    public static boolean naturalSoulSight(Entity searcher)
+    public static boolean hasSoulSight(EntityLivingBase searcher)
     {
-        return naturalSoulSightEntities.contains(searcher.getClass());
+        return naturalSoulSightEntities.contains(searcher.getClass()) || potionSoulSightEntities.contains(searcher);
     }
 
-
-    public static int angleLarge(Entity searcher)
+    public static int angleLarge(EntityLivingBase searcher)
     {
         Pair<Integer, Integer> pair = entityAngles.get(searcher.getClass());
         return pair == null ? serverSettings.senses.vision.e_angles.angleLarge : pair.getKey();
     }
 
-    public static int angleSmall(Entity searcher)
+    public static int angleSmall(EntityLivingBase searcher)
     {
         Pair<Integer, Integer> pair = entityAngles.get(searcher.getClass());
         return pair == null ? serverSettings.senses.vision.e_angles.angleSmall : pair.getValue();
     }
 
 
-    public static int distanceFar(Entity searcher)
+    public static int distanceFar(EntityLivingBase searcher)
     {
         Pair<Integer, Integer> pair = entityDistances.get(searcher.getClass());
         return pair == null ? serverSettings.senses.vision.f_distances.distanceFar : pair.getKey();
     }
 
-    public static int distanceNear(Entity searcher)
+    public static int distanceNear(EntityLivingBase searcher)
     {
         Pair<Integer, Integer> pair = entityDistances.get(searcher.getClass());
         return pair == null ? serverSettings.senses.vision.f_distances.distanceNear : pair.getValue();
     }
 
 
-    public static int lightHigh(Entity searcher)
+    public static int lightHigh(EntityLivingBase searcher)
     {
         Pair<Integer, Integer> pair = entityLighting.get(searcher.getClass());
         return pair == null ? serverSettings.senses.vision.c_lighting.lightHigh : pair.getKey();
     }
 
-    public static int lightLow(Entity searcher)
+    public static int lightLow(EntityLivingBase searcher)
     {
         Pair<Integer, Integer> pair = entityLighting.get(searcher.getClass());
         return pair == null ? serverSettings.senses.vision.c_lighting.lightLow : pair.getValue();
     }
 
 
-    public static double speedHigh(Entity searcher)
+    public static double speedHigh(EntityLivingBase searcher)
     {
         Pair<Double, Double> pair = entitySpeeds.get(searcher.getClass());
         return pair == null ? serverSettings.senses.vision.d_speeds.speedHigh : pair.getKey();
     }
 
-    public static double speedLow(Entity searcher)
+    public static double speedLow(EntityLivingBase searcher)
     {
         Pair<Double, Double> pair = entitySpeeds.get(searcher.getClass());
         return pair == null ? serverSettings.senses.vision.d_speeds.speedLow : pair.getValue();

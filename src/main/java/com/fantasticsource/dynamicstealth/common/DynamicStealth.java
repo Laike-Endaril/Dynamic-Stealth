@@ -2,6 +2,8 @@ package com.fantasticsource.dynamicstealth.common;
 
 import com.fantasticsource.dynamicstealth.client.HUD;
 import com.fantasticsource.dynamicstealth.client.RenderAlterer;
+import com.fantasticsource.dynamicstealth.common.potions.PotionSoulSight;
+import com.fantasticsource.dynamicstealth.common.potions.Potions;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatCNPC;
 import com.fantasticsource.dynamicstealth.server.Attributes;
@@ -68,7 +70,7 @@ import java.util.Set;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
 
-@Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, acceptableRemoteVersions = "*")
+@Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION)
 public class DynamicStealth
 {
     public static final String MODID = "dynamicstealth";
@@ -94,6 +96,7 @@ public class DynamicStealth
         MinecraftForge.EVENT_BUS.register(Threat.class);
         MinecraftForge.EVENT_BUS.register(Sight.class);
         MinecraftForge.EVENT_BUS.register(WarningSystem.class);
+        MinecraftForge.EVENT_BUS.register(Potions.class);
 
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
         {
@@ -506,6 +509,7 @@ public class DynamicStealth
     @EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
+        //Compat init
         if (Loader.isModLoaded("lycanitesmobs")) Compat.lycanites = true;
         if (Loader.isModLoaded("ancientwarfare")) Compat.ancientwarfare = true;
         if (Loader.isModLoaded("neat")) Compat.neat = true;

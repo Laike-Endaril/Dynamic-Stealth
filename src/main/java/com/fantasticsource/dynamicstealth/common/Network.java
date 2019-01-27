@@ -162,7 +162,7 @@ public class Network
 
         public ClientInitPacket(EntityPlayerMP player)
         {
-            soulSight = EntityVisionData.naturalSoulSight(player);
+            soulSight = EntityVisionData.hasSoulSight(player);
         }
 
         @Override

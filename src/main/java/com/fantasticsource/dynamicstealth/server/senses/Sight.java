@@ -267,7 +267,7 @@ public class Sight
         if (searcher.world != target.world || target.isDead) return 777;
 
         //Soul Sight (absolute)
-        if (naturalSoulSight(searcher)) return 0;
+        if (hasSoulSight(searcher)) return 0;
 
 
         //Angles and Distances (absolute, base FOV)
@@ -315,7 +315,7 @@ public class Sight
 
         //Lighting (absolute, factor, after Angles, after Glowing, after LOS)
         double lightFactor = lightLevelTotal(target);
-        if (searcher.getActivePotionEffect(MobEffects.NIGHT_VISION) != null || naturalNightVision(searcher))
+        if (hasNightVision(searcher))
         {
             lightFactor = Math.min(15, lightFactor + vision.c_lighting.nightVisionAddition);
         }
