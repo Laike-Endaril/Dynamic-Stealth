@@ -11,8 +11,7 @@ import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
 
@@ -21,13 +20,14 @@ public class EntityVisionData
     public static int playerMaxVisionDistance = serverSettings.senses.vision.f_distances.distanceFar;
 
     public static ArrayList<EntityLivingBase> potionSoulSightEntities = new ArrayList<>();
+    public static ArrayList<EntityLivingBase> soulSightCache = new ArrayList<>();
 
     private static ArrayList<Class<? extends EntityLivingBase>> naturalNightvisionEntities = new ArrayList<>();
     private static ArrayList<Class<? extends EntityLivingBase>> naturalSoulSightEntities = new ArrayList<>();
-    private static Map<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityAngles = new HashMap<>();
-    private static Map<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityDistances = new HashMap<>();
-    private static Map<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityLighting = new HashMap<>();
-    private static Map<Class<? extends EntityLivingBase>, Pair<Double, Double>> entitySpeeds = new HashMap<>();
+    private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityAngles = new LinkedHashMap<>();
+    private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityDistances = new LinkedHashMap<>();
+    private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityLighting = new LinkedHashMap<>();
+    private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Double, Double>> entitySpeeds = new LinkedHashMap<>();
 
     static
     {

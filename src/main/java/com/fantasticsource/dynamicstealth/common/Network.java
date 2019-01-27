@@ -38,6 +38,7 @@ public class Network
         WRAPPER.registerMessage(HUDPacketHandler.class, HUDPacket.class, discriminator++, Side.CLIENT);
         WRAPPER.registerMessage(ClientInitPacketHandler.class, ClientInitPacket.class, discriminator++, Side.CLIENT);
         WRAPPER.registerMessage(VisibilityPacketHandler.class, VisibilityPacket.class, discriminator++, Side.CLIENT);
+        WRAPPER.registerMessage(SoulSightPacketHandler.class, SoulSightPacket.class, discriminator++, Side.CLIENT);
     }
 
 
@@ -49,6 +50,23 @@ public class Network
             EntityPlayerMP player = (EntityPlayerMP) event.player;
             if (player != null && player.world.loadedEntityList.contains(player))
             {
+                if (EntityVisionData.hasSoulSight(player))
+                {
+                    if (!EntityVisionData.soulSightCache.contains(player))
+                    {
+                        EntityVisionData.soulSightCache.add(player);
+                        WRAPPER.sendTo(new SoulSightPacket(true), player);
+                    }
+                }
+                else
+                {
+                    if (EntityVisionData.soulSightCache.contains(player))
+                    {
+                        EntityVisionData.soulSightCache.remove(player);
+                        WRAPPER.sendTo(new SoulSightPacket(false), player);
+                    }
+                }
+
                 if (serverSettings.senses.usePlayerSenses) WRAPPER.sendTo(new VisibilityPacket(player), player);
 
                 if (isOP(player))
@@ -151,6 +169,50 @@ public class Network
     }
 
 
+    public static class SoulSightPacket implements IMessage
+    {
+        boolean soulSight;
+
+        public SoulSightPacket() //Required; probably for when the packet is received
+        {
+        }
+
+        public SoulSightPacket(boolean soulSight)
+        {
+            this.soulSight = soulSight;
+        }
+
+        @Override
+        public void toBytes(ByteBuf buf)
+        {
+            buf.writeBoolean(soulSight);
+        }
+
+        @Override
+        public void fromBytes(ByteBuf buf)
+        {
+            soulSight = buf.readBoolean();
+        }
+    }
+
+    public static class SoulSightPacketHandler implements IMessageHandler<SoulSightPacket, IMessage>
+    {
+        @Override
+        public IMessage onMessage(SoulSightPacket packet, MessageContext ctx)
+        {
+            if (ctx.side == Side.CLIENT)
+            {
+                Minecraft.getMinecraft().addScheduledTask(() ->
+                {
+                    ClientData.soulSight = packet.soulSight;
+                });
+            }
+
+            return null;
+        }
+    }
+
+
     public static class ClientInitPacket implements IMessage
     {
         boolean soulSight;
@@ -163,6 +225,7 @@ public class Network
         public ClientInitPacket(EntityPlayerMP player)
         {
             soulSight = EntityVisionData.hasSoulSight(player);
+            if (soulSight) EntityVisionData.soulSightCache.add(player);
         }
 
         @Override
