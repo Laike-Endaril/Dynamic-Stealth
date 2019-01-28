@@ -34,6 +34,7 @@ import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -177,6 +178,25 @@ public class DynamicStealth
         }
     }
 
+
+    @SubscribeEvent
+    public static void test(TickEvent.PlayerTickEvent event)
+    {
+        if (MCTools.isClient(event.player.world))
+        {
+            for (PotionEffect effect : event.player.getActivePotionEffects())
+            {
+                System.out.println("Client: " + effect.getEffectName());
+            }
+        }
+        else
+        {
+            for (PotionEffect effect : event.player.getActivePotionEffects())
+            {
+                System.out.println("Server: " + effect.getEffectName());
+            }
+        }
+    }
 
     @SubscribeEvent
     public static void entityCollision(TickEvent.WorldTickEvent event) throws InvocationTargetException, IllegalAccessException

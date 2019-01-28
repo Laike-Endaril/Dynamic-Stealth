@@ -1,7 +1,9 @@
 CURRENTLY WORKING ON ===================================================
 
-Add recipes for soul sight potions
+Fix potion effect not existing client-side (the particles do, but the effect itself does not)
+
 Add icon for soul sight potions
+Add recipes for soul sight potions
 
 Add option to allow OPs to bypass sight algorithm
 
@@ -17,13 +19,6 @@ Add "unreachable target" mechanic...
 ...option to trigger potion effects
 
 Make passives use fear AI task and allow them to build threat to use for it
-
-Add caching to AITargetEdit.isSuitableTarget()
-
-Add indicator for where a mob WAS when you last saw it...
-...show the mob, as it was last seen, but black and white with partial transparency
-...make the on-point HUD above it into an X with coloration
-
 
 
 BUG FIXES ==============================================================
@@ -43,6 +38,11 @@ Fix mobs not moving to last known position before searching when too far away...
 This system, if improved upon, could be used for most pathfinding and should improve pathfinding performance (by splitting it up and calculating parts at different times)
 
 
+OPTIMIZATIONS ==========================================================
+
+Add caching to AITargetEdit.isSuitableTarget()
+
+
 CONFIG =================================================================
 
 Add config option for "Can See Through" Materials
@@ -54,9 +54,13 @@ Add entity-specific configs for helper system
 
 VISUAL INDICATORS ======================================================
 
-Add touch detection indicator for players (see to do in DynamicStealth)
+Add indicator for where a mob WAS when you last saw it...
+...show the mob, as it was last seen, but black and white with partial transparency
+...make the on-point HUD above it into an X with coloration
 
-Add optional "damaged from" indicator, which draws an edge-of-screen arrow pointing the direction damage was recently received from
+Edge-of-screen indicators...
+...sdd optional touch detection indicator for players (see to do in DynamicStealth.java)
+...sdd optional "damaged from" indicator, which draws an edge-of-screen arrow pointing the direction damage was recently received from
 
 Add optional reticle which draws on focused entity (if there is one, and it is visible)
 

@@ -18,6 +18,6 @@ public class Potions
     @SubscribeEvent
     public static void registerPotionTypes(RegistryEvent.Register<PotionType> event)
     {
-        event.getRegistry().register(new PotionType(DynamicStealth.MODID + ".soulSight", new PotionEffect(new PotionSoulSight(), 200)).setRegistryName(DynamicStealth.MODID, "soulSight"));
+        event.getRegistry().register(new PotionType(DynamicStealth.MODID + ".soulsight", new PotionEffect(new PotionSoulSight(), 200)).setRegistryName(DynamicStealth.MODID, "soulSight"));
     }
 }
