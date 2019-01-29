@@ -32,6 +32,7 @@ import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.entity.passive.EntityRabbit;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
@@ -193,7 +194,7 @@ public class DynamicStealth
                     {
                         for (Entity felt : world.getEntitiesWithinAABBExcludingEntity(feeler, feeler.getEntityBoundingBox()))
                         {
-                            if (felt instanceof EntityLivingBase && felt.isEntityAlive() && !(felt instanceof EntityArmorStand || felt instanceof EntityBat))
+                            if (felt.isEntityAlive() && (felt instanceof EntityPlayer || (felt instanceof EntityLiving && !(felt instanceof EntityBat))))
                             {
                                 if (feeler instanceof EntityPlayerMP)
                                 {
