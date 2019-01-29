@@ -180,25 +180,6 @@ public class DynamicStealth
 
 
     @SubscribeEvent
-    public static void test(TickEvent.PlayerTickEvent event)
-    {
-        if (MCTools.isClient(event.player.world))
-        {
-            for (PotionEffect effect : event.player.getActivePotionEffects())
-            {
-                System.out.println("Client: " + effect.getEffectName());
-            }
-        }
-        else
-        {
-            for (PotionEffect effect : event.player.getActivePotionEffects())
-            {
-                System.out.println("Server: " + effect.getEffectName());
-            }
-        }
-    }
-
-    @SubscribeEvent
     public static void entityCollision(TickEvent.WorldTickEvent event) throws InvocationTargetException, IllegalAccessException
     {
         if (serverSettings.senses.touch.touchEnabled)
