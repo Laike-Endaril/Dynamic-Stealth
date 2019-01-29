@@ -40,7 +40,7 @@ public class WarningSystem
         World world = data.getKey();
         if (warner.isEntityAlive() && warner.world == world)
         {
-            for (Entity entity : world.loadedEntityList)
+            for (Entity entity : world.loadedEntityList.toArray(new Entity[world.loadedEntityList.size()]))
             {
                 tryWarn(warner, entity, data.getValue());
             }
@@ -51,7 +51,7 @@ public class WarningSystem
 
     private static void tryWarn(EntityLivingBase warner, Entity helper, BlockPos warnPos)
     {
-        if (helper != warner && helper instanceof EntityLiving)
+        if (helper != warner && helper instanceof EntityLiving && helper.isEntityAlive())
         {
             EntityLiving livingHelper = (EntityLiving) helper;
 
