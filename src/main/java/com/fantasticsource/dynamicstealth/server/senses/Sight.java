@@ -207,7 +207,28 @@ public class Sight
         double stealthLevel;
         Entity[] loadedEntities = player.world.loadedEntityList.toArray(new Entity[player.world.loadedEntityList.size()]);
 
-        if (serverSettings.senses.usePlayerSenses)
+        if (EntityVisionData.hasSoulSight(player))
+        {
+            for (Entity entity : loadedEntities)
+            {
+                if (entity instanceof EntityLivingBase && entity != player && visualStealthLevel(player, entity) <= 1)
+                {
+                    double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, entity.posY - player.posY, entity.posZ - player.posZ).normalize());
+
+                    //And because Vec3d.fromPitchYaw occasionally returns values barely out of the range of (-1, 1)...
+                    if (angleDif < -1) angleDif = -1;
+                    else if (angleDif > 1) angleDif = 1;
+
+                    angleDif = TRIG_TABLE.arccos(angleDif); //0 in front, pi in back
+
+                    double distSquared = player.getDistanceSq(entity);
+                    double priority = Math.pow(angleDif, 3) * distSquared;
+                    queues[0].add((EntityLivingBase) entity, priority); //Returned to external call
+                    queues[1].add((EntityLivingBase) entity, priority); //Used for playerSeenThisTickMap (result caching)
+                }
+            }
+        }
+        else if (serverSettings.senses.usePlayerSenses)
         {
             for (Entity entity : loadedEntities)
             {
@@ -243,10 +264,10 @@ public class Sight
 
                         if (angleDif / Math.PI * 180 <= 70)
                         {
-                            double priority = Math.pow(angleDif, 2) * distSquared;
+                            double priority = Math.pow(angleDif, 3) * distSquared;
                             queues[0].add((EntityLivingBase) entity, priority); //Returned to external call
                             queues[1].add((EntityLivingBase) entity, priority); //Used for playerSeenThisTickMap (result caching)
-                            map.put(entity, new SeenData(priority, true));
+                            map.put(entity, new SeenData(priority, true)); //visualStealthLevel was not called, so need to add to map manually
                         }
                     }
                 }
