@@ -2,7 +2,6 @@ package com.fantasticsource.dynamicstealth.common;
 
 import com.fantasticsource.dynamicstealth.client.HUD;
 import com.fantasticsource.dynamicstealth.client.RenderAlterer;
-import com.fantasticsource.dynamicstealth.common.potions.PotionSoulSight;
 import com.fantasticsource.dynamicstealth.common.potions.Potions;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatCNPC;
@@ -35,7 +34,6 @@ import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;

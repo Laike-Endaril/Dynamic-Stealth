@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth.common.potions;
+package com.fantasticsource.dynamicstealth.common.potions.soulsight;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.dynamicstealth.server.senses.EntityVisionData;
@@ -19,10 +19,10 @@ public class PotionSoulSight extends Potion
     public PotionSoulSight()
     {
         super(false, 0xFFFF55);
-        setPotionName(DynamicStealth.MODID + ".soulSight");
-        setRegistryName(DynamicStealth.MODID, "soulSight");
+        setPotionName(DynamicStealth.MODID + ".soulsight");
+        setRegistryName(DynamicStealth.MODID, "soulsight");
         setBeneficial();
-        iconTexture = new ResourceLocation(DynamicStealth.MODID, "potions/soulSight.png");
+        iconTexture = new ResourceLocation(DynamicStealth.MODID, "potions/soulsight.png");
     }
 
     @Override
