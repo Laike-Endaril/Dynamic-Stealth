@@ -199,7 +199,7 @@ public class DynamicStealth
                                 {
                                     //TODO add indicator for players
                                 }
-                                else
+                                else if (feeler instanceof EntityLiving)
                                 {
                                     EntityLiving feelerLiving = (EntityLiving) feeler;
                                     makeLivingLookDirection(feelerLiving, (float) Tools.radtodeg(TRIG_TABLE.arctanFullcircle(feeler.posZ, feeler.posX, felt.posZ, felt.posX)));
