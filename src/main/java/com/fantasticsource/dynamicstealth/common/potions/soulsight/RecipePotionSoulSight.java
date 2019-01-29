@@ -13,10 +13,11 @@ public class RecipePotionSoulSight extends BrewingRecipe
 {
     private static final ItemStack INPUT = PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.THICK);
     private static final ItemStack REAGENT = new ItemStack(Items.ENDER_EYE);
+    private static final ItemStack DEFAULT_OUTPUT = PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), Potions.POTIONTYPE_SOULSIGHT_NORMAL);
 
     public RecipePotionSoulSight(@Nonnull ItemStack input, @Nonnull ItemStack ingredient, @Nonnull ItemStack output)
     {
-        super(INPUT, REAGENT, null);
+        super(INPUT, REAGENT, DEFAULT_OUTPUT);
     }
 
     @Override
