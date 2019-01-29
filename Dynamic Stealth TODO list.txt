@@ -1,10 +1,10 @@
 CURRENTLY WORKING ON ===================================================
 
-Fix icon background for soul sight potions
-
+Add config option for enabling/disabling potions
 Add recipes for soul sight potions
+Add config option for enabling/disabling potion recipes
 
-Add option to allow OPs to bypass sight algorithm
+Change priority method of detail HUD when under the effects of soul sight
 
 Add "fear" AI task
 ...runs away from lastKnownPosition, or if that is somehow null, runs in a random direction
@@ -18,6 +18,10 @@ Add "unreachable target" mechanic...
 ...option to trigger potion effects
 
 Make passives use fear AI task and allow them to build threat to use for it
+
+Add action wheel which opens on keybind
+Add actions...
+...Attempt Stealth / Don't Attempt Stealth (if set to "Don't Attempt Stealth", you are very easy for things to notice)
 
 
 BUG FIXES ==============================================================
