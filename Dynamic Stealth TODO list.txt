@@ -1,6 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Make soulsight register as a buff, not a debuff
 Fix icon background for soul sight potions
 
 Add recipes for soul sight potions

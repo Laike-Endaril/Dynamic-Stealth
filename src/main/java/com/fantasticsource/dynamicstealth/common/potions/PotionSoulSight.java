@@ -21,6 +21,7 @@ public class PotionSoulSight extends Potion
         super(false, 0xFFFF55);
         setPotionName(DynamicStealth.MODID + ".soulSight");
         setRegistryName(DynamicStealth.MODID, "soulSight");
+        setBeneficial();
         iconTexture = new ResourceLocation(DynamicStealth.MODID, "potions/soulSight.png");
     }
 
