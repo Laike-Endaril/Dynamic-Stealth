@@ -13,6 +13,9 @@ Add "unreachable target" mechanic...
 
 Make passives use fear AI task and allow them to build threat to use for it
 
+Add blindness potion
+Add glowing potion
+
 Add action wheel which opens on keybind
 Add actions...
 ...Attempt Stealth / Don't Attempt Stealth (if set to "Don't Attempt Stealth", you are very easy for things to notice)
@@ -100,6 +103,8 @@ Add smoke bombs which block LOS
 Add hand mirror, which allows you to peek around corners (changes camera position while in use, based on which hand it is in)
 
 Add armor/baubles that improve stealth/anti-stealth attributes
+
+Add the ability to apply potions to weapons
 
 
 
