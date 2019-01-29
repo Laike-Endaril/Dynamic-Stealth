@@ -1,8 +1,8 @@
 CURRENTLY WORKING ON ===================================================
 
-Fix potion effect not existing client-side (the particles do, but the effect itself does not)
+Make soulsight register as a buff, not a debuff
+Fix icon background for soul sight potions
 
-Add icon for soul sight potions
 Add recipes for soul sight potions
 
 Add option to allow OPs to bypass sight algorithm

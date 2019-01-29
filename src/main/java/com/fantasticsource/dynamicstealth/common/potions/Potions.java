@@ -9,15 +9,18 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class Potions
 {
+    public static final Potion POTION_SOULSIGHT = new PotionSoulSight();
+    public static final PotionType POTIONTYPE_SOULSIGHT_NORMAL = new PotionType(DynamicStealth.MODID + ".soulSight", new PotionEffect(POTION_SOULSIGHT, 200)).setRegistryName(DynamicStealth.MODID, "soulSight");
+
     @SubscribeEvent
     public static void registerPotions(RegistryEvent.Register<Potion> event)
     {
-        event.getRegistry().register(new PotionSoulSight());
+        event.getRegistry().register(POTION_SOULSIGHT);
     }
 
     @SubscribeEvent
     public static void registerPotionTypes(RegistryEvent.Register<PotionType> event)
     {
-        event.getRegistry().register(new PotionType(DynamicStealth.MODID + ".soulsight", new PotionEffect(new PotionSoulSight(), 200)).setRegistryName(DynamicStealth.MODID, "soulSight"));
+        event.getRegistry().register(POTIONTYPE_SOULSIGHT_NORMAL);
     }
 }
