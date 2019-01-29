@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.common.potions;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
+import com.fantasticsource.dynamicstealth.common.DynamicStealthConfig;
 import com.fantasticsource.dynamicstealth.common.potions.soulsight.PotionSoulSight;
 import com.fantasticsource.dynamicstealth.common.potions.soulsight.RecipePotionSoulSight;
 import net.minecraft.potion.Potion;
@@ -18,13 +19,22 @@ public class Potions
     @SubscribeEvent
     public static void registerPotions(RegistryEvent.Register<Potion> event)
     {
-        event.getRegistry().register(POTION_SOULSIGHT);
+        if (DynamicStealthConfig.serverSettings.itemSettings.potionSettings.soulSightPotion)
+        {
+            event.getRegistry().register(POTION_SOULSIGHT);
+        }
     }
 
     @SubscribeEvent
     public static void registerPotionTypes(RegistryEvent.Register<PotionType> event)
     {
-        event.getRegistry().register(POTIONTYPE_SOULSIGHT_NORMAL);
-        BrewingRecipeRegistry.addRecipe(new RecipePotionSoulSight(null, null, null));
+        if (DynamicStealthConfig.serverSettings.itemSettings.potionSettings.soulSightPotion)
+        {
+            event.getRegistry().register(POTIONTYPE_SOULSIGHT_NORMAL);
+            if (DynamicStealthConfig.serverSettings.itemSettings.potionSettings.soulSightPotionRecipe)
+            {
+                BrewingRecipeRegistry.addRecipe(new RecipePotionSoulSight(null, null, null));
+            }
+        }
     }
 }

@@ -1,8 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Add config option for enabling/disabling potions
-Add config option for enabling/disabling potion recipes
-
 Change priority method of detail HUD when under the effects of soul sight
 
 Add "fear" AI task

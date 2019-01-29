@@ -186,6 +186,28 @@ public class DynamicStealthConfig
         @Comment({"Stuff that doesn't fit in other categories"})
         public OtherSettings z_otherSettings = new OtherSettings();
 
+        @Config.Name("Items")
+        public ItemSettings itemSettings = new ItemSettings();
+
+        public class ItemSettings
+        {
+            @Config.Name("Potions")
+            public PotionSettings potionSettings = new PotionSettings();
+
+            public class PotionSettings
+            {
+                @Config.Name("Soul Sight Potions")
+                @Comment("If set to true, the game will load soul sight potions (accessible from the brewing tab of the creative menu)")
+                @Config.RequiresMcRestart
+                public boolean soulSightPotion = true;
+
+                @Config.Name("Soul Sight Potion Recipes")
+                @Comment("If set to true, players can brew soul sight potions with ender eyes + thick potions")
+                @Config.RequiresMcRestart
+                public boolean soulSightPotionRecipe = true;
+            }
+        }
+
         public class HelperSystemSettings
         {
             @Config.Name("Ownership")
