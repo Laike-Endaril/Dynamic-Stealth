@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class Compat
 {
-    public static boolean lycanites = false, ancientwarfare = false, customnpcs = false, neat = false, statues = false;
+    public static boolean lycanites = false, ancientwarfare = false, customnpcs = false, neat = false, statues = false, vampirism = false;
 
     private static Field executingTasksField;
 
@@ -48,13 +48,14 @@ public class Compat
 
     private static boolean fixBadNullTargetHandling()
     {
-        return lycanites || ancientwarfare;
+        return lycanites || ancientwarfare || vampirism;
     }
 
     private static boolean badNullTargetHandling(String aiClassname)
     {
         return (lycanites && aiClassname.equals("com.lycanitesmobs.core.entity.ai.EntityAIAttackMelee"))
-                || (ancientwarfare && aiClassname.equals("net.shadowmage.ancientwarfare.npc.ai.vehicle.NpcAIAimVehicle"));
+                || (ancientwarfare && aiClassname.equals("net.shadowmage.ancientwarfare.npc.ai.vehicle.NpcAIAimVehicle"))
+                || (vampirism && aiClassname.equals("de.teamlapen.vampirism.entity.ai.EntityAIAttackMeleeNoSun"));
     }
 
 
