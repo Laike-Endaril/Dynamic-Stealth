@@ -63,7 +63,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
-import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -80,7 +79,6 @@ public class DynamicStealth
 
     public static final TrigLookupTable TRIG_TABLE = new TrigLookupTable(1024);
 
-    private static Logger logger;
     private static Field sensesField, lookHelperField, abstractSkeletonAIArrowAttackField, abstractSkeletonAIAttackOnCollideField, worldServerEntityTrackerField;
     private static Class aiSlimeFaceRandomClass, aiEvilAttackClass, aiBearMeleeClass, aiSpiderAttackClass, aiSpiderTargetClass, aiBearAttackPlayerClass, aiLlamaDefendTarget,
             aiPigmanHurtByAggressorClass, aiLlamaHurtByTargetClass, aiPigmanTargetAggressorClass, aiVindicatorJohnnyAttackClass, aiBearHurtByTargetClass, aiGuardianAttackClass,
@@ -478,8 +476,6 @@ public class DynamicStealth
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) throws NoSuchFieldException, IllegalAccessException
     {
-        logger = event.getModLog();
-
         Network.init();
 
         sensesField = ReflectionTool.getField(EntityLiving.class, "field_70723_bA", "senses");
