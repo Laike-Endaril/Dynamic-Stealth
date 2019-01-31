@@ -1,6 +1,8 @@
 package com.fantasticsource.dynamicstealth.compat;
 
 import com.fantasticsource.tools.ReflectionTool;
+import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
@@ -21,41 +23,36 @@ public class Compat
 
     public static void cancelTasksRequiringAttackTarget(EntityAITasks tasks)
     {
-        if (fixBadNullTargetHandling())
+        for (EntityAITasks.EntityAITaskEntry task : tasks.taskEntries)
         {
-            for (EntityAITasks.EntityAITaskEntry task : tasks.taskEntries)
+            if (badNullTargetHandling(task.action))
             {
-                if (badNullTargetHandling(task.action.getClass().getName()))
+                //Hard reset; set using to false, call resetTask(), and remove task from executingTasks
+                task.using = false;
+                task.action.resetTask();
+                try
                 {
-                    //Hard reset; set using to false, call resetTask(), and remove task from executingTasks
-                    task.using = false;
-                    task.action.resetTask();
-                    try
-                    {
-                        Set<EntityAITasks.EntityAITaskEntry> executingTasks = (Set<EntityAITasks.EntityAITaskEntry>) executingTasksField.get(tasks);
-                        executingTasks.remove(task);
-                    }
-                    catch (IllegalAccessException e)
-                    {
-                        e.printStackTrace();
-                        FMLCommonHandler.instance().exitJava(145, false);
-                    }
+                    Set<EntityAITasks.EntityAITaskEntry> executingTasks = (Set<EntityAITasks.EntityAITaskEntry>) executingTasksField.get(tasks);
+                    executingTasks.remove(task);
+                }
+                catch (IllegalAccessException e)
+                {
+                    e.printStackTrace();
+                    FMLCommonHandler.instance().exitJava(145, false);
                 }
             }
         }
     }
 
 
-    private static boolean fixBadNullTargetHandling()
+    private static boolean badNullTargetHandling(EntityAIBase ai)
     {
-        return lycanites || ancientwarfare || vampirism;
-    }
+        if (ai.getClass() == EntityAIAttackMelee.class) return true;
 
-    private static boolean badNullTargetHandling(String aiClassname)
-    {
+        String aiClassname = ai.getClass().getName();
         return (lycanites && aiClassname.equals("com.lycanitesmobs.core.entity.ai.EntityAIAttackMelee"))
                 || (ancientwarfare && aiClassname.equals("net.shadowmage.ancientwarfare.npc.ai.vehicle.NpcAIAimVehicle"))
-                || (vampirism && aiClassname.equals("de.teamlapen.vampirism.entity.ai.EntityAIAttackMeleeNoSun"));
+                || (vampirism && (aiClassname.equals("de.teamlapen.vampirism.entity.ai.EntityAIAttackMeleeNoSun") || aiClassname.equals("de.teamlapen.vampirism.entity.vampire.EntityVampireBaron$BaronAIAttackMelee")));
     }
 
 
