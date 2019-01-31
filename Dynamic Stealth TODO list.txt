@@ -2,7 +2,7 @@ CURRENTLY WORKING ON ===================================================
 
 Migrate old bad AI handling entries to new system, where applicable
 
-Keep EntityThreatData.isAfraid() in mind
+Allow passives to build threat from damage
 
 Add "fear" AI task
 ...runs away from lastKnownPosition, or if that is somehow null, runs in a random direction
@@ -14,8 +14,6 @@ Add "unreachable target" mechanic...
 ...if the mob has threat, hasn't dealt damage lately, and either (has no target OR cannot reach its target), it changes behavior in a configurable way
 ...option to trigger fear effect
 ...option to trigger potion effects
-
-Make passives use fear AI task and allow them to build threat to use for it
 
 Add blindness potion
 Add glowing potion

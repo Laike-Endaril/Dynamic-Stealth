@@ -758,6 +758,25 @@ public class DynamicStealthConfig
 
             public class EntityThreatSettings
             {
+                @Config.Name("Fearless")
+                @Comment("These entities will not use the fear mechanic when low on health")
+                public String[] fearless = new String[]
+                        {
+                                "player",
+                                "zombie",
+                                "zombie_villager",
+                                "husk",
+                                "skeleton",
+                                "stray",
+                                "wither_skeleton",
+                                "creeper",
+                                "ghast",
+                                "slime",
+                                "enderman",
+                                "ender_dragon",
+                                "wither"
+                        };
+
                 @Config.Name("Threat Bypass")
                 @Comment(
                         {

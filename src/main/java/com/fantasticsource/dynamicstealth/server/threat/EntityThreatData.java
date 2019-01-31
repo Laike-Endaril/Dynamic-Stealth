@@ -15,9 +15,10 @@ import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.ser
 
 public class EntityThreatData
 {
-    public static ArrayList<Class<? extends Entity>> threatBypass = new ArrayList<>();
-    public static ArrayList<Class<? extends Entity>> isPassive = new ArrayList<>();
-    public static ArrayList<Class<? extends Entity>> isNonPassive = new ArrayList<>();
+    private static ArrayList<Class<? extends Entity>> threatBypass = new ArrayList<>();
+    private static ArrayList<Class<? extends Entity>> isPassive = new ArrayList<>();
+    private static ArrayList<Class<? extends Entity>> isNonPassive = new ArrayList<>();
+    private static ArrayList<Class<? extends Entity>> isFearless = new ArrayList<>();
 
 
     static
@@ -26,6 +27,18 @@ public class EntityThreatData
         String[] tokens;
         String token;
         int mode;
+
+        for (String string : serverSettings.threat.y_entityOverrides.fearless)
+        {
+            if (string.equals("player")) isFearless.add(EntityPlayerMP.class);
+            else
+            {
+                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(string));
+
+                if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
+                else isFearless.add(entry.getEntityClass());
+            }
+        }
 
         for (String string : serverSettings.threat.y_entityOverrides.threatBypass)
         {
@@ -115,6 +128,11 @@ public class EntityThreatData
 
     public static boolean isAfraid(EntityLivingBase livingBase)
     {
-        return Threat.getThreat(livingBase) > 0 && isPassive(livingBase);
+        for (Class<? extends Entity> clss : isFearless)
+        {
+            if (clss.isAssignableFrom(livingBase.getClass())) return false;
+        }
+
+        return Threat.getThreat(livingBase) > 0 && (isPassive(livingBase) || livingBase.getHealth() / livingBase.getMaxHealth() < 0.25);
     }
 }
