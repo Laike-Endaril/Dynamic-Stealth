@@ -1,5 +1,9 @@
 CURRENTLY WORKING ON ===================================================
 
+Migrate old bad AI handling entries to new system, where applicable
+
+Keep EntityThreatData.isAfraid() in mind
+
 Add "fear" AI task
 ...runs away from lastKnownPosition, or if that is somehow null, runs in a random direction
 ...constant threat drain (configurable), effect ends when threat hits 0

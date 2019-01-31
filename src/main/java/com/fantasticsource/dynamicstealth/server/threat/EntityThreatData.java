@@ -113,7 +113,7 @@ public class EntityThreatData
     }
 
 
-    public static boolean isFeared(EntityLivingBase livingBase)
+    public static boolean isAfraid(EntityLivingBase livingBase)
     {
         return Threat.getThreat(livingBase) > 0 && isPassive(livingBase);
     }
