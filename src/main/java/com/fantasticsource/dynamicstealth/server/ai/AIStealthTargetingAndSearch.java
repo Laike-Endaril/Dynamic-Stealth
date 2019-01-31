@@ -116,7 +116,7 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
         searcher.setAttackTarget(null);
 
         int result = Math.max(0, threat - serverSettings.threat.unseenTargetDegredationRate);
-        if (result < serverSettings.threat.unseenMinimumThreat)
+        if (result <= serverSettings.threat.unseenMinimumThreat)
         {
             result = 0;
             clearSearchPath();
