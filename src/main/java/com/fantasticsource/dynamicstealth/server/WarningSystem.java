@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth.server;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealthConfig;
 import com.fantasticsource.dynamicstealth.server.ai.AIStealthTargetingAndSearch;
+import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.datastructures.Pair;
@@ -55,7 +56,7 @@ public class WarningSystem
         {
             EntityLiving livingHelper = (EntityLiving) helper;
 
-            if (!Threat.bypassesThreat(livingHelper) && !Threat.isPassive(livingHelper))
+            if (!EntityThreatData.bypassesThreat(livingHelper) && !EntityThreatData.isPassive(livingHelper))
             {
                 Threat.ThreatData data = Threat.get(livingHelper);
                 if (data.target == null && HelperSystem.helpPriority(livingHelper, warner, true, Math.pow(30d * livingHelper.getEntityAttribute(Attributes.HEARING).getAttributeValue() / 100, 2)) > 0)

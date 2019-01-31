@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth.server.ai;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.dynamicstealth.server.ai.edited.AITargetEdit;
+import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.TrigLookupTable;
@@ -46,8 +47,8 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
     @Override
     public boolean shouldExecute()
     {
-        if (Threat.bypassesThreat(searcher)) return false;
-        if (Threat.isPassive(searcher))
+        if (EntityThreatData.bypassesThreat(searcher)) return false;
+        if (EntityThreatData.isPassive(searcher))
         {
             searcher.setAttackTarget(null);
             return false;

@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth.common;
 
 import com.fantasticsource.dynamicstealth.server.senses.EntityVisionData;
 import com.fantasticsource.dynamicstealth.server.senses.Sight;
+import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import io.netty.buffer.ByteBuf;
@@ -24,7 +25,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import java.util.LinkedHashMap;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
-import static com.fantasticsource.dynamicstealth.server.threat.Threat.bypassesThreat;
 import static com.fantasticsource.mctools.MCTools.isOP;
 
 public class Network
@@ -302,7 +302,7 @@ public class Network
             {
                 searcher = queue.poll();
                 if (searcher == null) buf.writeInt(ClientData.COLOR_NULL); //if color == COLOR_NULL then searcher is null
-                else if (bypassesThreat(searcher))
+                else if (EntityThreatData.bypassesThreat(searcher))
                 {
                     buf.writeInt(ClientData.COLOR_ALERT);
                     buf.writeInt(-1); //else if threatLevel == -1 then searcher bypasses threat
@@ -348,7 +348,7 @@ public class Network
                 {
                     searcher = queue.poll();
                     if (searcher == null) buf.writeInt(ClientData.COLOR_NULL); //if color == COLOR_NULL then searcher is null
-                    else if (bypassesThreat(searcher))
+                    else if (EntityThreatData.bypassesThreat(searcher))
                     {
                         buf.writeInt(ClientData.COLOR_ALERT);
                         buf.writeInt(searcher.getEntityId());

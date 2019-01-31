@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
-import com.fantasticsource.dynamicstealth.server.threat.Threat;
+import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -43,7 +43,7 @@ public abstract class AITargetEdit extends EntityAIBase
             return false;
         }
 
-        if (Threat.isPassive(attacker)) return false;
+        if (EntityThreatData.isPassive(attacker)) return false;
 
         if (attacker.isOnSameTeam(target)) return false;
 

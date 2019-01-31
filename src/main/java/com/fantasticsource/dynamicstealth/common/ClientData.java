@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.common;
 
-import com.fantasticsource.dynamicstealth.server.threat.Threat;
+import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -9,7 +9,6 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import java.util.LinkedHashMap;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
-import static com.fantasticsource.dynamicstealth.server.threat.Threat.bypassesThreat;
 
 public class ClientData
 {
@@ -55,8 +54,8 @@ public class ClientData
     public static int getColor(EntityPlayer player, EntityLivingBase searcher, EntityLivingBase target, int threatLevel)
     {
         if (searcher == null) return COLOR_NULL;
-        if (bypassesThreat(searcher)) return COLOR_ALERT;
-        if (serverSettings.threat.recognizePassive && Threat.isPassive(searcher)) return COLOR_PASSIVE;
+        if (EntityThreatData.bypassesThreat(searcher)) return COLOR_ALERT;
+        if (serverSettings.threat.recognizePassive && EntityThreatData.isPassive(searcher)) return COLOR_PASSIVE;
         if (threatLevel <= 0) return COLOR_IDLE;
         if (target == null) return COLOR_ALERT;
         if (target == player) return COLOR_ATTACKING_YOU;

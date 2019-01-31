@@ -1,7 +1,9 @@
 package com.fantasticsource.dynamicstealth.server.threat;
 
 import com.fantasticsource.dynamicstealth.server.configdata.EntityThreatDefaults;
+import com.fantasticsource.mctools.MCTools;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityEntry;
@@ -78,5 +80,41 @@ public class EntityThreatData
                 }
             }
         }
+    }
+
+
+    public static boolean bypassesThreat(EntityLivingBase livingBase)
+    {
+        if (serverSettings.threat.bypassThreatSystem || livingBase == null) return true;
+
+        for (Class<? extends Entity> clss : threatBypass)
+        {
+            if (clss.isAssignableFrom(livingBase.getClass())) return true;
+        }
+
+        return false;
+    }
+
+    public static boolean isPassive(EntityLivingBase livingBase)
+    {
+        if (livingBase == null || bypassesThreat(livingBase)) return false;
+
+        for (Class<? extends Entity> clss : isPassive)
+        {
+            if (clss.isAssignableFrom(livingBase.getClass())) return true;
+        }
+
+        for (Class<? extends Entity> clss : isNonPassive)
+        {
+            if (clss.isAssignableFrom(livingBase.getClass())) return false;
+        }
+
+        return MCTools.isPassive(livingBase);
+    }
+
+
+    public static boolean fear(EntityLivingBase livingBase)
+    {
+        return Threat.getThreat(livingBase) > 0 && isPassive(livingBase);
     }
 }

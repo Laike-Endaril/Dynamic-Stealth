@@ -1,7 +1,5 @@
 package com.fantasticsource.dynamicstealth.server.threat;
 
-import com.fantasticsource.mctools.MCTools;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -82,7 +80,7 @@ public class Threat
 
     public static void set(EntityLivingBase searcher, EntityLivingBase target, int threat)
     {
-        if (bypassesThreat(searcher)) return;
+        if (EntityThreatData.bypassesThreat(searcher)) return;
 
         if (threat <= 0) remove(searcher);
         else
@@ -101,7 +99,7 @@ public class Threat
 
     public static void setTarget(EntityLivingBase searcher, EntityLivingBase target)
     {
-        if (bypassesThreat(searcher)) return;
+        if (EntityThreatData.bypassesThreat(searcher)) return;
 
         ThreatData threatData = threatMap.get(searcher);
         if (threatData != null) threatData.target = target;
@@ -110,7 +108,7 @@ public class Threat
 
     public static void setThreat(EntityLivingBase searcher, int threat)
     {
-        if (bypassesThreat(searcher)) return;
+        if (EntityThreatData.bypassesThreat(searcher)) return;
 
         if (threat <= 0) remove(searcher);
         else
@@ -121,36 +119,6 @@ public class Threat
             if (threatData != null) threatData.threatLevel = threat;
             else threatMap.put(searcher, new ThreatData(searcher, null, threat));
         }
-    }
-
-
-    public static boolean bypassesThreat(EntityLivingBase livingBase)
-    {
-        if (serverSettings.threat.bypassThreatSystem || livingBase == null) return true;
-
-        for (Class<? extends Entity> clss : EntityThreatData.threatBypass)
-        {
-            if (clss.isAssignableFrom(livingBase.getClass())) return true;
-        }
-
-        return false;
-    }
-
-    public static boolean isPassive(EntityLivingBase livingBase)
-    {
-        if (livingBase == null || bypassesThreat(livingBase)) return false;
-
-        for (Class<? extends Entity> clss : EntityThreatData.isPassive)
-        {
-            if (clss.isAssignableFrom(livingBase.getClass())) return true;
-        }
-
-        for (Class<? extends Entity> clss : EntityThreatData.isNonPassive)
-        {
-            if (clss.isAssignableFrom(livingBase.getClass())) return false;
-        }
-
-        return MCTools.isPassive(livingBase);
     }
 
 

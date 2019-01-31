@@ -15,6 +15,7 @@ import com.fantasticsource.dynamicstealth.server.senses.EntitySensesEdit;
 import com.fantasticsource.dynamicstealth.server.senses.EntityTouchData;
 import com.fantasticsource.dynamicstealth.server.senses.EntityVisionData;
 import com.fantasticsource.dynamicstealth.server.senses.Sight;
+import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.Speedometer;
@@ -231,7 +232,7 @@ public class DynamicStealth
                 EntityLiving livingTarget = (EntityLiving) target;
                 boolean updateTarget = true;
                 boolean newThreatTarget = false;
-                boolean passive = Threat.isPassive(livingTarget);
+                boolean passive = EntityThreatData.isPassive(livingTarget);
 
                 //Threat
                 if (!passive)
@@ -466,7 +467,7 @@ public class DynamicStealth
 
     private static void addTasks(EntityAITasks targetTasks, EntityAITasks tasks, EntityLiving living)
     {
-        if (!Threat.bypassesThreat(living))
+        if (!EntityThreatData.bypassesThreat(living))
         {
             tasks.addTask(-7777777, new AIStealthTargetingAndSearch(living, 1));
         }
