@@ -401,6 +401,8 @@ public class DynamicStealth
 
     private static void replaceTasks(EntityAITasks tasks, EntityLiving living) throws Exception
     {
+        Compat.replaceNPEAttackTargetTasks(living);
+
         Set<EntityAITasks.EntityAITaskEntry> taskSet = tasks.taskEntries;
         EntityAITasks.EntityAITaskEntry[] taskArray = new EntityAITasks.EntityAITaskEntry[taskSet.size()];
         taskSet.toArray(taskArray);
