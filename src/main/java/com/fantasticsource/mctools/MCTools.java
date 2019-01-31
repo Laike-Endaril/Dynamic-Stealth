@@ -1,11 +1,11 @@
 package com.fantasticsource.mctools;
 
+import com.fantasticsource.dynamicstealth.server.ai.NPEAttackTargetTaskHolder;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAITasks;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
@@ -29,13 +29,24 @@ public class MCTools
         return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().canSendCommands(player.getGameProfile());
     }
 
-    public static boolean isPassive(EntityLivingBase living)
+    public static boolean isPassive(EntityLivingBase livingBase)
     {
         //This is not 100% accurate for modded entities, so having an entity-specific config override is suggested
-        if (living == null) return false;
+        if (livingBase == null) return false;
+
+        if (livingBase instanceof EntityLiving)
+        {
+            EntityLiving living = (EntityLiving) livingBase;
+            EntityAIBase ai;
+            for (EntityAITasks.EntityAITaskEntry task : living.tasks.taskEntries)
+            {
+                ai = task.action;
+                if (ai instanceof NPEAttackTargetTaskHolder || ai instanceof EntityAIAttackMelee || ai instanceof EntityAIAttackRanged || ai instanceof EntityAIAttackRangedBow) return false;
+            }
+        }
 
         //getEntityAttribute is incorrectly tagged as @Nonnull; it can and will return a null value sometimes
-        IAttributeInstance damage = living.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
+        IAttributeInstance damage = livingBase.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         return damage == null || damage.getAttributeValue() <= 0;
     }
 
