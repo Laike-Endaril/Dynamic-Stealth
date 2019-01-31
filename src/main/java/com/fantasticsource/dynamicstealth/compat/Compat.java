@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class Compat
 {
-    public static boolean lycanites = false, ancientwarfare = false, customnpcs = false, neat = false, statues = false, vampirism = false;
+    public static boolean lycanites = false, ancientwarfare = false, customnpcs = false, neat = false, statues = false;
 
     private static Field executingTasksField;
 
@@ -47,12 +47,11 @@ public class Compat
 
     private static boolean badNullTargetHandling(EntityAIBase ai)
     {
-        if (ai.getClass() == EntityAIAttackMelee.class) return true;
+        if (ai instanceof EntityAIAttackMelee) return true;
 
         String aiClassname = ai.getClass().getName();
         return (lycanites && aiClassname.equals("com.lycanitesmobs.core.entity.ai.EntityAIAttackMelee"))
-                || (ancientwarfare && aiClassname.equals("net.shadowmage.ancientwarfare.npc.ai.vehicle.NpcAIAimVehicle"))
-                || (vampirism && (aiClassname.equals("de.teamlapen.vampirism.entity.ai.EntityAIAttackMeleeNoSun") || aiClassname.equals("de.teamlapen.vampirism.entity.vampire.EntityVampireBaron$BaronAIAttackMelee")));
+                || (ancientwarfare && aiClassname.equals("net.shadowmage.ancientwarfare.npc.ai.vehicle.NpcAIAimVehicle"));
     }
 
 
