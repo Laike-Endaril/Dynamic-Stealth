@@ -31,10 +31,10 @@ public class WarningSystem
     @SubscribeEvent
     public static void update(TickEvent.ServerTickEvent event)
     {
-        warners.entrySet().removeIf(WarningSystem::checkRemove);
+        warners.entrySet().removeIf(WarningSystem::processAndRemove);
     }
 
-    private static boolean checkRemove(Map.Entry<EntityLivingBase, Pair<World, BlockPos>> entry)
+    private static boolean processAndRemove(Map.Entry<EntityLivingBase, Pair<World, BlockPos>> entry)
     {
         EntityLivingBase warner = entry.getKey();
         Pair<World, BlockPos> data = entry.getValue();
