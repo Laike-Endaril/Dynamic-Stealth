@@ -705,6 +705,40 @@ public class DynamicStealthConfig
             }
         }
 
+        @Config.Name("Fear")
+        public FearSettings fear = new FearSettings();
+
+        public class FearSettings
+        {
+            @Config.Name("Damage Increases Fear Duration")
+            @Comment("If set to true, then when an entity is *already* in fear mode, damage will increase its fear duration")
+            public boolean increaseOnDamage = true;
+
+            @Config.Name("Fearless")
+            @Comment(
+                    {
+                            "These entities will not use the fear mechanic when low on health",
+                            "",
+                            "Entities that bypass threat are automatically fearless"
+                    })
+            public String[] fearless = new String[]
+                    {
+                            "player",
+                            "zombie",
+                            "zombie_villager",
+                            "husk",
+                            "skeleton",
+                            "stray",
+                            "wither_skeleton",
+                            "creeper",
+                            "ghast",
+                            "slime",
+                            "enderman",
+                            "ender_dragon",
+                            "wither"
+                    };
+        }
+
         public class ThreatSystem
         {
             @Config.Name("Client HUD allowances")
@@ -758,25 +792,6 @@ public class DynamicStealthConfig
 
             public class EntityThreatSettings
             {
-                @Config.Name("Fearless")
-                @Comment("These entities will not use the fear mechanic when low on health")
-                public String[] fearless = new String[]
-                        {
-                                "player",
-                                "zombie",
-                                "zombie_villager",
-                                "husk",
-                                "skeleton",
-                                "stray",
-                                "wither_skeleton",
-                                "creeper",
-                                "ghast",
-                                "slime",
-                                "enderman",
-                                "ender_dragon",
-                                "wither"
-                        };
-
                 @Config.Name("Threat Bypass")
                 @Comment(
                         {

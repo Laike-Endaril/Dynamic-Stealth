@@ -219,18 +219,18 @@ public class DynamicStealth
 
         Entity source = event.getSource().getTrueSource();
         if (source == null) source = event.getSource().getImmediateSource();
-        if (source == null) return;
 
-        if (source instanceof EntityLivingBase)
+        if (target instanceof EntityLiving)
         {
-            EntityLivingBase livingBaseSource = (EntityLivingBase) source;
+            EntityLiving livingTarget = (EntityLiving) target;
+            boolean passive = EntityThreatData.isPassive(livingTarget);
 
-            if (target instanceof EntityLiving)
+            if (source instanceof EntityLivingBase)
             {
-                EntityLiving livingTarget = (EntityLiving) target;
+                EntityLivingBase livingBaseSource = (EntityLivingBase) source;
+
                 boolean updateTarget = true;
                 boolean newThreatTarget = false;
-                boolean passive = EntityThreatData.isPassive(livingTarget);
 
                 //Threat
                 if (!passive)
@@ -310,7 +310,11 @@ public class DynamicStealth
                 if (warnPos == null) warnPos = livingTarget.getPosition();
                 WarningSystem.warn(livingTarget, warnPos);
             }
+        }
 
+        if (source instanceof EntityLivingBase)
+        {
+            EntityLivingBase livingBaseSource = (EntityLivingBase) source;
 
             //Remove invisibility and blindness if set to do so
             if (serverSettings.z_otherSettings.removeInvisibilityOnHit)

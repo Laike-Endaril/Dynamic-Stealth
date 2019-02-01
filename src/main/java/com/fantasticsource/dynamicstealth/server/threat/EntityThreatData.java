@@ -28,7 +28,7 @@ public class EntityThreatData
         String token;
         int mode;
 
-        for (String string : serverSettings.threat.y_entityOverrides.fearless)
+        for (String string : serverSettings.fear.fearless)
         {
             if (string.equals("player")) isFearless.add(EntityPlayerMP.class);
             else
@@ -126,13 +126,17 @@ public class EntityThreatData
     }
 
 
-    public static boolean isAfraid(EntityLivingBase livingBase)
+    public static boolean willBeAfraid(EntityLivingBase livingBase, float damage)
     {
+        if (bypassesThreat(livingBase)) return false;
+
         for (Class<? extends Entity> clss : isFearless)
         {
             if (clss.isAssignableFrom(livingBase.getClass())) return false;
         }
 
-        return Threat.getThreat(livingBase) > 0 && (isPassive(livingBase) || livingBase.getHealth() / livingBase.getMaxHealth() < 0.25);
+        double hpFraction = (livingBase.getHealth() - damage) / livingBase.getMaxHealth();
+
+        return hpFraction > 0 && Threat.getThreat(livingBase) > 0 && (isPassive(livingBase) || hpFraction < 0.25);
     }
 }
