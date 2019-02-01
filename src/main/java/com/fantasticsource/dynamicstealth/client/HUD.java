@@ -74,6 +74,7 @@ public class HUD extends Gui
         if (color == COLOR_ALERT) return clientSettings.threat.filter.showAlert;
         if (color == COLOR_ATTACKING_YOU) return clientSettings.threat.filter.showAttackingYou;
         if (color == COLOR_ATTACKING_OTHER) return clientSettings.threat.filter.showAttackingOther;
+        if (color == COLOR_FLEEING) return clientSettings.threat.filter.showFleeing;
         return false;
     }
 

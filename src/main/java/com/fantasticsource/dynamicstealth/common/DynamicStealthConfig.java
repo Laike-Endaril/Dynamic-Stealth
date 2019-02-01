@@ -100,6 +100,10 @@ public class DynamicStealthConfig
                 @Config.Name("Attacking You")
                 @Comment({"If true, on-point indicators appear for mobs that are attacking YOU"})
                 public boolean showAttackingYou = true;
+
+                @Config.Name("Flee")
+                @Comment({"If true, on-point indicators appear for mobs that are fleeing from combat"})
+                public boolean showFleeing = true;
             }
 
             public class OnPointHUDStyle
@@ -705,19 +709,19 @@ public class DynamicStealthConfig
             }
         }
 
-        @Config.Name("Fear")
-        public FearSettings fear = new FearSettings();
+        @Config.Name("Flee Mechanic")
+        public FleeSettings flee = new FleeSettings();
 
-        public class FearSettings
+        public class FleeSettings
         {
-            @Config.Name("Damage Increases Fear Duration")
-            @Comment("If set to true, then when an entity is *already* in fear mode, damage will increase its fear duration")
+            @Config.Name("Damage Increases Flee Duration")
+            @Comment("If set to true, then when an entity is *already* in flee mode, damage will increase its flee duration")
             public boolean increaseOnDamage = true;
 
             @Config.Name("Fearless")
             @Comment(
                     {
-                            "These entities will not use the fear mechanic when low on health",
+                            "These entities will not use the flee mechanic when low on health",
                             "",
                             "Entities that bypass threat are automatically fearless"
                     })

@@ -18,6 +18,7 @@ public class ClientData
     public static final int COLOR_ATTACKING_OTHER = 0xFFFF00;
     public static final int COLOR_IDLE = 0x4444FF;
     public static final int COLOR_PASSIVE = 0x00CC00;
+    public static final int COLOR_FLEEING = 0x770077;
 
     public static final String EMPTY = "----------";
     public static final String UNKNOWN = "???";
@@ -55,6 +56,7 @@ public class ClientData
     {
         if (searcher == null) return COLOR_NULL;
         if (EntityThreatData.bypassesThreat(searcher)) return COLOR_ALERT;
+        if (EntityThreatData.isFleeing(searcher)) return COLOR_FLEEING;
         if (serverSettings.threat.recognizePassive && EntityThreatData.isPassive(searcher)) return COLOR_PASSIVE;
         if (threatLevel <= 0) return COLOR_IDLE;
         if (target == null) return COLOR_ALERT;

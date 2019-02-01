@@ -28,7 +28,7 @@ public class EntityThreatData
         String token;
         int mode;
 
-        for (String string : serverSettings.fear.fearless)
+        for (String string : serverSettings.flee.fearless)
         {
             if (string.equals("player")) isFearless.add(EntityPlayerMP.class);
             else
@@ -126,7 +126,7 @@ public class EntityThreatData
     }
 
 
-    public static boolean willBeAfraid(EntityLivingBase livingBase, float damage)
+    public static boolean willFlee(EntityLivingBase livingBase, float damage)
     {
         if (bypassesThreat(livingBase)) return false;
 
@@ -138,5 +138,10 @@ public class EntityThreatData
         double hpFraction = (livingBase.getHealth() - damage) / livingBase.getMaxHealth();
 
         return hpFraction > 0 && Threat.getThreat(livingBase) > 0 && (isPassive(livingBase) || hpFraction < 0.25);
+    }
+
+    public static boolean isFleeing(EntityLivingBase livingBase)
+    {
+        return willFlee(livingBase, 0);
     }
 }

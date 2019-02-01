@@ -1,18 +1,18 @@
 CURRENTLY WORKING ON ===================================================
 
+Fix leashes not rendering sometimes (it shows the knot though...is this a vanilla bug?)
+
+Don't display on-point HUD for ridden / riding entities
+
 Migrate old bad AI handling entries to new system, where applicable
 
-Allow passives to build threat from damage
-
-Add "fear" AI task
+Add "flee" mechanic
 ...runs away from lastKnownPosition, or if that is somehow null, runs in a random direction
 ...constant threat drain (configurable), effect ends when threat hits 0
-...damage does not change threat level while in this mode
-...threat gauge appears purple
 
 Add "unreachable target" mechanic...
 ...if the mob has threat, hasn't dealt damage lately, and either (has no target OR cannot reach its target), it changes behavior in a configurable way
-...option to trigger fear effect
+...option to trigger flee effect
 ...option to trigger potion effects
 
 Add blindness potion
