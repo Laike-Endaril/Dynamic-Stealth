@@ -2,8 +2,6 @@ CURRENTLY WORKING ON ===================================================
 
 Fix leashes not rendering sometimes (it shows the knot though...is this a vanilla bug?)
 
-Don't display on-point HUD for ridden / riding entities
-
 Migrate old bad AI handling entries to new system, where applicable
 
 Add "flee" mechanic

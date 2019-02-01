@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -61,13 +62,15 @@ public class HUD extends Gui
             {
                 OnPointData data = onPointDataMap.get(livingBase.getEntityId());
 
-                if (data != null && data.priority < clientSettings.threat.onPointHUDMax && onPointFilter(data.color, data.percent)) drawOnPointHUDElement(event.getRenderer().getRenderManager(), event.getX(), event.getY(), event.getZ(), livingBase, data.color, data.percent);
+                if (data != null && data.priority < clientSettings.threat.onPointHUDMax && onPointFilter(Minecraft.getMinecraft().player, livingBase, data.color, data.percent)) drawOnPointHUDElement(event.getRenderer().getRenderManager(), event.getX(), event.getY(), event.getZ(), livingBase, data.color, data.percent);
             }
         }
     }
 
-    private static boolean onPointFilter(int color, int percent)
+    private static boolean onPointFilter(EntityPlayer player, EntityLivingBase livingBase, int color, int percent)
     {
+        if (livingBase.getRidingEntity() == player || player.getRidingEntity() == livingBase) return false;
+
         if (percent == -1) return clientSettings.threat.filter.showBypass;
         if (color == COLOR_PASSIVE) return clientSettings.threat.filter.showPassive;
         if (color == COLOR_IDLE) return clientSettings.threat.filter.showIdle;
