@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
+Add "naturally bright" entity-specific config; makes them fully visible light-wise
+
 Fix leashes not rendering sometimes (it shows the knot though...is this a vanilla bug?)
 
 Migrate old bad AI handling entries to new system, where applicable
