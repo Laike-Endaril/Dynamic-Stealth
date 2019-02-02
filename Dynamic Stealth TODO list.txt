@@ -1,7 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-Fix flee pathing for vanilla mobs; they don't keep running straight for some reason
-Fix flee pathing for CNPCs
+Fix flee pathing; they don't keep running straight for some reason
 Make fleeing use panic speed?  Passives seem too slow
 
 Add "unreachable target" mechanic...

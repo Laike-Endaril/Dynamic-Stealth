@@ -716,7 +716,7 @@ public class DynamicStealthConfig
             @Config.Name("HP Threshold")
             @Comment("The % of health at which entities start to flee")
             @Config.RangeInt(min = 0, max = 100)
-            public int threshold = 25;
+            public int threshold = 40;
 
             @Config.Name("Degredation Rate")
             @Comment("How fast the flee gauge decreases; lower number means they flee for a longer time")

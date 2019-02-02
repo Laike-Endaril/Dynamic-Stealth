@@ -290,12 +290,8 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
 
             if (isCNPC && serverSettings.flee.cnpcsRunHome)
             {
-                if (fleeToPos == null)
-                {
-                    startFleeing(false);
-
-                    if (navigator.getPath() != path) navigator.setPath(path, speed);
-                }
+                if (fleeToPos == null || path == null || (path.isFinished() && (fleeToPos.getX() != searcher.getPosition().getX() || fleeToPos.getZ() != searcher.getPosition().getZ()))) startFleeing(false);
+                else if (navigator.getPath() != path) navigator.setPath(path, speed);
             }
             else
             {
@@ -331,8 +327,8 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
         }
         else fleeToPos = new BlockPos(searcher.getPositionVector().add(searcher.getPositionVector().subtract(new Vec3d(lastKnownPosition)).normalize().scale(10)));
 
-        System.out.println(fleeToPos.getX() + ", " + fleeToPos.getZ());
         path = navigator.getPathToPos(fleeToPos);
+        navigator.setPath(path, speed);
     }
 
     public void restart(BlockPos newPos) //This is NOT the same as resetTask(); this is just a proxy for me to remember how to reset this correctly from outside the task system
