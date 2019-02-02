@@ -4,6 +4,7 @@ import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.dynamicstealth.server.ai.edited.AITargetEdit;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.TrigLookupTable;
 import net.minecraft.entity.EntityLiving;
@@ -25,7 +26,7 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
     private final PathNavigate navigator;
     public double speed;
     public Path path = null;
-    public BlockPos lastKnownPosition = null;
+    public BlockPos lastKnownPosition = null, fleeToPos = null;
     private int phase, timeAtPos;
     private boolean spinDirection;
     private Vec3d lastPos = null, nextPos = null;
@@ -48,11 +49,6 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
     public boolean shouldExecute()
     {
         if (EntityThreatData.bypassesThreat(searcher)) return false;
-        if (EntityThreatData.isPassive(searcher))
-        {
-            searcher.setAttackTarget(null);
-            return false;
-        }
 
         Threat.ThreatData threatData = Threat.get(searcher);
         int threat = threatData.threatLevel;
@@ -65,7 +61,7 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
                 //Hopefully this always only means we've just noticed a new, valid target
                 Threat.set(searcher, attackTarget, serverSettings.threat.targetSpottedThreat);
                 lastKnownPosition = attackTarget.getPosition();
-                clearSearchPath();
+                clearAIPath();
                 return false;
             }
 
@@ -87,7 +83,7 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
                 //Hopefully this always only means we've just noticed a new, valid target
                 Threat.set(searcher, attackTarget, serverSettings.threat.targetSpottedThreat);
                 lastKnownPosition = attackTarget.getPosition();
-                clearSearchPath();
+                clearAIPath();
                 return false;
             }
 
@@ -102,7 +98,7 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
         {
             //Existing target's current position is known
             lastKnownPosition = threatTarget.getPosition();
-            clearSearchPath();
+            clearAIPath();
             searcher.setAttackTarget(threatTarget);
             return false;
         }
@@ -114,20 +110,23 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
 
     private boolean unseenTargetDegredation(int threat)
     {
-        searcher.setAttackTarget(null);
-
-        int result = Math.max(0, threat - serverSettings.threat.unseenTargetDegredationRate);
-        if (result <= serverSettings.threat.unseenMinimumThreat)
+        if (EntityThreatData.isFleeing(searcher)) return threat > 0; //Flee degredation handled elsewhere
         {
-            result = 0;
-            clearSearchPath();
-        }
+            searcher.setAttackTarget(null);
 
-        Threat.setThreat(searcher, result);
-        return result > 0;
+            threat = Math.max(0, threat - serverSettings.threat.unseenTargetDegredationRate);
+            if (threat <= serverSettings.threat.unseenMinimumThreat)
+            {
+                threat = 0;
+                clearAIPath();
+            }
+
+            Threat.setThreat(searcher, threat);
+            return threat > 0;
+        }
     }
 
-    private void clearSearchPath()
+    private void clearAIPath()
     {
         if (path != null && path.equals(navigator.getPath()))
         {
@@ -140,23 +139,27 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
     @Override
     public void startExecuting()
     {
-        if (lastKnownPosition != null)
-        {
-            phase = 0;
+        lastPos = null;
+        timeAtPos = 0;
 
-            timeAtPos = 0;
-            lastPos = null;
-
-            path = navigator.getPathToPos(lastKnownPosition);
-            navigator.setPath(path, speed);
-        }
+        if (EntityThreatData.isFleeing(searcher)) startFleeing(false);
         else
         {
-            phase = 1;
+            if (lastKnownPosition != null)
+            {
+                phase = 0;
 
-            startAngle = searcher.rotationYawHead;
-            spinDirection = searcher.getRNG().nextBoolean();
-            angleDif = 0;
+                path = navigator.getPathToPos(lastKnownPosition);
+                navigator.setPath(path, speed);
+            }
+            else
+            {
+                phase = 1;
+
+                startAngle = searcher.rotationYawHead;
+                spinDirection = searcher.getRNG().nextBoolean();
+                angleDif = 0;
+            }
         }
     }
 
@@ -169,6 +172,13 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
     @Override
     public void updateTask()
     {
+        //Flee if we should
+        if (EntityThreatData.isFleeing(searcher) && phase != -1)
+        {
+            startFleeing(false);
+        }
+
+
         //Reach searchPos, or the nearest reachable position to it.  If we reach a position, reset the search timer
         if (phase == 0)
         {
@@ -255,6 +265,50 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
                 angleDif = 0;
             }
         }
+
+
+        //Flee mode
+
+        //Flee from lastKnownPos
+        if (phase == -1)
+        {
+            Threat.ThreatData data = Threat.get(searcher);
+            int threat = Math.max(0, data.threatLevel - serverSettings.flee.degredationRate);
+            if (threat <= 0)
+            {
+                clearAIPath();
+                Threat.setThreat(searcher, 0);
+                return;
+            }
+            Threat.setThreat(searcher, threat);
+
+
+
+            if (searcher.getPosition().distanceSq(fleeToPos) < 5) startFleeing(false);
+
+            if (navigator.getPath() != path) navigator.setPath(path, speed);
+
+            Vec3d currentPos = searcher.getPositionVector();
+            if (lastPos != null && lastPos.squareDistanceTo(currentPos) < speed * 0.005) timeAtPos++;
+            else timeAtPos = 0;
+
+            lastPos = currentPos;
+
+            if (timeAtPos > 60 || lastKnownPosition == null || (searcher.onGround && navigator.noPath()))
+            {
+                startFleeing(true);
+                timeAtPos = 0;
+            }
+        }
+    }
+
+    private void startFleeing(boolean forceRandom)
+    {
+        phase = -1;
+
+        if (lastKnownPosition == null || forceRandom) lastKnownPosition = MCTools.randomPos(searcher.getPosition(), 2, 0);
+        fleeToPos = new BlockPos(searcher.getPositionVector().add(searcher.getPositionVector().subtract(new Vec3d(lastKnownPosition)).normalize().scale(10)));
+        path = navigator.getPathToPos(fleeToPos);
     }
 
     public void restart(BlockPos newPos) //This is NOT the same as resetTask(); this is just a proxy for me to remember how to reset this correctly from outside the task system

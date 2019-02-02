@@ -14,9 +14,9 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class MCTools
 {
-    public static BlockPos randomPos(BlockPos centerPos, int xz, int y)
+    public static BlockPos randomPos(BlockPos centerPos, int xzRange, int yRange)
     {
-        return centerPos.add(-xz + (int) (Math.random() * xz * 2 + 1), -xz + (int) (Math.random() * xz * 2 + 1), -y + (int) (Math.random() * y * 2 + 1));
+        return centerPos.add(-xzRange + (int) (Math.random() * xzRange * 2 + 1), -xzRange + (int) (Math.random() * xzRange * 2 + 1), -yRange + (int) (Math.random() * yRange * 2 + 1));
     }
 
     public static boolean isClient(World world)

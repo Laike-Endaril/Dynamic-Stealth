@@ -1,14 +1,8 @@
 CURRENTLY WORKING ON ===================================================
 
-Add "naturally bright" entity-specific config; makes them fully visible light-wise
-
-Fix leashes not rendering sometimes (it shows the knot though...is this a vanilla bug?)
-
-Migrate old bad AI handling entries to new system, where applicable
-
-Add "flee" mechanic
-...runs away from lastKnownPosition, or if that is somehow null, runs in a random direction
-...constant threat drain (configurable), effect ends when threat hits 0
+Fix flee pathing
+Add entity-specific option for whether entity runs away or runs home?
+Add code in tryWarn to make passives who hear warning flee?
 
 Add "unreachable target" mechanic...
 ...if the mob has threat, hasn't dealt damage lately, and either (has no target OR cannot reach its target), it changes behavior in a configurable way
@@ -18,9 +12,20 @@ Add "unreachable target" mechanic...
 Add blindness potion
 Add glowing potion
 
+Add stealth buff system for when you attack an entity from stealth...
+...reference issue #9
+...add a weapon/held item filter with NBT support
+...add armor penetration as an option (probably use LivingAttackEvent?)
+
 Add action wheel which opens on keybind
 Add actions...
 ...Attempt Stealth / Don't Attempt Stealth (if set to "Don't Attempt Stealth", you are very easy for things to notice)
+
+Add "naturally bright" entity-specific config; makes them fully visible light-wise
+
+Fix leashes not rendering sometimes (it shows the knot though...is this a vanilla bug?)
+
+Migrate old bad AI handling entries to new system, where applicable
 
 
 BUG FIXES ==============================================================
