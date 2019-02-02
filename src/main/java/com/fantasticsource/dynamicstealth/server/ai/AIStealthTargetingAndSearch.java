@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.server.ai;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
+import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.server.ai.edited.AITargetEdit;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
@@ -15,6 +16,8 @@ import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import noppes.npcs.api.NpcAPI;
+import noppes.npcs.api.entity.ICustomNpc;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.dynamicstealth.compat.Compat.cancelTasksRequiringAttackTarget;
@@ -32,6 +35,7 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
     private Vec3d lastPos = null, nextPos = null;
     private double startAngle, angleDif, pathAngle;
     private int headTurnSpeed;
+    private boolean isCNPC;
 
 
     public AIStealthTargetingAndSearch(EntityLiving living, double speedIn)
@@ -41,6 +45,7 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
         speed = speedIn;
 
         headTurnSpeed = EntityAIData.headTurnSpeed(searcher);
+        isCNPC = Compat.customnpcs && NpcAPI.Instance().getIEntity(searcher) instanceof ICustomNpc;
 
         setMutexBits(3);
     }
@@ -274,30 +279,41 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
         {
             Threat.ThreatData data = Threat.get(searcher);
             int threat = Math.max(0, data.threatLevel - serverSettings.flee.degredationRate);
-            if (threat <= 0)
-            {
-                clearAIPath();
-                Threat.setThreat(searcher, 0);
-                return;
-            }
             Threat.setThreat(searcher, threat);
 
-
-
-            if (searcher.getPosition().distanceSq(fleeToPos) < 5) startFleeing(false);
-
-            if (navigator.getPath() != path) navigator.setPath(path, speed);
-
-            Vec3d currentPos = searcher.getPositionVector();
-            if (lastPos != null && lastPos.squareDistanceTo(currentPos) < speed * 0.005) timeAtPos++;
-            else timeAtPos = 0;
-
-            lastPos = currentPos;
-
-            if (timeAtPos > 60 || lastKnownPosition == null || (searcher.onGround && navigator.noPath()))
+            if (!EntityThreatData.isFleeing(searcher))
             {
-                startFleeing(true);
-                timeAtPos = 0;
+                restart(lastKnownPosition);
+                return;
+            }
+
+
+            if (isCNPC && serverSettings.flee.cnpcsRunHome)
+            {
+                if (fleeToPos == null)
+                {
+                    startFleeing(false);
+
+                    if (navigator.getPath() != path) navigator.setPath(path, speed);
+                }
+            }
+            else
+            {
+                if (searcher.getPosition().distanceSq(fleeToPos) < 5) startFleeing(false);
+
+                if (navigator.getPath() != path) navigator.setPath(path, speed);
+
+                Vec3d currentPos = searcher.getPositionVector();
+                if (lastPos != null && lastPos.squareDistanceTo(currentPos) < speed * 0.005) timeAtPos++;
+                else timeAtPos = 0;
+
+                lastPos = currentPos;
+
+                if (timeAtPos > 60 || lastKnownPosition == null || (searcher.onGround && navigator.noPath()))
+                {
+                    startFleeing(true);
+                    timeAtPos = 0;
+                }
             }
         }
     }
@@ -307,7 +323,15 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
         phase = -1;
 
         if (lastKnownPosition == null || forceRandom) lastKnownPosition = MCTools.randomPos(searcher.getPosition(), 2, 0);
-        fleeToPos = new BlockPos(searcher.getPositionVector().add(searcher.getPositionVector().subtract(new Vec3d(lastKnownPosition)).normalize().scale(10)));
+
+        if (isCNPC && serverSettings.flee.cnpcsRunHome)
+        {
+            ICustomNpc cnpc = (ICustomNpc) NpcAPI.Instance().getIEntity(searcher);
+            fleeToPos = new BlockPos(cnpc.getHomeX(), cnpc.getHomeY(), cnpc.getHomeZ());
+        }
+        else fleeToPos = new BlockPos(searcher.getPositionVector().add(searcher.getPositionVector().subtract(new Vec3d(lastKnownPosition)).normalize().scale(10)));
+
+        System.out.println(fleeToPos.getX() + ", " + fleeToPos.getZ());
         path = navigator.getPathToPos(fleeToPos);
     }
 

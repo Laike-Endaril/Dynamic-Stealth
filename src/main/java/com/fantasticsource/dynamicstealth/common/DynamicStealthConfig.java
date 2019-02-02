@@ -723,6 +723,10 @@ public class DynamicStealthConfig
             @Comment("If set to true, then when an entity is *already* in flee mode, damage will increase its flee duration")
             public boolean increaseOnDamage = true;
 
+            @Config.Name("CNPCs flee To Home Position")
+            @Comment("If enabled, Custom NPCs flee to their home position instead of away from what hit them")
+            public boolean cnpcsRunHome = false;
+
             @Config.Name("Fearless")
             @Comment(
                     {

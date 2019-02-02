@@ -1,9 +1,8 @@
 CURRENTLY WORKING ON ===================================================
 
-Fix flee pathing
-Make fleeing use panic speed
-
-Add entity-specific option for whether entity runs away or runs home?
+Fix flee pathing for vanilla mobs; they don't keep running straight for some reason
+Fix flee pathing for CNPCs
+Make fleeing use panic speed?
 
 Add "unreachable target" mechanic...
 ...if the mob has threat, hasn't dealt damage lately, and either (has no target OR cannot reach its target), it changes behavior in a configurable way
@@ -12,6 +11,7 @@ Add "unreachable target" mechanic...
 
 Add blindness potion
 Add glowing potion
+Add the ability to apply potions to weapons
 
 Add stealth buff system for when you attack an entity from stealth...
 ...reference issue #9
@@ -28,12 +28,12 @@ Fix leashes not rendering sometimes (it shows the knot though...is this a vanill
 
 Migrate old bad AI handling entries to new system, where applicable
 
+Fix bug where mobs' body angle is sometimes wrong...
+...think this may have to do with losing sight of an entity and regaining sight of it...
+...and something in vanilla's spawn packet handling which doesn't set the body angle instantly upon spawn (<- fix it here if possible)
+
 
 BUG FIXES ==============================================================
-
-Fix bug where mobs' body angle is sometimes wrong...
-...when damaging a passive, after they move and turn once
-...when trying to tame a horse by mounting it
 
 Fix mobs in search mode periodically NOT doing the search, but going back to it later...
 ...noticed with spider, and so far I think it is specific to spiders?
@@ -111,8 +111,6 @@ Add smoke bombs which block LOS
 Add hand mirror, which allows you to peek around corners (changes camera position while in use, based on which hand it is in)
 
 Add armor/baubles that improve stealth/anti-stealth attributes
-
-Add the ability to apply potions to weapons
 
 
 
