@@ -102,7 +102,7 @@ public class EntityThreatData
 
         for (Class<? extends Entity> clss : threatBypass)
         {
-            if (clss.isAssignableFrom(livingBase.getClass())) return true;
+            if (livingBase.getClass() == clss) return true;
         }
 
         return false;
@@ -114,12 +114,12 @@ public class EntityThreatData
 
         for (Class<? extends Entity> clss : isPassive)
         {
-            if (clss.isAssignableFrom(livingBase.getClass())) return true;
+            if (livingBase.getClass() == clss) return true;
         }
 
         for (Class<? extends Entity> clss : isNonPassive)
         {
-            if (clss.isAssignableFrom(livingBase.getClass())) return false;
+            if (livingBase.getClass() == clss) return false;
         }
 
         return MCTools.isPassive(livingBase);
@@ -132,7 +132,7 @@ public class EntityThreatData
 
         for (Class<? extends Entity> clss : isFearless)
         {
-            if (clss.isAssignableFrom(livingBase.getClass())) return false;
+            if (livingBase.getClass() == clss) return false;
         }
 
         double hpFraction = (livingBase.getHealth() - damage) / livingBase.getMaxHealth();
