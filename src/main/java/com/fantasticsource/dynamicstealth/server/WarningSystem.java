@@ -56,7 +56,7 @@ public class WarningSystem
         {
             EntityLiving livingHelper = (EntityLiving) helper;
 
-            if (!EntityThreatData.bypassesThreat(livingHelper) && !EntityThreatData.isPassive(livingHelper))
+            if (!EntityThreatData.bypassesThreat(livingHelper))
             {
                 Threat.ThreatData data = Threat.get(livingHelper);
                 if (data.target == null && HelperSystem.helpPriority(livingHelper, warner, true, Math.pow(30d * livingHelper.getEntityAttribute(Attributes.HEARING).getAttributeValue() / 100, 2)) > 0)

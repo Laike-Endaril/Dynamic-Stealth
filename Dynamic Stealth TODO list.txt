@@ -1,8 +1,9 @@
 CURRENTLY WORKING ON ===================================================
 
 Fix flee pathing
+Make fleeing use panic speed
+
 Add entity-specific option for whether entity runs away or runs home?
-Add code in tryWarn to make passives who hear warning flee?
 
 Add "unreachable target" mechanic...
 ...if the mob has threat, hasn't dealt damage lately, and either (has no target OR cannot reach its target), it changes behavior in a configurable way
