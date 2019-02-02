@@ -714,6 +714,11 @@ public class DynamicStealthConfig
 
         public class FleeSettings
         {
+            @Config.Name("Degredation Rate")
+            @Comment("How fast the flee gauge decreases; lower number means they flee for a longer time")
+            @Config.RangeInt(min = 1)
+            public int degredationRate = 3;
+
             @Config.Name("Damage Increases Flee Duration")
             @Comment("If set to true, then when an entity is *already* in flee mode, damage will increase its flee duration")
             public boolean increaseOnDamage = true;
