@@ -192,6 +192,8 @@ public class DynamicStealthConfig
 
         @Config.Name("Items")
         public ItemSettings itemSettings = new ItemSettings();
+        @Config.Name("Flee Mechanic")
+        public FleeSettings flee = new FleeSettings();
 
         public class ItemSettings
         {
@@ -709,11 +711,13 @@ public class DynamicStealthConfig
             }
         }
 
-        @Config.Name("Flee Mechanic")
-        public FleeSettings flee = new FleeSettings();
-
         public class FleeSettings
         {
+            @Config.Name("HP Threshold")
+            @Comment("The % of health at which entities start to flee")
+            @Config.RangeInt(min = 0, max = 100)
+            public int threshold = 25;
+
             @Config.Name("Degredation Rate")
             @Comment("How fast the flee gauge decreases; lower number means they flee for a longer time")
             @Config.RangeInt(min = 1)

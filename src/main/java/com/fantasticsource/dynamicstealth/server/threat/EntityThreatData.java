@@ -126,7 +126,7 @@ public class EntityThreatData
     }
 
 
-    public static boolean willFlee(EntityLivingBase livingBase, float damage)
+    public static boolean isFleeing(EntityLivingBase livingBase)
     {
         if (bypassesThreat(livingBase)) return false;
 
@@ -135,13 +135,13 @@ public class EntityThreatData
             if (livingBase.getClass() == clss) return false;
         }
 
-        double hpFraction = (livingBase.getHealth() - damage) / livingBase.getMaxHealth();
+        if (Threat.getThreat(livingBase) > 0)
+        {
+            if (isPassive(livingBase)) return true;
 
-        return hpFraction > 0 && Threat.getThreat(livingBase) > 0 && (isPassive(livingBase) || hpFraction < 0.25);
-    }
+            return (int) (livingBase.getHealth() / livingBase.getMaxHealth() * 100) <= serverSettings.flee.threshold;
+        }
 
-    public static boolean isFleeing(EntityLivingBase livingBase)
-    {
-        return willFlee(livingBase, 0);
+        return false;
     }
 }
