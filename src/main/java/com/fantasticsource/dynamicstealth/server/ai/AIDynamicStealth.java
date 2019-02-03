@@ -314,7 +314,7 @@ public class AIDynamicStealth extends EntityAIBase
             if (!EntityThreatData.shouldFlee(searcher, searcher.getHealth()))
             {
                 fleeing = false;
-                //TODO can trigger "retaliation" here
+                //TODO can trigger "rally" here
             }
             else if (threat <= 0) fleeing = false;
 
