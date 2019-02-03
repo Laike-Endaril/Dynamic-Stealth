@@ -786,6 +786,10 @@ public class DynamicStealthConfig
             @Config.RangeInt(min = 1)
             public int targetSpottedThreat = 300;
 
+            @Config.Name("'Warned' Threat")
+            @Comment("When an entity heeds a warning from another entity, its threat is set to this (if less than this)")
+            public int warnedThreat = 300;
+
             @Config.Name("Maximum Threat")
             @Comment({"The maximum threat level an entity can reach"})
             @Config.RangeInt(min = 1)

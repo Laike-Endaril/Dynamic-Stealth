@@ -67,7 +67,7 @@ public class WarningSystem
                     AIDynamicStealth searchAI = AIDynamicStealth.getStealthAI(livingHelper);
                     if (searchAI != null) searchAI.restart(MCTools.randomPos(warnPos, xz, y));
 
-                    if (data.threatLevel < DynamicStealthConfig.serverSettings.threat.targetSpottedThreat) Threat.setThreat(livingHelper, DynamicStealthConfig.serverSettings.threat.targetSpottedThreat); //TODO add config for "warned" threat level
+                    if (data.threatLevel < DynamicStealthConfig.serverSettings.threat.warnedThreat) Threat.setThreat(livingHelper, DynamicStealthConfig.serverSettings.threat.warnedThreat);
                 }
             }
         }
