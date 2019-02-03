@@ -16,7 +16,6 @@ public class ServerTickTimer
 
     public static long currentTick()
     {
-        System.out.println(currentTick);
         return currentTick;
     }
 }
