@@ -29,6 +29,7 @@ import java.util.Map;
 import static com.fantasticsource.dynamicstealth.common.DynamicStealth.TRIG_TABLE;
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.dynamicstealth.server.senses.EntityVisionData.*;
+import static com.fantasticsource.mctools.ServerTickTimer.currentTick;
 
 public class Sight
 {
@@ -36,8 +37,6 @@ public class Sight
 
     private static final DynamicStealthConfig.ServerSettings.Senses senses = serverSettings.senses;
     private static final DynamicStealthConfig.ServerSettings.Senses.Vision vision = senses.vision;
-
-    public static long currentTick = 0;
 
 
     private static Map<EntityLivingBase, Map<Entity, SeenData>> recentlySeenMap = new LinkedHashMap<>();
@@ -51,7 +50,6 @@ public class Sight
     {
         if (event.phase == TickEvent.Phase.END)
         {
-            currentTick++;
             playerSeenThisTickMap.clear();
             entitySeenThisTickMap.clear();
             recentlySeenMap.entrySet().removeIf(Sight::entityRemoveIfEmpty);
@@ -77,7 +75,7 @@ public class Sight
         SeenData data = map.get(target);
         if (data == null) return false;
 
-        return data.seen && currentTick - data.lastSeenTime < SEEN_RECENT_TIMER;
+        return data.seen && currentTick() - data.lastSeenTime < SEEN_RECENT_TIMER;
     }
 
 
@@ -91,7 +89,7 @@ public class Sight
         if (useCache && map != null)
         {
             SeenData data = map.get(target);
-            if (data != null && data.lastUpdateTime == currentTick) return data.lastStealthLevel;
+            if (data != null && data.lastUpdateTime == currentTick()) return data.lastStealthLevel;
         }
 
         searcher.world.profiler.startSection("DS Sight checks");
@@ -112,12 +110,12 @@ public class Sight
                 if (data == null) map.put(target, new SeenData(result));
                 else
                 {
-                    data.lastUpdateTime = currentTick;
+                    data.lastUpdateTime = currentTick();
                     data.lastStealthLevel = result;
                     if (result <= 1)
                     {
                         data.seen = true;
-                        data.lastSeenTime = currentTick;
+                        data.lastSeenTime = currentTick();
                     }
                 }
             }
@@ -414,7 +412,7 @@ public class Sight
     {
         boolean seen = false;
         long lastSeenTime;
-        long lastUpdateTime = currentTick;
+        long lastUpdateTime = currentTick();
         double lastStealthLevel;
 
         SeenData(double stealthLevel)
@@ -428,7 +426,7 @@ public class Sight
             if (forceSeen || stealthLevel <= 1)
             {
                 seen = true;
-                lastSeenTime = currentTick;
+                lastSeenTime = currentTick();
             }
         }
     }
