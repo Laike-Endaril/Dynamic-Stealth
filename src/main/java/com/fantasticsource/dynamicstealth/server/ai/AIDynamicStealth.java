@@ -8,7 +8,6 @@ import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.TrigLookupTable;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -357,11 +356,7 @@ public class AIDynamicStealth extends EntityAIBase
                 if (fleeToPos == null || searcher.getPosition().distanceSq(fleeToPos) < 5 || (path != null && path.isFinished()) || timeAtPos > 2)
                 {
                     if (timeAtPos <= 3) fleeToPos = new BlockPos(searcher.getPositionVector().add(searcher.getPositionVector().subtract(new Vec3d(lastKnownPosition)).normalize().scale(10)));
-                    else if (timeAtPos == 4)
-                    {
-                        //TODO
-                        System.out.println(navigator.canEntityStandOnPos(searcher.getPosition()) + ", " + !searcher.world.getBlockState(searcher.getPosition()).getMaterial().blocksMovement());
-                    }
+                    else if (timeAtPos == 4) findShortRangeGoalPos();
                     else
                     {
                         //TODO can trigger "desperation" here
@@ -382,6 +377,52 @@ public class AIDynamicStealth extends EntityAIBase
         }
     }
 
+
+    private void findShortRangeGoalPos()
+    {
+        BlockPos searcherPos = searcher.getPosition();
+
+        int xFactor = searcherPos.getX() - lastKnownPosition.getX();
+        int zFactor = searcherPos.getZ() - lastKnownPosition.getZ();
+        int maxFactor = Tools.max(Math.abs(xFactor), Math.abs(zFactor));
+        if (maxFactor == 0)
+        {
+            maxFactor = 5;
+            if (Math.random() < 0.5)
+            {
+                xFactor = 0;
+                zFactor = Math.random() < 0.5 ? 5 : -5;
+            }
+            else
+            {
+                xFactor = Math.random() < 0.5 ? 5 : -5;
+                zFactor = 0;
+            }
+        }
+        xFactor = (int) ((double) xFactor * 5 / maxFactor);
+        zFactor = (int) ((double) zFactor * 5 / maxFactor);
+        int xStep = xFactor < 0 ? -1 : 1;
+        int zStep = zFactor < 0 ? -1 : 1;
+
+        BlockPos testPos;
+        boolean found = false;
+        for (int iy = 1; iy > -4 && !found; iy--)
+        {
+            for (int ix = xFactor; ix != -xStep && !found; ix -= xStep)
+            {
+                for (int iz = zFactor; iz != -zStep && !found; iz -= zStep)
+                {
+                    testPos = searcherPos.add(ix, iy, iz);
+                    if ((ix != 0 || iy != 0 || iz != 0) && (navigator.canEntityStandOnPos(testPos) && !searcher.world.getBlockState(testPos).getMaterial().blocksMovement()))
+                    {
+                        System.out.println(testPos);
+                        fleeToPos = testPos;
+                        found = true;
+                    }
+                }
+            }
+        }
+    }
 
     public void restart(BlockPos newPos) //This is NOT the same as resetTask(); this is just a proxy for me to remember how to reset this correctly from outside the task system
     {
