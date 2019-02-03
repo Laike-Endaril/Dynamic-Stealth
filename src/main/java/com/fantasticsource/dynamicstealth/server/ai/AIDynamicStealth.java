@@ -304,14 +304,13 @@ public class AIDynamicStealth extends EntityAIBase
             //Flee interrupts
             if (!EntityThreatData.shouldFlee(searcher, searcher.getHealth()))
             {
+                fleeing = false;
                 //TODO can trigger "desperation" here
-                fleeing = false;
-                restart(lastKnownPosition);
-                return;
             }
-            else if (threat <= 0)
+            else if (threat <= 0) fleeing = false;
+
+            if (!fleeing)
             {
-                fleeing = false;
                 restart(lastKnownPosition);
                 return;
             }
@@ -342,6 +341,7 @@ public class AIDynamicStealth extends EntityAIBase
             }
         }
     }
+
 
     private void startFleeing(boolean forceRandom)
     {
