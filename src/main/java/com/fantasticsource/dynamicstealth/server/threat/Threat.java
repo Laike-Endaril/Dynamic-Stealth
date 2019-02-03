@@ -1,6 +1,8 @@
 package com.fantasticsource.dynamicstealth.server.threat;
 
+import com.fantasticsource.mctools.ServerTickTimer;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -12,19 +14,15 @@ import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.ser
 
 public class Threat
 {
-    private static final int ITERATION_FREQUENCY = 72000; //Server ticks
-    private static int timer = ITERATION_FREQUENCY;
+    private static final int ITERATION_FREQUENCY = 72000;
+
     //Searcher, target, threat level
     private static Map<EntityLivingBase, ThreatData> threatMap = new LinkedHashMap<>(200);
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void update(TickEvent.ServerTickEvent event)
     {
-        if (event.phase == TickEvent.Phase.START && --timer == 0)
-        {
-            timer = ITERATION_FREQUENCY;
-            removeAllUnused();
-        }
+        if (event.phase == TickEvent.Phase.START && ServerTickTimer.currentTick() % ITERATION_FREQUENCY == 0) removeAllUnused();
     }
 
 

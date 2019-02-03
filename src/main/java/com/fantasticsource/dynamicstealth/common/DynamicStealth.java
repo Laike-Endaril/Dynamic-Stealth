@@ -7,6 +7,7 @@ import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatCNPC;
 import com.fantasticsource.dynamicstealth.event.StealthAttackEvent;
 import com.fantasticsource.dynamicstealth.server.Attributes;
+import com.fantasticsource.dynamicstealth.server.CombatTracker;
 import com.fantasticsource.dynamicstealth.server.EntityLookHelperEdit;
 import com.fantasticsource.dynamicstealth.server.WarningSystem;
 import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
@@ -91,6 +92,7 @@ public class DynamicStealth
         Attributes.init();
 
         MinecraftForge.EVENT_BUS.register(ServerTickTimer.class);
+        MinecraftForge.EVENT_BUS.register(CombatTracker.class);
         MinecraftForge.EVENT_BUS.register(EntityVisionData.class);
         MinecraftForge.EVENT_BUS.register(DynamicStealth.class);
         MinecraftForge.EVENT_BUS.register(Speedometer.class);
