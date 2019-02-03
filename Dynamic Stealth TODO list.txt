@@ -1,8 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Fix flee pathing; they don't keep running straight for some reason
-Make fleeing use panic speed?  Passives seem too slow
-
 Add "unreachable target" mechanic...
 ...if the mob has threat, hasn't dealt damage lately, and either (has no target OR cannot reach its target), it changes behavior in a configurable way
 ...option to trigger flee effect

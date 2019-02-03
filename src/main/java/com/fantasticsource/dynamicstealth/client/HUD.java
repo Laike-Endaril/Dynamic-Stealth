@@ -214,7 +214,7 @@ public class HUD extends Gui
     {
         try
         {
-            renderManagerRenderOutlinesField = ReflectionTool.getField(RenderManager.class, "field_178639_r", "field_188301_f", "renderOutlines");
+            renderManagerRenderOutlinesField = ReflectionTool.getField(RenderManager.class, "field_178639_r", "renderOutlines");
         }
         catch (NoSuchFieldException | IllegalAccessException e)
         {

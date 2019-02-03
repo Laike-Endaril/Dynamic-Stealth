@@ -6,26 +6,38 @@ import com.fantasticsource.dynamicstealth.server.ai.edited.AITargetEdit;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
+import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.TrigLookupTable;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import noppes.npcs.api.NpcAPI;
 import noppes.npcs.api.entity.ICustomNpc;
+
+import java.lang.reflect.Field;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.dynamicstealth.compat.Compat.cancelTasksRequiringAttackTarget;
 
 public class AIDynamicStealth extends EntityAIBase
 {
+    private static Field aiPanicSpeedField;
     private static TrigLookupTable trigTable = DynamicStealth.TRIG_TABLE;
+
+    static
+    {
+        initReflections();
+    }
+
     private final EntityLiving searcher;
     private final PathNavigate navigator;
     public double speed;
@@ -69,6 +81,19 @@ public class AIDynamicStealth extends EntityAIBase
             if (ai != null) ai.fleeing = true;
 
             if (resetPhaseIfYouFlee) ai.phase = 0;
+        }
+    }
+
+    private static void initReflections()
+    {
+        try
+        {
+            aiPanicSpeedField = ReflectionTool.getField(EntityAIPanic.class, "field_75265_b", "speed");
+        }
+        catch (NoSuchFieldException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(148, true);
         }
     }
 
@@ -338,9 +363,9 @@ public class AIDynamicStealth extends EntityAIBase
                 if ((fleeToPos.getX() != searcher.getPosition().getX() || fleeToPos.getZ() != searcher.getPosition().getZ()) && (path == null || path.isFinished()))
                 {
                     path = navigator.getPathToPos(fleeToPos);
-                    navigator.setPath(path, speed);
+                    navigator.setPath(path, getFleeSpeed(speed));
                 }
-                else if (navigator.getPath() != path) navigator.setPath(path, speed);
+                else if (navigator.getPath() != path) navigator.setPath(path, getFleeSpeed(speed));
             }
             else
             {
@@ -370,13 +395,12 @@ public class AIDynamicStealth extends EntityAIBase
                 if (fleeToPos != oldFleePos || path == null)
                 {
                     path = navigator.getPathToPos(fleeToPos);
-                    navigator.setPath(path, speed);
+                    navigator.setPath(path, getFleeSpeed(speed));
                 }
-                else if (navigator.getPath() != path) navigator.setPath(path, speed);
+                else if (navigator.getPath() != path) navigator.setPath(path, getFleeSpeed(speed));
             }
         }
     }
-
 
     private void findShortRangeGoalPos()
     {
@@ -511,5 +535,27 @@ public class AIDynamicStealth extends EntityAIBase
         }
 
         return null;
+    }
+
+    private double getFleeSpeed(double normalSpeed)
+    {
+        for (EntityAITasks.EntityAITaskEntry task : searcher.tasks.taskEntries)
+        {
+            if (task.action instanceof EntityAIPanic)
+            {
+                try
+                {
+                    normalSpeed = (double) aiPanicSpeedField.get(task.action);
+                    return normalSpeed <= 0 ? 1.25 : normalSpeed;
+                }
+                catch (IllegalAccessException e)
+                {
+                    e.printStackTrace();
+                    FMLCommonHandler.instance().exitJava(149, false);
+                }
+            }
+        }
+
+        return normalSpeed <= 0 ? 1.25 : normalSpeed * 1.25;
     }
 }
