@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth.event;
+package com.fantasticsource.dynamicstealth.server.event;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;
@@ -58,6 +58,15 @@ public class BasicEvent extends Event
     public static class DesperationEvent extends BasicEvent
     {
         public DesperationEvent(EntityLivingBase livingBase)
+        {
+            super(livingBase);
+        }
+    }
+
+    @Cancelable
+    public static class StopChaseEvent extends BasicEvent
+    {
+        public StopChaseEvent(EntityLivingBase livingBase)
         {
             super(livingBase);
         }
