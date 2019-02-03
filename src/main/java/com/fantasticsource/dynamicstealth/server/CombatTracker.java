@@ -37,6 +37,7 @@ public class CombatTracker
     {
         setSuccessfulAttackTime(livingBase, currentTick());
     }
+
     public static void setSuccessfulAttackTime(EntityLivingBase livingBase, long time)
     {
         successfulAttackTimes.put(livingBase, time);
