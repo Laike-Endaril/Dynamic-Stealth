@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth.server.ai;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.dynamicstealth.compat.Compat;
+import com.fantasticsource.dynamicstealth.event.BasicEvent;
 import com.fantasticsource.dynamicstealth.server.ai.edited.AITargetEdit;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
@@ -19,6 +20,7 @@ import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import noppes.npcs.api.NpcAPI;
 import noppes.npcs.api.entity.ICustomNpc;
@@ -62,6 +64,8 @@ public class AIDynamicStealth extends EntityAIBase
         isCNPC = Compat.customnpcs && NpcAPI.Instance().getIEntity(searcher) instanceof ICustomNpc;
 
         setMutexBits(3);
+
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     public static AIDynamicStealth getStealthAI(EntityLiving living)
@@ -111,9 +115,12 @@ public class AIDynamicStealth extends EntityAIBase
             if (AITargetEdit.isSuitableTarget(searcher, attackTarget))
             {
                 //Hopefully this always only means we've just noticed a new, valid target
-                Threat.set(searcher, attackTarget, serverSettings.threat.targetSpottedThreat);
-                lastKnownPosition = attackTarget.getPosition();
-                clearAIPath();
+                if (!MinecraftForge.EVENT_BUS.post(new BasicEvent.TargetSeenEvent(searcher)))
+                {
+                    Threat.set(searcher, attackTarget, serverSettings.threat.targetSpottedThreat);
+                    lastKnownPosition = attackTarget.getPosition();
+                    clearAIPath();
+                }
                 return false;
             }
 
@@ -196,7 +203,7 @@ public class AIDynamicStealth extends EntityAIBase
         lastPos = null;
         timeAtPos = 0;
 
-        if (!fleeing)
+        if (!fleeing && !MinecraftForge.EVENT_BUS.post(new BasicEvent.SearchEvent(searcher)))
         {
             if (lastKnownPosition != null)
             {
@@ -226,7 +233,7 @@ public class AIDynamicStealth extends EntityAIBase
     public void updateTask()
     {
         //Flee if we should
-        if (fleeing && phase != -1)
+        if (fleeing && phase != -1 && !MinecraftForge.EVENT_BUS.post(new BasicEvent.FleeEvent(searcher)))
         {
             clearAIPath();
             fleeToPos = null;
@@ -335,10 +342,9 @@ public class AIDynamicStealth extends EntityAIBase
 
 
             //Flee interrupts
-            if (!EntityThreatData.shouldFlee(searcher, searcher.getHealth()))
+            if (!EntityThreatData.shouldFlee(searcher, searcher.getHealth()) && !MinecraftForge.EVENT_BUS.post(new BasicEvent.RallyEvent(searcher)))
             {
                 fleeing = false;
-                //TODO can trigger "rally" here
             }
             else if (threat <= 0) fleeing = false;
 
@@ -382,13 +388,13 @@ public class AIDynamicStealth extends EntityAIBase
                 {
                     if (timeAtPos <= 3) fleeToPos = new BlockPos(searcher.getPositionVector().add(searcher.getPositionVector().subtract(new Vec3d(lastKnownPosition)).normalize().scale(10)));
                     else if (timeAtPos == 4) findShortRangeGoalPos();
-                    else
+                    else if (!MinecraftForge.EVENT_BUS.post(new BasicEvent.DesperationEvent(searcher)))
                     {
-                        //TODO can trigger "desperation" here
                         fleeing = false;
                         restart(lastKnownPosition);
                         return;
                     }
+                    else timeAtPos = 0;
                 }
 
                 //Set path

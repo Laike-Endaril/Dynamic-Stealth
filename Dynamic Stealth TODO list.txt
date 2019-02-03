@@ -1,20 +1,11 @@
 CURRENTLY WORKING ON ===================================================
 
-Add "unreachable target" mechanic...
+Add "unreachable target" mechanic/event...
 ...if the mob has threat, hasn't dealt damage lately, and either (has no target OR cannot reach its target), it changes behavior in a configurable way
 ...option to trigger flee effect
 ...option to trigger potion effects
 
 Make it so if an entity dies, all entities who had threat against it and see it die set target to null
-
-Add blindness potion
-Add glowing potion
-Add the ability to apply potions to weapons
-
-Add stealth buff system for when you attack an entity from stealth...
-...reference issue #9
-...add a weapon/held item filter with NBT support
-...add armor penetration as an option (probably use LivingAttackEvent?)
 
 Add action wheel which opens on keybind
 Add actions...
@@ -26,15 +17,10 @@ Fix leashes not rendering sometimes (it shows the knot though...is this a vanill
 
 Migrate old bad AI handling entries to new system, where applicable
 
-Fix bug where mobs' body angle is sometimes wrong...
-...think this may have to do with losing sight of an entity and regaining sight of it...
-...and something in vanilla's spawn packet handling which doesn't set the body angle instantly upon spawn (<- fix it here if possible)
+Fix bug where mobs' body angle is sometimes wrong
 
 
 BUG FIXES ==============================================================
-
-Fix mobs in search mode periodically NOT doing the search, but going back to it later...
-...noticed with spider, and so far I think it is specific to spiders?
 
 Fix mobs not moving to last known position before searching when too far away...
 ...Create function which, when beyond normal pathfinding range...
@@ -42,6 +28,18 @@ Fix mobs not moving to last known position before searching when too far away...
 ...then if not at the final destination, finds another partial path and follows it...
 ...etc.
 This system, if improved upon, could be used for most pathfinding and should improve pathfinding performance (by splitting it up and calculating parts at different times)
+
+
+EVENTS =================================================================
+
+Add event for stealth attacks extending normal attack event
+...reference issue #9
+...add a weapon/held item filter with NBT support
+...add armor penetration as an option (probably use LivingAttackEvent?)
+
+Add event for stealth kills extending normal death event
+...reference issue #9
+...add a weapon/held item filter with NBT support
 
 
 OPTIMIZATIONS ==========================================================
@@ -81,12 +79,9 @@ Add to HUD...
 
 AI =====================================================================
 
-Add desperation mechanic (see to do in AIStealthTargetingAndSearch)
-Add rally mechanic (see to do in AIStealthTargetingAndSearch)
-
 Can probably combine the two below into a single AI task...
-...Replace EntityAILookIdle with a new version that has gradual head rotation, instead of just removing it
 ...Change "wandering" AI so that it can't instantly flip a 180 (force it to turn gradually before moving in the chosen direction)
+...Replace EntityAILookIdle with a new version that has gradual head rotation, instead of just removing it
 
 
 
@@ -99,11 +94,13 @@ Add scent-based detection (wolves, cats, bears)
 ...Add the ability for entities to smell not only other living entities, but also ground items, etc.
 Apply stealth-based scent attributes
 
-Improve LOS checks
-
 
 
 ITEMS ==================================================================
+
+Add blindness potion
+Add glowing potion
+Add the ability to apply potions to weapons
 
 Add water arrows (create a thin flowing water block on impact)
 Add torch arrows (yes I know some other mods already do, but I want them in mine)
