@@ -84,6 +84,8 @@ Add to HUD...
 
 AI =====================================================================
 
+Add desperation mechanic (see to do in AIStealthTargetingAndSearch)
+
 Can probably combine the two below into a single AI task...
 ...Replace EntityAILookIdle with a new version that has gradual head rotation, instead of just removing it
 ...Change "wandering" AI so that it can't instantly flip a 180 (force it to turn gradually before moving in the chosen direction)

@@ -23,7 +23,7 @@ import noppes.npcs.api.entity.ICustomNpc;
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.dynamicstealth.compat.Compat.cancelTasksRequiringAttackTarget;
 
-public class AIStealthTargetingAndSearch extends EntityAIBase
+public class AIDynamicStealth extends EntityAIBase
 {
     private static TrigLookupTable trigTable = DynamicStealth.TRIG_TABLE;
     private final EntityLiving searcher;
@@ -40,7 +40,7 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
     private boolean isCNPC;
 
 
-    public AIStealthTargetingAndSearch(EntityLiving living, double speedIn)
+    public AIDynamicStealth(EntityLiving living, double speedIn)
     {
         searcher = living;
         navigator = living.getNavigator();
@@ -52,11 +52,11 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
         setMutexBits(3);
     }
 
-    public static AIStealthTargetingAndSearch getStealthAI(EntityLiving living)
+    public static AIDynamicStealth getStealthAI(EntityLiving living)
     {
         for (EntityAITasks.EntityAITaskEntry task : living.tasks.taskEntries)
         {
-            if (task.action instanceof AIStealthTargetingAndSearch) return (AIStealthTargetingAndSearch) task.action;
+            if (task.action instanceof AIDynamicStealth) return (AIDynamicStealth) task.action;
         }
         return null;
     }
@@ -65,11 +65,9 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
     {
         if (EntityThreatData.shouldFlee(living, hp))
         {
-            AIStealthTargetingAndSearch ai = getStealthAI(living);
+            AIDynamicStealth ai = getStealthAI(living);
             if (ai != null) ai.fleeing = true;
-            System.out.println(living.getName() + ": Flee");
         }
-        System.out.println(living.getName() + ": Don't flee");
     }
 
     @Override
@@ -304,7 +302,14 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
 
 
             //Flee interrupts
-            if (threat <= 0 || !EntityThreatData.shouldFlee(searcher, searcher.getHealth()))
+            if (!EntityThreatData.shouldFlee(searcher, searcher.getHealth()))
+            {
+                //TODO can trigger "desperation" here
+                fleeing = false;
+                restart(lastKnownPosition);
+                return;
+            }
+            else if (threat <= 0)
             {
                 fleeing = false;
                 restart(lastKnownPosition);
@@ -353,7 +358,6 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
 
         path = navigator.getPathToPos(fleeToPos);
         navigator.setPath(path, speed);
-        System.out.println(searcher.getName() + ", " + lastKnownPosition.toString() + ", " + fleeToPos.toString());
     }
 
     public void restart(BlockPos newPos) //This is NOT the same as resetTask(); this is just a proxy for me to remember how to reset this correctly from outside the task system

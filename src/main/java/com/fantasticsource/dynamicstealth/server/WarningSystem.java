@@ -1,7 +1,7 @@
 package com.fantasticsource.dynamicstealth.server;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealthConfig;
-import com.fantasticsource.dynamicstealth.server.ai.AIStealthTargetingAndSearch;
+import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
@@ -64,7 +64,7 @@ public class WarningSystem
                     int xz = 4 + distance / 2;
                     int y = 2 + distance / 4;
 
-                    AIStealthTargetingAndSearch searchAI = AIStealthTargetingAndSearch.getStealthAI(livingHelper);
+                    AIDynamicStealth searchAI = AIDynamicStealth.getStealthAI(livingHelper);
                     if (searchAI != null) searchAI.restart(MCTools.randomPos(warnPos, xz, y));
 
                     if (data.threatLevel < DynamicStealthConfig.serverSettings.threat.targetSpottedThreat) Threat.setThreat(livingHelper, DynamicStealthConfig.serverSettings.threat.targetSpottedThreat); //TODO add config for "warned" threat level

@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.compat;
 
-import com.fantasticsource.dynamicstealth.server.ai.AIStealthTargetingAndSearch;
+import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -17,7 +17,7 @@ public class CompatCNPC
         if (entity instanceof EntityLiving)
         {
             EntityLiving living = (EntityLiving) entity;
-            if (AIStealthTargetingAndSearch.getStealthAI(living) == null) entityJoinWorldInit(living);
+            if (AIDynamicStealth.getStealthAI(living) == null) entityJoinWorldInit(living);
         }
     }
 }

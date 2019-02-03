@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.threat;
 
-import com.fantasticsource.dynamicstealth.server.ai.AIStealthTargetingAndSearch;
+import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
 import com.fantasticsource.dynamicstealth.server.configdata.EntityThreatDefaults;
 import com.fantasticsource.mctools.MCTools;
 import net.minecraft.entity.Entity;
@@ -146,7 +146,7 @@ public class EntityThreatData
     {
         if (livingBase instanceof EntityLiving)
         {
-            AIStealthTargetingAndSearch searchAI = AIStealthTargetingAndSearch.getStealthAI((EntityLiving) livingBase);
+            AIDynamicStealth searchAI = AIDynamicStealth.getStealthAI((EntityLiving) livingBase);
             if (searchAI != null) return searchAI.fleeing;
         }
 

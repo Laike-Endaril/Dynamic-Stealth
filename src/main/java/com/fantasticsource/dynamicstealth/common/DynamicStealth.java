@@ -8,7 +8,7 @@ import com.fantasticsource.dynamicstealth.compat.CompatCNPC;
 import com.fantasticsource.dynamicstealth.server.Attributes;
 import com.fantasticsource.dynamicstealth.server.EntityLookHelperEdit;
 import com.fantasticsource.dynamicstealth.server.WarningSystem;
-import com.fantasticsource.dynamicstealth.server.ai.AIStealthTargetingAndSearch;
+import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
 import com.fantasticsource.dynamicstealth.server.ai.edited.*;
 import com.fantasticsource.dynamicstealth.server.entitytracker.EntityTrackerEdit;
 import com.fantasticsource.dynamicstealth.server.senses.EntitySensesEdit;
@@ -233,9 +233,9 @@ public class DynamicStealth
 
 
                 //Flee if you should
-                AIStealthTargetingAndSearch searchAI = AIStealthTargetingAndSearch.getStealthAI(livingTarget);
-                if (event.isCanceled()) AIStealthTargetingAndSearch.fleeIfYouShould(livingTarget, livingTarget.getHealth());
-                else AIStealthTargetingAndSearch.fleeIfYouShould(livingTarget, livingTarget.getHealth() - event.getAmount());
+                AIDynamicStealth searchAI = AIDynamicStealth.getStealthAI(livingTarget);
+                if (event.isCanceled()) AIDynamicStealth.fleeIfYouShould(livingTarget, livingTarget.getHealth());
+                else AIDynamicStealth.fleeIfYouShould(livingTarget, livingTarget.getHealth() - event.getAmount());
 
 
                 //Threat
@@ -476,7 +476,7 @@ public class DynamicStealth
     {
         if (!EntityThreatData.bypassesThreat(living))
         {
-            tasks.addTask(-7777777, new AIStealthTargetingAndSearch(living, 1));
+            tasks.addTask(-7777777, new AIDynamicStealth(living, 1));
         }
     }
 
