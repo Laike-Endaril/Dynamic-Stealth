@@ -9,7 +9,6 @@ import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -64,10 +63,9 @@ public class WarningSystem
                     int distance = (int) warner.getDistance(helper);
                     int xz = 4 + distance / 2;
                     int y = 2 + distance / 4;
-                    for (EntityAITasks.EntityAITaskEntry task : livingHelper.tasks.taskEntries)
-                    {
-                        if (task.action instanceof AIStealthTargetingAndSearch) ((AIStealthTargetingAndSearch) task.action).restart(MCTools.randomPos(warnPos, xz, y));
-                    }
+
+                    AIStealthTargetingAndSearch searchAI = AIStealthTargetingAndSearch.getStealthAI(livingHelper);
+                    if (searchAI != null) searchAI.restart(MCTools.randomPos(warnPos, xz, y));
 
                     if (data.threatLevel < DynamicStealthConfig.serverSettings.threat.targetSpottedThreat) Threat.setThreat(livingHelper, DynamicStealthConfig.serverSettings.threat.targetSpottedThreat); //TODO add config for "warned" threat level
                 }

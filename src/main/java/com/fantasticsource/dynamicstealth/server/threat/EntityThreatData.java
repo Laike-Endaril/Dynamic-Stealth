@@ -1,8 +1,10 @@
 package com.fantasticsource.dynamicstealth.server.threat;
 
+import com.fantasticsource.dynamicstealth.server.ai.AIStealthTargetingAndSearch;
 import com.fantasticsource.dynamicstealth.server.configdata.EntityThreatDefaults;
 import com.fantasticsource.mctools.MCTools;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
@@ -28,7 +30,7 @@ public class EntityThreatData
         String token;
         int mode;
 
-        for (String string : serverSettings.flee.fearless)
+        for (String string : serverSettings.ai.flee.fearless)
         {
             if (string.equals("player")) isFearless.add(EntityPlayerMP.class);
             else
@@ -126,7 +128,7 @@ public class EntityThreatData
     }
 
 
-    public static boolean isFleeing(EntityLivingBase livingBase)
+    public static boolean shouldFlee(EntityLivingBase livingBase, float hp)
     {
         if (bypassesThreat(livingBase)) return false;
 
@@ -135,11 +137,17 @@ public class EntityThreatData
             if (livingBase.getClass() == clss) return false;
         }
 
-        if (Threat.getThreat(livingBase) > 0)
-        {
-            if (isPassive(livingBase)) return true;
+        if (isPassive(livingBase)) return true;
 
-            return (int) (livingBase.getHealth() / livingBase.getMaxHealth() * 100) <= serverSettings.flee.threshold;
+        return (int) (hp / livingBase.getMaxHealth() * 100) <= serverSettings.ai.flee.threshold;
+    }
+
+    public static boolean isFleeing(EntityLivingBase livingBase)
+    {
+        if (livingBase instanceof EntityLiving)
+        {
+            AIStealthTargetingAndSearch searchAI = AIStealthTargetingAndSearch.getStealthAI((EntityLiving) livingBase);
+            if (searchAI != null) return searchAI.fleeing;
         }
 
         return false;

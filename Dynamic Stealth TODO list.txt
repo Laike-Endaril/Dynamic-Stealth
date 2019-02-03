@@ -8,6 +8,8 @@ Add "unreachable target" mechanic...
 ...option to trigger flee effect
 ...option to trigger potion effects
 
+Make it so if an entity dies, all entities who had threat against it and see it die set target to null
+
 Add blindness potion
 Add glowing potion
 Add the ability to apply potions to weapons
@@ -102,6 +104,9 @@ Improve LOS checks
 
 
 ITEMS ==================================================================
+
+Add water arrows (create a thin flowing water block on impact)
+Add torch arrows (yes I know some other mods already do, but I want them in mine)
 
 Add a stealth guidebook
 

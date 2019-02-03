@@ -3,7 +3,6 @@ package com.fantasticsource.dynamicstealth.compat;
 import com.fantasticsource.dynamicstealth.server.ai.AIStealthTargetingAndSearch;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -18,11 +17,7 @@ public class CompatCNPC
         if (entity instanceof EntityLiving)
         {
             EntityLiving living = (EntityLiving) entity;
-            for (EntityAITasks.EntityAITaskEntry task : living.tasks.taskEntries)
-            {
-                if (task.action instanceof AIStealthTargetingAndSearch) return;
-            }
-            entityJoinWorldInit(living);
+            if (AIStealthTargetingAndSearch.getStealthAI(living) == null) entityJoinWorldInit(living);
         }
     }
 }

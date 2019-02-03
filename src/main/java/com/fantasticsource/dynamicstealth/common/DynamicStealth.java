@@ -231,6 +231,13 @@ public class DynamicStealth
                 boolean updateTarget = true;
                 boolean newThreatTarget = false;
 
+
+                //Flee if you should
+                AIStealthTargetingAndSearch searchAI = AIStealthTargetingAndSearch.getStealthAI(livingTarget);
+                if (event.isCanceled()) AIStealthTargetingAndSearch.fleeIfYouShould(livingTarget, livingTarget.getHealth());
+                else AIStealthTargetingAndSearch.fleeIfYouShould(livingTarget, livingTarget.getHealth() - event.getAmount());
+
+
                 //Threat
                 Threat.ThreatData threatData = Threat.get(livingTarget);
                 EntityLivingBase threatTarget = threatData.target;
@@ -244,7 +251,12 @@ public class DynamicStealth
                     Threat.set(livingTarget, livingBaseSource, threat + (int) (Tools.max(event.getAmount(), 1) * serverSettings.threat.attackedThreatMultiplierInitial / livingTarget.getMaxHealth()));
                     newThreatTarget = true;
                 }
-                else if (threatTarget != source && !EntityThreatData.isFleeing(livingTarget))
+                else if (EntityThreatData.isFleeing(livingTarget))
+                {
+                    //Be brave, Sir Robin
+                    if (serverSettings.ai.flee.increaseOnDamage) Threat.setThreat(livingTarget, threat + (int) (event.getAmount() * serverSettings.threat.attackedThreatMultiplierTarget / livingTarget.getMaxHealth()));
+                }
+                else if (threatTarget != source)
                 {
                     //In combat (not fleeing), and hit by an entity besides our threat target
                     double threatChangeFactor = event.getAmount() / livingTarget.getMaxHealth();
@@ -263,11 +275,10 @@ public class DynamicStealth
                 }
                 else
                 {
-                    //In combat or fleeing, and hit by threat target
-                    if (serverSettings.flee.increaseOnDamage || !EntityThreatData.isFleeing(livingTarget)) Threat.setThreat(livingTarget, threat + (int) (event.getAmount() * serverSettings.threat.attackedThreatMultiplierTarget / livingTarget.getMaxHealth()));
+                    //In combat (not fleeing), and hit by threat target
+                    Threat.setThreat(livingTarget, threat + (int) (event.getAmount() * serverSettings.threat.attackedThreatMultiplierTarget / livingTarget.getMaxHealth()));
                 }
 
-                AIStealthTargetingAndSearch searchAI = null;
                 if (updateTarget)
                 {
                     //Threat targeting already updated
@@ -285,14 +296,10 @@ public class DynamicStealth
 
                         livingTarget.getNavigator().clearPath();
 
-                        for (EntityAITasks.EntityAITaskEntry task : livingTarget.tasks.taskEntries)
+                        if (searchAI != null)
                         {
-                            if (task.action instanceof AIStealthTargetingAndSearch)
-                            {
-                                searchAI = (AIStealthTargetingAndSearch) task.action;
-                                int distance = (int) Math.sqrt(source.getDistanceSq(livingTarget));
-                                searchAI.restart(MCTools.randomPos(source.getPosition(), distance / 2, distance / 4));
-                            }
+                            int distance = (int) Math.sqrt(source.getDistanceSq(livingTarget));
+                            searchAI.restart(MCTools.randomPos(source.getPosition(), distance / 2, distance / 4));
                         }
                     }
                 }

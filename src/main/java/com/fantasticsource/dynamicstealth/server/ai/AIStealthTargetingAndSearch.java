@@ -11,6 +11,7 @@ import com.fantasticsource.tools.TrigLookupTable;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathPoint;
@@ -30,6 +31,7 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
     public double speed;
     public Path path = null;
     public BlockPos lastKnownPosition = null, fleeToPos = null;
+    public boolean fleeing = false;
     private int phase, timeAtPos;
     private boolean spinDirection;
     private Vec3d lastPos = null, nextPos = null;
@@ -48,6 +50,26 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
         isCNPC = Compat.customnpcs && NpcAPI.Instance().getIEntity(searcher) instanceof ICustomNpc;
 
         setMutexBits(3);
+    }
+
+    public static AIStealthTargetingAndSearch getStealthAI(EntityLiving living)
+    {
+        for (EntityAITasks.EntityAITaskEntry task : living.tasks.taskEntries)
+        {
+            if (task.action instanceof AIStealthTargetingAndSearch) return (AIStealthTargetingAndSearch) task.action;
+        }
+        return null;
+    }
+
+    public static void fleeIfYouShould(EntityLiving living, float hp)
+    {
+        if (EntityThreatData.shouldFlee(living, hp))
+        {
+            AIStealthTargetingAndSearch ai = getStealthAI(living);
+            if (ai != null) ai.fleeing = true;
+            System.out.println(living.getName() + ": Flee");
+        }
+        System.out.println(living.getName() + ": Don't flee");
     }
 
     @Override
@@ -77,6 +99,8 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
         }
 
         //Threat > 0
+
+        if (fleeing) return true;
 
         EntityLivingBase threatTarget = threatData.target;
 
@@ -115,7 +139,7 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
 
     private boolean unseenTargetDegredation(int threat)
     {
-        if (EntityThreatData.isFleeing(searcher)) return threat > 0; //Flee degredation handled elsewhere
+        if (fleeing) return threat > 0; //Flee degredation handled elsewhere
         {
             searcher.setAttackTarget(null);
 
@@ -147,7 +171,7 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
         lastPos = null;
         timeAtPos = 0;
 
-        if (EntityThreatData.isFleeing(searcher)) startFleeing(false);
+        if (fleeing) startFleeing(false);
         else
         {
             if (lastKnownPosition != null)
@@ -178,10 +202,7 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
     public void updateTask()
     {
         //Flee if we should
-        if (EntityThreatData.isFleeing(searcher) && phase != -1)
-        {
-            startFleeing(false);
-        }
+        if (fleeing && phase != -1) startFleeing(false);
 
 
         //Reach searchPos, or the nearest reachable position to it.  If we reach a position, reset the search timer
@@ -278,17 +299,20 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
         if (phase == -1)
         {
             Threat.ThreatData data = Threat.get(searcher);
-            int threat = Math.max(0, data.threatLevel - serverSettings.flee.degredationRate);
+            int threat = Math.max(0, data.threatLevel - serverSettings.ai.flee.degredationRate);
             Threat.setThreat(searcher, threat);
 
-            if (!EntityThreatData.isFleeing(searcher))
+
+            //Flee interrupts
+            if (threat <= 0 || !EntityThreatData.shouldFlee(searcher, searcher.getHealth()))
             {
+                fleeing = false;
                 restart(lastKnownPosition);
                 return;
             }
 
 
-            if (isCNPC && serverSettings.flee.cnpcsRunHome)
+            if (isCNPC && serverSettings.ai.flee.cnpcsRunHome)
             {
                 if (fleeToPos == null || path == null || (path.isFinished() && (fleeToPos.getX() != searcher.getPosition().getX() || fleeToPos.getZ() != searcher.getPosition().getZ()))) startFleeing(false);
                 else if (navigator.getPath() != path) navigator.setPath(path, speed);
@@ -320,7 +344,7 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
 
         if (lastKnownPosition == null || forceRandom) lastKnownPosition = MCTools.randomPos(searcher.getPosition(), 2, 0);
 
-        if (isCNPC && serverSettings.flee.cnpcsRunHome)
+        if (isCNPC && serverSettings.ai.flee.cnpcsRunHome)
         {
             ICustomNpc cnpc = (ICustomNpc) NpcAPI.Instance().getIEntity(searcher);
             fleeToPos = new BlockPos(cnpc.getHomeX(), cnpc.getHomeY(), cnpc.getHomeZ());
@@ -329,6 +353,7 @@ public class AIStealthTargetingAndSearch extends EntityAIBase
 
         path = navigator.getPathToPos(fleeToPos);
         navigator.setPath(path, speed);
+        System.out.println(searcher.getName() + ", " + lastKnownPosition.toString() + ", " + fleeToPos.toString());
     }
 
     public void restart(BlockPos newPos) //This is NOT the same as resetTask(); this is just a proxy for me to remember how to reset this correctly from outside the task system

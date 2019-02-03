@@ -192,8 +192,6 @@ public class DynamicStealthConfig
 
         @Config.Name("Items")
         public ItemSettings itemSettings = new ItemSettings();
-        @Config.Name("Flee Mechanic")
-        public FleeSettings flee = new FleeSettings();
 
         public class ItemSettings
         {
@@ -286,6 +284,8 @@ public class DynamicStealthConfig
 
             @Config.Name("Entity-Specific Settings (Advanced)")
             public EntityAISettings y_entityOverrides = new EntityAISettings();
+            @Config.Name("Flee Mechanic")
+            public FleeSettings flee = new FleeSettings();
 
             public class EntityAISettings
             {
@@ -302,6 +302,51 @@ public class DynamicStealthConfig
                         })
                 @Config.RequiresMcRestart
                 public String[] headTurnSpeed = new String[]{"ghast, 10"};
+            }
+
+            public class FleeSettings
+            {
+                @Config.Name("HP Threshold")
+                @Comment("The % of health at which entities start to flee")
+                @Config.RangeInt(min = 0, max = 100)
+                public int threshold = 40;
+
+                @Config.Name("Degredation Rate")
+                @Comment("How fast the flee gauge decreases; lower number means they flee for a longer time")
+                @Config.RangeInt(min = 1)
+                public int degredationRate = 3;
+
+                @Config.Name("Damage Increases Flee Duration")
+                @Comment("If set to true, then when an entity is *already* in flee mode, damage will increase its flee duration")
+                public boolean increaseOnDamage = true;
+
+                @Config.Name("CNPCs flee To Home Position")
+                @Comment("If enabled, Custom NPCs flee to their home position instead of away from what hit them")
+                public boolean cnpcsRunHome = false;
+
+                @Config.Name("Fearless")
+                @Comment(
+                        {
+                                "These entities will not use the flee mechanic when low on health",
+                                "",
+                                "Entities that bypass threat are automatically fearless"
+                        })
+                public String[] fearless = new String[]
+                        {
+                                "player",
+                                "zombie",
+                                "zombie_villager",
+                                "husk",
+                                "skeleton",
+                                "stray",
+                                "wither_skeleton",
+                                "creeper",
+                                "ghast",
+                                "slime",
+                                "enderman",
+                                "ender_dragon",
+                                "wither"
+                        };
             }
         }
 
@@ -711,50 +756,6 @@ public class DynamicStealthConfig
             }
         }
 
-        public class FleeSettings
-        {
-            @Config.Name("HP Threshold")
-            @Comment("The % of health at which entities start to flee")
-            @Config.RangeInt(min = 0, max = 100)
-            public int threshold = 40;
-
-            @Config.Name("Degredation Rate")
-            @Comment("How fast the flee gauge decreases; lower number means they flee for a longer time")
-            @Config.RangeInt(min = 1)
-            public int degredationRate = 3;
-
-            @Config.Name("Damage Increases Flee Duration")
-            @Comment("If set to true, then when an entity is *already* in flee mode, damage will increase its flee duration")
-            public boolean increaseOnDamage = true;
-
-            @Config.Name("CNPCs flee To Home Position")
-            @Comment("If enabled, Custom NPCs flee to their home position instead of away from what hit them")
-            public boolean cnpcsRunHome = false;
-
-            @Config.Name("Fearless")
-            @Comment(
-                    {
-                            "These entities will not use the flee mechanic when low on health",
-                            "",
-                            "Entities that bypass threat are automatically fearless"
-                    })
-            public String[] fearless = new String[]
-                    {
-                            "player",
-                            "zombie",
-                            "zombie_villager",
-                            "husk",
-                            "skeleton",
-                            "stray",
-                            "wither_skeleton",
-                            "creeper",
-                            "ghast",
-                            "slime",
-                            "enderman",
-                            "ender_dragon",
-                            "wither"
-                    };
-        }
 
         public class ThreatSystem
         {
