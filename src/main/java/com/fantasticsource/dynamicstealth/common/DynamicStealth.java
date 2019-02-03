@@ -234,8 +234,8 @@ public class DynamicStealth
 
                 //Flee if you should
                 AIDynamicStealth searchAI = AIDynamicStealth.getStealthAI(livingTarget);
-                if (event.isCanceled()) AIDynamicStealth.fleeIfYouShould(livingTarget, livingTarget.getHealth());
-                else AIDynamicStealth.fleeIfYouShould(livingTarget, livingTarget.getHealth() - event.getAmount());
+                if (event.isCanceled()) AIDynamicStealth.fleeIfYouShould(livingTarget, livingTarget.getHealth(), true);
+                else AIDynamicStealth.fleeIfYouShould(livingTarget, livingTarget.getHealth() - event.getAmount(), true);
 
 
                 //Threat

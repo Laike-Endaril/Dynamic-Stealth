@@ -85,6 +85,7 @@ Add to HUD...
 AI =====================================================================
 
 Add desperation mechanic (see to do in AIStealthTargetingAndSearch)
+Add retaliation mechanic (see to do in AIStealthTargetingAndSearch)
 
 Can probably combine the two below into a single AI task...
 ...Replace EntityAILookIdle with a new version that has gradual head rotation, instead of just removing it

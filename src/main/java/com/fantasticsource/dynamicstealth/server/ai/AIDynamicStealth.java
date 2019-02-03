@@ -8,6 +8,7 @@ import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.TrigLookupTable;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -61,12 +62,14 @@ public class AIDynamicStealth extends EntityAIBase
         return null;
     }
 
-    public static void fleeIfYouShould(EntityLiving living, float hp)
+    public static void fleeIfYouShould(EntityLiving living, float hp, boolean resetPhaseIfYouFlee)
     {
         if (EntityThreatData.shouldFlee(living, hp))
         {
             AIDynamicStealth ai = getStealthAI(living);
             if (ai != null) ai.fleeing = true;
+
+            if (resetPhaseIfYouFlee) ai.phase = 0;
         }
     }
 
@@ -169,8 +172,7 @@ public class AIDynamicStealth extends EntityAIBase
         lastPos = null;
         timeAtPos = 0;
 
-        if (fleeing) startFleeing(false);
-        else
+        if (!fleeing)
         {
             if (lastKnownPosition != null)
             {
@@ -200,7 +202,13 @@ public class AIDynamicStealth extends EntityAIBase
     public void updateTask()
     {
         //Flee if we should
-        if (fleeing && phase != -1) startFleeing(false);
+        if (fleeing && phase != -1)
+        {
+            clearAIPath();
+            fleeToPos = null;
+            timeAtPos = 0;
+            phase = -1;
+        }
 
 
         //Reach searchPos, or the nearest reachable position to it.  If we reach a position, reset the search timer
@@ -296,6 +304,7 @@ public class AIDynamicStealth extends EntityAIBase
         //Flee from lastKnownPos
         if (phase == -1)
         {
+            //Threat calc
             Threat.ThreatData data = Threat.get(searcher);
             int threat = Math.max(0, data.threatLevel - serverSettings.ai.flee.degredationRate);
             Threat.setThreat(searcher, threat);
@@ -305,7 +314,7 @@ public class AIDynamicStealth extends EntityAIBase
             if (!EntityThreatData.shouldFlee(searcher, searcher.getHealth()))
             {
                 fleeing = false;
-                //TODO can trigger "desperation" here
+                //TODO can trigger "retaliation" here
             }
             else if (threat <= 0) fleeing = false;
 
@@ -316,49 +325,63 @@ public class AIDynamicStealth extends EntityAIBase
             }
 
 
+            //Ensure lastKnownPosition is non-null
+            if (lastKnownPosition == null) lastKnownPosition = MCTools.randomPos(searcher.getPosition(), 5, 0);
+
+
             if (isCNPC && serverSettings.ai.flee.cnpcsRunHome)
             {
-                if (fleeToPos == null || path == null || (path.isFinished() && (fleeToPos.getX() != searcher.getPosition().getX() || fleeToPos.getZ() != searcher.getPosition().getZ()))) startFleeing(false);
+                //Set flee position
+                ICustomNpc cnpc = (ICustomNpc) NpcAPI.Instance().getIEntity(searcher);
+                fleeToPos = new BlockPos(cnpc.getHomeX(), cnpc.getHomeY(), cnpc.getHomeZ());
+
+                //Set path
+                if ((fleeToPos.getX() != searcher.getPosition().getX() || fleeToPos.getZ() != searcher.getPosition().getZ()) && (path == null || path.isFinished()))
+                {
+                    path = navigator.getPathToPos(fleeToPos);
+                    navigator.setPath(path, speed);
+                }
                 else if (navigator.getPath() != path) navigator.setPath(path, speed);
             }
             else
             {
-                if (searcher.getPosition().distanceSq(fleeToPos) < 5) startFleeing(false);
-
-                if (navigator.getPath() != path) navigator.setPath(path, speed);
-
+                //Calc movement data
                 Vec3d currentPos = searcher.getPositionVector();
-                if (lastPos != null && lastPos.squareDistanceTo(currentPos) < speed * 0.005) timeAtPos++;
+                if (lastPos != null && lastPos.squareDistanceTo(currentPos) < speed * 0.001) timeAtPos++; //Uses different movement detection than when searching
                 else timeAtPos = 0;
-
                 lastPos = currentPos;
 
-                if (timeAtPos > 60 || lastKnownPosition == null || (searcher.onGround && navigator.noPath()))
+                //Set flee position
+                BlockPos oldFleePos = fleeToPos;
+
+                if (fleeToPos == null || searcher.getPosition().distanceSq(fleeToPos) < 5 || (path != null && path.isFinished()) || timeAtPos > 2)
                 {
-                    startFleeing(true);
-                    timeAtPos = 0;
+                    if (timeAtPos <= 3) fleeToPos = new BlockPos(searcher.getPositionVector().add(searcher.getPositionVector().subtract(new Vec3d(lastKnownPosition)).normalize().scale(10)));
+                    else if (timeAtPos == 4)
+                    {
+                        //TODO
+                        System.out.println(navigator.canEntityStandOnPos(searcher.getPosition()) + ", " + !searcher.world.getBlockState(searcher.getPosition()).getMaterial().blocksMovement());
+                    }
+                    else
+                    {
+                        //TODO can trigger "desperation" here
+                        fleeing = false;
+                        restart(lastKnownPosition);
+                        return;
+                    }
                 }
+
+                //Set path
+                if (fleeToPos != oldFleePos || path == null)
+                {
+                    path = navigator.getPathToPos(fleeToPos);
+                    navigator.setPath(path, speed);
+                }
+                else if (navigator.getPath() != path) navigator.setPath(path, speed);
             }
         }
     }
 
-
-    private void startFleeing(boolean forceRandom)
-    {
-        phase = -1;
-
-        if (lastKnownPosition == null || forceRandom) lastKnownPosition = MCTools.randomPos(searcher.getPosition(), 2, 0);
-
-        if (isCNPC && serverSettings.ai.flee.cnpcsRunHome)
-        {
-            ICustomNpc cnpc = (ICustomNpc) NpcAPI.Instance().getIEntity(searcher);
-            fleeToPos = new BlockPos(cnpc.getHomeX(), cnpc.getHomeY(), cnpc.getHomeZ());
-        }
-        else fleeToPos = new BlockPos(searcher.getPositionVector().add(searcher.getPositionVector().subtract(new Vec3d(lastKnownPosition)).normalize().scale(10)));
-
-        path = navigator.getPathToPos(fleeToPos);
-        navigator.setPath(path, speed);
-    }
 
     public void restart(BlockPos newPos) //This is NOT the same as resetTask(); this is just a proxy for me to remember how to reset this correctly from outside the task system
     {
