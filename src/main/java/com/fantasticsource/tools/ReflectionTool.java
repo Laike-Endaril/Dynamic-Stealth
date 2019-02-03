@@ -8,6 +8,11 @@ public class ReflectionTool
 {
     public static Field getField(Class classType, String... possibleFieldnames) throws NoSuchFieldException, IllegalAccessException
     {
+        return getField(false, classType, possibleFieldnames);
+    }
+
+    public static Field getField(boolean printFound, Class classType, String... possibleFieldnames) throws NoSuchFieldException, IllegalAccessException
+    {
         Field[] fields = classType.getDeclaredFields();
         for (Field field : fields)
         {
@@ -21,6 +26,7 @@ public class ReflectionTool
                     modifiersField.setAccessible(true);
                     modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
 
+                    if (printFound) System.out.println(name);
                     return field;
                 }
             }
@@ -30,6 +36,11 @@ public class ReflectionTool
 
     public static Method getMethod(Class classType, String... possibleMethodNames)
     {
+        return getMethod(false, classType, possibleMethodNames);
+    }
+
+    public static Method getMethod(boolean printFound, Class classType, String... possibleMethodNames)
+    {
         Method[] methods = classType.getDeclaredMethods();
         for (Method method : methods)
         {
@@ -38,6 +49,7 @@ public class ReflectionTool
                 if (method.getName().equals(name))
                 {
                     method.setAccessible(true);
+                    if (printFound) System.out.println(name);
                     return method;
                 }
             }
