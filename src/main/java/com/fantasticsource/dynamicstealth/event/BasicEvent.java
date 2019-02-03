@@ -54,6 +54,7 @@ public class BasicEvent extends Event
         }
     }
 
+    @Cancelable
     public static class DesperationEvent extends BasicEvent
     {
         public DesperationEvent(EntityLivingBase livingBase)
@@ -61,5 +62,4 @@ public class BasicEvent extends Event
             super(livingBase);
         }
     }
-
 }

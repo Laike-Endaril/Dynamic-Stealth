@@ -5,6 +5,7 @@ import com.fantasticsource.dynamicstealth.client.RenderAlterer;
 import com.fantasticsource.dynamicstealth.common.potions.Potions;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatCNPC;
+import com.fantasticsource.dynamicstealth.event.StealthAttackEvent;
 import com.fantasticsource.dynamicstealth.server.Attributes;
 import com.fantasticsource.dynamicstealth.server.EntityLookHelperEdit;
 import com.fantasticsource.dynamicstealth.server.WarningSystem;
@@ -212,9 +213,43 @@ public class DynamicStealth
     }
 
 
-    @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
-    public static void entityAttacked(LivingHurtEvent event) throws InvocationTargetException, IllegalAccessException
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void entityAttackedPre(LivingHurtEvent event)
     {
+        EntityLivingBase target = event.getEntityLiving();
+
+        Entity source = event.getSource().getTrueSource();
+        if (source == null) source = event.getSource().getImmediateSource();
+
+        if (target instanceof EntityLiving)
+        {
+            EntityLiving livingTarget = (EntityLiving) target;
+
+            if (source instanceof EntityLivingBase)
+            {
+                EntityLivingBase livingBaseSource = (EntityLivingBase) source;
+
+                if (!livingTarget.getEntitySenses().canSee(livingBaseSource))
+                {
+                    if (!MinecraftForge.EVENT_BUS.post(new StealthAttackEvent(livingTarget, event.getSource(), event.getAmount())))
+                    {
+                        //TODO Stealth attack
+                    }
+                    else
+                    {
+                        event.setResult(Event.Result.DENY);
+                        event.setCanceled(true);
+                    }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
+    public static void entityAttackedPost(LivingHurtEvent event) throws InvocationTargetException, IllegalAccessException
+    {
+        if (event.isCanceled() && event.getResult() == Event.Result.DENY) return;
+
         EntityLivingBase target = event.getEntityLiving();
 
         Entity source = event.getSource().getTrueSource();

@@ -7,10 +7,6 @@ Add "unreachable target" mechanic/event...
 
 Make it so if an entity dies, all entities who had threat against it and see it die set target to null
 
-Add action wheel which opens on keybind
-Add actions...
-...Attempt Stealth / Don't Attempt Stealth (if set to "Don't Attempt Stealth", you are very easy for things to notice)
-
 Add "naturally bright" entity-specific config; makes them fully visible light-wise
 
 Fix leashes not rendering sometimes (it shows the knot though...is this a vanilla bug?)
@@ -32,14 +28,20 @@ This system, if improved upon, could be used for most pathfinding and should imp
 
 EVENTS =================================================================
 
-Add event for stealth attacks extending normal attack event
-...reference issue #9
+Add event for stealth kills triggering from normal death event and using it as a base
 ...add a weapon/held item filter with NBT support
-...add armor penetration as an option (probably use LivingAttackEvent?)
+...reference issue #9
 
-Add event for stealth kills extending normal death event
-...reference issue #9
-...add a weapon/held item filter with NBT support
+Add config options which alter events in the event constructors
+
+
+
+
+KEYBOUND ACTIONS =======================================================
+
+Add action wheel which opens on keybind
+Add actions...
+...Attempt Stealth / Don't Attempt Stealth (if set to "Don't Attempt Stealth", you are very easy for things to notice)
 
 
 OPTIMIZATIONS ==========================================================
