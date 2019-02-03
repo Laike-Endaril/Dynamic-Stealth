@@ -284,7 +284,8 @@ public class DynamicStealthConfig
 
             @Config.Name("Entity-Specific Settings (Advanced)")
             public EntityAISettings y_entityOverrides = new EntityAISettings();
-            @Config.Name("Flee Mechanic")
+
+            @Config.Name("Flee")
             public FleeSettings flee = new FleeSettings();
 
             public class EntityAISettings

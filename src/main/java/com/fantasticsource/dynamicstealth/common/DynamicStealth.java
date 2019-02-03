@@ -5,7 +5,7 @@ import com.fantasticsource.dynamicstealth.client.RenderAlterer;
 import com.fantasticsource.dynamicstealth.common.potions.Potions;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatCNPC;
-import com.fantasticsource.dynamicstealth.event.StealthAttackEvent;
+import com.fantasticsource.dynamicstealth.server.event.StealthAttackEvent;
 import com.fantasticsource.dynamicstealth.server.Attributes;
 import com.fantasticsource.dynamicstealth.server.CombatTracker;
 import com.fantasticsource.dynamicstealth.server.EntityLookHelperEdit;
@@ -266,6 +266,7 @@ public class DynamicStealth
             if (source instanceof EntityLivingBase)
             {
                 EntityLivingBase livingBaseSource = (EntityLivingBase) source;
+                CombatTracker.setSuccessfulAttackTime(livingBaseSource);
 
                 boolean updateTarget = true;
                 boolean newThreatTarget = false;

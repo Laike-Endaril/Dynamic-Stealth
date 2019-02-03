@@ -2,8 +2,8 @@ package com.fantasticsource.dynamicstealth.server.ai;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.dynamicstealth.compat.Compat;
-import com.fantasticsource.dynamicstealth.event.BasicEvent;
 import com.fantasticsource.dynamicstealth.server.ai.edited.AITargetEdit;
+import com.fantasticsource.dynamicstealth.server.event.BasicEvent;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
@@ -232,9 +232,18 @@ public class AIDynamicStealth extends EntityAIBase
     @Override
     public void updateTask()
     {
-        //Flee if we should
+        //Calc movement data
+        Vec3d currentPos = searcher.getPositionVector();
+        if (lastPos != null && lastPos.squareDistanceTo(currentPos) < speed * 0.001) timeAtPos++;
+        else timeAtPos = 0;
+        lastPos = currentPos;
+
+
+        //Last second phase changes
+
         if (fleeing && phase != -1 && !MinecraftForge.EVENT_BUS.post(new BasicEvent.FleeEvent(searcher)))
         {
+            //Flee
             clearAIPath();
             fleeToPos = null;
             timeAtPos = 0;
@@ -246,12 +255,6 @@ public class AIDynamicStealth extends EntityAIBase
         if (phase == 0)
         {
             if (navigator.getPath() != path) navigator.setPath(path, speed);
-
-            Vec3d currentPos = searcher.getPositionVector();
-            if (lastPos != null && lastPos.squareDistanceTo(currentPos) < speed * 0.005) timeAtPos++;
-            else timeAtPos = 0;
-
-            lastPos = currentPos;
 
             if (timeAtPos > 60 || lastKnownPosition == null || (searcher.onGround && navigator.noPath() && !newPath(lastKnownPosition)))
             {
@@ -313,12 +316,6 @@ public class AIDynamicStealth extends EntityAIBase
         {
             if (navigator.getPath() != path) navigator.setPath(path, speed);
 
-            Vec3d currentPos = searcher.getPositionVector();
-            if (lastPos != null && lastPos.squareDistanceTo(currentPos) < speed * 0.005) timeAtPos++;
-            else timeAtPos = 0;
-
-            lastPos = currentPos;
-
             if (timeAtPos > 60 || (searcher.onGround && navigator.noPath() && !newPath(path)))
             {
                 phase = 1;
@@ -375,12 +372,6 @@ public class AIDynamicStealth extends EntityAIBase
             }
             else
             {
-                //Calc movement data
-                Vec3d currentPos = searcher.getPositionVector();
-                if (lastPos != null && lastPos.squareDistanceTo(currentPos) < speed * 0.001) timeAtPos++; //Uses different movement detection than when searching
-                else timeAtPos = 0;
-                lastPos = currentPos;
-
                 //Set flee position
                 BlockPos oldFleePos = fleeToPos;
 
