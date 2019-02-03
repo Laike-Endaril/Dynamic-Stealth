@@ -445,7 +445,6 @@ public class AIDynamicStealth extends EntityAIBase
                     testPos = searcherPos.add(ix, iy, iz);
                     if ((ix != 0 || iy != 0 || iz != 0) && (navigator.canEntityStandOnPos(testPos) && !searcher.world.getBlockState(testPos).getMaterial().blocksMovement()))
                     {
-                        System.out.println(testPos);
                         fleeToPos = testPos;
                         found = true;
                     }
