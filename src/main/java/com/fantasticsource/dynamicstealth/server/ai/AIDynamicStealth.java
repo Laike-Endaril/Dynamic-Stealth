@@ -83,9 +83,11 @@ public class AIDynamicStealth extends EntityAIBase
         if (EntityThreatData.shouldFlee(living, hp))
         {
             AIDynamicStealth ai = getStealthAI(living);
-            if (ai != null) ai.fleeing = true;
-
-            if (resetPhaseIfYouFlee) ai.phase = 0;
+            if (ai != null)
+            {
+                ai.fleeing = true;
+                if (resetPhaseIfYouFlee) ai.phase = 0;
+            }
         }
     }
 
