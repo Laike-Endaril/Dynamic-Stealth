@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth.server.configdata;
+package com.fantasticsource.dynamicstealth.server.threat;
 
 import java.util.ArrayList;
 

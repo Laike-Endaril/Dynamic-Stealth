@@ -1,7 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.threat;
 
 import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
-import com.fantasticsource.dynamicstealth.server.configdata.EntityThreatDefaults;
 import com.fantasticsource.mctools.MCTools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -17,10 +16,10 @@ import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.ser
 
 public class EntityThreatData
 {
-    private static ArrayList<Class<? extends Entity>> threatBypass = new ArrayList<>();
-    private static ArrayList<Class<? extends Entity>> isPassive = new ArrayList<>();
-    private static ArrayList<Class<? extends Entity>> isNonPassive = new ArrayList<>();
-    private static ArrayList<Class<? extends Entity>> isFearless = new ArrayList<>();
+    private static ArrayList<Class<? extends EntityLivingBase>> threatBypass = new ArrayList<>();
+    private static ArrayList<Class<? extends EntityLivingBase>> isPassive = new ArrayList<>();
+    private static ArrayList<Class<? extends EntityLivingBase>> isNonPassive = new ArrayList<>();
+    private static ArrayList<Class<? extends EntityLivingBase>> isFearless = new ArrayList<>();
 
 
     static
@@ -38,7 +37,12 @@ public class EntityThreatData
                 entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(string));
 
                 if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
-                else isFearless.add(entry.getEntityClass());
+                else
+                {
+                    Class c = entry.getEntityClass();
+                    if (EntityLivingBase.class.isAssignableFrom(c)) isFearless.add(c);
+                    else System.err.println("Entity \"" + string + "\" does not extend EntityLivingBase!");
+                }
             }
         }
 
@@ -55,7 +59,9 @@ public class EntityThreatData
                 }
                 else
                 {
-                    threatBypass.add(entry.getEntityClass());
+                    Class c = entry.getEntityClass();
+                    if (EntityLivingBase.class.isAssignableFrom(c)) threatBypass.add(c);
+                    else System.err.println("Entity \"" + string + "\" does not extend EntityLivingBase!");
                 }
             }
         }
@@ -88,8 +94,13 @@ public class EntityThreatData
                         }
                         else
                         {
-                            if (mode == 1) isPassive.add(entry.getEntityClass());
-                            else isNonPassive.add(entry.getEntityClass());
+                            Class c = entry.getEntityClass();
+                            if (EntityLivingBase.class.isAssignableFrom(c))
+                            {
+                                if (mode == 1) isPassive.add(c);
+                                else isNonPassive.add(c);
+                            }
+                            else System.err.println("Entity \"" + string + "\" does not extend EntityLivingBase!");
                         }
                     }
                 }

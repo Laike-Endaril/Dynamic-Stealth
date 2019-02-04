@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Add "naturally bright" entity-specific config; makes them fully visible light-wise
-
 Add blindness potion
 Add glowing potion
 
@@ -130,6 +128,8 @@ Possibly change music using ActualMusic when going into battle, etc
 
 
 MOD COMPATIBILITY ======================================================
+
+Add bright mobs from mods to EntityVisionDefaults.naturallyBrightEntities
 
 CNPCs don't change opacity
 

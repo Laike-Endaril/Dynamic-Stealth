@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.common;
 
-import com.fantasticsource.dynamicstealth.server.configdata.EntityThreatDefaults;
+import com.fantasticsource.dynamicstealth.server.senses.EntityVisionDefaults;
+import com.fantasticsource.dynamicstealth.server.threat.EntityThreatDefaults;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.Comment;
 
@@ -726,6 +727,11 @@ public class DynamicStealthConfig
                                     "wither, 0, -1",
                                     "ender_dragon, 0, -1"
                             };
+
+                    @Config.Name("Naturally Bright")
+                    @Comment({"Entities in this list are always treated as if they are standing in max light level"})
+                    @Config.RequiresMcRestart
+                    public String[] naturallyBrightEntities = EntityVisionDefaults.naturallyBrightDefaults.toArray(new String[EntityVisionDefaults.naturallyBrightDefaults.size()]);
 
                     @Config.Name("Natural Night Vision")
                     @Comment({"Entities in this list ALWAYS get the night vision bonus"})

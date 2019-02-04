@@ -22,6 +22,7 @@ public class EntityVisionData
     public static ArrayList<EntityLivingBase> potionSoulSightEntities = new ArrayList<>();
     public static ArrayList<EntityLivingBase> soulSightCache = new ArrayList<>();
 
+    private static ArrayList<Class<? extends EntityLivingBase>> naturallyBrightEntities = new ArrayList<>();
     private static ArrayList<Class<? extends EntityLivingBase>> naturalNightvisionEntities = new ArrayList<>();
     private static ArrayList<Class<? extends EntityLivingBase>> naturalSoulSightEntities = new ArrayList<>();
     private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityAngles = new LinkedHashMap<>();
@@ -34,6 +35,26 @@ public class EntityVisionData
         EntityEntry entry;
         String[] tokens;
         String token;
+
+        for (String string : serverSettings.senses.vision.y_entityOverrides.naturallyBrightEntities)
+        {
+            if (string.equals("player")) naturallyBrightEntities.add(EntityPlayerMP.class);
+            else
+            {
+                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(string));
+
+                if (entry == null)
+                {
+                    if (!EntityVisionDefaults.naturallyBrightDefaults.contains(string)) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
+                }
+                else
+                {
+                    Class c = entry.getEntityClass();
+                    if (EntityLivingBase.class.isAssignableFrom(c)) naturallyBrightEntities.add(c);
+                    else System.err.println("Entity \"" + string + "\" does not extend EntityLivingBase!");
+                }
+            }
+        }
 
         for (String string : serverSettings.senses.vision.y_entityOverrides.naturalNightVisionMobs)
         {
@@ -160,6 +181,7 @@ public class EntityVisionData
         }
     }
 
+
     public static void postInit(FMLPostInitializationEvent event)
     {
         update();
@@ -178,6 +200,11 @@ public class EntityVisionData
         if (serverSettings.senses.vision.d_speeds.speedLow > serverSettings.senses.vision.d_speeds.speedHigh) throw new IllegalArgumentException("speedHigh must be greater than or equal to speedLow");
     }
 
+
+    public static boolean isNaturallyBright(EntityLivingBase target)
+    {
+        return naturallyBrightEntities.contains(target.getClass());
+    }
 
     public static boolean hasNightVision(EntityLivingBase searcher)
     {
