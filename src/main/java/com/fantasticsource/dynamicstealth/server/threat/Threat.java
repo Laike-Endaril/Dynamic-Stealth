@@ -1,7 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.threat;
 
 import com.fantasticsource.dynamicstealth.server.CombatTracker;
-import com.fantasticsource.mctools.ServerTickTimer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -12,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
+import static com.fantasticsource.mctools.ServerTickTimer.currentTick;
 
 public class Threat
 {
@@ -23,7 +23,7 @@ public class Threat
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void update(TickEvent.ServerTickEvent event)
     {
-        if (event.phase == TickEvent.Phase.START && ServerTickTimer.currentTick() % ITERATION_FREQUENCY == 0) removeAllUnused();
+        if (event.phase == TickEvent.Phase.START && currentTick() % ITERATION_FREQUENCY == 0) removeAllUnused();
     }
 
 
@@ -81,7 +81,11 @@ public class Threat
     {
         if (EntityThreatData.bypassesThreat(searcher)) return;
 
-        if (threat <= 0) remove(searcher);
+        if (threat <= 0)
+        {
+            CombatTracker.setIdleTime(searcher);
+            remove(searcher);
+        }
         else
         {
             if (threat > serverSettings.threat.maxThreat) threat = serverSettings.threat.maxThreat;
@@ -89,13 +93,13 @@ public class Threat
             ThreatData threatData = threatMap.get(searcher);
             if (threatData != null)
             {
-                if (threatData.threatLevel <= 0) CombatTracker.setIdleTime(searcher, ServerTickTimer.currentTick() - 1);
+                if (threatData.threatLevel <= 0) CombatTracker.setIdleTime(searcher, currentTick() - 1);
                 threatData.target = target;
                 threatData.threatLevel = threat;
             }
             else
             {
-                CombatTracker.setIdleTime(searcher, ServerTickTimer.currentTick() - 1);
+                CombatTracker.setIdleTime(searcher, currentTick() - 1);
                 threatMap.put(searcher, new ThreatData(searcher, target, threat));
             }
         }
@@ -113,7 +117,11 @@ public class Threat
     {
         if (EntityThreatData.bypassesThreat(searcher)) return;
 
-        if (threat <= 0) remove(searcher);
+        if (threat <= 0)
+        {
+            CombatTracker.setIdleTime(searcher);
+            remove(searcher);
+        }
         else
         {
             if (threat > serverSettings.threat.maxThreat) threat = serverSettings.threat.maxThreat;
@@ -121,12 +129,12 @@ public class Threat
             ThreatData threatData = threatMap.get(searcher);
             if (threatData != null)
             {
-                if (threatData.threatLevel <= 0) CombatTracker.setIdleTime(searcher, ServerTickTimer.currentTick() - 1);
+                if (threatData.threatLevel <= 0) CombatTracker.setIdleTime(searcher, currentTick() - 1);
                 threatData.threatLevel = threat;
             }
             else
             {
-                CombatTracker.setIdleTime(searcher, ServerTickTimer.currentTick() - 1);
+                CombatTracker.setIdleTime(searcher, currentTick() - 1);
                 threatMap.put(searcher, new ThreatData(searcher, null, threat));
             }
         }

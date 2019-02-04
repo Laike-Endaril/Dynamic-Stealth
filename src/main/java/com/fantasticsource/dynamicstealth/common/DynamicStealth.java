@@ -231,7 +231,7 @@ public class DynamicStealth
                     if (path != null)
                     {
                         PathPoint point = path.getFinalPathPoint();
-                        if (point != null && data.target.getPosition().equals(new BlockPos(point.x, point.y, point.z))) CombatTracker.setSuccessfulPathTime(living);
+                        if (point != null && data.target.getPosition().distanceSq(new BlockPos(point.x, point.y, point.z)) < 2) CombatTracker.setSuccessfulPathTime(living);
                     }
                 }
             }
@@ -288,7 +288,6 @@ public class DynamicStealth
             if (source instanceof EntityLivingBase)
             {
                 EntityLivingBase livingBaseSource = (EntityLivingBase) source;
-                CombatTracker.setSuccessfulAttackTime(livingBaseSource);
 
                 boolean updateTarget = true;
                 boolean newThreatTarget = false;
@@ -380,6 +379,7 @@ public class DynamicStealth
         if (source instanceof EntityLivingBase)
         {
             EntityLivingBase livingBaseSource = (EntityLivingBase) source;
+            CombatTracker.setSuccessfulAttackTime(livingBaseSource);
 
             //Remove invisibility and blindness if set to do so
             if (serverSettings.z_otherSettings.removeInvisibilityOnHit)

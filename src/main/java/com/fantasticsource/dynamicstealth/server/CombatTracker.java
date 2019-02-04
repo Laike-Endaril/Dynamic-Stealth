@@ -58,7 +58,7 @@ public class CombatTracker
     public static long timeSinceLastSuccessfulAttack(EntityLivingBase livingBase)
     {
         long result = lastSuccessfulAttackTime(livingBase);
-        return result == -1 ? -1 : currentTick() - result;
+        return result == -1 ? Long.MAX_VALUE : currentTick() - result;
     }
 
 
@@ -81,18 +81,19 @@ public class CombatTracker
     public static long timeSinceLastSuccessfulPath(EntityLivingBase livingBase)
     {
         long result = lastSuccessfulPathTime(livingBase);
-        return result == -1 ? -1 : currentTick() - result;
+        return result == -1 ? Long.MAX_VALUE : currentTick() - result;
     }
 
 
     public static void setIdleTime(EntityLivingBase livingBase)
     {
-        setIdleTime(livingBase, currentTick());
+        idleTimes.remove(livingBase);
     }
 
     public static void setIdleTime(EntityLivingBase livingBase, long time)
     {
-        idleTimes.put(livingBase, time);
+        if (time == currentTick()) idleTimes.remove(livingBase);
+        else idleTimes.put(livingBase, time);
     }
 
     public static long lastIdleTime(EntityLivingBase livingBase)
@@ -104,6 +105,6 @@ public class CombatTracker
     public static long timeSinceLastIdle(EntityLivingBase livingBase)
     {
         long result = lastIdleTime(livingBase);
-        return result == -1 ? -1 : currentTick() - result;
+        return result == -1 ? 0 : currentTick() - result;
     }
 }

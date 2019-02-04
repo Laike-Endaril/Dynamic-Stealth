@@ -1,5 +1,8 @@
 CURRENTLY WORKING ON ===================================================
 
+Account for size of large mobs in CombatTracker's path detection
+Account for reach of large CNPCs in CombatTracker's path detection
+
 For StopChaseEvent...
 ...trigger if the mob doesn't bypass threat, has a threat target but cannot reach it, and the mob hasn't dealt damage lately
 ...option to trigger flee effect
