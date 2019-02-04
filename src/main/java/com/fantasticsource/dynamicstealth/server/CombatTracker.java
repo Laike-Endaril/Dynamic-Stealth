@@ -15,7 +15,7 @@ public class CombatTracker
     private static final int ITERATION_FREQUENCY = 72000;
 
     private static LinkedHashMap<EntityLivingBase, Long> successfulAttackTimes = new LinkedHashMap<>();
-    private static LinkedHashMap<EntityLivingBase, Long> successfulPathTimes = new LinkedHashMap<>(); //TODO update contents
+    private static LinkedHashMap<EntityLivingBase, Long> successfulPathTimes = new LinkedHashMap<>();
     private static LinkedHashMap<EntityLivingBase, Long> idleTimes = new LinkedHashMap<>();
 
 

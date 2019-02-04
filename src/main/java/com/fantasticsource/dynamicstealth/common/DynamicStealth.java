@@ -38,6 +38,8 @@ import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
+import net.minecraft.pathfinding.Path;
+import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -185,10 +187,10 @@ public class DynamicStealth
     @SubscribeEvent
     public static void entityCollision(TickEvent.WorldTickEvent event) throws InvocationTargetException, IllegalAccessException
     {
-        if (serverSettings.senses.touch.touchEnabled)
+        World world = event.world;
+        if (!MCTools.isClient(world) && event.phase == TickEvent.Phase.START)
         {
-            World world = event.world;
-            if (!MCTools.isClient(world))
+            if (serverSettings.senses.touch.touchEnabled)
             {
                 for (Entity feeler : world.loadedEntityList)
                 {
@@ -210,6 +212,26 @@ public class DynamicStealth
                                 }
                             }
                         }
+                    }
+                }
+            }
+        }
+
+        for (Entity entity : world.loadedEntityList)
+        {
+            if (entity instanceof EntityLiving && entity.isEntityAlive())
+            {
+                EntityLiving living = (EntityLiving) entity;
+                Threat.ThreatData data = Threat.get(living);
+
+                if (data.threatLevel > 0 && data.target != null)
+                {
+                    Path path = living.getNavigator().getPath();
+
+                    if (path != null)
+                    {
+                        PathPoint point = path.getFinalPathPoint();
+                        if (point != null && data.target.getPosition().equals(new BlockPos(point.x, point.y, point.z))) CombatTracker.setSuccessfulPathTime(living);
                     }
                 }
             }

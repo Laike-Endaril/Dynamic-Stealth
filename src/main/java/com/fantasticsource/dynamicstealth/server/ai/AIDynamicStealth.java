@@ -46,7 +46,7 @@ public class AIDynamicStealth extends EntityAIBase
     public Path path = null;
     public BlockPos lastKnownPosition = null, fleeToPos = null;
     public boolean fleeing = false;
-    private int phase, timeAtPos;
+    private int phase, timeAtPos; //Don't replace timeAtPos with a ServerTickTimer reference, because this ai does not run every tick
     private boolean spinDirection;
     private Vec3d lastPos = null, nextPos = null;
     private double startAngle, angleDif, pathAngle;
