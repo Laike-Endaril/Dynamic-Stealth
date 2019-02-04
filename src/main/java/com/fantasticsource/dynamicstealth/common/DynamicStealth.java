@@ -231,7 +231,7 @@ public class DynamicStealth
                     if (path != null)
                     {
                         PathPoint point = path.getFinalPathPoint();
-                        if (point != null && data.target.getPosition().distanceSq(new BlockPos(point.x, point.y, point.z)) < 2) CombatTracker.setSuccessfulPathTime(living);
+                        if (point != null && data.target.getPosition().distanceSq(new BlockPos(point.x, point.y, point.z)) < Math.pow((data.target.width + data.target.height) / 2 + (living.width + living.height) / 2, 2)) CombatTracker.setSuccessfulPathTime(living);
                     }
                 }
             }

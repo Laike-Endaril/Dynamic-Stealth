@@ -17,6 +17,7 @@ public class CombatTracker
     private static LinkedHashMap<EntityLivingBase, Long> successfulAttackTimes = new LinkedHashMap<>();
     private static LinkedHashMap<EntityLivingBase, Long> successfulPathTimes = new LinkedHashMap<>();
     private static LinkedHashMap<EntityLivingBase, Long> idleTimes = new LinkedHashMap<>();
+    private static LinkedHashMap<EntityLivingBase, Long> noTargetTimes = new LinkedHashMap<>();
 
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -25,6 +26,7 @@ public class CombatTracker
         if (event.phase == TickEvent.Phase.START && (currentTick() + 1000) % ITERATION_FREQUENCY == 0) removeAllUnusedTimes(successfulAttackTimes);
         if (event.phase == TickEvent.Phase.START && (currentTick() + 2000) % ITERATION_FREQUENCY == 0) removeAllUnusedTimes(successfulPathTimes);
         if (event.phase == TickEvent.Phase.START && (currentTick() + 3000) % ITERATION_FREQUENCY == 0) removeAllUnusedTimes(idleTimes);
+        if (event.phase == TickEvent.Phase.START && (currentTick() + 4000) % ITERATION_FREQUENCY == 0) removeAllUnusedTimes(noTargetTimes);
     }
 
     private static void removeAllUnusedTimes(LinkedHashMap<EntityLivingBase, Long> map)
@@ -105,6 +107,30 @@ public class CombatTracker
     public static long timeSinceLastIdle(EntityLivingBase livingBase)
     {
         long result = lastIdleTime(livingBase);
+        return result == -1 ? 0 : currentTick() - result;
+    }
+
+
+    public static void setNoTargetTime(EntityLivingBase livingBase)
+    {
+        noTargetTimes.remove(livingBase);
+    }
+
+    public static void setNoTargetTime(EntityLivingBase livingBase, long time)
+    {
+        if (time == currentTick()) noTargetTimes.remove(livingBase);
+        else noTargetTimes.put(livingBase, time);
+    }
+
+    public static long lastNoTargetTime(EntityLivingBase livingBase)
+    {
+        if (!noTargetTimes.containsKey(livingBase)) return -1;
+        return noTargetTimes.get(livingBase);
+    }
+
+    public static long timeSinceLastNoTarget(EntityLivingBase livingBase)
+    {
+        long result = lastNoTargetTime(livingBase);
         return result == -1 ? 0 : currentTick() - result;
     }
 }

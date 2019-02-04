@@ -1,13 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Account for size of large mobs in CombatTracker's path detection
-Account for reach of large CNPCs in CombatTracker's path detection
-
-For StopChaseEvent...
-...trigger if the mob doesn't bypass threat, has a threat target but cannot reach it, and the mob hasn't dealt damage lately
-...option to trigger flee effect
-...option to trigger potion effects
-
 Make it so if an entity dies, all entities who had threat against it and see it die set target to null
 
 Add "naturally bright" entity-specific config; makes them fully visible light-wise
@@ -37,7 +29,7 @@ Add event for stealth kills triggering from normal death event, using death even
 
 Add event for stealth interact (right clicking an entity that cannot see you)
 
-Add config options which alter events in the event constructors
+Add config options which alter events in the event constructors or after they trigger
 
 
 

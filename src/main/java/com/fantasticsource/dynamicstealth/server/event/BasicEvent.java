@@ -64,9 +64,9 @@ public class BasicEvent extends Event
     }
 
     @Cancelable
-    public static class StopChaseEvent extends BasicEvent
+    public static class CantReachEvent extends BasicEvent
     {
-        public StopChaseEvent(EntityLivingBase livingBase)
+        public CantReachEvent(EntityLivingBase livingBase)
         {
             super(livingBase);
         }

@@ -50,6 +50,8 @@ public class Threat
 
     public static void remove(EntityLivingBase searcher)
     {
+        CombatTracker.setNoTargetTime(searcher);
+        CombatTracker.setIdleTime(searcher);
         threatMap.remove(searcher);
     }
 
@@ -81,11 +83,7 @@ public class Threat
     {
         if (EntityThreatData.bypassesThreat(searcher)) return;
 
-        if (threat <= 0)
-        {
-            CombatTracker.setIdleTime(searcher);
-            remove(searcher);
-        }
+        if (threat <= 0) remove(searcher);
         else
         {
             if (threat > serverSettings.threat.maxThreat) threat = serverSettings.threat.maxThreat;
@@ -93,12 +91,18 @@ public class Threat
             ThreatData threatData = threatMap.get(searcher);
             if (threatData != null)
             {
+                if (target == null) CombatTracker.setNoTargetTime(searcher);
+                else if (threatData.target == null) CombatTracker.setNoTargetTime(searcher, currentTick() - 1);
+
                 if (threatData.threatLevel <= 0) CombatTracker.setIdleTime(searcher, currentTick() - 1);
                 threatData.target = target;
                 threatData.threatLevel = threat;
             }
             else
             {
+                if (target == null) CombatTracker.setNoTargetTime(searcher);
+                else CombatTracker.setNoTargetTime(searcher, currentTick() - 1);
+
                 CombatTracker.setIdleTime(searcher, currentTick() - 1);
                 threatMap.put(searcher, new ThreatData(searcher, target, threat));
             }
@@ -110,18 +114,20 @@ public class Threat
         if (EntityThreatData.bypassesThreat(searcher)) return;
 
         ThreatData threatData = threatMap.get(searcher);
-        if (threatData != null) threatData.target = target;
+        if (threatData != null)
+        {
+            if (target == null) CombatTracker.setNoTargetTime(searcher);
+            else if (threatData.target == null) CombatTracker.setNoTargetTime(searcher, currentTick() - 1);
+            threatData.target = target;
+        }
+        else CombatTracker.setNoTargetTime(searcher);
     }
 
     public static void setThreat(EntityLivingBase searcher, int threat)
     {
         if (EntityThreatData.bypassesThreat(searcher)) return;
 
-        if (threat <= 0)
-        {
-            CombatTracker.setIdleTime(searcher);
-            remove(searcher);
-        }
+        if (threat <= 0) remove(searcher);
         else
         {
             if (threat > serverSettings.threat.maxThreat) threat = serverSettings.threat.maxThreat;

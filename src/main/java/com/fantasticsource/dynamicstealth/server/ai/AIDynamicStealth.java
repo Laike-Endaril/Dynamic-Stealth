@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth.server.ai;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.dynamicstealth.compat.Compat;
+import com.fantasticsource.dynamicstealth.server.CombatTracker;
 import com.fantasticsource.dynamicstealth.server.ai.edited.AITargetEdit;
 import com.fantasticsource.dynamicstealth.server.event.BasicEvent;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
@@ -45,7 +46,7 @@ public class AIDynamicStealth extends EntityAIBase
     public double speed;
     public Path path = null;
     public BlockPos lastKnownPosition = null, fleeToPos = null;
-    public boolean fleeing = false;
+    public boolean fleeing = false, triedCantReach = false, forcedFlee = false;
     private int phase, timeAtPos; //Don't replace timeAtPos with a ServerTickTimer reference, because this ai does not run every tick
     private boolean spinDirection;
     private Vec3d lastPos = null, nextPos = null;
@@ -130,6 +131,7 @@ public class AIDynamicStealth extends EntityAIBase
             return false;
         }
 
+
         //Threat > 0
 
         if (fleeing) return true;
@@ -153,7 +155,27 @@ public class AIDynamicStealth extends EntityAIBase
             return unseenTargetDegredation(threat);
         }
 
+
         //Threat > 0 and threatTarget != null...we have an existing target from before
+
+        if (CombatTracker.timeSinceLastIdle(searcher) >= serverSettings.ai.cantReach.lastIdleThreshold
+                && CombatTracker.timeSinceLastSuccessfulAttack(searcher) >= serverSettings.ai.cantReach.lastAttackThreshold
+                && CombatTracker.timeSinceLastSuccessfulPath(searcher) >= serverSettings.ai.cantReach.lastPathThreshold
+                && CombatTracker.timeSinceLastNoTarget(searcher) >= serverSettings.ai.cantReach.lastNoTargetThreshold)
+        {
+            System.out.println(CombatTracker.timeSinceLastIdle(searcher) + ", " + CombatTracker.timeSinceLastSuccessfulAttack(searcher) + ", " + CombatTracker.timeSinceLastSuccessfulPath(searcher));
+            if (!triedCantReach && !MinecraftForge.EVENT_BUS.post(new BasicEvent.CantReachEvent(searcher)))
+            {
+                if (serverSettings.ai.cantReach.flee)
+                {
+                    forcedFlee = true;
+                    fleeing = true;
+                    return true;
+                }
+            }
+            triedCantReach = true;
+        }
+        else triedCantReach = false;
 
         if (AITargetEdit.isSuitableTarget(searcher, threatTarget))
         {
@@ -343,11 +365,16 @@ public class AIDynamicStealth extends EntityAIBase
             {
                 fleeing = false;
             }
-            else if (threat <= 0) fleeing = false;
+            else if (threat <= 0)
+            {
+                fleeing = false;
+                forcedFlee = false;
+            }
 
             if (!fleeing)
             {
-                restart(lastKnownPosition);
+                if (Threat.getThreat(searcher) > 0) restart(lastKnownPosition);
+                else clearAIPath();
                 return;
             }
 
@@ -381,7 +408,7 @@ public class AIDynamicStealth extends EntityAIBase
                     else if (timeAtPos == 4) findShortRangeGoalPos();
                     else if (!MinecraftForge.EVENT_BUS.post(new BasicEvent.DesperationEvent(searcher)))
                     {
-                        fleeing = false;
+                        if (!forcedFlee) fleeing = false;
                         restart(lastKnownPosition);
                         return;
                     }

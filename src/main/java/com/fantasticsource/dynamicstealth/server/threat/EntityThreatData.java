@@ -132,6 +132,12 @@ public class EntityThreatData
     {
         if (bypassesThreat(livingBase)) return false;
 
+        if (livingBase instanceof EntityLiving)
+        {
+            AIDynamicStealth searchAI = AIDynamicStealth.getStealthAI((EntityLiving) livingBase);
+            if (searchAI != null && searchAI.forcedFlee) return true;
+        }
+
         for (Class<? extends Entity> clss : isFearless)
         {
             if (livingBase.getClass() == clss) return false;
