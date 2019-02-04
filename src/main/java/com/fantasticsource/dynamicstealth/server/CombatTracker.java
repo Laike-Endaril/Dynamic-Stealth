@@ -16,7 +16,7 @@ public class CombatTracker
 
     private static LinkedHashMap<EntityLivingBase, Long> successfulAttackTimes = new LinkedHashMap<>();
     private static LinkedHashMap<EntityLivingBase, Long> successfulPathTimes = new LinkedHashMap<>(); //TODO update contents
-    private static LinkedHashMap<EntityLivingBase, Long> idleTimes = new LinkedHashMap<>(); //TODO update contents
+    private static LinkedHashMap<EntityLivingBase, Long> idleTimes = new LinkedHashMap<>();
 
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)

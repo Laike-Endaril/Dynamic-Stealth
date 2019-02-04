@@ -1,7 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
 For StopChaseEvent...
-...trigger if the mob has a threat target but cannot reach it AND the mob hasn't dealt damage lately
+...trigger if the mob doesn't bypass threat, has a threat target but cannot reach it, and the mob hasn't dealt damage lately
 ...option to trigger flee effect
 ...option to trigger potion effects
 

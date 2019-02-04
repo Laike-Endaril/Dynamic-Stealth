@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.threat;
 
+import com.fantasticsource.dynamicstealth.server.CombatTracker;
 import com.fantasticsource.mctools.ServerTickTimer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -88,10 +89,15 @@ public class Threat
             ThreatData threatData = threatMap.get(searcher);
             if (threatData != null)
             {
+                if (threatData.threatLevel <= 0) CombatTracker.setIdleTime(searcher, ServerTickTimer.currentTick() - 1);
                 threatData.target = target;
                 threatData.threatLevel = threat;
             }
-            else threatMap.put(searcher, new ThreatData(searcher, target, threat));
+            else
+            {
+                CombatTracker.setIdleTime(searcher, ServerTickTimer.currentTick() - 1);
+                threatMap.put(searcher, new ThreatData(searcher, target, threat));
+            }
         }
     }
 
@@ -101,7 +107,6 @@ public class Threat
 
         ThreatData threatData = threatMap.get(searcher);
         if (threatData != null) threatData.target = target;
-        else threatMap.put(searcher, new ThreatData(searcher, target, 0));
     }
 
     public static void setThreat(EntityLivingBase searcher, int threat)
@@ -114,8 +119,16 @@ public class Threat
             if (threat > serverSettings.threat.maxThreat) threat = serverSettings.threat.maxThreat;
 
             ThreatData threatData = threatMap.get(searcher);
-            if (threatData != null) threatData.threatLevel = threat;
-            else threatMap.put(searcher, new ThreatData(searcher, null, threat));
+            if (threatData != null)
+            {
+                if (threatData.threatLevel <= 0) CombatTracker.setIdleTime(searcher, ServerTickTimer.currentTick() - 1);
+                threatData.threatLevel = threat;
+            }
+            else
+            {
+                CombatTracker.setIdleTime(searcher, ServerTickTimer.currentTick() - 1);
+                threatMap.put(searcher, new ThreatData(searcher, null, threat));
+            }
         }
     }
 
