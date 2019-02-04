@@ -163,7 +163,6 @@ public class AIDynamicStealth extends EntityAIBase
                 && CombatTracker.timeSinceLastSuccessfulPath(searcher) >= serverSettings.ai.cantReach.lastPathThreshold
                 && CombatTracker.timeSinceLastNoTarget(searcher) >= serverSettings.ai.cantReach.lastNoTargetThreshold)
         {
-            System.out.println(CombatTracker.timeSinceLastIdle(searcher) + ", " + CombatTracker.timeSinceLastSuccessfulAttack(searcher) + ", " + CombatTracker.timeSinceLastSuccessfulPath(searcher));
             if (!triedCantReach && !MinecraftForge.EVENT_BUS.post(new BasicEvent.CantReachEvent(searcher)))
             {
                 if (serverSettings.ai.cantReach.flee)
