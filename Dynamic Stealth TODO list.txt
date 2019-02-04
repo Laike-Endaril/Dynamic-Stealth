@@ -1,7 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
-Add "unreachable target" mechanic/event...
-...if the mob has threat, hasn't dealt damage lately, and either (has no target OR cannot reach its target), it changes behavior in a configurable way
+For StopChaseEvent...
+...trigger if the mob has a threat target but cannot reach it AND the mob hasn't dealt damage lately
 ...option to trigger flee effect
 ...option to trigger potion effects
 

@@ -57,7 +57,7 @@ public class Threat
     public static ThreatData get(EntityLivingBase searcher)
     {
         ThreatData threatData = threatMap.get(searcher);
-        if (threatData != null) return threatData;
+        if (threatData != null) return threatData.copy();
         return new ThreatData(searcher, null, 0);
     }
 
