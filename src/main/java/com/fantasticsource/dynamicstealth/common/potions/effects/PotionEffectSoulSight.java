@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth.common.potions.soulsight;
+package com.fantasticsource.dynamicstealth.common.potions.effects;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.dynamicstealth.server.senses.EntityVisionData;
@@ -12,11 +12,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class PotionSoulSight extends Potion
+public class PotionEffectSoulSight extends Potion
 {
     private final ResourceLocation iconTexture;
 
-    public PotionSoulSight()
+    public PotionEffectSoulSight()
     {
         super(false, 0xFFFF55);
         setPotionName(DynamicStealth.MODID + ".soulsight");

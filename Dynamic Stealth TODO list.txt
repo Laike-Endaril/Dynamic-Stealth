@@ -1,8 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Add blindness potion
-Add glowing potion
-
 Add event for stealth kills triggering from normal death event, using death event as a base
 ...add a weapon/held item filter with NBT support
 ...reference issue #9

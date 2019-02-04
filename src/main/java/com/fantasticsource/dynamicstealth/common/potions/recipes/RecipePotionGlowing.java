@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth.common.potions.soulsight;
+package com.fantasticsource.dynamicstealth.common.potions.recipes;
 
 import com.fantasticsource.dynamicstealth.common.potions.Potions;
 import net.minecraft.init.Items;
@@ -9,13 +9,13 @@ import net.minecraftforge.common.brewing.BrewingRecipe;
 
 import javax.annotation.Nonnull;
 
-public class RecipePotionSoulSight extends BrewingRecipe
+public class RecipePotionGlowing extends BrewingRecipe
 {
     private static final ItemStack INPUT = PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.THICK);
-    private static final ItemStack REAGENT = new ItemStack(Items.ENDER_EYE);
-    private static final ItemStack DEFAULT_OUTPUT = PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), Potions.POTIONTYPE_SOULSIGHT_NORMAL);
+    private static final ItemStack REAGENT = new ItemStack(Items.GLOWSTONE_DUST);
+    private static final ItemStack DEFAULT_OUTPUT = PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), Potions.POTIONTYPE_GLOWING);
 
-    public RecipePotionSoulSight(@Nonnull ItemStack input, @Nonnull ItemStack ingredient, @Nonnull ItemStack output)
+    public RecipePotionGlowing(@Nonnull ItemStack input, @Nonnull ItemStack ingredient, @Nonnull ItemStack output)
     {
         super(INPUT, REAGENT, DEFAULT_OUTPUT);
     }
@@ -30,7 +30,7 @@ public class RecipePotionSoulSight extends BrewingRecipe
     @Override
     public ItemStack getOutput(@Nonnull ItemStack input, @Nonnull ItemStack ingredient)
     {
-        if (isInput(input) && isIngredient(ingredient)) return PotionUtils.addPotionToItemStack(new ItemStack(input.getItem()), Potions.POTIONTYPE_SOULSIGHT_NORMAL);
+        if (isInput(input) && isIngredient(ingredient)) return PotionUtils.addPotionToItemStack(new ItemStack(input.getItem()), Potions.POTIONTYPE_GLOWING);
         return ItemStack.EMPTY;
     }
 }

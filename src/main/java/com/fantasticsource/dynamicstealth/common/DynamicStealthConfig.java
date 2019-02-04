@@ -202,14 +202,34 @@ public class DynamicStealthConfig
             public class PotionSettings
             {
                 @Config.Name("Soul Sight Potions")
-                @Comment("If set to true, the game will load soul sight potions (accessible from the brewing tab of the creative menu)")
+                @Comment("Whether to load soul sight potions (accessible from the brewing tab of the creative menu)")
                 @Config.RequiresMcRestart
                 public boolean soulSightPotion = true;
 
                 @Config.Name("Soul Sight Potion Recipes")
-                @Comment("If set to true, players can brew soul sight potions with ender eyes + thick potions")
+                @Comment("Whether to load the soul sight potion recipe (thick potion + ender eye)")
                 @Config.RequiresMcRestart
                 public boolean soulSightPotionRecipe = true;
+
+                @Config.Name("Blindness Potions")
+                @Comment("Whether to load blindness potions (accessible from the brewing tab of the creative menu)")
+                @Config.RequiresMcRestart
+                public boolean blindnessPotion = true;
+
+                @Config.Name("Blindness Potion Recipes")
+                @Comment("Whether to load the blindness potion recipe (thick potion + ink sac)")
+                @Config.RequiresMcRestart
+                public boolean blindnessPotionRecipe = true;
+
+                @Config.Name("Glowing Potions")
+                @Comment("Whether to load glowing potions (accessible from the brewing tab of the creative menu)")
+                @Config.RequiresMcRestart
+                public boolean glowingPotion = true;
+
+                @Config.Name("Glowing Potion Recipes")
+                @Comment("Whether to load the glowing potion recipe (thick potion + glowstone dust)")
+                @Config.RequiresMcRestart
+                public boolean glowingPotionRecipe = true;
             }
         }
 
