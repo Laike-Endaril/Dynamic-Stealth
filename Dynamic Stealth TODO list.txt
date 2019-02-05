@@ -1,13 +1,14 @@
 CURRENTLY WORKING ON ===================================================
 
-Fix slimes and magma cubes...
-...does this apply to other things as well?
+Change stealth calcs; try to prevent rapid blinking in and out
 
 Add config options which alter events in the event constructors or after they trigger
 
 Make it so if an entity dies, all entities who had threat against it and see it die set target to null
 
 Migrate old bad AI handling entries to new system, where applicable
+
+Change "Stop Chase" in config to "Can't Reach" (config reset)
 
 
 
@@ -22,7 +23,6 @@ Fix mobs not moving to last known position before searching when too far away...
 ...finds a partial path instead of a full path, and follows it...
 ...then if not at the final destination, finds another partial path and follows it...
 ...etc.
-This system, if improved upon, could be used for most pathfinding and should improve pathfinding performance (by splitting it up and calculating parts at different times)
 
 
 
@@ -128,6 +128,8 @@ Possibly change music using ActualMusic when going into battle, etc
 MOD COMPATIBILITY ======================================================
 
 Add bright mobs from mods to EntityVisionDefaults.naturallyBrightEntities
+
+Slimes and magma cubes do some really weird spinny stuff with both DS and CNPCs installed
 
 CNPCs don't change opacity
 
