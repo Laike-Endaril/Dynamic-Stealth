@@ -504,7 +504,7 @@ public class DynamicStealth
         replaceTasks(living.targetTasks, living);
 
         //Entity AI task additions
-        addTasks(living.targetTasks, living.tasks, living);
+        if (!EntityThreatData.bypassesThreat(living)) addTasks(living.targetTasks, living.tasks, living);
     }
 
     private static void replaceTasks(EntityAITasks tasks, EntityLiving living) throws Exception

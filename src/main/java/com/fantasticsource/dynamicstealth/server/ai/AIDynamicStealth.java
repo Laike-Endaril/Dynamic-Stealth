@@ -105,8 +105,6 @@ public class AIDynamicStealth extends EntityAIBase
     @Override
     public boolean shouldExecute()
     {
-        if (EntityThreatData.bypassesThreat(searcher)) return false;
-
         Threat.ThreatData threatData = Threat.get(searcher);
         int threat = threatData.threatLevel;
 
