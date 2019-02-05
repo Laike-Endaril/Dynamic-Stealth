@@ -10,6 +10,7 @@ public class EntityThreatDefaults
     static
     {
         passiveDefaults.add("shulker, false");
+        passiveDefaults.add("snowman, false");
 
         threatBypassDefaults.add("player");
         threatBypassDefaults.add("slime");
