@@ -14,6 +14,37 @@ import java.util.Random;
 @SuppressWarnings("unused")
 public class Tools
 {
+    public static int average(int... values)
+    {
+        int sum = 0;
+        for (int value : values)
+        {
+            sum += value;
+        }
+        return sum / values.length;
+    }
+
+    public static float average(float... values)
+    {
+        float sum = 0;
+        for (float value : values)
+        {
+            sum += value;
+        }
+        return sum / values.length;
+    }
+
+    public static double average(double... values)
+    {
+        double sum = 0;
+        for (double value : values)
+        {
+            sum += value;
+        }
+        return sum / values.length;
+    }
+
+
     public static int min(int... values)
     {
         int result = Integer.MAX_VALUE;
