@@ -18,15 +18,10 @@ public class HelperSystem
 {
     public static boolean shouldHelp(EntityLivingBase helper, EntityLivingBase troubledOne, boolean checkWorldMatch, double maxDistSquared)
     {
-        return helpPriority(helper, troubledOne, checkWorldMatch, maxDistSquared) > 0;
-    }
-
-    public static int helpPriority(EntityLivingBase helper, EntityLivingBase troubledOne, boolean checkWorldMatch, double maxDistSquared)
-    {
-        if (troubledOne == null || helper == null) return 0;
-        if (Threat.getTarget(helper) == troubledOne) return 0;
-        if (!checkWorldMatch && (troubledOne.world == null || troubledOne.world != helper.world)) return 0;
-        if (troubledOne.getDistanceSq(helper) > maxDistSquared) return 0;
+        if (troubledOne == null || helper == null) return false;
+        if (Threat.getTarget(helper) == troubledOne) return false;
+        if (!checkWorldMatch && (troubledOne.world == null || troubledOne.world != helper.world)) return false;
+        if (troubledOne.getDistanceSq(helper) > maxDistSquared) return false;
 
 
         //Ownership
@@ -38,17 +33,17 @@ public class HelperSystem
                 //Owner needs help
                 if (troubledOne == helperOwner)
                 {
-                    if (serverSettings.helperSystemSettings.ownership.helpOwner) return 100;
+                    if (serverSettings.helperSystemSettings.ownership.helpOwner) return true;
                 }
 
                 //Something with same owner needs help
                 else if (troubledOne instanceof IEntityOwnable && ((IEntityOwnable) troubledOne).getOwner() == helperOwner)
                 {
-                    if (serverSettings.helperSystemSettings.ownership.helpOtherWithSameOwner) return 90;
+                    if (serverSettings.helperSystemSettings.ownership.helpOtherWithSameOwner) return true;
                 }
 
                 //Something unrelated needs help.  If we're only dedicated to our owner, don't help them
-                else if (serverSettings.helperSystemSettings.ownership.dedicated) return 0;
+                else if (serverSettings.helperSystemSettings.ownership.dedicated) return false;
             }
         }
         if (troubledOne instanceof IEntityOwnable)
@@ -56,7 +51,7 @@ public class HelperSystem
             //Something we own needs help
             if (((IEntityOwnable) troubledOne).getOwner() == helper)
             {
-                if (serverSettings.helperSystemSettings.ownership.helpOwned) return 80;
+                if (serverSettings.helperSystemSettings.ownership.helpOwned) return true;
             }
         }
 
@@ -68,13 +63,13 @@ public class HelperSystem
             //Same team
             if (troubledOneTeam.isSameTeam(helper.getTeam()))
             {
-                if (serverSettings.helperSystemSettings.teams.helpSame) return 70;
+                if (serverSettings.helperSystemSettings.teams.helpSame) return true;
             }
 
             //Different team
             else if (helper.getTeam() != null)
             {
-                if (serverSettings.helperSystemSettings.teams.dontHelpOther) return 0;
+                if (serverSettings.helperSystemSettings.teams.dontHelpOther) return false;
             }
         }
 
@@ -89,13 +84,13 @@ public class HelperSystem
             //Good rep
             if (factionStatus > 0)
             {
-                if (serverSettings.helperSystemSettings.cnpcFactions.helpGoodRep) return 60;
+                if (serverSettings.helperSystemSettings.cnpcFactions.helpGoodRep) return true;
             }
 
             //Bad rep
             else if (factionStatus < 0)
             {
-                if (serverSettings.helperSystemSettings.cnpcFactions.dontHelpBadRep) return 0;
+                if (serverSettings.helperSystemSettings.cnpcFactions.dontHelpBadRep) return false;
             }
         }
 
@@ -103,10 +98,10 @@ public class HelperSystem
         //Entity types
         if (troubledOne.getClass() == helper.getClass() && !(cnpcEntityTroubled instanceof ICustomNpc))
         {
-            if (serverSettings.helperSystemSettings.helpSameType) return 50;
+            if (serverSettings.helperSystemSettings.helpSameType) return true;
         }
 
-        return 0;
+        return false;
     }
 
 

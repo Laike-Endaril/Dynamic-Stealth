@@ -58,7 +58,7 @@ public class WarningSystem
             if (!EntityThreatData.bypassesThreat(livingHelper))
             {
                 Threat.ThreatData data = Threat.get(livingHelper);
-                if (data.target == null && HelperSystem.helpPriority(livingHelper, warner, true, Math.pow(30d * livingHelper.getEntityAttribute(Attributes.HEARING).getAttributeValue() / 100, 2)) > 0)
+                if (data.target == null && HelperSystem.shouldHelp(livingHelper, warner, true, Math.pow(30d * livingHelper.getEntityAttribute(Attributes.HEARING).getAttributeValue() / 100, 2)))
                 {
                     int distance = (int) warner.getDistance(helper);
                     int xz = 4 + distance / 2;

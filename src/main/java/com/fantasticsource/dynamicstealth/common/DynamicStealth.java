@@ -240,19 +240,19 @@ public class DynamicStealth
 
             boolean wasSeen = false;
 
-            EntityLivingBase livingHelper;
-            for (Entity helper : victim.world.loadedEntityList)
+            EntityLivingBase witness;
+            for (Entity entity : victim.world.loadedEntityList)
             {
-                if (helper instanceof EntityLivingBase)
+                if (entity instanceof EntityLivingBase)
                 {
-                    livingHelper = (EntityLivingBase) helper;
+                    witness = (EntityLivingBase) entity;
 
-                    if (HelperSystem.shouldHelp(livingHelper, victim, true, EntityVisionData.distanceFar(livingHelper)))
+                    if (HelperSystem.shouldHelp(witness, victim, true, EntityVisionData.distanceFar(witness)))
                     {
-                        if (Sight.canSee(livingHelper, victim))
+                        if (Sight.canSee(witness, victim))
                         {
                             //Helper sees victim die
-                            if (Sight.canSee(livingHelper, killer))
+                            if (Sight.canSee(witness, killer))
                             {
                                 //Helper saw everything
                                 //TODO
