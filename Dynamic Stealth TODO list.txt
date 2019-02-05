@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Make entities warn upon first sight
-
 Change stealth calcs; try to prevent rapid blinking in and out
 
 Add config options which alter events in the event constructors or after they trigger

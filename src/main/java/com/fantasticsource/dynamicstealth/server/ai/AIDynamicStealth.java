@@ -3,6 +3,7 @@ package com.fantasticsource.dynamicstealth.server.ai;
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.server.CombatTracker;
+import com.fantasticsource.dynamicstealth.server.WarningSystem;
 import com.fantasticsource.dynamicstealth.server.ai.edited.AITargetEdit;
 import com.fantasticsource.dynamicstealth.server.event.BasicEvent;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
@@ -121,6 +122,7 @@ public class AIDynamicStealth extends EntityAIBase
                     Threat.set(searcher, attackTarget, serverSettings.threat.targetSpottedThreat);
                     lastKnownPosition = attackTarget.getPosition();
                     clearAIPath();
+                    WarningSystem.warn(searcher, lastKnownPosition);
                     return false;
                 }
             }
@@ -151,6 +153,7 @@ public class AIDynamicStealth extends EntityAIBase
                     Threat.set(searcher, attackTarget, serverSettings.threat.targetSpottedThreat);
                     lastKnownPosition = attackTarget.getPosition();
                     clearAIPath();
+                    WarningSystem.warn(searcher, lastKnownPosition);
                     return false;
                 }
             }
