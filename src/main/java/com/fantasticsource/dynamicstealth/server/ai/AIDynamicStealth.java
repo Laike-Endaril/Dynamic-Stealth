@@ -65,8 +65,6 @@ public class AIDynamicStealth extends EntityAIBase
         isCNPC = Compat.customnpcs && NpcAPI.Instance().getIEntity(searcher) instanceof ICustomNpc;
 
         setMutexBits(3);
-
-        MinecraftForge.EVENT_BUS.register(this);
     }
 
     public static AIDynamicStealth getStealthAI(EntityLiving living)
