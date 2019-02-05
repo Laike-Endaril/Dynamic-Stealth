@@ -201,9 +201,9 @@ public class EntityVisionData
     }
 
 
-    public static boolean isNaturallyBright(EntityLivingBase target)
+    public static boolean isBright(EntityLivingBase target)
     {
-        return naturallyBrightEntities.contains(target.getClass());
+        return target.isBurning() || naturallyBrightEntities.contains(target.getClass());
     }
 
     public static boolean hasNightVision(EntityLivingBase searcher)

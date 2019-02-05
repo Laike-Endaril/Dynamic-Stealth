@@ -557,18 +557,6 @@ public class DynamicStealthConfig
                             })
                     @Config.RangeDouble(min = 1)
                     public double seenMultiplier = 2;
-
-                    @Config.Name("'On Fire' Multiplier")
-                    @Comment(
-                            {
-                                    "If an entity is on fire, their visibility is multiplied by this",
-                                    "",
-                                    "If set to 1, there is no effect",
-                                    "",
-                                    "If set to 2, they are twice as easy to see when on fire"
-                            })
-                    @Config.RangeDouble(min = 1)
-                    public double onFireMultiplier = 1.5;
                 }
 
                 public class Lighting

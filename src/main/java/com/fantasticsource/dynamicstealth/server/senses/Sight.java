@@ -336,7 +336,7 @@ public class Sight
 
 
         //Lighting (absolute, factor, after Angles, after Glowing, after LOS)
-        double lightFactor = isLivingBase && isNaturallyBright(targetLivingBase) ? 15 : lightLevelTotal(target);
+        double lightFactor = isLivingBase && isBright(targetLivingBase) ? 15 : lightLevelTotal(target);
         if (hasNightVision(searcher))
         {
             lightFactor = Math.min(15, lightFactor + vision.c_lighting.nightVisionAddition);
@@ -394,13 +394,9 @@ public class Sight
         double armorMultiplier = isLivingBase ? Math.max(0, 1 + vision.b_visibilityMultipliers.armorMultiplierCumulative * targetLivingBase.getTotalArmorValue()) : 1;
 
 
-        //Fire
-        double fireMultiplier = !isLivingBase ? 1 : !targetLivingBase.isBurning() ? 1 : vision.b_visibilityMultipliers.onFireMultiplier;
-
-
         //Combine multipliers
         double stealthMultiplier = Tools.min(blindnessMultiplier, invisibilityMultiplier, crouchingMultiplier, mobHeadMultiplier);
-        double visibilityMultiplier = Tools.max(armorMultiplier, fireMultiplier, alertMultiplier, seenMultiplier);
+        double visibilityMultiplier = Tools.max(armorMultiplier, alertMultiplier, seenMultiplier);
         double baseMultiplier = Tools.min(Tools.max((lightFactor + speedFactor) / 2 * stealthMultiplier * visibilityMultiplier, 0), 1);
 
         double visReduction = !isLivingBase ? 0 : targetLivingBase.getEntityAttribute(Attributes.VISIBILITY_REDUCTION).getAttributeValue();
