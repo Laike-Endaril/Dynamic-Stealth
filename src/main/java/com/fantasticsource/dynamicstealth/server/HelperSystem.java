@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.server;
 
 import com.fantasticsource.dynamicstealth.compat.Compat;
+import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityOwnable;
@@ -23,6 +24,7 @@ public class HelperSystem
     public static int helpPriority(EntityLivingBase helper, EntityLivingBase troubledOne, boolean checkWorldMatch, double maxDistSquared)
     {
         if (troubledOne == null || helper == null) return 0;
+        if (Threat.getTarget(helper) == troubledOne) return 0;
         if (!checkWorldMatch && (troubledOne.world == null || troubledOne.world != helper.world)) return 0;
         if (troubledOne.getDistanceSq(helper) > maxDistSquared) return 0;
 
