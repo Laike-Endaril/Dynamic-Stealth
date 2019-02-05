@@ -98,7 +98,7 @@ public class Sight
         }
 
         searcher.world.profiler.startSection("DS Sight checks");
-        double result = visualStealthLevel2(searcher, target);
+        double result = visualStealthLevelInternal(searcher, target);
         searcher.world.profiler.endSection();
 
         if (map == null)
@@ -267,7 +267,7 @@ public class Sight
                             double priority = Math.pow(angleDif, 3) * distSquared;
                             queues[0].add((EntityLivingBase) entity, priority); //Returned to external call
                             queues[1].add((EntityLivingBase) entity, priority); //Used for playerSeenThisTickMap (result caching)
-                            map.put(entity, new SeenData(priority, true)); //visualStealthLevel2 was not called, so need to add to map manually
+                            map.put(entity, new SeenData(priority, true)); //visualStealthLevelInternal was not called, so need to add to map manually
                         }
                     }
                 }
@@ -278,7 +278,7 @@ public class Sight
     }
 
 
-    private static double visualStealthLevel2(EntityLivingBase searcher, Entity target)
+    private static double visualStealthLevelInternal(EntityLivingBase searcher, Entity target)
     {
         //Hard checks (absolute)
         if (target.getRidingEntity() == searcher || searcher.getRidingEntity() == target) return -777; //getRidingEntity DOES NOT RETURN THE RIDING ENTITY!  It returns the RIDDEN entity!
@@ -286,6 +286,7 @@ public class Sight
         if (target instanceof EntityPlayerMP && ((EntityPlayerMP) target).capabilities.disableDamage) return 777;
 
         if (searcher.world != target.world || target.isDead) return 777;
+
 
         //Soul Sight (absolute)
         if (hasSoulSight(searcher)) return 0;
