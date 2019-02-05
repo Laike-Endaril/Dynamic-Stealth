@@ -1,4 +1,5 @@
 # Dynamic Stealth
 Introducing actual stealth mechanics to Minecraft
 
-A WIP desmos graph simulating the FOV profile can be found here: https://www.desmos.com/calculator/gjlqsuosfe
+See details on the curseforge page:
+https://minecraft.curseforge.com/projects/dynamic-stealth?gameCategorySlug=mc-mods&projectID=309344#c154
