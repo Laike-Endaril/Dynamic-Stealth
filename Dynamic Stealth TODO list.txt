@@ -4,7 +4,8 @@ Change stealth calcs; try to prevent rapid blinking in and out
 
 Add config options which alter events in the event constructors or after they trigger
 
-Make it so if an entity dies, all entities who had threat against it and see it die set target to null
+Make it so if an entity dies, all entities who had threat against it and see it die set target to null...
+...this should already happen, but damage from a dead entity might still be setting target (creeper explosion)
 
 Migrate old bad AI handling entries to new system, where applicable
 
