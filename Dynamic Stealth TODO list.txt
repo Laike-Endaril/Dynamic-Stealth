@@ -1,10 +1,10 @@
 CURRENTLY WORKING ON ===================================================
 
+Make entities warn upon first sight
+
 Change stealth calcs; try to prevent rapid blinking in and out
 
 Add config options which alter events in the event constructors or after they trigger
-
-Prevent creepers from being targetable when they explode (they still seem to count as "alive" at the time)
 
 Migrate old bad AI handling entries to new system, where applicable
 

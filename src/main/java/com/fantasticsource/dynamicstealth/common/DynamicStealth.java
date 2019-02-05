@@ -39,6 +39,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -52,6 +53,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.ChunkEvent;
+import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -223,6 +225,18 @@ public class DynamicStealth
                 }
             }
         }
+    }
+
+
+    @SubscribeEvent
+    public static void kamikazeDeath(ExplosionEvent event)
+    {
+        //Because creepers don't trigger the LivingDeathEvent when they explode
+        //So I'm making sure they setDead() before the damage happens to prevent threat changes
+        //Trying to remove them from threat system right here doesn't work due to the timing
+        Explosion explosion = event.getExplosion();
+        EntityLivingBase exploder = explosion.getExplosivePlacedBy();
+        if (exploder instanceof EntityCreeper) exploder.setDead();
     }
 
 
