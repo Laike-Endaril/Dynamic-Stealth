@@ -121,8 +121,8 @@ public class AIDynamicStealth extends EntityAIBase
                     Threat.set(searcher, attackTarget, serverSettings.threat.targetSpottedThreat);
                     lastKnownPosition = attackTarget.getPosition();
                     clearAIPath();
+                    return false;
                 }
-                return false;
             }
 
             //No suitable target, old or new, and threat is <= 0
@@ -144,10 +144,15 @@ public class AIDynamicStealth extends EntityAIBase
             if (AITargetEdit.isSuitableTarget(searcher, attackTarget))
             {
                 //Hopefully this always only means we've just noticed a new, valid target
-                Threat.set(searcher, attackTarget, serverSettings.threat.targetSpottedThreat);
-                lastKnownPosition = attackTarget.getPosition();
-                clearAIPath();
-                return false;
+                if (!MinecraftForge.EVENT_BUS.post(new BasicEvent.TargetSeenEvent(searcher)))
+                {
+                    //TODO Apply target found config options
+
+                    Threat.set(searcher, attackTarget, serverSettings.threat.targetSpottedThreat);
+                    lastKnownPosition = attackTarget.getPosition();
+                    clearAIPath();
+                    return false;
+                }
             }
 
             //No suitable target, old or new, but threat is > 0
