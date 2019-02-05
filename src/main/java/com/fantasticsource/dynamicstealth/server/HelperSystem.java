@@ -15,6 +15,11 @@ import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.ser
 
 public class HelperSystem
 {
+    public static boolean shouldHelp(EntityLivingBase helper, EntityLivingBase troubledOne, boolean checkWorldMatch, double maxDistSquared)
+    {
+        return helpPriority(helper, troubledOne, checkWorldMatch, maxDistSquared) > 0;
+    }
+
     public static int helpPriority(EntityLivingBase helper, EntityLivingBase troubledOne, boolean checkWorldMatch, double maxDistSquared)
     {
         if (troubledOne == null || helper == null) return 0;
@@ -103,7 +108,7 @@ public class HelperSystem
     }
 
 
-    public static int cnpcRep(IEntity entity1, IEntity entity2)
+    private static int cnpcRep(IEntity entity1, IEntity entity2)
     {
         if (entity1 instanceof ICustomNpc)
         {

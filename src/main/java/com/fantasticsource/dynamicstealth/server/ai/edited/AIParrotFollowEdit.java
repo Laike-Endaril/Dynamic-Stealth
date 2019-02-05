@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.dynamicstealth.server.senses.Sight;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import com.google.common.base.Predicate;
@@ -82,7 +83,7 @@ public class AIParrotFollowEdit extends EntityAIBase //In vanilla, this is only 
         }
 
         target = queue.poll();
-        while (target != null && !searcher.getEntitySenses().canSee(target)) //Doesn't need isSuitableTarget because it's not always used for attacking
+        while (target != null && !Sight.canSee(searcher, target)) //Doesn't need isSuitableTarget because it's not always used for attacking
         {
             target = queue.poll();
         }
@@ -92,7 +93,7 @@ public class AIParrotFollowEdit extends EntityAIBase //In vanilla, this is only 
     @Override
     public boolean shouldContinueExecuting()
     {
-        return searcher.getEntitySenses().canSee(target) && !navigator.noPath() && searcher.getDistanceSq(target) > Math.pow(stopDistance, 2);
+        return Sight.canSee(searcher, target) && !navigator.noPath() && searcher.getDistanceSq(target) > Math.pow(stopDistance, 2);
     }
 
     @Override

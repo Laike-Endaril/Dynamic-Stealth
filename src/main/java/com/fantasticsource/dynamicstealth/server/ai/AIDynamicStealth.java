@@ -120,6 +120,8 @@ public class AIDynamicStealth extends EntityAIBase
                 //Hopefully this always only means we've just noticed a new, valid target
                 if (!MinecraftForge.EVENT_BUS.post(new BasicEvent.TargetSeenEvent(searcher)))
                 {
+                    //TODO Apply target found config options
+
                     Threat.set(searcher, attackTarget, serverSettings.threat.targetSpottedThreat);
                     lastKnownPosition = attackTarget.getPosition();
                     clearAIPath();
@@ -167,6 +169,8 @@ public class AIDynamicStealth extends EntityAIBase
         {
             if (!triedCantReach && !MinecraftForge.EVENT_BUS.post(new BasicEvent.CantReachEvent(searcher)))
             {
+                //TODO Apply can't reach config options
+
                 if (serverSettings.ai.cantReach.flee)
                 {
                     forcedFlee = true;
@@ -228,6 +232,8 @@ public class AIDynamicStealth extends EntityAIBase
 
         if (!fleeing && !MinecraftForge.EVENT_BUS.post(new BasicEvent.SearchEvent(searcher)))
         {
+            //TODO apply search config options
+
             if (lastKnownPosition != null)
             {
                 phase = 0;
@@ -266,6 +272,8 @@ public class AIDynamicStealth extends EntityAIBase
 
         if (fleeing && phase != -1 && !MinecraftForge.EVENT_BUS.post(new BasicEvent.FleeEvent(searcher)))
         {
+            //TODO Apply flee config options
+
             //Flee
             clearAIPath();
             fleeToPos = null;
@@ -364,6 +372,7 @@ public class AIDynamicStealth extends EntityAIBase
             //Flee interrupts
             if (!EntityThreatData.shouldFlee(searcher, searcher.getHealth()) && !MinecraftForge.EVENT_BUS.post(new BasicEvent.RallyEvent(searcher)))
             {
+                //TODO Apply rally config options
                 fleeing = false;
             }
             else if (threat <= 0)
@@ -409,6 +418,8 @@ public class AIDynamicStealth extends EntityAIBase
                     else if (timeAtPos == 4) findShortRangeGoalPos();
                     else if (!MinecraftForge.EVENT_BUS.post(new BasicEvent.DesperationEvent(searcher)))
                     {
+                        //TODO Apply desperation config options
+
                         if (!forcedFlee) fleeing = false;
                         restart(lastKnownPosition);
                         return;

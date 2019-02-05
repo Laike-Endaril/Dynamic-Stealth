@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
 import com.fantasticsource.dynamicstealth.server.senses.EntityVisionData;
+import com.fantasticsource.dynamicstealth.server.senses.Sight;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import com.google.common.base.Predicates;
@@ -96,7 +97,7 @@ public class AIWatchClosestEdit extends EntityAIBase
         }
 
         target = queue.poll();
-        while (target != null && !entity.getEntitySenses().canSee(target)) //Doesn't need isSuitableTarget because it's not always used for attacking
+        while (target != null && !Sight.canSee(entity, target)) //Doesn't need isSuitableTarget because it's not always used for attacking
         {
             target = queue.poll();
         }
@@ -107,7 +108,7 @@ public class AIWatchClosestEdit extends EntityAIBase
     @Override
     public boolean shouldContinueExecuting()
     {
-        return (target.isEntityAlive() && entity.getEntitySenses().canSee(target) && lookTime > 0);
+        return (target.isEntityAlive() && Sight.canSee(entity, target) && lookTime > 0);
     }
 
     @Override

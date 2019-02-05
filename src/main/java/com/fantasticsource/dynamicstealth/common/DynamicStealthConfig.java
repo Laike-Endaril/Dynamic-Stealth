@@ -391,6 +391,7 @@ public class DynamicStealthConfig
                                 "creeper",
                                 "ghast",
                                 "slime",
+                                "magma_cube",
                                 "enderman",
                                 "ender_dragon",
                                 "wither"

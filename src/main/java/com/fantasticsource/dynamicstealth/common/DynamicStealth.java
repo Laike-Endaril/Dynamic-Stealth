@@ -5,13 +5,11 @@ import com.fantasticsource.dynamicstealth.client.RenderAlterer;
 import com.fantasticsource.dynamicstealth.common.potions.Potions;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatCNPC;
-import com.fantasticsource.dynamicstealth.server.Attributes;
-import com.fantasticsource.dynamicstealth.server.CombatTracker;
-import com.fantasticsource.dynamicstealth.server.EntityLookHelperEdit;
-import com.fantasticsource.dynamicstealth.server.WarningSystem;
+import com.fantasticsource.dynamicstealth.server.*;
 import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
 import com.fantasticsource.dynamicstealth.server.ai.edited.*;
 import com.fantasticsource.dynamicstealth.server.entitytracker.EntityTrackerEdit;
+import com.fantasticsource.dynamicstealth.server.event.AssassinationEvent;
 import com.fantasticsource.dynamicstealth.server.event.StealthAttackEvent;
 import com.fantasticsource.dynamicstealth.server.senses.EntitySensesEdit;
 import com.fantasticsource.dynamicstealth.server.senses.EntityTouchData;
@@ -139,17 +137,6 @@ public class DynamicStealth
     }
 
     @SubscribeEvent
-    public static void entityDead(LivingDeathEvent event)
-    {
-        EntityLivingBase deadOne = event.getEntityLiving();
-        if (deadOne != null)
-        {
-            Threat.removeTargetFromAll(deadOne);
-            if (deadOne instanceof EntityLiving) Threat.remove(deadOne);
-        }
-    }
-
-    @SubscribeEvent
     public static void chunkUnload(ChunkEvent.Unload event)
     {
         Chunk chunk = event.getChunk();
@@ -240,6 +227,72 @@ public class DynamicStealth
 
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void entityDeath(LivingDeathEvent event)
+    {
+        EntityLivingBase victim = event.getEntityLiving();
+
+        Entity killer = event.getSource().getTrueSource();
+        if (killer == null) killer = event.getSource().getImmediateSource();
+
+        if (killer instanceof EntityLivingBase)
+        {
+            EntityLivingBase livingBaseSource = (EntityLivingBase) killer;
+
+            boolean wasSeen = false;
+
+            EntityLivingBase livingHelper;
+            for (Entity helper : victim.world.loadedEntityList)
+            {
+                if (helper instanceof EntityLivingBase)
+                {
+                    livingHelper = (EntityLivingBase) helper;
+
+                    if (HelperSystem.shouldHelp(livingHelper, victim, true, EntityVisionData.distanceFar(livingHelper)))
+                    {
+                        if (Sight.canSee(livingHelper, victim))
+                        {
+                            //Helper sees victim die
+                            if (Sight.canSee(livingHelper, killer))
+                            {
+                                //Helper saw everything
+                                //TODO
+                                wasSeen = true;
+                            }
+                            else
+                            {
+                                //Helper saw victim die, but didn't see killer
+                                //TODO
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (!wasSeen)
+            {
+                //Target's friends didn't see
+                if (!Sight.canSee(victim, killer))
+                {
+                    //Target cannot see us
+                    if (Threat.getTarget(victim) != killer)
+                    {
+                        //Target is not searching for *us*
+                        if (!MinecraftForge.EVENT_BUS.post(new AssassinationEvent(livingBaseSource, victim)))
+                        {
+                            //TODO Apply stealth attack config options
+                        }
+                    }
+                }
+            }
+        }
+
+
+        //Remove from threat data
+        Threat.removeTargetFromAll(victim);
+        if (victim instanceof EntityLiving) Threat.remove(victim);
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void entityAttackedPre(LivingHurtEvent event)
     {
         EntityLivingBase target = event.getEntityLiving();
@@ -247,25 +300,13 @@ public class DynamicStealth
         Entity source = event.getSource().getTrueSource();
         if (source == null) source = event.getSource().getImmediateSource();
 
-        if (target instanceof EntityLiving)
+        if (source instanceof EntityLivingBase)
         {
-            EntityLiving livingTarget = (EntityLiving) target;
-
-            if (source instanceof EntityLivingBase)
+            if (!Sight.canSee(target, source))
             {
-                EntityLivingBase livingBaseSource = (EntityLivingBase) source;
-
-                if (!livingTarget.getEntitySenses().canSee(livingBaseSource))
+                if (!MinecraftForge.EVENT_BUS.post(new StealthAttackEvent(target, event.getSource(), event.getAmount())))
                 {
-                    if (!MinecraftForge.EVENT_BUS.post(new StealthAttackEvent(livingTarget, event.getSource(), event.getAmount())))
-                    {
-                        //TODO Stealth attack
-                    }
-                    else
-                    {
-                        event.setResult(Event.Result.DENY);
-                        event.setCanceled(true);
-                    }
+                    //TODO Apply stealth attack config options
                 }
             }
         }
@@ -365,7 +406,7 @@ public class DynamicStealth
                     }
                 }
 
-                if (newThreatTarget && !livingTarget.getEntitySenses().canSee(livingBaseSource)) Threat.setTarget(livingTarget, null);
+                if (newThreatTarget && !Sight.canSee(livingTarget, livingBaseSource)) Threat.setTarget(livingTarget, null);
 
 
                 //Warn others

@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.dynamicstealth.server.senses.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.entity.*;
@@ -65,7 +66,7 @@ public abstract class AITargetEdit extends EntityAIBase
 
         if (target instanceof EntityPlayer && ((EntityPlayer) target).capabilities.disableDamage) return false;
 
-        return attacker.getEntitySenses().canSee(target);
+        return Sight.canSee(attacker, target);
     }
 
     private static void initReflections()
@@ -95,7 +96,7 @@ public abstract class AITargetEdit extends EntityAIBase
 
         if (target instanceof EntityPlayer && ((EntityPlayer) target).capabilities.disableDamage) return false;
 
-        if (!attacker.getEntitySenses().canSee(target)) return false;
+        if (!Sight.canSee(attacker, target)) return false;
 
         attacker.setAttackTarget(target);
         return true;

@@ -1,16 +1,14 @@
 CURRENTLY WORKING ON ===================================================
 
-Add event for stealth kills triggering from normal death event, using death event as a base
-...add a weapon/held item filter with NBT support
-...reference issue #9
-
-Add event for stealth interact (right clicking an entity that cannot see you)
+Fix slimes and magma cubes...
+...does this apply to other things as well?
 
 Add config options which alter events in the event constructors or after they trigger
 
 Make it so if an entity dies, all entities who had threat against it and see it die set target to null
 
 Migrate old bad AI handling entries to new system, where applicable
+
 
 
 BUG FIXES ==============================================================
@@ -27,6 +25,7 @@ Fix mobs not moving to last known position before searching when too far away...
 This system, if improved upon, could be used for most pathfinding and should improve pathfinding performance (by splitting it up and calculating parts at different times)
 
 
+
 KEYBOUND ACTIONS =======================================================
 
 Add action wheel which opens on keybind
@@ -34,9 +33,11 @@ Add actions...
 ...Attempt Stealth / Don't Attempt Stealth (if set to "Don't Attempt Stealth", you are very easy for things to notice)
 
 
+
 OPTIMIZATIONS ==========================================================
 
 Add caching to AITargetEdit.isSuitableTarget()
+
 
 
 CONFIG =================================================================

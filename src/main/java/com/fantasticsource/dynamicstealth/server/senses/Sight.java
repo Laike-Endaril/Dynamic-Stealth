@@ -79,44 +79,46 @@ public class Sight
     }
 
 
-    public static double visualStealthLevel(EntityLivingBase searcher, Entity target, boolean useCache, boolean updateCache)
+    public static boolean canSee(EntityLivingBase searcher, Entity target)
+    {
+        return visualStealthLevel(searcher, target) <= 1;
+    }
+
+    public static double visualStealthLevel(EntityLivingBase searcher, Entity target)
     {
         if (searcher == null || target == null || !searcher.world.isBlockLoaded(searcher.getPosition()) || !target.world.isBlockLoaded(target.getPosition())) return -777;
         if (searcher.world != target.world) return 777;
 
         Map<Entity, SeenData> map = recentlySeenMap.get(searcher);
 
-        if (useCache && map != null)
+        if (map != null)
         {
             SeenData data = map.get(target);
             if (data != null && data.lastUpdateTime == currentTick()) return data.lastStealthLevel;
         }
 
         searcher.world.profiler.startSection("DS Sight checks");
-        double result = visualStealthLevel(searcher, target);
+        double result = visualStealthLevel2(searcher, target);
         searcher.world.profiler.endSection();
 
-        if (updateCache)
+        if (map == null)
         {
-            if (map == null)
-            {
-                map = new LinkedHashMap<>();
-                recentlySeenMap.put(searcher, map);
-                map.put(target, new SeenData(result));
-            }
+            map = new LinkedHashMap<>();
+            recentlySeenMap.put(searcher, map);
+            map.put(target, new SeenData(result));
+        }
+        else
+        {
+            SeenData data = map.get(target);
+            if (data == null) map.put(target, new SeenData(result));
             else
             {
-                SeenData data = map.get(target);
-                if (data == null) map.put(target, new SeenData(result));
-                else
+                data.lastUpdateTime = currentTick();
+                data.lastStealthLevel = result;
+                if (result <= 1)
                 {
-                    data.lastUpdateTime = currentTick();
-                    data.lastStealthLevel = result;
-                    if (result <= 1)
-                    {
-                        data.seen = true;
-                        data.lastSeenTime = currentTick();
-                    }
+                    data.seen = true;
+                    data.lastSeenTime = currentTick();
                 }
             }
         }
@@ -209,7 +211,7 @@ public class Sight
         {
             for (Entity entity : loadedEntities)
             {
-                if (entity instanceof EntityLivingBase && entity != player && visualStealthLevel(player, entity) <= 1)
+                if (entity instanceof EntityLivingBase && entity != player && canSee(player, entity))
                 {
                     double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, entity.posY - player.posY, entity.posZ - player.posZ).normalize());
 
@@ -232,7 +234,7 @@ public class Sight
             {
                 if (entity instanceof EntityLivingBase && entity != player)
                 {
-                    stealthLevel = visualStealthLevel(player, entity, true, true);
+                    stealthLevel = visualStealthLevel(player, entity);
                     if (stealthLevel <= 1)
                     {
                         queues[0].add((EntityLivingBase) entity, stealthLevel); //Returned to external call
@@ -265,7 +267,7 @@ public class Sight
                             double priority = Math.pow(angleDif, 3) * distSquared;
                             queues[0].add((EntityLivingBase) entity, priority); //Returned to external call
                             queues[1].add((EntityLivingBase) entity, priority); //Used for playerSeenThisTickMap (result caching)
-                            map.put(entity, new SeenData(priority, true)); //visualStealthLevel was not called, so need to add to map manually
+                            map.put(entity, new SeenData(priority, true)); //visualStealthLevel2 was not called, so need to add to map manually
                         }
                     }
                 }
@@ -276,7 +278,7 @@ public class Sight
     }
 
 
-    private static double visualStealthLevel(EntityLivingBase searcher, Entity target)
+    private static double visualStealthLevel2(EntityLivingBase searcher, Entity target)
     {
         //Hard checks (absolute)
         if (target.getRidingEntity() == searcher || searcher.getRidingEntity() == target) return -777; //getRidingEntity DOES NOT RETURN THE RIDING ENTITY!  It returns the RIDDEN entity!

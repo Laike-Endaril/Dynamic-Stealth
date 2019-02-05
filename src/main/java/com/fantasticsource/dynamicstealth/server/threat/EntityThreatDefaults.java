@@ -13,6 +13,7 @@ public class EntityThreatDefaults
 
         threatBypassDefaults.add("player");
         threatBypassDefaults.add("slime");
+        threatBypassDefaults.add("magma_cube");
         threatBypassDefaults.add("ender_dragon");
 
         //Compat; these should be added absolutely, not conditionally

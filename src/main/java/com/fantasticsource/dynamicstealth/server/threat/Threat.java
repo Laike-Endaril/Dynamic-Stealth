@@ -67,7 +67,7 @@ public class Threat
     public static EntityLivingBase getTarget(EntityLivingBase searcher)
     {
         ThreatData threatData = threatMap.get(searcher);
-        if (threatData != null) return threatData.searcher;
+        if (threatData != null) return threatData.target;
         return null;
     }
 
