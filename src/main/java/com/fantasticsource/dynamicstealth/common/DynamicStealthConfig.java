@@ -309,7 +309,7 @@ public class DynamicStealthConfig
             @Config.Name("Flee")
             public FleeSettings flee = new FleeSettings();
 
-            @Config.Name("Stop Chase")
+            @Config.Name("Can't Reach")
             public CantReachSettings cantReach = new CantReachSettings();
 
             public class CantReachSettings

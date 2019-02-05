@@ -8,8 +8,6 @@ Make it so if an entity dies, all entities who had threat against it and see it 
 
 Migrate old bad AI handling entries to new system, where applicable
 
-Change "Stop Chase" in config to "Can't Reach" (config reset)
-
 
 
 BUG FIXES ==============================================================
