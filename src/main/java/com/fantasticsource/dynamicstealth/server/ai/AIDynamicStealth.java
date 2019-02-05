@@ -366,7 +366,7 @@ public class AIDynamicStealth extends EntityAIBase
 
 
             //Flee interrupts
-            if (!EntityThreatData.shouldFlee(searcher, searcher.getHealth()) && !MinecraftForge.EVENT_BUS.post(new BasicEvent.RallyEvent(searcher)))
+            if (!EntityThreatData.isPassive(searcher) && !EntityThreatData.shouldFlee(searcher, searcher.getHealth()) && !MinecraftForge.EVENT_BUS.post(new BasicEvent.RallyEvent(searcher)))
             {
                 //TODO Apply rally config options
                 fleeing = false;
@@ -416,7 +416,7 @@ public class AIDynamicStealth extends EntityAIBase
                     {
                         //TODO Apply desperation config options
 
-                        if (!forcedFlee) fleeing = false;
+                        if (!forcedFlee && !EntityThreatData.isPassive(searcher)) fleeing = false;
                         restart(lastKnownPosition);
                         return;
                     }
