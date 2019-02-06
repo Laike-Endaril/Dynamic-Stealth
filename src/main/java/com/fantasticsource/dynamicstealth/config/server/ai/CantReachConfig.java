@@ -22,5 +22,5 @@ public class CantReachConfig
 
     @Config.Name("Flee If Unreachable")
     @Config.Comment("If we can't reach the target, do what brave Sir Robin does")
-    public boolean flee = false;
+    public boolean flee = true;
 }

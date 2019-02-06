@@ -292,8 +292,9 @@ public class DynamicStealth
                                 AIDynamicStealth stealthAI = AIDynamicStealth.getStealthAI((EntityLiving) witness);
                                 if (stealthAI != null)
                                 {
-                                    stealthAI.lastKnownPosition = dangerPos;
-                                    stealthAI.fleeIfYouShould(0, true);
+                                    stealthAI.fleeIfYouShould(0);
+
+                                    if (stealthAI.isFleeing()) stealthAI.lastKnownPosition = killer.getPosition();
                                 }
                             }
                         }
@@ -350,7 +351,7 @@ public class DynamicStealth
                 victim.removePotionEffect(MobEffects.BLINDNESS);
             }
 
-            if (!Sight.canSee(victim, attacker))
+            if (attacker.isEntityAlive() && !Sight.canSee(victim, attacker))
             {
                 if (!MinecraftForge.EVENT_BUS.post(new StealthAttackEvent(victim, dmgSource, event.getAmount())))
                 {
@@ -393,15 +394,21 @@ public class DynamicStealth
 
 
                 //Flee if you should
-                AIDynamicStealth searchAI = AIDynamicStealth.getStealthAI(livingTarget);
-                if (event.isCanceled()) searchAI.fleeIfYouShould(0, true);
-                else searchAI.fleeIfYouShould(-event.getAmount(), true);
+                AIDynamicStealth stealthAI = AIDynamicStealth.getStealthAI(livingTarget);
+                if (stealthAI != null)
+                {
+                    if (event.isCanceled()) stealthAI.fleeIfYouShould(0);
+                    else stealthAI.fleeIfYouShould(-event.getAmount());
+
+                    if (stealthAI.isFleeing()) stealthAI.lastKnownPosition = source.getPosition();
+                }
 
 
                 //Threat
                 Threat.ThreatData threatData = Threat.get(livingTarget);
                 EntityLivingBase threatTarget = threatData.target;
                 int threat = threatData.threatLevel;
+
                 if (threatTarget == null || threat == 0)
                 {
                     //Hit by entity when no target is set; this includes...
@@ -411,7 +418,7 @@ public class DynamicStealth
                     Threat.set(livingTarget, livingBaseSource, threat + (int) (Tools.max(event.getAmount(), 1) * serverSettings.threat.attackedThreatMultiplierInitial / livingTarget.getMaxHealth()));
                     newThreatTarget = true;
                 }
-                else if (EntityThreatData.isFleeing(livingTarget))
+                else if (stealthAI != null && stealthAI.isFleeing())
                 {
                     //Be brave, Sir Robin
                     if (serverSettings.ai.flee.increaseOnDamage) Threat.setThreat(livingTarget, threat + (int) (event.getAmount() * serverSettings.threat.attackedThreatMultiplierTarget / livingTarget.getMaxHealth()));
@@ -456,10 +463,10 @@ public class DynamicStealth
 
                         livingTarget.getNavigator().clearPath();
 
-                        if (searchAI != null)
+                        if (stealthAI != null)
                         {
                             int distance = (int) Math.sqrt(source.getDistanceSq(livingTarget));
-                            searchAI.restart(MCTools.randomPos(source.getPosition(), Tools.min(distance >> 1, 7), Tools.min(distance >> 2, 4)));
+                            stealthAI.restart(MCTools.randomPos(source.getPosition(), Tools.min(distance >> 1, 7), Tools.min(distance >> 2, 4)));
                         }
                     }
                 }
@@ -469,7 +476,7 @@ public class DynamicStealth
 
                 //Warn others
                 BlockPos warnPos = null;
-                if (searchAI != null) warnPos = searchAI.lastKnownPosition;
+                if (stealthAI != null) warnPos = stealthAI.lastKnownPosition;
                 if (warnPos == null) warnPos = livingTarget.getPosition();
                 WarningSystem.warn(livingTarget, warnPos);
             }

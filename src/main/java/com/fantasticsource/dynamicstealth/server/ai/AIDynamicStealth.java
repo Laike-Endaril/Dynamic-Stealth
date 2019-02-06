@@ -44,6 +44,13 @@ public class AIDynamicStealth extends EntityAIBase
             MODE_FACE_RANDOM_PATH = 5,
             MODE_FOLLOW_RANDOM_PATH = 6,
             MODE_FLEE = -1;
+
+    public static final int
+            FLEE_NONE = 0,
+            FLEE_PASSIVE = 1,
+            FLEE_CANTREACH = 2,
+            FLEE_HP = 3;
+
     private static Method navigatorCanNavigateMethod;
     private static Field aiPanicSpeedField;
     private static TrigLookupTable trigTable = DynamicStealth.TRIG_TABLE;
@@ -58,7 +65,8 @@ public class AIDynamicStealth extends EntityAIBase
     public double speed;
     public Path path = null;
     public BlockPos lastKnownPosition = null, fleeToPos = null;
-    public boolean fleeing = false, triedCantReach = false, forcedFlee = false;
+    public boolean triedTriggerCantReach = false;
+    public int fleeReason;
     private int mode, timeAtPos; //Don't replace timeAtPos with a ServerTickTimer reference, because this ai does not run every tick
     private boolean spinDirection;
     private Vec3d lastPos = null, nextPos = null;
@@ -88,15 +96,6 @@ public class AIDynamicStealth extends EntityAIBase
         return null;
     }
 
-    public void fleeIfYouShould(float hpOffset, boolean resetModeIfYouFlee)
-    {
-        if (EntityThreatData.shouldFlee(searcher, searcher.getHealth() + hpOffset))
-        {
-            fleeing = true;
-            if (resetModeIfYouFlee) mode(MODE_NONE);
-        }
-    }
-
     private static void initReflections()
     {
         try
@@ -109,6 +108,36 @@ public class AIDynamicStealth extends EntityAIBase
             e.printStackTrace();
             FMLCommonHandler.instance().exitJava(148, true);
         }
+    }
+
+    public boolean isFleeing()
+    {
+        return fleeReason != FLEE_NONE;
+    }
+
+    public void fleeIfYouShould(float hpOffset)
+    {
+        if (!EntityThreatData.bypassesThreat(searcher) && (fleeReason == FLEE_CANTREACH || !EntityThreatData.isFearless(searcher)))
+        {
+            if (EntityThreatData.isPassive(searcher))
+            {
+                fleeReason = FLEE_PASSIVE;
+                mode = MODE_NONE;
+            }
+            else if ((int) ((searcher.getHealth() + hpOffset) / searcher.getMaxHealth() * 100) <= serverSettings.ai.flee.threshold)
+            {
+                fleeReason = FLEE_HP;
+                mode = MODE_NONE;
+            }
+        }
+    }
+
+    private boolean cantReach()
+    {
+        return CombatTracker.timeSinceLastIdle(searcher) >= serverSettings.ai.cantReach.lastIdleThreshold
+                && CombatTracker.timeSinceLastSuccessfulAttack(searcher) >= serverSettings.ai.cantReach.lastAttackThreshold
+                && CombatTracker.timeSinceLastSuccessfulPath(searcher) >= serverSettings.ai.cantReach.lastPathThreshold
+                && CombatTracker.timeSinceLastNoTarget(searcher) >= serverSettings.ai.cantReach.lastNoTargetThreshold;
     }
 
     @Override
@@ -144,7 +173,7 @@ public class AIDynamicStealth extends EntityAIBase
 
         //Threat > 0
 
-        if (fleeing) return true;
+        if (fleeReason != FLEE_NONE) return true;
 
         EntityLivingBase threatTarget = threatData.target;
 
@@ -174,25 +203,21 @@ public class AIDynamicStealth extends EntityAIBase
 
         //Threat > 0 and threatTarget != null...we have an existing target from before
 
-        if (CombatTracker.timeSinceLastIdle(searcher) >= serverSettings.ai.cantReach.lastIdleThreshold
-                && CombatTracker.timeSinceLastSuccessfulAttack(searcher) >= serverSettings.ai.cantReach.lastAttackThreshold
-                && CombatTracker.timeSinceLastSuccessfulPath(searcher) >= serverSettings.ai.cantReach.lastPathThreshold
-                && CombatTracker.timeSinceLastNoTarget(searcher) >= serverSettings.ai.cantReach.lastNoTargetThreshold)
+        if (cantReach())
         {
-            if (!triedCantReach && !MinecraftForge.EVENT_BUS.post(new BasicEvent.CantReachEvent(searcher)))
+            if (!triedTriggerCantReach && !MinecraftForge.EVENT_BUS.post(new BasicEvent.CantReachEvent(searcher)))
             {
                 //TODO Apply can't reach config options
 
                 if (serverSettings.ai.cantReach.flee)
                 {
-                    forcedFlee = true;
-                    fleeing = true;
+                    fleeReason = FLEE_CANTREACH;
                     return true;
                 }
             }
-            triedCantReach = true;
+            triedTriggerCantReach = true;
         }
-        else triedCantReach = false;
+        else triedTriggerCantReach = false;
 
         if (AITargetEdit.isSuitableTarget(searcher, threatTarget))
         {
@@ -210,7 +235,7 @@ public class AIDynamicStealth extends EntityAIBase
 
     private boolean unseenTargetDegredation(int threat)
     {
-        if (fleeing) return threat > 0; //Flee degredation handled elsewhere
+        if (fleeReason != FLEE_NONE) return threat > 0; //Flee degredation handled elsewhere
         {
             searcher.setAttackTarget(null);
 
@@ -242,7 +267,7 @@ public class AIDynamicStealth extends EntityAIBase
         lastPos = null;
         timeAtPos = 0;
 
-        if (!fleeing && !MinecraftForge.EVENT_BUS.post(new BasicEvent.SearchEvent(searcher)))
+        if (fleeReason == FLEE_NONE && !MinecraftForge.EVENT_BUS.post(new BasicEvent.SearchEvent(searcher)))
         {
             //TODO apply search config options
 
@@ -259,7 +284,8 @@ public class AIDynamicStealth extends EntityAIBase
 
     private void mode(int newMode)
     {
-        if (mode == MODE_SPIN) timeAtPos = 0;
+        if (mode == MODE_SPIN && newMode != MODE_SPIN) timeAtPos = 0;
+        else if (mode == MODE_FLEE && newMode != MODE_FLEE) fleeReason = FLEE_NONE;
 
         if (newMode == MODE_SPIN)
         {
@@ -272,12 +298,7 @@ public class AIDynamicStealth extends EntityAIBase
             timeAtPos = 0;
             searcher.rotationYaw = searcher.rotationYawHead;
         }
-        else if (newMode == MODE_FLEE)
-        {
-            clearAIPath();
-            fleeToPos = null;
-            timeAtPos = 0;
-        }
+        else if (newMode == MODE_FLEE) throw new IllegalArgumentException();
         else if (newMode == MODE_FIND_RANDOM_PATH)
         {
             lastKnownPosition = MCTools.randomPos(searcher.getPosition(), (int) (navigator.getPathSearchRange() * 0.5), (int) (navigator.getPathSearchRange() * 0.25));
@@ -298,12 +319,15 @@ public class AIDynamicStealth extends EntityAIBase
 
         //Last second mode changes
 
-        if (fleeing && mode != MODE_FLEE && !MinecraftForge.EVENT_BUS.post(new BasicEvent.FleeEvent(searcher)))
+        if (fleeReason != FLEE_NONE && mode != MODE_FLEE && !MinecraftForge.EVENT_BUS.post(new BasicEvent.FleeEvent(searcher, fleeReason)))
         {
             //TODO Apply flee config options
 
-            //Flee
-            mode(MODE_FLEE);
+            //Flee (do not use mode() method, to prevent accidentally using it from other places; fleeing should be started by setting "fleeing" to true)
+            mode = MODE_FLEE;
+            clearAIPath();
+            fleeToPos = null;
+            timeAtPos = 0;
         }
 
 
@@ -446,21 +470,34 @@ public class AIDynamicStealth extends EntityAIBase
 
 
             //Flee interrupts
-            if (!EntityThreatData.isPassive(searcher) && !EntityThreatData.shouldFlee(searcher, searcher.getHealth()) && !MinecraftForge.EVENT_BUS.post(new BasicEvent.RallyEvent(searcher)))
+            int oldReason = fleeReason;
+            if (threat <= 0)
             {
-                //TODO Apply rally config options
-                fleeing = false;
+                mode(MODE_NONE);
+                MinecraftForge.EVENT_BUS.post(new BasicEvent.CalmDownEvent(searcher, oldReason));
             }
-            else if (threat <= 0)
+            else
             {
-                fleeing = false;
-                forcedFlee = false;
+                if (fleeReason == FLEE_CANTREACH && !cantReach())
+                {
+                    mode(MODE_NONE);
+                    fleeIfYouShould(0);
+                    if (fleeReason == FLEE_NONE) MinecraftForge.EVENT_BUS.post(new BasicEvent.RallyEvent(searcher, oldReason));
+                }
+
+                oldReason = fleeReason;
+                if (fleeReason == FLEE_HP && (int) (searcher.getHealth() / searcher.getMaxHealth() * 100) > serverSettings.ai.flee.threshold)
+                {
+                    mode(MODE_NONE);
+                    fleeIfYouShould(0);
+                    if (fleeReason == FLEE_NONE) MinecraftForge.EVENT_BUS.post(new BasicEvent.RallyEvent(searcher, oldReason));
+                }
             }
 
-            if (!fleeing)
+            if (fleeReason == FLEE_NONE)
             {
+                clearAIPath();
                 if (Threat.getThreat(searcher) > 0) restart(lastKnownPosition);
-                else clearAIPath();
                 return;
             }
 
@@ -492,11 +529,11 @@ public class AIDynamicStealth extends EntityAIBase
                 {
                     if (timeAtPos <= 3) fleeToPos = new BlockPos(searcher.getPositionVector().add(searcher.getPositionVector().subtract(new Vec3d(lastKnownPosition)).normalize().scale(10)));
                     else if (timeAtPos == 4) findShortRangeGoalPos();
-                    else if (!MinecraftForge.EVENT_BUS.post(new BasicEvent.DesperationEvent(searcher)))
+                    else if (fleeReason == FLEE_HP && !MinecraftForge.EVENT_BUS.post(new BasicEvent.DesperationEvent(searcher)))
                     {
                         //TODO Apply desperation config options
 
-                        if (!forcedFlee && !EntityThreatData.isPassive(searcher)) fleeing = false;
+                        mode(MODE_NONE);
                         restart(lastKnownPosition);
                         return;
                     }

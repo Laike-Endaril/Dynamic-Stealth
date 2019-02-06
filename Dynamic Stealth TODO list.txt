@@ -1,11 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Separate reasons for fleeing into different modes (hp, passive, cantreach)
-Passives don't rally
-cantreach rallies on reachable target, after a minimum flee time
-hp mode overrides cantreach mode, and rallies on going back above hp threshold
-
-Add "calmed down" event; triggers when fleeing and threat hits 0
 Add option for "calmed down" to trigger CNPC home warp
 Add option for "calmed down" to set health
 

@@ -65,11 +65,11 @@ public class WarningSystem
 
                     if (data.threatLevel < DynamicStealthConfig.serverSettings.threat.warnedThreat) Threat.setThreat(livingHelper, DynamicStealthConfig.serverSettings.threat.warnedThreat);
 
-                    AIDynamicStealth searchAI = AIDynamicStealth.getStealthAI(livingHelper);
-                    if (searchAI != null)
+                    AIDynamicStealth stealthAI = AIDynamicStealth.getStealthAI(livingHelper);
+                    if (stealthAI != null)
                     {
-                        searchAI.restart(MCTools.randomPos(warnPos, Tools.min(3 + (distance >> 1), 7), Tools.min(1 + (distance >> 2), 4)));
-                        searchAI.fleeIfYouShould(0, true);
+                        stealthAI.fleeIfYouShould(0);
+                        if (stealthAI.isFleeing()) stealthAI.lastKnownPosition = MCTools.randomPos(warnPos, Tools.min(3 + (distance >> 1), 7), Tools.min(1 + (distance >> 2), 4));
                     }
                 }
             }

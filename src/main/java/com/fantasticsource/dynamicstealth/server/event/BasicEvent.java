@@ -39,16 +39,15 @@ public class BasicEvent extends Event
     @Cancelable
     public static class FleeEvent extends BasicEvent
     {
-        public FleeEvent(EntityLivingBase livingBase)
+        public FleeEvent(EntityLivingBase livingBase, int fleeReason)
         {
             super(livingBase);
         }
     }
 
-    @Cancelable
     public static class RallyEvent extends BasicEvent
     {
-        public RallyEvent(EntityLivingBase livingBase)
+        public RallyEvent(EntityLivingBase livingBase, int fleeReason)
         {
             super(livingBase);
         }
@@ -67,6 +66,14 @@ public class BasicEvent extends Event
     public static class CantReachEvent extends BasicEvent
     {
         public CantReachEvent(EntityLivingBase livingBase)
+        {
+            super(livingBase);
+        }
+    }
+
+    public static class CalmDownEvent extends BasicEvent
+    {
+        public CalmDownEvent(EntityLivingBase livingBase, int fleeReason)
         {
             super(livingBase);
         }

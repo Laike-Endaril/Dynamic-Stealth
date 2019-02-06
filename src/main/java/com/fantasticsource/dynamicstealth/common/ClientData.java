@@ -1,6 +1,8 @@
 package com.fantasticsource.dynamicstealth.common;
 
+import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -56,7 +58,8 @@ public class ClientData
     {
         if (searcher == null) return COLOR_NULL;
         if (EntityThreatData.bypassesThreat(searcher)) return COLOR_ALERT;
-        if (EntityThreatData.isFleeing(searcher)) return COLOR_FLEEING;
+        AIDynamicStealth stealthAI = searcher instanceof EntityLiving ? AIDynamicStealth.getStealthAI((EntityLiving) searcher) : null;
+        if (stealthAI != null && stealthAI.isFleeing()) return COLOR_FLEEING;
         if (serverSettings.threat.recognizePassive && EntityThreatData.isPassive(searcher)) return COLOR_PASSIVE;
         if (threatLevel <= 0) return COLOR_IDLE;
         if (target == null) return COLOR_ALERT;
