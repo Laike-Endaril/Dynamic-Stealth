@@ -10,6 +10,7 @@ import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
 import com.fantasticsource.dynamicstealth.server.ai.edited.*;
 import com.fantasticsource.dynamicstealth.server.entitytracker.EntityTrackerEdit;
 import com.fantasticsource.dynamicstealth.server.event.AssassinationEvent;
+import com.fantasticsource.dynamicstealth.server.event.StealthAttackData;
 import com.fantasticsource.dynamicstealth.server.event.StealthAttackEvent;
 import com.fantasticsource.dynamicstealth.server.senses.EntitySensesEdit;
 import com.fantasticsource.dynamicstealth.server.senses.EntitySightData;
@@ -38,6 +39,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
@@ -267,25 +269,31 @@ public class DynamicStealth
                         if (Sight.canSee(witness, victim))
                         {
                             //Witness saw victim die
+                            BlockPos dangerPos;
+
                             if (Sight.canSee(witness, source))
                             {
                                 //Witness saw everything
                                 wasSeen = true;
 
                                 Threat.set(witness, killer, serverSettings.threat.allyKilledThreat);
-                                WarningSystem.warn(witness, killer.getPosition());
+                                dangerPos = killer.getPosition();
                             }
                             else
                             {
                                 //Witness saw ally die without seeing killer
-                                BlockPos dangerPos = victim.getPosition();
                                 Threat.set(witness, null, serverSettings.threat.allyKilledThreat);
-                                WarningSystem.warn(witness, dangerPos);
+                                dangerPos = victim.getPosition();
+                            }
 
-                                if (witness instanceof EntityLiving)
+                            WarningSystem.warn(witness, dangerPos);
+                            if (witness instanceof EntityLiving)
+                            {
+                                AIDynamicStealth stealthAI = AIDynamicStealth.getStealthAI((EntityLiving) witness);
+                                if (stealthAI != null)
                                 {
-                                    AIDynamicStealth stealthAI = AIDynamicStealth.getStealthAI((EntityLiving) witness);
-                                    if (stealthAI != null) stealthAI.lastKnownPosition = dangerPos;
+                                    stealthAI.lastKnownPosition = dangerPos;
+                                    stealthAI.fleeIfYouShould(0, true);
                                 }
                             }
                         }
@@ -320,7 +328,7 @@ public class DynamicStealth
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void entityAttackedPre(LivingHurtEvent event)
     {
-        EntityLivingBase target = event.getEntityLiving();
+        EntityLivingBase victim = event.getEntityLiving();
 
         DamageSource dmgSource = event.getSource();
         Entity source = dmgSource.getTrueSource();
@@ -328,13 +336,35 @@ public class DynamicStealth
 
         if (source instanceof EntityLivingBase)
         {
-            if (!Sight.canSee(target, source))
+            EntityLivingBase attacker = (EntityLivingBase) source;
+
+            //Remove invisibility and blindness if set to do so
+            if (serverSettings.interactions.attack.removeInvisibilityOnHit)
             {
-                if (!MinecraftForge.EVENT_BUS.post(new StealthAttackEvent(target, dmgSource, event.getAmount())))
+                attacker.removePotionEffect(MobEffects.INVISIBILITY);
+                victim.removePotionEffect(MobEffects.INVISIBILITY);
+            }
+            if (serverSettings.interactions.attack.removeBlindnessOnHit)
+            {
+                attacker.removePotionEffect(MobEffects.BLINDNESS);
+                victim.removePotionEffect(MobEffects.BLINDNESS);
+            }
+
+            if (!Sight.canSee(victim, attacker))
+            {
+                if (!MinecraftForge.EVENT_BUS.post(new StealthAttackEvent(victim, dmgSource, event.getAmount())))
                 {
                     if (serverSettings.interactions.stealthAttack.armorPenetration) dmgSource.setDamageBypassesArmor();
                     event.setAmount((float) (event.getAmount() * serverSettings.interactions.stealthAttack.damageMultiplier));
-                    //TODO Apply stealth attack config options
+
+                    for (PotionEffect potionEffect : StealthAttackData.attackerEffects)
+                    {
+                        attacker.addPotionEffect(new PotionEffect(potionEffect));
+                    }
+                    for (PotionEffect potionEffect : StealthAttackData.victimEffects)
+                    {
+                        victim.addPotionEffect(new PotionEffect(potionEffect));
+                    }
                 }
             }
         }
@@ -442,24 +472,6 @@ public class DynamicStealth
                 if (searchAI != null) warnPos = searchAI.lastKnownPosition;
                 if (warnPos == null) warnPos = livingTarget.getPosition();
                 WarningSystem.warn(livingTarget, warnPos);
-            }
-        }
-
-        if (source instanceof EntityLivingBase)
-        {
-            EntityLivingBase livingBaseSource = (EntityLivingBase) source;
-            CombatTracker.setSuccessfulAttackTime(livingBaseSource);
-
-            //Remove invisibility and blindness if set to do so
-            if (serverSettings.interactions.attack.removeInvisibilityOnHit)
-            {
-                livingBaseSource.removePotionEffect(MobEffects.INVISIBILITY);
-                target.removePotionEffect(MobEffects.INVISIBILITY);
-            }
-            if (serverSettings.interactions.attack.removeBlindnessOnHit)
-            {
-                livingBaseSource.removePotionEffect(MobEffects.BLINDNESS);
-                target.removePotionEffect(MobEffects.BLINDNESS);
             }
         }
     }
