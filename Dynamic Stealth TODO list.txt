@@ -1,8 +1,8 @@
 CURRENTLY WORKING ON ===================================================
 
-Change stealth calcs; try to prevent rapid blinking in and out
-
 Add config options which alter events in the event constructors or after they trigger
+
+Change stealth calcs; try to prevent rapid blinking in and out
 
 Migrate old bad AI handling entries to new system, where applicable
 
@@ -58,8 +58,8 @@ Add to HUD...
 AI =====================================================================
 
 Can probably combine the two below into a single AI task...
-...Change "wandering" AI so that it can't instantly flip a 180 (force it to turn gradually before moving in the chosen direction)
 ...Replace EntityAILookIdle with a new version that has gradual head rotation, instead of just removing it
+...Change "wandering" AI so that it can't instantly flip a 180 (force it to turn gradually before moving in the chosen direction)
 
 
 
@@ -76,10 +76,12 @@ Apply stealth-based scent attributes
 
 ITEMS ==================================================================
 
-Add the ability to apply potions to weapons
+Add water arrows (create a thin flowing water block on impact; for breaking torches and giving Wet status effect)
+Add "Wet" status effect (if you are burning at any time for its duration, it removes burning and then removes itself)
 
-Add water arrows (create a thin flowing water block on impact)
 Add torch arrows (yes I know some other mods already do, but I want them in mine)
+
+Add the ability to apply potions to weapons
 
 Add a stealth guidebook
 
