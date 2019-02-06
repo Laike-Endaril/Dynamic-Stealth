@@ -37,8 +37,6 @@ import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
@@ -213,19 +211,7 @@ public class DynamicStealth
         {
             if (entity instanceof EntityLiving && entity.isEntityAlive())
             {
-                EntityLiving living = (EntityLiving) entity;
-                Threat.ThreatData data = Threat.get(living);
-
-                if (data.threatLevel > 0 && data.target != null)
-                {
-                    Path path = living.getNavigator().getPath();
-
-                    if (path != null)
-                    {
-                        PathPoint point = path.getFinalPathPoint();
-                        if (point != null && data.target.getPosition().distanceSq(new BlockPos(point.x, point.y, point.z)) < Math.pow((data.target.width + data.target.height) / 2 + (living.width + living.height) / 2, 2)) CombatTracker.setSuccessfulPathTime(living);
-                    }
-                }
+                CombatTracker.pathReachesThreatTarget((EntityLiving) entity);
             }
         }
     }

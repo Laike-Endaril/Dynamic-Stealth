@@ -132,12 +132,23 @@ public class AIDynamicStealth extends EntityAIBase
         }
     }
 
-    private boolean cantReach()
+    private boolean canReachTarget()
     {
-        return CombatTracker.timeSinceLastIdle(searcher) >= serverSettings.ai.cantReach.lastIdleThreshold
+        if (CombatTracker.timeSinceLastIdle(searcher) >= serverSettings.ai.cantReach.lastIdleThreshold
                 && CombatTracker.timeSinceLastSuccessfulAttack(searcher) >= serverSettings.ai.cantReach.lastAttackThreshold
                 && CombatTracker.timeSinceLastSuccessfulPath(searcher) >= serverSettings.ai.cantReach.lastPathThreshold
-                && CombatTracker.timeSinceLastNoTarget(searcher) >= serverSettings.ai.cantReach.lastNoTargetThreshold;
+                && CombatTracker.timeSinceLastNoTarget(searcher) >= serverSettings.ai.cantReach.lastNoTargetThreshold)
+        {
+            EntityLivingBase target = Threat.getTarget(searcher);
+            if (target == null) return false;
+
+            Path newPath = navigator.getPathToEntityLiving(target);
+            if (newPath == null || newPath.isSamePath(navigator.getPath())) return false;
+
+            return CombatTracker.pathReachesThreatTarget(searcher, newPath);
+        }
+
+        return true;
     }
 
     @Override
@@ -203,7 +214,7 @@ public class AIDynamicStealth extends EntityAIBase
 
         //Threat > 0 and threatTarget != null...we have an existing target from before
 
-        if (cantReach())
+        if (!canReachTarget())
         {
             if (!triedTriggerCantReach && !MinecraftForge.EVENT_BUS.post(new BasicEvent.CantReachEvent(searcher)))
             {
@@ -287,7 +298,11 @@ public class AIDynamicStealth extends EntityAIBase
         if (mode == MODE_SPIN && newMode != MODE_SPIN) timeAtPos = 0;
         else if (mode == MODE_FLEE && newMode != MODE_FLEE) fleeReason = FLEE_NONE;
 
-        if (newMode == MODE_SPIN)
+        if (newMode == MODE_NONE)
+        {
+            fleeReason = FLEE_NONE;
+        }
+        else if (newMode == MODE_SPIN)
         {
             startAngle = searcher.rotationYawHead;
             spinDirection = searcher.getRNG().nextBoolean();
@@ -475,11 +490,13 @@ public class AIDynamicStealth extends EntityAIBase
             {
                 mode(MODE_NONE);
                 MinecraftForge.EVENT_BUS.post(new BasicEvent.CalmDownEvent(searcher, oldReason));
+                System.out.println(oldReason == FLEE_CANTREACH);
             }
             else
             {
-                if (fleeReason == FLEE_CANTREACH && !cantReach())
+                if (fleeReason == FLEE_CANTREACH && canReachTarget())
                 {
+                    System.out.println("Should rally");
                     mode(MODE_NONE);
                     fleeIfYouShould(0);
                     if (fleeReason == FLEE_NONE) MinecraftForge.EVENT_BUS.post(new BasicEvent.RallyEvent(searcher, oldReason));

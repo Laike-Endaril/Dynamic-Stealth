@@ -1,6 +1,11 @@
 package com.fantasticsource.dynamicstealth.server;
 
+import com.fantasticsource.dynamicstealth.server.threat.Threat;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.pathfinding.Path;
+import net.minecraft.pathfinding.PathPoint;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -63,6 +68,33 @@ public class CombatTracker
         return result == -1 ? Long.MAX_VALUE : currentTick() - result;
     }
 
+
+    public static boolean pathReachesThreatTarget(EntityLiving living)
+    {
+        return pathReachesThreatTarget(living, null);
+    }
+
+    public static boolean pathReachesThreatTarget(EntityLiving living, Path path)
+    {
+        Threat.ThreatData data = Threat.get(living);
+
+        if (data.threatLevel > 0 && data.target != null)
+        {
+            if (path == null) path = living.getNavigator().getPath();
+
+            if (path != null)
+            {
+                PathPoint point = path.getFinalPathPoint();
+                if (point != null && data.target.getPosition().distanceSq(new BlockPos(point.x, point.y, point.z)) < 2)
+                {
+                    CombatTracker.setSuccessfulPathTime(living);
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 
     public static void setSuccessfulPathTime(EntityLivingBase livingBase)
     {
