@@ -38,6 +38,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
@@ -311,15 +312,18 @@ public class DynamicStealth
     {
         EntityLivingBase target = event.getEntityLiving();
 
-        Entity source = event.getSource().getTrueSource();
-        if (source == null) source = event.getSource().getImmediateSource();
+        DamageSource dmgSource = event.getSource();
+        Entity source = dmgSource.getTrueSource();
+        if (source == null) source = dmgSource.getImmediateSource();
 
         if (source instanceof EntityLivingBase)
         {
             if (!Sight.canSee(target, source))
             {
-                if (!MinecraftForge.EVENT_BUS.post(new StealthAttackEvent(target, event.getSource(), event.getAmount())))
+                if (!MinecraftForge.EVENT_BUS.post(new StealthAttackEvent(target, dmgSource, event.getAmount())))
                 {
+                    if (serverSettings.interactions.stealthAttack.armorPenetration) dmgSource.setDamageBypassesArmor();
+                    event.setAmount((float) (event.getAmount() * serverSettings.interactions.stealthAttack.damageMultiplier));
                     //TODO Apply stealth attack config options
                 }
             }
@@ -350,8 +354,8 @@ public class DynamicStealth
 
                 //Flee if you should
                 AIDynamicStealth searchAI = AIDynamicStealth.getStealthAI(livingTarget);
-                if (event.isCanceled()) AIDynamicStealth.fleeIfYouShould(livingTarget, livingTarget.getHealth(), true);
-                else AIDynamicStealth.fleeIfYouShould(livingTarget, livingTarget.getHealth() - event.getAmount(), true);
+                if (event.isCanceled()) searchAI.fleeIfYouShould(0, true);
+                else searchAI.fleeIfYouShould(-event.getAmount(), true);
 
 
                 //Threat

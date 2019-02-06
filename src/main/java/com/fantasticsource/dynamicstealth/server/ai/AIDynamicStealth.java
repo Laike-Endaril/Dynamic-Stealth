@@ -88,16 +88,12 @@ public class AIDynamicStealth extends EntityAIBase
         return null;
     }
 
-    public static void fleeIfYouShould(EntityLiving living, float hp, boolean resetModeIfYouFlee)
+    public void fleeIfYouShould(float hpOffset, boolean resetModeIfYouFlee)
     {
-        if (EntityThreatData.shouldFlee(living, hp))
+        if (EntityThreatData.shouldFlee(searcher, searcher.getHealth() + hpOffset))
         {
-            AIDynamicStealth ai = getStealthAI(living);
-            if (ai != null)
-            {
-                ai.fleeing = true;
-                if (resetModeIfYouFlee) ai.mode = MODE_NONE;
-            }
+            fleeing = true;
+            if (resetModeIfYouFlee) mode(MODE_NONE);
         }
     }
 

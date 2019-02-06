@@ -16,10 +16,6 @@ public class StealthAttackEvent extends LivingEvent
         super(entity);
         this.source = source;
         this.amount = amount;
-
-        //TODO Add a weapon/held item filter with NBT support
-        //TODO Add armor penetration as an option
-        //TODO Reference issue #9
     }
 
     public DamageSource getSource()
