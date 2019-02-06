@@ -1,14 +1,9 @@
 CURRENTLY WORKING ON ===================================================
 
-Add hearing config for default hearing range
-Add hearing config for no LOS hearing reduction
-
-
-
 Add config options which alter events in the event constructors or after they trigger...
 ...and mention github issue for it
 
-Make stuck detection ignore jumping
+Make stuck detection ignore jumping by allowing for more play along y axis
 
 Add new color for threat bypass
 

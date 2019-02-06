@@ -17,6 +17,10 @@ public class SensesConfig
 
     @Config.Name("Touch")
     public TouchConfig touch = new TouchConfig();
+
     @Config.Name("Sight")
     public SightConfig sight = new SightConfig();
+
+    @Config.Name("Hearing")
+    public HearingConfig hearing = new HearingConfig();
 }

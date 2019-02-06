@@ -1,7 +1,7 @@
 package com.fantasticsource.dynamicstealth.server;
 
-import com.fantasticsource.dynamicstealth.config.DynamicStealthConfig;
 import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
+import com.fantasticsource.dynamicstealth.server.senses.EntityHearingData;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
@@ -11,12 +11,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 
 public class WarningSystem
 {
@@ -59,11 +62,11 @@ public class WarningSystem
             if (!EntityThreatData.bypassesThreat(livingHelper))
             {
                 Threat.ThreatData data = Threat.get(livingHelper);
-                if (data.target == null && HelperSystem.shouldHelp(livingHelper, warner, true, Math.pow(30d * livingHelper.getEntityAttribute(Attributes.HEARING).getAttributeValue() / 100, 2)))
+                if (data.target == null && HelperSystem.shouldHelp(livingHelper, warner, true, Math.pow(serverSettings.senses.hearing.warningRange * EntityHearingData.hearingRange(livingHelper, warner.getPositionVector().add(new Vec3d(0, warner.getEyeHeight(), 0))), 2)))
                 {
                     int distance = (int) warner.getDistance(helper);
 
-                    if (data.threatLevel < DynamicStealthConfig.serverSettings.threat.warnedThreat) Threat.setThreat(livingHelper, DynamicStealthConfig.serverSettings.threat.warnedThreat);
+                    if (data.threatLevel < serverSettings.threat.warnedThreat) Threat.setThreat(livingHelper, serverSettings.threat.warnedThreat);
 
                     AIDynamicStealth stealthAI = AIDynamicStealth.getStealthAI(livingHelper);
                     if (stealthAI != null)
