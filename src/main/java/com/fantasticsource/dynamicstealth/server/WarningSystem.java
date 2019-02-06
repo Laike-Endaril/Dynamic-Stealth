@@ -5,6 +5,7 @@ import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
+import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -61,11 +62,9 @@ public class WarningSystem
                 if (data.target == null && HelperSystem.shouldHelp(livingHelper, warner, true, Math.pow(30d * livingHelper.getEntityAttribute(Attributes.HEARING).getAttributeValue() / 100, 2)))
                 {
                     int distance = (int) warner.getDistance(helper);
-                    int xz = 4 + distance / 2;
-                    int y = 2 + distance / 4;
 
                     AIDynamicStealth searchAI = AIDynamicStealth.getStealthAI(livingHelper);
-                    if (searchAI != null) searchAI.restart(MCTools.randomPos(warnPos, xz, y));
+                    if (searchAI != null) searchAI.restart(MCTools.randomPos(warnPos, Tools.min(3 + (distance >> 1), 7), Tools.min(1 + (distance >> 2), 4)));
 
                     if (data.threatLevel < DynamicStealthConfig.serverSettings.threat.warnedThreat) Threat.setThreat(livingHelper, DynamicStealthConfig.serverSettings.threat.warnedThreat);
                 }

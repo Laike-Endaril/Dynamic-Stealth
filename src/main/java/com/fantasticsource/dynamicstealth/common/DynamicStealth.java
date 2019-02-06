@@ -415,7 +415,7 @@ public class DynamicStealth
                         if (searchAI != null)
                         {
                             int distance = (int) Math.sqrt(source.getDistanceSq(livingTarget));
-                            searchAI.restart(MCTools.randomPos(source.getPosition(), distance / 2, distance / 4));
+                            searchAI.restart(MCTools.randomPos(source.getPosition(), Tools.min(distance >> 1, 7), Tools.min(distance >> 2, 4)));
                         }
                     }
                 }
