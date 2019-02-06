@@ -338,7 +338,7 @@ public class Sight
 
         //Lighting (absolute, factor, after Angles, after Glowing, after LOS)
         double lightFactor = isLivingBase && isBright(targetLivingBase) ? 15 : lightLevelTotal(target);
-        if (hasNightVision(searcher))
+        if (hasNightvision(searcher))
         {
             lightFactor = Math.min(15, lightFactor + sight.c_lighting.nightvisionBonus);
         }

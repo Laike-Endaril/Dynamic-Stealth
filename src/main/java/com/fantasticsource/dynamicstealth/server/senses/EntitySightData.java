@@ -206,7 +206,7 @@ public class EntitySightData
         return (serverSettings.senses.sight.g_absolutes.seeBurning && target.isBurning()) || naturallyBrightEntities.contains(target.getClass());
     }
 
-    public static boolean hasNightVision(EntityLivingBase searcher)
+    public static boolean hasNightvision(EntityLivingBase searcher)
     {
         return naturalNightvisionEntities.contains(searcher.getClass()) || searcher.getActivePotionEffect(MobEffects.NIGHT_VISION) != null;
     }

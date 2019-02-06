@@ -12,8 +12,8 @@ import com.fantasticsource.dynamicstealth.server.entitytracker.EntityTrackerEdit
 import com.fantasticsource.dynamicstealth.server.event.AssassinationEvent;
 import com.fantasticsource.dynamicstealth.server.event.StealthAttackEvent;
 import com.fantasticsource.dynamicstealth.server.senses.EntitySensesEdit;
-import com.fantasticsource.dynamicstealth.server.senses.EntityTouchData;
 import com.fantasticsource.dynamicstealth.server.senses.EntitySightData;
+import com.fantasticsource.dynamicstealth.server.senses.EntityTouchData;
 import com.fantasticsource.dynamicstealth.server.senses.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
