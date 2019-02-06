@@ -19,7 +19,6 @@ import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
-import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.MinecraftForge;
@@ -28,12 +27,24 @@ import noppes.npcs.api.NpcAPI;
 import noppes.npcs.api.entity.ICustomNpc;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.dynamicstealth.compat.Compat.cancelTasksRequiringAttackTarget;
 
 public class AIDynamicStealth extends EntityAIBase
 {
+    public static final int
+            MODE_NONE = 0,
+            MODE_FIND_PATH = 1,
+            MODE_FOLLOW_PATH = 2,
+            MODE_SPIN = 3,
+            MODE_FIND_RANDOM_PATH = 4,
+            MODE_FACE_RANDOM_PATH = 5,
+            MODE_FOLLOW_RANDOM_PATH = 6,
+            MODE_FLEE = -1;
+    private static Method navigatorCanNavigateMethod;
     private static Field aiPanicSpeedField;
     private static TrigLookupTable trigTable = DynamicStealth.TRIG_TABLE;
 
@@ -48,7 +59,7 @@ public class AIDynamicStealth extends EntityAIBase
     public Path path = null;
     public BlockPos lastKnownPosition = null, fleeToPos = null;
     public boolean fleeing = false, triedCantReach = false, forcedFlee = false;
-    private int phase, timeAtPos; //Don't replace timeAtPos with a ServerTickTimer reference, because this ai does not run every tick
+    private int mode, timeAtPos; //Don't replace timeAtPos with a ServerTickTimer reference, because this ai does not run every tick
     private boolean spinDirection;
     private Vec3d lastPos = null, nextPos = null;
     private double startAngle, angleDif, pathAngle;
@@ -77,7 +88,7 @@ public class AIDynamicStealth extends EntityAIBase
         return null;
     }
 
-    public static void fleeIfYouShould(EntityLiving living, float hp, boolean resetPhaseIfYouFlee)
+    public static void fleeIfYouShould(EntityLiving living, float hp, boolean resetModeIfYouFlee)
     {
         if (EntityThreatData.shouldFlee(living, hp))
         {
@@ -85,7 +96,7 @@ public class AIDynamicStealth extends EntityAIBase
             if (ai != null)
             {
                 ai.fleeing = true;
-                if (resetPhaseIfYouFlee) ai.phase = 0;
+                if (resetModeIfYouFlee) ai.mode = MODE_NONE;
             }
         }
     }
@@ -95,6 +106,7 @@ public class AIDynamicStealth extends EntityAIBase
         try
         {
             aiPanicSpeedField = ReflectionTool.getField(EntityAIPanic.class, "field_75265_b", "speed");
+            navigatorCanNavigateMethod = ReflectionTool.getMethod(PathNavigate.class, "func_75485_k", "canNavigate");
         }
         catch (NoSuchFieldException | IllegalAccessException e)
         {
@@ -238,21 +250,8 @@ public class AIDynamicStealth extends EntityAIBase
         {
             //TODO apply search config options
 
-            if (lastKnownPosition != null)
-            {
-                phase = 0;
-
-                path = navigator.getPathToPos(lastKnownPosition);
-                navigator.setPath(path, speed);
-            }
-            else
-            {
-                phase = 1;
-
-                startAngle = searcher.rotationYawHead;
-                spinDirection = searcher.getRNG().nextBoolean();
-                angleDif = 0;
-            }
+            if (lastKnownPosition == null) mode(MODE_SPIN);
+            else mode(MODE_FIND_PATH);
         }
     }
 
@@ -260,6 +259,35 @@ public class AIDynamicStealth extends EntityAIBase
     public boolean shouldContinueExecuting()
     {
         return shouldExecute();
+    }
+
+    private void mode(int newMode)
+    {
+        if (mode == MODE_SPIN) timeAtPos = 0;
+
+        if (newMode == MODE_SPIN)
+        {
+            startAngle = searcher.rotationYawHead;
+            spinDirection = searcher.getRNG().nextBoolean();
+            angleDif = 0;
+        }
+        else if (newMode == MODE_FOLLOW_PATH || newMode == MODE_FOLLOW_RANDOM_PATH)
+        {
+            timeAtPos = 0;
+            searcher.rotationYaw = searcher.rotationYawHead;
+        }
+        else if (newMode == MODE_FLEE)
+        {
+            clearAIPath();
+            fleeToPos = null;
+            timeAtPos = 0;
+        }
+        else if (newMode == MODE_FIND_RANDOM_PATH)
+        {
+            lastKnownPosition = MCTools.randomPos(searcher.getPosition(), (int) (navigator.getPathSearchRange() * 0.5), (int) (navigator.getPathSearchRange() * 0.25));
+        }
+
+        mode = newMode;
     }
 
     @Override
@@ -272,37 +300,73 @@ public class AIDynamicStealth extends EntityAIBase
         lastPos = currentPos;
 
 
-        //Last second phase changes
+        //Last second mode changes
 
-        if (fleeing && phase != -1 && !MinecraftForge.EVENT_BUS.post(new BasicEvent.FleeEvent(searcher)))
+        if (fleeing && mode != MODE_FLEE && !MinecraftForge.EVENT_BUS.post(new BasicEvent.FleeEvent(searcher)))
         {
             //TODO Apply flee config options
 
             //Flee
-            clearAIPath();
-            fleeToPos = null;
-            timeAtPos = 0;
-            phase = -1;
+            mode(MODE_FLEE);
         }
 
 
-        //Reach searchPos, or the nearest reachable position to it.  If we reach a position, reset the search timer
-        if (phase == 0)
+        //Find the next waypoint toward lastKnownPosition and a path toward it
+        //Success -> MODE_FOLLOW_PATH
+        //Failure -> MODE_SPIN
+        if (mode == MODE_FIND_PATH)
         {
-            if (navigator.getPath() != path) navigator.setPath(path, speed);
-
-            if (timeAtPos > 60 || lastKnownPosition == null || (searcher.onGround && navigator.noPath() && !newPath(lastKnownPosition)))
+            double distSquared = lastKnownPosition.distanceSq(searcher.getPosition());
+            if (distSquared < 1 || timeAtPos > 60) mode(MODE_SPIN);
+            else try
             {
-                phase = 1;
+                if (!(boolean) navigatorCanNavigateMethod.invoke(navigator)) return;
+                else
+                {
+                    //We can navigate, and have not reached lastKnownPosition
+                    Path newPath;
+                    if (distSquared < Math.pow(navigator.getPathSearchRange() - 2, 2))
+                    {
+                        //Position in range
+                        newPath = navigator.getPathToPos(lastKnownPosition);
+                    }
+                    else
+                    {
+                        //Position out of range
+                        BlockPos startPos = searcher.getPosition();
+                        BlockPos dif = lastKnownPosition.subtract(startPos);
+                        double ratio = navigator.getPathSearchRange() * 0.75 / Math.sqrt(dif.distanceSq(0, 0, 0));
+                        newPath = navigator.getPathToPos(startPos.add(new BlockPos(dif.getX() * ratio, dif.getY() * ratio, dif.getZ() * ratio)));
+                    }
 
-                startAngle = searcher.rotationYawHead;
-                spinDirection = searcher.getRNG().nextBoolean();
-                angleDif = 0;
+                    if (newPath == null || newPath.isSamePath(path)) mode(MODE_SPIN);
+                    else
+                    {
+                        path = newPath;
+                        mode(MODE_FOLLOW_PATH);
+                    }
+                }
+            }
+            catch (IllegalAccessException | InvocationTargetException e)
+            {
+                e.printStackTrace();
+                FMLCommonHandler.instance().exitJava(150, false);
             }
         }
 
-        //Do a 360 search-in-place, then choose a random spot to move to nearby
-        if (phase == 1)
+
+        //Reach our waypoint, or the nearest reachable position to it.
+        //Done -> MODE_FIND_PATH
+        if (mode == MODE_FOLLOW_PATH)
+        {
+            if (timeAtPos > 5 || path == null) mode(MODE_FIND_PATH);
+            else if (navigator.getPath() != path) navigator.setPath(path, speed);
+        }
+
+
+        //Do a 360 search-in-place
+        //Done -> MODE_FIND_RANDOM_PATH
+        if (mode == MODE_SPIN)
         {
             navigator.clearPath();
 
@@ -312,33 +376,53 @@ public class AIDynamicStealth extends EntityAIBase
             double angleRad = Tools.degtorad(startAngle + angleDif);
             searcher.getLookHelper().setLookPosition(searcher.posX - trigTable.sin(angleRad), searcher.posY + searcher.getEyeHeight(), searcher.posZ + trigTable.cos(angleRad), headTurnSpeed, headTurnSpeed);
 
-            if (Math.abs(angleDif) >= 360)
+            if (Math.abs(angleDif) >= 360) mode(MODE_FIND_RANDOM_PATH);
+        }
+
+
+        //Find a random path
+        //Success -> MODE_FACE_RANDOM_PATH
+        //Failure -> MODE_SPIN
+        if (mode == MODE_FIND_RANDOM_PATH)
+        {
+            double distSquared = lastKnownPosition.distanceSq(searcher.getPosition());
+            if (distSquared < 1 || timeAtPos > 60) mode(MODE_SPIN);
+            else try
             {
-                if (randomPath(searcher.getPosition(), 4, 2) != null && !path.isFinished() && findPathAngle())
-                {
-                    phase = 2;
-                }
+                if (!(boolean) navigatorCanNavigateMethod.invoke(navigator)) return;
                 else
                 {
-                    startAngle = searcher.rotationYawHead;
-                    spinDirection = searcher.getRNG().nextBoolean();
-                    angleDif = 0;
+                    //We can navigate, and have not reached lastKnownPosition
+                    //Position in range, because we calced it in range inside mode() method
+
+                    Path newPath = navigator.getPathToPos(lastKnownPosition);
+                    if (newPath == null || newPath.isSamePath(path)) mode(MODE_SPIN);
+                    else
+                    {
+                        path = newPath;
+                        if (findPathAngle()) mode(MODE_FACE_RANDOM_PATH);
+                        else mode(MODE_SPIN);
+                    }
                 }
+            }
+            catch (IllegalAccessException | InvocationTargetException e)
+            {
+                e.printStackTrace();
+                FMLCommonHandler.instance().exitJava(150, false);
             }
         }
 
-        //Gradually turn toward initial path direction before moving to new random point
-        if (phase == 2)
+
+        //Gradually turn toward first point in random path before moving to it
+        //Done -> MODE_FOLLOW_RANDOM_PATH
+        if (mode == MODE_FACE_RANDOM_PATH)
         {
             navigator.clearPath();
 
-            double head = Tools.mod(searcher.rotationYawHead, 360);
-            if ((head > pathAngle && head - pathAngle <= 1) || (head <= pathAngle && pathAngle - head <= 1))
+            double headYaw = Tools.mod(searcher.rotationYawHead, 360);
+            if ((headYaw > pathAngle && headYaw - pathAngle <= 1) || (headYaw <= pathAngle && pathAngle - headYaw <= 1))
             {
-                phase = 3;
-
-                lastPos = null;
-                timeAtPos = 0;
+                mode(MODE_FOLLOW_RANDOM_PATH);
             }
             else
             {
@@ -346,26 +430,18 @@ public class AIDynamicStealth extends EntityAIBase
             }
         }
 
-        //Move along our path to our random point, then choose a new random point
-        if (phase == 3)
+
+        //Reach our waypoint, or the nearest reachable position to it.
+        //Done -> MODE_SPIN
+        if (mode == MODE_FOLLOW_RANDOM_PATH)
         {
-            if (navigator.getPath() != path) navigator.setPath(path, speed);
-
-            if (timeAtPos > 60 || (searcher.onGround && navigator.noPath() && !newPath(path)))
-            {
-                phase = 1;
-
-                startAngle = searcher.rotationYawHead;
-                spinDirection = searcher.getRNG().nextBoolean();
-                angleDif = 0;
-            }
+            if (timeAtPos > 5 || path == null) mode(MODE_SPIN);
+            else if (navigator.getPath() != path) navigator.setPath(path, speed);
         }
 
 
-        //Flee mode
-
-        //Flee from lastKnownPos
-        if (phase == -1)
+        //Flee from lastKnownPosition
+        if (mode == MODE_FLEE)
         {
             //Threat calc
             Threat.ThreatData data = Threat.get(searcher);
@@ -513,67 +589,6 @@ public class AIDynamicStealth extends EntityAIBase
         pathAngle = 360 - Tools.radtodeg(DynamicStealth.TRIG_TABLE.arctanFullcircle(pos.z, -pos.x, nextPos.z, -nextPos.x));
 
         return true;
-    }
-
-    private boolean newPath(Path pathIn)
-    {
-        if (pathIn == null) return false;
-
-        PathPoint finalPoint = pathIn.getFinalPathPoint();
-        return finalPoint != null && newPath(new BlockPos(finalPoint.x, finalPoint.y, finalPoint.z));
-    }
-
-    private boolean newPath(BlockPos targetPos)
-    {
-        Path newPath = navigator.getPathToPos(targetPos);
-        if (newPath == null) return false;
-
-        PathPoint finalPoint = newPath.getFinalPathPoint();
-        if (finalPoint == null || Math.pow(finalPoint.x - searcher.posX, 2) + Math.pow(finalPoint.y - searcher.posY, 2) + Math.pow(finalPoint.z - searcher.posZ, 2) < 1) return false;
-
-        path = newPath;
-        navigator.setPath(path, speed);
-        return true;
-    }
-
-    private BlockPos randomPath(BlockPos position, int xz, int y)
-    {
-        if (xz < 0) xz = -xz;
-        if (y < 0) y = -y;
-
-        int x = xz > 0 ? searcher.getRNG().nextInt(xz * 2) : 0;
-        int z = xz > 0 ? searcher.getRNG().nextInt(xz * 2) : 0;
-
-        int yDir = searcher.getRNG().nextBoolean() ? 1 : -1;
-        int yEnd = yDir == 1 ? y * 2 : 0;
-
-        int xCheck, yCheck, zCheck;
-        BlockPos checkPos;
-        for (int ix = 0; ix < xz * 2; ix++)
-        {
-            for (int iz = 0; iz < xz * 2; iz++)
-            {
-                for (int iy = 0; Math.abs(iy) <= yEnd; iy += yDir)
-                {
-                    if (xz > 0)
-                    {
-                        xCheck = (x + ix) % (xz * 2) - xz + position.getX();
-                        zCheck = (z + iz) % (xz * 2) - xz + position.getZ();
-                    }
-                    else
-                    {
-                        xCheck = position.getX();
-                        zCheck = position.getZ();
-                    }
-                    yCheck = y > 0 ? (y + iy) % (y * 2) - y + position.getY() : position.getY();
-
-                    checkPos = new BlockPos(xCheck, yCheck, zCheck);
-                    if (newPath(checkPos)) return checkPos;
-                }
-            }
-        }
-
-        return null;
     }
 
     private double getFleeSpeed(double normalSpeed)
