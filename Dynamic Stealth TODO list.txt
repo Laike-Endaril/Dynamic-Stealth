@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Fix warned passives searching instead of running
-
 Add config options which alter events in the event constructors or after they trigger
 
 Change stealth calcs; try to prevent rapid blinking in and out
