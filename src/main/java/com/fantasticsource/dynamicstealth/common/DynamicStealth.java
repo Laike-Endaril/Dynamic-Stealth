@@ -81,7 +81,7 @@ public class DynamicStealth
 {
     public static final String MODID = "dynamicstealth";
     public static final String NAME = "Dynamic Stealth";
-    public static final String VERSION = "1.12.2.045";
+    public static final String VERSION = "1.12.2.045a";
 
     public static final TrigLookupTable TRIG_TABLE = new TrigLookupTable(1024);
 
