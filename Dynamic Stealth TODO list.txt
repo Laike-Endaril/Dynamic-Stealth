@@ -1,6 +1,33 @@
 CURRENTLY WORKING ON ===================================================
 
-Add config options which alter events in the event constructors or after they trigger
+Separate reasons for fleeing into different modes (hp, passive, cantreach)
+Passives don't rally
+cantreach rallies on reachable target, after a minimum flee time
+hp mode overrides cantreach mode, and rallies on going back above hp threshold
+
+Add "calmed down" event; triggers when fleeing and threat hits 0
+Add option for "calmed down" to trigger CNPC home warp
+Add option for "calmed down" to set health
+
+Add config to teleport CNPCs home when they enter desperation
+
+Faerun cycles:
+can't reach -> flee -> rally (continue fight)
+can't reach -> flee -> calm down (warp and full hp)
+
+
+
+Add hearing config for default hearing range
+Add hearing config for no LOS hearing reduction
+
+
+
+Add config options which alter events in the event constructors or after they trigger...
+...and mention github issue for it
+
+Make stuck detection ignore jumping
+
+Add new color for threat bypass
 
 Change stealth calcs; try to prevent rapid blinking in and out
 
