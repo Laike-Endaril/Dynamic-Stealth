@@ -28,6 +28,11 @@ public class ThreatConfig
     @Config.RangeInt(min = 1)
     public int targetSpottedThreat = 300;
 
+    @Config.Name("'Ally Killed' Threat")
+    @Config.Comment({"When an out-of-combat entity spots a valid target, its threat is set to this"})
+    @Config.RangeInt(min = 1)
+    public int allyKilledThreat = 1000;
+
     @Config.Name("'Warned' Threat")
     @Config.Comment("When an entity heeds a warning from another entity, its threat is set to this (if less than this)")
     public int warnedThreat = 300;

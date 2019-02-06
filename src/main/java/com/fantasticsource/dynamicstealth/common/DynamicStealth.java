@@ -246,12 +246,12 @@ public class DynamicStealth
     {
         EntityLivingBase victim = event.getEntityLiving();
 
-        Entity killer = event.getSource().getTrueSource();
-        if (killer == null) killer = event.getSource().getImmediateSource();
+        Entity source = event.getSource().getTrueSource();
+        if (source == null) source = event.getSource().getImmediateSource();
 
-        if (killer instanceof EntityLivingBase)
+        if (source instanceof EntityLivingBase)
         {
-            EntityLivingBase livingBaseSource = (EntityLivingBase) killer;
+            EntityLivingBase killer = (EntityLivingBase) source;
 
             boolean wasSeen = false;
 
@@ -266,17 +266,27 @@ public class DynamicStealth
                     {
                         if (Sight.canSee(witness, victim))
                         {
-                            //Helper sees victim die
-                            if (Sight.canSee(witness, killer))
+                            //Witness saw victim die
+                            if (Sight.canSee(witness, source))
                             {
-                                //Helper saw everything
-                                //TODO
+                                //Witness saw everything
                                 wasSeen = true;
+
+                                Threat.set(witness, killer, serverSettings.threat.allyKilledThreat);
+                                WarningSystem.warn(witness, killer.getPosition());
                             }
                             else
                             {
-                                //Helper saw victim die, but didn't see killer
-                                //TODO
+                                //Witness saw ally die without seeing killer
+                                BlockPos dangerPos = victim.getPosition();
+                                Threat.set(witness, null, serverSettings.threat.allyKilledThreat);
+                                WarningSystem.warn(witness, dangerPos);
+
+                                if (witness instanceof EntityLiving)
+                                {
+                                    AIDynamicStealth stealthAI = AIDynamicStealth.getStealthAI((EntityLiving) witness);
+                                    if (stealthAI != null) stealthAI.lastKnownPosition = dangerPos;
+                                }
                             }
                         }
                     }
@@ -286,13 +296,13 @@ public class DynamicStealth
             if (!wasSeen)
             {
                 //Target's friends didn't see
-                if (!Sight.canSee(victim, killer))
+                if (!Sight.canSee(victim, source))
                 {
                     //Target cannot see us
-                    if (Threat.getTarget(victim) != killer)
+                    if (Threat.getTarget(victim) != source)
                     {
                         //Target is not searching for *us*
-                        if (!MinecraftForge.EVENT_BUS.post(new AssassinationEvent(livingBaseSource, victim)))
+                        if (!MinecraftForge.EVENT_BUS.post(new AssassinationEvent(killer, victim)))
                         {
                             //TODO Apply stealth attack config options
                         }
