@@ -24,6 +24,10 @@ public class InteractionConfig
     @Config.Comment("When something was fleeing, but regained health")
     public RallyConfig rally = new RallyConfig();
 
+    @Config.Name("Calm Down")
+    @Config.Comment("When something was fleeing, but ran out of threat")
+    public CalmDownConfig calmDown = new CalmDownConfig();
+
     @Config.Name("Search")
     @Config.Comment("When something begins to actively search for a not-yet-seen target")
     public SearchConfig search = new SearchConfig();

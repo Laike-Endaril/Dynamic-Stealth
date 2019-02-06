@@ -1,16 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Add option for "calmed down" to trigger CNPC home warp
-Add option for "calmed down" to set health
-
-Add config to teleport CNPCs home when they enter desperation
-
-Faerun cycles:
-can't reach -> flee -> rally (continue fight)
-can't reach -> flee -> calm down (warp and full hp)
-
-
-
 Add hearing config for default hearing range
 Add hearing config for no LOS hearing reduction
 

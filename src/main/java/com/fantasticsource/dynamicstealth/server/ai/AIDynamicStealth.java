@@ -488,26 +488,41 @@ public class AIDynamicStealth extends EntityAIBase
             int oldReason = fleeReason;
             if (threat <= 0)
             {
+                System.out.println("Calmed down");
                 mode(MODE_NONE);
+                if (serverSettings.interactions.calmDown.fullHPRecovery) searcher.setHealth(searcher.getMaxHealth());
+                if (isCNPC && serverSettings.interactions.calmDown.cnpcsWarpHome)
+                {
+                    ICustomNpc cnpc = (ICustomNpc) NpcAPI.Instance().getIEntity(searcher);
+                    MCTools.teleport(searcher, cnpc.getHomeX() + 0.5, cnpc.getHomeY() + 0.5, cnpc.getHomeZ() + 0.5, false, 0);
+                }
                 MinecraftForge.EVENT_BUS.post(new BasicEvent.CalmDownEvent(searcher, oldReason));
-                System.out.println(oldReason == FLEE_CANTREACH);
             }
             else
             {
                 if (fleeReason == FLEE_CANTREACH && canReachTarget())
                 {
-                    System.out.println("Should rally");
+                    System.out.println("Tried rally 1");
                     mode(MODE_NONE);
                     fleeIfYouShould(0);
-                    if (fleeReason == FLEE_NONE) MinecraftForge.EVENT_BUS.post(new BasicEvent.RallyEvent(searcher, oldReason));
+                    if (fleeReason == FLEE_NONE)
+                    {
+                        System.out.println("Rallied 1");
+                        MinecraftForge.EVENT_BUS.post(new BasicEvent.RallyEvent(searcher, oldReason));
+                    }
                 }
 
                 oldReason = fleeReason;
                 if (fleeReason == FLEE_HP && (int) (searcher.getHealth() / searcher.getMaxHealth() * 100) > serverSettings.ai.flee.threshold)
                 {
+                    System.out.println("Tried rally 2");
                     mode(MODE_NONE);
                     fleeIfYouShould(0);
-                    if (fleeReason == FLEE_NONE) MinecraftForge.EVENT_BUS.post(new BasicEvent.RallyEvent(searcher, oldReason));
+                    if (fleeReason == FLEE_NONE)
+                    {
+                        System.out.println("Rallied 2");
+                        MinecraftForge.EVENT_BUS.post(new BasicEvent.RallyEvent(searcher, oldReason));
+                    }
                 }
             }
 
@@ -550,6 +565,7 @@ public class AIDynamicStealth extends EntityAIBase
                     {
                         //TODO Apply desperation config options
 
+                        System.out.println("Desperation");
                         mode(MODE_NONE);
                         restart(lastKnownPosition);
                         return;
