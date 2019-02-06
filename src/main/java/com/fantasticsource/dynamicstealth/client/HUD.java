@@ -24,7 +24,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.lang.reflect.Field;
 
 import static com.fantasticsource.dynamicstealth.common.ClientData.*;
-import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.clientSettings;
+import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.clientSettings;
 import static net.minecraft.client.renderer.vertex.DefaultVertexFormats.POSITION_TEX_LMAP_COLOR;
 import static org.lwjgl.opengl.GL11.*;
 
@@ -62,7 +62,7 @@ public class HUD extends Gui
             {
                 OnPointData data = onPointDataMap.get(livingBase.getEntityId());
 
-                if (data != null && data.priority < clientSettings.threat.onPointHUDMax && onPointFilter(Minecraft.getMinecraft().player, livingBase, data.color, data.percent)) drawOnPointHUDElement(event.getRenderer().getRenderManager(), event.getX(), event.getY(), event.getZ(), livingBase, data.color, data.percent);
+                if (data != null && data.priority < clientSettings.hudSettings.onPointHUDMax && onPointFilter(Minecraft.getMinecraft().player, livingBase, data.color, data.percent)) drawOnPointHUDElement(event.getRenderer().getRenderManager(), event.getX(), event.getY(), event.getZ(), livingBase, data.color, data.percent);
             }
         }
     }
@@ -71,13 +71,13 @@ public class HUD extends Gui
     {
         if (livingBase.getRidingEntity() == player || player.getRidingEntity() == livingBase) return false;
 
-        if (percent == -1) return clientSettings.threat.filter.showBypass;
-        if (color == COLOR_PASSIVE) return clientSettings.threat.filter.showPassive;
-        if (color == COLOR_IDLE) return clientSettings.threat.filter.showIdle;
-        if (color == COLOR_ALERT) return clientSettings.threat.filter.showAlert;
-        if (color == COLOR_ATTACKING_YOU) return clientSettings.threat.filter.showAttackingYou;
-        if (color == COLOR_ATTACKING_OTHER) return clientSettings.threat.filter.showAttackingOther;
-        if (color == COLOR_FLEEING) return clientSettings.threat.filter.showFleeing;
+        if (percent == -1) return clientSettings.hudSettings.filter.showBypass;
+        if (color == COLOR_PASSIVE) return clientSettings.hudSettings.filter.showPassive;
+        if (color == COLOR_IDLE) return clientSettings.hudSettings.filter.showIdle;
+        if (color == COLOR_ALERT) return clientSettings.hudSettings.filter.showAlert;
+        if (color == COLOR_ATTACKING_YOU) return clientSettings.hudSettings.filter.showAttackingYou;
+        if (color == COLOR_ATTACKING_OTHER) return clientSettings.hudSettings.filter.showAttackingOther;
+        if (color == COLOR_FLEEING) return clientSettings.hudSettings.filter.showFleeing;
         return false;
     }
 
@@ -88,11 +88,11 @@ public class HUD extends Gui
         Color c = new Color(color, true);
         int r = c.r(), g = c.g(), b = c.b();
 
-        boolean depth = clientSettings.threat.onPointHUDStyle.depth;
-        double scale = clientSettings.threat.onPointHUDStyle.scale * 0.025;
+        boolean depth = clientSettings.hudSettings.onPointHUDStyle.depth;
+        double scale = clientSettings.hudSettings.onPointHUDStyle.scale * 0.025;
         double halfSize2D = TEX_SIZE / 4D;
-        double hOff2D = clientSettings.threat.onPointHUDStyle.horizontalOffset2D;
-        double vOff2D = Compat.neat ? clientSettings.threat.onPointHUDStyle.verticalOffset2D - 11 : clientSettings.threat.onPointHUDStyle.verticalOffset2D;
+        double hOff2D = clientSettings.hudSettings.onPointHUDStyle.horizontalOffset2D;
+        double vOff2D = Compat.neat ? clientSettings.hudSettings.onPointHUDStyle.verticalOffset2D - 11 : clientSettings.hudSettings.onPointHUDStyle.verticalOffset2D;
 
 
         GlStateManager.disableLighting();
@@ -117,19 +117,19 @@ public class HUD extends Gui
 
         if (Compat.neat)
         {
-            GlStateManager.translate(x, y + entity.height * clientSettings.threat.onPointHUDStyle.verticalPercent + clientSettings.threat.onPointHUDStyle.verticalOffset - 0.5 + CompatNeat.heightAboveMob, z);
+            GlStateManager.translate(x, y + entity.height * clientSettings.hudSettings.onPointHUDStyle.verticalPercent + clientSettings.hudSettings.onPointHUDStyle.verticalOffset - 0.5 + CompatNeat.heightAboveMob, z);
             GlStateManager.rotate(-viewerYaw, 0, 1, 0);
             GlStateManager.rotate(renderManager.options.thirdPersonView == 2 ? -viewerPitch : viewerPitch, 1, 0, 0);
-            GlStateManager.translate(entity.width * clientSettings.threat.onPointHUDStyle.horizontalPercent, 0, 0);
+            GlStateManager.translate(entity.width * clientSettings.hudSettings.onPointHUDStyle.horizontalPercent, 0, 0);
             GlStateManager.scale(-scale, -scale, scale);
         }
         else if (Compat.customnpcs && entity.getClass().getName().equals("noppes.npcs.entity.EntityCustomNpc"))
         {
             double cnpcScale = entity.height / 1.8;
-            GlStateManager.translate(x, y + entity.height * clientSettings.threat.onPointHUDStyle.verticalPercent + clientSettings.threat.onPointHUDStyle.verticalOffset - 0.5 - 0.108 * cnpcScale, z);
+            GlStateManager.translate(x, y + entity.height * clientSettings.hudSettings.onPointHUDStyle.verticalPercent + clientSettings.hudSettings.onPointHUDStyle.verticalOffset - 0.5 - 0.108 * cnpcScale, z);
             GlStateManager.rotate(-viewerYaw, 0, 1, 0);
             GlStateManager.rotate(renderManager.options.thirdPersonView == 2 ? -viewerPitch : viewerPitch, 1, 0, 0);
-            GlStateManager.translate(entity.width * clientSettings.threat.onPointHUDStyle.horizontalPercent, 0, 0);
+            GlStateManager.translate(entity.width * clientSettings.hudSettings.onPointHUDStyle.horizontalPercent, 0, 0);
 
             scale *= cnpcScale;
             GlStateManager.scale(-scale, -scale, scale);
@@ -138,10 +138,10 @@ public class HUD extends Gui
         }
         else
         {
-            GlStateManager.translate(x, y + entity.height * clientSettings.threat.onPointHUDStyle.verticalPercent - (clientSettings.threat.onPointHUDStyle.accountForSneak && entity.isSneaking() ? 0.25 : 0) + clientSettings.threat.onPointHUDStyle.verticalOffset, z);
+            GlStateManager.translate(x, y + entity.height * clientSettings.hudSettings.onPointHUDStyle.verticalPercent - (clientSettings.hudSettings.onPointHUDStyle.accountForSneak && entity.isSneaking() ? 0.25 : 0) + clientSettings.hudSettings.onPointHUDStyle.verticalOffset, z);
             GlStateManager.rotate(-viewerYaw, 0, 1, 0);
             GlStateManager.rotate(renderManager.options.thirdPersonView == 2 ? -viewerPitch : viewerPitch, 1, 0, 0);
-            GlStateManager.translate(entity.width * clientSettings.threat.onPointHUDStyle.horizontalPercent, 0, 0);
+            GlStateManager.translate(entity.width * clientSettings.hudSettings.onPointHUDStyle.horizontalPercent, 0, 0);
             GlStateManager.scale(-scale, -scale, scale);
         }
 
@@ -225,7 +225,7 @@ public class HUD extends Gui
 
     private void drawDetailHUD(int width, int height, FontRenderer fontRender)
     {
-        if (clientSettings.threat.displayDetailHUD)
+        if (clientSettings.hudSettings.displayDetailHUD)
         {
             if (detailSearcher.equals(EMPTY))
             {

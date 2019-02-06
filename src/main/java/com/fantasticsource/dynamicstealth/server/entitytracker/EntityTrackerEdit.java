@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.entitytracker;
 
-import com.fantasticsource.dynamicstealth.server.senses.EntityVisionData;
+import com.fantasticsource.dynamicstealth.server.senses.EntitySightData;
 import com.fantasticsource.tools.Tools;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
@@ -44,7 +44,7 @@ public class EntityTrackerEdit extends EntityTracker
         super(worldIn);
 
         world = worldIn;
-        maxDistance = Tools.min(worldIn.getMinecraftServer().getPlayerList().getEntityViewDistance(), EntityVisionData.playerMaxVisionDistance);
+        maxDistance = Tools.min(worldIn.getMinecraftServer().getPlayerList().getEntityViewDistance(), EntitySightData.playerMaxSightDistance);
     }
 
     public void track(Entity entityIn)
@@ -227,7 +227,7 @@ public class EntityTrackerEdit extends EntityTracker
 
     public void setViewDistance(int distance)
     {
-        maxDistance = Tools.min((distance - 1) * 16, EntityVisionData.playerMaxVisionDistance);
+        maxDistance = Tools.min((distance - 1) * 16, EntitySightData.playerMaxSightDistance);
 
         for (EntityTrackerEntry entitytrackerentry : entries.toArray(new EntityTrackerEntry[entries.size()]))
         {

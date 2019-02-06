@@ -2,7 +2,7 @@ package com.fantasticsource.dynamicstealth.server.senses;
 
 import java.util.ArrayList;
 
-public class EntityVisionDefaults
+public class EntitySightDefaults
 {
     public static ArrayList<String> naturallyBrightDefaults = new ArrayList<>();
 

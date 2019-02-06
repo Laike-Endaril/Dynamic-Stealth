@@ -1,11 +1,11 @@
 package com.fantasticsource.dynamicstealth.common.potions;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
-import com.fantasticsource.dynamicstealth.common.DynamicStealthConfig;
 import com.fantasticsource.dynamicstealth.common.potions.effects.PotionEffectSoulSight;
 import com.fantasticsource.dynamicstealth.common.potions.recipes.RecipePotionBlindness;
 import com.fantasticsource.dynamicstealth.common.potions.recipes.RecipePotionGlowing;
 import com.fantasticsource.dynamicstealth.common.potions.recipes.RecipePotionSoulSight;
+import com.fantasticsource.dynamicstealth.config.DynamicStealthConfig;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;

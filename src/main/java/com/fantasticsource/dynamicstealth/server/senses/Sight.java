@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.server.senses;
 
-import com.fantasticsource.dynamicstealth.common.DynamicStealthConfig;
+import com.fantasticsource.dynamicstealth.config.server.senses.SensesConfig;
+import com.fantasticsource.dynamicstealth.config.server.senses.sight.SightConfig;
 import com.fantasticsource.dynamicstealth.server.Attributes;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.Speedometer;
@@ -27,16 +28,16 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealth.TRIG_TABLE;
-import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
-import static com.fantasticsource.dynamicstealth.server.senses.EntityVisionData.*;
+import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
+import static com.fantasticsource.dynamicstealth.server.senses.EntitySightData.*;
 import static com.fantasticsource.mctools.ServerTickTimer.currentTick;
 
 public class Sight
 {
     private static final int SEEN_RECENT_TIMER = 60;
 
-    private static final DynamicStealthConfig.ServerSettings.Senses senses = serverSettings.senses;
-    private static final DynamicStealthConfig.ServerSettings.Senses.Vision vision = senses.vision;
+    private static final SensesConfig senses = serverSettings.senses;
+    private static final SightConfig sight = senses.sight;
 
 
     private static Map<EntityLivingBase, Map<Entity, SeenData>> recentlySeenMap = new LinkedHashMap<>();
@@ -207,7 +208,7 @@ public class Sight
         double stealthLevel;
         Entity[] loadedEntities = player.world.loadedEntityList.toArray(new Entity[player.world.loadedEntityList.size()]);
 
-        if (EntityVisionData.hasSoulSight(player))
+        if (EntitySightData.hasSoulSight(player))
         {
             for (Entity entity : loadedEntities)
             {
@@ -252,7 +253,7 @@ public class Sight
                 if (entity instanceof EntityLivingBase && entity != player)
                 {
                     double distSquared = player.getDistanceSq(entity);
-                    if (distSquared <= Math.pow(playerMaxVisionDistance, 2) && los(player, entity))
+                    if (distSquared <= Math.pow(playerMaxSightDistance, 2) && los(player, entity))
                     {
                         double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, entity.posY - player.posY, entity.posZ - player.posZ).normalize());
 
@@ -328,7 +329,7 @@ public class Sight
         EntityLivingBase targetLivingBase = isLivingBase ? (EntityLivingBase) target : null;
 
         //Glowing (absolute, after Angles)
-        if (vision.g_absolutes.seeGlowing && isLivingBase && targetLivingBase.getActivePotionEffect(MobEffects.GLOWING) != null) return 0;
+        if (sight.g_absolutes.seeGlowing && isLivingBase && targetLivingBase.getActivePotionEffect(MobEffects.GLOWING) != null) return 0;
 
 
         //LOS check (absolute, after Angles, after Glowing)
@@ -339,7 +340,7 @@ public class Sight
         double lightFactor = isLivingBase && isBright(targetLivingBase) ? 15 : lightLevelTotal(target);
         if (hasNightVision(searcher))
         {
-            lightFactor = Math.min(15, lightFactor + vision.c_lighting.nightVisionAddition);
+            lightFactor = Math.min(15, lightFactor + sight.c_lighting.nightvisionBonus);
         }
 
         int lightLow = lightLow(searcher);
@@ -356,21 +357,21 @@ public class Sight
 
 
         //Blindness (multiplier)
-        double blindnessMultiplier = searcher.getActivePotionEffect(MobEffects.BLINDNESS) != null ? vision.a_stealthMultipliers.blindnessMultiplier : 1;
+        double blindnessMultiplier = searcher.getActivePotionEffect(MobEffects.BLINDNESS) != null ? sight.a_stealthMultipliers.blindnessMultiplier : 1;
 
 
         //Invisibility (multiplier)
-        double invisibilityMultiplier = isLivingBase && targetLivingBase.getActivePotionEffect(MobEffects.INVISIBILITY) != null ? vision.a_stealthMultipliers.invisibilityMultiplier : 1;
+        double invisibilityMultiplier = isLivingBase && targetLivingBase.getActivePotionEffect(MobEffects.INVISIBILITY) != null ? sight.a_stealthMultipliers.invisibilityMultiplier : 1;
 
 
         //Alerted multiplier
-        double alertMultiplier = searcher instanceof EntityLiving && Threat.get(searcher).threatLevel > 0 ? vision.b_visibilityMultipliers.alertMultiplier : 1;
+        double alertMultiplier = searcher instanceof EntityLiving && Threat.get(searcher).threatLevel > 0 ? sight.b_visibilityMultipliers.alertMultiplier : 1;
 
         //Seen multiplier
-        double seenMultiplier = recentlySeen(searcher, target) ? vision.b_visibilityMultipliers.seenMultiplier : 1;
+        double seenMultiplier = recentlySeen(searcher, target) ? sight.b_visibilityMultipliers.seenMultiplier : 1;
 
         //Crouching (multiplier)
-        double crouchingMultiplier = target.isSneaking() ? vision.a_stealthMultipliers.crouchingMultiplier : 1;
+        double crouchingMultiplier = target.isSneaking() ? sight.a_stealthMultipliers.crouchingMultiplier : 1;
 
 
         //Mob Heads (multiplier)
@@ -383,15 +384,15 @@ public class Sight
                 int damage = helmet.getItemDamage();
                 if (target instanceof EntitySkeleton && damage == 0 || target instanceof EntityWitherSkeleton && damage == 1 || target instanceof EntityZombie && damage == 2 || target instanceof EntityCreeper && damage == 4)
                 {
-                    mobHeadMultiplier = vision.a_stealthMultipliers.mobHeadMultiplier;
+                    mobHeadMultiplier = sight.a_stealthMultipliers.mobHeadMultiplier;
                 }
             }
-            else if ((helmet.getItem() == Item.getItemFromBlock(Blocks.PUMPKIN) && helmet.getItem() == Item.getItemFromBlock(Blocks.LIT_PUMPKIN)) && target instanceof EntitySnowman) mobHeadMultiplier = vision.a_stealthMultipliers.mobHeadMultiplier;
+            else if ((helmet.getItem() == Item.getItemFromBlock(Blocks.PUMPKIN) && helmet.getItem() == Item.getItemFromBlock(Blocks.LIT_PUMPKIN)) && target instanceof EntitySnowman) mobHeadMultiplier = sight.a_stealthMultipliers.mobHeadMultiplier;
         }
 
 
         //Armor
-        double armorMultiplier = isLivingBase ? Math.max(0, 1 + vision.b_visibilityMultipliers.armorMultiplierCumulative * targetLivingBase.getTotalArmorValue()) : 1;
+        double armorMultiplier = isLivingBase ? Math.max(0, 1 + sight.b_visibilityMultipliers.armorMultiplierCumulative * targetLivingBase.getTotalArmorValue()) : 1;
 
 
         //Combine multipliers

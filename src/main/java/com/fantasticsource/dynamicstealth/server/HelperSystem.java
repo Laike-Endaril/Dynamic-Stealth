@@ -12,7 +12,7 @@ import noppes.npcs.api.entity.IEntity;
 import noppes.npcs.api.entity.IPlayer;
 import noppes.npcs.api.handler.data.IFaction;
 
-import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
+import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 
 public class HelperSystem
 {

@@ -1,7 +1,7 @@
 package com.fantasticsource.dynamicstealth.common.potions.effects;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
-import com.fantasticsource.dynamicstealth.server.senses.EntityVisionData;
+import com.fantasticsource.dynamicstealth.server.senses.EntitySightData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.EntityLivingBase;
@@ -35,14 +35,14 @@ public class PotionEffectSoulSight extends Potion
     public void applyAttributesModifiersToEntity(EntityLivingBase entityLivingBaseIn, AbstractAttributeMap attributeMapIn, int amplifier)
     {
         //Should be called "onPotionStart"
-        EntityVisionData.potionSoulSightEntities.add(entityLivingBaseIn);
+        EntitySightData.potionSoulSightEntities.add(entityLivingBaseIn);
     }
 
     @Override
     public void removeAttributesModifiersFromEntity(EntityLivingBase entityLivingBaseIn, AbstractAttributeMap attributeMapIn, int amplifier)
     {
         //Should be called "onPotionEnd"
-        EntityVisionData.potionSoulSightEntities.remove(entityLivingBaseIn);
+        EntitySightData.potionSoulSightEntities.remove(entityLivingBaseIn);
     }
 
     @SideOnly(Side.CLIENT)

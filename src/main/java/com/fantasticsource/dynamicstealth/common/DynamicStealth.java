@@ -13,7 +13,7 @@ import com.fantasticsource.dynamicstealth.server.event.AssassinationEvent;
 import com.fantasticsource.dynamicstealth.server.event.StealthAttackEvent;
 import com.fantasticsource.dynamicstealth.server.senses.EntitySensesEdit;
 import com.fantasticsource.dynamicstealth.server.senses.EntityTouchData;
-import com.fantasticsource.dynamicstealth.server.senses.EntityVisionData;
+import com.fantasticsource.dynamicstealth.server.senses.EntitySightData;
 import com.fantasticsource.dynamicstealth.server.senses.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
@@ -73,7 +73,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
-import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
+import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 
 @Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION)
 public class DynamicStealth
@@ -95,7 +95,7 @@ public class DynamicStealth
 
         MinecraftForge.EVENT_BUS.register(ServerTickTimer.class);
         MinecraftForge.EVENT_BUS.register(CombatTracker.class);
-        MinecraftForge.EVENT_BUS.register(EntityVisionData.class);
+        MinecraftForge.EVENT_BUS.register(EntitySightData.class);
         MinecraftForge.EVENT_BUS.register(DynamicStealth.class);
         MinecraftForge.EVENT_BUS.register(Speedometer.class);
         MinecraftForge.EVENT_BUS.register(Network.class);
@@ -261,7 +261,7 @@ public class DynamicStealth
                 {
                     witness = (EntityLivingBase) entity;
 
-                    if (HelperSystem.shouldHelp(witness, victim, true, EntityVisionData.distanceFar(witness)))
+                    if (HelperSystem.shouldHelp(witness, victim, true, EntitySightData.distanceFar(witness)))
                     {
                         if (Sight.canSee(witness, victim))
                         {
@@ -437,12 +437,12 @@ public class DynamicStealth
             CombatTracker.setSuccessfulAttackTime(livingBaseSource);
 
             //Remove invisibility and blindness if set to do so
-            if (serverSettings.z_otherSettings.removeInvisibilityOnHit)
+            if (serverSettings.interactions.attack.removeInvisibilityOnHit)
             {
                 livingBaseSource.removePotionEffect(MobEffects.INVISIBILITY);
                 target.removePotionEffect(MobEffects.INVISIBILITY);
             }
-            if (serverSettings.z_otherSettings.removeBlindnessOnHit)
+            if (serverSettings.interactions.attack.removeBlindnessOnHit)
             {
                 livingBaseSource.removePotionEffect(MobEffects.BLINDNESS);
                 target.removePotionEffect(MobEffects.BLINDNESS);

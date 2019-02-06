@@ -30,8 +30,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.dynamicstealth.compat.Compat.cancelTasksRequiringAttackTarget;
+import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 
 public class AIDynamicStealth extends EntityAIBase
 {

@@ -8,7 +8,7 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
 import java.util.LinkedHashMap;
 
-import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
+import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 
 public class ClientData
 {

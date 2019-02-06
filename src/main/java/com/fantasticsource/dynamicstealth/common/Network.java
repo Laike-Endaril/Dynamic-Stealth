@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.common;
 
-import com.fantasticsource.dynamicstealth.server.senses.EntityVisionData;
+import com.fantasticsource.dynamicstealth.server.senses.EntitySightData;
 import com.fantasticsource.dynamicstealth.server.senses.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
@@ -24,7 +24,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.LinkedHashMap;
 
-import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
+import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.mctools.MCTools.isOP;
 
 public class Network
@@ -50,19 +50,19 @@ public class Network
             EntityPlayerMP player = (EntityPlayerMP) event.player;
             if (player != null && player.world.loadedEntityList.contains(player))
             {
-                if (EntityVisionData.hasSoulSight(player))
+                if (EntitySightData.hasSoulSight(player))
                 {
-                    if (!EntityVisionData.soulSightCache.contains(player))
+                    if (!EntitySightData.soulSightCache.contains(player))
                     {
-                        EntityVisionData.soulSightCache.add(player);
+                        EntitySightData.soulSightCache.add(player);
                         WRAPPER.sendTo(new SoulSightPacket(true), player);
                     }
                 }
                 else
                 {
-                    if (EntityVisionData.soulSightCache.contains(player))
+                    if (EntitySightData.soulSightCache.contains(player))
                     {
-                        EntityVisionData.soulSightCache.remove(player);
+                        EntitySightData.soulSightCache.remove(player);
                         WRAPPER.sendTo(new SoulSightPacket(false), player);
                     }
                 }
@@ -71,14 +71,14 @@ public class Network
 
                 if (isOP(player))
                 {
-                    boolean detailHUD = serverSettings.threat.hud.allowClientDetailHUD > 0;
-                    int onPointHUDMode = serverSettings.threat.hud.opOnPointHUD;
+                    boolean detailHUD = serverSettings.hud.allowClientDetailHUD > 0;
+                    int onPointHUDMode = serverSettings.hud.opOnPointHUD;
                     if (detailHUD || onPointHUDMode > 0) WRAPPER.sendTo(new HUDPacket(player, detailHUD, onPointHUDMode), player);
                 }
                 else
                 {
-                    boolean detailHUD = serverSettings.threat.hud.allowClientDetailHUD > 1;
-                    int onPointHUDMode = serverSettings.threat.hud.normalOnPointHUD;
+                    boolean detailHUD = serverSettings.hud.allowClientDetailHUD > 1;
+                    int onPointHUDMode = serverSettings.hud.normalOnPointHUD;
                     if (detailHUD || onPointHUDMode > 0) WRAPPER.sendTo(new HUDPacket(player, detailHUD, onPointHUDMode), player);
                 }
             }
@@ -224,8 +224,8 @@ public class Network
 
         public ClientInitPacket(EntityPlayerMP player)
         {
-            soulSight = EntityVisionData.hasSoulSight(player);
-            if (soulSight) EntityVisionData.soulSightCache.add(player);
+            soulSight = EntitySightData.hasSoulSight(player);
+            if (soulSight) EntitySightData.soulSightCache.add(player);
         }
 
         @Override

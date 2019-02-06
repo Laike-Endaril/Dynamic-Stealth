@@ -13,11 +13,11 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-import static com.fantasticsource.dynamicstealth.common.DynamicStealthConfig.serverSettings;
+import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 
-public class EntityVisionData
+public class EntitySightData
 {
-    public static int playerMaxVisionDistance = serverSettings.senses.vision.f_distances.distanceFar;
+    public static int playerMaxSightDistance = serverSettings.senses.sight.f_distances.distanceFar;
 
     public static ArrayList<EntityLivingBase> potionSoulSightEntities = new ArrayList<>();
     public static ArrayList<EntityLivingBase> soulSightCache = new ArrayList<>();
@@ -36,7 +36,7 @@ public class EntityVisionData
         String[] tokens;
         String token;
 
-        for (String string : serverSettings.senses.vision.y_entityOverrides.naturallyBrightEntities)
+        for (String string : serverSettings.senses.sight.y_entityOverrides.naturallyBrightEntities)
         {
             if (string.equals("player")) naturallyBrightEntities.add(EntityPlayerMP.class);
             else
@@ -45,7 +45,7 @@ public class EntityVisionData
 
                 if (entry == null)
                 {
-                    if (!EntityVisionDefaults.naturallyBrightDefaults.contains(string)) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
+                    if (!EntitySightDefaults.naturallyBrightDefaults.contains(string)) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
                 }
                 else
                 {
@@ -56,7 +56,7 @@ public class EntityVisionData
             }
         }
 
-        for (String string : serverSettings.senses.vision.y_entityOverrides.naturalNightVisionMobs)
+        for (String string : serverSettings.senses.sight.y_entityOverrides.naturalNightvisionMobs)
         {
             if (string.equals("player")) naturalNightvisionEntities.add(EntityPlayerMP.class);
             else
@@ -72,7 +72,7 @@ public class EntityVisionData
             }
         }
 
-        for (String string : serverSettings.senses.vision.y_entityOverrides.naturalSoulSightMobs)
+        for (String string : serverSettings.senses.sight.y_entityOverrides.naturalSoulSightMobs)
         {
             if (string.equals("player")) naturalSoulSightEntities.add(EntityPlayerMP.class);
             else
@@ -88,7 +88,7 @@ public class EntityVisionData
             }
         }
 
-        for (String string : serverSettings.senses.vision.y_entityOverrides.angle)
+        for (String string : serverSettings.senses.sight.y_entityOverrides.angle)
         {
             tokens = string.split(",");
             if (tokens.length != 3) System.err.println("Wrong number of arguments for entity-specific angle override; please check example in tooltip");
@@ -110,7 +110,7 @@ public class EntityVisionData
             }
         }
 
-        for (String string : serverSettings.senses.vision.y_entityOverrides.distance)
+        for (String string : serverSettings.senses.sight.y_entityOverrides.distance)
         {
             tokens = string.split(",");
             if (tokens.length != 3) System.err.println("Wrong number of arguments for entity-specific distance override; please check example in tooltip");
@@ -119,8 +119,8 @@ public class EntityVisionData
                 token = tokens[0].trim();
                 if (token.equals("player"))
                 {
-                    playerMaxVisionDistance = Integer.parseInt(tokens[1].trim());
-                    entityDistances.put(EntityPlayerMP.class, new Pair<>(playerMaxVisionDistance, Integer.parseInt(tokens[2].trim())));
+                    playerMaxSightDistance = Integer.parseInt(tokens[1].trim());
+                    entityDistances.put(EntityPlayerMP.class, new Pair<>(playerMaxSightDistance, Integer.parseInt(tokens[2].trim())));
                 }
                 else
                 {
@@ -136,7 +136,7 @@ public class EntityVisionData
             }
         }
 
-        for (String string : serverSettings.senses.vision.y_entityOverrides.lighting)
+        for (String string : serverSettings.senses.sight.y_entityOverrides.lighting)
         {
             tokens = string.split(",");
             if (tokens.length != 3) System.err.println("Wrong number of arguments for entity-specific lighting override; please check example in tooltip");
@@ -158,7 +158,7 @@ public class EntityVisionData
             }
         }
 
-        for (String string : serverSettings.senses.vision.y_entityOverrides.speed)
+        for (String string : serverSettings.senses.sight.y_entityOverrides.speed)
         {
             tokens = string.split(",");
             if (tokens.length != 3) System.err.println("Wrong number of arguments for entity-specific speed override; please check example in tooltip");
@@ -194,16 +194,16 @@ public class EntityVisionData
 
     private static void update()
     {
-        if (serverSettings.senses.vision.e_angles.angleSmall > serverSettings.senses.vision.e_angles.angleLarge) throw new IllegalArgumentException("angleLarge must be greater than or equal to angleSmall");
-        if (serverSettings.senses.vision.f_distances.distanceNear > serverSettings.senses.vision.f_distances.distanceFar) throw new IllegalArgumentException("distanceFar must be greater than or equal to distanceNear");
-        if (serverSettings.senses.vision.c_lighting.lightLow > serverSettings.senses.vision.c_lighting.lightHigh) throw new IllegalArgumentException("lightHigh must be greater than or equal to lightLow");
-        if (serverSettings.senses.vision.d_speeds.speedLow > serverSettings.senses.vision.d_speeds.speedHigh) throw new IllegalArgumentException("speedHigh must be greater than or equal to speedLow");
+        if (serverSettings.senses.sight.e_angles.angleSmall > serverSettings.senses.sight.e_angles.angleLarge) throw new IllegalArgumentException("angleLarge must be greater than or equal to angleSmall");
+        if (serverSettings.senses.sight.f_distances.distanceNear > serverSettings.senses.sight.f_distances.distanceFar) throw new IllegalArgumentException("distanceFar must be greater than or equal to distanceNear");
+        if (serverSettings.senses.sight.c_lighting.lightLow > serverSettings.senses.sight.c_lighting.lightHigh) throw new IllegalArgumentException("lightHigh must be greater than or equal to lightLow");
+        if (serverSettings.senses.sight.d_speeds.speedLow > serverSettings.senses.sight.d_speeds.speedHigh) throw new IllegalArgumentException("speedHigh must be greater than or equal to speedLow");
     }
 
 
     public static boolean isBright(EntityLivingBase target)
     {
-        return target.isBurning() || naturallyBrightEntities.contains(target.getClass());
+        return (serverSettings.senses.sight.g_absolutes.seeBurning && target.isBurning()) || naturallyBrightEntities.contains(target.getClass());
     }
 
     public static boolean hasNightVision(EntityLivingBase searcher)
@@ -219,51 +219,51 @@ public class EntityVisionData
     public static int angleLarge(EntityLivingBase searcher)
     {
         Pair<Integer, Integer> pair = entityAngles.get(searcher.getClass());
-        return pair == null ? serverSettings.senses.vision.e_angles.angleLarge : pair.getKey();
+        return pair == null ? serverSettings.senses.sight.e_angles.angleLarge : pair.getKey();
     }
 
     public static int angleSmall(EntityLivingBase searcher)
     {
         Pair<Integer, Integer> pair = entityAngles.get(searcher.getClass());
-        return pair == null ? serverSettings.senses.vision.e_angles.angleSmall : pair.getValue();
+        return pair == null ? serverSettings.senses.sight.e_angles.angleSmall : pair.getValue();
     }
 
 
     public static int distanceFar(EntityLivingBase searcher)
     {
         Pair<Integer, Integer> pair = entityDistances.get(searcher.getClass());
-        return pair == null ? serverSettings.senses.vision.f_distances.distanceFar : pair.getKey();
+        return pair == null ? serverSettings.senses.sight.f_distances.distanceFar : pair.getKey();
     }
 
     public static int distanceNear(EntityLivingBase searcher)
     {
         Pair<Integer, Integer> pair = entityDistances.get(searcher.getClass());
-        return pair == null ? serverSettings.senses.vision.f_distances.distanceNear : pair.getValue();
+        return pair == null ? serverSettings.senses.sight.f_distances.distanceNear : pair.getValue();
     }
 
 
     public static int lightHigh(EntityLivingBase searcher)
     {
         Pair<Integer, Integer> pair = entityLighting.get(searcher.getClass());
-        return pair == null ? serverSettings.senses.vision.c_lighting.lightHigh : pair.getKey();
+        return pair == null ? serverSettings.senses.sight.c_lighting.lightHigh : pair.getKey();
     }
 
     public static int lightLow(EntityLivingBase searcher)
     {
         Pair<Integer, Integer> pair = entityLighting.get(searcher.getClass());
-        return pair == null ? serverSettings.senses.vision.c_lighting.lightLow : pair.getValue();
+        return pair == null ? serverSettings.senses.sight.c_lighting.lightLow : pair.getValue();
     }
 
 
     public static double speedHigh(EntityLivingBase searcher)
     {
         Pair<Double, Double> pair = entitySpeeds.get(searcher.getClass());
-        return pair == null ? serverSettings.senses.vision.d_speeds.speedHigh : pair.getKey();
+        return pair == null ? serverSettings.senses.sight.d_speeds.speedHigh : pair.getKey();
     }
 
     public static double speedLow(EntityLivingBase searcher)
     {
         Pair<Double, Double> pair = entitySpeeds.get(searcher.getClass());
-        return pair == null ? serverSettings.senses.vision.d_speeds.speedLow : pair.getValue();
+        return pair == null ? serverSettings.senses.sight.d_speeds.speedLow : pair.getValue();
     }
 }

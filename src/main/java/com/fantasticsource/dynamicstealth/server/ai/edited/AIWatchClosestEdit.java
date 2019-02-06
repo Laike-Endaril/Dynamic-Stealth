@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
-import com.fantasticsource.dynamicstealth.server.senses.EntityVisionData;
+import com.fantasticsource.dynamicstealth.server.senses.EntitySightData;
 import com.fantasticsource.dynamicstealth.server.senses.Sight;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
@@ -78,7 +78,7 @@ public class AIWatchClosestEdit extends EntityAIBase
 
         List<Entity> list;
         ExplicitPriorityQueue<Entity> queue;
-        double range = EntityVisionData.distanceFar(entity);
+        double range = EntitySightData.distanceFar(entity);
         if (watchedClass == EntityPlayer.class)
         {
             list = entity.world.getEntitiesWithinAABB(EntityPlayer.class, entity.getEntityBoundingBox().grow(range, 4D, range));

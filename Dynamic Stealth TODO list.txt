@@ -114,7 +114,7 @@ Possibly change music using ActualMusic when going into battle, etc
 
 MOD COMPATIBILITY ======================================================
 
-Add bright mobs from mods to EntityVisionDefaults.naturallyBrightEntities
+Add bright mobs from mods to EntitySightDefaults.naturallyBrightEntities
 
 Slimes and magma cubes do some really weird spinny stuff with both DS and CNPCs installed
 

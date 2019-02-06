@@ -1,8 +1,8 @@
 package com.fantasticsource.dynamicstealth.client;
 
 import com.fantasticsource.dynamicstealth.common.ClientData;
-import com.fantasticsource.dynamicstealth.common.DynamicStealthConfig;
 import com.fantasticsource.dynamicstealth.compat.Compat;
+import com.fantasticsource.dynamicstealth.config.DynamicStealthConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.EntityLivingBase;
@@ -42,9 +42,9 @@ public class RenderAlterer
         if (ClientData.usePlayerSenses && livingBase != Minecraft.getMinecraft().player)
         {
             int id = livingBase.getEntityId();
-            double min = DynamicStealthConfig.clientSettings.z_otherSettings.mobOpacityMin;
+            double min = DynamicStealthConfig.clientSettings.entityFading.mobOpacityMin;
             double visibility = ClientData.visibilityMap.containsKey(id) ? ClientData.visibilityMap.get(id) : 0;
-            double maxOpacityAt = DynamicStealthConfig.clientSettings.z_otherSettings.fullOpacityAt;
+            double maxOpacityAt = DynamicStealthConfig.clientSettings.entityFading.fullOpacityAt;
             if (visibility != 0)
             {
                 if (maxOpacityAt == 0) visibility = 1;
