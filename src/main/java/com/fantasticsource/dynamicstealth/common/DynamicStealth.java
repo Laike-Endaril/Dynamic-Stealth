@@ -76,7 +76,7 @@ import java.util.Set;
 
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 
-@Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, guiFactory = "com.fantasticsource.dynamicstealth.config.factoryclasses.DynamicStealthConfigFactory")
+@Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION)
 public class DynamicStealth
 {
     public static final String MODID = "dynamicstealth";
