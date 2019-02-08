@@ -38,8 +38,8 @@ public class StealthAttackConfig
     @Config.RequiresMcRestart
     public String[] victimEffects = {};
 
-    @Config.Name("Weapon-Specific Settings")
-    @Config.Comment("Weapon-specific overrides for all the settings above")
-    @Config.RequiresMcRestart
-    public String[] weaponSpecific = {};
+//    @Config.Name("Weapon-Specific Settings")
+//    @Config.Comment("Weapon-specific overrides for all the settings above")
+//    @Config.RequiresMcRestart
+//    public DynamicStealthConfigFactory weaponSpecific = new DynamicStealthConfigFactory(null, DynamicStealth.MODID, "Weapon-Specific Settings");
 }
