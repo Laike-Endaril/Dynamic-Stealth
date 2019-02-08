@@ -2,6 +2,8 @@ package com.fantasticsource.dynamicstealth.config.server.interactions;
 
 import net.minecraftforge.common.config.Config;
 
+import java.util.ArrayList;
+
 public class StealthAttackConfig
 {
     @Config.Name("Armor Penetration")
@@ -41,5 +43,5 @@ public class StealthAttackConfig
 //    @Config.Name("Weapon-Specific Settings")
 //    @Config.Comment("Weapon-specific overrides for all the settings above")
 //    @Config.RequiresMcRestart
-//    public DynamicStealthConfigFactory weaponSpecific = new DynamicStealthConfigFactory(null, DynamicStealth.MODID, "Weapon-Specific Settings");
+//    public ArrayList<WeaponFilterConfig> weaponSpecific = new ArrayList<>();
 }
