@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Migrate weapon entries to a "defaults" array for error suppression
-
 Add config options which alter events in the event constructors or after they trigger...
 ...and mention github issue for it
 
