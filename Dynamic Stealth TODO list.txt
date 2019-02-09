@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
+Migrate weapon entries to a "defaults" array for error suppression
+
 Add config options which alter events in the event constructors or after they trigger...
 ...and mention github issue for it
 
@@ -79,10 +81,17 @@ Apply stealth-based scent attributes
 
 
 
+STATUS EFFECTS =========================================================
+
+Wet: Triggers if you touch water.  If you are burning at any time for its duration, it removes burning and then removes itself
+Doom: Instant death if it is not removed before the countdown hits 0.  OP if not filtered carefully
+Frozen: Triggers if you touch ice while wet.  Removes wet and stops movement until you take damage once or the duration runs out.  If you start burning while frozen, frozen and burning are both removed.
+
+
+
 ITEMS ==================================================================
 
 Add water arrows (create a thin flowing water block on impact; for breaking torches and giving Wet status effect)
-Add "Wet" status effect (if you are burning at any time for its duration, it removes burning and then removes itself)
 
 Add torch arrows (yes I know some other mods already do, but I want them in mine)
 
