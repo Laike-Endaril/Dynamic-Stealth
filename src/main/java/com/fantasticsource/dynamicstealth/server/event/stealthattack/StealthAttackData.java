@@ -1,6 +1,7 @@
-package com.fantasticsource.dynamicstealth.server.event;
+package com.fantasticsource.dynamicstealth.server.event.stealthattack;
 
 import com.fantasticsource.dynamicstealth.config.server.interactions.StealthAttackConfig;
+import com.fantasticsource.dynamicstealth.server.event.WeaponEntry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 

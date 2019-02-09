@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth.server.event;
+package com.fantasticsource.dynamicstealth.server.event.stealthattack;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;

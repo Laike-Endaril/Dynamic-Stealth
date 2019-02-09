@@ -10,8 +10,8 @@ import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
 import com.fantasticsource.dynamicstealth.server.ai.edited.*;
 import com.fantasticsource.dynamicstealth.server.entitytracker.EntityTrackerEdit;
 import com.fantasticsource.dynamicstealth.server.event.AssassinationEvent;
-import com.fantasticsource.dynamicstealth.server.event.StealthAttackData;
-import com.fantasticsource.dynamicstealth.server.event.StealthAttackEvent;
+import com.fantasticsource.dynamicstealth.server.event.stealthattack.StealthAttackData;
+import com.fantasticsource.dynamicstealth.server.event.stealthattack.StealthAttackEvent;
 import com.fantasticsource.dynamicstealth.server.event.WeaponEntry;
 import com.fantasticsource.dynamicstealth.server.senses.EntitySensesEdit;
 import com.fantasticsource.dynamicstealth.server.senses.EntitySightData;
@@ -37,6 +37,7 @@ import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.entity.passive.EntityRabbit;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
@@ -358,7 +359,7 @@ public class DynamicStealth
                         victim.addPotionEffect(new PotionEffect(potionEffect));
                     }
 
-                    if (weaponEntry.consumeItem && !(attacker instanceof EntityPlayer || ((EntityPlayer) attacker).capabilities.isCreativeMode)) itemStack.grow(-1);
+                    if (weaponEntry.consumeItem && !(attacker instanceof EntityPlayer && ((EntityPlayer) attacker).capabilities.isCreativeMode) && !itemStack.getItem().equals(Items.AIR)) itemStack.grow(-1);
                 }
             }
         }

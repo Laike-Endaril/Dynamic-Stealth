@@ -1,5 +1,7 @@
 package com.fantasticsource.dynamicstealth.server.event;
 
+import com.fantasticsource.dynamicstealth.server.event.stealthattack.StealthAttackData;
+import com.fantasticsource.dynamicstealth.server.event.stealthattack.StealthAttackDefaults;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -24,7 +26,7 @@ public class WeaponEntry
     public ArrayList<PotionEffect> victimEffects = StealthAttackData.victimEffects;
     public boolean consumeItem = false;
 
-    ItemStack itemStack = null;
+    public ItemStack itemStack = null;
     private LinkedHashMap<String, String> tags = new LinkedHashMap<>();
 
     private WeaponEntry()
@@ -82,7 +84,7 @@ public class WeaponEntry
 
         if (itemStack == null)
         {
-            System.err.println("Item for weapon-specific stealth attack not found: " + token);
+            if (!StealthAttackDefaults.weaponSpecific.contains(configEntry)) System.err.println("Item for weapon-specific stealth attack not found: " + token);
             return;
         }
 

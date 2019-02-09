@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.config.server.interactions;
 
+import com.fantasticsource.dynamicstealth.server.event.stealthattack.StealthAttackDefaults;
 import net.minecraftforge.common.config.Config;
 
 public class StealthAttackConfig
@@ -41,21 +42,5 @@ public class StealthAttackConfig
     @Config.Name("Weapon-Specific Settings")
     @Config.Comment("Weapon-specific overrides for all the settings above")
     @Config.RequiresMcRestart
-    public String[] weaponSpecific =
-            {
-                    "backstab:wood_dagger:0, true, 3",
-                    "backstab:stone_dagger:0, true, 3",
-                    "backstab:iron_dagger:0, true, 3",
-                    "backstab:diamond_dagger:0, true, 3",
-                    "backstab:gold_dagger:0, true, 3",
-                    "natura:ghostwood_kama:0, true, 2",
-                    "natura:bloodwood_kama:0, true, 2",
-                    "natura:darkwood_kama:0, true, 2",
-                    "natura:fusewood_kama:0, true, 2",
-                    "natura:netherquartz_kama:0, true, 2",
-                    "tetra:duplex_tool_modular:0 > duplex/sickle_left_material & duplex/butt_right_material, true, 2",
-                    "tconstruct:kama:0, true, 2",
-                    ", false, 0, , blindness.100",
-                    "minecraft:dye:0, false, 0, , blindness.100, true",
-            };
+    public String[] weaponSpecific = StealthAttackDefaults.weaponSpecific.toArray(new String[StealthAttackDefaults.weaponSpecific.size()]);
 }
