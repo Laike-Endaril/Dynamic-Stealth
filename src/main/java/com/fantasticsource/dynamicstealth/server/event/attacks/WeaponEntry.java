@@ -173,7 +173,6 @@ public class WeaponEntry
         {
             WeaponEntry weaponEntry = weaponMapping.getValue();
             ItemStack item = weaponMapping.getKey();
-            System.out.println(item.getItem() + " ?= " + itemStack.getItem());
             if (item.getItem().equals(itemStack.getItem()) && (itemStack.isItemStackDamageable() || item.getMetadata() == itemStack.getMetadata()))
             {
                 match = true;
