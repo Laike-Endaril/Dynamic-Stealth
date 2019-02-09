@@ -31,11 +31,7 @@ public class WeaponEntry
     public ItemStack itemStack = null;
     private LinkedHashMap<String, String> tags = new LinkedHashMap<>();
 
-    private WeaponEntry()
-    {
-    }
-
-    public WeaponEntry(String configEntry, int type)
+    private WeaponEntry(int type)
     {
         //Defaults
         if (type == TYPE_NORMAL)
@@ -56,6 +52,12 @@ public class WeaponEntry
         {
             attackerEffects = AttackData.assassinationAttackerEffects;
         }
+    }
+
+    public WeaponEntry(String configEntry, int type)
+    {
+        //Defaults
+        this(type);
 
 
         String[] tokens = configEntry.split(Pattern.quote(","));
@@ -196,7 +198,6 @@ public class WeaponEntry
         {
             WeaponEntry weaponEntry = weaponMapping.getValue();
             ItemStack item = weaponMapping.getKey();
-            if (type == TYPE_ASSASSINATION) System.out.println(itemStack + " ?= " + item);
             if (item.getItem().equals(itemStack.getItem()) && (itemStack.isItemStackDamageable() || item.getMetadata() == itemStack.getMetadata()))
             {
                 match = true;
@@ -223,7 +224,7 @@ public class WeaponEntry
             }
         }
 
-        return new WeaponEntry();
+        return new WeaponEntry(type);
     }
 
 

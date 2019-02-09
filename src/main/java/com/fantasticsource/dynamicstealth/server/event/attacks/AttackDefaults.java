@@ -25,7 +25,5 @@ public class AttackDefaults
         stealthAttackDefaults.add("natura:netherquartz_kama, true, 2");
         stealthAttackDefaults.add("tetra:duplex_tool_modular > duplex/sickle_left_material & duplex/butt_right_material, true, 2");
         stealthAttackDefaults.add("tconstruct:kama, true, 2");
-
-        assassinationDefaults.add(", strength.400.2");
     }
 }

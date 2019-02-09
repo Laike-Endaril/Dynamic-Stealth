@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Fix assassination effects not triggering
-
 If you stealth attack eg. a wolf and it immediately starts fleeing, it will not set threat target to you
 
 Add config options which alter non-attack events after they trigger

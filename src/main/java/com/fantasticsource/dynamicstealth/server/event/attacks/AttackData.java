@@ -16,11 +16,14 @@ public class AttackData
     public static ArrayList<PotionEffect> normalAttackerEffects;
     public static ArrayList<PotionEffect> normalVictimEffects;
     public static LinkedHashMap<ItemStack, WeaponEntry> normalWeaponSpecific = new LinkedHashMap<>();
+
     public static ArrayList<PotionEffect> stealthAttackerEffects;
     public static ArrayList<PotionEffect> stealthVictimEffects;
     public static LinkedHashMap<ItemStack, WeaponEntry> stealthWeaponSpecific = new LinkedHashMap<>();
+
     public static ArrayList<PotionEffect> assassinationAttackerEffects;
     public static LinkedHashMap<ItemStack, WeaponEntry> assassinationWeaponSpecific = new LinkedHashMap<>();
+
     private static NormalAttackConfig normalConfig = serverSettings.interactions.attack;
     private static StealthAttackConfig stealthConfig = serverSettings.interactions.stealthAttack;
     private static AssassinationConfig assassinationConfig = serverSettings.interactions.assassination;
