@@ -291,7 +291,7 @@ public class DynamicStealth
                 }
             }
 
-            if (!wasSeen)
+            if (!wasSeen && !EntityThreatData.isPassive(victim))
             {
                 //Target's friends didn't see
                 if (!Sight.canSee(victim, source))

@@ -1,6 +1,5 @@
 package com.fantasticsource.dynamicstealth.server.event.attacks;
 
-import com.fantasticsource.dynamicstealth.config.server.interactions.StealthAttackConfig;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -22,12 +21,11 @@ import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.ser
 public class WeaponEntry
 {
     public static final int TYPE_NORMAL = 0, TYPE_STEALTH = 1, TYPE_ASSASSINATION = 2;
-    public static StealthAttackConfig config = serverSettings.interactions.stealthAttack;
 
-    public boolean armorPenetration = config.armorPenetration;
-    public double damageMultiplier = config.damageMultiplier;
-    public ArrayList<PotionEffect> attackerEffects = AttackData.stealthAttackerEffects;
-    public ArrayList<PotionEffect> victimEffects = AttackData.stealthVictimEffects;
+    public boolean armorPenetration = false;
+    public double damageMultiplier = 1;
+    public ArrayList<PotionEffect> attackerEffects = new ArrayList<>();
+    public ArrayList<PotionEffect> victimEffects = new ArrayList<>();
     public boolean consumeItem = false;
 
     public ItemStack itemStack = null;
@@ -39,6 +37,27 @@ public class WeaponEntry
 
     public WeaponEntry(String configEntry, int type)
     {
+        //Defaults
+        if (type == TYPE_NORMAL)
+        {
+            armorPenetration = serverSettings.interactions.attack.armorPenetration;
+            damageMultiplier = serverSettings.interactions.attack.damageMultiplier;
+            attackerEffects = AttackData.normalAttackerEffects;
+            victimEffects = AttackData.normalVictimEffects;
+        }
+        else if (type == TYPE_STEALTH)
+        {
+            armorPenetration = serverSettings.interactions.stealthAttack.armorPenetration;
+            damageMultiplier = serverSettings.interactions.stealthAttack.damageMultiplier;
+            attackerEffects = AttackData.stealthAttackerEffects;
+            victimEffects = AttackData.stealthVictimEffects;
+        }
+        else if (type == TYPE_ASSASSINATION)
+        {
+            attackerEffects = AttackData.assassinationAttackerEffects;
+        }
+
+
         String[] tokens = configEntry.split(Pattern.quote(","));
         String token;
 
@@ -140,12 +159,16 @@ public class WeaponEntry
 
 
         //Easy stuff...
-        armorPenetration = Boolean.parseBoolean(tokens[1]);
-        if (tokens.length > 2) damageMultiplier = Double.parseDouble(tokens[2]);
+        if (type == TYPE_NORMAL || type == TYPE_STEALTH)
+        {
+            armorPenetration = Boolean.parseBoolean(tokens[1]);
+            if (tokens.length > 2) damageMultiplier = Double.parseDouble(tokens[2]);
+        }
 
 
         //Potion effects
-        if (tokens.length > 3)
+        if (type == TYPE_ASSASSINATION) attackerEffects = getPotions(tokens[1].split(Pattern.quote("&")));
+        else if (tokens.length > 3)
         {
             attackerEffects = getPotions(tokens[3].split(Pattern.quote("&")));
             if (tokens.length > 4)
@@ -173,6 +196,7 @@ public class WeaponEntry
         {
             WeaponEntry weaponEntry = weaponMapping.getValue();
             ItemStack item = weaponMapping.getKey();
+            if (type == TYPE_ASSASSINATION) System.out.println(itemStack + " ?= " + item);
             if (item.getItem().equals(itemStack.getItem()) && (itemStack.isItemStackDamageable() || item.getMetadata() == itemStack.getMetadata()))
             {
                 match = true;
