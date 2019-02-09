@@ -6,7 +6,7 @@ public class InteractionConfig
 {
     @Config.Name("Attack")
     @Config.Comment("When anything attacks anything else")
-    public AttackConfig attack = new AttackConfig();
+    public NormalAttackConfig attack = new NormalAttackConfig();
 
     @Config.Name("Stealth Attack")
     @Config.Comment("When something attacks an unaware victim")

@@ -1,7 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-Add config options which alter events in the event constructors or after they trigger...
-...and mention github issue for it
+Add config options which alter non-attack events after they trigger...
 
 Make stuck detection ignore jumping by allowing for more play along y axis
 
@@ -84,6 +83,7 @@ STATUS EFFECTS =========================================================
 Wet: Triggers if you touch water.  If you are burning at any time for its duration, it removes burning and then removes itself
 Doom: Instant death if it is not removed before the countdown hits 0.  OP if not filtered carefully
 Frozen: Triggers if you touch ice while wet.  Removes wet and stops movement until you take damage once or the duration runs out.  If you start burning while frozen, frozen and burning are both removed.
+Burning: Triggers when set on fire, and sets you on fire when it is triggered.  Puts out the fire when it ends...basically just trying to link normal burning to a usable potion effect
 
 
 

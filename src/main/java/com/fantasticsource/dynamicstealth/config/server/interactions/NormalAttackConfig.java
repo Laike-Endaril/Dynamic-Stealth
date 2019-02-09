@@ -3,8 +3,26 @@ package com.fantasticsource.dynamicstealth.config.server.interactions;
 import com.fantasticsource.dynamicstealth.server.event.attacks.AttackDefaults;
 import net.minecraftforge.common.config.Config;
 
-public class StealthAttackConfig
+public class NormalAttackConfig
 {
+    @Config.Name("Remove Invisibility On Hit")
+    @Config.Comment(
+            {
+                    "If set to true, when one living entity hits another living entity, they both lose invisibility",
+                    "",
+                    "This happens before any new effects are applied"
+            })
+    public boolean removeInvisibilityOnHit = true;
+
+    @Config.Name("Remove Blindness On Hit")
+    @Config.Comment(
+            {
+                    "If set to true, when one living entity hits another living entity, they both lose blindness",
+                    "",
+                    "This happens before any new effects are applied"
+            })
+    public boolean removeBlindnessOnHit = true;
+
     @Config.Name("Armor Penetration")
     @Config.Comment({"Whether stealth attacks bypass armor or not"})
     public boolean armorPenetration = false;
@@ -12,12 +30,12 @@ public class StealthAttackConfig
     @Config.Name("Damage Multiplier")
     @Config.Comment("Damage is multiplied by this when attacking from stealth")
     @Config.RangeDouble(min = 1)
-    public double damageMultiplier = 1.25;
+    public double damageMultiplier = 1;
 
     @Config.Name("Attacker Effects")
     @Config.Comment(
             {
-                    "Potion effects that are applied to the attacker when a stealth attack happens",
+                    "Potion effects that are applied to the attacker when an attack happens",
                     "",
                     "This applies strength 2 for 200 ticks (10 seconds):",
                     "strength.200.2",
@@ -31,7 +49,7 @@ public class StealthAttackConfig
     @Config.Name("Victim Effects")
     @Config.Comment(
             {
-                    "Potion effects that are applied to the victim when a stealth attack happens",
+                    "Potion effects that are applied to the victim when an attack happens",
                     "",
                     "This applies blindness for 100 ticks (5 seconds):",
                     "blindness.100"
@@ -56,5 +74,5 @@ public class StealthAttackConfig
                     "dye, false, 0, , blindness.20, true"
             })
     @Config.RequiresMcRestart
-    public String[] weaponSpecific = AttackDefaults.stealthAttackDefaults.toArray(new String[AttackDefaults.stealthAttackDefaults.size()]);
+    public String[] weaponSpecific = AttackDefaults.normalAttackDefaults.toArray(new String[AttackDefaults.normalAttackDefaults.size()]);
 }

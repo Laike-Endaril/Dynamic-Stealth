@@ -9,10 +9,10 @@ import com.fantasticsource.dynamicstealth.server.*;
 import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
 import com.fantasticsource.dynamicstealth.server.ai.edited.*;
 import com.fantasticsource.dynamicstealth.server.entitytracker.EntityTrackerEdit;
-import com.fantasticsource.dynamicstealth.server.event.AssassinationEvent;
-import com.fantasticsource.dynamicstealth.server.event.WeaponEntry;
-import com.fantasticsource.dynamicstealth.server.event.stealthattack.StealthAttackData;
-import com.fantasticsource.dynamicstealth.server.event.stealthattack.StealthAttackEvent;
+import com.fantasticsource.dynamicstealth.server.event.attacks.AssassinationEvent;
+import com.fantasticsource.dynamicstealth.server.event.attacks.AttackData;
+import com.fantasticsource.dynamicstealth.server.event.attacks.StealthAttackEvent;
+import com.fantasticsource.dynamicstealth.server.event.attacks.WeaponEntry;
 import com.fantasticsource.dynamicstealth.server.senses.EntitySensesEdit;
 import com.fantasticsource.dynamicstealth.server.senses.EntitySightData;
 import com.fantasticsource.dynamicstealth.server.senses.EntityTouchData;
@@ -302,7 +302,14 @@ public class DynamicStealth
                         //Target is not searching for *us*
                         if (!MinecraftForge.EVENT_BUS.post(new AssassinationEvent(killer, victim)))
                         {
-                            //TODO Apply stealth attack config options
+                            //Assassinations
+                            ItemStack itemStack = killer.getHeldItemMainhand();
+                            WeaponEntry weaponEntry = WeaponEntry.get(itemStack, WeaponEntry.TYPE_ASSASSINATION);
+
+                            for (PotionEffect potionEffect : weaponEntry.attackerEffects)
+                            {
+                                killer.addPotionEffect(new PotionEffect(potionEffect));
+                            }
                         }
                     }
                 }
@@ -340,26 +347,49 @@ public class DynamicStealth
                 victim.removePotionEffect(MobEffects.BLINDNESS);
             }
 
-            if (attacker.isEntityAlive() && !Sight.canSee(victim, attacker))
+            if (attacker.isEntityAlive())
             {
-                if (!MinecraftForge.EVENT_BUS.post(new StealthAttackEvent(victim, dmgSource, event.getAmount())))
+                //Normal attacks
+                ItemStack itemStack = attacker.getHeldItemMainhand();
+                WeaponEntry weaponEntry = WeaponEntry.get(itemStack, WeaponEntry.TYPE_NORMAL);
+
+                if (weaponEntry.armorPenetration) dmgSource.setDamageBypassesArmor();
+                event.setAmount((float) (event.getAmount() * weaponEntry.damageMultiplier));
+
+                for (PotionEffect potionEffect : weaponEntry.attackerEffects)
                 {
-                    ItemStack itemStack = attacker.getHeldItemMainhand();
-                    WeaponEntry weaponEntry = WeaponEntry.get(itemStack);
+                    attacker.addPotionEffect(new PotionEffect(potionEffect));
+                }
+                for (PotionEffect potionEffect : weaponEntry.victimEffects)
+                {
+                    victim.addPotionEffect(new PotionEffect(potionEffect));
+                }
 
-                    if (weaponEntry.armorPenetration) dmgSource.setDamageBypassesArmor();
-                    event.setAmount((float) (event.getAmount() * weaponEntry.damageMultiplier));
+                if (weaponEntry.consumeItem && !(attacker instanceof EntityPlayer && ((EntityPlayer) attacker).capabilities.isCreativeMode) && !itemStack.getItem().equals(Items.AIR)) itemStack.grow(-1);
 
-                    for (PotionEffect potionEffect : weaponEntry.attackerEffects)
+
+                //Stealth attacks
+                if (!Sight.canSee(victim, attacker))
+                {
+                    if (!MinecraftForge.EVENT_BUS.post(new StealthAttackEvent(victim, dmgSource, event.getAmount())))
                     {
-                        attacker.addPotionEffect(new PotionEffect(potionEffect));
-                    }
-                    for (PotionEffect potionEffect : weaponEntry.victimEffects)
-                    {
-                        victim.addPotionEffect(new PotionEffect(potionEffect));
-                    }
+                        itemStack = attacker.getHeldItemMainhand();
+                        weaponEntry = WeaponEntry.get(itemStack, WeaponEntry.TYPE_STEALTH);
 
-                    if (weaponEntry.consumeItem && !(attacker instanceof EntityPlayer && ((EntityPlayer) attacker).capabilities.isCreativeMode) && !itemStack.getItem().equals(Items.AIR)) itemStack.grow(-1);
+                        if (weaponEntry.armorPenetration) dmgSource.setDamageBypassesArmor();
+                        event.setAmount((float) (event.getAmount() * weaponEntry.damageMultiplier));
+
+                        for (PotionEffect potionEffect : weaponEntry.attackerEffects)
+                        {
+                            attacker.addPotionEffect(new PotionEffect(potionEffect));
+                        }
+                        for (PotionEffect potionEffect : weaponEntry.victimEffects)
+                        {
+                            victim.addPotionEffect(new PotionEffect(potionEffect));
+                        }
+
+                        if (weaponEntry.consumeItem && !(attacker instanceof EntityPlayer && ((EntityPlayer) attacker).capabilities.isCreativeMode) && !itemStack.getItem().equals(Items.AIR)) itemStack.grow(-1);
+                    }
                 }
             }
         }
@@ -670,6 +700,6 @@ public class DynamicStealth
             MinecraftForge.EVENT_BUS.register(CompatCNPC.class);
         }
 
-        StealthAttackData.init();
+        AttackData.init();
     }
 }

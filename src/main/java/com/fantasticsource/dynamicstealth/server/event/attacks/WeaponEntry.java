@@ -1,7 +1,6 @@
-package com.fantasticsource.dynamicstealth.server.event;
+package com.fantasticsource.dynamicstealth.server.event.attacks;
 
-import com.fantasticsource.dynamicstealth.server.event.stealthattack.StealthAttackData;
-import com.fantasticsource.dynamicstealth.server.event.stealthattack.StealthAttackDefaults;
+import com.fantasticsource.dynamicstealth.config.server.interactions.StealthAttackConfig;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -18,12 +17,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
+
 public class WeaponEntry
 {
-    public boolean armorPenetration = false;
-    public double damageMultiplier = 1;
-    public ArrayList<PotionEffect> attackerEffects = StealthAttackData.attackerEffects;
-    public ArrayList<PotionEffect> victimEffects = StealthAttackData.victimEffects;
+    public static final int TYPE_NORMAL = 0, TYPE_STEALTH = 1, TYPE_ASSASSINATION = 2;
+    public static StealthAttackConfig config = serverSettings.interactions.stealthAttack;
+
+    public boolean armorPenetration = config.armorPenetration;
+    public double damageMultiplier = config.damageMultiplier;
+    public ArrayList<PotionEffect> attackerEffects = AttackData.stealthAttackerEffects;
+    public ArrayList<PotionEffect> victimEffects = AttackData.stealthVictimEffects;
     public boolean consumeItem = false;
 
     public ItemStack itemStack = null;
@@ -33,26 +37,26 @@ public class WeaponEntry
     {
     }
 
-    public WeaponEntry(String configEntry)
+    public WeaponEntry(String configEntry, int type)
     {
         String[] tokens = configEntry.split(Pattern.quote(","));
         String token;
 
         if (tokens.length < 2)
         {
-            System.err.println("Not enough arguments for weapon-specific stealth attack entry: " + configEntry);
+            System.err.println("Not enough arguments for weapon entry: " + configEntry);
             return;
         }
-        if (tokens.length > 6)
+        if (((type == TYPE_NORMAL || type == TYPE_STEALTH) && tokens.length > 6) || (type == TYPE_ASSASSINATION && tokens.length > 2))
         {
-            System.err.println("Too many arguments for weapon-specific stealth attack entry: " + configEntry);
+            System.err.println("Too many arguments for weapon entry: " + configEntry);
             return;
         }
 
         String[] namePlusTags = tokens[0].trim().split(Pattern.quote(">"));
         if (namePlusTags.length > 2)
         {
-            System.err.println("Too many arguments for name/NBT pair in weapon-specific stealth attack entry: " + configEntry);
+            System.err.println("Too many arguments for name/NBT pair in weapon entry: " + configEntry);
             return;
         }
 
@@ -62,18 +66,40 @@ public class WeaponEntry
         if (token.equals("")) itemStack = new ItemStack(Items.AIR);
         else
         {
+            ResourceLocation resourceLocation;
+            int meta = 0;
+
             String[] innerTokens = token.split(Pattern.quote(":"));
-            if (innerTokens.length != 3)
+            if (innerTokens.length > 3)
             {
-                System.err.println("Invalid item name for weapon-specific stealth attack entry: " + token + ". This requires a full name, eg. minecraft:dye:0");
+                System.err.println("Bad item name: " + token);
                 return;
             }
+            if (innerTokens.length == 3)
+            {
+                resourceLocation = new ResourceLocation(innerTokens[0], innerTokens[1]);
+                meta = Integer.parseInt(innerTokens[2]);
+            }
+            else if (innerTokens.length == 1) resourceLocation = new ResourceLocation("minecraft", innerTokens[0]);
+            else
+            {
+                try
+                {
+                    meta = Integer.parseInt(innerTokens[1]);
+                    resourceLocation = new ResourceLocation("minecraft", innerTokens[0]);
+                }
+                catch (NumberFormatException e)
+                {
+                    meta = 0;
+                    resourceLocation = new ResourceLocation(innerTokens[0], innerTokens[1]);
+                }
+            }
 
-            ResourceLocation resourceLocation = new ResourceLocation(innerTokens[0], innerTokens[1]);
+
             Item item = ForgeRegistries.ITEMS.getValue(resourceLocation);
             if (item != null)
             {
-                itemStack = new ItemStack(item, 1, Integer.parseInt(innerTokens[2]));
+                itemStack = new ItemStack(item, 1, meta);
             }
             else
             {
@@ -84,7 +110,9 @@ public class WeaponEntry
 
         if (itemStack == null)
         {
-            if (!StealthAttackDefaults.weaponSpecific.contains(configEntry)) System.err.println("Item for weapon-specific stealth attack not found: " + token);
+            if (type == TYPE_NORMAL && !AttackDefaults.normalAttackDefaults.contains(configEntry)) System.err.println("Item for normal attack weapon entry not found: " + token);
+            if (type == TYPE_STEALTH && !AttackDefaults.stealthAttackDefaults.contains(configEntry)) System.err.println("Item for stealth attack weapon entry not found: " + token);
+            if (type == TYPE_ASSASSINATION && !AttackDefaults.assassinationDefaults.contains(configEntry)) System.err.println("Item for assassination weapon entry not found: " + token);
             return;
         }
 
@@ -101,7 +129,7 @@ public class WeaponEntry
                 String[] keyValue = tag.split(Pattern.quote("="));
                 if (keyValue.length > 2)
                 {
-                    System.err.println("Each NBT tag can only be set to one value!  Error in weapon-specific stealth attack entry: " + configEntry);
+                    System.err.println("Each NBT tag can only be set to one value!  Error in weapon entry: " + configEntry);
                     return;
                 }
 
@@ -113,7 +141,7 @@ public class WeaponEntry
 
         //Easy stuff...
         armorPenetration = Boolean.parseBoolean(tokens[1]);
-        damageMultiplier = Double.parseDouble(tokens[2]);
+        if (tokens.length > 2) damageMultiplier = Double.parseDouble(tokens[2]);
 
 
         //Potion effects
@@ -131,12 +159,17 @@ public class WeaponEntry
         if (tokens.length > 5) consumeItem = Boolean.parseBoolean(tokens[5].trim());
     }
 
-    public static WeaponEntry get(ItemStack itemStack)
+    public static WeaponEntry get(ItemStack itemStack, int type)
     {
         NBTTagCompound compound;
         boolean match;
 
-        for (Map.Entry<ItemStack, WeaponEntry> weaponMapping : StealthAttackData.weaponSpecific.entrySet())
+        LinkedHashMap<ItemStack, WeaponEntry> map = null;
+        if (type == TYPE_NORMAL) map = AttackData.normalWeaponSpecific;
+        else if (type == TYPE_STEALTH) map = AttackData.stealthWeaponSpecific;
+        else if (type == TYPE_ASSASSINATION) map = AttackData.assassinationWeaponSpecific;
+
+        for (Map.Entry<ItemStack, WeaponEntry> weaponMapping : map.entrySet())
         {
             WeaponEntry weaponEntry = weaponMapping.getValue();
             ItemStack item = weaponMapping.getKey();
