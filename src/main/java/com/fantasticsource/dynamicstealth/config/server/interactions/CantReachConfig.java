@@ -2,12 +2,12 @@ package com.fantasticsource.dynamicstealth.config.server.interactions;
 
 import net.minecraftforge.common.config.Config;
 
-public class DesperationConfig
+public class CantReachConfig
 {
     @Config.Name("Potion Effects")
     @Config.Comment(
             {
-                    "Potion effects to apply when something gets cornered and desperate",
+                    "Potion effects to apply when something can't reach its target",
                     "",
                     "This applies strength 2 for 200 ticks (10 seconds):",
                     "strength.200.2",
@@ -15,8 +15,5 @@ public class DesperationConfig
                     "This applies soul sight for 100 ticks (5 seconds):",
                     "dynamicstealth:soulsight.100"
             })
-    public String[] potionEffects =
-            {
-                    "strength.200.3"
-            };
+    public String[] potionEffects = {};
 }

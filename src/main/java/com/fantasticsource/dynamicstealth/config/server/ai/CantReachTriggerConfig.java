@@ -2,7 +2,7 @@ package com.fantasticsource.dynamicstealth.config.server.ai;
 
 import net.minecraftforge.common.config.Config;
 
-public class CantReachConfig
+public class CantReachTriggerConfig
 {
     @Config.Name("Combat Time")
     @Config.Comment("Deciding we can't reach the target requires at least this many ticks in combat")

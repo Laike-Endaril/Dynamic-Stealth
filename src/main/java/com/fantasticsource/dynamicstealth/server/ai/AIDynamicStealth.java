@@ -6,6 +6,7 @@ import com.fantasticsource.dynamicstealth.server.CombatTracker;
 import com.fantasticsource.dynamicstealth.server.WarningSystem;
 import com.fantasticsource.dynamicstealth.server.ai.edited.AITargetEdit;
 import com.fantasticsource.dynamicstealth.server.event.BasicEvent;
+import com.fantasticsource.dynamicstealth.server.event.EventData;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
@@ -19,6 +20,7 @@ import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.MinecraftForge;
@@ -163,16 +165,12 @@ public class AIDynamicStealth extends EntityAIBase
             if (AITargetEdit.isSuitableTarget(searcher, attackTarget))
             {
                 //Hopefully this always only means we've just noticed a new, valid target
-                if (!MinecraftForge.EVENT_BUS.post(new BasicEvent.TargetSeenEvent(searcher)))
-                {
-                    //TODO Apply target found config options
-
-                    Threat.set(searcher, attackTarget, serverSettings.threat.targetSpottedThreat);
-                    lastKnownPosition = attackTarget.getPosition();
-                    clearAIPath();
-                    WarningSystem.warn(searcher, lastKnownPosition);
-                    return false;
-                }
+                Threat.set(searcher, attackTarget, serverSettings.threat.targetSpottedThreat);
+                lastKnownPosition = attackTarget.getPosition();
+                clearAIPath();
+                WarningSystem.warn(searcher, lastKnownPosition);
+                MinecraftForge.EVENT_BUS.post(new BasicEvent.TargetSeenEvent(searcher));
+                return false;
             }
 
             //No suitable target, old or new, and threat is <= 0
@@ -194,16 +192,12 @@ public class AIDynamicStealth extends EntityAIBase
             if (AITargetEdit.isSuitableTarget(searcher, attackTarget))
             {
                 //Hopefully this always only means we've just noticed a new, valid target
-                if (!MinecraftForge.EVENT_BUS.post(new BasicEvent.TargetSeenEvent(searcher)))
-                {
-                    //TODO Apply target found config options
-
-                    Threat.set(searcher, attackTarget, serverSettings.threat.targetSpottedThreat);
-                    lastKnownPosition = attackTarget.getPosition();
-                    clearAIPath();
-                    WarningSystem.warn(searcher, lastKnownPosition);
-                    return false;
-                }
+                Threat.set(searcher, attackTarget, serverSettings.threat.targetSpottedThreat);
+                lastKnownPosition = attackTarget.getPosition();
+                clearAIPath();
+                WarningSystem.warn(searcher, lastKnownPosition);
+                MinecraftForge.EVENT_BUS.post(new BasicEvent.TargetSeenEvent(searcher));
+                return false;
             }
 
             //No suitable target, old or new, but threat is > 0
@@ -218,7 +212,11 @@ public class AIDynamicStealth extends EntityAIBase
         {
             if (!triedTriggerCantReach && !MinecraftForge.EVENT_BUS.post(new BasicEvent.CantReachEvent(searcher)))
             {
-                //TODO Apply can't reach config options
+                WarningSystem.warn(searcher, lastKnownPosition);
+                for (PotionEffect potionEffect : EventData.desperationPotions)
+                {
+                    searcher.addPotionEffect(new PotionEffect(potionEffect));
+                }
 
                 if (serverSettings.ai.cantReach.flee)
                 {
@@ -278,12 +276,12 @@ public class AIDynamicStealth extends EntityAIBase
         lastPos = null;
         timeAtPos = 0;
 
-        if (fleeReason == FLEE_NONE && !MinecraftForge.EVENT_BUS.post(new BasicEvent.SearchEvent(searcher)))
+        if (fleeReason == FLEE_NONE)
         {
-            //TODO apply search config options
-
             if (lastKnownPosition == null) mode(MODE_SPIN);
             else mode(MODE_FIND_PATH);
+
+            MinecraftForge.EVENT_BUS.post(new BasicEvent.SearchEvent(searcher));
         }
     }
 
@@ -334,15 +332,14 @@ public class AIDynamicStealth extends EntityAIBase
 
         //Last second mode changes
 
-        if (fleeReason != FLEE_NONE && mode != MODE_FLEE && !MinecraftForge.EVENT_BUS.post(new BasicEvent.FleeEvent(searcher, fleeReason)))
+        if (fleeReason != FLEE_NONE && mode != MODE_FLEE)
         {
-            //TODO Apply flee config options
-
             //Flee (do not use mode() method, to prevent accidentally using it from other places; fleeing should be started by setting "fleeing" to true)
             mode = MODE_FLEE;
             clearAIPath();
             fleeToPos = null;
             timeAtPos = 0;
+            MinecraftForge.EVENT_BUS.post(new BasicEvent.FleeEvent(searcher, fleeReason));
         }
 
 
@@ -495,7 +492,14 @@ public class AIDynamicStealth extends EntityAIBase
                     ICustomNpc cnpc = (ICustomNpc) NpcAPI.Instance().getIEntity(searcher);
                     MCTools.teleport(searcher, cnpc.getHomeX() + 0.5, cnpc.getHomeY() + 0.5, cnpc.getHomeZ() + 0.5, false, 0);
                 }
-                MinecraftForge.EVENT_BUS.post(new BasicEvent.CalmDownEvent(searcher, oldReason));
+
+                if (!MinecraftForge.EVENT_BUS.post(new BasicEvent.CalmDownEvent(searcher, oldReason)))
+                {
+                    for (PotionEffect potionEffect : EventData.calmDownPotions)
+                    {
+                        searcher.addPotionEffect(new PotionEffect(potionEffect));
+                    }
+                }
             }
             else
             {
@@ -503,7 +507,14 @@ public class AIDynamicStealth extends EntityAIBase
                 {
                     mode(MODE_NONE);
                     fleeIfYouShould(0);
-                    if (fleeReason == FLEE_NONE) MinecraftForge.EVENT_BUS.post(new BasicEvent.RallyEvent(searcher, oldReason));
+                    if (fleeReason == FLEE_NONE && !MinecraftForge.EVENT_BUS.post(new BasicEvent.RallyEvent(searcher, oldReason)))
+                    {
+                        WarningSystem.warn(searcher, lastKnownPosition);
+                        for (PotionEffect potionEffect : EventData.rallyPotions)
+                        {
+                            searcher.addPotionEffect(new PotionEffect(potionEffect));
+                        }
+                    }
                 }
 
                 oldReason = fleeReason;
@@ -511,7 +522,14 @@ public class AIDynamicStealth extends EntityAIBase
                 {
                     mode(MODE_NONE);
                     fleeIfYouShould(0);
-                    if (fleeReason == FLEE_NONE) MinecraftForge.EVENT_BUS.post(new BasicEvent.RallyEvent(searcher, oldReason));
+                    if (fleeReason == FLEE_NONE && !MinecraftForge.EVENT_BUS.post(new BasicEvent.RallyEvent(searcher, oldReason)))
+                    {
+                        WarningSystem.warn(searcher, lastKnownPosition);
+                        for (PotionEffect potionEffect : EventData.rallyPotions)
+                        {
+                            searcher.addPotionEffect(new PotionEffect(potionEffect));
+                        }
+                    }
                 }
             }
 
@@ -552,10 +570,15 @@ public class AIDynamicStealth extends EntityAIBase
                     else if (timeAtPos == 4) findShortRangeGoalPos();
                     else if (fleeReason == FLEE_HP && !MinecraftForge.EVENT_BUS.post(new BasicEvent.DesperationEvent(searcher)))
                     {
-                        //TODO Apply desperation config options
-
                         mode(MODE_NONE);
                         restart(lastKnownPosition);
+
+                        WarningSystem.warn(searcher, lastKnownPosition);
+                        for (PotionEffect potionEffect : EventData.desperationPotions)
+                        {
+                            searcher.addPotionEffect(new PotionEffect(potionEffect));
+                        }
+
                         return;
                     }
                     else timeAtPos = 0;

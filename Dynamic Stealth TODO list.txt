@@ -82,8 +82,10 @@ Apply stealth-based scent attributes
 
 STATUS EFFECTS =========================================================
 
-Wet: Triggers if you touch water.  If you are burning at any time for its duration, it removes burning and then removes itself
 Doom: Instant death if it is not removed before the countdown hits 0.  OP if not filtered carefully
+Voidwalker: Allows you to walk on / place blocks on the void at the bottom of the world, as if it were solid; mostly useful in the end
+
+Wet: Triggers if you touch water.  If you are burning at any time for its duration, it removes burning and then removes itself
 Frozen: Triggers if you touch ice while wet.  Removes wet and stops movement until you take damage once or the duration runs out.  If you start burning while frozen, frozen and burning are both removed.
 Burning: Triggers when set on fire, and sets you on fire when it is triggered.  Puts out the fire when it ends...basically just trying to link normal burning to a usable potion effect
 
@@ -91,9 +93,12 @@ Burning: Triggers when set on fire, and sets you on fire when it is triggered.  
 
 ITEMS ==================================================================
 
-Add water arrows (create a thin flowing water block on impact; for breaking torches and giving Wet status effect)
+Water potions...yes...for applying the wetness effect (for normal one, try to make it usable faster and play water splash sound)
+Fire potions, for burning effect
 
-Add torch arrows (yes I know some other mods already do, but I want them in mine)
+Water arrows (create a thin flowing water block on impact; for breaking torches and giving Wet status effect)
+Fire arrows (set entities on fire or create fire on impact)
+Torch arrows (yes I know some other mods already do, but I want them in mine)
 
 Add the ability to apply potions to weapons
 

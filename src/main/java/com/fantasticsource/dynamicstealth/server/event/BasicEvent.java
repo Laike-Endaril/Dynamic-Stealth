@@ -18,7 +18,7 @@ public class BasicEvent extends Event
         return livingBase;
     }
 
-    @Cancelable
+
     public static class SearchEvent extends BasicEvent
     {
         public SearchEvent(EntityLivingBase livingBase)
@@ -27,7 +27,6 @@ public class BasicEvent extends Event
         }
     }
 
-    @Cancelable
     public static class TargetSeenEvent extends BasicEvent
     {
         public TargetSeenEvent(EntityLivingBase livingBase)
@@ -36,7 +35,7 @@ public class BasicEvent extends Event
         }
     }
 
-    @Cancelable
+
     public static class FleeEvent extends BasicEvent
     {
         public FleeEvent(EntityLivingBase livingBase, int fleeReason)
@@ -45,6 +44,22 @@ public class BasicEvent extends Event
         }
     }
 
+    /**
+     * Cancelling this event only prevents any special effects; it does not make the entity continue to flee
+     */
+    @Cancelable
+    public static class CalmDownEvent extends BasicEvent
+    {
+        public CalmDownEvent(EntityLivingBase livingBase, int fleeReason)
+        {
+            super(livingBase);
+        }
+    }
+
+    /**
+     * Cancelling this event only prevents any special effects; it does not make the entity continue to flee
+     */
+    @Cancelable
     public static class RallyEvent extends BasicEvent
     {
         public RallyEvent(EntityLivingBase livingBase, int fleeReason)
@@ -66,14 +81,6 @@ public class BasicEvent extends Event
     public static class CantReachEvent extends BasicEvent
     {
         public CantReachEvent(EntityLivingBase livingBase)
-        {
-            super(livingBase);
-        }
-    }
-
-    public static class CalmDownEvent extends BasicEvent
-    {
-        public CalmDownEvent(EntityLivingBase livingBase, int fleeReason)
         {
             super(livingBase);
         }

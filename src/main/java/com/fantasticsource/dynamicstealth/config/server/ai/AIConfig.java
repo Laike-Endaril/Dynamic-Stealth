@@ -16,5 +16,5 @@ public class AIConfig
     public FleeConfig flee = new FleeConfig();
 
     @Config.Name("Can't Reach")
-    public CantReachConfig cantReach = new CantReachConfig();
+    public CantReachTriggerConfig cantReach = new CantReachTriggerConfig();
 }
