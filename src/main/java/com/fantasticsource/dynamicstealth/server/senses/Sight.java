@@ -82,17 +82,27 @@ public class Sight
 
     public static boolean canSee(EntityLivingBase searcher, Entity target)
     {
-        return visualStealthLevel(searcher, target) <= 1;
+        return canSee(searcher, target, true);
+    }
+
+    public static boolean canSee(EntityLivingBase searcher, Entity target, boolean useCache)
+    {
+        return visualStealthLevel(searcher, target, useCache) <= 1;
     }
 
     public static double visualStealthLevel(EntityLivingBase searcher, Entity target)
+    {
+        return visualStealthLevel(searcher, target, true);
+    }
+
+    public static double visualStealthLevel(EntityLivingBase searcher, Entity target, boolean useCache)
     {
         if (searcher == null || target == null || !searcher.world.isBlockLoaded(searcher.getPosition()) || !target.world.isBlockLoaded(target.getPosition())) return -777;
         if (searcher.world != target.world) return 777;
 
         Map<Entity, SeenData> map = recentlySeenMap.get(searcher);
 
-        if (map != null)
+        if (map != null && useCache)
         {
             SeenData data = map.get(target);
             if (data != null && data.lastUpdateTime == currentTick()) return data.lastStealthLevel;

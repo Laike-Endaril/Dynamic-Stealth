@@ -495,7 +495,7 @@ public class DynamicStealth
                     }
                 }
 
-                if (newThreatTarget && !Sight.canSee(livingTarget, livingBaseSource)) Threat.setTarget(livingTarget, null);
+                if (newThreatTarget && !Sight.canSee(livingTarget, livingBaseSource, false)) Threat.setTarget(livingTarget, null);
 
 
                 //Warn others

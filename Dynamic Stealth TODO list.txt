@@ -1,6 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-If you stealth attack eg. a wolf and it immediately starts fleeing, it will not set threat target to you
+Option to prevent wolves from teleporting
 
 Make stuck detection account for jumping by allowing for more play along y axis
 
