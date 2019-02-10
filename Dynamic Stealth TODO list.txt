@@ -1,5 +1,13 @@
 CURRENTLY WORKING ON ===================================================
 
+Improve behavior of owned entities such as doggy talents dogs
+
+Slimes and magma cubes do some really weird spinny stuff with both DS and CNPCs installed
+This was also noticed with doggy talents when they are set to threat bypass mode, so probably general issue with threat bypass mobs when running DS alongside certain other mods
+Quite possibly due to both DS and another mod both constantly setting path/look direction
+
+
+
 Make stuck detection account for jumping by allowing for more play along y axis
 
 Add new color for threat bypass
@@ -142,8 +150,6 @@ Make it so morphing into a creature using Morph mod acts as a disguise against t
 MOD COMPATIBILITY ======================================================
 
 Add bright mobs from mods to EntitySightDefaults.naturallyBrightEntities
-
-Slimes and magma cubes do some really weird spinny stuff with both DS and CNPCs installed
 
 CNPCs don't change opacity
 
