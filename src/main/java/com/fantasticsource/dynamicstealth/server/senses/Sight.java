@@ -4,12 +4,14 @@ import com.fantasticsource.dynamicstealth.config.server.senses.SensesConfig;
 import com.fantasticsource.dynamicstealth.config.server.senses.sight.SightConfig;
 import com.fantasticsource.dynamicstealth.server.Attributes;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.Speedometer;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -19,6 +21,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -402,7 +405,7 @@ public class Sight
 
 
         //Armor
-        double armorMultiplier = isLivingBase ? Math.max(0, 1 + sight.b_visibilityMultipliers.armorMultiplierCumulative * targetLivingBase.getTotalArmorValue()) : 1;
+        double armorMultiplier = !isLivingBase ? 1 : Math.max(0, 1 + sight.b_visibilityMultipliers.armorMultiplierCumulative * MathHelper.floor(MCTools.getAttribute(targetLivingBase, SharedMonsterAttributes.ARMOR, 0)));
 
 
         //Combine multipliers

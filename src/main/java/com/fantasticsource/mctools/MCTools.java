@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.*;
+import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.DamageSource;
@@ -17,6 +18,13 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class MCTools
 {
+    public static double getAttribute(EntityLivingBase entity, IAttribute attribute, double defaultVal)
+    {
+        //getEntityAttribute is incorrectly tagged as @Nonnull; it can and will return a null value sometimes, thus this helper
+        IAttributeInstance iAttributeInstance = entity.getEntityAttribute(attribute);
+        return iAttributeInstance == null ? defaultVal : iAttributeInstance.getAttributeValue();
+    }
+
     public static void teleport(EntityLivingBase entity, BlockPos pos, boolean doEvent, float fallDamage)
     {
         teleport(entity, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, doEvent, fallDamage);
@@ -80,9 +88,7 @@ public class MCTools
             }
         }
 
-        //getEntityAttribute is incorrectly tagged as @Nonnull; it can and will return a null value sometimes
-        IAttributeInstance damage = livingBase.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
-        return damage == null || damage.getAttributeValue() <= 0;
+        return MCTools.getAttribute(livingBase, SharedMonsterAttributes.ATTACK_DAMAGE, 0) <= 0;
     }
 
     public static void printTasks(EntityLiving living)

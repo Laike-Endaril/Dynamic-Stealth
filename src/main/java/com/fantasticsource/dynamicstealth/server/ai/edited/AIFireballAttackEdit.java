@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.mctools.MCTools;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -108,8 +109,8 @@ public class AIFireballAttackEdit extends EntityAIBase
         super.updateTask();
     }
 
-    private double getFollowDistance()
+    protected double getFollowDistance()
     {
-        return blaze.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).getAttributeValue();
+        return MCTools.getAttribute(blaze, SharedMonsterAttributes.FOLLOW_RANGE, 0);
     }
 }

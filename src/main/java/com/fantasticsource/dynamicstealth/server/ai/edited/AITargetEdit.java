@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth.server.ai.edited;
 
 import com.fantasticsource.dynamicstealth.server.senses.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -104,7 +105,7 @@ public abstract class AITargetEdit extends EntityAIBase
 
     protected double getFollowDistance()
     {
-        return attacker.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).getAttributeValue();
+        return MCTools.getAttribute(attacker, SharedMonsterAttributes.FOLLOW_RANGE, 0);
     }
 
     @Override

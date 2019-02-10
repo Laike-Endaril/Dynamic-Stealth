@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -127,7 +128,7 @@ public class AIGuardianAttackEdit extends EntityAIBase
             if (isElder) f += 2.0F;
 
             target.attackEntityFrom(DamageSource.causeIndirectMagicDamage(guardian, guardian), f);
-            target.attackEntityFrom(DamageSource.causeMobDamage(guardian), (float) guardian.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+            target.attackEntityFrom(DamageSource.causeMobDamage(guardian), (float) MCTools.getAttribute(guardian, SharedMonsterAttributes.ATTACK_DAMAGE, 0));
             guardian.setAttackTarget(null);
         }
     }
