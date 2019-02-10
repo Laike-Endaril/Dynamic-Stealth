@@ -1,9 +1,9 @@
 CURRENTLY WORKING ON ===================================================
 
-Improve behavior of owned entities such as doggy talents dogs
-Threat bypass may not be the best option, as the threat system allows them to track their targets during combat
-Instead, maybe just drop threat if owner or any owned sees target die
-Also, if not using threat bypass, prevent owned entities from entering flee mode due to being unable to reach
+Improve behavior of owned entities such as doggy talents dogs...
+...Make helper system allow entities to notify each other when they see a threat target die
+...make owned entities without a target drop threat
+...prevent owned entities from entering flee mode due to being unable to reach?
 
 
 
