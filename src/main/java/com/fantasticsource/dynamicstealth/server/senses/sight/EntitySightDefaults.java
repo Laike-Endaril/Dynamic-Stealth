@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth.server.senses;
+package com.fantasticsource.dynamicstealth.server.senses.sight;
 
 import java.util.ArrayList;
 

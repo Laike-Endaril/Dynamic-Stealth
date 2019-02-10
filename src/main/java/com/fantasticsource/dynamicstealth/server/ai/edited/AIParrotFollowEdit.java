@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
-import com.fantasticsource.dynamicstealth.server.senses.Sight;
+import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import com.google.common.base.Predicate;

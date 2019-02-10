@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth.server.senses;
+package com.fantasticsource.dynamicstealth.server.senses.sight;
 
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;

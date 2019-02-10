@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth.server.senses;
+package com.fantasticsource.dynamicstealth.server.senses.sight;
 
 import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.entity.EntityLivingBase;

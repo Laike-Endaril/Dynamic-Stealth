@@ -1,4 +1,4 @@
-package com.fantasticsource.dynamicstealth.server.senses;
+package com.fantasticsource.dynamicstealth.server.senses.sight;
 
 import com.fantasticsource.dynamicstealth.config.server.senses.SensesConfig;
 import com.fantasticsource.dynamicstealth.config.server.senses.sight.SightConfig;
@@ -32,7 +32,7 @@ import java.util.Map;
 
 import static com.fantasticsource.dynamicstealth.common.DynamicStealth.TRIG_TABLE;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
-import static com.fantasticsource.dynamicstealth.server.senses.EntitySightData.*;
+import static com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData.*;
 import static com.fantasticsource.mctools.ServerTickTimer.currentTick;
 
 public class Sight

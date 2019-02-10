@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.entitytracker;
 
-import com.fantasticsource.dynamicstealth.server.senses.Sight;
+import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.google.common.collect.Sets;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;

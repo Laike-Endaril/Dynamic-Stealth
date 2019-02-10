@@ -1,7 +1,7 @@
 package com.fantasticsource.dynamicstealth.common;
 
-import com.fantasticsource.dynamicstealth.server.senses.EntitySightData;
-import com.fantasticsource.dynamicstealth.server.senses.Sight;
+import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
+import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;

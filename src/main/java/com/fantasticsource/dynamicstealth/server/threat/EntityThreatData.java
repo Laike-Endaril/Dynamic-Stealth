@@ -112,8 +112,6 @@ public class EntityThreatData
     {
         if (serverSettings.threat.bypassThreatSystem || livingBase == null) return true;
 
-        if (livingBase instanceof IEntityOwnable && ((IEntityOwnable) livingBase).getOwner() != null) return true;
-
         for (Class<? extends Entity> clss : threatBypass)
         {
             if (livingBase.getClass() == clss) return true;

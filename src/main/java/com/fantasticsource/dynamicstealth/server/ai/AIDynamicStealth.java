@@ -3,7 +3,7 @@ package com.fantasticsource.dynamicstealth.server.ai;
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.server.CombatTracker;
-import com.fantasticsource.dynamicstealth.server.WarningSystem;
+import com.fantasticsource.dynamicstealth.server.senses.hearing.Communication;
 import com.fantasticsource.dynamicstealth.server.ai.edited.AITargetEdit;
 import com.fantasticsource.dynamicstealth.server.event.BasicEvent;
 import com.fantasticsource.dynamicstealth.server.event.EventData;
@@ -168,7 +168,7 @@ public class AIDynamicStealth extends EntityAIBase
                 Threat.set(searcher, attackTarget, serverSettings.threat.targetSpottedThreat);
                 lastKnownPosition = attackTarget.getPosition();
                 clearAIPath();
-                WarningSystem.warn(searcher, lastKnownPosition);
+                Communication.warn(searcher, lastKnownPosition);
                 MinecraftForge.EVENT_BUS.post(new BasicEvent.TargetSeenEvent(searcher));
                 return false;
             }
@@ -195,7 +195,7 @@ public class AIDynamicStealth extends EntityAIBase
                 Threat.set(searcher, attackTarget, serverSettings.threat.targetSpottedThreat);
                 lastKnownPosition = attackTarget.getPosition();
                 clearAIPath();
-                WarningSystem.warn(searcher, lastKnownPosition);
+                Communication.warn(searcher, lastKnownPosition);
                 MinecraftForge.EVENT_BUS.post(new BasicEvent.TargetSeenEvent(searcher));
                 return false;
             }
@@ -212,7 +212,7 @@ public class AIDynamicStealth extends EntityAIBase
         {
             if (!triedTriggerCantReach && !MinecraftForge.EVENT_BUS.post(new BasicEvent.CantReachEvent(searcher)))
             {
-                WarningSystem.warn(searcher, lastKnownPosition);
+                Communication.warn(searcher, lastKnownPosition);
                 for (PotionEffect potionEffect : EventData.desperationPotions)
                 {
                     searcher.addPotionEffect(new PotionEffect(potionEffect));
@@ -509,7 +509,7 @@ public class AIDynamicStealth extends EntityAIBase
                     fleeIfYouShould(0);
                     if (fleeReason == FLEE_NONE && !MinecraftForge.EVENT_BUS.post(new BasicEvent.RallyEvent(searcher, oldReason)))
                     {
-                        WarningSystem.warn(searcher, lastKnownPosition);
+                        Communication.warn(searcher, lastKnownPosition);
                         for (PotionEffect potionEffect : EventData.rallyPotions)
                         {
                             searcher.addPotionEffect(new PotionEffect(potionEffect));
@@ -524,7 +524,7 @@ public class AIDynamicStealth extends EntityAIBase
                     fleeIfYouShould(0);
                     if (fleeReason == FLEE_NONE && !MinecraftForge.EVENT_BUS.post(new BasicEvent.RallyEvent(searcher, oldReason)))
                     {
-                        WarningSystem.warn(searcher, lastKnownPosition);
+                        Communication.warn(searcher, lastKnownPosition);
                         for (PotionEffect potionEffect : EventData.rallyPotions)
                         {
                             searcher.addPotionEffect(new PotionEffect(potionEffect));
@@ -573,7 +573,7 @@ public class AIDynamicStealth extends EntityAIBase
                         mode(MODE_NONE);
                         restart(lastKnownPosition);
 
-                        WarningSystem.warn(searcher, lastKnownPosition);
+                        Communication.warn(searcher, lastKnownPosition);
                         for (PotionEffect potionEffect : EventData.desperationPotions)
                         {
                             searcher.addPotionEffect(new PotionEffect(potionEffect));

@@ -1,6 +1,7 @@
-package com.fantasticsource.dynamicstealth.server.senses;
+package com.fantasticsource.dynamicstealth.server.senses.hearing;
 
 import com.fantasticsource.dynamicstealth.server.Attributes;
+import com.fantasticsource.dynamicstealth.server.senses.sight.LOS;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.Vec3d;
 

@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.senses;
 
+import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;

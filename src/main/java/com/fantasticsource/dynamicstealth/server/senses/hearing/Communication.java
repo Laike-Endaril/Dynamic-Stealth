@@ -1,7 +1,7 @@
-package com.fantasticsource.dynamicstealth.server;
+package com.fantasticsource.dynamicstealth.server.senses.hearing;
 
+import com.fantasticsource.dynamicstealth.server.HelperSystem;
 import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
-import com.fantasticsource.dynamicstealth.server.senses.EntityHearingData;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
@@ -21,7 +21,7 @@ import java.util.Map;
 
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 
-public class WarningSystem
+public class Communication
 {
     private static LinkedHashMap<EntityLivingBase, Pair<World, BlockPos>> warners = new LinkedHashMap<>();
 
@@ -34,7 +34,7 @@ public class WarningSystem
     @SubscribeEvent
     public static void update(TickEvent.ServerTickEvent event)
     {
-        warners.entrySet().removeIf(WarningSystem::processAndRemove);
+        warners.entrySet().removeIf(Communication::processAndRemove);
     }
 
     private static boolean processAndRemove(Map.Entry<EntityLivingBase, Pair<World, BlockPos>> entry)

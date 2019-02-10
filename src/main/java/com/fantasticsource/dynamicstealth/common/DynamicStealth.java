@@ -14,9 +14,10 @@ import com.fantasticsource.dynamicstealth.server.event.attacks.AttackData;
 import com.fantasticsource.dynamicstealth.server.event.attacks.StealthAttackEvent;
 import com.fantasticsource.dynamicstealth.server.event.attacks.WeaponEntry;
 import com.fantasticsource.dynamicstealth.server.senses.EntitySensesEdit;
-import com.fantasticsource.dynamicstealth.server.senses.EntitySightData;
+import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
 import com.fantasticsource.dynamicstealth.server.senses.EntityTouchData;
-import com.fantasticsource.dynamicstealth.server.senses.Sight;
+import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
+import com.fantasticsource.dynamicstealth.server.senses.hearing.Communication;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
@@ -106,7 +107,7 @@ public class DynamicStealth
         MinecraftForge.EVENT_BUS.register(Network.class);
         MinecraftForge.EVENT_BUS.register(Threat.class);
         MinecraftForge.EVENT_BUS.register(Sight.class);
-        MinecraftForge.EVENT_BUS.register(WarningSystem.class);
+        MinecraftForge.EVENT_BUS.register(Communication.class);
         MinecraftForge.EVENT_BUS.register(Potions.class);
 
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
@@ -276,7 +277,7 @@ public class DynamicStealth
                                 dangerPos = victim.getPosition();
                             }
 
-                            WarningSystem.warn(witness, dangerPos);
+                            Communication.warn(witness, dangerPos);
                             if (witness instanceof EntityLiving)
                             {
                                 AIDynamicStealth stealthAI = AIDynamicStealth.getStealthAI((EntityLiving) witness);
@@ -503,7 +504,7 @@ public class DynamicStealth
                 BlockPos warnPos = null;
                 if (stealthAI != null) warnPos = stealthAI.lastKnownPosition;
                 if (warnPos == null) warnPos = livingTarget.getPosition();
-                WarningSystem.warn(livingTarget, warnPos);
+                Communication.warn(livingTarget, warnPos);
             }
         }
     }
