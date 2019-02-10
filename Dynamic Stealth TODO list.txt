@@ -133,6 +133,12 @@ Possibly change music using ActualMusic when going into battle, etc
 
 
 
+CROSS-MOD FEATURES =====================================================
+
+Make it so morphing into a creature using Morph mod acts as a disguise against that mob type
+
+
+
 MOD COMPATIBILITY ======================================================
 
 Add bright mobs from mods to EntitySightDefaults.naturallyBrightEntities
