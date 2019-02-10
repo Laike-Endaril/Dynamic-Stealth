@@ -82,6 +82,10 @@ STATUS EFFECTS =========================================================
 
 Doom: Instant death if it is not removed before the countdown hits 0.  OP if not filtered carefully
 Voidwalker: Allows you to walk on / place blocks on the void at the bottom of the world, as if it were solid; mostly useful in the end
+Silenced: Cannot warn others
+Deafened: Cannot hear
+Fear: Makes them flee
+Courage: Applies rally effect if they were fleeing; grants immunity to fleeing for the duration
 
 Wet: Triggers if you touch water.  If you are burning at any time for its duration, it removes burning and then removes itself
 Frozen: Triggers if you touch ice while wet.  Removes wet and stops movement until you take damage once or the duration runs out.  If you start burning while frozen, frozen and burning are both removed.
