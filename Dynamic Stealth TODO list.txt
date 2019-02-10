@@ -2,8 +2,6 @@ CURRENTLY WORKING ON ===================================================
 
 If you stealth attack eg. a wolf and it immediately starts fleeing, it will not set threat target to you
 
-Add config options which alter non-attack events after they trigger
-
 Make stuck detection account for jumping by allowing for more play along y axis
 
 Add new color for threat bypass
