@@ -16,7 +16,7 @@ import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.ser
 
 public class HelperSystem
 {
-    public static boolean shouldHelp(EntityLivingBase helper, EntityLivingBase troubledOne, boolean checkWorldMatch, double maxDistSquared)
+    public static boolean shouldAcknowledge(EntityLivingBase helper, EntityLivingBase troubledOne, boolean checkWorldMatch, double maxDistSquared)
     {
         if (troubledOne == null || helper == null) return false;
         if (Threat.getTarget(helper) == troubledOne) return false;

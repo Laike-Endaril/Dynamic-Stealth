@@ -258,7 +258,7 @@ public class DynamicStealth
                 {
                     witness = (EntityLivingBase) entity;
 
-                    if (HelperSystem.shouldHelp(witness, victim, true, EntitySightData.distanceFar(witness)))
+                    if (HelperSystem.shouldAcknowledge(witness, victim, true, EntitySightData.distanceFar(witness)))
                     {
                         if (Sight.canSee(witness, victim))
                         {

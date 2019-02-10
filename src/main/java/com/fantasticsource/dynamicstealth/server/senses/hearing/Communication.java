@@ -40,7 +40,7 @@ public class Communication
                 {
                     EntityLivingBase entityLivingBase = (EntityLivingBase) entity;
 
-                    if (HelperSystem.shouldHelp(entityLivingBase, livingNotifier, true, Math.pow(serverSettings.senses.hearing.notificationRange * EntityHearingData.hearingRange(entityLivingBase, livingNotifier.getPositionVector().add(new Vec3d(0, livingNotifier.getEyeHeight(), 0))), 2)))
+                    if (HelperSystem.shouldAcknowledge(entityLivingBase, livingNotifier, true, Math.pow(serverSettings.senses.hearing.notificationRange * EntityHearingData.hearingRange(entityLivingBase, livingNotifier.getPositionVector().add(new Vec3d(0, livingNotifier.getEyeHeight(), 0))), 2)))
                     {
                         Threat.ThreatData data = Threat.get(entityLivingBase);
                         if (data.target == dead) Threat.setTarget(entityLivingBase, null);
@@ -88,7 +88,7 @@ public class Communication
             if (!EntityThreatData.bypassesThreat(livingHelper))
             {
                 Threat.ThreatData data = Threat.get(livingHelper);
-                if (data.target == null && HelperSystem.shouldHelp(livingHelper, warner, true, Math.pow(serverSettings.senses.hearing.warningRange * EntityHearingData.hearingRange(livingHelper, warner.getPositionVector().add(new Vec3d(0, warner.getEyeHeight(), 0))), 2)))
+                if (data.target == null && HelperSystem.shouldAcknowledge(livingHelper, warner, true, Math.pow(serverSettings.senses.hearing.warningRange * EntityHearingData.hearingRange(livingHelper, warner.getPositionVector().add(new Vec3d(0, warner.getEyeHeight(), 0))), 2)))
                 {
                     int distance = (int) warner.getDistance(helper);
 
