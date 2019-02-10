@@ -258,7 +258,13 @@ public class DynamicStealth
                 {
                     witness = (EntityLivingBase) entity;
 
-                    if (HelperSystem.shouldAcknowledge(witness, victim, true, EntitySightData.distanceFar(witness)))
+                    Threat.ThreatData data = Threat.get(witness);
+                    if (data.target == victim)
+                    {
+                        data.target = null;
+                        Communication.notifyDead(witness, victim);
+                    }
+                    else if (HelperSystem.shouldAcknowledge(witness, victim, true, EntitySightData.distanceFar(witness)))
                     {
                         if (Sight.canSee(witness, victim))
                         {
@@ -320,11 +326,6 @@ public class DynamicStealth
                 }
             }
         }
-
-
-        //Remove from threat data
-        Threat.removeTargetFromAll(victim);
-        if (victim instanceof EntityLiving) Threat.remove(victim);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)

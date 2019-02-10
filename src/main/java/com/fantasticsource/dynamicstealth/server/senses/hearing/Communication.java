@@ -43,7 +43,7 @@ public class Communication
                     if (HelperSystem.shouldAcknowledge(entityLivingBase, livingNotifier, true, Math.pow(serverSettings.senses.hearing.notificationRange * EntityHearingData.hearingRange(entityLivingBase, livingNotifier.getPositionVector().add(new Vec3d(0, livingNotifier.getEyeHeight(), 0))), 2)))
                     {
                         Threat.ThreatData data = Threat.get(entityLivingBase);
-                        if (data.target == dead) Threat.setTarget(entityLivingBase, null);
+                        if (data.target == dead) data.target = null;
                     }
                 }
             }

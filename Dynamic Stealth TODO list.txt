@@ -1,7 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
 Improve behavior of owned entities such as doggy talents dogs...
-...Make helper system allow entities to notify each other when they see a threat target die
 ...make owned entities without a target drop threat
 ...prevent owned entities from entering flee mode due to being unable to reach?
 
