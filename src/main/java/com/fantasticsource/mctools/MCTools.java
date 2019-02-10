@@ -91,7 +91,7 @@ public class MCTools
         return MCTools.getAttribute(livingBase, SharedMonsterAttributes.ATTACK_DAMAGE, 0) <= 0;
     }
 
-    public static void printTasks(EntityLiving living)
+    public static void printAITasks(EntityLiving living)
     {
         ExplicitPriorityQueue<EntityAIBase> queue = new ExplicitPriorityQueue<>();
         EntityAIBase ai;

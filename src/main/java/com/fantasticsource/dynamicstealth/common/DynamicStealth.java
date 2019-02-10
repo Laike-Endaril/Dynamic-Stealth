@@ -70,8 +70,9 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
+import noppes.npcs.api.NpcAPI;
+import noppes.npcs.api.entity.ICustomNpc;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -541,16 +542,20 @@ public class DynamicStealth
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void entityJoin(EntityJoinWorldEvent event) throws Exception
+    public static void entityJoin(EntityJoinWorldEvent event)
     {
         Entity entity = event.getEntity();
         if (entity instanceof EntityLivingBase && !MCTools.isClient(entity.world))
         {
-            if (entity instanceof EntityLiving) entityJoinWorldInit((EntityLiving) entity);
+            if (entity instanceof EntityLiving)
+            {
+                EntityLiving living = (EntityLiving) entity;
+                if (!Compat.customnpcs || !(NpcAPI.Instance().getIEntity(living) instanceof ICustomNpc)) livingJoinWorld(living);
+            }
         }
     }
 
-    public static void entityJoinWorldInit(EntityLiving living) throws Exception
+    public static void livingJoinWorld(EntityLiving living)
     {
         //Set the new senses handler for all living entities (not including players)
         try
@@ -563,19 +568,19 @@ public class DynamicStealth
                 abstractSkeletonAIArrowAttackField.set(living, new AIAttackRangedBowEdit<AbstractSkeleton>((EntityAIAttackRangedBow) abstractSkeletonAIArrowAttackField.get(living)));
                 abstractSkeletonAIAttackOnCollideField.set(living, new AIAttackMeleeEdit((EntityAIAttackMelee) abstractSkeletonAIAttackOnCollideField.get(living)));
             }
+
+            //Entity AI task replacements
+            replaceTasks(living.tasks, living);
+            replaceTasks(living.targetTasks, living);
+
+            //Entity AI task additions
+            if (!EntityThreatData.bypassesThreat(living)) addTasks(living.targetTasks, living.tasks, living);
         }
-        catch (ReflectionHelper.UnableToFindFieldException | ReflectionHelper.UnableToAccessFieldException e)
+        catch (Exception e)
         {
             e.printStackTrace();
             FMLCommonHandler.instance().exitJava(137, false);
         }
-
-        //Entity AI task replacements
-        replaceTasks(living.tasks, living);
-        replaceTasks(living.targetTasks, living);
-
-        //Entity AI task additions
-        if (!EntityThreatData.bypassesThreat(living)) addTasks(living.targetTasks, living.tasks, living);
     }
 
     private static void replaceTasks(EntityAITasks tasks, EntityLiving living) throws Exception
