@@ -1,10 +1,10 @@
 CURRENTLY WORKING ON ===================================================
 
-Option to prevent wolves from teleporting
-
 Make stuck detection account for jumping by allowing for more play along y axis
 
 Add new color for threat bypass
+
+Option to prevent wolves from teleporting
 
 Change stealth calcs; try to prevent rapid blinking in and out
 
