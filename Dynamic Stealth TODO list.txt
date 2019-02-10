@@ -1,6 +1,9 @@
 CURRENTLY WORKING ON ===================================================
 
 Improve behavior of owned entities such as doggy talents dogs
+Threat bypass may not be the best option, as the threat system allows them to track their targets during combat
+Instead, maybe just drop threat if owner or any owned sees target die
+Also, if not using threat bypass, prevent owned entities from entering flee mode due to being unable to reach
 
 Slimes and magma cubes do some really weird spinny stuff with both DS and CNPCs installed
 This was also noticed with doggy talents when they are set to threat bypass mode, so probably general issue with threat bypass mobs when running DS alongside certain other mods

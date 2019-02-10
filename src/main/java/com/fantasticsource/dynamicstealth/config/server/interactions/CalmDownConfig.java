@@ -23,8 +23,5 @@ public class CalmDownConfig
                     "This applies soul sight for 100 ticks (5 seconds):",
                     "dynamicstealth:soulsight.100"
             })
-    public String[] potionEffects =
-            {
-                    "regeneration.400"
-            };
+    public String[] potionEffects = {};
 }

@@ -3,6 +3,7 @@ package com.fantasticsource.dynamicstealth.server.threat;
 import com.fantasticsource.mctools.MCTools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityEntry;
@@ -110,6 +111,8 @@ public class EntityThreatData
     public static boolean bypassesThreat(EntityLivingBase livingBase)
     {
         if (serverSettings.threat.bypassThreatSystem || livingBase == null) return true;
+
+        if (livingBase instanceof IEntityOwnable && ((IEntityOwnable) livingBase).getOwner() != null) return true;
 
         for (Class<? extends Entity> clss : threatBypass)
         {
