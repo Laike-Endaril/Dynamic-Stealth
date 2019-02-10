@@ -26,6 +26,32 @@ public class Communication
     private static LinkedHashMap<EntityLivingBase, Pair<World, BlockPos>> warners = new LinkedHashMap<>();
 
 
+    //Notify others of target death
+    public static void notifyDead(EntityLivingBase notifier, EntityLivingBase dead)
+    {
+        if (notifier instanceof EntityLiving && notifier.world == dead.world && notifier.isEntityAlive())
+        {
+            EntityLiving livingNotifier = (EntityLiving) notifier;
+            World world = notifier.world;
+
+            for (Entity entity : world.loadedEntityList.toArray(new Entity[world.loadedEntityList.size()]))
+            {
+                if (entity instanceof EntityLivingBase)
+                {
+                    EntityLivingBase entityLivingBase = (EntityLivingBase) entity;
+
+                    if (HelperSystem.shouldHelp(entityLivingBase, livingNotifier, true, Math.pow(serverSettings.senses.hearing.notificationRange * EntityHearingData.hearingRange(entityLivingBase, livingNotifier.getPositionVector().add(new Vec3d(0, livingNotifier.getEyeHeight(), 0))), 2)))
+                    {
+                        Threat.ThreatData data = Threat.get(entityLivingBase);
+                        if (data.target == dead) Threat.setTarget(entityLivingBase, null);
+                    }
+                }
+            }
+        }
+    }
+
+
+    //Warn others of threat
     public static void warn(EntityLivingBase livingBase, BlockPos blockPos)
     {
         warners.put(livingBase, new Pair<>(livingBase.world, blockPos));
