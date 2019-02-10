@@ -3,7 +3,6 @@ package com.fantasticsource.dynamicstealth.server.threat;
 import com.fantasticsource.mctools.MCTools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityEntry;
