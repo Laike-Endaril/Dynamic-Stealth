@@ -431,7 +431,8 @@ public class DynamicStealth
                 }
 
 
-                //Warn others
+                //Warn others (for both attacker and target)
+                Communication.warn(attacker, target, target.getPosition(), true);
                 Communication.warn(target, attacker, perceivedPos, canSee);
 
 
