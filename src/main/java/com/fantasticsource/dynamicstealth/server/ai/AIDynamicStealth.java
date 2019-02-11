@@ -604,8 +604,12 @@ public class AIDynamicStealth extends EntityAIBase
                 //Set path
                 if (fleeToPos != oldFleePos || path == null)
                 {
-                    path = navigator.getPathToPos(fleeToPos);
-                    navigator.setPath(path, getFleeSpeed(speed));
+                    if (fleeToPos == null) clearAIPath();
+                    else
+                    {
+                        path = navigator.getPathToPos(fleeToPos);
+                        navigator.setPath(path, getFleeSpeed(speed));
+                    }
                 }
                 else if (navigator.getPath() != path) navigator.setPath(path, getFleeSpeed(speed));
             }
