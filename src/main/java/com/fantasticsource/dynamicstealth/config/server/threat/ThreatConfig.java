@@ -54,12 +54,12 @@ public class ThreatConfig
     @Config.Name("Unseen Target Degredation Rate")
     @Config.Comment({"Every time an entity updates and their target's position is unknown, this is subtracted from their threat"})
     @Config.RangeInt(min = 1)
-    public int unseenTargetDegredationRate = 5;
+    public int unseenTargetDegredationRate = 1;
 
     @Config.Name("Owned Can't Reach Degredation Rate")
     @Config.Comment({"Every time an owned entity updates and can't reach their target, this is subtracted from their threat"})
     @Config.RangeInt(min = 1)
-    public int ownedCantReachDegredationRate = 1;
+    public int ownedCantReachDegredationRate = 5;
 
     @Config.Name("Entity-Specific Settings (Advanced)")
     public SpecificThreatConfig y_entityOverrides = new SpecificThreatConfig();
