@@ -4,10 +4,7 @@ import com.fantasticsource.dynamicstealth.server.ai.NPEAttackTargetTaskHolder;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.TrigLookupTable;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -21,6 +18,17 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class MCTools
 {
+    public static boolean isOwned(Entity entity)
+    {
+        return getOwner(entity) != null;
+    }
+
+    public static Entity getOwner(Entity entity)
+    {
+        if (!(entity instanceof IEntityOwnable)) return null;
+        return ((IEntityOwnable) entity).getOwner();
+    }
+
     public static double getYaw(Entity fromEntity, Entity toEntity, TrigLookupTable trigTable)
     {
         if (toEntity == null) return fromEntity.getRotationYawHead();

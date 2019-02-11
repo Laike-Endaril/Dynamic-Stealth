@@ -39,11 +39,13 @@ public class Communication
             {
                 if (entity instanceof EntityLivingBase)
                 {
-                    EntityLivingBase entityLivingBase = (EntityLivingBase) entity;
+                    EntityLivingBase listener = (EntityLivingBase) entity;
 
-                    if (Threat.getTarget(entityLivingBase) == dead && isAlly(entityLivingBase, livingNotifier) && canHear(entityLivingBase, livingNotifier, serverSettings.senses.hearing.notificationRange))
+                    if (Threat.getTarget(listener) == dead && isAlly(listener, livingNotifier) && canHear(listener, livingNotifier, serverSettings.senses.hearing.notificationRange))
                     {
-                        Threat.clearTarget(entityLivingBase);
+                        if (MCTools.isOwned(listener)) Threat.set(listener, null, 0);
+                        else Threat.clearTarget(listener);
+                        Communication.notifyDead(listener, dead);
                     }
                 }
             }

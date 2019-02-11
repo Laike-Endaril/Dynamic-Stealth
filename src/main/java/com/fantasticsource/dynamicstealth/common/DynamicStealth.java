@@ -262,7 +262,8 @@ public class DynamicStealth
                     {
                         if (Sight.canSee(witness, victim))
                         {
-                            Threat.clearTarget(witness);
+                            if (MCTools.isOwned(witness)) Threat.set(witness, null, 0);
+                            else Threat.clearTarget(witness);
                             Communication.notifyDead(witness, victim);
                         }
                     }

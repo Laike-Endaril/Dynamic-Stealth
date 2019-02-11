@@ -1,7 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
 Improve behavior of owned entities such as wolves and doggy talents dogs...
-...make owned entities without a target drop threat
 ...prevent owned entities from entering flee mode due to being unable to reach?
 
 
