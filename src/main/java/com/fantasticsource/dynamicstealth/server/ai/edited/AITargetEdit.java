@@ -38,6 +38,20 @@ public abstract class AITargetEdit extends EntityAIBase
         nearbyOnly = (boolean) nearbyOnlyField.get(oldAI);
     }
 
+    private static void initReflections()
+    {
+        try
+        {
+            nearbyOnlyField = ReflectionTool.getField(EntityAITarget.class, "field_75303_a", "nearbyOnly");
+            taskOwnerField = ReflectionTool.getField(EntityAITarget.class, "field_75299_d", "taskOwner");
+        }
+        catch (NoSuchFieldException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(128, false);
+        }
+    }
+
     public static boolean isSuitableTarget(EntityLiving attacker, @Nullable EntityLivingBase target)
     {
         if (target == null || target == attacker || !target.isEntityAlive() || !attacker.canAttackClass(target.getClass()) || attacker.isOnSameTeam(target))
@@ -70,18 +84,11 @@ public abstract class AITargetEdit extends EntityAIBase
         return Sight.canSee(attacker, target);
     }
 
-    private static void initReflections()
+    protected boolean isSuitableTarget(@Nullable EntityLivingBase target)
     {
-        try
-        {
-            nearbyOnlyField = ReflectionTool.getField(EntityAITarget.class, "field_75303_a", "nearbyOnly");
-            taskOwnerField = ReflectionTool.getField(EntityAITarget.class, "field_75299_d", "taskOwner");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(128, false);
-        }
+        if (target == null || (nearbyOnly && !canEasilyReach(target))) return false;
+
+        return isSuitableTarget(attacker, target) && attacker.isWithinHomeDistanceFromPosition(new BlockPos(target));
     }
 
     @Override
@@ -113,13 +120,6 @@ public abstract class AITargetEdit extends EntityAIBase
     {
         attacker.setAttackTarget(null);
         target = null;
-    }
-
-    protected boolean isSuitableTarget(@Nullable EntityLivingBase target)
-    {
-        if (target == null || (nearbyOnly && !canEasilyReach(target))) return false;
-
-        return isSuitableTarget(attacker, target) && attacker.isWithinHomeDistanceFromPosition(new BlockPos(target));
     }
 
     private boolean canEasilyReach(EntityLivingBase target)

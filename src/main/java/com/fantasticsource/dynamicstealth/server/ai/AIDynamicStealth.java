@@ -214,7 +214,12 @@ public class AIDynamicStealth extends EntityAIBase
 
         if (!canReachTarget())
         {
-            if (MCTools.isOwned(searcher)) Threat.setThreat(searcher, Threat.getThreat(searcher) - serverSettings.threat.ownedCantReachDegredationRate);
+            if (MCTools.isOwned(searcher))
+            {
+                threat = Threat.getThreat(searcher) - serverSettings.threat.ownedCantReachDegredationRate;
+                Threat.setThreat(searcher, threat);
+                if (threat <= 0) clearAIPath();
+            }
             else
             {
                 if (!triedTriggerCantReach && !MinecraftForge.EVENT_BUS.post(new BasicEvent.CantReachEvent(searcher)))

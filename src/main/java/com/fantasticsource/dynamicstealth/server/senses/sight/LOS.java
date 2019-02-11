@@ -17,7 +17,7 @@ public class LOS
     //Fixing this so it doesn't return null when going through diagonal walls in the +X direction (the original version of this in World.java is the reason zombies can hit you through diagonal walls in vanilla)
     //The current version of this should only ever be used as a boolean return (not to return the last block or w/e) because it reverses the vector direction in half of the cases
     //Yes I'm lazy, I know
-    public static boolean rayTraceBlocks(World world, Vec3d vec, Vec3d vecEnd, boolean ignoreBlockWithoutBoundingBox)
+    public static boolean rayTraceBlocks(World world, Vec3d vec, Vec3d vecEnd, boolean collideOnAllSolids)
     {
         if (vec.x < vecEnd.x)
         {
@@ -40,7 +40,7 @@ public class LOS
 
 
         IBlockState blockState = world.getBlockState(blockPos);
-        if (!canSeeThrough(blockState) && (!ignoreBlockWithoutBoundingBox || blockState.getCollisionBoundingBox(world, blockPos) != Block.NULL_AABB))
+        if ((collideOnAllSolids || !canSeeThrough(blockState)) && blockState.getCollisionBoundingBox(world, blockPos) != Block.NULL_AABB)
         {
             if (blockState.collisionRayTrace(world, blockPos, vec, vecEnd) != null) return false;
         }
@@ -113,7 +113,7 @@ public class LOS
             if (!world.isBlockLoaded(blockPos)) return false;
 
             blockState = world.getBlockState(blockPos);
-            if (!canSeeThrough(blockState) && (!ignoreBlockWithoutBoundingBox || blockState.getCollisionBoundingBox(world, blockPos) != Block.NULL_AABB))
+            if ((collideOnAllSolids || !canSeeThrough(blockState)) && blockState.getCollisionBoundingBox(world, blockPos) != Block.NULL_AABB)
             {
                 if (blockState.collisionRayTrace(world, blockPos, vec, vecEnd) != null) return false;
             }
