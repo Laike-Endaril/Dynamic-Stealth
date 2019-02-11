@@ -1,6 +1,5 @@
 package com.fantasticsource.dynamicstealth.server.ai;
 
-import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.server.CombatTracker;
 import com.fantasticsource.dynamicstealth.server.ai.edited.AITargetEdit;
@@ -32,6 +31,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import static com.fantasticsource.dynamicstealth.common.DynamicStealth.TRIG_TABLE;
 import static com.fantasticsource.dynamicstealth.compat.Compat.cancelTasksRequiringAttackTarget;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.dynamicstealth.server.senses.hearing.Communication.warn;
@@ -47,7 +47,8 @@ public class AIDynamicStealth extends EntityAIBase
             MODE_FIND_RANDOM_PATH = 4,
             MODE_FACE_RANDOM_PATH = 5,
             MODE_FOLLOW_RANDOM_PATH = 6,
-            MODE_FLEE = -1;
+            MODE_FLEE = -1,
+            MODE_COWER = -2;
 
     public static final int
             FLEE_NONE = 0,
@@ -57,7 +58,7 @@ public class AIDynamicStealth extends EntityAIBase
 
     private static Method navigatorCanNavigateMethod;
     private static Field aiPanicSpeedField;
-    private static TrigLookupTable trigTable = DynamicStealth.TRIG_TABLE;
+    private static TrigLookupTable trigTable = TRIG_TABLE;
 
     static
     {
@@ -77,6 +78,7 @@ public class AIDynamicStealth extends EntityAIBase
     private double startAngle, angleDif, pathAngle;
     private int headTurnSpeed;
     private boolean isCNPC;
+    private float cornerLookYaw, cornerLookPitch;
 
 
     public AIDynamicStealth(EntityLiving living, double speedIn)
@@ -306,13 +308,10 @@ public class AIDynamicStealth extends EntityAIBase
     private void mode(int newMode)
     {
         if (mode == MODE_SPIN && newMode != MODE_SPIN) timeAtPos = 0;
-        else if (mode == MODE_FLEE && newMode != MODE_FLEE) fleeReason = FLEE_NONE;
 
-        if (newMode == MODE_NONE)
-        {
-            fleeReason = FLEE_NONE;
-        }
-        else if (newMode == MODE_SPIN)
+        if (newMode != MODE_FLEE && newMode != MODE_COWER) fleeReason = FLEE_NONE;
+
+        if (newMode == MODE_SPIN)
         {
             startAngle = searcher.rotationYawHead;
             spinDirection = searcher.getRNG().nextBoolean();
@@ -327,6 +326,49 @@ public class AIDynamicStealth extends EntityAIBase
         else if (newMode == MODE_FIND_RANDOM_PATH)
         {
             lastKnownPosition = MCTools.randomPos(searcher.getPosition(), (int) (navigator.getPathSearchRange() * 0.5), (int) (navigator.getPathSearchRange() * 0.25));
+        }
+        else if (newMode == MODE_COWER)
+        {
+            //Stop fleeing
+            path = null;
+            navigator.clearPath();
+
+            EntityLivingBase target = Threat.getTarget(searcher);
+            if (canSee(searcher, target, false, true, MCTools.getYaw(searcher, lastKnownPosition, TRIG_TABLE), MCTools.getPitch(searcher, lastKnownPosition, TRIG_TABLE)))
+            {
+                //See target; warn, apply desperation effects if flee reason is low hp, and retaliate
+                lastKnownPosition = target.getPosition();
+                timeAtPos = 0;
+                warn(searcher, target, lastKnownPosition, true);
+
+                if (fleeReason == FLEE_HP)
+                {
+                    if (!MinecraftForge.EVENT_BUS.post(new BasicEvent.DesperationEvent(searcher)))
+                    {
+                        for (PotionEffect potionEffect : EventData.desperationPotions)
+                        {
+                            searcher.addPotionEffect(new PotionEffect(potionEffect));
+                        }
+                    }
+                }
+
+                mode(MODE_NONE);
+                restart(lastKnownPosition);
+            }
+            else
+            {
+                //Don't see target; warn, but stay here and look in direction of last known position
+                warn(searcher, target, lastKnownPosition, false);
+
+                cornerLookYaw = (float) MCTools.getYaw(searcher, lastKnownPosition, TRIG_TABLE);
+                searcher.rotationYaw = cornerLookYaw;
+                searcher.prevRotationYaw = cornerLookYaw;
+                searcher.rotationYawHead = cornerLookYaw;
+                searcher.prevRotationYawHead = cornerLookYaw;
+
+                cornerLookPitch = (float) MCTools.getPitch(searcher, lastKnownPosition, TRIG_TABLE);
+                searcher.rotationPitch = cornerLookPitch;
+            }
         }
 
         mode = newMode;
@@ -344,7 +386,7 @@ public class AIDynamicStealth extends EntityAIBase
 
         //Last second mode changes
 
-        if (fleeReason != FLEE_NONE && mode != MODE_FLEE)
+        if (fleeReason != FLEE_NONE && mode != MODE_FLEE && mode != MODE_COWER)
         {
             //Flee (do not use mode() method, to prevent accidentally using it from other places; fleeing should be started by setting "fleeing" to true)
             mode = MODE_FLEE;
@@ -484,8 +526,8 @@ public class AIDynamicStealth extends EntityAIBase
         }
 
 
-        //Flee from lastKnownPosition
-        if (mode == MODE_FLEE)
+        //Flee from lastKnownPosition or cower in the corner
+        if (mode == MODE_FLEE || mode == MODE_COWER)
         {
             //Threat calc
             Threat.ThreatData data = Threat.get(searcher);
@@ -558,60 +600,94 @@ public class AIDynamicStealth extends EntityAIBase
 
 
             //Ensure lastKnownPosition is non-null
-            if (lastKnownPosition == null) lastKnownPosition = MCTools.randomPos(searcher.getPosition(), 5, 0);
-
-
-            if (isCNPC && serverSettings.ai.flee.cnpcsRunHome)
+            if (lastKnownPosition == null)
             {
-                //Set flee position
-                ICustomNpc cnpc = (ICustomNpc) NpcAPI.Instance().getIEntity(searcher);
-                fleeToPos = new BlockPos(cnpc.getHomeX(), cnpc.getHomeY(), cnpc.getHomeZ());
-
-                //Set path
-                if ((fleeToPos.getX() != searcher.getPosition().getX() || fleeToPos.getZ() != searcher.getPosition().getZ()) && (path == null || path.isFinished()))
-                {
-                    path = navigator.getPathToPos(fleeToPos);
-                    navigator.setPath(path, getFleeSpeed(speed));
-                }
-                else if (navigator.getPath() != path) navigator.setPath(path, getFleeSpeed(speed));
+                lastKnownPosition = MCTools.randomPos(searcher.getPosition(), 5, 0);
             }
-            else
+
+
+            //Flee
+            if (mode == MODE_FLEE)
             {
-                //Set flee position
-                BlockPos oldFleePos = fleeToPos;
-
-                if (fleeToPos == null || searcher.getPosition().distanceSq(fleeToPos) < 5 || (path != null && path.isFinished()) || timeAtPos > 2)
+                if (isCNPC && serverSettings.ai.flee.cnpcsRunHome)
                 {
-                    if (timeAtPos <= 3) fleeToPos = new BlockPos(searcher.getPositionVector().add(searcher.getPositionVector().subtract(new Vec3d(lastKnownPosition)).normalize().scale(10)));
-                    else if (timeAtPos == 4) findShortRangeGoalPos();
-                    else if (fleeReason == FLEE_HP && !MinecraftForge.EVENT_BUS.post(new BasicEvent.DesperationEvent(searcher)))
-                    {
-                        mode(MODE_NONE);
-                        restart(lastKnownPosition);
+                    //Set flee position
+                    ICustomNpc cnpc = (ICustomNpc) NpcAPI.Instance().getIEntity(searcher);
+                    fleeToPos = new BlockPos(cnpc.getHomeX(), cnpc.getHomeY(), cnpc.getHomeZ());
 
-                        EntityLivingBase target = Threat.getTarget(searcher);
-                        warn(searcher, target, lastKnownPosition, canSee(searcher, target));
-                        for (PotionEffect potionEffect : EventData.desperationPotions)
-                        {
-                            searcher.addPotionEffect(new PotionEffect(potionEffect));
-                        }
-
-                        return;
-                    }
-                    else timeAtPos = 0;
-                }
-
-                //Set path
-                if (fleeToPos != oldFleePos || path == null)
-                {
-                    if (fleeToPos == null) clearAIPath();
-                    else
+                    //Set path
+                    if ((fleeToPos.getX() != searcher.getPosition().getX() || fleeToPos.getZ() != searcher.getPosition().getZ()) && (path == null || path.isFinished()))
                     {
                         path = navigator.getPathToPos(fleeToPos);
                         navigator.setPath(path, getFleeSpeed(speed));
                     }
+                    else if (navigator.getPath() != path) navigator.setPath(path, getFleeSpeed(speed));
                 }
-                else if (navigator.getPath() != path) navigator.setPath(path, getFleeSpeed(speed));
+                else
+                {
+                    //Set flee position
+                    BlockPos oldFleePos = fleeToPos;
+
+                    if (fleeToPos == null || searcher.getPosition().distanceSq(fleeToPos) < 5 || (path != null && path.isFinished()) || timeAtPos > 2)
+                    {
+                        if (timeAtPos <= 3) fleeToPos = new BlockPos(searcher.getPositionVector().add(searcher.getPositionVector().subtract(new Vec3d(lastKnownPosition)).normalize().scale(10)));
+                        else if (timeAtPos == 4) findShortRangeGoalPos();
+                        else
+                        {
+                            //Cornered while fleeing
+                            if (fleeReason == FLEE_PASSIVE) timeAtPos = 0; //Passives continue to panic/flee
+                            else mode(MODE_COWER); //Non-passives enter "cornered" mode
+                        }
+                    }
+
+                    //Set path
+                    if (fleeToPos != oldFleePos || path == null)
+                    {
+                        if (fleeToPos == null) clearAIPath();
+                        else
+                        {
+                            path = navigator.getPathToPos(fleeToPos);
+                            navigator.setPath(path, getFleeSpeed(speed));
+                        }
+                    }
+                    else if (navigator.getPath() != path) navigator.setPath(path, getFleeSpeed(speed));
+                }
+            }
+            else if (mode == MODE_COWER)
+            {
+                //Cower in the corner, unless we see the target, in which case enter desperation mode
+
+                path = null;
+                navigator.clearPath();
+
+                float yaw = (float) (cornerLookYaw + 45 * TRIG_TABLE.sin(timeAtPos * 0.1));
+                searcher.rotationYawHead = yaw;
+                searcher.prevRotationYawHead = yaw;
+
+                searcher.rotationPitch = cornerLookPitch;
+
+
+                EntityLivingBase target = Threat.getTarget(searcher);
+                if (canSee(searcher, target))
+                {
+                    //See target; warn, apply desperation effects if flee reason is low hp, and retaliate
+                    lastKnownPosition = target.getPosition();
+                    warn(searcher, target, lastKnownPosition, true);
+
+                    if (fleeReason == FLEE_HP)
+                    {
+                        if (!MinecraftForge.EVENT_BUS.post(new BasicEvent.DesperationEvent(searcher)))
+                        {
+                            for (PotionEffect potionEffect : EventData.desperationPotions)
+                            {
+                                searcher.addPotionEffect(new PotionEffect(potionEffect));
+                            }
+                        }
+                    }
+
+                    mode(MODE_NONE);
+                    restart(lastKnownPosition);
+                }
             }
         }
     }
@@ -684,7 +760,7 @@ public class AIDynamicStealth extends EntityAIBase
             nextPos = path.getVectorFromIndex(searcher, i);
         }
 
-        pathAngle = 360 - Tools.radtodeg(DynamicStealth.TRIG_TABLE.arctanFullcircle(pos.z, -pos.x, nextPos.z, -nextPos.x));
+        pathAngle = 360 - Tools.radtodeg(TRIG_TABLE.arctanFullcircle(pos.z, -pos.x, nextPos.z, -nextPos.x));
 
         return true;
     }

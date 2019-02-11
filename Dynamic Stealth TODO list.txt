@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Make entities only enter desperation if they see their threat target
-
 Make helpers ignore victim if they have higher or equal rep with attacker than victim (should be done; test)
 Make warnings set target if target is known by warner and seen by helper (should be done; test)
 
