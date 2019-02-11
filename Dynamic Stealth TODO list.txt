@@ -1,7 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
+Fix entities attempting to path through diagonal walls; this may very well fix the issue below
 Fix entities being able to attack through glass diagonally (because they can see through it...)
-Fix entities attempting to path through diagonal walls
 
 Make stuck detection account for jumping by allowing for more play along y axis
 
