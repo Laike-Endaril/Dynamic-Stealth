@@ -1,8 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Make helpers ignore victim if they have higher or equal rep with attacker than victim (should be done; test)
-Make warnings set target if target is known by warner and seen by helper (should be done; test)
-
 Improve behavior of owned entities such as wolves and doggy talents dogs...
 ...make owned entities without a target drop threat
 ...prevent owned entities from entering flee mode due to being unable to reach?
