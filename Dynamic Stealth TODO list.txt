@@ -1,9 +1,11 @@
 CURRENTLY WORKING ON ===================================================
 
 Improve behavior of owned entities such as wolves and doggy talents dogs...
-...prevent owned entities from entering flee mode due to being unable to reach?
+...warn when damaging
 
 
+
+Fix entities being able to attack through glass diagonally (because they can see through it...)
 
 Make stuck detection account for jumping by allowing for more play along y axis
 

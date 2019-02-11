@@ -214,31 +214,35 @@ public class AIDynamicStealth extends EntityAIBase
 
         if (!canReachTarget())
         {
-            if (!triedTriggerCantReach && !MinecraftForge.EVENT_BUS.post(new BasicEvent.CantReachEvent(searcher)))
+            if (MCTools.isOwned(searcher)) Threat.setThreat(searcher, Threat.getThreat(searcher) - serverSettings.threat.ownedCantReachDegredationRate);
+            else
             {
-                if (Sight.canSee(searcher, threatTarget))
+                if (!triedTriggerCantReach && !MinecraftForge.EVENT_BUS.post(new BasicEvent.CantReachEvent(searcher)))
                 {
-                    warn(searcher, threatTarget, threatTarget.getPosition(), true);
-                }
-                else
-                {
-                    int distance = (int) searcher.getDistance(threatTarget);
-                    MCTools.randomPos(lastKnownPosition, Tools.min(distance >> 1, 7), Tools.min(distance >> 2, 4));
-                    warn(searcher, threatTarget, lastKnownPosition, false);
-                }
+                    if (Sight.canSee(searcher, threatTarget))
+                    {
+                        warn(searcher, threatTarget, threatTarget.getPosition(), true);
+                    }
+                    else
+                    {
+                        int distance = (int) searcher.getDistance(threatTarget);
+                        MCTools.randomPos(lastKnownPosition, Tools.min(distance >> 1, 7), Tools.min(distance >> 2, 4));
+                        warn(searcher, threatTarget, lastKnownPosition, false);
+                    }
 
-                for (PotionEffect potionEffect : EventData.cantReachPotions)
-                {
-                    searcher.addPotionEffect(new PotionEffect(potionEffect));
-                }
+                    for (PotionEffect potionEffect : EventData.cantReachPotions)
+                    {
+                        searcher.addPotionEffect(new PotionEffect(potionEffect));
+                    }
 
-                if (serverSettings.ai.cantReach.flee)
-                {
-                    fleeReason = FLEE_CANTREACH;
-                    return true;
+                    if (serverSettings.ai.cantReach.flee)
+                    {
+                        fleeReason = FLEE_CANTREACH;
+                        return true;
+                    }
                 }
+                triedTriggerCantReach = true;
             }
-            triedTriggerCantReach = true;
         }
         else triedTriggerCantReach = false;
 
