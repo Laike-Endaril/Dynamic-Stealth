@@ -205,7 +205,7 @@ public class DynamicStealth
                                 else if (feeler instanceof EntityLiving)
                                 {
                                     EntityLiving feelerLiving = (EntityLiving) feeler;
-                                    makeLivingLookDirection(feelerLiving, (float) Tools.radtodeg(TRIG_TABLE.arctanFullcircle(feeler.posZ, feeler.posX, felt.posZ, felt.posX)));
+                                    makeLivingLookTowardEntity(feelerLiving, felt);
                                     feelerLiving.getNavigator().clearPath();
                                 }
                             }
@@ -258,35 +258,31 @@ public class DynamicStealth
                 {
                     witness = (EntityLivingBase) entity;
 
-                    Threat.ThreatData data = Threat.get(witness);
-                    if (data.target == victim)
+                    if (Threat.getTarget(witness) == victim)
                     {
-                        data.target = null;
+                        Threat.clearTarget(witness);
                         Communication.notifyDead(witness, victim);
                     }
-                    else if (HelperSystem.shouldAcknowledge(witness, victim, true, EntitySightData.distanceFar(witness)))
+                    else if (HelperSystem.isAlly(witness, victim))
                     {
                         if (Sight.canSee(witness, victim))
                         {
                             //Witness saw victim die
-                            BlockPos dangerPos;
-
                             if (Sight.canSee(witness, source))
                             {
                                 //Witness saw everything
                                 wasSeen = true;
 
                                 Threat.set(witness, killer, serverSettings.threat.allyKilledThreat);
-                                dangerPos = killer.getPosition();
+                                Communication.warn(witness, killer, killer.getPosition(), true);
                             }
                             else
                             {
                                 //Witness saw ally die without seeing killer
                                 Threat.set(witness, null, serverSettings.threat.allyKilledThreat);
-                                dangerPos = victim.getPosition();
+                                Communication.warn(witness, killer, victim.getPosition(), false);
                             }
 
-                            Communication.warn(witness, dangerPos);
                             if (witness instanceof EntityLiving)
                             {
                                 AIDynamicStealth stealthAI = AIDynamicStealth.getStealthAI((EntityLiving) witness);
@@ -406,119 +402,109 @@ public class DynamicStealth
     {
         if (event.isCanceled() && event.getResult() == Event.Result.DENY) return;
 
-        EntityLivingBase target = event.getEntityLiving();
+        EntityLivingBase targetBase = event.getEntityLiving();
 
         Entity source = event.getSource().getTrueSource();
         if (source == null) source = event.getSource().getImmediateSource();
 
-        if (target instanceof EntityLiving)
+        if (targetBase instanceof EntityLiving)
         {
-            EntityLiving livingTarget = (EntityLiving) target;
+            EntityLiving target = (EntityLiving) targetBase;
 
             if (source instanceof EntityLivingBase)
             {
-                EntityLivingBase livingBaseSource = (EntityLivingBase) source;
-
-                boolean updateTarget = true;
-                boolean newThreatTarget = false;
+                EntityLivingBase attacker = (EntityLivingBase) source;
 
 
-                //Flee if you should
-                AIDynamicStealth stealthAI = AIDynamicStealth.getStealthAI(livingTarget);
-                if (stealthAI != null)
+                //Look toward damage, check sight, and set perceived position
+                makeLivingLookTowardEntity(target, attacker);
+                boolean canSee = Sight.canSee(target, attacker, false, true);
+                BlockPos perceivedPos = attacker.getPosition();
+                if (!canSee)
                 {
-                    if (event.isCanceled()) stealthAI.fleeIfYouShould(0);
-                    else stealthAI.fleeIfYouShould(-event.getAmount());
-
-                    if (stealthAI.isFleeing()) stealthAI.lastKnownPosition = source.getPosition();
+                    int distance = (int) target.getDistance(attacker);
+                    MCTools.randomPos(perceivedPos, Tools.min(distance >> 1, 7), Tools.min(distance >> 2, 4));
                 }
-
-
-                //Threat
-                Threat.ThreatData threatData = Threat.get(livingTarget);
-                EntityLivingBase threatTarget = threatData.target;
-                int threat = threatData.threatLevel;
-
-                if (threatTarget == null || threat == 0)
-                {
-                    //Hit by entity when no target is set; this includes...
-                    //...getting hit while out-of-combat
-                    //...getting hit after previous target has been killed
-                    //...getting hit when no target has been seen so far
-                    Threat.set(livingTarget, livingBaseSource, threat + (int) (Tools.max(event.getAmount(), 1) * serverSettings.threat.attackedThreatMultiplierInitial / livingTarget.getMaxHealth()));
-                    newThreatTarget = true;
-                }
-                else if (stealthAI != null && stealthAI.isFleeing())
-                {
-                    //Be brave, Sir Robin
-                    if (serverSettings.ai.flee.increaseOnDamage) Threat.setThreat(livingTarget, threat + (int) (event.getAmount() * serverSettings.threat.attackedThreatMultiplierTarget / livingTarget.getMaxHealth()));
-                }
-                else if (threatTarget != source)
-                {
-                    //In combat (not fleeing), and hit by an entity besides our threat target
-                    double threatChangeFactor = event.getAmount() / livingTarget.getMaxHealth();
-                    threat -= threatChangeFactor * serverSettings.threat.attackedThreatMultiplierOther;
-                    if (threat <= 0)
-                    {
-                        //Switching targets
-                        Threat.set(livingTarget, livingBaseSource, (int) (threatChangeFactor * serverSettings.threat.attackedThreatMultiplierInitial));
-                        newThreatTarget = true;
-                    }
-                    else
-                    {
-                        Threat.setThreat(livingTarget, threat);
-                        updateTarget = false;
-                    }
-                }
-                else
-                {
-                    //In combat (not fleeing), and hit by threat target
-                    Threat.setThreat(livingTarget, threat + (int) (event.getAmount() * serverSettings.threat.attackedThreatMultiplierTarget / livingTarget.getMaxHealth()));
-                }
-
-                if (updateTarget)
-                {
-                    //Threat targeting already updated
-
-                    //Update vanilla targeting
-                    livingTarget.setAttackTarget(livingBaseSource);
-
-                    //Look toward damage
-                    float newYaw = (float) (TRIG_TABLE.arctanFullcircle(target.posZ, target.posX, source.posZ, source.posX) / Math.PI * 180);
-                    makeLivingLookDirection(livingTarget, newYaw);
-
-                    if (!(livingTarget instanceof EntitySlime))
-                    {
-                        //This is mostly for setting/resetting things when eg. you hit an entity that is in the middle of a task, and they don't see you (even after you hit them)
-
-                        livingTarget.getNavigator().clearPath();
-
-                        if (stealthAI != null)
-                        {
-                            int distance = (int) Math.sqrt(source.getDistanceSq(livingTarget));
-                            stealthAI.restart(MCTools.randomPos(source.getPosition(), Tools.min(distance >> 1, 7), Tools.min(distance >> 2, 4)));
-                        }
-                    }
-                }
-
-                if (newThreatTarget && !Sight.canSee(livingTarget, livingBaseSource, false)) Threat.setTarget(livingTarget, null);
 
 
                 //Warn others
-                BlockPos warnPos = null;
-                if (stealthAI != null) warnPos = stealthAI.lastKnownPosition;
-                if (warnPos == null) warnPos = livingTarget.getPosition();
-                Communication.warn(livingTarget, warnPos);
+                Communication.warn(target, attacker, perceivedPos, canSee);
+
+
+                //Threat, AI, and vanilla attack target
+                AIDynamicStealth stealthAI = AIDynamicStealth.getStealthAI(target);
+                boolean hasAI = stealthAI != null;
+                boolean fleeing = hasAI && stealthAI.isFleeing();
+
+                Threat.ThreatData threatData = Threat.get(target);
+                EntityLivingBase threatTarget = threatData.target;
+                int threat = threatData.threatLevel;
+
+                if (fleeing)
+                {
+                    //Be brave, Sir Robin
+                    if (serverSettings.ai.flee.increaseOnDamage) Threat.set(target, canSee ? attacker : threatTarget, threat + (int) (event.getAmount() * serverSettings.threat.attackedThreatMultiplierTarget / target.getMaxHealth()));
+                    target.setAttackTarget(null);
+                    stealthAI.restart(perceivedPos);
+                }
+                else if (threat == 0)
+                {
+                    Threat.set(target, canSee ? attacker : null, threat + (int) (Tools.max(event.getAmount(), 1) * serverSettings.threat.attackedThreatMultiplierInitial / target.getMaxHealth()));
+                    target.setAttackTarget(canSee ? attacker : null);
+                    if (hasAI) stealthAI.restart(perceivedPos);
+                }
+                else if (threatTarget == attacker || threatTarget == null)
+                {
+                    //In combat (not fleeing), and hit by threat target or what is presumed to be threat target (if null)
+                    Threat.set(target, canSee ? attacker : null, threat + (int) (event.getAmount() * serverSettings.threat.attackedThreatMultiplierTarget / target.getMaxHealth()));
+                    target.setAttackTarget(canSee ? attacker : threatTarget);
+                    if (hasAI) stealthAI.restart(perceivedPos);
+                }
+                else
+                {
+                    //In combat (not fleeing), and hit by an entity besides our threat target
+                    double changeFactor = event.getAmount() / target.getMaxHealth();
+                    threat -= changeFactor * serverSettings.threat.attackedThreatMultiplierOther;
+                    if (threat <= 0)
+                    {
+                        //Switching targets
+                        Threat.set(target, canSee ? attacker : null, (int) (changeFactor * serverSettings.threat.attackedThreatMultiplierInitial));
+                        target.setAttackTarget(canSee ? attacker : null);
+                        if (hasAI) stealthAI.restart(perceivedPos);
+                    }
+                    else
+                    {
+                        //Just reducing threat toward current target
+                        Threat.setThreat(target, threat);
+                    }
+                }
+
+
+                //Flee if you should
+                if (hasAI)
+                {
+                    if (event.isCanceled()) stealthAI.fleeIfYouShould(0);
+                    else stealthAI.fleeIfYouShould(-event.getAmount());
+                }
             }
         }
     }
 
-    public static void makeLivingLookDirection(EntityLiving living, float directionDegrees) throws InvocationTargetException, IllegalAccessException
+
+    public static void makeLivingLookTowardEntity(EntityLiving living, Entity target) throws InvocationTargetException, IllegalAccessException
     {
-        living.rotationYaw = directionDegrees;
-        living.prevRotationYaw = directionDegrees;
-        living.rotationYawHead = directionDegrees;
-        living.prevRotationYawHead = directionDegrees;
+        makeLivingLookDirection(living, MCTools.getYaw(living, target, TRIG_TABLE), MCTools.getPitch(living, target, TRIG_TABLE));
+    }
+
+    public static void makeLivingLookDirection(EntityLiving living, double yawDegrees, double pitchDegrees) throws InvocationTargetException, IllegalAccessException
+    {
+        float fYaw = (float) yawDegrees;
+        living.rotationYaw = fYaw;
+        living.prevRotationYaw = fYaw;
+        living.rotationYawHead = fYaw;
+        living.prevRotationYawHead = fYaw;
+
+        living.rotationPitch = (float) pitchDegrees;
 
         if (living instanceof EntitySlime)
         {
@@ -527,7 +513,7 @@ public class DynamicStealth
             {
                 if (task.action instanceof AISlimeFaceRandomEdit)
                 {
-                    ((AISlimeFaceRandomEdit) task.action).setDirection(directionDegrees, true);
+                    ((AISlimeFaceRandomEdit) task.action).setDirection(fYaw, true);
                     break;
                 }
             }

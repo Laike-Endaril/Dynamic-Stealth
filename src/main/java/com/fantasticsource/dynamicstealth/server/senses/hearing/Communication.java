@@ -1,29 +1,30 @@
 package com.fantasticsource.dynamicstealth.server.senses.hearing;
 
-import com.fantasticsource.dynamicstealth.server.HelperSystem;
 import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
+import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.Tools;
-import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.ArrayList;
 
+import static com.fantasticsource.dynamicstealth.common.DynamicStealth.TRIG_TABLE;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
+import static com.fantasticsource.dynamicstealth.server.HelperSystem.isAlly;
+import static com.fantasticsource.dynamicstealth.server.HelperSystem.rep;
+import static com.fantasticsource.dynamicstealth.server.senses.hearing.Hearing.canHear;
 
 public class Communication
 {
-    private static LinkedHashMap<EntityLivingBase, Pair<World, BlockPos>> warners = new LinkedHashMap<>();
+    private static ArrayList<WarnData> warners = new ArrayList<>();
 
 
     //Notify others of target death
@@ -40,10 +41,9 @@ public class Communication
                 {
                     EntityLivingBase entityLivingBase = (EntityLivingBase) entity;
 
-                    if (HelperSystem.shouldAcknowledge(entityLivingBase, livingNotifier, true, Math.pow(serverSettings.senses.hearing.notificationRange * EntityHearingData.hearingRange(entityLivingBase, livingNotifier.getPositionVector().add(new Vec3d(0, livingNotifier.getEyeHeight(), 0))), 2)))
+                    if (Threat.getTarget(entityLivingBase) == dead && isAlly(entityLivingBase, livingNotifier) && canHear(entityLivingBase, livingNotifier, serverSettings.senses.hearing.notificationRange))
                     {
-                        Threat.ThreatData data = Threat.get(entityLivingBase);
-                        if (data.target == dead) data.target = null;
+                        Threat.clearTarget(entityLivingBase);
                     }
                 }
             }
@@ -52,56 +52,78 @@ public class Communication
 
 
     //Warn others of threat
-    public static void warn(EntityLivingBase livingBase, BlockPos blockPos)
+    public static void warn(EntityLivingBase warner, EntityLivingBase danger, BlockPos dangerPos, boolean sawDanger)
     {
-        warners.put(livingBase, new Pair<>(livingBase.world, blockPos));
+        warners.add(new WarnData(warner, danger, dangerPos, sawDanger));
     }
 
     @SubscribeEvent
     public static void update(TickEvent.ServerTickEvent event)
     {
-        warners.entrySet().removeIf(Communication::processAndRemove);
+        warners.removeIf(Communication::processAndRemove);
     }
 
-    private static boolean processAndRemove(Map.Entry<EntityLivingBase, Pair<World, BlockPos>> entry)
+    private static boolean processAndRemove(WarnData warnData)
     {
-        EntityLivingBase warner = entry.getKey();
-        Pair<World, BlockPos> data = entry.getValue();
-        World world = data.getKey();
-        if (warner.isEntityAlive() && warner.world == world)
+        EntityLivingBase warner = warnData.warner;
+        EntityLivingBase danger = warnData.danger;
+        World world = warner.world;
+        if (warner.isEntityAlive() && (danger == null || danger.world == world))
         {
-            for (Entity entity : world.loadedEntityList.toArray(new Entity[world.loadedEntityList.size()]))
+            for (Entity helper : world.loadedEntityList.toArray(new Entity[world.loadedEntityList.size()]))
             {
-                tryWarn(warner, entity, data.getValue());
+                tryWarn(warner, helper, danger, warnData.dangerPos, warnData.sawDanger);
             }
         }
 
         return true;
     }
 
-    private static void tryWarn(EntityLivingBase warner, Entity helper, BlockPos warnPos)
+    private static void tryWarn(EntityLivingBase warner, Entity helper, EntityLivingBase danger, BlockPos dangerPos, boolean sawDanger)
     {
-        if (helper != warner && helper instanceof EntityLiving && helper.isEntityAlive())
+        if (helper != warner && helper != danger && helper instanceof EntityLiving && helper.isEntityAlive())
         {
             EntityLiving livingHelper = (EntityLiving) helper;
 
-            if (!EntityThreatData.bypassesThreat(livingHelper))
+            if (!EntityThreatData.bypassesThreat(livingHelper) && rep(livingHelper, warner) > rep(livingHelper, danger))
             {
-                Threat.ThreatData data = Threat.get(livingHelper);
-                if (data.target == null && HelperSystem.shouldAcknowledge(livingHelper, warner, true, Math.pow(serverSettings.senses.hearing.warningRange * EntityHearingData.hearingRange(livingHelper, warner.getPositionVector().add(new Vec3d(0, warner.getEyeHeight(), 0))), 2)))
+                Threat.ThreatData helperThreat = Threat.get(livingHelper);
+                if ((helperThreat.target == null || helperThreat.target == danger) && canHear(livingHelper, warner, serverSettings.senses.hearing.warningRange))
                 {
-                    int distance = (int) warner.getDistance(helper);
+                    boolean canSee = sawDanger && Sight.canSee(livingHelper, danger, false, true, MCTools.getYaw(livingHelper, danger, TRIG_TABLE), MCTools.getPitch(livingHelper, danger, TRIG_TABLE));
+                    if (canSee) Threat.set(livingHelper, danger, Tools.max(serverSettings.threat.warnedThreat, helperThreat.threatLevel));
+                    else Threat.setThreat(livingHelper, Tools.max(serverSettings.threat.warnedThreat, helperThreat.threatLevel));
 
-                    if (data.threatLevel < serverSettings.threat.warnedThreat) Threat.setThreat(livingHelper, serverSettings.threat.warnedThreat);
-
-                    AIDynamicStealth stealthAI = AIDynamicStealth.getStealthAI(livingHelper);
-                    if (stealthAI != null)
+                    AIDynamicStealth helperAI = AIDynamicStealth.getStealthAI(livingHelper);
+                    if (helperAI != null)
                     {
-                        stealthAI.fleeIfYouShould(0);
-                        if (stealthAI.isFleeing()) stealthAI.lastKnownPosition = MCTools.randomPos(warnPos, Tools.min(3 + (distance >> 1), 7), Tools.min(1 + (distance >> 2), 4));
+                        helperAI.fleeIfYouShould(0);
+
+                        if (canSee) helperAI.lastKnownPosition = danger.getPosition();
+                        else
+                        {
+                            int distance = (int) helper.getDistance(dangerPos.getX(), dangerPos.getY(), dangerPos.getZ());
+                            helperAI.lastKnownPosition = MCTools.randomPos(dangerPos, Tools.min(3 + (distance >> 1), 7), Tools.min(1 + (distance >> 2), 4));
+                        }
                     }
                 }
             }
+        }
+    }
+
+    public static class WarnData
+    {
+        EntityLivingBase warner;
+        EntityLivingBase danger;
+        BlockPos dangerPos;
+        boolean sawDanger;
+
+        public WarnData(EntityLivingBase warner, EntityLivingBase danger, BlockPos dangerPos, boolean sawDanger)
+        {
+            this.warner = warner;
+            this.danger = danger;
+            this.dangerPos = dangerPos;
+            this.sawDanger = sawDanger;
         }
     }
 }

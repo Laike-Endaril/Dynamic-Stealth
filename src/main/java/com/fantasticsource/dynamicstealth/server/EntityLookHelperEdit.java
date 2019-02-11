@@ -30,7 +30,7 @@ public class EntityLookHelperEdit extends EntityLookHelper
         {
             try
             {
-                DynamicStealth.makeLivingLookDirection(entity, (float) (Math.random() * 360));
+                DynamicStealth.makeLivingLookDirection(entity, Math.random() * 360, 0);
             }
             catch (InvocationTargetException | IllegalAccessException e)
             {

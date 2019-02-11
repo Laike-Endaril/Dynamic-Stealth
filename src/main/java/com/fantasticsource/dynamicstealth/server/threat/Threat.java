@@ -109,18 +109,13 @@ public class Threat
         }
     }
 
-    public static void setTarget(EntityLivingBase searcher, EntityLivingBase target)
+    public static void clearTarget(EntityLivingBase searcher)
     {
         if (EntityThreatData.bypassesThreat(searcher)) return;
 
         ThreatData threatData = threatMap.get(searcher);
-        if (threatData != null)
-        {
-            if (target == null) CombatTracker.setNoTargetTime(searcher);
-            else if (threatData.target == null) CombatTracker.setNoTargetTime(searcher, currentTick() - 1);
-            threatData.target = target;
-        }
-        else CombatTracker.setNoTargetTime(searcher);
+        if (threatData != null) threatData.target = null;
+        CombatTracker.setNoTargetTime(searcher);
     }
 
     public static void setThreat(EntityLivingBase searcher, int threat)

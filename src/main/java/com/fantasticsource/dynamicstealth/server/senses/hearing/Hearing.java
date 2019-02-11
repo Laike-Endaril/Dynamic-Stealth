@@ -7,8 +7,17 @@ import net.minecraft.util.math.Vec3d;
 
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 
-public class EntityHearingData
+public class Hearing
 {
+    public static boolean canHear(EntityLivingBase helper, EntityLivingBase troubledOne, double baseRange)
+    {
+        if (troubledOne == null || helper == null) return false;
+        if (troubledOne.world == null || troubledOne.world != helper.world) return false;
+        if (troubledOne.getDistanceSq(helper) > Math.pow(baseRange * hearingRange(helper, troubledOne.getPositionVector().add(new Vec3d(0, troubledOne.getEyeHeight(), 0))), 2)) return false;
+
+        return true;
+    }
+
     public static double hearingRange(EntityLivingBase entity, Vec3d soundPos)
     {
         double range = entity.getEntityAttribute(Attributes.HEARING).getAttributeValue() / 100;

@@ -1,7 +1,6 @@
 package com.fantasticsource.dynamicstealth.server;
 
 import com.fantasticsource.dynamicstealth.compat.Compat;
-import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityOwnable;
@@ -16,12 +15,15 @@ import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.ser
 
 public class HelperSystem
 {
-    public static boolean shouldAcknowledge(EntityLivingBase helper, EntityLivingBase troubledOne, boolean checkWorldMatch, double maxDistSquared)
+    public static boolean isAlly(EntityLivingBase helper, EntityLivingBase troubledOne)
     {
-        if (troubledOne == null || helper == null) return false;
-        if (Threat.getTarget(helper) == troubledOne) return false;
-        if (!checkWorldMatch && (troubledOne.world == null || troubledOne.world != helper.world)) return false;
-        if (troubledOne.getDistanceSq(helper) > maxDistSquared) return false;
+        return rep(helper, troubledOne) > 0;
+    }
+
+    public static int rep(EntityLivingBase helper, EntityLivingBase troubledOne)
+    {
+        //Hard checks
+        if (helper == null || troubledOne == null) return 0;
 
 
         //Ownership
@@ -33,17 +35,17 @@ public class HelperSystem
                 //Owner needs help
                 if (troubledOne == helperOwner)
                 {
-                    if (serverSettings.helperSystemSettings.ownership.helpOwner) return true;
+                    if (serverSettings.helperSystemSettings.ownership.helpOwner) return 100;
                 }
 
                 //Something with same owner needs help
                 else if (troubledOne instanceof IEntityOwnable && ((IEntityOwnable) troubledOne).getOwner() == helperOwner)
                 {
-                    if (serverSettings.helperSystemSettings.ownership.helpOtherWithSameOwner) return true;
+                    if (serverSettings.helperSystemSettings.ownership.helpOtherWithSameOwner) return 90;
                 }
 
                 //Something unrelated needs help.  If we're only dedicated to our owner, don't help them
-                else if (serverSettings.helperSystemSettings.ownership.dedicated) return false;
+                else if (serverSettings.helperSystemSettings.ownership.dedicated) return 0;
             }
         }
         if (troubledOne instanceof IEntityOwnable)
@@ -51,7 +53,7 @@ public class HelperSystem
             //Something we own needs help
             if (((IEntityOwnable) troubledOne).getOwner() == helper)
             {
-                if (serverSettings.helperSystemSettings.ownership.helpOwned) return true;
+                if (serverSettings.helperSystemSettings.ownership.helpOwned) return 80;
             }
         }
 
@@ -63,13 +65,13 @@ public class HelperSystem
             //Same team
             if (troubledOneTeam.isSameTeam(helper.getTeam()))
             {
-                if (serverSettings.helperSystemSettings.teams.helpSame) return true;
+                if (serverSettings.helperSystemSettings.teams.helpSame) return 70;
             }
 
             //Different team
             else if (helper.getTeam() != null)
             {
-                if (serverSettings.helperSystemSettings.teams.dontHelpOther) return false;
+                if (serverSettings.helperSystemSettings.teams.dontHelpOther) return 0;
             }
         }
 
@@ -84,13 +86,13 @@ public class HelperSystem
             //Good rep
             if (factionStatus > 0)
             {
-                if (serverSettings.helperSystemSettings.cnpcFactions.helpGoodRep) return true;
+                if (serverSettings.helperSystemSettings.cnpcFactions.helpGoodRep) return 60;
             }
 
             //Bad rep
             else if (factionStatus < 0)
             {
-                if (serverSettings.helperSystemSettings.cnpcFactions.dontHelpBadRep) return false;
+                if (serverSettings.helperSystemSettings.cnpcFactions.dontHelpBadRep) return 0;
             }
         }
 
@@ -98,10 +100,10 @@ public class HelperSystem
         //Entity types
         if (troubledOne.getClass() == helper.getClass() && !(cnpcEntityTroubled instanceof ICustomNpc))
         {
-            if (serverSettings.helperSystemSettings.helpSameType) return true;
+            if (serverSettings.helperSystemSettings.helpSameType) return 50;
         }
 
-        return false;
+        return 0;
     }
 
 

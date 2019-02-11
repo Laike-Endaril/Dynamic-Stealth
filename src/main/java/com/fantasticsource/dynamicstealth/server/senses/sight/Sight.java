@@ -85,20 +85,25 @@ public class Sight
 
     public static boolean canSee(EntityLivingBase searcher, Entity target)
     {
-        return canSee(searcher, target, true);
+        return visualStealthLevel(searcher, target, true, true, searcher.prevRotationYawHead, searcher.prevRotationPitch) <= 1;
     }
 
-    public static boolean canSee(EntityLivingBase searcher, Entity target, boolean useCache)
+    public static boolean canSee(EntityLivingBase searcher, Entity target, boolean useCache, boolean saveCache)
     {
-        return visualStealthLevel(searcher, target, useCache) <= 1;
+        return visualStealthLevel(searcher, target, useCache, saveCache, searcher.prevRotationYawHead, searcher.prevRotationPitch) <= 1;
+    }
+
+    public static boolean canSee(EntityLivingBase searcher, Entity target, boolean useCache, boolean saveCache, double yaw, double pitch)
+    {
+        return visualStealthLevel(searcher, target, useCache, saveCache, yaw, pitch) <= 1;
     }
 
     public static double visualStealthLevel(EntityLivingBase searcher, Entity target)
     {
-        return visualStealthLevel(searcher, target, true);
+        return visualStealthLevel(searcher, target, true, true, searcher.prevRotationYawHead, searcher.prevRotationPitch);
     }
 
-    public static double visualStealthLevel(EntityLivingBase searcher, Entity target, boolean useCache)
+    public static double visualStealthLevel(EntityLivingBase searcher, Entity target, boolean useCache, boolean saveCache, double yaw, double pitch)
     {
         if (searcher == null || target == null || !searcher.world.isBlockLoaded(searcher.getPosition()) || !target.world.isBlockLoaded(target.getPosition())) return -777;
         if (searcher.world != target.world) return 777;
@@ -112,27 +117,30 @@ public class Sight
         }
 
         searcher.world.profiler.startSection("DS Sight checks");
-        double result = visualStealthLevelInternal(searcher, target);
+        double result = visualStealthLevelInternal(searcher, target, yaw, pitch);
         searcher.world.profiler.endSection();
 
-        if (map == null)
+        if (saveCache)
         {
-            map = new LinkedHashMap<>();
-            recentlySeenMap.put(searcher, map);
-            map.put(target, new SeenData(result));
-        }
-        else
-        {
-            SeenData data = map.get(target);
-            if (data == null) map.put(target, new SeenData(result));
+            if (map == null)
+            {
+                map = new LinkedHashMap<>();
+                recentlySeenMap.put(searcher, map);
+                map.put(target, new SeenData(result));
+            }
             else
             {
-                data.lastUpdateTime = currentTick();
-                data.lastStealthLevel = result;
-                if (result <= 1)
+                SeenData data = map.get(target);
+                if (data == null) map.put(target, new SeenData(result));
+                else
                 {
-                    data.seen = true;
-                    data.lastSeenTime = currentTick();
+                    data.lastUpdateTime = currentTick();
+                    data.lastStealthLevel = result;
+                    if (result <= 1)
+                    {
+                        data.seen = true;
+                        data.lastSeenTime = currentTick();
+                    }
                 }
             }
         }
@@ -210,12 +218,12 @@ public class Sight
         ExplicitPriorityQueue<EntityLivingBase> queue = playerSeenThisTickMap.get(player);
         if (queue != null) return queue.clone();
 
-        ExplicitPriorityQueue<EntityLivingBase>[] queues = seenEntities2(player);
+        ExplicitPriorityQueue<EntityLivingBase>[] queues = seenEntitiesInternal(player);
         playerSeenThisTickMap.put(player, queues[1]);
         return queues[0];
     }
 
-    private static ExplicitPriorityQueue<EntityLivingBase>[] seenEntities2(EntityPlayerMP player)
+    private static ExplicitPriorityQueue<EntityLivingBase>[] seenEntitiesInternal(EntityPlayerMP player)
     {
         ExplicitPriorityQueue<EntityLivingBase>[] queues = new ExplicitPriorityQueue[]{new ExplicitPriorityQueue<>(10), new ExplicitPriorityQueue<>(10)};
         double stealthLevel;
@@ -292,7 +300,7 @@ public class Sight
     }
 
 
-    private static double visualStealthLevelInternal(EntityLivingBase searcher, Entity target)
+    private static double visualStealthLevelInternal(EntityLivingBase searcher, Entity target, double yaw, double pitch)
     {
         //Hard checks (absolute)
         if (target.getRidingEntity() == searcher || searcher.getRidingEntity() == target) return -777; //getRidingEntity DOES NOT RETURN THE RIDING ENTITY!  It returns the RIDDEN entity!
@@ -320,7 +328,7 @@ public class Sight
         else
         {
             //Using previous values here to give the player a chance, because client-side rendering always runs behind what's actually happening
-            double angleDif = Vec3d.fromPitchYaw(searcher.prevRotationPitch, searcher.prevRotationYawHead).normalize().dotProduct(new Vec3d(target.posX - searcher.posX, (target.posY + target.height / 2) - (searcher.posY + searcher.getEyeHeight()), target.posZ - searcher.posZ).normalize());
+            double angleDif = Vec3d.fromPitchYaw((float) pitch, (float) yaw).normalize().dotProduct(new Vec3d(target.posX - searcher.posX, (target.posY + target.height / 2) - (searcher.posY + searcher.getEyeHeight()), target.posZ - searcher.posZ).normalize());
 
             //And because Vec3d.fromPitchYaw occasionally returns values barely out of the range of (-1, 1)...
             if (angleDif < -1) angleDif = -1;

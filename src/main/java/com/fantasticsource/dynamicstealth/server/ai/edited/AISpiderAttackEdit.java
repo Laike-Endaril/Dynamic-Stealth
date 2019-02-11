@@ -22,7 +22,7 @@ public class AISpiderAttackEdit extends AIAttackMeleeEdit
             return false;
         }
 
-        if (attacker.getBrightness() >= 0.5) data.threatLevel--;
+        if (attacker.getBrightness() >= 0.5) Threat.setThreat(attacker, --data.threatLevel);
         return super.shouldContinueExecuting();
     }
 

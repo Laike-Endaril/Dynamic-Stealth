@@ -1,7 +1,10 @@
 package com.fantasticsource.mctools;
 
 import com.fantasticsource.dynamicstealth.server.ai.NPEAttackTargetTaskHolder;
+import com.fantasticsource.tools.Tools;
+import com.fantasticsource.tools.TrigLookupTable;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -18,6 +21,19 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class MCTools
 {
+    public static double getYaw(Entity fromEntity, Entity toEntity, TrigLookupTable trigTable)
+    {
+        if (toEntity == null) return fromEntity.getRotationYawHead();
+        return Tools.radtodeg(trigTable.arctanFullcircle(fromEntity.posZ, fromEntity.posX, toEntity.posZ, toEntity.posX));
+    }
+
+    public static double getPitch(Entity fromEntity, Entity toEntity, TrigLookupTable trigTable)
+    {
+        if (toEntity == null) return fromEntity.rotationPitch;
+        double result = Tools.radtodeg(trigTable.arctanFullcircle(0, 0, Tools.distance(fromEntity.posX, fromEntity.posZ, toEntity.posX, toEntity.posZ), toEntity.posY - fromEntity.posY));
+        return fromEntity.posY > toEntity.posY ? -result : result;
+    }
+
     public static double getAttribute(EntityLivingBase entity, IAttribute attribute, double defaultVal)
     {
         //getEntityAttribute is incorrectly tagged as @Nonnull; it can and will return a null value sometimes, thus this helper

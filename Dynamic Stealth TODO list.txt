@@ -1,6 +1,11 @@
 CURRENTLY WORKING ON ===================================================
 
-Improve behavior of owned entities such as doggy talents dogs...
+Fix entities without LOS removing threat target when target dies
+
+Make helpers ignore victim if they have higher or equal rep with attacker than victim (should be done; test)
+Make warnings set target if target is known by warner and seen by helper (should be done; test)
+
+Improve behavior of owned entities such as wolves and doggy talents dogs...
 ...make owned entities without a target drop threat
 ...prevent owned entities from entering flee mode due to being unable to reach?
 
@@ -22,6 +27,7 @@ BUG FIXES ==============================================================
 
 Fix bug where mobs' body angle is sometimes wrong (pretty sure this is a vanilla bug)...
 ...may also have something to do with setting previous rotation yaw, maybe try not doing that bit and see what happens
+...if so, keep in mind that sight algorithm uses previous yaw and notably depends on it when making an entity look a direction then checking sight
 
 Fix leashes not rendering sometimes? (it shows the knot though...is this a vanilla bug?)
 
