@@ -260,8 +260,11 @@ public class DynamicStealth
 
                     if (Threat.getTarget(witness) == victim)
                     {
-                        Threat.clearTarget(witness);
-                        Communication.notifyDead(witness, victim);
+                        if (Sight.canSee(witness, victim))
+                        {
+                            Threat.clearTarget(witness);
+                            Communication.notifyDead(witness, victim);
+                        }
                     }
                     else if (HelperSystem.isAlly(witness, victim))
                     {
