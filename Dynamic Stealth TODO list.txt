@@ -3,7 +3,9 @@ CURRENTLY WORKING ON ===================================================
 Look into issue #27...
 ...fix possession desync (causes you to still see soul while possessing entity, and allows flight while possessing entity)
 ...desync has something to do with the altered entity tracker; disabling the entity tracker replacement fixes the issue
+...removing use of the edited tracker entry from the edited tracker has no effect; look into the code of the tracker itself
 ...fix ai activating on your "shell" when outside your body (though it's pretty funny to see yourself sprinting away from you in fear)
+...fix possessed entity building threat (should all possessables bypass threat, or just currently possessed ones?)
 
 Fix entities attempting to path through diagonal walls; this may very well fix the issue below
 Fix entities being able to attack through glass diagonally (because they can see through it...)
