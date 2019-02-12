@@ -21,6 +21,7 @@ import com.fantasticsource.dynamicstealth.server.senses.EntityTouchData;
 import com.fantasticsource.dynamicstealth.server.senses.hearing.Communication;
 import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
+import com.fantasticsource.dynamicstealth.server.senses.sight.Tracking;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
@@ -112,6 +113,7 @@ public class DynamicStealth
         MinecraftForge.EVENT_BUS.register(Sight.class);
         MinecraftForge.EVENT_BUS.register(Communication.class);
         MinecraftForge.EVENT_BUS.register(Potions.class);
+        MinecraftForge.EVENT_BUS.register(Tracking.class);
 
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
         {

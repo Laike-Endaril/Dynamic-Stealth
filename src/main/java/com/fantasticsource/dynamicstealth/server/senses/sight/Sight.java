@@ -307,13 +307,13 @@ public class Sight
     private static double visualStealthLevelInternal(EntityLivingBase searcher, Entity target, double yaw, double pitch)
     {
         //Hard checks (absolute)
-        if (Compat.dissolution && searcher instanceof EntityPlayer && ((IIncorporealHandler) searcher.getCapability(CompatDissolution.INCORPOREAL_HANDLER_CAP, null)).getPossessed() == target) return -777;
+        if (searcher.world != target.world || target.isDead) return 777;
 
+        if (Tracking.isTracking(searcher, target)) return -777;
+        if (Compat.dissolution && searcher instanceof EntityPlayer && ((IIncorporealHandler) searcher.getCapability(CompatDissolution.INCORPOREAL_HANDLER_CAP, null)).getPossessed() == target) return -777;
         if (target.getRidingEntity() == searcher || searcher.getRidingEntity() == target) return -777; //getRidingEntity DOES NOT RETURN THE RIDING ENTITY!  It returns the RIDDEN entity!
 
         if (target instanceof EntityPlayerMP && ((EntityPlayerMP) target).capabilities.disableDamage) return 777;
-
-        if (searcher.world != target.world || target.isDead) return 777;
 
 
         //Soul Sight (absolute)

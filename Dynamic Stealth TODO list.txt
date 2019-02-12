@@ -17,6 +17,8 @@ Change stealth calcs; try to prevent rapid blinking in and out
 
 Migrate old bad AI handling entries to new system, where applicable
 
+Use tracking system (Tracking class) for something
+
 
 
 BUG FIXES ==============================================================
