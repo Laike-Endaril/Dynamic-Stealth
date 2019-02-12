@@ -172,7 +172,7 @@ public class EntityTrackerEdit extends EntityTracker
 
     public void updateVisibility(EntityPlayerMP player)
     {
-        //Only called from updatePotionMetadata(), and I'm going to be updating this stuff every tick, so don't need it
+        //Only called from updatePotionMetadata(), and I'm updating this stuff every tick, so don't need it
     }
 
     public void sendToTracking(Entity entityIn, Packet<?> packetIn)
@@ -188,10 +188,8 @@ public class EntityTrackerEdit extends EntityTracker
     public Set<? extends EntityPlayer> getTrackingPlayers(Entity entity)
     {
         EntityTrackerEntry entry = trackedEntityMap.lookup(entity.getEntityId());
-        if (entry == null)
-            return java.util.Collections.emptySet();
-        else
-            return java.util.Collections.unmodifiableSet(entry.trackingPlayers);
+        if (entry == null) return java.util.Collections.emptySet();
+        else return java.util.Collections.unmodifiableSet(entry.trackingPlayers);
     }
 
     public void sendToTrackingAndSelf(Entity entityIn, Packet<?> packetIn)
