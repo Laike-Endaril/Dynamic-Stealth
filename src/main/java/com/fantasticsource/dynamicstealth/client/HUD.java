@@ -19,6 +19,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -52,6 +53,15 @@ public class HUD extends Gui
         drawDetailHUD(width, height, fontRender);
 
         GlStateManager.color(1, 1, 1, 1);
+    }
+
+    @SubscribeEvent
+    public static void drawHUD(RenderGameOverlayEvent.Post event)
+    {
+        if (event.getType() == RenderGameOverlayEvent.ElementType.EXPERIENCE)
+        {
+            new HUD(Minecraft.getMinecraft());
+        }
     }
 
     @SubscribeEvent
