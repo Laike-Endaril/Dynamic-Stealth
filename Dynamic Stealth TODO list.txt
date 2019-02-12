@@ -3,7 +3,13 @@ CURRENTLY WORKING ON ===================================================
 Look into issue #27...
 ...fix ai activating on your "shell" when outside your body (though it's pretty funny to see yourself sprinting away from you in fear)
 ...fix possessed entity building threat (should all possessables bypass threat, or just currently possessed ones?)
-...don't display on-point HUD for possessed entity
+...fix repeated authentication checks due to players not existing -> existing repeatedly on client...
+...maybe the skins can be cached instead of always being requested?
+...is this only with dissolution, or is this a general DS thing no matter what other mods are around? (test in multiplayer with only DS)
+...fix detail HUD always showing possessed
+
+Fix detail HUD not displaying while riding, due to event used
+Fix detail HUD always showing ridden entity (or at least I assume this will be the case once the one above is done)
 
 Fix entities attempting to path through diagonal walls; this may very well fix the issue below
 Fix entities being able to attack through glass diagonally (because they can see through it...)
