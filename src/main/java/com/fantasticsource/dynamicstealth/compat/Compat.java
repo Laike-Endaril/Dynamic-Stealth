@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class Compat
 {
-    public static boolean lycanites = false, ancientwarfare = false, customnpcs = false, neat = false, statues = false;
+    public static boolean lycanites = false, ancientwarfare = false, customnpcs = false, neat = false, statues = false, dissolution = false;
 
     private static Field executingTaskEntriesField;
 

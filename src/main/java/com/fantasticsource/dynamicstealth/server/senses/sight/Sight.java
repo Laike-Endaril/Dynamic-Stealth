@@ -1,5 +1,7 @@
 package com.fantasticsource.dynamicstealth.server.senses.sight;
 
+import com.fantasticsource.dynamicstealth.compat.Compat;
+import com.fantasticsource.dynamicstealth.compat.CompatDissolution;
 import com.fantasticsource.dynamicstealth.config.server.senses.SensesConfig;
 import com.fantasticsource.dynamicstealth.config.server.senses.sight.SightConfig;
 import com.fantasticsource.dynamicstealth.server.Attributes;
@@ -8,11 +10,13 @@ import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.Speedometer;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
+import ladysnake.dissolution.api.corporeality.IIncorporealHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.*;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -303,6 +307,8 @@ public class Sight
     private static double visualStealthLevelInternal(EntityLivingBase searcher, Entity target, double yaw, double pitch)
     {
         //Hard checks (absolute)
+        if (Compat.dissolution && searcher instanceof EntityPlayer && ((IIncorporealHandler) searcher.getCapability(CompatDissolution.INCORPOREAL_HANDLER_CAP, null)).getPossessed() == target) return -777;
+
         if (target.getRidingEntity() == searcher || searcher.getRidingEntity() == target) return -777; //getRidingEntity DOES NOT RETURN THE RIDING ENTITY!  It returns the RIDDEN entity!
 
         if (target instanceof EntityPlayerMP && ((EntityPlayerMP) target).capabilities.disableDamage) return 777;
