@@ -114,7 +114,7 @@ public class EntityTrackerEdit extends EntityTracker
             }
             entries.add(entityEntry);
             trackedEntityMap.addKey(entityIn.getEntityId(), entityEntry);
-            if (!isLivingBase) entityEntry.updatePlayerEntities(world.playerEntities);
+            entityEntry.updatePlayerEntities(world.playerEntities);
         }
         catch (Throwable throwable)
         {
