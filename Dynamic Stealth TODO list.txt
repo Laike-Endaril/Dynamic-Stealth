@@ -2,6 +2,7 @@ CURRENTLY WORKING ON ===================================================
 
 Look into issue #27...
 ...fix possession desync (causes you to still see soul while possessing entity, and allows flight while possessing entity)
+...desync has something to do with the altered entity tracker; disabling the entity tracker replacement fixes the issue
 ...fix ai activating on your "shell" when outside your body (though it's pretty funny to see yourself sprinting away from you in fear)
 
 Fix entities attempting to path through diagonal walls; this may very well fix the issue below
