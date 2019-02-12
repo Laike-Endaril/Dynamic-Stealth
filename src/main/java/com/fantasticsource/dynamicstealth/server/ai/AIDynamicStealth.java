@@ -231,8 +231,8 @@ public class AIDynamicStealth extends EntityAIBase
                     else
                     {
                         int distance = (int) searcher.getDistance(threatTarget);
-                        MCTools.randomPos(lastKnownPosition, Tools.min(distance >> 1, 7), Tools.min(distance >> 2, 4));
-                        warn(searcher, threatTarget, lastKnownPosition, false);
+                        if (lastKnownPosition == null) lastKnownPosition = searcher.getPosition();
+                        warn(searcher, threatTarget, MCTools.randomPos(lastKnownPosition, Tools.min(distance >> 1, 7), Tools.min(distance >> 2, 4)), false);
                     }
 
                     for (PotionEffect potionEffect : EventData.cantReachPotions)
