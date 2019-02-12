@@ -286,7 +286,7 @@ public class Network
             this.detailHUD = detailHUD;
             this.onPointHUDMode = onPointHUDMode;
 
-            queue = Sight.seenEntities(this.player);
+            queue = Sight.seenEntities(player);
         }
 
         @Override

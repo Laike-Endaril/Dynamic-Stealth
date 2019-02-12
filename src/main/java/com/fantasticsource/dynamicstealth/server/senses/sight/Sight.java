@@ -1,6 +1,5 @@
 package com.fantasticsource.dynamicstealth.server.senses.sight;
 
-import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatDissolution;
 import com.fantasticsource.dynamicstealth.config.server.senses.SensesConfig;
 import com.fantasticsource.dynamicstealth.config.server.senses.sight.SightConfig;
@@ -10,7 +9,6 @@ import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.Speedometer;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
-import ladysnake.dissolution.api.corporeality.IIncorporealHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -237,7 +235,7 @@ public class Sight
         {
             for (Entity entity : loadedEntities)
             {
-                if (entity instanceof EntityLivingBase && entity != player && canSee(player, entity))
+                if (entity instanceof EntityLivingBase && entity != player && canSee(player, entity)) //The canSee() here is correct
                 {
                     double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, entity.posY - player.posY, entity.posZ - player.posZ).normalize());
 
@@ -310,7 +308,7 @@ public class Sight
         if (searcher.world != target.world || target.isDead) return 777;
 
         if (Tracking.isTracking(searcher, target)) return -777;
-        if (Compat.dissolution && searcher instanceof EntityPlayer && ((IIncorporealHandler) searcher.getCapability(CompatDissolution.INCORPOREAL_HANDLER_CAP, null)).getPossessed() == target) return -777;
+        if (searcher instanceof EntityPlayer && CompatDissolution.isPossessing((EntityPlayer) searcher, target)) return -777;
         if (MCTools.isRidingOrRiddenBy(searcher, target)) return -777;
 
         if (target instanceof EntityPlayerMP && ((EntityPlayerMP) target).capabilities.disableDamage) return 777;
