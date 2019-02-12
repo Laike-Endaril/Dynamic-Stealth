@@ -393,7 +393,10 @@ public class LivingBaseEntityTrackerEntry extends EntityTrackerEntry
 
     public void updatePlayerEntities(List<EntityPlayer> players)
     {
-        //Don't need this anymore since it happens every tick
+        for (EntityPlayer player : players)
+        {
+            updatePlayerEntity((EntityPlayerMP) player);
+        }
     }
 
     private Packet<?> createSpawnPacket()
