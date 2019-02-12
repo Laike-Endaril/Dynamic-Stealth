@@ -311,7 +311,7 @@ public class Sight
 
         if (Tracking.isTracking(searcher, target)) return -777;
         if (Compat.dissolution && searcher instanceof EntityPlayer && ((IIncorporealHandler) searcher.getCapability(CompatDissolution.INCORPOREAL_HANDLER_CAP, null)).getPossessed() == target) return -777;
-        if (target.getRidingEntity() == searcher || searcher.getRidingEntity() == target) return -777; //getRidingEntity DOES NOT RETURN THE RIDING ENTITY!  It returns the RIDDEN entity!
+        if (MCTools.isRidingOrRiddenBy(searcher, target)) return -777;
 
         if (target instanceof EntityPlayerMP && ((EntityPlayerMP) target).capabilities.disableDamage) return 777;
 

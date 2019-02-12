@@ -4,6 +4,7 @@ import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatDissolution;
 import com.fantasticsource.dynamicstealth.compat.CompatNeat;
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.datastructures.Color;
 import ladysnake.dissolution.api.corporeality.IIncorporealHandler;
@@ -81,7 +82,7 @@ public class HUD extends Gui
 
     private static boolean onPointFilter(EntityPlayer player, EntityLivingBase livingBase, int color, int percent)
     {
-        if (livingBase.getRidingEntity() == player || player.getRidingEntity() == livingBase) return false;
+        if (MCTools.isRidingOrRiddenBy(player, livingBase)) return false;
         if (Compat.dissolution && ((IIncorporealHandler) player.getCapability(CompatDissolution.INCORPOREAL_HANDLER_CAP, null)).getPossessed() == livingBase) return false;
 
         if (percent == -1) return clientSettings.hudSettings.filter.showBypass;

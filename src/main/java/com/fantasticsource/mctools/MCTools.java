@@ -18,6 +18,12 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class MCTools
 {
+    public static boolean isRidingOrRiddenBy(Entity entity1, Entity entity2)
+    {
+        //getRidingEntity DOES NOT GET THE RIDING ENTITY!  It gets the RIDDEN entity (these are opposites, ppl...)
+        return entity1 != null && entity2 != null && (entity1.getRidingEntity() == entity2 || entity2.getRidingEntity() == entity1);
+    }
+
     public static boolean isOwned(Entity entity)
     {
         return getOwner(entity) != null;
