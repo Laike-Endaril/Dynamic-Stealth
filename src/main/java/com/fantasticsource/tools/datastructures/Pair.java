@@ -38,4 +38,16 @@ public class Pair<K, V>
         setValue(value);
         return this;
     }
+
+    public boolean equals(Object other)
+    {
+        if (!(other instanceof Pair)) return false;
+        Pair otherPair = (Pair) other;
+        return equal(key, otherPair.key) && equal(value, otherPair.value);
+    }
+
+    private boolean equal(Object obj1, Object obj2)
+    {
+        return obj1 == null ? obj2 == null : obj1.equals(obj2);
+    }
 }
