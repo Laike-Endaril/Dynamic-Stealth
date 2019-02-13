@@ -1,6 +1,8 @@
 package com.fantasticsource.dynamicstealth.server.threat;
 
+import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.mctools.MCTools;
+import ladysnake.dissolution.api.corporeality.IPossessable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -110,6 +112,8 @@ public class EntityThreatData
     public static boolean bypassesThreat(EntityLivingBase livingBase)
     {
         if (serverSettings.threat.bypassThreatSystem || livingBase == null) return true;
+
+        if (Compat.dissolution && livingBase instanceof IPossessable && ((IPossessable) livingBase).getPossessingEntity() != null) return true;
 
         for (Class<? extends Entity> clss : threatBypass)
         {

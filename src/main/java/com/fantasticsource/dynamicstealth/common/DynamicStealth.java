@@ -5,6 +5,7 @@ import com.fantasticsource.dynamicstealth.client.RenderAlterer;
 import com.fantasticsource.dynamicstealth.common.potions.Potions;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatCNPC;
+import com.fantasticsource.dynamicstealth.compat.CompatDissolution;
 import com.fantasticsource.dynamicstealth.server.Attributes;
 import com.fantasticsource.dynamicstealth.server.CombatTracker;
 import com.fantasticsource.dynamicstealth.server.EntityLookHelperEdit;
@@ -686,7 +687,11 @@ public class DynamicStealth
         if (Loader.isModLoaded("ancientwarfare")) Compat.ancientwarfare = true;
         if (Loader.isModLoaded("neat")) Compat.neat = true;
         if (Loader.isModLoaded("statues")) Compat.statues = true;
-        if (Loader.isModLoaded("dissolution")) Compat.dissolution = true;
+        if (Loader.isModLoaded("dissolution"))
+        {
+            Compat.dissolution = true;
+            MinecraftForge.EVENT_BUS.register(CompatDissolution.class);
+        }
         if (Loader.isModLoaded("customnpcs"))
         {
             Compat.customnpcs = true;

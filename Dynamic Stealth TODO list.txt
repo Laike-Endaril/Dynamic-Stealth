@@ -1,12 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Look into issue #27...
-...fix possessed entity building threat (should all possessables bypass threat, or just currently possessed ones?)
-
-...fix repeated authentication checks due to players not existing -> existing repeatedly on client...
-...maybe the skins can be cached instead of always being requested?
-...is this only with dissolution, or is this a general DS thing no matter what other mods are around? (test in multiplayer with only DS)
-
 Fix entities attempting to path through diagonal walls; this may very well fix the issue below
 Fix entities being able to attack through glass diagonally (because they can see through it...)
 
