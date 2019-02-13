@@ -1,23 +1,36 @@
 CURRENTLY WORKING ON ===================================================
 
-Fix entities attempting to path through diagonal walls; this may very well fix the issue below
-Fix entities being able to attack through glass diagonally (because they can see through it...)
+Look into crash with Deadly Mobs and its haunted cows...
+...https://paste.ee/p/gnVtK
+...apparently haunted cows are also not supposed to look haunted until they get hit
 
-Make stuck detection account for jumping by allowing for more play along y axis
+Look into issue where "entities don't always notice you right away"...
+...Epic Siege Mod
+...Mo' Creatures
+...I'm guessing this is probably due to a custom AI based on one of the vanilla AIs with a "chance" of seeing you
 
 Add new color for threat bypass; very dark grey?
 
 Option to prevent wolves from teleporting
 
-Change stealth calcs; try to prevent rapid blinking in and out
-
 Migrate old bad AI handling entries to new system, where applicable
+
+
+
+GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES ============================
+
+Change stealth calcs; try to prevent rapid blinking in and out
 
 Use tracking system (Tracking class) for something
 
 
 
 BUG FIXES ==============================================================
+
+Fix entities attempting to path through diagonal walls; this may very well fix (or at least mostly fix) the issue below
+Fix entities being able to attack through glass diagonally (because they can see through it...)
+
+Make stuck detection account for jumping by allowing for more play along y axis
 
 Fix bug where mobs' body angle is sometimes wrong (pretty sure this is a vanilla bug)...
 ...may also have something to do with setting previous rotation yaw, maybe try not doing that bit and see what happens
@@ -158,11 +171,3 @@ Lycanite's Mobs can still attack through walls; probably using different LOS
 
 Lycanite's Mobs have their own EntityAILookIdle which needs removing/replacing
 
-Look into crash with Deadly Mobs and its haunted cows...
-...https://paste.ee/p/gnVtK
-...apparently haunted cows are also not supposed to look haunted until they get hit
-
-Look into issue where "entities don't always notice you right away"...
-...Epic Siege Mod
-...Mo' Creatures
-...I'm guessing this is probably due to a custom AI based on one of the vanilla AIs with a "chance" of seeing you
