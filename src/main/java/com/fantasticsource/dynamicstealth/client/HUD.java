@@ -58,7 +58,7 @@ public class HUD extends Gui
     @SubscribeEvent
     public static void drawHUD(RenderGameOverlayEvent.Post event)
     {
-        if (event.getType() == RenderGameOverlayEvent.ElementType.EXPERIENCE)
+        if (event.getType() == RenderGameOverlayEvent.ElementType.ALL)
         {
             new HUD(Minecraft.getMinecraft());
         }
