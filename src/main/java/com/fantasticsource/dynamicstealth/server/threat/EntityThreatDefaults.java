@@ -21,5 +21,6 @@ public class EntityThreatDefaults
         passiveDefaults.add("ebwizardry:wizard, false");
 
         threatBypassDefaults.add("rafradek_tf2_weapons:sentry");
+        threatBypassDefaults.add("dissolution:player_corpse");
     }
 }

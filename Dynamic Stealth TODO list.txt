@@ -1,7 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
 Look into issue #27...
-...fix ai activating on your "shell" when outside your body (though it's pretty funny to see yourself sprinting away from you in fear)
 ...fix possessed entity building threat (should all possessables bypass threat, or just currently possessed ones?)
 
 ...fix repeated authentication checks due to players not existing -> existing repeatedly on client...
