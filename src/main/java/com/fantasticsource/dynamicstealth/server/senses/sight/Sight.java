@@ -9,6 +9,7 @@ import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.Speedometer;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
+import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -47,7 +48,7 @@ public class Sight
 
     private static Map<EntityLivingBase, Map<Entity, SeenData>> recentlySeenMap = new LinkedHashMap<>();
 
-    private static Map<EntityPlayerMP, ExplicitPriorityQueue<EntityLivingBase>> playerSeenThisTickMap = new LinkedHashMap<>();
+    private static Map<Pair<EntityPlayerMP, Boolean>, ExplicitPriorityQueue<EntityLivingBase>> playerSeenThisTickMap = new LinkedHashMap<>();
     private static Map<EntityLiving, ArrayList<EntityLivingBase>> entitySeenThisTickMap = new LinkedHashMap<>();
 
 
@@ -215,17 +216,17 @@ public class Sight
     }
 
 
-    public static ExplicitPriorityQueue<EntityLivingBase> seenEntities(EntityPlayerMP player)
+    public static ExplicitPriorityQueue<EntityLivingBase> seenEntities(EntityPlayerMP player, boolean isForHUD)
     {
-        ExplicitPriorityQueue<EntityLivingBase> queue = playerSeenThisTickMap.get(player);
+        ExplicitPriorityQueue<EntityLivingBase> queue = playerSeenThisTickMap.get(new Pair<>(player, isForHUD));
         if (queue != null) return queue.clone();
 
-        ExplicitPriorityQueue<EntityLivingBase>[] queues = seenEntitiesInternal(player);
-        playerSeenThisTickMap.put(player, queues[1]);
+        ExplicitPriorityQueue<EntityLivingBase>[] queues = seenEntitiesInternal(player, isForHUD);
+        playerSeenThisTickMap.put(new Pair<>(player, isForHUD), queues[1]);
         return queues[0];
     }
 
-    private static ExplicitPriorityQueue<EntityLivingBase>[] seenEntitiesInternal(EntityPlayerMP player)
+    private static ExplicitPriorityQueue<EntityLivingBase>[] seenEntitiesInternal(EntityPlayerMP player, boolean isForHUD)
     {
         ExplicitPriorityQueue<EntityLivingBase>[] queues = new ExplicitPriorityQueue[]{new ExplicitPriorityQueue<>(10), new ExplicitPriorityQueue<>(10)};
         double stealthLevel;
@@ -235,20 +236,23 @@ public class Sight
         {
             for (Entity entity : loadedEntities)
             {
-                if (entity instanceof EntityLivingBase && entity != player && canSee(player, entity)) //The canSee() here is correct
+                if (!isForHUD || !(MCTools.isRidingOrRiddenBy(player, entity) || CompatDissolution.isPossessing(player, entity)))
                 {
-                    double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, entity.posY - player.posY, entity.posZ - player.posZ).normalize());
+                    if (entity instanceof EntityLivingBase && entity != player && canSee(player, entity)) //The canSee() here is correct
+                    {
+                        double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, entity.posY - player.posY, entity.posZ - player.posZ).normalize());
 
-                    //And because Vec3d.fromPitchYaw occasionally returns values barely out of the range of (-1, 1)...
-                    if (angleDif < -1) angleDif = -1;
-                    else if (angleDif > 1) angleDif = 1;
+                        //And because Vec3d.fromPitchYaw occasionally returns values barely out of the range of (-1, 1)...
+                        if (angleDif < -1) angleDif = -1;
+                        else if (angleDif > 1) angleDif = 1;
 
-                    angleDif = TRIG_TABLE.arccos(angleDif); //0 in front, pi in back
+                        angleDif = TRIG_TABLE.arccos(angleDif); //0 in front, pi in back
 
-                    double distSquared = player.getDistanceSq(entity);
-                    double priority = Math.pow(angleDif, 3) * distSquared;
-                    queues[0].add((EntityLivingBase) entity, priority); //Returned to external call
-                    queues[1].add((EntityLivingBase) entity, priority); //Used for playerSeenThisTickMap (result caching)
+                        double distSquared = player.getDistanceSq(entity);
+                        double priority = Math.pow(angleDif, 3) * distSquared;
+                        queues[0].add((EntityLivingBase) entity, priority); //Returned to external call
+                        queues[1].add((EntityLivingBase) entity, priority); //Used for playerSeenThisTickMap (result caching)
+                    }
                 }
             }
         }
@@ -258,11 +262,14 @@ public class Sight
             {
                 if (entity instanceof EntityLivingBase && entity != player)
                 {
-                    stealthLevel = visualStealthLevel(player, entity);
-                    if (stealthLevel <= 1)
+                    if (!isForHUD || !(MCTools.isRidingOrRiddenBy(player, entity) || CompatDissolution.isPossessing(player, entity)))
                     {
-                        queues[0].add((EntityLivingBase) entity, stealthLevel); //Returned to external call
-                        queues[1].add((EntityLivingBase) entity, stealthLevel); //Used for playerSeenThisTickMap (result caching)
+                        stealthLevel = visualStealthLevel(player, entity);
+                        if (stealthLevel <= 1)
+                        {
+                            queues[0].add((EntityLivingBase) entity, stealthLevel); //Returned to external call
+                            queues[1].add((EntityLivingBase) entity, stealthLevel); //Used for playerSeenThisTickMap (result caching)
+                        }
                     }
                 }
             }
@@ -275,23 +282,26 @@ public class Sight
             {
                 if (entity instanceof EntityLivingBase && entity != player)
                 {
-                    double distSquared = player.getDistanceSq(entity);
-                    if (distSquared <= Math.pow(playerMaxSightDistance, 2) && los(player, entity))
+                    if (!isForHUD || !(MCTools.isRidingOrRiddenBy(player, entity) || CompatDissolution.isPossessing(player, entity)))
                     {
-                        double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, entity.posY - player.posY, entity.posZ - player.posZ).normalize());
-
-                        //And because Vec3d.fromPitchYaw occasionally returns values barely out of the range of (-1, 1)...
-                        if (angleDif < -1) angleDif = -1;
-                        else if (angleDif > 1) angleDif = 1;
-
-                        angleDif = TRIG_TABLE.arccos(angleDif); //0 in front, pi in back
-
-                        if (angleDif / Math.PI * 180 <= 70)
+                        double distSquared = player.getDistanceSq(entity);
+                        if (distSquared <= Math.pow(playerMaxSightDistance, 2) && los(player, entity))
                         {
-                            double priority = Math.pow(angleDif, 3) * distSquared;
-                            queues[0].add((EntityLivingBase) entity, priority); //Returned to external call
-                            queues[1].add((EntityLivingBase) entity, priority); //Used for playerSeenThisTickMap (result caching)
-                            map.put(entity, new SeenData(priority, true)); //visualStealthLevelInternal was not called, so need to add to map manually
+                            double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, entity.posY - player.posY, entity.posZ - player.posZ).normalize());
+
+                            //And because Vec3d.fromPitchYaw occasionally returns values barely out of the range of (-1, 1)...
+                            if (angleDif < -1) angleDif = -1;
+                            else if (angleDif > 1) angleDif = 1;
+
+                            angleDif = TRIG_TABLE.arccos(angleDif); //0 in front, pi in back
+
+                            if (angleDif / Math.PI * 180 <= 70)
+                            {
+                                double priority = Math.pow(angleDif, 3) * distSquared;
+                                queues[0].add((EntityLivingBase) entity, priority); //Returned to external call
+                                queues[1].add((EntityLivingBase) entity, priority); //Used for playerSeenThisTickMap (result caching)
+                                map.put(entity, new SeenData(priority, true)); //visualStealthLevelInternal was not called, so need to add to map manually
+                            }
                         }
                     }
                 }

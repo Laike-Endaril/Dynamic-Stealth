@@ -109,7 +109,7 @@ public class Network
 
         public VisibilityPacket(EntityPlayerMP player)
         {
-            queue = Sight.seenEntities(player);
+            queue = Sight.seenEntities(player, false);
         }
 
 
@@ -286,7 +286,7 @@ public class Network
             this.detailHUD = detailHUD;
             this.onPointHUDMode = onPointHUDMode;
 
-            queue = Sight.seenEntities(player);
+            queue = Sight.seenEntities(player, true);
         }
 
         @Override
