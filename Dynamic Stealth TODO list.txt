@@ -1,13 +1,9 @@
 CURRENTLY WORKING ON ===================================================
 
-Look into crash with Deadly Mobs and its haunted cows...
-...https://paste.ee/p/gnVtK
-...apparently haunted cows are also not supposed to look haunted until they get hit
+Figure out why the TF2 sentry gun constantly loses target with DS installed (if it's not in threat bypass mode)
+Does having DS installed cause TF2 bullet streaks to not show?
 
-Look into issue where "entities don't always notice you right away"...
-...Epic Siege Mod
-...Mo' Creatures
-...I'm guessing this is probably due to a custom AI based on one of the vanilla AIs with a "chance" of seeing you
+CNPCs don't change opacity
 
 Add new color for threat bypass; very dark grey?
 
@@ -161,11 +157,6 @@ Make it so morphing into a creature using Morph mod acts as a disguise against t
 MOD COMPATIBILITY ======================================================
 
 Add bright mobs from mods to EntitySightDefaults.naturallyBrightEntities
-
-CNPCs don't change opacity
-
-Figure out why the TF2 sentry gun constantly loses target with DS installed (if it's not in threat bypass mode)
-Does having DS installed cause TF2 bullet streaks to not show?
 
 Lycanite's Mobs can still attack through walls; probably using different LOS
 
