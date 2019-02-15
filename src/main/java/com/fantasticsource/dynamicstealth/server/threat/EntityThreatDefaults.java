@@ -19,8 +19,8 @@ public class EntityThreatDefaults
 
         //Compat; these should be added absolutely, not conditionally
         passiveDefaults.add("ebwizardry:wizard, false");
+        passiveDefaults.add("rafradek_tf2_weapons:sentry, false");
 
-        threatBypassDefaults.add("rafradek_tf2_weapons:sentry");
         threatBypassDefaults.add("dissolution:player_corpse");
     }
 }

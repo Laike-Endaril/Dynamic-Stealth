@@ -1,6 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Figure out why the TF2 sentry gun constantly loses target with DS installed (if it's not in threat bypass mode)
 Does having DS installed cause TF2 bullet streaks to not show?
 
 Add new color for threat bypass; very dark grey?
