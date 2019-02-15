@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 
@@ -57,7 +58,8 @@ public class RenderAlterer
             GlStateManager.enableCull();
             GlStateManager.cullFace(GlStateManager.CullFace.BACK);
 
-            GlStateManager.color(1, 1, 1, (float) (min + (1d - min) * visibility));
+            GlStateManager.color(1, 1, 1, 1);
+            GL11.glColor4f(1, 1, 1, (float) (min + (1d - min) * visibility));
         }
     }
 
@@ -66,6 +68,7 @@ public class RenderAlterer
     {
         if (Compat.statues && event.getEntity().getClass().getName().contains("party.lemons.statue")) return;
         GlStateManager.color(1, 1, 1, 1);
+        GL11.glColor4f(1, 1, 1, 1);
         GlStateManager.disableBlend();
     }
 }
