@@ -1,6 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-Does having DS installed cause TF2 bullet streaks to not show?
+Make it so morphing into a creature using Morph mod acts as a disguise against that mob type
 
 Add new color for threat bypass; very dark grey?
 
@@ -142,12 +142,6 @@ Gray Men...
 MUSIC AND SOUND ========================================================
 
 Possibly change music using ActualMusic when going into battle, etc
-
-
-
-CROSS-MOD FEATURES =====================================================
-
-Make it so morphing into a creature using Morph mod acts as a disguise against that mob type
 
 
 
