@@ -1,6 +1,8 @@
 CURRENTLY WORKING ON ===================================================
 
-Make it so morphing into a creature using Morph mod acts as a disguise against that mob type
+Add disguise system; conditionally prevents targeting even if seen, but not if the enemy has threat against you...
+...make it so skulls use disguise system instead of doing a stealth multiplier
+...make it so morphing into a creature using Morph mod acts as a disguise against that mob type
 
 Add new color for threat bypass; very dark grey?
 
