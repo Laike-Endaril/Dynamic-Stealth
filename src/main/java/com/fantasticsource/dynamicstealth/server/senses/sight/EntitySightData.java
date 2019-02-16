@@ -157,28 +157,6 @@ public class EntitySightData
                 }
             }
         }
-
-        for (String string : serverSettings.senses.sight.y_entityOverrides.speed)
-        {
-            tokens = string.split(",");
-            if (tokens.length != 3) System.err.println("Wrong number of arguments for entity-specific speed override; please check example in tooltip");
-            else
-            {
-                token = tokens[0].trim();
-                if (token.equals("player")) entitySpeeds.put(EntityPlayerMP.class, new Pair<>(Double.parseDouble(tokens[1].trim()), Double.parseDouble(tokens[2].trim())));
-                else
-                {
-                    entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(token));
-                    if (entry == null) System.err.println("ResourceLocation for entity \"" + token + "\" not found!");
-                    else
-                    {
-                        Class c = entry.getEntityClass();
-                        if (EntityLivingBase.class.isAssignableFrom(c)) entitySpeeds.put(c, new Pair<>(Double.parseDouble(tokens[1].trim()), Double.parseDouble(tokens[2].trim())));
-                        else System.err.println("Entity \"" + string + "\" does not extend EntityLivingBase!");
-                    }
-                }
-            }
-        }
     }
 
 
@@ -197,7 +175,6 @@ public class EntitySightData
         if (serverSettings.senses.sight.e_angles.angleSmall > serverSettings.senses.sight.e_angles.angleLarge) throw new IllegalArgumentException("angleLarge must be greater than or equal to angleSmall");
         if (serverSettings.senses.sight.f_distances.distanceNear > serverSettings.senses.sight.f_distances.distanceFar) throw new IllegalArgumentException("distanceFar must be greater than or equal to distanceNear");
         if (serverSettings.senses.sight.c_lighting.lightLow > serverSettings.senses.sight.c_lighting.lightHigh) throw new IllegalArgumentException("lightHigh must be greater than or equal to lightLow");
-        if (serverSettings.senses.sight.d_speeds.speedLow > serverSettings.senses.sight.d_speeds.speedHigh) throw new IllegalArgumentException("speedHigh must be greater than or equal to speedLow");
     }
 
 
@@ -252,18 +229,5 @@ public class EntitySightData
     {
         Pair<Integer, Integer> pair = entityLighting.get(searcher.getClass());
         return pair == null ? serverSettings.senses.sight.c_lighting.lightLow : pair.getValue();
-    }
-
-
-    public static double speedHigh(EntityLivingBase searcher)
-    {
-        Pair<Double, Double> pair = entitySpeeds.get(searcher.getClass());
-        return pair == null ? serverSettings.senses.sight.d_speeds.speedHigh : pair.getKey();
-    }
-
-    public static double speedLow(EntityLivingBase searcher)
-    {
-        Pair<Double, Double> pair = entitySpeeds.get(searcher.getClass());
-        return pair == null ? serverSettings.senses.sight.d_speeds.speedLow : pair.getValue();
     }
 }

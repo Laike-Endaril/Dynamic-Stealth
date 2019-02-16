@@ -27,7 +27,6 @@ import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.ServerTickTimer;
-import com.fantasticsource.mctools.Speedometer;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.TrigLookupTable;
@@ -106,7 +105,6 @@ public class DynamicStealth
         MinecraftForge.EVENT_BUS.register(CombatTracker.class);
         MinecraftForge.EVENT_BUS.register(EntitySightData.class);
         MinecraftForge.EVENT_BUS.register(DynamicStealth.class);
-        MinecraftForge.EVENT_BUS.register(Speedometer.class);
         MinecraftForge.EVENT_BUS.register(Network.class);
         MinecraftForge.EVENT_BUS.register(Threat.class);
         MinecraftForge.EVENT_BUS.register(Sight.class);

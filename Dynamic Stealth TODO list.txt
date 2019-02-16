@@ -1,10 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-Add disguise system; conditionally prevents targeting even if seen, but not if the enemy has threat against you...
-...for AI, probably call the method for this check in EntitySensesEdit#canSee()
-...make it so skulls use disguise system instead of doing a stealth multiplier
-...make it so morphing into a creature using Morph mod acts as a disguise against that mob type
-...for players, this may be more complicated, and involve sending fake entities...
+Remove server -> threat -> recognize passives automatically
 
 Add new color for threat bypass; very dark grey?
 
@@ -16,7 +12,11 @@ Migrate old bad AI handling entries to new system, where applicable
 
 GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES ============================
 
-Change stealth calcs; try to prevent rapid blinking in and out
+Add disguise system; conditionally prevents targeting even if seen, but not if the enemy has threat against you...
+...for AI, probably call the method for this check in EntitySensesEdit#canSee()
+...make it so skulls use disguise system instead of doing a stealth multiplier
+...make it so morphing into a creature using Morph mod acts as a disguise against that mob type
+...for players, this may be more complicated, and involve sending fake entities...
 
 Use tracking system (Tracking class) for something
 
@@ -70,7 +70,6 @@ Add target locking (press button to lock/unlock on current target)
 
 Add to HUD...
 ...light
-...speed
 ...combined stealth multiplier?
 
 

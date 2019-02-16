@@ -23,9 +23,6 @@ public class SightConfig
     @Config.Name("Lighting")
     @Config.Comment({"How much of an effect lighting has on stealth.  Nightvision is in here as well"})
     public LightingConfig c_lighting = new LightingConfig();
-    @Config.Name("Speed")
-    @Config.Comment({"How much of an effect an entity's speed has on stealth"})
-    public SpeedConfig d_speeds = new SpeedConfig();
     @Config.Name("Angle")
     @Config.Comment({"FOV angles"})
     public AngleConfig e_angles = new AngleConfig();

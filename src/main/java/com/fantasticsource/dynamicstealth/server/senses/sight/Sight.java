@@ -6,7 +6,6 @@ import com.fantasticsource.dynamicstealth.config.server.senses.sight.SightConfig
 import com.fantasticsource.dynamicstealth.server.Attributes;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
-import com.fantasticsource.mctools.Speedometer;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import com.fantasticsource.tools.datastructures.Pair;
@@ -384,13 +383,6 @@ public class Sight
         lightFactor = lightFactor >= lightHigh ? 1 : lightFactor / (lightHigh - lightLow);
 
 
-        //Speeds (factor)
-        double speedFactor = Speedometer.getSpeed(target);
-        double speedLow = speedLow(searcher);
-        double speedHigh = speedHigh(searcher);
-        speedFactor = speedFactor >= speedHigh ? 1 : speedFactor <= speedLow ? 0 : (speedFactor - speedLow) / (speedHigh - speedLow);
-
-
         //Blindness (multiplier)
         double blindnessMultiplier = searcher.getActivePotionEffect(MobEffects.BLINDNESS) != null ? sight.a_stealthMultipliers.blindnessMultiplier : 1;
 
@@ -431,16 +423,16 @@ public class Sight
 
 
         //Combine multipliers
-        double stealthMultiplier = Tools.min(blindnessMultiplier, invisibilityMultiplier, crouchingMultiplier, mobHeadMultiplier);
-        double visibilityMultiplier = Tools.max(armorMultiplier, alertMultiplier, seenMultiplier);
-        double baseMultiplier = Tools.min(Tools.max((lightFactor + speedFactor) / 2 * stealthMultiplier * visibilityMultiplier, 0), 1);
+        double stealthMultiplier = blindnessMultiplier * Tools.min(invisibilityMultiplier, crouchingMultiplier, mobHeadMultiplier);
+        double visibilityMultiplier = armorMultiplier * alertMultiplier * seenMultiplier;
+        double configMultipliers = Tools.min(Tools.max(stealthMultiplier * visibilityMultiplier, 0), 1);
 
         double visReduction = !isLivingBase ? 0 : targetLivingBase.getEntityAttribute(Attributes.VISIBILITY_REDUCTION).getAttributeValue();
-        double attributeMultiplier = visReduction == 0 ? Double.MAX_VALUE : searcher.getEntityAttribute(Attributes.SIGHT).getAttributeValue() / visReduction;
+        double attributeMultipliers = visReduction == 0 ? Double.MAX_VALUE : searcher.getEntityAttribute(Attributes.SIGHT).getAttributeValue() / visReduction;
 
 
         //Final calculation
-        return Math.sqrt(distSquared) / (distanceThreshold * baseMultiplier * attributeMultiplier);
+        return Math.sqrt(distSquared) / (distanceThreshold * lightFactor * configMultipliers * attributeMultipliers);
     }
 
     private static class SeenData

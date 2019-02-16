@@ -14,7 +14,7 @@ public class EntityFadeConfig
                     "If set to 1, entities always appear at full visibility"
             })
     @Config.RangeDouble(min = 0, max = 1)
-    public double mobOpacityMin = 0;
+    public double mobOpacityMin = 0.1;
 
     @Config.Name("Full Opacity At...")
     @Config.Comment(

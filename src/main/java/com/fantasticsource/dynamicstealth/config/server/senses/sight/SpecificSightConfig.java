@@ -107,18 +107,4 @@ public class SpecificSightConfig
                     "ender_dragon",
                     "vex"
             };
-
-    @Config.Name("Speed")
-    @Config.Comment(
-            {
-                    "How sensitive an entity's sight is to movement",
-                    "",
-                    "entityID, speedHigh, speedLow",
-                    "",
-                    "eg...",
-                    "",
-                    "minecraft:skeleton, 5.6, 0"
-            })
-    @Config.RequiresMcRestart
-    public String[] speed = new String[]{"ghast, 3, 3"};
 }
