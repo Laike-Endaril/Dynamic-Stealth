@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Remove server -> threat -> recognize passives automatically
-
 Add new color for threat bypass; very dark grey?
 
 Option to prevent wolves from teleporting

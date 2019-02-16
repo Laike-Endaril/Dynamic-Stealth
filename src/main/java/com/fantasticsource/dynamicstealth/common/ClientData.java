@@ -60,7 +60,7 @@ public class ClientData
         if (EntityThreatData.bypassesThreat(searcher)) return COLOR_ALERT;
         AIDynamicStealth stealthAI = searcher instanceof EntityLiving ? AIDynamicStealth.getStealthAI((EntityLiving) searcher) : null;
         if (stealthAI != null && stealthAI.isFleeing()) return COLOR_FLEEING;
-        if (serverSettings.threat.recognizePassive && EntityThreatData.isPassive(searcher)) return COLOR_PASSIVE;
+        if (serverSettings.hud.recognizePassive && EntityThreatData.isPassive(searcher)) return COLOR_PASSIVE;
         if (threatLevel <= 0) return COLOR_IDLE;
         if (target == null) return COLOR_ALERT;
         if (target == player) return COLOR_ATTACKING_YOU;

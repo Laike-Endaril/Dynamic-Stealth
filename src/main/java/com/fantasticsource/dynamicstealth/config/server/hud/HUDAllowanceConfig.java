@@ -40,4 +40,7 @@ public class HUDAllowanceConfig
     @Config.RangeInt(min = 0, max = 2)
     public int opOnPointHUD = 2;
 
+    @Config.Name("Recognize Passives Automatically")
+    @Config.Comment({"If enabled, clients' threat HUDs will display green for passive mobs"})
+    public boolean recognizePassive = true;
 }

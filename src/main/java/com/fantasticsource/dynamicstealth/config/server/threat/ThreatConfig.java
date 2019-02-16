@@ -42,10 +42,6 @@ public class ThreatConfig
     @Config.RangeInt(min = 1)
     public int maxThreat = 1000;
 
-    @Config.Name("Recognize Passives Automatically")
-    @Config.Comment({"If enabled, clients' threat HUDs will display green for passive mobs"})
-    public boolean recognizePassive = true;
-
     @Config.Name("Unseen Target Minimum Threat Level")
     @Config.Comment({"If an entity's threat level falls below this and they don't see their target, they go out-of-combat / stop searching"})
     @Config.RangeInt(min = 0)
