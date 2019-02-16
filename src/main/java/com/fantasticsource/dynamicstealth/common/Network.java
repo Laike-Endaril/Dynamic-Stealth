@@ -304,7 +304,7 @@ public class Network
                 if (searcher == null) buf.writeInt(ClientData.COLOR_NULL); //if color == COLOR_NULL then searcher is null
                 else if (EntityThreatData.bypassesThreat(searcher))
                 {
-                    buf.writeInt(ClientData.COLOR_ALERT);
+                    buf.writeInt(ClientData.COLOR_BYPASS);
                     buf.writeInt(-1); //else if threatLevel == -1 then searcher bypasses threat
                     ByteBufUtils.writeUTF8String(buf, searcher.getName());
 
@@ -350,7 +350,7 @@ public class Network
                     if (searcher == null) buf.writeInt(ClientData.COLOR_NULL); //if color == COLOR_NULL then searcher is null
                     else if (EntityThreatData.bypassesThreat(searcher))
                     {
-                        buf.writeInt(ClientData.COLOR_ALERT);
+                        buf.writeInt(ClientData.COLOR_BYPASS);
                         buf.writeInt(searcher.getEntityId());
                         buf.writeInt(-1); //else if threatLevel == -1 then searcher bypasses threat
                     }

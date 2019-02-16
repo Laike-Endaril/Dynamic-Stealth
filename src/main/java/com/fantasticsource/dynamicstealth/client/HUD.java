@@ -83,7 +83,7 @@ public class HUD extends Gui
     {
         if (MCTools.isRidingOrRiddenBy(player, livingBase) || CompatDissolution.isPossessing(player, livingBase)) return false;
 
-        if (percent == -1) return clientSettings.hudSettings.filter.showBypass;
+        if (color == COLOR_BYPASS) return clientSettings.hudSettings.filter.showBypass;
         if (color == COLOR_PASSIVE) return clientSettings.hudSettings.filter.showPassive;
         if (color == COLOR_IDLE) return clientSettings.hudSettings.filter.showIdle;
         if (color == COLOR_ALERT) return clientSettings.hudSettings.filter.showAlert;
@@ -194,8 +194,9 @@ public class HUD extends Gui
         }
 
         //Outline and eyes
-        if (color == COLOR_ATTACKING_YOU || color == COLOR_ALERT)
+        if (color == COLOR_ATTACKING_YOU || color == COLOR_ALERT || color == COLOR_BYPASS)
         {
+            //Angry, lit up eyes
             bufferbuilder.pos(left, top, 0).tex(UV_HALF_PIXEL, 0.5 + UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
             bufferbuilder.pos(left, bottom, 0).tex(UV_HALF_PIXEL, 1 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
             bufferbuilder.pos(right, bottom, 0).tex(0.5 - UV_HALF_PIXEL, 1 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
@@ -203,6 +204,7 @@ public class HUD extends Gui
         }
         else
         {
+            //Normal, empty eyes
             bufferbuilder.pos(left, top, 0).tex(0.5 + UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
             bufferbuilder.pos(left, bottom, 0).tex(0.5 + UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
             bufferbuilder.pos(right, bottom, 0).tex(1 - UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
@@ -249,9 +251,9 @@ public class HUD extends Gui
             {
                 if (detailPercent == -1) //Special code for threat bypass mode
                 {
-                    drawString(fontRender, detailSearcher, (int) (width * 0.75), height - 30, COLOR_ALERT);
-                    drawString(fontRender, UNKNOWN, (int) (width * 0.75), height - 20, COLOR_ALERT);
-                    drawString(fontRender, UNKNOWN, (int) (width * 0.75), height - 10, COLOR_ALERT);
+                    drawString(fontRender, detailSearcher, (int) (width * 0.75), height - 30, COLOR_BYPASS);
+                    drawString(fontRender, UNKNOWN, (int) (width * 0.75), height - 20, COLOR_BYPASS);
+                    drawString(fontRender, UNKNOWN, (int) (width * 0.75), height - 10, COLOR_BYPASS);
                 }
                 else if (detailPercent == 0)
                 {

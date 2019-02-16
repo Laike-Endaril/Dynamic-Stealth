@@ -21,6 +21,7 @@ public class ClientData
     public static final int COLOR_IDLE = 0x4444FF;
     public static final int COLOR_PASSIVE = 0x00CC00;
     public static final int COLOR_FLEEING = 0x770077;
+    public static final int COLOR_BYPASS = 0x333333;
 
     public static final String EMPTY = "----------";
     public static final String UNKNOWN = "???";
@@ -57,7 +58,7 @@ public class ClientData
     public static int getColor(EntityPlayer player, EntityLivingBase searcher, EntityLivingBase target, int threatLevel)
     {
         if (searcher == null) return COLOR_NULL;
-        if (EntityThreatData.bypassesThreat(searcher)) return COLOR_ALERT;
+        if (EntityThreatData.bypassesThreat(searcher)) return COLOR_BYPASS;
         AIDynamicStealth stealthAI = searcher instanceof EntityLiving ? AIDynamicStealth.getStealthAI((EntityLiving) searcher) : null;
         if (stealthAI != null && stealthAI.isFleeing()) return COLOR_FLEEING;
         if (serverSettings.hud.recognizePassive && EntityThreatData.isPassive(searcher)) return COLOR_PASSIVE;

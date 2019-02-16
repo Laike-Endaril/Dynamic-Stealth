@@ -1,10 +1,12 @@
 CURRENTLY WORKING ON ===================================================
 
-Add new color for threat bypass; very dark grey?
+Fix ender dragon not being easily visible
+
+Fix equipment not fading with entity
 
 Option to prevent wolves from teleporting
 
-Migrate old bad AI handling entries to new system, where applicable
+Optimize networking
 
 
 
@@ -28,7 +30,8 @@ Fix entities being able to attack through glass diagonally (because they can see
 Make stuck detection account for jumping by allowing for more play along y axis
 
 Fix bug where mobs' body angle is sometimes wrong (pretty sure this is a vanilla bug)...
-...may also have something to do with setting previous rotation yaw, maybe try not doing that bit and see what happens
+...one very notable time this happens is when an entity is created client-side (eg. when you spin and it comes into view with player senses enabled)
+...may have something to do with setting previous rotation yaw, maybe try not doing that bit and see what happens
 ...if so, keep in mind that sight algorithm uses previous yaw and notably depends on it when making an entity look a direction then checking sight
 
 Fix leashes not rendering sometimes? (it shows the knot though...is this a vanilla bug?)
@@ -137,12 +140,6 @@ Ninjas...
 Gray Men...
 ...Gray men are considered invisible if you are facing them directly
 ...When they were visible, but are no longer visible, stop sending updates to client, but *don't* tell client to remove them; this should cause an illusion that they are holding still
-
-
-
-MUSIC AND SOUND ========================================================
-
-Possibly change music using ActualMusic when going into battle, etc
 
 
 
