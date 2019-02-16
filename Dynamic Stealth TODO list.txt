@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Fix ender dragon not being easily visible
-
 Fix equipment not fading with entity
 
 Option to prevent wolves from teleporting

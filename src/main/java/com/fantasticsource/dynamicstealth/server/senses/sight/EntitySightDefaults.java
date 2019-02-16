@@ -10,6 +10,8 @@ public class EntitySightDefaults
     {
         naturallyBrightDefaults.add("blaze");
         naturallyBrightDefaults.add("magma_cube");
+        naturallyBrightDefaults.add("ender_dragon");
+        naturallyBrightDefaults.add("wither");
 
         //Compat; these should be added absolutely, not conditionally
         //TODO add glowy lycanite stuff, like cinders, wisps, etc...

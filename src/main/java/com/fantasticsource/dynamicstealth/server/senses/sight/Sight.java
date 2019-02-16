@@ -13,6 +13,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -317,6 +319,7 @@ public class Sight
         if (searcher.world != target.world || target.isDead) return 777;
 
         if (Tracking.isTracking(searcher, target)) return -777;
+        if (target instanceof EntityDragon || target instanceof EntityWither) return -777;
         if (searcher instanceof EntityPlayer && CompatDissolution.isPossessing((EntityPlayer) searcher, target)) return -777;
         if (MCTools.isRidingOrRiddenBy(searcher, target)) return -777;
 
