@@ -269,10 +269,10 @@ public class Network
         boolean detailHUD;
         int onPointHUDMode;
 
-        String detailSearcherName;
-        String detailTargetName;
-        int detailPercent;
-        int detailColor;
+        String detailSearcherName = ClientData.EMPTY;
+        String detailTargetName = ClientData.EMPTY;
+        int detailPercent = -1;
+        int detailColor = ClientData.COLOR_NULL;
 
         LinkedHashMap<Integer, ClientData.OnPointData> onPointMap = new LinkedHashMap<>(10);
 
