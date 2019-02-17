@@ -92,14 +92,20 @@ public class RenderItemEdit extends RenderItem
     {
         if (!stack.isEmpty())
         {
-            int id = livingBase.getEntityId();
-            double min = DynamicStealthConfig.clientSettings.entityFading.mobOpacityMin;
-            double visibility = ClientData.visibilityMap.containsKey(id) ? ClientData.visibilityMap.get(id) : 0;
-            double maxOpacityAt = DynamicStealthConfig.clientSettings.entityFading.fullOpacityAt;
-            if (visibility != 0)
+            double alpha;
+            if (livingBase == Minecraft.getMinecraft().player) alpha = 1;
+            else
             {
-                if (maxOpacityAt == 0) visibility = 1;
-                else visibility /= maxOpacityAt;
+                int id = livingBase.getEntityId();
+                double min = DynamicStealthConfig.clientSettings.entityFading.mobOpacityMin;
+                double visibility = ClientData.visibilityMap.containsKey(id) ? ClientData.visibilityMap.get(id) : 0;
+                double maxOpacityAt = DynamicStealthConfig.clientSettings.entityFading.fullOpacityAt;
+                if (visibility != 0)
+                {
+                    if (maxOpacityAt == 0) visibility = 1;
+                    else visibility /= maxOpacityAt;
+                }
+                alpha = min + (1d - min) * visibility;
             }
 
             GlStateManager.pushMatrix();
@@ -107,14 +113,14 @@ public class RenderItemEdit extends RenderItem
 
             if (model.isBuiltInRenderer())
             {
-                GlStateManager.color(1, 1, 1, (float) (min + (1d - min) * visibility));
+                GlStateManager.color(1, 1, 1, (float) alpha);
                 GlStateManager.enableRescaleNormal();
                 stack.getItem().getTileEntityItemStackRenderer().renderByItem(stack);
             }
             else
             {
-                int alpha = Tools.min(0xFF, (int) ((min + (1d - min) * visibility) * 0xFF));
-                renderModel(model, 0xFFFFFF | (alpha << 24), stack);
+                int a = Tools.min(0xFF, (int) (alpha * 0xFF));
+                renderModel(model, 0xFFFFFF | (a << 24), stack);
 
                 if (stack.hasEffect())
                 {
