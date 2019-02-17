@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Fix cnpcs on Faerun teleporting into ground when calming down
-
 Fix equipment not fading with entity
 
 Option to prevent wolves from teleporting

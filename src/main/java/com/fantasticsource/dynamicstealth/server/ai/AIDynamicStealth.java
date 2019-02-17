@@ -569,7 +569,7 @@ public class AIDynamicStealth extends EntityAIBase
                 if (isCNPC && serverSettings.interactions.calmDown.cnpcsWarpHome)
                 {
                     ICustomNpc cnpc = (ICustomNpc) NpcAPI.Instance().getIEntity(searcher);
-                    MCTools.teleport(searcher, cnpc.getHomeX() + 0.5, cnpc.getHomeY() + 0.5, cnpc.getHomeZ() + 0.5, false, 0);
+                    MCTools.teleport(searcher, cnpc.getHomeX() + 0.5, cnpc.getHomeY() + 1.5, cnpc.getHomeZ() + 0.5, false, 0);
                 }
 
                 if (!MinecraftForge.EVENT_BUS.post(new BasicEvent.CalmDownEvent(searcher, oldReason)))
