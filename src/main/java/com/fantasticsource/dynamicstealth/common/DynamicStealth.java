@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth.common;
 
 import com.fantasticsource.dynamicstealth.client.HUD;
 import com.fantasticsource.dynamicstealth.client.RenderAlterer;
+import com.fantasticsource.dynamicstealth.client.RenderItemEdit;
 import com.fantasticsource.dynamicstealth.common.potions.Potions;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatCNPC;
@@ -698,5 +699,6 @@ public class DynamicStealth
         }
 
         AttackData.init();
+        RenderItemEdit.init();
     }
 }
