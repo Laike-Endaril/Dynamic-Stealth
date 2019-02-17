@@ -386,6 +386,9 @@ public class AIDynamicStealth extends EntityAIBase
     @Override
     public void updateTask()
     {
+        //Prevent any strangeness
+        if (searcher.getHealth() <= 0) return;
+
         //Calc movement data
         Vec3d currentPos = searcher.getPositionVector();
         if (lastPos != null && lastPos.squareDistanceTo(currentPos) < speed * 0.001) timeAtPos++;
