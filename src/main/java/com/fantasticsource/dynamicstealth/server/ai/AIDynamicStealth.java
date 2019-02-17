@@ -354,19 +354,18 @@ public class AIDynamicStealth extends EntityAIBase
                 timeAtPos = 0;
                 warn(searcher, target, lastKnownPosition, true);
 
-                if (fleeReason == FLEE_HP)
+                if (fleeReason == FLEE_HP && canReachTarget())
                 {
                     if (!MinecraftForge.EVENT_BUS.post(new BasicEvent.DesperationEvent(searcher)))
                     {
+                        mode(MODE_NONE);
+                        restart(lastKnownPosition);
                         for (PotionEffect potionEffect : EventData.desperationPotions)
                         {
                             searcher.addPotionEffect(new PotionEffect(potionEffect));
                         }
                     }
                 }
-
-                mode(MODE_NONE);
-                restart(lastKnownPosition);
             }
             else
             {
@@ -695,19 +694,18 @@ public class AIDynamicStealth extends EntityAIBase
                     lastKnownPosition = target.getPosition();
                     warn(searcher, target, lastKnownPosition, true);
 
-                    if (fleeReason == FLEE_HP)
+                    if (fleeReason == FLEE_HP && canReachTarget())
                     {
                         if (!MinecraftForge.EVENT_BUS.post(new BasicEvent.DesperationEvent(searcher)))
                         {
+                            mode(MODE_NONE);
+                            restart(lastKnownPosition);
                             for (PotionEffect potionEffect : EventData.desperationPotions)
                             {
                                 searcher.addPotionEffect(new PotionEffect(potionEffect));
                             }
                         }
                     }
-
-                    mode(MODE_NONE);
-                    restart(lastKnownPosition);
                 }
             }
         }
