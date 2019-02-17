@@ -160,6 +160,14 @@ public class AIDynamicStealth extends EntityAIBase
     @Override
     public boolean shouldExecute()
     {
+        //Prevent any strangeness
+        if (searcher.getHealth() <= 0)
+        {
+            mode(MODE_NONE);
+            Threat.set(searcher, null, 0);
+            return false;
+        }
+
         Threat.ThreatData threatData = Threat.get(searcher);
         int threat = threatData.threatLevel;
 
@@ -390,6 +398,7 @@ public class AIDynamicStealth extends EntityAIBase
         if (searcher.getHealth() <= 0)
         {
             mode(MODE_NONE);
+            Threat.set(searcher, null, 0);
             return;
         }
 
