@@ -1,5 +1,11 @@
 CURRENTLY WORKING ON ===================================================
 
+Make armor fade
+
+Build threat while we see our threat target
+
+Build threat from dealing damage to threat target
+
 Option to prevent wolves from teleporting
 
 Optimize networking
