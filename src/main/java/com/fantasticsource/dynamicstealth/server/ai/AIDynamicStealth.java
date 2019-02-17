@@ -260,6 +260,7 @@ public class AIDynamicStealth extends EntityAIBase
             lastKnownPosition = threatTarget.getPosition();
             clearAIPath();
             searcher.setAttackTarget(threatTarget);
+            Threat.setThreat(searcher, threat + serverSettings.threat.seenTargetThreatRate);
             return false;
         }
 
