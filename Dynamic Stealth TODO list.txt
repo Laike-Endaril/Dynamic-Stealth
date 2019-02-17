@@ -1,7 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
 Fix cnpcs on Faerun teleporting into ground when calming down
-Fix ophud showing for dead entities
 
 Fix equipment not fading with entity
 
