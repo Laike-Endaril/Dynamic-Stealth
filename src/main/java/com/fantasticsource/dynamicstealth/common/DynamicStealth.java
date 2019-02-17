@@ -401,6 +401,7 @@ public class DynamicStealth
 
         Entity source = event.getSource().getTrueSource();
         if (source == null) source = event.getSource().getImmediateSource();
+        EntityLivingBase attacker;
 
         if (targetBase instanceof EntityLiving)
         {
@@ -408,7 +409,7 @@ public class DynamicStealth
 
             if (source instanceof EntityLivingBase)
             {
-                EntityLivingBase attacker = (EntityLivingBase) source;
+                attacker = (EntityLivingBase) source;
 
 
                 //Look toward damage, check sight, and set perceived position
@@ -483,6 +484,14 @@ public class DynamicStealth
                     else stealthAI.fleeIfYouShould(-event.getAmount());
                 }
             }
+        }
+
+        //Threat for attacker
+        if (source instanceof EntityLiving)
+        {
+            EntityLiving livingSource = (EntityLiving) source;
+            Threat.ThreatData data = Threat.get(livingSource);
+            if (data.target == targetBase) Threat.setThreat(livingSource, data.threatLevel + (int) (event.getAmount() * serverSettings.threat.damageDealtThreatMultiplier / targetBase.getMaxHealth()));
         }
     }
 

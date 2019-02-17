@@ -4,15 +4,20 @@ import net.minecraftforge.common.config.Config;
 
 public class ThreatConfig
 {
+    @Config.Name("Dealt Damage Multiplier")
+    @Config.Comment({"When an in-combat entity damages its current target, its threat is increased by the damage dealt times this, divided by its target's max HP"})
+    @Config.RangeDouble(min = 0)
+    public double damageDealtThreatMultiplier = 2000;
+
     @Config.Name("'Attacked By Same' Multiplier")
     @Config.Comment({"When an in-combat entity is attacked by its current target, its threat is increased by the damage taken times this, divided by its max HP"})
     @Config.RangeDouble(min = 0)
-    public double attackedThreatMultiplierTarget = 6000;
+    public double attackedThreatMultiplierTarget = 4000;
 
     @Config.Name("'Attacked By Other' Multiplier")
     @Config.Comment({"When an in-combat entity is attacked by something that is *not* its current target, its threat is decreased by damage taken times this, divided by its max HP"})
     @Config.RangeDouble(min = 0)
-    public double attackedThreatMultiplierOther = 6000;
+    public double attackedThreatMultiplierOther = 4000;
 
     @Config.Name("Bypass Threat System (Global)")
     @Config.Comment({"If enabled, all entities should bypass the threat system"})
@@ -21,7 +26,7 @@ public class ThreatConfig
     @Config.Name("Initial Attack Multiplier")
     @Config.Comment({"When an out-of-combat entity is attacked, its threat is set to the damage taken times this, divided by its max HP"})
     @Config.RangeDouble(min = 0)
-    public double attackedThreatMultiplierInitial = 6000;
+    public double attackedThreatMultiplierInitial = 4000;
 
     @Config.Name("Initial 'Target Spotted' Threat")
     @Config.Comment({"When an out-of-combat entity spots a valid target, its threat is set to this"})
