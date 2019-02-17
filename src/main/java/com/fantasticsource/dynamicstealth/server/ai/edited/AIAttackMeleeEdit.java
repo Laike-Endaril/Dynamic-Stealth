@@ -16,7 +16,16 @@ public class AIAttackMeleeEdit extends EntityAIAttackMelee
 
     static
     {
-        initReflections();
+        try
+        {
+            attackerField = ReflectionTool.getField(EntityAIAttackMelee.class, "field_75441_b", "attacker");
+            speedTowardsTargetField = ReflectionTool.getField(EntityAIAttackMelee.class, "field_75440_e", "speedTowardsTarget");
+        }
+        catch (NoSuchFieldException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(126, false);
+        }
     }
 
     protected final int attackInterval = 20;
@@ -33,20 +42,6 @@ public class AIAttackMeleeEdit extends EntityAIAttackMelee
         speed = (double) speedTowardsTargetField.get(oldAI);
 
         setMutexBits(3);
-    }
-
-    private static void initReflections()
-    {
-        try
-        {
-            attackerField = ReflectionTool.getField(EntityAIAttackMelee.class, "field_75441_b", "attacker");
-            speedTowardsTargetField = ReflectionTool.getField(EntityAIAttackMelee.class, "field_75440_e", "speedTowardsTarget");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(126, false);
-        }
     }
 
     @Override

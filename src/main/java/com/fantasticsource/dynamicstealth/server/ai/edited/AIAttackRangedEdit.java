@@ -18,7 +18,19 @@ public class AIAttackRangedEdit extends EntityAIBase
 
     static
     {
-        initReflections();
+        try
+        {
+            rangedAttackEntityHostField = ReflectionTool.getField(EntityAIAttackRanged.class, "field_82641_b", "rangedAttackEntityHost");
+            entityMoveSpeedField = ReflectionTool.getField(EntityAIAttackRanged.class, "field_75321_e", "entityMoveSpeed");
+            attackRadiusField = ReflectionTool.getField(EntityAIAttackRanged.class, "field_96562_i", "attackRadius");
+            attackIntervalMinField = ReflectionTool.getField(EntityAIAttackRanged.class, "field_96561_g", "attackIntervalMin");
+            maxRangedAttackTimeField = ReflectionTool.getField(EntityAIAttackRanged.class, "field_75325_h", "maxRangedAttackTime");
+        }
+        catch (NoSuchFieldException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(138, false);
+        }
     }
 
 
@@ -47,23 +59,6 @@ public class AIAttackRangedEdit extends EntityAIBase
         timer = -1;
 
         setMutexBits(3);
-    }
-
-    private static void initReflections()
-    {
-        try
-        {
-            rangedAttackEntityHostField = ReflectionTool.getField(EntityAIAttackRanged.class, "field_82641_b", "rangedAttackEntityHost");
-            entityMoveSpeedField = ReflectionTool.getField(EntityAIAttackRanged.class, "field_75321_e", "entityMoveSpeed");
-            attackRadiusField = ReflectionTool.getField(EntityAIAttackRanged.class, "field_96562_i", "attackRadius");
-            attackIntervalMinField = ReflectionTool.getField(EntityAIAttackRanged.class, "field_96561_g", "attackIntervalMin");
-            maxRangedAttackTimeField = ReflectionTool.getField(EntityAIAttackRanged.class, "field_75325_h", "maxRangedAttackTime");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(138, false);
-        }
     }
 
     @Override

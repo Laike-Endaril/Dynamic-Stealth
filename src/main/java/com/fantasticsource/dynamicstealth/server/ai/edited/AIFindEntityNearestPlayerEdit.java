@@ -23,7 +23,15 @@ public class AIFindEntityNearestPlayerEdit extends EntityAIBase
 
     static
     {
-        initReflections();
+        try
+        {
+            entityLivingField = ReflectionTool.getField(EntityAIFindEntityNearestPlayer.class, "field_179434_b", "entityLiving");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(125, false);
+        }
     }
 
     private final EntityLiving searcher;
@@ -34,19 +42,6 @@ public class AIFindEntityNearestPlayerEdit extends EntityAIBase
         searcher = (EntityLiving) entityLivingField.get(oldAI);
 
         if (searcher instanceof EntityCreature) LOGGER.warn("Use NearestAttackableTargetGoal.class for PathfinderMob mobs!");
-    }
-
-    private static void initReflections()
-    {
-        try
-        {
-            entityLivingField = ReflectionTool.getField(EntityAIFindEntityNearestPlayer.class, "field_179434_b", "entityLiving");
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(125, false);
-        }
     }
 
     @Override

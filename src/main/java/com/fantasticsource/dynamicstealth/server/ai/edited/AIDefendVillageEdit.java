@@ -20,7 +20,15 @@ public class AIDefendVillageEdit extends AITargetEdit
 
     static
     {
-        initReflections();
+        try
+        {
+            villageReputationsField = ReflectionTool.getField(Village.class, "field_82693_j", "playerReputation");
+        }
+        catch (NoSuchFieldException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(135, false);
+        }
     }
 
 
@@ -32,19 +40,6 @@ public class AIDefendVillageEdit extends AITargetEdit
         super(oldAI);
         irongolem = (EntityIronGolem) attacker;
         setMutexBits(1);
-    }
-
-    private static void initReflections()
-    {
-        try
-        {
-            villageReputationsField = ReflectionTool.getField(Village.class, "field_82693_j", "playerReputation");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(135, false);
-        }
     }
 
     @Override

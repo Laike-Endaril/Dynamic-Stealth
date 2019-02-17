@@ -40,7 +40,15 @@ public class HUD extends Gui
 
     static
     {
-        initReflections();
+        try
+        {
+            renderManagerRenderOutlinesField = ReflectionTool.getField(RenderManager.class, "field_178639_r", "renderOutlines");
+        }
+        catch (NoSuchFieldException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(147, false);
+        }
     }
 
     public HUD(Minecraft mc)
@@ -222,19 +230,6 @@ public class HUD extends Gui
         GlStateManager.enableLighting();
 
         GlStateManager.color(1, 1, 1, 1);
-    }
-
-    private static void initReflections()
-    {
-        try
-        {
-            renderManagerRenderOutlinesField = ReflectionTool.getField(RenderManager.class, "field_178639_r", "renderOutlines");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(147, false);
-        }
     }
 
     private void drawDetailHUD(int width, int height, FontRenderer fontRender)

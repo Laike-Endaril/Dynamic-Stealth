@@ -14,17 +14,6 @@ public class AIJohnnyAttackEdit extends AINearestAttackableTargetEdit<EntityLivi
 
     static
     {
-        initReflections();
-    }
-
-
-    public AIJohnnyAttackEdit(EntityAINearestAttackableTarget oldAI) throws IllegalAccessException
-    {
-        super(oldAI);
-    }
-
-    private static void initReflections()
-    {
         try
         {
             johnnyField = ReflectionTool.getField(EntityVindicator.class, "field_190643_b", "johnny");
@@ -34,6 +23,12 @@ public class AIJohnnyAttackEdit extends AINearestAttackableTargetEdit<EntityLivi
             e.printStackTrace();
             FMLCommonHandler.instance().exitJava(133, false);
         }
+    }
+
+
+    public AIJohnnyAttackEdit(EntityAINearestAttackableTarget oldAI) throws IllegalAccessException
+    {
+        super(oldAI);
     }
 
     @Override

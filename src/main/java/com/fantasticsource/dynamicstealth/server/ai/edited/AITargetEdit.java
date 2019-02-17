@@ -24,7 +24,16 @@ public abstract class AITargetEdit extends EntityAIBase
 
     static
     {
-        initReflections();
+        try
+        {
+            nearbyOnlyField = ReflectionTool.getField(EntityAITarget.class, "field_75303_a", "nearbyOnly");
+            taskOwnerField = ReflectionTool.getField(EntityAITarget.class, "field_75299_d", "taskOwner");
+        }
+        catch (NoSuchFieldException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(128, false);
+        }
     }
 
 
@@ -36,20 +45,6 @@ public abstract class AITargetEdit extends EntityAIBase
     {
         attacker = (EntityCreature) taskOwnerField.get(oldAI);
         nearbyOnly = (boolean) nearbyOnlyField.get(oldAI);
-    }
-
-    private static void initReflections()
-    {
-        try
-        {
-            nearbyOnlyField = ReflectionTool.getField(EntityAITarget.class, "field_75303_a", "nearbyOnly");
-            taskOwnerField = ReflectionTool.getField(EntityAITarget.class, "field_75299_d", "taskOwner");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(128, false);
-        }
     }
 
     public static boolean isSuitableTarget(EntityLiving attacker, @Nullable EntityLivingBase target)

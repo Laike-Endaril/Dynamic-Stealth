@@ -62,7 +62,16 @@ public class AIDynamicStealth extends EntityAIBase
 
     static
     {
-        initReflections();
+        try
+        {
+            aiPanicSpeedField = ReflectionTool.getField(EntityAIPanic.class, "field_75265_b", "speed");
+            navigatorCanNavigateMethod = ReflectionTool.getMethod(PathNavigate.class, "func_75485_k", "canNavigate");
+        }
+        catch (NoSuchFieldException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(148, true);
+        }
     }
 
     private final EntityLiving searcher;
@@ -100,20 +109,6 @@ public class AIDynamicStealth extends EntityAIBase
             if (task.action instanceof AIDynamicStealth) return (AIDynamicStealth) task.action;
         }
         return null;
-    }
-
-    private static void initReflections()
-    {
-        try
-        {
-            aiPanicSpeedField = ReflectionTool.getField(EntityAIPanic.class, "field_75265_b", "speed");
-            navigatorCanNavigateMethod = ReflectionTool.getMethod(PathNavigate.class, "func_75485_k", "canNavigate");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(148, true);
-        }
     }
 
     public boolean isFleeing()
@@ -519,7 +514,7 @@ public class AIDynamicStealth extends EntityAIBase
             catch (IllegalAccessException | InvocationTargetException e)
             {
                 e.printStackTrace();
-                FMLCommonHandler.instance().exitJava(150, false);
+                FMLCommonHandler.instance().exitJava(151, false);
             }
         }
 

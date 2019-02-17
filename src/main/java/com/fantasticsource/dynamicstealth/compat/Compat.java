@@ -20,7 +20,15 @@ public class Compat
 
     static
     {
-        initReflections();
+        try
+        {
+            executingTaskEntriesField = ReflectionTool.getField(EntityAITasks.class, "field_75780_b", "executingTaskEntries");
+        }
+        catch (NoSuchFieldException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(144, false);
+        }
     }
 
 
@@ -83,20 +91,6 @@ public class Compat
                 taskList.addTask(task.priority, new NPEAttackTargetTaskHolder(living, task.action));
                 taskList.removeTask(task.action);
             }
-        }
-    }
-
-
-    private static void initReflections()
-    {
-        try
-        {
-            executingTaskEntriesField = ReflectionTool.getField(EntityAITasks.class, "field_75780_b", "executingTaskEntries");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(144, false);
         }
     }
 }

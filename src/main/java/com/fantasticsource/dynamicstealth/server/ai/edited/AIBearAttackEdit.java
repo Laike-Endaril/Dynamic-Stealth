@@ -15,7 +15,7 @@ public class AIBearAttackEdit extends AIAttackMeleeEdit
 
     static
     {
-        initReflections();
+        playWarningSoundMethod = ReflectionTool.getMethod(EntityPolarBear.class, "func_189796_de", "playWarningSound");
     }
 
 
@@ -25,11 +25,6 @@ public class AIBearAttackEdit extends AIAttackMeleeEdit
     {
         super(oldAI);
         bear = (EntityPolarBear) attacker;
-    }
-
-    public static void initReflections()
-    {
-        playWarningSoundMethod = ReflectionTool.getMethod(EntityPolarBear.class, "func_189796_de", "playWarningSound");
     }
 
     @Override

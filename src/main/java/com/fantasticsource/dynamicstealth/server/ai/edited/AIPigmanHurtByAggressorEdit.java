@@ -16,18 +16,13 @@ public class AIPigmanHurtByAggressorEdit extends AIHurtByTargetEdit
 
     static
     {
-        initReflections();
+        pigmanBecomeAngryAtMethod = ReflectionTool.getMethod(EntityPigZombie.class, "func_70835_c", "becomeAngryAt");
     }
 
 
     public AIPigmanHurtByAggressorEdit(EntityAIHurtByTarget oldAI) throws IllegalAccessException
     {
         super(oldAI);
-    }
-
-    private static void initReflections()
-    {
-        pigmanBecomeAngryAtMethod = ReflectionTool.getMethod(EntityPigZombie.class, "func_70835_c", "becomeAngryAt");
     }
 
     @Override

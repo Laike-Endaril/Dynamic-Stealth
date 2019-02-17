@@ -16,7 +16,8 @@ public class AISlimeFaceRandomEdit extends EntityAIBase
 
     static
     {
-        initReflections();
+        slimeMoveHelperClass = ReflectionTool.getInternalClass(EntitySlime.class, "SlimeMoveHelper");
+        slimeMoveHelperSetDirectionMethod = ReflectionTool.getMethod(slimeMoveHelperClass, "func_179920_a", "setDirection");
     }
 
     public final EntitySlime slime;
@@ -32,12 +33,6 @@ public class AISlimeFaceRandomEdit extends EntityAIBase
         timer = timeMin + slime.getRNG().nextInt(timeRange);
 
         setMutexBits(2);
-    }
-
-    private static void initReflections()
-    {
-        slimeMoveHelperClass = ReflectionTool.getInternalClass(EntitySlime.class, "SlimeMoveHelper");
-        slimeMoveHelperSetDirectionMethod = ReflectionTool.getMethod(slimeMoveHelperClass, "func_179920_a", "setDirection");
     }
 
     @Override

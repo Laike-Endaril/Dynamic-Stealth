@@ -20,7 +20,18 @@ public class AIParrotFollowEdit extends EntityAIBase //In vanilla, this is only 
 
     static
     {
-        initReflections();
+        try
+        {
+            entityField = ReflectionTool.getField(EntityAIFollow.class, "field_192372_a", "entity");
+            speedModifierField = ReflectionTool.getField(EntityAIFollow.class, "field_192375_d", "speedModifier");
+            stopDistanceField = ReflectionTool.getField(EntityAIFollow.class, "field_192378_g", "stopDistance");
+            areaSizeField = ReflectionTool.getField(EntityAIFollow.class, "field_192380_i", "areaSize");
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(121, false);
+        }
     }
 
 
@@ -51,22 +62,6 @@ public class AIParrotFollowEdit extends EntityAIBase //In vanilla, this is only 
         }
 
         setMutexBits(3);
-    }
-
-    private static void initReflections()
-    {
-        try
-        {
-            entityField = ReflectionTool.getField(EntityAIFollow.class, "field_192372_a", "entity");
-            speedModifierField = ReflectionTool.getField(EntityAIFollow.class, "field_192375_d", "speedModifier");
-            stopDistanceField = ReflectionTool.getField(EntityAIFollow.class, "field_192378_g", "stopDistance");
-            areaSizeField = ReflectionTool.getField(EntityAIFollow.class, "field_192380_i", "areaSize");
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(121, false);
-        }
     }
 
     @Override

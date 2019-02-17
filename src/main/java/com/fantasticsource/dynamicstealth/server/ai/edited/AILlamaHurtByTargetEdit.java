@@ -16,20 +16,6 @@ public class AILlamaHurtByTargetEdit extends AIHurtByTargetEdit
 
     static
     {
-        initReflections();
-    }
-
-
-    EntityLlama llama;
-
-    public AILlamaHurtByTargetEdit(EntityAIHurtByTarget oldAI) throws IllegalAccessException
-    {
-        super(oldAI);
-        llama = (EntityLlama) attacker;
-    }
-
-    private static void initReflections()
-    {
         setDidSpitMethod = ReflectionTool.getMethod(EntityLlama.class, "func_190714_x", "setDidSpit");
 
         try
@@ -41,6 +27,15 @@ public class AILlamaHurtByTargetEdit extends AIHurtByTargetEdit
             e.printStackTrace();
             FMLCommonHandler.instance().exitJava(131, false);
         }
+    }
+
+
+    EntityLlama llama;
+
+    public AILlamaHurtByTargetEdit(EntityAIHurtByTarget oldAI) throws IllegalAccessException
+    {
+        super(oldAI);
+        llama = (EntityLlama) attacker;
     }
 
     @Override

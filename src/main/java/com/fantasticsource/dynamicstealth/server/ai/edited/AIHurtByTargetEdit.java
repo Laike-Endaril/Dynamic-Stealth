@@ -16,7 +16,16 @@ public class AIHurtByTargetEdit extends AITargetEdit
 
     static
     {
-        initReflections();
+        try
+        {
+            entityCallsForHelpField = ReflectionTool.getField(EntityAIHurtByTarget.class, "field_75312_a", "entityCallsForHelp");
+            excludedReinforcementTypesField = ReflectionTool.getField(EntityAIHurtByTarget.class, "field_179447_c", "excludedReinforcementTypes");
+        }
+        catch (NoSuchFieldException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(129, false);
+        }
     }
 
 
@@ -30,20 +39,6 @@ public class AIHurtByTargetEdit extends AITargetEdit
         entityCallsForHelp = (boolean) entityCallsForHelpField.get(oldAI);
         excludedReinforcementTypes = (Class<?>[]) excludedReinforcementTypesField.get(oldAI);
         setMutexBits(1);
-    }
-
-    private static void initReflections()
-    {
-        try
-        {
-            entityCallsForHelpField = ReflectionTool.getField(EntityAIHurtByTarget.class, "field_75312_a", "entityCallsForHelp");
-            excludedReinforcementTypesField = ReflectionTool.getField(EntityAIHurtByTarget.class, "field_179447_c", "excludedReinforcementTypes");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(129, false);
-        }
     }
 
     @Override

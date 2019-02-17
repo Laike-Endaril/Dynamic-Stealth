@@ -22,7 +22,16 @@ public class AIGuardianAttackEdit extends EntityAIBase
 
     static
     {
-        initReflections();
+        try
+        {
+            targetEntityField = ReflectionTool.getField(EntityGuardian.class, "field_184723_b", "TARGET_ENTITY");
+            wanderField = ReflectionTool.getField(EntityGuardian.class, "field_175481_bq", "wander");
+        }
+        catch (NoSuchFieldException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+            FMLCommonHandler.instance().exitJava(140, false);
+        }
     }
 
 
@@ -36,20 +45,6 @@ public class AIGuardianAttackEdit extends EntityAIBase
         guardian = guardianIn;
         isElder = guardian instanceof EntityElderGuardian;
         setMutexBits(3);
-    }
-
-    private static void initReflections()
-    {
-        try
-        {
-            targetEntityField = ReflectionTool.getField(EntityGuardian.class, "field_184723_b", "TARGET_ENTITY");
-            wanderField = ReflectionTool.getField(EntityGuardian.class, "field_175481_bq", "wander");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(140, false);
-        }
     }
 
     public boolean shouldExecute()
