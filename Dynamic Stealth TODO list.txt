@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Build threat from dealing damage to threat target
-
 Make armor fade
 Make elytra fade
 
