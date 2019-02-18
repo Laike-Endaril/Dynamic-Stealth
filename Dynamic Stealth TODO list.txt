@@ -1,6 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-Option to prevent wolves from teleporting
+Option to prevent wolves, cats, and parrots from teleporting
 
 Optimize networking
 
