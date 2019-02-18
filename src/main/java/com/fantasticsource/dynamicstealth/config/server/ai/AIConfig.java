@@ -17,4 +17,8 @@ public class AIConfig
 
     @Config.Name("Can't Reach")
     public CantReachTriggerConfig cantReach = new CantReachTriggerConfig();
+
+    @Config.Name("Prevent Pet Teleport")
+    @Config.Comment("If set to true, wolves, cats, and parrots do not teleport while following their owners")
+    public boolean preventPetTeleport = true;
 }

@@ -1,6 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-Option to prevent wolves, cats, and parrots from teleporting
+Remove debug reflections
 
 
 
@@ -26,7 +26,8 @@ Fix entities being able to attack through glass diagonally (because they can see
 
 Make stuck detection account for jumping by allowing for more play along y axis
 
-Fix leashes not rendering sometimes? (it shows the knot though...is this a vanilla bug?)
+Fix leashes not rendering sometimes (not a vanilla bug)...
+...can reproduce by leashing a horse, flying into the air, and dropping into water while facing down
 
 
 
