@@ -296,16 +296,16 @@ public class Network
             int maxThreat = serverSettings.threat.maxThreat;
 
             buf.writeBoolean(detailHUD);
-            buf.writeInt(onPointHUDMode);
+            buf.writeByte(onPointHUDMode);
 
             if (detailHUD)
             {
                 searcher = queue.poll();
-                if (searcher == null) buf.writeInt(ClientData.COLOR_NULL); //if color == COLOR_NULL then searcher is null
+                if (searcher == null) buf.writeByte(ClientData.CID_NULL); //if color == COLOR_NULL then searcher is null
                 else if (EntityThreatData.bypassesThreat(searcher))
                 {
-                    buf.writeInt(ClientData.COLOR_BYPASS);
-                    buf.writeInt(-1); //else if threatLevel == -1 then searcher bypasses threat
+                    buf.writeByte(ClientData.CID_BYPASS);
+                    buf.writeByte(-1); //else if threatLevel == -1 then searcher bypasses threat
                     ByteBufUtils.writeUTF8String(buf, searcher.getName());
 
                     if (onPointHUDMode > 0) buf.writeInt(searcher.getEntityId());
@@ -314,8 +314,8 @@ public class Network
                 {
                     Threat.ThreatData data = Threat.get(searcher);
 
-                    buf.writeInt(ClientData.getColor(player, searcher, data.target, data.threatLevel)); //else this is a normal entry
-                    buf.writeInt((int) (100D * data.threatLevel / maxThreat));
+                    buf.writeByte(ClientData.getCID(player, searcher, data.target, data.threatLevel)); //else this is a normal entry
+                    buf.writeByte((int) (100D * data.threatLevel / maxThreat));
 
                     ByteBufUtils.writeUTF8String(buf, searcher.getName());
                     ByteBufUtils.writeUTF8String(buf, data.target == null ? ClientData.EMPTY : data.target.getName());
@@ -323,19 +323,19 @@ public class Network
                     if (onPointHUDMode > 0) buf.writeInt(searcher.getEntityId());
                 }
             }
-            else //!detailHUD
+            else //No detail HUD
             {
                 if (onPointHUDMode == 1)
                 {
                     searcher = queue.poll();
-                    if (searcher == null) buf.writeInt(ClientData.COLOR_NULL);
+                    if (searcher == null) buf.writeByte(ClientData.CID_NULL);
                     else
                     {
                         Threat.ThreatData data = Threat.get(searcher);
 
-                        buf.writeInt(ClientData.getColor(player, searcher, data.target, data.threatLevel));
+                        buf.writeByte(ClientData.getCID(player, searcher, data.target, data.threatLevel));
                         buf.writeInt(searcher.getEntityId());
-                        buf.writeInt((int) (100D * data.threatLevel / maxThreat));
+                        buf.writeByte((int) (100D * data.threatLevel / maxThreat));
                     }
                 }
             }
@@ -347,20 +347,20 @@ public class Network
                 while (queue.size() > 0)
                 {
                     searcher = queue.poll();
-                    if (searcher == null) buf.writeInt(ClientData.COLOR_NULL); //if color == COLOR_NULL then searcher is null
+                    if (searcher == null) buf.writeByte(ClientData.CID_NULL); //if color == COLOR_NULL then searcher is null
                     else if (EntityThreatData.bypassesThreat(searcher))
                     {
-                        buf.writeInt(ClientData.COLOR_BYPASS);
+                        buf.writeByte(ClientData.CID_BYPASS);
                         buf.writeInt(searcher.getEntityId());
-                        buf.writeInt(-1); //else if threatLevel == -1 then searcher bypasses threat
+                        buf.writeByte(-1); //else if threatLevel == -1 then searcher bypasses threat
                     }
                     else
                     {
                         Threat.ThreatData data = Threat.get(searcher);
 
-                        buf.writeInt(ClientData.getColor(player, searcher, data.target, data.threatLevel)); //else this is a normal entry
+                        buf.writeByte(ClientData.getCID(player, searcher, data.target, data.threatLevel)); //else this is a normal entry
                         buf.writeInt(searcher.getEntityId());
-                        buf.writeInt((int) (100D * data.threatLevel / maxThreat));
+                        buf.writeByte((int) (100D * data.threatLevel / maxThreat));
                     }
                 }
             }
@@ -374,15 +374,15 @@ public class Network
             int priority = 0;
 
             detailHUD = buf.readBoolean();
-            onPointHUDMode = buf.readInt();
+            onPointHUDMode = (int) buf.readByte();
 
             if (detailHUD)
             {
-                detailColor = buf.readInt();
+                detailColor = ClientData.getColor(buf.readByte());
 
                 if (detailColor != ClientData.COLOR_NULL)
                 {
-                    detailPercent = buf.readInt();
+                    detailPercent = (int) buf.readByte();
 
                     detailSearcherName = ByteBufUtils.readUTF8String(buf);
                     detailTargetName = detailPercent == -1 ? ClientData.UNKNOWN : ByteBufUtils.readUTF8String(buf);
@@ -394,8 +394,8 @@ public class Network
             {
                 if (onPointHUDMode == 1)
                 {
-                    color = buf.readInt();
-                    if (color != ClientData.COLOR_NULL) onPointMap.put(buf.readInt(), new ClientData.OnPointData(color, buf.readInt(), priority++));
+                    color = ClientData.getColor(buf.readByte());
+                    if (color != ClientData.COLOR_NULL) onPointMap.put(buf.readInt(), new ClientData.OnPointData(color, (int) buf.readByte(), priority++));
                 }
             }
 
@@ -403,8 +403,8 @@ public class Network
             {
                 for (int i = buf.readInt(); i > 0; i--)
                 {
-                    color = buf.readInt();
-                    if (color != ClientData.COLOR_NULL) onPointMap.put(buf.readInt(), new ClientData.OnPointData(color, buf.readInt(), priority++));
+                    color = ClientData.getColor(buf.readByte());
+                    if (color != ClientData.COLOR_NULL) onPointMap.put(buf.readInt(), new ClientData.OnPointData(color, (int) buf.readByte(), priority++));
                 }
             }
         }

@@ -14,14 +14,25 @@ import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.ser
 
 public class ClientData
 {
-    public static final int COLOR_NULL = 0x777777;
-    public static final int COLOR_ATTACKING_YOU = 0xFF0000;
-    public static final int COLOR_ALERT = 0xFF8800;
-    public static final int COLOR_ATTACKING_OTHER = 0xFFFF00;
-    public static final int COLOR_IDLE = 0x4444FF;
-    public static final int COLOR_PASSIVE = 0x00CC00;
-    public static final int COLOR_FLEEING = 0x770077;
-    public static final int COLOR_BYPASS = 0x333333;
+    public static final byte
+            CID_NULL = 0,
+            CID_ATTACKING_YOU = 1,
+            CID_ALERT = 2,
+            CID_ATTACKING_OTHER = 3,
+            CID_IDLE = 4,
+            CID_PASSIVE = 5,
+            CID_FLEEING = 6,
+            CID_BYPASS = 7;
+
+    public static final int
+            COLOR_NULL = 0x777777,
+            COLOR_ATTACKING_YOU = 0xFF0000,
+            COLOR_ALERT = 0xFF8800,
+            COLOR_ATTACKING_OTHER = 0xFFFF00,
+            COLOR_IDLE = 0x4444FF,
+            COLOR_PASSIVE = 0x00CC00,
+            COLOR_FLEEING = 0x770077,
+            COLOR_BYPASS = 0x333333;
 
     public static final String EMPTY = "----------";
     public static final String UNKNOWN = "???";
@@ -54,6 +65,59 @@ public class ClientData
         visibilityMap.clear();
     }
 
+
+    public static byte getCID(int color)
+    {
+        switch (color)
+        {
+            case COLOR_NULL:
+                return CID_NULL;
+            case COLOR_ATTACKING_YOU:
+                return CID_ATTACKING_YOU;
+            case COLOR_ALERT:
+                return CID_ALERT;
+            case COLOR_ATTACKING_OTHER:
+                return CID_ATTACKING_OTHER;
+            case COLOR_IDLE:
+                return CID_IDLE;
+            case COLOR_PASSIVE:
+                return CID_PASSIVE;
+            case COLOR_FLEEING:
+                return CID_FLEEING;
+            case COLOR_BYPASS:
+                return CID_BYPASS;
+        }
+        throw new IllegalArgumentException("Unregistered color: " + color);
+    }
+
+    public static byte getCID(EntityPlayer player, EntityLivingBase searcher, EntityLivingBase target, int threatLevel)
+    {
+        return getCID(getColor(player, searcher, target, threatLevel));
+    }
+
+    public static int getColor(byte cid)
+    {
+        switch (cid)
+        {
+            case CID_NULL:
+                return COLOR_NULL;
+            case CID_ATTACKING_YOU:
+                return COLOR_ATTACKING_YOU;
+            case CID_ALERT:
+                return COLOR_ALERT;
+            case CID_ATTACKING_OTHER:
+                return COLOR_ATTACKING_OTHER;
+            case CID_IDLE:
+                return COLOR_IDLE;
+            case CID_PASSIVE:
+                return COLOR_PASSIVE;
+            case CID_FLEEING:
+                return COLOR_FLEEING;
+            case CID_BYPASS:
+                return COLOR_BYPASS;
+        }
+        throw new IllegalArgumentException("Unregistered cid: " + cid);
+    }
 
     public static int getColor(EntityPlayer player, EntityLivingBase searcher, EntityLivingBase target, int threatLevel)
     {
