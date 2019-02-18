@@ -156,7 +156,7 @@ public class AIDynamicStealth extends EntityAIBase
     public boolean shouldExecute()
     {
         //Prevent any strangeness
-        if (searcher.getHealth() <= 0)
+        if (!searcher.isEntityAlive())
         {
             mode(MODE_NONE);
             Threat.set(searcher, null, 0);
@@ -388,7 +388,7 @@ public class AIDynamicStealth extends EntityAIBase
     public void updateTask()
     {
         //Prevent any strangeness
-        if (searcher.getHealth() <= 0)
+        if (!searcher.isEntityAlive())
         {
             mode(MODE_NONE);
             Threat.set(searcher, null, 0);

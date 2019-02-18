@@ -232,6 +232,7 @@ public class DynamicStealth
     public static void entityDeath(LivingDeathEvent event)
     {
         EntityLivingBase victim = event.getEntityLiving();
+        Threat.set(victim, null, 0);
 
         Entity source = event.getSource().getTrueSource();
         if (source == null) source = event.getSource().getImmediateSource();
@@ -539,13 +540,10 @@ public class DynamicStealth
     public static void entityJoin(EntityJoinWorldEvent event)
     {
         Entity entity = event.getEntity();
-        if (entity instanceof EntityLivingBase && !MCTools.isClient(entity.world))
+        if (entity instanceof EntityLiving)
         {
-            if (entity instanceof EntityLiving)
-            {
-                EntityLiving living = (EntityLiving) entity;
-                if (!Compat.customnpcs || !(NpcAPI.Instance().getIEntity(living) instanceof ICustomNpc)) livingJoinWorld(living);
-            }
+            EntityLiving living = (EntityLiving) entity;
+            if (!Compat.customnpcs || !(NpcAPI.Instance().getIEntity(living) instanceof ICustomNpc)) livingJoinWorld(living);
         }
     }
 
@@ -554,21 +552,25 @@ public class DynamicStealth
         //Set the new senses handler for all living entities (not including players)
         try
         {
-            sensesField.set(living, new EntitySensesEdit(living));
             lookHelperField.set(living, new EntityLookHelperEdit(living));
 
-            if (living instanceof AbstractSkeleton)
+            if (!MCTools.isClient(living.world))
             {
-                abstractSkeletonAIArrowAttackField.set(living, new AIAttackRangedBowEdit<AbstractSkeleton>((EntityAIAttackRangedBow) abstractSkeletonAIArrowAttackField.get(living)));
-                abstractSkeletonAIAttackOnCollideField.set(living, new AIAttackMeleeEdit((EntityAIAttackMelee) abstractSkeletonAIAttackOnCollideField.get(living)));
+                sensesField.set(living, new EntitySensesEdit(living));
+
+                if (living instanceof AbstractSkeleton)
+                {
+                    abstractSkeletonAIArrowAttackField.set(living, new AIAttackRangedBowEdit<AbstractSkeleton>((EntityAIAttackRangedBow) abstractSkeletonAIArrowAttackField.get(living)));
+                    abstractSkeletonAIAttackOnCollideField.set(living, new AIAttackMeleeEdit((EntityAIAttackMelee) abstractSkeletonAIAttackOnCollideField.get(living)));
+                }
+
+                //Entity AI task replacements
+                replaceTasks(living.tasks, living);
+                replaceTasks(living.targetTasks, living);
+
+                //Entity AI task additions
+                if (!EntityThreatData.bypassesThreat(living)) addTasks(living.targetTasks, living.tasks, living);
             }
-
-            //Entity AI task replacements
-            replaceTasks(living.tasks, living);
-            replaceTasks(living.targetTasks, living);
-
-            //Entity AI task additions
-            if (!EntityThreatData.bypassesThreat(living)) addTasks(living.targetTasks, living.tasks, living);
         }
         catch (Exception e)
         {

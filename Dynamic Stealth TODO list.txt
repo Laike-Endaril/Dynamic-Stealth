@@ -1,8 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Fix bug where mobs' body angle is sometimes wrong (pretty sure this is a vanilla bug)...
-...one very notable time this happens is when an entity is created client-side (eg. when you spin and it comes into view with player senses enabled)
-
 Option to prevent wolves from teleporting
 
 Optimize networking

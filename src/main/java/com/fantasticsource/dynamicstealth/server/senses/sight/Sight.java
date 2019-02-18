@@ -66,9 +66,9 @@ public class Sight
 
     private static boolean entityRemoveIfEmpty(Map.Entry<EntityLivingBase, Map<Entity, SeenData>> entry)
     {
-        if (entry.getKey().isDead) return true;
+        if (!entry.getKey().isEntityAlive()) return true;
 
-        entry.getValue().entrySet().removeIf(e -> e.getKey().isDead);
+        entry.getValue().entrySet().removeIf(e -> !e.getKey().isEntityAlive());
         return false;
     }
 
@@ -237,7 +237,7 @@ public class Sight
         {
             for (Entity entity : loadedEntities)
             {
-                if (!isForHUD || !(MCTools.isRidingOrRiddenBy(player, entity) || CompatDissolution.isPossessing(player, entity) || (entity instanceof EntityLivingBase && ((EntityLivingBase) entity).getHealth() <= 0)))
+                if (!isForHUD || !(MCTools.isRidingOrRiddenBy(player, entity) || CompatDissolution.isPossessing(player, entity) || !entity.isEntityAlive()))
                 {
                     if (entity instanceof EntityLivingBase && entity != player && canSee(player, entity)) //The canSee() here is correct
                     {
@@ -263,7 +263,7 @@ public class Sight
             {
                 if (entity instanceof EntityLivingBase && entity != player)
                 {
-                    if (!isForHUD || !(MCTools.isRidingOrRiddenBy(player, entity) || CompatDissolution.isPossessing(player, entity) || ((EntityLivingBase) entity).getHealth() <= 0))
+                    if (!isForHUD || !(MCTools.isRidingOrRiddenBy(player, entity) || CompatDissolution.isPossessing(player, entity) || !entity.isEntityAlive()))
                     {
                         stealthLevel = visualStealthLevel(player, entity);
                         if (stealthLevel <= 1)
@@ -283,7 +283,7 @@ public class Sight
             {
                 if (entity instanceof EntityLivingBase && entity != player)
                 {
-                    if (!isForHUD || !(MCTools.isRidingOrRiddenBy(player, entity) || CompatDissolution.isPossessing(player, entity) || ((EntityLivingBase) entity).getHealth() <= 0))
+                    if (!isForHUD || !(MCTools.isRidingOrRiddenBy(player, entity) || CompatDissolution.isPossessing(player, entity) || !entity.isEntityAlive()))
                     {
                         double distSquared = player.getDistanceSq(entity);
                         if (distSquared <= Math.pow(playerMaxSightDistance, 2) && los(player, entity))

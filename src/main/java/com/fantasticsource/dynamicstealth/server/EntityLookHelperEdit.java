@@ -38,6 +38,12 @@ public class EntityLookHelperEdit extends EntityLookHelper
                 FMLCommonHandler.instance().exitJava(146, false);
             }
         }
+        else
+        {
+            entity.prevRotationYawHead = entity.rotationYawHead;
+            entity.rotationYaw = entity.rotationYawHead;
+            entity.prevRotationYaw = entity.rotationYawHead;
+        }
     }
 
     public void setLookPositionWithEntity(Entity entityIn, float deltaYaw, float deltaPitch)
