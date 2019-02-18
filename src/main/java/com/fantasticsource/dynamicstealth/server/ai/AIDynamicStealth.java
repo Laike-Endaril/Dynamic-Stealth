@@ -374,9 +374,7 @@ public class AIDynamicStealth extends EntityAIBase
 
                 cornerLookYaw = (float) MCTools.getYaw(searcher, lastKnownPosition, TRIG_TABLE);
                 searcher.rotationYaw = cornerLookYaw;
-                searcher.prevRotationYaw = cornerLookYaw;
                 searcher.rotationYawHead = cornerLookYaw;
-                searcher.prevRotationYawHead = cornerLookYaw;
 
                 cornerLookPitch = (float) MCTools.getPitch(searcher, lastKnownPosition, TRIG_TABLE);
                 searcher.rotationPitch = cornerLookPitch;
@@ -682,7 +680,6 @@ public class AIDynamicStealth extends EntityAIBase
 
                 float yaw = (float) (cornerLookYaw + 45 * TRIG_TABLE.sin(timeAtPos * 0.1));
                 searcher.rotationYawHead = yaw;
-                searcher.prevRotationYawHead = yaw;
 
                 searcher.rotationPitch = cornerLookPitch;
 

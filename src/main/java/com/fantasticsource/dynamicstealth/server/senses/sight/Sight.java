@@ -89,12 +89,12 @@ public class Sight
 
     public static boolean canSee(EntityLivingBase searcher, Entity target)
     {
-        return visualStealthLevel(searcher, target, true, true, searcher.prevRotationYawHead, searcher.prevRotationPitch) <= 1;
+        return visualStealthLevel(searcher, target, true, true, searcher.rotationYawHead, searcher.rotationPitch) <= 1;
     }
 
     public static boolean canSee(EntityLivingBase searcher, Entity target, boolean useCache, boolean saveCache)
     {
-        return visualStealthLevel(searcher, target, useCache, saveCache, searcher.prevRotationYawHead, searcher.prevRotationPitch) <= 1;
+        return visualStealthLevel(searcher, target, useCache, saveCache, searcher.rotationYawHead, searcher.rotationPitch) <= 1;
     }
 
     public static boolean canSee(EntityLivingBase searcher, Entity target, boolean useCache, boolean saveCache, double yaw, double pitch)
@@ -104,7 +104,7 @@ public class Sight
 
     public static double visualStealthLevel(EntityLivingBase searcher, Entity target)
     {
-        return visualStealthLevel(searcher, target, true, true, searcher.prevRotationYawHead, searcher.prevRotationPitch);
+        return visualStealthLevel(searcher, target, true, true, searcher.rotationYawHead, searcher.rotationPitch);
     }
 
     public static double visualStealthLevel(EntityLivingBase searcher, Entity target, boolean useCache, boolean saveCache, double yaw, double pitch)

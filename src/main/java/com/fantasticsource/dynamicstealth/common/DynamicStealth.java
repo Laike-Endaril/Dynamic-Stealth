@@ -505,9 +505,7 @@ public class DynamicStealth
     {
         float fYaw = (float) yawDegrees;
         living.rotationYaw = fYaw;
-        living.prevRotationYaw = fYaw;
         living.rotationYawHead = fYaw;
-        living.prevRotationYawHead = fYaw;
 
         living.rotationPitch = (float) pitchDegrees;
 
