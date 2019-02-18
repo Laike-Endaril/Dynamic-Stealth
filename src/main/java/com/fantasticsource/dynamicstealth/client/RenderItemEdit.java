@@ -43,8 +43,8 @@ public class RenderItemEdit extends RenderItem
     {
         try
         {
-            Field itemRendererRenderItemField = ReflectionTool.getField(true, ItemRenderer.class, "field_178112_h", "field_73841_b", "field_78516_c", "field_147709_v", "field_175620_Y", "field_177074_h", "field_177080_a", "field_177083_e", "itemRenderer");
-            Field minecraftModelManagerField = ReflectionTool.getField(true, Minecraft.class, "field_175617_aL", "field_178090_d", "field_178128_c", "modelManager");
+            Field itemRendererRenderItemField = ReflectionTool.getField(ItemRenderer.class, "field_178112_h", "itemRenderer");
+            Field minecraftModelManagerField = ReflectionTool.getField(Minecraft.class, "field_175617_aL", "modelManager");
             //noinspection ConstantConditions
             itemRendererRenderItemField.set(mc.getItemRenderer(), new RenderItemEdit(mc.getTextureManager(), (ModelManager) minecraftModelManagerField.get(mc), mc.getItemColors()));
         }
