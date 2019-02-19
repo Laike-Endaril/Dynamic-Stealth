@@ -2,9 +2,9 @@ CURRENTLY WORKING ON ===================================================
 
 Check threat issue, maybe on dedicated?
 
-Check possible coloration issue (#4) with cyclic + guide api + DS
-
 Check whether detail HUD is working for op clients on dedicated when allowance is set to 1
+
+Check possible coloration issue (#4) with cyclic + guide api + DS
 
 Add versioning to config
 
@@ -149,3 +149,4 @@ Lycanite's Mobs can still attack through walls; probably using different LOS
 
 Lycanite's Mobs have their own EntityAILookIdle which needs removing/replacing
 
+Zombie Awareness (after all senses are done; even then, might need to make an API and have Corosis do the rest from his side)
