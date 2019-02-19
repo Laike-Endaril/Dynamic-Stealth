@@ -27,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -316,7 +317,7 @@ public class Sight
     private static double visualStealthLevelInternal(EntityLivingBase searcher, Entity target, double yaw, double pitch)
     {
         //Hard checks (absolute)
-        if (searcher.world != target.world || target.isDead) return 777;
+        if (searcher.world != target.world || target.isDead || target instanceof FakePlayer) return 777;
 
         if (Tracking.isTracking(searcher, target)) return -777;
         if (target instanceof EntityDragon || target instanceof EntityWither) return -777;

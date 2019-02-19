@@ -55,6 +55,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -174,7 +175,7 @@ public class DynamicStealth
 
 
     @SubscribeEvent
-    public static void entityCollision(TickEvent.WorldTickEvent event) throws InvocationTargetException, IllegalAccessException
+    public static void worldTick(TickEvent.WorldTickEvent event) throws InvocationTargetException, IllegalAccessException
     {
         World world = event.world;
         if (!MCTools.isClient(world) && event.phase == TickEvent.Phase.START)
@@ -183,7 +184,7 @@ public class DynamicStealth
             {
                 for (Entity feeler : world.loadedEntityList)
                 {
-                    if (feeler instanceof EntityLivingBase && feeler.isEntityAlive() && !(feeler instanceof EntityArmorStand || feeler instanceof EntityBat) && EntityTouchData.canFeel(feeler))
+                    if (feeler instanceof EntityLivingBase && feeler.isEntityAlive() && !(feeler instanceof EntityArmorStand || feeler instanceof EntityBat || feeler instanceof FakePlayer) && EntityTouchData.canFeel(feeler))
                     {
                         for (Entity felt : world.getEntitiesWithinAABBExcludingEntity(feeler, feeler.getEntityBoundingBox()))
                         {
@@ -303,7 +304,7 @@ public class DynamicStealth
                     if (Threat.getTarget(victim) != source)
                     {
                         //Target is not searching for *us*
-                        if (!MinecraftForge.EVENT_BUS.post(new AssassinationEvent(killer, victim)))
+                        if (!(killer instanceof FakePlayer) && !MinecraftForge.EVENT_BUS.post(new AssassinationEvent(killer, victim)))
                         {
                             //Assassinations
                             ItemStack itemStack = killer.getHeldItemMainhand();
@@ -336,16 +337,16 @@ public class DynamicStealth
             //Remove invisibility and blindness if set to do so
             if (serverSettings.interactions.attack.removeInvisibilityOnHit)
             {
-                attacker.removePotionEffect(MobEffects.INVISIBILITY);
+                if (!(attacker instanceof FakePlayer)) attacker.removePotionEffect(MobEffects.INVISIBILITY);
                 victim.removePotionEffect(MobEffects.INVISIBILITY);
             }
             if (serverSettings.interactions.attack.removeBlindnessOnHit)
             {
-                attacker.removePotionEffect(MobEffects.BLINDNESS);
+                if (!(attacker instanceof FakePlayer)) attacker.removePotionEffect(MobEffects.BLINDNESS);
                 victim.removePotionEffect(MobEffects.BLINDNESS);
             }
 
-            if (attacker.isEntityAlive())
+            if (attacker.isEntityAlive() && !(attacker instanceof FakePlayer))
             {
                 //Normal attacks
                 ItemStack itemStack = attacker.getHeldItemMainhand();
@@ -402,7 +403,6 @@ public class DynamicStealth
 
         Entity source = event.getSource().getTrueSource();
         if (source == null) source = event.getSource().getImmediateSource();
-        EntityLivingBase attacker;
 
         if (targetBase instanceof EntityLiving)
         {
@@ -410,7 +410,7 @@ public class DynamicStealth
 
             if (source instanceof EntityLivingBase)
             {
-                attacker = (EntityLivingBase) source;
+                EntityLivingBase attacker = (EntityLivingBase) source;
 
 
                 //Look toward damage, check sight, and set perceived position
