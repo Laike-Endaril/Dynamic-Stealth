@@ -10,8 +10,7 @@ Check whether detail HUD is working for op clients on dedicated when allowance i
 
 GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES ============================
 
-Make armor fade (LayerArmorBase, RenderLivingBase, etc)
-Make elytra fade
+Make held items, armor, elytra, etc. fade with entity?
 
 Add disguise system; conditionally prevents targeting even if seen, but not if the enemy has threat against you...
 ...for AI, probably call the method for this check in EntitySensesEdit#canSee()
