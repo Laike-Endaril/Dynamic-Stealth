@@ -1,6 +1,10 @@
 CURRENTLY WORKING ON ===================================================
 
----
+Add versioning to config
+
+Check possible coloration issue (#4) with cyclic + guide api + DS
+
+Check whether detail HUD is working for op clients on dedicated when allowance is set to 1
 
 
 
