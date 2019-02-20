@@ -10,6 +10,7 @@ public class DynamicStealthConfig
 {
     @Config.Name("Client Settings")
     public static ClientConfig clientSettings = new ClientConfig();
+
     @Config.Name("Server Settings")
     public static ServerConfig serverSettings = new ServerConfig();
 }

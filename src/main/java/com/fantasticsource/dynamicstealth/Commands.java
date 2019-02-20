@@ -42,7 +42,7 @@ public class Commands extends CommandBase
     @Override
     public String getName()
     {
-        return "dyns";
+        return "dstealth";
     }
 
     public int getRequiredPermissionLevel()
@@ -53,7 +53,7 @@ public class Commands extends CommandBase
     @Override
     public String getUsage(ICommandSender sender)
     {
-        return "/dyns reload";
+        return "/dstealth reload";
     }
 
     public void execute(MinecraftServer server, ICommandSender sender, String[] args)
