@@ -1,6 +1,14 @@
 CURRENTLY WORKING ON ===================================================
 
+Make sure /dyns doesn't conflict with dynamic surroundings
+
 Add versioning to config
+
+Edge-of-screen indicators...
+...add optional "damaged from" indicator, which draws an edge-of-screen arrow pointing the direction damage was recently received from
+...add optional touch detection indicator for players (see to do in DynamicStealth.java)
+
+Dodge button (default V); short lateral jump in chosen direction if touching the ground; respects movement speed and slow debuff and has a cooldown (on HUD)
 
 
 
@@ -14,6 +22,10 @@ GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES ============================
 
 "Potion Applier" item trait; item filter for tools that can have potions applied to them
 
+"Noisiness" block trait; block filter to determine how much noise walking/running/landing makes
+
+"Footprint Duration" block trait; block filter for how long visible footprints/tracks last on the block type.  Add (long to short); clay, snow, sand, mycelium, dirt, coarse dirt, podzol
+
 Make held items, armor, elytra, etc. fade with entity?
 
 Add disguise system; conditionally prevents targeting even if seen, but not if the enemy has threat against you...
@@ -22,7 +34,7 @@ Add disguise system; conditionally prevents targeting even if seen, but not if t
 ...make it so morphing into a creature using Morph mod acts as a disguise against that mob type
 ...for players, this may be more complicated, and involve sending fake entities...
 
-Use tracking system (Tracking class) for something
+Use tracking system (Tracking class) for something, or remove it
 
 
 
@@ -44,6 +56,7 @@ Add action wheel which opens on keybind
 Add actions...
 ...Attempt Stealth / Don't Attempt Stealth (if set to "Don't Attempt Stealth", you are very easy for things to notice)
 ...Yell
+...Prone/unprone - has a charge time; when prone, you are stealthier, slower, have a lower POV, have a smaller hitbox (can move through 1b high areas), and cannot jump/dodge/sneak
 ...Find pebble?
 
 
@@ -62,10 +75,6 @@ VISUAL INDICATORS ======================================================
 Add indicator for where a mob WAS when you last saw it...
 ...show the mob, as it was last seen, but black and white with partial transparency
 ...make the on-point HUD above it into an X with coloration
-
-Edge-of-screen indicators...
-...sdd optional touch detection indicator for players (see to do in DynamicStealth.java)
-...sdd optional "damaged from" indicator, which draws an edge-of-screen arrow pointing the direction damage was recently received from
 
 Add optional reticle which draws on focused entity (if there is one, and it is visible)
 
@@ -98,16 +107,25 @@ Apply stealth-based scent attributes
 
 STATUS EFFECTS =========================================================
 
-Doom: Instant death if it is not removed before the countdown hits 0.  OP if not filtered carefully
-Voidwalker: Allows you to walk on / place blocks on the void at the bottom of the world, as if it were solid; mostly useful in the end
+Keen Nose: Get visible indicators for scents and scent trails
 Silenced: Cannot warn others
 Deafened: Cannot hear
 Fear: Makes them flee
 Courage: Applies rally effect if they were fleeing; grants immunity to fleeing for the duration
 
+Doom: Instant death if it is not removed before the countdown hits 0.  OP if not filtered carefully
+Voidwalker: Allows you to walk on / place blocks on the void at the bottom of the world, as if it were solid; mostly useful in the end
 Wet: Triggers if you touch water.  If you are burning at any time for its duration, it removes burning and then removes itself
 Frozen: Triggers if you touch ice while wet.  Removes wet and stops movement until you take damage once or the duration runs out.  If you start burning while frozen, frozen and burning are both removed.
 Burning: Triggers when set on fire, and sets you on fire when it is triggered.  Puts out the fire when it ends...basically just trying to link normal burning to a usable potion effect
+
+
+
+BLOCKS =================================================================
+
+Punji (wood/reed): Deals medium damage + bonus damage based on movement speed in the correct direction, then breaks
+
+Pitfall: TE which destroys the dirt block it's on if something walks on it.
 
 
 
@@ -122,7 +140,7 @@ Torch arrows (yes I know some other mods already do, but I want them in mine)
 
 Make sticks throwable (act like snowballs; 0 damage projectile, but if they hit a block, then instead create small sound.  Either way, drop as stick item again)
 
-Add a stealth guidebook
+Add guidebook, possibly using guide api or patchouli
 
 Smoke bombs - Block LOS
 
@@ -138,13 +156,27 @@ Make firework stars throwable; they go off after a short delay, or if in water, 
 
 Slingshot - Can fire pebbles, smoke bombs, splash/lingering potions, or firework stars as low-damage projectiles
 
-Add armor/baubles that improve stealth/anti-stealth attributes
-
 Kunai - Melee/throwing weapon; can be used to craft Rope Dart, stacks up to 4
 
 Rope Dart - Re-usable medium range thrown weapon with 3 second chargeup
 
 Shuriken - Throwing weapon; stacks up to 8
+
+Caltrops - Create a small entity which damages and slows a running entity with a %chance (destroyed if so).  Can be spam-used to leave a trail.  Can be right-clicked to pick up
+
+Kama
+
+Grappling hook - Only works if it latches to something
+
+Chain - Material crafted from 3 iron ingots
+
+Kusarigama - Crafted from a kama, a chain, and an iron ingot.  Cannot be used as a grappling hook, but if no offhand is equipped, right click acts like a rope dart attack (but only kama attack can have potions applied)
+
+Tabi - Footwear that silences your movement noise (no protection)
+
+Mossy Tabi - Like Tabi, but also reduces your chance of leaving footprints
+
+Add armor/baubles that improve stealth/anti-stealth attributes
 
 
 
