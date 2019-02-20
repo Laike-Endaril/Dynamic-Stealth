@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Check whether detail HUD is working for op clients on dedicated when allowance is set to 1
-
 Add versioning to config
 
 
