@@ -1,9 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
-Add versioning to config
-
-Edge-of-screen indicators...
-...add optional "damaged from" indicator, which draws an edge-of-screen arrow pointing the direction damage was recently received from
+Directional indicators...
+...add optional "damaged from" indicator, which draws an indicator pointing the direction damage was recently received from
 ...add optional touch detection indicator for players (see to do in DynamicStealth.java)
 
 Dodge button (default V); short lateral jump in chosen direction if touching the ground; respects movement speed and slow debuff and has a cooldown (on HUD)
@@ -12,13 +10,13 @@ Dodge button (default V); short lateral jump in chosen direction if touching the
 
 GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES ============================
 
-"Climbing" item trait; item filter for tools that can be used for climbing...
+"Climbing" item trait; item filter for weapons/tools that can be used for climbing...
 ...climbing tools are effective on vertical surfaces of a lower mining level than their material
 ...when wielding one climbing tool, you can catch yourself / hold yourself on vertical surfaces
 ...when wielding two, you can climb up vertical surfaces
 ...both features use durability
 
-"Potion Applier" item trait; item filter for tools that can have potions applied to them
+"Potion Applier" item trait; item filter for weapons that can have potions applied to them
 
 "Noisiness" block trait; block filter to determine how much noise walking/running/landing makes
 
@@ -53,7 +51,9 @@ KEYBOUND ACTIONS =======================================================
 Add action wheel which opens on keybind
 Add actions...
 ...Attempt Stealth / Don't Attempt Stealth (if set to "Don't Attempt Stealth", you are very easy for things to notice)
-...Yell
+...Wave (decrease visual stealth for 1 second)
+...Whisper (make a small noise; "psst")
+...Yell (make a loud noise; "hey")
 ...Prone/unprone - has a charge time; when prone, you are stealthier, slower, have a lower POV, have a smaller hitbox (can move through 1b high areas), and cannot jump/dodge/sneak
 ...Find pebble?
 
