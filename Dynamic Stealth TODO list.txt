@@ -35,6 +35,8 @@ KEYBOUND ACTIONS =======================================================
 Add action wheel which opens on keybind
 Add actions...
 ...Attempt Stealth / Don't Attempt Stealth (if set to "Don't Attempt Stealth", you are very easy for things to notice)
+...Yell
+...Find pebble?
 
 
 
@@ -110,15 +112,31 @@ Water arrows (create a thin flowing water block on impact; for breaking torches 
 Fire arrows (set entities on fire or create fire on impact)
 Torch arrows (yes I know some other mods already do, but I want them in mine)
 
-Add the ability to apply potions to weapons
+Add the ability to apply potions to sharp/pointy weapons
+
+Make sticks throwable (act like snowballs; 0 damage projectile, but if they hit a block, then instead create small sound.  Either way, drop as stick item again)
+
+Make firework stars throwable
 
 Add a stealth guidebook
 
-Add smoke bombs which block LOS
+Smoke bombs - Block LOS
 
-Add hand mirror, which allows you to peek around corners (changes camera position while in use, based on which hand it is in)
+Hand mirror - Allows you to peek around corners (changes camera position while in use, based on which hand it is in)
+
+Firecracker - make a loud sound after a short delay
+
+Pebbles - Can be thrown as a 0 damage projectile like a snowball, but drops as an item again on impact.  Crafted from cobblestone
+
+Darts - Dan be thrown as a low damage weapon, and can have potions applied to them
+
+Blowpipe - Can fire darts as a weapon, or can be used to breathe underwater, when an air block is near
+
+Slingshot - Can fire pebbles as a low-damage weapon (no pebble recovery), or can fire smoke bombs, splash/lingering potions, or firecrackers
 
 Add armor/baubles that improve stealth/anti-stealth attributes
+
+Kamas - When wielding one, can be used to catch / hold onto softer vertical surfaces. Dual wielding allows you to climb softer vertical surfaces (both use durability based on material hardness difference)
 
 
 
