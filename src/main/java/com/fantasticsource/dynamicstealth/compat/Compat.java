@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class Compat
 {
-    public static boolean lycanites = false, ancientwarfare = false, customnpcs = false, neat = false, statues = false, dissolution = false, thermalfoundation = false;
+    public static boolean lycanites = false, ancientwarfare = false, customnpcs = false, iceandfire = false, neat = false, statues = false, dissolution = false, thermalfoundation = false;
 
     private static Field executingTaskEntriesField;
 
@@ -64,6 +64,7 @@ public class Compat
         if (lycanites && aiClassname.equals("com.lycanitesmobs.core.entity.ai.EntityAIAttackMelee")) return true;
         if (ancientwarfare && aiClassname.equals("net.shadowmage.ancientwarfare.npc.ai.vehicle.NpcAIAimVehicle")) return true;
         if (thermalfoundation && aiClassname.contains("cofh.thermalfoundation.entity.monster")) return true; //Should cover Basalz, Blitz, and Blizz
+        if (iceandfire && (aiClassname.contains("iceandfire.entity.ai.DragonAIAttackMelee") || aiClassname.contains("iceandfire.entity.ai.HippogryphAIAttackMelee") || aiClassname.contains("iceandfire.entity.ai.SeaSerpentAIAttackMelee"))) return true;
 
         return false;
     }
