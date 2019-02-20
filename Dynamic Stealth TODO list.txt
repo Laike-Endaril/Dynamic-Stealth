@@ -6,6 +6,14 @@ Add versioning to config
 
 GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES ============================
 
+"Climbing" item trait; item filter for tools that can be used for climbing...
+...climbing tools are effective on vertical surfaces of a lower mining level than their material
+...when wielding one climbing tool, you can catch yourself / hold yourself on vertical surfaces
+...when wielding two, you can climb up vertical surfaces
+...both features use durability
+
+"Potion Applier" item trait; item filter for tools that can have potions applied to them
+
 Make held items, armor, elytra, etc. fade with entity?
 
 Add disguise system; conditionally prevents targeting even if seen, but not if the enemy has threat against you...
@@ -112,11 +120,7 @@ Water arrows (create a thin flowing water block on impact; for breaking torches 
 Fire arrows (set entities on fire or create fire on impact)
 Torch arrows (yes I know some other mods already do, but I want them in mine)
 
-Add the ability to apply potions to sharp/pointy weapons
-
 Make sticks throwable (act like snowballs; 0 damage projectile, but if they hit a block, then instead create small sound.  Either way, drop as stick item again)
-
-Make firework stars throwable
 
 Add a stealth guidebook
 
@@ -124,19 +128,23 @@ Smoke bombs - Block LOS
 
 Hand mirror - Allows you to peek around corners (changes camera position while in use, based on which hand it is in)
 
-Firecracker - make a loud sound after a short delay
-
 Pebbles - Can be thrown as a 0 damage projectile like a snowball, but drops as an item again on impact.  Crafted from cobblestone
 
 Darts - Dan be thrown as a low damage weapon, and can have potions applied to them
 
 Blowpipe - Can fire darts as a weapon, or can be used to breathe underwater, when an air block is near
 
-Slingshot - Can fire pebbles as a low-damage weapon (no pebble recovery), or can fire smoke bombs, splash/lingering potions, or firecrackers
+Make firework stars throwable; they go off after a short delay, or if in water, drop as an item again
+
+Slingshot - Can fire pebbles, smoke bombs, splash/lingering potions, or firework stars as low-damage projectiles
 
 Add armor/baubles that improve stealth/anti-stealth attributes
 
-Kamas - When wielding one, can be used to catch / hold onto softer vertical surfaces. Dual wielding allows you to climb softer vertical surfaces (both use durability based on material hardness difference)
+Kunai - Melee/throwing weapon; can be used to craft Rope Dart, stacks up to 4
+
+Rope Dart - Re-usable medium range thrown weapon with 3 second chargeup
+
+Shuriken - Throwing weapon; stacks up to 8
 
 
 
