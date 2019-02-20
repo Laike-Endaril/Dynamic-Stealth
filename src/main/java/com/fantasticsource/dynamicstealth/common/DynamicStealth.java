@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.common;
 
+import com.fantasticsource.dynamicstealth.Commands;
 import com.fantasticsource.dynamicstealth.client.HUD;
 import com.fantasticsource.dynamicstealth.client.RenderAlterer;
 import com.fantasticsource.dynamicstealth.common.potions.Potions;
@@ -71,6 +72,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -657,6 +659,12 @@ public class DynamicStealth
         {
             tasks.addTask(-7777777, new AIDynamicStealth(living, 1));
         }
+    }
+
+    @EventHandler
+    public static void serverStarting(FMLServerStartingEvent event)
+    {
+        event.registerServerCommand(new Commands());
     }
 
     @EventHandler

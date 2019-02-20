@@ -1,10 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-Check threat issue, maybe on dedicated?
-
 Check whether detail HUD is working for op clients on dedicated when allowance is set to 1
-
-Check possible coloration issue (#4) with cyclic + guide api + DS
 
 Add versioning to config
 

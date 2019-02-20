@@ -20,3 +20,5 @@ lingering_potion.effect.dynamicstealth.blindness=Lingering Potion of Blindness
 potion.effect.dynamicstealth.glowing=Potion of Glowing
 splash_potion.effect.dynamicstealth.glowing=Splash Potion of Glowing
 lingering_potion.effect.dynamicstealth.glowing=Lingering Potion of Glowing
+
+dynamicstealth.cmd.reloaded=Server reloaded config from file
