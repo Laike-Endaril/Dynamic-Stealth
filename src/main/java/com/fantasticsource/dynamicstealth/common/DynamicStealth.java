@@ -576,8 +576,7 @@ public class DynamicStealth
         }
         catch (Exception e)
         {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(137, false);
+            MCTools.crash(e, 137, false);
         }
     }
 

@@ -1,12 +1,12 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EnumHand;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.lang.reflect.Field;
 
@@ -23,8 +23,7 @@ public class AIAttackMeleeEdit extends EntityAIAttackMelee
         }
         catch (NoSuchFieldException | IllegalAccessException e)
         {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(126, false);
+            MCTools.crash(e, 126, false);
         }
     }
 

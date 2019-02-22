@@ -1,9 +1,9 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.passive.EntityLlama;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -24,8 +24,7 @@ public class AILlamaHurtByTargetEdit extends AIHurtByTargetEdit
         }
         catch (NoSuchFieldException | IllegalAccessException e)
         {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(131, false);
+            MCTools.crash(e, 131, false);
         }
     }
 
@@ -51,8 +50,7 @@ public class AILlamaHurtByTargetEdit extends AIHurtByTargetEdit
         }
         catch (IllegalAccessException | InvocationTargetException e)
         {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(132, false);
+            MCTools.crash(e, 132, false);
         }
 
         return super.shouldContinueExecuting();

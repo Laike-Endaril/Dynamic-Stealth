@@ -1,11 +1,11 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -38,8 +38,7 @@ public class AIPigmanHurtByAggressorEdit extends AIHurtByTargetEdit
             }
             catch (IllegalAccessException | InvocationTargetException e)
             {
-                e.printStackTrace();
-                FMLCommonHandler.instance().exitJava(130, false);
+                MCTools.crash(e, 130, false);
             }
         }
     }

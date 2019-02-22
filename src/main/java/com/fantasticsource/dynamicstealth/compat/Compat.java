@@ -1,13 +1,13 @@
 package com.fantasticsource.dynamicstealth.compat;
 
 import com.fantasticsource.dynamicstealth.server.ai.edited.AIAttackMeleeEdit;
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.NPEAttackTargetTaskHolder;
 import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITasks;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.lang.reflect.Field;
 import java.util.Set;
@@ -26,8 +26,7 @@ public class Compat
         }
         catch (NoSuchFieldException | IllegalAccessException e)
         {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(144, false);
+            MCTools.crash(e, 144, false);
         }
     }
 
@@ -48,8 +47,7 @@ public class Compat
                 }
                 catch (IllegalAccessException e)
                 {
-                    e.printStackTrace();
-                    FMLCommonHandler.instance().exitJava(145, false);
+                    MCTools.crash(e, 145, false);
                 }
             }
         }

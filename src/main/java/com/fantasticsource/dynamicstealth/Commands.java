@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -10,7 +11,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 
 import javax.annotation.Nullable;
@@ -34,8 +34,7 @@ public class Commands extends CommandBase
         }
         catch (NoSuchFieldException | IllegalAccessException e)
         {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(155, true);
+            MCTools.crash(e, 155, true);
         }
     }
 

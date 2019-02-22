@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import com.google.common.base.Predicate;
@@ -7,7 +8,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -25,8 +25,7 @@ public class AINearestAttackableTargetEdit<T extends EntityLivingBase> extends A
         }
         catch (Exception e)
         {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(122, false);
+            MCTools.crash(e, 122, false);
         }
     }
 

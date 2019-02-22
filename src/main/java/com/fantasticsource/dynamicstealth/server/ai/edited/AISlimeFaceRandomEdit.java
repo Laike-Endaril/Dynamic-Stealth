@@ -1,9 +1,9 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.monster.EntitySlime;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -69,8 +69,7 @@ public class AISlimeFaceRandomEdit extends EntityAIBase
                 }
                 catch (IllegalAccessException | InvocationTargetException e)
                 {
-                    e.printStackTrace();
-                    FMLCommonHandler.instance().exitJava(124, false);
+                    MCTools.crash(e, 124, false);
                 }
             }
             else resetTimer();

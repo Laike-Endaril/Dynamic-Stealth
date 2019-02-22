@@ -13,7 +13,6 @@ import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
@@ -31,8 +30,7 @@ public abstract class AITargetEdit extends EntityAIBase
         }
         catch (NoSuchFieldException | IllegalAccessException e)
         {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(128, false);
+            MCTools.crash(e, 128, false);
         }
     }
 

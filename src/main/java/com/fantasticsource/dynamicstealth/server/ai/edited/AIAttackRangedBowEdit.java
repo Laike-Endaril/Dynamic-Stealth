@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IRangedAttackMob;
@@ -9,7 +10,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemBow;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EnumHand;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.lang.reflect.Field;
 
@@ -28,8 +28,7 @@ public class AIAttackRangedBowEdit<T extends EntityMob & IRangedAttackMob> exten
         }
         catch (NoSuchFieldException | IllegalAccessException e)
         {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(139, false);
+            MCTools.crash(e, 139, false);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import net.minecraft.entity.EntityLivingBase;
@@ -8,7 +9,6 @@ import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.village.Village;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -26,8 +26,7 @@ public class AIDefendVillageEdit extends AITargetEdit
         }
         catch (NoSuchFieldException | IllegalAccessException e)
         {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(135, false);
+            MCTools.crash(e, 135, false);
         }
     }
 
@@ -82,8 +81,7 @@ public class AIDefendVillageEdit extends AITargetEdit
             }
             catch (IllegalAccessException e)
             {
-                e.printStackTrace();
-                FMLCommonHandler.instance().exitJava(136, false);
+                MCTools.crash(e, 136, false);
             }
 
             return villageAgressorTarget != null;

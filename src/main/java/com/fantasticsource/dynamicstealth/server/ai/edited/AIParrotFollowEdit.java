@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import com.google.common.base.Predicate;
@@ -9,7 +10,6 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIFollow;
 import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.pathfinding.*;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -29,8 +29,7 @@ public class AIParrotFollowEdit extends EntityAIBase //In vanilla, this is only 
         }
         catch (Exception e)
         {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(121, false);
+            MCTools.crash(e, 121, false);
         }
     }
 

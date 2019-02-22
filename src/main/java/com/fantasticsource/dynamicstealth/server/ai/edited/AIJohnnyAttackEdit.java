@@ -1,10 +1,10 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.EntityVindicator;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.lang.reflect.Field;
 
@@ -20,8 +20,7 @@ public class AIJohnnyAttackEdit extends AINearestAttackableTargetEdit<EntityLivi
         }
         catch (NoSuchFieldException | IllegalAccessException e)
         {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(133, false);
+            MCTools.crash(e, 133, false);
         }
     }
 
@@ -40,8 +39,7 @@ public class AIJohnnyAttackEdit extends AINearestAttackableTargetEdit<EntityLivi
         }
         catch (IllegalAccessException e)
         {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(134, false);
+            MCTools.crash(e, 134, false);
             return false;
         }
     }

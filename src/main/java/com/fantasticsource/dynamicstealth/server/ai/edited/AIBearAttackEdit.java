@@ -1,10 +1,10 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.monster.EntityPolarBear;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -55,8 +55,7 @@ public class AIBearAttackEdit extends AIAttackMeleeEdit
                 }
                 catch (IllegalAccessException | InvocationTargetException e)
                 {
-                    e.printStackTrace();
-                    FMLCommonHandler.instance().exitJava(127, false);
+                    MCTools.crash(e, 127, false);
                 }
             }
         }

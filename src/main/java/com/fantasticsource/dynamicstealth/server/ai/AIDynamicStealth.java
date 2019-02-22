@@ -23,7 +23,6 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import noppes.npcs.api.NpcAPI;
 import noppes.npcs.api.entity.ICustomNpc;
 
@@ -69,8 +68,7 @@ public class AIDynamicStealth extends EntityAIBase
         }
         catch (NoSuchFieldException | IllegalAccessException e)
         {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(148, true);
+            MCTools.crash(e, 148, true);
         }
     }
 
@@ -453,8 +451,7 @@ public class AIDynamicStealth extends EntityAIBase
             }
             catch (IllegalAccessException | InvocationTargetException e)
             {
-                e.printStackTrace();
-                FMLCommonHandler.instance().exitJava(150, false);
+                MCTools.crash(e, 150, false);
             }
         }
 
@@ -511,8 +508,7 @@ public class AIDynamicStealth extends EntityAIBase
             }
             catch (IllegalAccessException | InvocationTargetException e)
             {
-                e.printStackTrace();
-                FMLCommonHandler.instance().exitJava(151, false);
+                MCTools.crash(e, 151, false);
             }
         }
 
@@ -794,8 +790,7 @@ public class AIDynamicStealth extends EntityAIBase
                 }
                 catch (IllegalAccessException e)
                 {
-                    e.printStackTrace();
-                    FMLCommonHandler.instance().exitJava(149, false);
+                    MCTools.crash(e, 149, false);
                 }
             }
         }

@@ -11,7 +11,6 @@ import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.EnumDifficulty;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.lang.reflect.Field;
 
@@ -29,8 +28,7 @@ public class AIGuardianAttackEdit extends EntityAIBase
         }
         catch (NoSuchFieldException | IllegalAccessException e)
         {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(140, false);
+            MCTools.crash(e, 140, false);
         }
     }
 
@@ -76,8 +74,7 @@ public class AIGuardianAttackEdit extends EntityAIBase
         }
         catch (IllegalAccessException e)
         {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(142, false);
+            MCTools.crash(e, 142, false);
         }
     }
 
@@ -89,8 +86,7 @@ public class AIGuardianAttackEdit extends EntityAIBase
         }
         catch (IllegalAccessException e)
         {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(141, false);
+            MCTools.crash(e, 141, false);
         }
     }
 
@@ -111,8 +107,7 @@ public class AIGuardianAttackEdit extends EntityAIBase
             }
             catch (IllegalAccessException e)
             {
-                e.printStackTrace();
-                FMLCommonHandler.instance().exitJava(143, false);
+                MCTools.crash(e, 143, false);
             }
             guardian.world.setEntityState(guardian, (byte) 21);
         }

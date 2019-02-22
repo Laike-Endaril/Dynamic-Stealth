@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
@@ -14,7 +15,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.lang.reflect.Field;
 
@@ -34,8 +34,7 @@ public class AIFollowOwnerEdit extends EntityAIBase
         }
         catch (NoSuchFieldException | IllegalAccessException e)
         {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(153, false);
+            MCTools.crash(e, 153, false);
         }
     }
 
@@ -63,8 +62,7 @@ public class AIFollowOwnerEdit extends EntityAIBase
         }
         catch (IllegalAccessException e)
         {
-            e.printStackTrace();
-            FMLCommonHandler.instance().exitJava(154, false);
+            MCTools.crash(e, 154, false);
         }
 
         setMutexBits(3);

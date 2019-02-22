@@ -1,12 +1,12 @@
 package com.fantasticsource.dynamicstealth.server;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
+import com.fantasticsource.mctools.MCTools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -33,8 +33,7 @@ public class EntityLookHelperEdit extends EntityLookHelper
             }
             catch (InvocationTargetException | IllegalAccessException e)
             {
-                e.printStackTrace();
-                FMLCommonHandler.instance().exitJava(146, false);
+                MCTools.crash(e, 146, false);
             }
         }
         else
