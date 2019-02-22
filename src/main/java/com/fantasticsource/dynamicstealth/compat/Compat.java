@@ -1,7 +1,7 @@
 package com.fantasticsource.dynamicstealth.compat;
 
-import com.fantasticsource.dynamicstealth.server.ai.NPEAttackTargetTaskHolder;
 import com.fantasticsource.dynamicstealth.server.ai.edited.AIAttackMeleeEdit;
+import com.fantasticsource.mctools.NPEAttackTargetTaskHolder;
 import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIAttackMelee;

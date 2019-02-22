@@ -4,8 +4,6 @@ Directional indicators...
 ...add optional "damaged from" indicator, which draws an indicator pointing the direction damage was recently received from
 ...add optional touch detection indicator for players (see to do in DynamicStealth.java)
 
-Dodge button (default V); short lateral jump in chosen direction if touching the ground; respects movement speed and slow debuff and has a cooldown (on HUD)
-
 
 
 GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES ============================
