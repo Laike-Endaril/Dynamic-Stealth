@@ -180,7 +180,7 @@ public class DynamicStealth
     public static void worldTick(TickEvent.WorldTickEvent event) throws InvocationTargetException, IllegalAccessException
     {
         World world = event.world;
-        if (!MCTools.isClient(world) && event.phase == TickEvent.Phase.START)
+        if (!world.isRemote && event.phase == TickEvent.Phase.START)
         {
             if (serverSettings.senses.touch.touchEnabled)
             {
@@ -556,7 +556,7 @@ public class DynamicStealth
         {
             lookHelperField.set(living, new EntityLookHelperEdit(living));
 
-            if (!MCTools.isClient(living.world))
+            if (!living.world.isRemote)
             {
                 sensesField.set(living, new EntitySensesEdit(living));
 
