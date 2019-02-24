@@ -19,7 +19,8 @@ public class HUDConfig
     public int onPointHUDMax = 9999;
 
     @Config.Name("On-point HUD Filter")
-    public OPHUDFilterConfig filter = new OPHUDFilterConfig();
+    public OPHUDFilterConfig filterOP = new OPHUDFilterConfig();
+
     @Config.Name("On-point HUD Style")
-    public OPHUDStyleConfig onPointHUDStyle = new OPHUDStyleConfig();
+    public OPHUDStyleConfig styleOP = new OPHUDStyleConfig();
 }
