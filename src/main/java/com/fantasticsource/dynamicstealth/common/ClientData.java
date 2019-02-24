@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
@@ -37,15 +38,12 @@ public class ClientData
     public static final String EMPTY = "----------";
     public static final String UNKNOWN = "???";
 
-    public static String detailSearcher = EMPTY;
-    public static String detailTarget = EMPTY;
-    public static int detailPercent = 0;
-    public static int detailColor = COLOR_NULL;
-
     public static boolean soulSight = false;
     public static boolean usePlayerSenses = false;
 
-    public static LinkedHashMap<Integer, OnPointData> onPointDataMap = new LinkedHashMap<>();
+    public static ArrayList<OnPointData> opList = new ArrayList<>();
+    public static LinkedHashMap<Integer, OnPointData> opMap = new LinkedHashMap<>();
+    public static OnPointData detailData = null;
 
     public static LinkedHashMap<Integer, Float> visibilityMap = new LinkedHashMap<>();
 
@@ -53,15 +51,13 @@ public class ClientData
     @SubscribeEvent
     public static void clearHUD(FMLNetworkEvent.ClientDisconnectionFromServerEvent event)
     {
-        detailColor = COLOR_NULL;
-        detailSearcher = EMPTY;
-        detailTarget = EMPTY;
-        detailPercent = 0;
-
         soulSight = false;
         usePlayerSenses = false;
 
-        onPointDataMap.clear();
+        opList.clear();
+        opMap.clear();
+        detailData = null;
+
         visibilityMap.clear();
     }
 
@@ -134,13 +130,14 @@ public class ClientData
 
     public static class OnPointData
     {
-        public int color, percent, priority;
+        public int color, searcherID, targetID, percent;
 
-        public OnPointData(int color, int percent, int priority)
+        public OnPointData(int color, int searcherID, int targetID, int percent)
         {
             this.color = color;
+            this.searcherID = searcherID;
+            this.targetID = targetID;
             this.percent = percent;
-            this.priority = priority;
         }
     }
 }

@@ -1,6 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-Detail HUD filter (server-side, to keep compatible with some existing core systems and some upcoming features)
+Explain library situation in curseforge description
 
 Add wiki / guide videos
 Add guidebook, possibly using guide api or patchouli
@@ -70,6 +70,9 @@ Add config option for "Can See Through" Materials
 Add config option for "Can See Through" Blocks
 
 Add entity-specific configs for helper system
+
+Add entity-specific filter for OPHUD
+Add entity-specific filter for detail HUD
 
 
 

@@ -4,43 +4,32 @@ import net.minecraftforge.common.config.Config;
 
 public class HUDAllowanceConfig
 {
-    @Config.Name("Allow detailed HUD on clients")
+    @Config.Name("Allow on-point HUD for Clients")
     @Config.Comment(
             {
-                    "If enabled, clients are allowed to turn on a HUD for displaying detailed threat information for a single target",
+                    "If enabled, clients can turn on/off a HUD which appears above each entity",
                     "",
                     "0 means disabled for all players",
                     "1 means enabled for OP players ONLY",
                     "2 means enabled for all players"
             })
     @Config.RangeInt(min = 0, max = 2)
-    public int allowClientDetailHUD = 2;
+    public int allowOPHUD = 2;
 
-    @Config.Name("On-Point HUD for normal players")
+    @Config.Name("Allow Detail HUD for Clients")
     @Config.Comment(
             {
-                    "Controls how the on-point, per-entity threat HUD can be used on clients (for normal/non-OP players)",
+                    "If enabled, clients can see more detailed information in their on-point HUD",
+                    "If their on-point HUD is disallowed, this does nothing",
                     "",
-                    "0 means disabled",
-                    "1 means enabled for targeted entity ONLY",
-                    "2 means enabled for all seen entities"
+                    "0 means disabled for all players",
+                    "1 means enabled for OP players ONLY",
+                    "2 means enabled for all players"
             })
     @Config.RangeInt(min = 0, max = 2)
-    public int normalOnPointHUD = 2;
-
-    @Config.Name("On-Point HUD for OP players")
-    @Config.Comment(
-            {
-                    "Controls how the on-point, per-entity threat HUD can be used on clients (for OP players)",
-                    "",
-                    "0 means disabled",
-                    "1 means enabled for targeted entity ONLY",
-                    "2 means enabled for all seen entities"
-            })
-    @Config.RangeInt(min = 0, max = 2)
-    public int opOnPointHUD = 2;
+    public int allowDetailedOPHUD = 2;
 
     @Config.Name("Recognize Passives Automatically")
-    @Config.Comment({"If enabled, clients' threat HUDs will display green for passive mobs"})
+    @Config.Comment("If enabled, clients' threat HUDs will display green for passive mobs.  If disabled, passives appear as idle (blue).")
     public boolean recognizePassive = true;
 }

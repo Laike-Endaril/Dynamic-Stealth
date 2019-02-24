@@ -2,7 +2,6 @@ package com.fantasticsource.dynamicstealth.client;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.dynamicstealth.compat.Compat;
-import com.fantasticsource.dynamicstealth.compat.CompatDissolution;
 import com.fantasticsource.dynamicstealth.compat.CompatNeat;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.ReflectionTool;
@@ -17,8 +16,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -78,31 +77,35 @@ public class HUD extends Gui
             EntityLivingBase livingBase = event.getEntity();
             if (livingBase != null)
             {
-                OnPointData data = onPointDataMap.get(livingBase.getEntityId());
+                int id = livingBase.getEntityId();
+                OnPointData data;
+                if (detailData != null && detailData.searcherID == id) data = detailData;
+                else data = opMap.get(livingBase.getEntityId());
 
-                if (data != null && data.priority < clientSettings.hudSettings.onPointHUDMax && onPointFilter(Minecraft.getMinecraft().player, livingBase, data.color, data.percent)) drawOnPointHUDElement(event.getRenderer().getRenderManager(), event.getX(), event.getY(), event.getZ(), livingBase, data.color, data.percent);
+                if (data != null && (data == detailData || onPointFilter(data.color))) drawOnPointHUDElement(event.getRenderer().getRenderManager(), livingBase, data);
             }
         }
     }
 
-    private static boolean onPointFilter(EntityPlayer player, EntityLivingBase livingBase, int color, int percent)
+    private static boolean onPointFilter(int color)
     {
-        if (MCTools.isRidingOrRiddenBy(player, livingBase) || CompatDissolution.isPossessing(player, livingBase)) return false;
-
         if (color == COLOR_BYPASS) return clientSettings.hudSettings.filterOP.showBypass;
-        if (color == COLOR_PASSIVE) return clientSettings.hudSettings.filterOP.showPassive;
-        if (color == COLOR_IDLE) return clientSettings.hudSettings.filterOP.showIdle;
-        if (color == COLOR_ALERT) return clientSettings.hudSettings.filterOP.showAlert;
-        if (color == COLOR_ATTACKING_YOU) return clientSettings.hudSettings.filterOP.showAttackingYou;
-        if (color == COLOR_ATTACKING_OTHER) return clientSettings.hudSettings.filterOP.showAttackingOther;
-        if (color == COLOR_FLEEING) return clientSettings.hudSettings.filterOP.showFleeing;
+        else if (color == COLOR_PASSIVE) return clientSettings.hudSettings.filterOP.showPassive;
+        else if (color == COLOR_IDLE) return clientSettings.hudSettings.filterOP.showIdle;
+        else if (color == COLOR_ALERT) return clientSettings.hudSettings.filterOP.showAlert;
+        else if (color == COLOR_ATTACKING_YOU) return clientSettings.hudSettings.filterOP.showAttackingYou;
+        else if (color == COLOR_ATTACKING_OTHER) return clientSettings.hudSettings.filterOP.showAttackingOther;
+        else if (color == COLOR_FLEEING) return clientSettings.hudSettings.filterOP.showFleeing;
         return false;
     }
 
-    private static void drawOnPointHUDElement(RenderManager renderManager, double x, double y, double z, Entity entity, int color, int percent)
+    private static void drawOnPointHUDElement(RenderManager renderManager, Entity entity, OnPointData data)
     {
+        double x = entity.posX, y = entity.posY, z = entity.posZ;
+
         float viewerYaw = renderManager.playerViewY;
         float viewerPitch = renderManager.playerViewX;
+        int color = data.color;
         Color c = new Color(color, true);
         int r = c.r(), g = c.g(), b = c.b();
 
@@ -172,7 +175,7 @@ public class HUD extends Gui
         double right = halfSize2D + hOff2D;
         double top = -halfSize2D + vOff2D;
         double bottom = halfSize2D + vOff2D;
-        if (color == COLOR_PASSIVE || color == COLOR_IDLE || percent == -1)
+        if (color == COLOR_PASSIVE || color == COLOR_IDLE || data.percent == -1)
         {
             //Fill for states that are always 100%
             bufferbuilder.pos(left, top, 0).tex(UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
@@ -182,7 +185,7 @@ public class HUD extends Gui
         }
         else
         {
-            double amount = (double) percent / 100;
+            double amount = (double) data.percent / 100;
             double level = bottom - halfSize2D * 2 * amount;
             double uvLevel = 0.5 - UV_HALF_PIXEL - UV_SUBTEX_SIZE * amount;
 
@@ -230,43 +233,31 @@ public class HUD extends Gui
         GlStateManager.color(1, 1, 1, 1);
     }
 
+    public static boolean detailFilter(int color)
+    {
+        if (color == COLOR_BYPASS) return clientSettings.hudSettings.filterDetail.showBypass;
+        else if (color == COLOR_PASSIVE) return clientSettings.hudSettings.filterDetail.showPassive;
+        else if (color == COLOR_IDLE) return clientSettings.hudSettings.filterDetail.showIdle;
+        else if (color == COLOR_ALERT) return clientSettings.hudSettings.filterDetail.showAlert;
+        else if (color == COLOR_ATTACKING_YOU) return clientSettings.hudSettings.filterDetail.showAttackingYou;
+        else if (color == COLOR_ATTACKING_OTHER) return clientSettings.hudSettings.filterDetail.showAttackingOther;
+        else if (color == COLOR_FLEEING) return clientSettings.hudSettings.filterDetail.showFleeing;
+        return false;
+    }
+
     private void drawDetailHUD(int width, int height, FontRenderer fontRender)
     {
-        if (clientSettings.hudSettings.displayDetailHUD)
+        World world = Minecraft.getMinecraft().player.world;
+        if (detailData != null)
         {
-            if (detailSearcher.equals(EMPTY))
-            {
-                drawString(fontRender, EMPTY, (int) (width * 0.75), height - 30, detailColor);
-                drawString(fontRender, EMPTY, (int) (width * 0.75), height - 20, detailColor);
-                drawString(fontRender, EMPTY, (int) (width * 0.75), height - 10, detailColor);
-            }
-            else
-            {
-                if (detailPercent == -1) //Special code for threat bypass mode
-                {
-                    drawString(fontRender, detailSearcher, (int) (width * 0.75), height - 30, COLOR_BYPASS);
-                    drawString(fontRender, UNKNOWN, (int) (width * 0.75), height - 20, COLOR_BYPASS);
-                    drawString(fontRender, UNKNOWN, (int) (width * 0.75), height - 10, COLOR_BYPASS);
-                }
-                else if (detailPercent == 0)
-                {
-                    drawString(fontRender, detailSearcher, (int) (width * 0.75), height - 30, detailColor);
-                    drawString(fontRender, EMPTY, (int) (width * 0.75), height - 20, detailColor);
-                    drawString(fontRender, EMPTY, (int) (width * 0.75), height - 10, detailColor);
-                }
-                else if (detailTarget.equals(EMPTY))
-                {
-                    drawString(fontRender, detailSearcher, (int) (width * 0.75), height - 30, detailColor);
-                    drawString(fontRender, EMPTY, (int) (width * 0.75), height - 20, detailColor);
-                    drawString(fontRender, detailPercent + "%", (int) (width * 0.75), height - 10, detailColor);
-                }
-                else
-                {
-                    drawString(fontRender, detailSearcher, (int) (width * 0.75), height - 30, detailColor);
-                    drawString(fontRender, detailTarget, (int) (width * 0.75), height - 20, detailColor);
-                    drawString(fontRender, detailPercent + "%", (int) (width * 0.75), height - 10, detailColor);
-                }
-            }
+            int color = detailData.color;
+            Entity searcher = world.getEntityByID(detailData.searcherID);
+            int targetID = detailData.targetID;
+            Entity target = (targetID == -1 || targetID == -2) ? null : world.getEntityByID(targetID);
+
+            drawString(fontRender, searcher == null ? EMPTY : searcher.getName(), (int) (width * 0.75), height - 30, color);
+            drawString(fontRender, target == null ? UNKNOWN : target.getName(), (int) (width * 0.75), height - 20, color);
+            drawString(fontRender, detailData.percent < 0 ? UNKNOWN : detailData.percent + "%", (int) (width * 0.75), height - 10, color);
         }
     }
 }
