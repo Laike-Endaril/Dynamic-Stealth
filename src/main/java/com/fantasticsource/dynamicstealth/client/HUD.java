@@ -82,7 +82,7 @@ public class HUD extends Gui
                 if (detailData != null && detailData.searcherID == id) data = detailData;
                 else data = opMap.get(livingBase.getEntityId());
 
-                if (data != null && (data == detailData || onPointFilter(data.color))) drawOnPointHUDElement(event.getRenderer().getRenderManager(), livingBase, data);
+                if (data != null && (data == detailData || onPointFilter(data.color))) drawOnPointHUDElement(event.getRenderer().getRenderManager(), event.getX(), event.getY(), event.getZ(), livingBase, data);
             }
         }
     }
@@ -99,10 +99,8 @@ public class HUD extends Gui
         return false;
     }
 
-    private static void drawOnPointHUDElement(RenderManager renderManager, Entity entity, OnPointData data)
+    private static void drawOnPointHUDElement(RenderManager renderManager, double x, double y, double z, Entity entity, OnPointData data)
     {
-        double x = entity.posX, y = entity.posY, z = entity.posZ;
-
         float viewerYaw = renderManager.playerViewY;
         float viewerPitch = renderManager.playerViewX;
         int color = data.color;
