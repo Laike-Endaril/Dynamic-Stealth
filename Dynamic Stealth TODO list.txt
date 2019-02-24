@@ -2,6 +2,9 @@ CURRENTLY WORKING ON ===================================================
 
 Detail HUD filter (server-side, to keep compatible with some existing core systems and some upcoming features)
 
+Add wiki / guide videos
+Add guidebook, possibly using guide api or patchouli
+
 Directional indicators...
 ...add optional "damaged from" indicator, which draws an indicator pointing the direction damage was recently received from
 ...add optional touch detection indicator for players (see to do in DynamicStealth.java)
@@ -137,8 +140,6 @@ Fire arrows (set entities on fire or create fire on impact)
 Torch arrows (yes I know some other mods already do, but I want them in mine)
 
 Make sticks throwable (act like snowballs; 0 damage projectile, but if they hit a block, then instead create small sound.  Either way, drop as stick item again)
-
-Add guidebook, possibly using guide api or patchouli
 
 Smoke bombs - Block LOS
 
