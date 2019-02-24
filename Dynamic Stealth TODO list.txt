@@ -1,10 +1,12 @@
 CURRENTLY WORKING ON ===================================================
 
-Detail HUD filter
+Detail HUD filter (server-side, to keep compatible with some existing core systems and some upcoming features)
 
 Directional indicators...
 ...add optional "damaged from" indicator, which draws an indicator pointing the direction damage was recently received from
 ...add optional touch detection indicator for players (see to do in DynamicStealth.java)
+
+Add optional reticle which draws on focused entity (if there is one, and it is visible)
 
 
 
@@ -73,8 +75,6 @@ VISUAL INDICATORS ======================================================
 Add indicator for where a mob WAS when you last saw it...
 ...show the mob, as it was last seen, but black and white with partial transparency
 ...make the on-point HUD above it into an X with coloration
-
-Add optional reticle which draws on focused entity (if there is one, and it is visible)
 
 Add target locking (press button to lock/unlock on current target)
 
