@@ -256,8 +256,8 @@ public class HUD extends Gui
             Entity target = (targetID == -1 || targetID == -2) ? null : world.getEntityByID(targetID);
 
             drawString(fontRender, searcher == null ? EMPTY : searcher.getName(), (int) (width * 0.75), height - 30, color);
-            drawString(fontRender, target == null ? UNKNOWN : target.getName(), (int) (width * 0.75), height - 20, color);
-            drawString(fontRender, detailData.percent < 0 ? UNKNOWN : detailData.percent + "%", (int) (width * 0.75), height - 10, color);
+            drawString(fontRender, targetID == -1 ? EMPTY : target == null ? UNKNOWN : target.getName(), (int) (width * 0.75), height - 20, color);
+            drawString(fontRender, detailData.percent < 0 ? UNKNOWN : detailData.percent == 0 ? EMPTY : detailData.percent + "%", (int) (width * 0.75), height - 10, color);
         }
     }
 }
