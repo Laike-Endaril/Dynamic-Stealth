@@ -15,6 +15,7 @@ import java.util.ArrayList;
 public class RenderAlterer
 {
     private static ArrayList<EntityLivingBase> soulSightCache = new ArrayList<>();
+    private static EntityLivingBase detailTarget = null;
 
 
     @SubscribeEvent
@@ -32,7 +33,12 @@ public class RenderAlterer
             soulSightCache.remove(livingBase);
             livingBase.setGlowing(false);
         }
-        if (ClientData.soulSight && !livingBase.isGlowing())
+        if (ClientData.detailData != null && ClientData.detailData.searcherID == livingBase.getEntityId())
+        {
+            livingBase.setGlowing(true);
+            soulSightCache.add(livingBase);
+        }
+        else if (ClientData.soulSight && !livingBase.isGlowing())
         {
             livingBase.setGlowing(true);
             soulSightCache.add(livingBase);
@@ -66,6 +72,12 @@ public class RenderAlterer
     @SubscribeEvent
     public static void postRender(RenderLivingEvent.Post event)
     {
+        if (detailTarget != null)
+        {
+            detailTarget.setGlowing(false);
+            detailTarget = null;
+        }
+
         if (Compat.statues && event.getEntity().getClass().getName().contains("party.lemons.statue")) return;
         GlStateManager.color(1, 1, 1, 1);
         GL11.glColor4f(1, 1, 1, 1);

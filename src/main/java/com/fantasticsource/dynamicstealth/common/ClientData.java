@@ -49,7 +49,7 @@ public class ClientData
 
 
     @SubscribeEvent
-    public static void clearHUD(FMLNetworkEvent.ClientDisconnectionFromServerEvent event)
+    public static void clearClientData(FMLNetworkEvent.ClientDisconnectionFromServerEvent event)
     {
         soulSight = false;
         usePlayerSenses = false;
