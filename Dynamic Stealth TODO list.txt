@@ -4,8 +4,6 @@ Explain library situation in curseforge description
 
 Make sure focused target is based on camera only; not on visibility (as long as it's seen)
 
-Make focused target glow in the correct color
-
 Create new graphics for detailed OPHUD, but keep skulls for normal OPHUDs
 
 Add wiki / guide videos
