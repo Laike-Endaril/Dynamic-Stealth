@@ -27,21 +27,16 @@ public class RenderAlterer
         livingBase.setInvisible(false);
 
 
-        //Soul sight glowing effect for when the player has soul sight
+        //Remove detail target and soul sight glowing effects; the glowing part of the render seems to be outside these events, which is why this is in pre and not post
+        if (detailTarget != null)
+        {
+            detailTarget.setGlowing(false);
+            detailTarget = null;
+        }
         if (soulSightCache.contains(livingBase))
         {
             soulSightCache.remove(livingBase);
             livingBase.setGlowing(false);
-        }
-        if (ClientData.detailData != null && ClientData.detailData.searcherID == livingBase.getEntityId())
-        {
-            livingBase.setGlowing(true);
-            soulSightCache.add(livingBase);
-        }
-        else if (ClientData.soulSight && !livingBase.isGlowing())
-        {
-            livingBase.setGlowing(true);
-            soulSightCache.add(livingBase);
         }
 
 
@@ -72,13 +67,23 @@ public class RenderAlterer
     @SubscribeEvent
     public static void postRender(RenderLivingEvent.Post event)
     {
-        if (detailTarget != null)
+        EntityLivingBase livingBase = event.getEntity();
+
+
+        //Add detail target and soul sight glowing effects; the glowing part of the render seems to be outside these events, which is why this is in post and not pre
+        if (ClientData.detailData != null && ClientData.detailData.searcherID == livingBase.getEntityId())
         {
-            detailTarget.setGlowing(false);
-            detailTarget = null;
+            livingBase.setGlowing(true);
+            detailTarget = livingBase;
+        }
+        else if (ClientData.soulSight && !livingBase.isGlowing())
+        {
+            livingBase.setGlowing(true);
+            soulSightCache.add(livingBase);
         }
 
-        if (Compat.statues && event.getEntity().getClass().getName().contains("party.lemons.statue")) return;
+
+        if (Compat.statues && livingBase.getClass().getName().contains("party.lemons.statue")) return;
         GlStateManager.color(1, 1, 1, 1);
         GL11.glColor4f(1, 1, 1, 1);
         GlStateManager.disableBlend();
