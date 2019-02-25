@@ -21,8 +21,10 @@ public class RenderAlterer
     @SubscribeEvent
     public static void preRender(RenderLivingEvent.Pre event)
     {
-        //Don't draw seen entities as invisible, because they've been SEEN
         EntityLivingBase livingBase = event.getEntity();
+
+
+        //Don't draw seen entities as invisible, because they've been SEEN
         if (Compat.statues && livingBase.getClass().getName().contains("party.lemons.statue")) return;
         livingBase.setInvisible(false);
 
