@@ -2,8 +2,6 @@ CURRENTLY WORKING ON ===================================================
 
 Explain library situation in curseforge description
 
-Fix soul sight making things look transparent...I don't think I'm sending a boolean for it over the network
-
 Create new graphics for detailed OPHUD, but keep skulls for normal OPHUDs
 
 Add wiki / guide videos
@@ -12,8 +10,6 @@ Add guidebook, possibly using guide api or patchouli
 Directional indicators...
 ...add optional "damaged from" indicator, which draws an indicator pointing the direction damage was recently received from
 ...add optional touch detection indicator for players (see to do in DynamicStealth.java)
-
-Add optional reticle which draws on focused entity (if there is one, and it is visible)
 
 
 
