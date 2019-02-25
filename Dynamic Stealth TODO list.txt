@@ -3,6 +3,13 @@ CURRENTLY WORKING ON ===================================================
 Explain library situation in curseforge description
 
 Make focused target glow in the correct color
+If new method works...
+...Move/remove AT and glowing methods to library
+...Use method for soul sight as well, and remove unnecessary code
+
+If it doesn't work...
+...re-add old code for making focused target glow white, at least
+...re-explore team colors
 
 Create new graphics for detailed OPHUD, but keep skulls for normal OPHUDs
 
