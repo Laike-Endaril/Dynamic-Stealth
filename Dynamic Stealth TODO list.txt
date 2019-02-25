@@ -2,7 +2,7 @@ CURRENTLY WORKING ON ===================================================
 
 Explain library situation in curseforge description
 
-Make sure focused target is based on camera only; not on visibility (as long as it's seen)
+Fix soul sight making things look transparent...I don't think I'm sending a boolean for it over the network
 
 Create new graphics for detailed OPHUD, but keep skulls for normal OPHUDs
 

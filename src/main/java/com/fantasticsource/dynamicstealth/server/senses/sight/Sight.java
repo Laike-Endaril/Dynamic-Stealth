@@ -269,8 +269,26 @@ public class Sight
                         stealthLevel = visualStealthLevel(player, entity);
                         if (stealthLevel <= 1)
                         {
-                            queues[0].add((EntityLivingBase) entity, stealthLevel); //Returned to external call
-                            queues[1].add((EntityLivingBase) entity, stealthLevel); //Used for playerSeenThisTickMap (result caching)
+                            if (isForHUD)
+                            {
+                                double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, entity.posY - player.posY, entity.posZ - player.posZ).normalize());
+
+                                //And because Vec3d.fromPitchYaw occasionally returns values barely out of the range of (-1, 1)...
+                                if (angleDif < -1) angleDif = -1;
+                                else if (angleDif > 1) angleDif = 1;
+
+                                angleDif = TRIG_TABLE.arccos(angleDif); //0 in front, pi in back
+
+                                double distSquared = player.getDistanceSq(entity);
+                                double priority = Math.pow(angleDif, 3) * distSquared;
+                                queues[0].add((EntityLivingBase) entity, priority); //Returned to external call
+                                queues[1].add((EntityLivingBase) entity, priority); //Used for playerSeenThisTickMap (result caching)
+                            }
+                            else
+                            {
+                                queues[0].add((EntityLivingBase) entity, stealthLevel); //Returned to external call
+                                queues[1].add((EntityLivingBase) entity, stealthLevel); //Used for playerSeenThisTickMap (result caching)
+                            }
                         }
                     }
                 }
