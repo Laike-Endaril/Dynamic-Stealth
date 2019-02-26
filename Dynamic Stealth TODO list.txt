@@ -57,8 +57,8 @@ Add action wheel which opens on keybind
 Add actions...
 ...Attempt Stealth / Don't Attempt Stealth (if set to "Don't Attempt Stealth", you are very easy for things to notice)
 ...Wave (decrease visual stealth for 1 second)
-...Whisper (make a small noise; "psst")
-...Yell (make a loud noise; "hey")
+...Whisper (make a small noise; altered villager conversation sound?)
+...Yell (make a loud noise; hurt sound?)
 ...Prone/unprone - has a charge time; when prone, you are stealthier, slower, have a lower POV, have a smaller hitbox (can move through 1b high areas), and cannot jump/dodge/sneak
 ...Find pebble?
 
