@@ -256,7 +256,7 @@ public class Sight
                                 angleDif = TRIG_TABLE.arccos(angleDif); //0 in front, pi in back
 
                                 double distSquared = player.getDistanceSq(entity);
-                                double priority = Math.pow(angleDif, 3) * distSquared;
+                                double priority = Math.pow(angleDif, 4) * distSquared;
                                 queues[0].add((EntityLivingBase) entity, priority); //Returned to external call
                                 queues[1].add((EntityLivingBase) entity, priority); //Used for playerSeenThisTickMap (result caching)
                             }
@@ -292,7 +292,7 @@ public class Sight
                                 angleDif = TRIG_TABLE.arccos(angleDif); //0 in front, pi in back
 
                                 double distSquared = player.getDistanceSq(entity);
-                                double priority = Math.pow(angleDif, 3) * distSquared;
+                                double priority = Math.pow(angleDif, 4) * distSquared;
                                 queues[0].add((EntityLivingBase) entity, priority); //Returned to external call
                                 queues[1].add((EntityLivingBase) entity, priority); //Used for playerSeenThisTickMap (result caching)
                             }
@@ -329,7 +329,7 @@ public class Sight
 
                             if (angleDif / Math.PI * 180 <= 70)
                             {
-                                double priority = Math.pow(angleDif, 3) * distSquared;
+                                double priority = Math.pow(angleDif, 4) * distSquared;
                                 queues[0].add((EntityLivingBase) entity, priority); //Returned to external call
                                 queues[1].add((EntityLivingBase) entity, priority); //Used for playerSeenThisTickMap (result caching)
                                 map.put(entity, new SeenData(priority, true)); //visualStealthLevelInternal was not called, so need to add to map manually
