@@ -501,7 +501,7 @@ public class DynamicStealth
 
     public static void makeLivingLookTowardEntity(EntityLiving living, Entity target) throws InvocationTargetException, IllegalAccessException
     {
-        makeLivingLookDirection(living, MCTools.getYaw(living, target, TRIG_TABLE), MCTools.getPitch(living, target, TRIG_TABLE));
+        makeLivingLookDirection(living, MCTools.getYaw(living.getPositionVector(), target.getPositionVector(), TRIG_TABLE), MCTools.getPitch(living.getPositionVector(), target.getPositionVector(), TRIG_TABLE));
     }
 
     public static void makeLivingLookDirection(EntityLiving living, double yawDegrees, double pitchDegrees) throws InvocationTargetException, IllegalAccessException

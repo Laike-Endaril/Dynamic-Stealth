@@ -2,6 +2,12 @@ CURRENTLY WORKING ON ===================================================
 
 Explain library situation in curseforge description
 
+Update fantasticlib requirement, and release new fantasticlib
+
+Finish creating and testing new methods in HUD, then move them to library
+
+Shorten getField call arguments
+
 Create new graphics for detailed OPHUD, but keep skulls for normal OPHUDs
 
 Add wiki / guide videos

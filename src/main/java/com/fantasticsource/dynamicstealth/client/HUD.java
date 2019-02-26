@@ -6,6 +6,7 @@ import com.fantasticsource.dynamicstealth.compat.CompatNeat;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.datastructures.Color;
+import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -17,6 +18,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
@@ -50,13 +52,7 @@ public class HUD extends Gui
 
     public HUD(Minecraft mc)
     {
-        ScaledResolution sr = new ScaledResolution(mc);
-        int width = sr.getScaledWidth();
-        int height = sr.getScaledHeight();
-        FontRenderer fontRender = mc.fontRenderer;
-
-        drawDetailHUD(width, height, fontRender);
-
+        drawDetailHUD(mc);
         GlStateManager.color(1, 1, 1, 1);
     }
 
@@ -78,11 +74,16 @@ public class HUD extends Gui
             if (livingBase != null)
             {
                 int id = livingBase.getEntityId();
-                OnPointData data;
-                if (detailData != null && detailData.searcherID == id) data = detailData;
-                else data = opMap.get(livingBase.getEntityId());
 
-                if (data != null && (data == detailData || onPointFilter(data.color))) drawOnPointHUDElement(event.getRenderer().getRenderManager(), event.getX(), event.getY(), event.getZ(), livingBase, data);
+                if (id != detailData.searcherID)
+                {
+                    OnPointData data = opMap.get(id);
+                    if (data != null && (data == detailData || onPointFilter(data.color)))
+                    {
+                        //Normal OPHUD
+                        drawNormalOPHUD(event.getRenderer().getRenderManager(), event.getX(), event.getY(), event.getZ(), livingBase, data);
+                    }
+                }
             }
         }
     }
@@ -99,7 +100,7 @@ public class HUD extends Gui
         return false;
     }
 
-    private static void drawOnPointHUDElement(RenderManager renderManager, double x, double y, double z, Entity entity, OnPointData data)
+    private static void drawNormalOPHUD(RenderManager renderManager, double x, double y, double z, Entity entity, OnPointData data)
     {
         float viewerYaw = renderManager.playerViewY;
         float viewerPitch = renderManager.playerViewX;
@@ -243,9 +244,47 @@ public class HUD extends Gui
         return false;
     }
 
-    private void drawDetailHUD(int width, int height, FontRenderer fontRender)
+//    private void drawDetailHUD(Minecraft mc)
+//    {
+//        FontRenderer fontRenderer = mc.fontRenderer;
+//        ScaledResolution sr = new ScaledResolution(mc);
+//        int width = sr.getScaledWidth();
+//        int height = sr.getScaledHeight();
+//
+//        World world = mc.player.world;
+//        if (detailData != null)
+//        {
+//            int color = detailData.color;
+//            Entity searcher = world.getEntityByID(detailData.searcherID);
+//            int targetID = detailData.targetID;
+//            Entity target = (targetID == -1 || targetID == -2) ? null : world.getEntityByID(targetID);
+//
+//            drawString(fontRenderer, searcher == null ? EMPTY : searcher.getName(), (int) (width * 0.75), height - 30, color);
+//            drawString(fontRenderer, targetID == -1 ? EMPTY : target == null ? UNKNOWN : target.getName(), (int) (width * 0.75), height - 20, color);
+//            drawString(fontRenderer, detailData.percent < 0 ? UNKNOWN : detailData.percent == 0 ? EMPTY : detailData.percent + "%", (int) (width * 0.75), height - 10, color);
+//        }
+//    }
+
+    public static Pair<Double, Double> getEntityXYInWindow(Entity entity) throws IllegalAccessException
     {
-        World world = Minecraft.getMinecraft().player.world;
+        return get2DWindowCoordsFrom3DWorldCoords(entity.getPositionVector());
+    }
+
+    public static Pair<Double, Double> get2DWindowCoordsFrom3DWorldCoords(Vec3d position) throws IllegalAccessException
+    {
+        Vec3d relativeVec = position.subtract(MCTools.getCameraPosition());
+//        MCTools.ya
+        return null;
+    }
+
+    private void drawDetailHUD(Minecraft mc)
+    {
+        FontRenderer fontRenderer = mc.fontRenderer;
+        ScaledResolution sr = new ScaledResolution(mc);
+        int width = sr.getScaledWidth();
+        int height = sr.getScaledHeight();
+
+        World world = mc.player.world;
         if (detailData != null)
         {
             int color = detailData.color;
@@ -253,9 +292,9 @@ public class HUD extends Gui
             int targetID = detailData.targetID;
             Entity target = (targetID == -1 || targetID == -2) ? null : world.getEntityByID(targetID);
 
-            drawString(fontRender, searcher == null ? EMPTY : searcher.getName(), (int) (width * 0.75), height - 30, color);
-            drawString(fontRender, targetID == -1 ? EMPTY : target == null ? UNKNOWN : target.getName(), (int) (width * 0.75), height - 20, color);
-            drawString(fontRender, detailData.percent < 0 ? UNKNOWN : detailData.percent == 0 ? EMPTY : detailData.percent + "%", (int) (width * 0.75), height - 10, color);
+            drawString(fontRenderer, searcher == null ? EMPTY : searcher.getName(), (int) (width * 0.75), height - 30, color);
+            drawString(fontRenderer, targetID == -1 ? EMPTY : target == null ? UNKNOWN : target.getName(), (int) (width * 0.75), height - 20, color);
+            drawString(fontRenderer, detailData.percent < 0 ? UNKNOWN : detailData.percent == 0 ? EMPTY : detailData.percent + "%", (int) (width * 0.75), height - 10, color);
         }
     }
 }

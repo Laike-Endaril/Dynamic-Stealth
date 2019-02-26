@@ -345,7 +345,7 @@ public class AIDynamicStealth extends EntityAIBase
             navigator.clearPath();
 
             EntityLivingBase target = Threat.getTarget(searcher);
-            if (canSee(searcher, target, false, true, MCTools.getYaw(searcher, lastKnownPosition, TRIG_TABLE), MCTools.getPitch(searcher, lastKnownPosition, TRIG_TABLE)))
+            if (canSee(searcher, target, false, true, MCTools.getYaw(searcher.getPositionVector(), new Vec3d(lastKnownPosition), TRIG_TABLE), MCTools.getPitch(searcher.getPositionVector(), new Vec3d(lastKnownPosition), TRIG_TABLE)))
             {
                 //See target; warn, apply desperation effects if flee reason is low hp, and retaliate
                 lastKnownPosition = target.getPosition();
@@ -370,11 +370,11 @@ public class AIDynamicStealth extends EntityAIBase
                 //Don't see target; warn, but stay here and look in direction of last known position
                 warn(searcher, target, lastKnownPosition, false);
 
-                cornerLookYaw = (float) MCTools.getYaw(searcher, lastKnownPosition, TRIG_TABLE);
+                cornerLookYaw = (float) MCTools.getYaw(searcher.getPositionVector(), new Vec3d(lastKnownPosition), TRIG_TABLE);
                 searcher.rotationYaw = cornerLookYaw;
                 searcher.rotationYawHead = cornerLookYaw;
 
-                cornerLookPitch = (float) MCTools.getPitch(searcher, lastKnownPosition, TRIG_TABLE);
+                cornerLookPitch = (float) MCTools.getPitch(searcher.getPositionVector(), new Vec3d(lastKnownPosition), TRIG_TABLE);
                 searcher.rotationPitch = cornerLookPitch;
             }
         }
