@@ -10,6 +10,7 @@ import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -262,7 +263,8 @@ public class HUD extends Gui
 
 
             Pair<Float, Float> pos = MCTools.getEntityXYInWindow(entity, 0, entity.height * 0.5, 0);
-            float x = pos.getKey(), y = pos.getValue();
+            int guiScale = (new ScaledResolution(Minecraft.getMinecraft())).getScaleFactor();
+            float x = pos.getKey() * 2 / guiScale, y = pos.getValue() * 2 / guiScale;
 
             int color = detailData.color;
             Color c = new Color(color, true);
