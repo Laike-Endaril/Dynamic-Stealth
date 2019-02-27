@@ -18,7 +18,6 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -261,7 +260,7 @@ public class HUD extends Gui
 
         try
         {
-            Pair<Float, Float> pos = MCTools.get2DWindowCoordsFrom3DWorldCoords(entity.getPositionVector().add(new Vec3d(0, entity.height * 0.5, 0)));
+            Pair<Float, Float> pos = MCTools.getEntityXYInWindow(entity, 0, entity.height * 0.5, 0);
             float x = pos.getKey(), y = pos.getValue();
 
             GlStateManager.enableAlpha();
