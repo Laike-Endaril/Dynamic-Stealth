@@ -11,7 +11,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -264,20 +263,6 @@ public class HUD extends Gui
 //            drawString(fontRenderer, detailData.percent < 0 ? UNKNOWN : detailData.percent == 0 ? EMPTY : detailData.percent + "%", (int) (width * 0.75), height - 10, color);
 //        }
 //    }
-
-    private static Field activeRenderInfoProjectionField;
-
-    static
-    {
-        try
-        {
-            activeRenderInfoProjectionField = ReflectionTool.getField(ActiveRenderInfo.class, "field_178813_c", "PROJECTION");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            e.printStackTrace();
-        }
-    }
 
     private void drawDetailHUD(Minecraft mc)
     {
