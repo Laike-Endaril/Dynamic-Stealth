@@ -87,7 +87,7 @@ public class RenderAlterer
         {
             int id = livingBase.getEntityId();
             double min = DynamicStealthConfig.clientSettings.entityFading.mobOpacityMin;
-            double visibility = ClientData.visibilityMap.containsKey(id) ? ClientData.visibilityMap.get(id) : 0;
+            double visibility = ClientData.visibilityMap.containsKey(id) ? ClientData.visibilityMap.get(id) : 1;
             double maxOpacityAt = DynamicStealthConfig.clientSettings.entityFading.fullOpacityAt;
             if (visibility != 0)
             {
