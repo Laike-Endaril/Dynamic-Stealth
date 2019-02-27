@@ -4,8 +4,6 @@ Explain library situation in curseforge description
 
 Update fantasticlib requirement, and release new fantasticlib
 
-Cleanup HUD class after it's done going through changes
-
 Create new graphics for detailed OPHUD, but keep skulls for normal OPHUDs
 
 Skyrim-style "eye" indicator
