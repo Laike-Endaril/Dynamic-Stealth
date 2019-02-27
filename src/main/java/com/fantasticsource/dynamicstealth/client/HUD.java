@@ -19,7 +19,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -52,7 +51,7 @@ public class HUD extends Gui
 
     public HUD(Minecraft mc)
     {
-        drawDetailHUD(mc);
+        drawHUD(mc);
         GlStateManager.color(1, 1, 1, 1);
     }
 
@@ -244,37 +243,60 @@ public class HUD extends Gui
         return false;
     }
 
-    private void drawDetailHUD(Minecraft mc)
+    private void drawHUD(Minecraft mc)
     {
-        FontRenderer fontRenderer = mc.fontRenderer;
-        ScaledResolution sr = new ScaledResolution(mc);
+        //TODO main HUD
+
+        //Detailed OPHUD
+        if (detailData != null)
+        {
+            Entity searcher = mc.player.world.getEntityByID(detailData.searcherID);
+            if (searcher != null) drawDetailedOPHUD(searcher, mc.fontRenderer);
+        }
+    }
+
+    public void drawDetailedOPHUD(Entity entity, FontRenderer fontRenderer)
+    {
+        oldHUD(entity, fontRenderer); //TODO remove this
+
+        try
+        {
+            Pair<Float, Float> pos = MCTools.get2DWindowCoordsFrom3DWorldCoords(entity.getPositionVector().add(new Vec3d(0, entity.height * 0.5, 0)));
+            float x = pos.getKey(), y = pos.getValue();
+
+            GlStateManager.enableAlpha();
+            GlStateManager.disableTexture2D();
+            GlStateManager.color(1, 1, 1, 1);
+
+            GlStateManager.glBegin(GL_LINES);
+            GlStateManager.glVertex3f(x - 10, y, 0);
+            GlStateManager.glVertex3f(x + 10, y, 0);
+            GlStateManager.glVertex3f(x, y - 10, 0);
+            GlStateManager.glVertex3f(x, y + 10, 0);
+            GlStateManager.glEnd();
+
+            GlStateManager.disableAlpha();
+            GlStateManager.enableTexture2D();
+        }
+        catch (IllegalAccessException e)
+        {
+            MCTools.crash(e, 156, false);
+        }
+    }
+
+    public void oldHUD(Entity entity, FontRenderer fontRenderer)
+    {
+        //TODO remove this
+        ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
         int width = sr.getScaledWidth();
         int height = sr.getScaledHeight();
 
-        World world = mc.player.world;
-        if (detailData != null)
-        {
-            int color = detailData.color;
-            Entity searcher = world.getEntityByID(detailData.searcherID);
-            int targetID = detailData.targetID;
-            Entity target = (targetID == -1 || targetID == -2) ? null : world.getEntityByID(targetID);
+        int color = detailData.color;
+        int targetID = detailData.targetID;
+        Entity target = (targetID == -1 || targetID == -2) ? null : entity.world.getEntityByID(targetID);
 
-            drawString(fontRenderer, searcher == null ? EMPTY : searcher.getName(), (int) (width * 0.75), height - 30, color);
-            drawString(fontRenderer, targetID == -1 ? EMPTY : target == null ? UNKNOWN : target.getName(), (int) (width * 0.75), height - 20, color);
-            drawString(fontRenderer, detailData.percent < 0 ? UNKNOWN : detailData.percent == 0 ? EMPTY : detailData.percent + "%", (int) (width * 0.75), height - 10, color);
-
-            try
-            {
-                if (searcher != null)
-                {
-                    Pair<Float, Float> pos = MCTools.get2DWindowCoordsFrom3DWorldCoords(searcher.getPositionVector().add(new Vec3d(0, searcher.height * 0.5, 0)));
-                    drawCenteredString(fontRenderer, "---------------------------------------O---------------------------------------", pos.getKey().intValue(), pos.getValue().intValue(), 0xFFFFFFFF);
-                }
-            }
-            catch (IllegalAccessException e)
-            {
-                MCTools.crash(e, 156, false);
-            }
-        }
+        drawString(fontRenderer, entity == null ? EMPTY : entity.getName(), (int) (width * 0.75), height - 30, color);
+        drawString(fontRenderer, targetID == -1 ? EMPTY : target == null ? UNKNOWN : target.getName(), (int) (width * 0.75), height - 20, color);
+        drawString(fontRenderer, detailData.percent < 0 ? UNKNOWN : detailData.percent == 0 ? EMPTY : detailData.percent + "%", (int) (width * 0.75), height - 10, color);
     }
 }

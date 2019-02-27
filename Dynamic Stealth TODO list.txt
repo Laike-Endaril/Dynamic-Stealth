@@ -4,6 +4,8 @@ Explain library situation in curseforge description
 
 Update fantasticlib requirement, and release new fantasticlib
 
+3D -> 2D functions need partialtick smoothing
+
 Create new graphics for detailed OPHUD, but keep skulls for normal OPHUDs
 
 Skyrim-style "eye" indicator
