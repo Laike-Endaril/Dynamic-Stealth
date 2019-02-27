@@ -5,7 +5,9 @@ import com.fantasticsource.dynamicstealth.config.client.ClientConfig;
 import com.fantasticsource.dynamicstealth.config.server.ServerConfig;
 import net.minecraftforge.common.config.Config;
 
-@Config(modid = DynamicStealth.MODID)
+import static com.fantasticsource.dynamicstealth.config.ConfigHandler.CONFIG_NAME;
+
+@Config(modid = DynamicStealth.MODID, name = CONFIG_NAME)
 public class DynamicStealthConfig
 {
     @Config.Name("Client Settings")

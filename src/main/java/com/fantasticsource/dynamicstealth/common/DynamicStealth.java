@@ -7,6 +7,7 @@ import com.fantasticsource.dynamicstealth.common.potions.Potions;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatCNPC;
 import com.fantasticsource.dynamicstealth.compat.CompatDissolution;
+import com.fantasticsource.dynamicstealth.config.ConfigHandler;
 import com.fantasticsource.dynamicstealth.server.Attributes;
 import com.fantasticsource.dynamicstealth.server.CombatTracker;
 import com.fantasticsource.dynamicstealth.server.EntityLookHelperEdit;
@@ -93,6 +94,7 @@ public class DynamicStealth
     public static final String MODID = "dynamicstealth";
     public static final String NAME = "Dynamic Stealth";
     public static final String VERSION = "1.12.2.055";
+    public static final String CONFIG_VERSION = "1.12.2.056"; //The lowest compatible config version
 
     public static final TrigLookupTable TRIG_TABLE = new TrigLookupTable(1024);
 
@@ -100,6 +102,12 @@ public class DynamicStealth
     private static Class aiSlimeFaceRandomClass, aiEvilAttackClass, aiBearMeleeClass, aiSpiderAttackClass, aiSpiderTargetClass, aiBearAttackPlayerClass, aiLlamaDefendTarget,
             aiPigmanHurtByAggressorClass, aiLlamaHurtByTargetClass, aiPigmanTargetAggressorClass, aiVindicatorJohnnyAttackClass, aiBearHurtByTargetClass, aiGuardianAttackClass,
             aiBlazeFireballAttackClass, aiVexChargeAttackClass, aiShulkerAttackClass, aiShulkerAttackNearestClass, aiShulkerDefenseAttackClass;
+
+    static
+    {
+        ConfigHandler.init();
+    }
+
 
     public DynamicStealth()
     {

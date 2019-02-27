@@ -4,8 +4,18 @@ Explain library situation in curseforge description
 
 Update fantasticlib requirement, and release new fantasticlib
 
-Create new graphics for detailed OPHUD, but keep skulls for normal OPHUDs
-If focused target is off-screen, draw edge-of-screen indicator instead of detailed OPHUD
+Finish ConfigHandler.update() method
+
+Create new graphics for detailed OPHUD, but keep skulls for normal OPHUDs...
+...something translucent, but with a background/border so it's easy enough to read
+...if focused target is off-screen, draw edge-of-screen indicator instead of detailed OPHUD
+...add indicator for distance to focused target
+
+Create graphics for edge-of-screen detailed OPHUD (in case focused entity is offscreen)...
+...the usual skull, but smaller and inside a bubble with an arrow
+
+Create graphics for edge-of-screen nomral OPHUDs...
+...just a translucent colored arrow
 
 Skyrim-style "eye" indicator
 
