@@ -6,9 +6,9 @@ Update fantasticlib requirement, and release new fantasticlib
 
 Finish creating and testing new methods in HUD, then move them to library
 
-Shorten getField call arguments
-
 Create new graphics for detailed OPHUD, but keep skulls for normal OPHUDs
+
+Skyrim-style "eye" indicator
 
 Add wiki / guide videos
 Add guidebook, possibly using guide api or patchouli

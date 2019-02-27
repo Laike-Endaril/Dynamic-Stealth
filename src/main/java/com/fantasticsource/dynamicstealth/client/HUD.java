@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -18,7 +19,6 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
@@ -75,7 +75,7 @@ public class HUD extends Gui
             {
                 int id = livingBase.getEntityId();
 
-                if (id != detailData.searcherID)
+                if (detailData == null || id != detailData.searcherID)
                 {
                     OnPointData data = opMap.get(id);
                     if (data != null && (data == detailData || onPointFilter(data.color)))
@@ -102,8 +102,8 @@ public class HUD extends Gui
 
     private static void drawNormalOPHUD(RenderManager renderManager, double x, double y, double z, Entity entity, OnPointData data)
     {
-        float viewerYaw = renderManager.playerViewY;
-        float viewerPitch = renderManager.playerViewX;
+        float viewerYaw = renderManager.playerViewY; //"playerViewY" is LITERALLY the yaw...interpolated over the partialtick
+        float viewerPitch = renderManager.playerViewX; //"playerViewX" is LITERALLY the pitch...interpolated over the partialtick
         int color = data.color;
         Color c = new Color(color, true);
         int r = c.r(), g = c.g(), b = c.b();
@@ -265,16 +265,18 @@ public class HUD extends Gui
 //        }
 //    }
 
-    public static Pair<Double, Double> getEntityXYInWindow(Entity entity) throws IllegalAccessException
-    {
-        return get2DWindowCoordsFrom3DWorldCoords(entity.getPositionVector());
-    }
+    private static Field activeRenderInfoProjectionField;
 
-    public static Pair<Double, Double> get2DWindowCoordsFrom3DWorldCoords(Vec3d position) throws IllegalAccessException
+    static
     {
-        Vec3d relativeVec = position.subtract(MCTools.getCameraPosition());
-//        MCTools.ya
-        return null;
+        try
+        {
+            activeRenderInfoProjectionField = ReflectionTool.getField(ActiveRenderInfo.class, "field_178813_c", "PROJECTION");
+        }
+        catch (NoSuchFieldException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private void drawDetailHUD(Minecraft mc)
@@ -295,6 +297,19 @@ public class HUD extends Gui
             drawString(fontRenderer, searcher == null ? EMPTY : searcher.getName(), (int) (width * 0.75), height - 30, color);
             drawString(fontRenderer, targetID == -1 ? EMPTY : target == null ? UNKNOWN : target.getName(), (int) (width * 0.75), height - 20, color);
             drawString(fontRenderer, detailData.percent < 0 ? UNKNOWN : detailData.percent == 0 ? EMPTY : detailData.percent + "%", (int) (width * 0.75), height - 10, color);
+
+            try
+            {
+                if (searcher != null)
+                {
+                    Pair<Float, Float> pos = MCTools.getEntityXYInWindow(searcher);
+                    System.out.println(pos.getKey() + ", " + pos.getValue());
+                }
+            }
+            catch (IllegalAccessException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 }
