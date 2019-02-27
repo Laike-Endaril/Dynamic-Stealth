@@ -10,7 +10,6 @@ import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -256,16 +255,18 @@ public class HUD extends Gui
 
     public void drawDetailedOPHUD(Entity entity, FontRenderer fontRenderer)
     {
-        oldHUD(entity, fontRenderer); //TODO remove this
-
         try
         {
+            GlStateManager.enableAlpha();
+            GlStateManager.disableTexture2D();
+
+
             Pair<Float, Float> pos = MCTools.getEntityXYInWindow(entity, 0, entity.height * 0.5, 0);
             float x = pos.getKey(), y = pos.getValue();
 
-            GlStateManager.enableAlpha();
-            GlStateManager.disableTexture2D();
-            GlStateManager.color(1, 1, 1, 1);
+            int color = detailData.color;
+            Color c = new Color(color, true);
+            GlStateManager.color(c.r(), c.g(), c.b(), c.a());
 
             GlStateManager.glBegin(GL_LINES);
             GlStateManager.glVertex3f(x - 10, y, 0);
@@ -274,28 +275,23 @@ public class HUD extends Gui
             GlStateManager.glVertex3f(x, y + 10, 0);
             GlStateManager.glEnd();
 
-            GlStateManager.disableAlpha();
+
             GlStateManager.enableTexture2D();
+
+
+            int targetID = detailData.targetID;
+            Entity target = (targetID == -1 || targetID == -2) ? null : entity.world.getEntityByID(targetID);
+
+            drawString(fontRenderer, entity.getName(), (int) x + 30, (int) y - 10, color);
+            drawString(fontRenderer, targetID == -1 ? EMPTY : target == null ? UNKNOWN : target.getName(), (int) x + 30, (int) y, color);
+            drawString(fontRenderer, detailData.percent < 0 ? UNKNOWN : detailData.percent == 0 ? EMPTY : detailData.percent + "%", (int) x + 30, (int) y + 10, color);
+
+
+            GlStateManager.disableAlpha();
         }
         catch (IllegalAccessException e)
         {
             MCTools.crash(e, 156, false);
         }
-    }
-
-    public void oldHUD(Entity entity, FontRenderer fontRenderer)
-    {
-        //TODO remove this
-        ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
-        int width = sr.getScaledWidth();
-        int height = sr.getScaledHeight();
-
-        int color = detailData.color;
-        int targetID = detailData.targetID;
-        Entity target = (targetID == -1 || targetID == -2) ? null : entity.world.getEntityByID(targetID);
-
-        drawString(fontRenderer, entity == null ? EMPTY : entity.getName(), (int) (width * 0.75), height - 30, color);
-        drawString(fontRenderer, targetID == -1 ? EMPTY : target == null ? UNKNOWN : target.getName(), (int) (width * 0.75), height - 20, color);
-        drawString(fontRenderer, detailData.percent < 0 ? UNKNOWN : detailData.percent == 0 ? EMPTY : detailData.percent + "%", (int) (width * 0.75), height - 10, color);
     }
 }
