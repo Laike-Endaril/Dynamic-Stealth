@@ -263,8 +263,7 @@ public class HUD extends Gui
 
 
             Pair<Float, Float> pos = MCTools.getEntityXYInWindow(entity, 0, entity.height * 0.5, 0);
-            int guiScale = (new ScaledResolution(Minecraft.getMinecraft())).getScaleFactor();
-            float x = pos.getKey() * 2 / guiScale, y = pos.getValue() * 2 / guiScale;
+            float x = pos.getKey(), y = pos.getValue();
 
             int color = detailData.color;
             Color c = new Color(color, true);
