@@ -677,6 +677,8 @@ public class DynamicStealth
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) throws NoSuchFieldException, IllegalAccessException
     {
+        ConfigHandler.update();
+
         Network.init();
 
         sensesField = ReflectionTool.getField(EntityLiving.class, "field_70723_bA", "senses");

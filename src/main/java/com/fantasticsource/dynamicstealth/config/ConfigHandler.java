@@ -1,7 +1,7 @@
 package com.fantasticsource.dynamicstealth.config;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
-import com.fantasticsource.tools.ReflectionTool;
+import net.minecraftforge.common.config.Configuration;
 
 import java.io.File;
 
@@ -11,33 +11,21 @@ public class ConfigHandler
 
     private static String configDir = new File(".").getAbsolutePath() + File.separator + "config" + File.separator;
     private static String dsDir = configDir + DynamicStealth.MODID + File.separator;
-    private static File currentVer = new File(dsDir + DynamicStealth.CONFIG_VERSION + "+.cfg");
+    private static File currentFile = new File(dsDir + DynamicStealth.CONFIG_VERSION + "+.cfg");
+    private static File mostRecentFile = new File(dsDir + DynamicStealth.CONFIG_VERSION + "+.cfg");
 
     public static void init()
     {
-        //If newest config version already exists or no config of any version exists, do nothing special
-        File mostRecent = mostRecent();
-        if (mostRecent == null || mostRecent == currentVer) return;
-
-        //If newest config version does not exist but a previous version does, do complicated things
-        update(mostRecent);
+        mostRecentFile = mostRecent();
     }
 
-    private static void setName(String name)
-    {
-        try
-        {
-            ReflectionTool.getField(ConfigHandler.class, "CONFIG_NAME").set(null, name);
-        }
-        catch (IllegalAccessException | NoSuchFieldException e)
-        {
-            e.printStackTrace();
-        }
-    }
+
+    //EVERYTHING ABOVE THIS HAPPENS *BEFORE* FORGE LOADS THE CONFIG
+
 
     private static File mostRecent()
     {
-        if (currentVer.exists()) return currentVer;
+        if (currentFile.exists()) return currentFile;
 
         File[] files = new File(dsDir).listFiles();
         File result = null;
@@ -50,10 +38,10 @@ public class ConfigHandler
                 if (ver == null) continue;
 
                 String mcVer = getMCVer(ver);
-                if (mcVer == null || !mcVer.equals(getMCVer(getVersion(currentVer)))) continue;
+                if (mcVer == null || !mcVer.equals(getMCVer(getVersion(currentFile)))) continue;
 
                 ver = subVer(ver);
-                if (ver == null || !mcVer.equals(getMCVer(getVersion(currentVer)))) continue;
+                if (ver == null || !mcVer.equals(getMCVer(getVersion(currentFile)))) continue;
 
                 int subver = Integer.parseInt(ver);
 
@@ -70,7 +58,7 @@ public class ConfigHandler
         result = new File(configDir + "dynamicstealth.cfg");
         if (result.exists()) return result;
 
-        return currentVer;
+        return currentFile;
     }
 
     private static String getVersion(File file)
@@ -97,8 +85,41 @@ public class ConfigHandler
         return version.substring(0, index);
     }
 
-    private static void update(File mostRecent)
+
+    //EVERYTHING BELOW THIS HAPPENS *AFTER* FORGE LOADS THE CONFIG
+
+
+    public static void update()
     {
-        //TODO
+        //If newest config version already exists or no config of any version exists, do nothing special
+        if (mostRecentFile == null || mostRecentFile == currentFile) return;
+
+        //If newest config version does not exist but a previous version does, do complicated things
+        int recent;
+        String mostRecentVer = getVersion(mostRecentFile);
+        if (mostRecentVer == null || subVer(mostRecentVer) == null)
+        {
+            //Config versions 55-
+            initUpdatePre56To56(mostRecentFile);
+            recent = 56;
+        }
+        else recent = Integer.parseInt(subVer(mostRecentVer));
+
+        switch (recent)
+        {
+            case 56:
+                //TODO This is where changes go for 56+ -> XX+ (w/e the next config version is)
+                //Would look something like...
+                //initUpdate56ToXX();
+                //Don't use break here; allow cases to pass to the next one, so it does each update function incrementally
+        }
+    }
+
+    private static void initUpdatePre56To56(File oldConfig)
+    {
+        Configuration old = new Configuration(oldConfig);
+        boolean test = old.get("general.client settings.hud.on-point hud filter", "Alert", false).getBoolean();
+        System.out.println("================================================================================================================================");
+        System.out.println(test);
     }
 }
