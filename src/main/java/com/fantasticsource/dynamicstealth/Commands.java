@@ -1,43 +1,20 @@
 package com.fantasticsource.dynamicstealth;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
+import com.fantasticsource.dynamicstealth.config.ConfigHandler;
 import com.fantasticsource.mctools.MCTools;
-import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.ConfigManager;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.Loader;
 
 import javax.annotation.Nullable;
-import java.io.File;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Commands extends CommandBase
 {
-    private static File configFile = new File(Loader.instance().getConfigDir(), DynamicStealth.MODID + ".cfg");
-    private static String configFilename = configFile.getAbsolutePath();
-    private static Field configManagerCONFIGSField;
-
-    static
-    {
-        try
-        {
-            configManagerCONFIGSField = ReflectionTool.getField(ConfigManager.class, "CONFIGS");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            MCTools.crash(e, 155, true);
-        }
-    }
-
     @Override
     public String getName()
     {
@@ -81,8 +58,8 @@ public class Commands extends CommandBase
         {
             try
             {
-                ((Map<String, Configuration>) configManagerCONFIGSField.get(null)).remove(configFilename);
-                ConfigManager.sync(DynamicStealth.MODID, Config.Type.INSTANCE);
+                System.out.println(ConfigHandler.fullConfigFilename);
+                MCTools.reloadConfig(ConfigHandler.fullConfigFilename, DynamicStealth.MODID);
                 notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.reloaded");
             }
             catch (IllegalAccessException e)

@@ -1,27 +1,31 @@
 package com.fantasticsource.dynamicstealth.config;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
+import com.fantasticsource.mctools.MCTools;
+import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
+import net.minecraftforge.fml.common.Loader;
 
 import java.io.File;
+import java.util.Map;
+import java.util.Set;
 
 public class ConfigHandler
 {
     public static final String CONFIG_NAME = DynamicStealth.MODID + "/" + DynamicStealth.CONFIG_VERSION + "+";
 
-    private static String configDir = new File(".").getAbsolutePath() + File.separator + "config" + File.separator;
+    private static String configDir = Loader.instance().getConfigDir().getAbsolutePath() + File.separator;
     private static String dsDir = configDir + DynamicStealth.MODID + File.separator;
     private static File currentFile = new File(dsDir + DynamicStealth.CONFIG_VERSION + "+.cfg");
     private static File mostRecentFile = new File(dsDir + DynamicStealth.CONFIG_VERSION + "+.cfg");
+
+    public static String fullConfigFilename = currentFile.getAbsolutePath();
 
     public static void init()
     {
         mostRecentFile = mostRecent();
     }
-
-
-    //EVERYTHING ABOVE THIS HAPPENS *BEFORE* FORGE LOADS THE CONFIG
-
 
     private static File mostRecent()
     {
@@ -85,10 +89,6 @@ public class ConfigHandler
         return version.substring(0, index);
     }
 
-
-    //EVERYTHING BELOW THIS HAPPENS *AFTER* FORGE LOADS THE CONFIG
-
-
     public static void update()
     {
         //If newest config version already exists or no config of any version exists, do nothing special
@@ -100,7 +100,7 @@ public class ConfigHandler
         if (mostRecentVer == null || subVer(mostRecentVer) == null)
         {
             //Config versions 55-
-            initUpdatePre56To56(mostRecentFile);
+            updatePre56To56(mostRecentFile);
             recent = 56;
         }
         else recent = Integer.parseInt(subVer(mostRecentVer));
@@ -110,16 +110,43 @@ public class ConfigHandler
             case 56:
                 //TODO This is where changes go for 56+ -> XX+ (w/e the next config version is)
                 //Would look something like...
-                //initUpdate56ToXX();
+                //update56ToXX();
                 //Don't use break here; allow cases to pass to the next one, so it does each update function incrementally
         }
     }
 
-    private static void initUpdatePre56To56(File oldConfig)
+    private static void updatePre56To56(File oldConfig)
     {
+        transferAll(oldConfig);
+        try
+        {
+            MCTools.reloadConfig(fullConfigFilename, DynamicStealth.MODID);
+        }
+        catch (IllegalAccessException e)
+        {
+            MCTools.crash(e, 152, true);
+        }
+    }
+
+    private static void transferAll(File oldConfig)
+    {
+        Configuration current = new Configuration(currentFile);
         Configuration old = new Configuration(oldConfig);
-        boolean test = old.get("general.client settings.hud.on-point hud filter", "Alert", false).getBoolean();
-        System.out.println("================================================================================================================================");
-        System.out.println(test);
+
+        for (String string : current.getCategoryNames())
+        {
+            if (old.hasCategory(string))
+            {
+                Set<String> oldKeys = old.getCategory(string).keySet();
+                ConfigCategory oldCat = old.getCategory(string);
+                for (Map.Entry<String, Property> entry : current.getCategory(string).entrySet())
+                {
+                    String k = entry.getKey();
+                    if (oldKeys.contains(k)) entry.setValue(oldCat.get(k));
+                }
+            }
+        }
+
+        current.save();
     }
 }
