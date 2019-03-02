@@ -14,6 +14,11 @@ Create graphics for edge-of-screen nomral OPHUDs...
 
 Do something about threat bypass text in targeting HUD; dark grey on translucent black is not good contrast
 
+Spiders glow white when they should glow blue
+Spiders glow yellow when they should glow orange
+Spiders glow white when they should glow red
+This happens for cave spiders as well
+
 Seem to have some screwy stuff going on with threat?  May need to do general threat testing
 
 Skyrim-style "eye" indicator
