@@ -25,6 +25,7 @@ import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.lang.reflect.Field;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import static com.fantasticsource.dynamicstealth.common.ClientData.*;
@@ -38,6 +39,7 @@ public class HUD extends Gui
     private static final int TEX_SIZE = 32;
     private static final double UV_HALF_PIXEL = 0.5 / TEX_SIZE, UV_SUBTEX_SIZE = 0.5 - UV_HALF_PIXEL * 2;
     private static Field renderManagerRenderOutlinesField;
+    private DecimalFormat oneDecimal = new DecimalFormat("0.0");
 
     static
     {
@@ -252,8 +254,8 @@ public class HUD extends Gui
         //Detailed OPHUD
         if (detailData != null)
         {
-            Entity searcher = mc.player.world.getEntityByID(detailData.searcherID);
-            if (searcher != null) drawDetailedOPHUD(searcher, mc.fontRenderer);
+            Entity entity = mc.player.world.getEntityByID(detailData.searcherID);
+            if (entity != null) drawDetailedOPHUD(entity, mc.fontRenderer);
         }
     }
 
@@ -271,8 +273,9 @@ public class HUD extends Gui
 
             Pair<Float, Float> pos = MCTools.getEntityXYInWindow(entity, 0, entity.height * 0.5, 0);
             float originX = pos.getKey(), originY = pos.getValue();
+            int portW = MCTools.getViewportWidth(), portH = MCTools.getViewportHeight();
 
-            if (originX < 0 || originX > MCTools.getViewportWidth() || originY < 0 || originY > MCTools.getViewportHeight())
+            if (originX < 0 || originX > portW || originY < 0 || originY > portH)
             {
                 //Draw offscreen indicator and return
                 //TODO offscreen indicator
@@ -302,8 +305,11 @@ public class HUD extends Gui
                 ArrayList<String> elements = new ArrayList<>();
 
                 if (!Compat.neat) elements.add(entity.getName());
-                if (detailData.percent > 0) elements.add("Threat: " + detailData.percent);
                 if (targetID != -1 && targetID != -2) elements.add("Targeting " + (target == null ? UNKNOWN : target.getName()));
+                else if (detailData.percent > 0) elements.add("Searching for target");
+                if (detailData.color == COLOR_BYPASS) elements.add("Threat: §k000");
+                else if (detailData.percent > 0) elements.add("Threat: " + detailData.percent + "%");
+                elements.add("Distance: " + oneDecimal.format(entity.getDistance(Minecraft.getMinecraft().player)));
 
                 float width = 0;
                 for (String string : elements)
@@ -316,10 +322,14 @@ public class HUD extends Gui
                 //Main detailed OPHUD
                 double offDist = entity.width / 2 + 0.6;
                 float offX = 30;
-                if (originX < MCTools.getViewportWidth() >> 1)
+                double scaledW = sr.getScaledWidth_double(), scaledH = sr.getScaledHeight_double();
+                if (originX < portW >> 1)
                 {
-                    pos = MCTools.getEntityXYInWindow(entity, offDist * -ActiveRenderInfo.getRotationX(), entity.height * 0.5, offDist * -ActiveRenderInfo.getRotationZ()); //TODO change this to get position to right side of entity
-                    float drawX = (pos.getKey() + offX) / sr.getScaleFactor(), drawY = pos.getValue() / sr.getScaleFactor(); //TODO and then if this would be partially off-screen, adjust until on-screen
+                    pos = MCTools.getEntityXYInWindow(entity, offDist * -ActiveRenderInfo.getRotationX(), entity.height * 0.5, offDist * -ActiveRenderInfo.getRotationZ());
+                    float drawX = (pos.getKey() + offX) / sr.getScaleFactor(), drawY = pos.getValue() / sr.getScaleFactor();
+                    if (drawX + width + padding - 1 > scaledW) drawX = (float) scaledW - width - padding + 1;
+                    if (drawY - height / 2 - padding < 0) drawY = height / 2 + padding;
+                    else if (drawY + height / 2 + padding - 1 > scaledH) drawY = (float) scaledH - height / 2 - padding + 1;
 
                     //TODO threat gauge
 

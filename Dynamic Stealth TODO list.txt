@@ -4,16 +4,17 @@ Explain library situation in curseforge description
 
 Update fantasticlib requirement, and release new fantasticlib
 
-Create new graphics for detailed OPHUD, but keep skulls for normal OPHUDs...
-...something translucent, but with a background/border so it's easy enough to read
-...if focused target is off-screen, draw edge-of-screen indicator instead of detailed OPHUD
-...add indicator for distance to focused target
+Create new threat gauge graphics for detailed OPHUD
 
 Create graphics for edge-of-screen detailed OPHUD (in case focused entity is offscreen)...
-...the usual skull, but smaller and inside a bubble with an arrow
+...colored arrow and offset details so they don't overlap it
 
 Create graphics for edge-of-screen nomral OPHUDs...
 ...just a translucent colored arrow
+
+Fix targeting HUD text drawing in front of hotbar (but behind items in hotbar...but in front of text on items in hotbar?!)
+
+Seem to have some screwy stuff going on with threat?  May need to do general threat testing
 
 Skyrim-style "eye" indicator
 
