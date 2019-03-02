@@ -39,7 +39,6 @@ public class HUD extends Gui
     private static final int TEX_SIZE = 32;
     private static final double UV_HALF_PIXEL = 0.5 / TEX_SIZE, UV_SUBTEX_SIZE = 0.5 - UV_HALF_PIXEL * 2;
     private static Field renderManagerRenderOutlinesField;
-    private DecimalFormat oneDecimal = new DecimalFormat("0.0");
 
     static
     {
@@ -52,6 +51,8 @@ public class HUD extends Gui
             MCTools.crash(e, 147, false);
         }
     }
+
+    private DecimalFormat oneDecimal = new DecimalFormat("0.0");
 
     public HUD(Minecraft mc)
     {
@@ -273,19 +274,14 @@ public class HUD extends Gui
 
             Pair<Float, Float> pos = MCTools.getEntityXYInWindow(entity, 0, entity.height * 0.5, 0);
             float originX = pos.getKey(), originY = pos.getValue();
-            int portW = MCTools.getViewportWidth(), portH = MCTools.getViewportHeight();
+            int portW = MCTools.getViewportWidth();
+            ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
+            boolean offScreen = originX < 0 || originX > portW || originY < 0 || originY > MCTools.getViewportHeight();
 
-            if (originX < 0 || originX > portW || originY < 0 || originY > portH)
-            {
-                //Draw offscreen indicator and return
-                //TODO offscreen indicator
-                return;
-            }
-            else
-            {
-                ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
 
-                //Reticle (if any)
+            //Reticle (if any)
+            if (!offScreen)
+            {
                 float originDrawX = originX / sr.getScaleFactor(), originDrawY = originY / sr.getScaleFactor();
                 GlStateManager.color(1, 1, 1, 1);
                 GlStateManager.glBegin(GL_LINES);
@@ -294,64 +290,85 @@ public class HUD extends Gui
                 GlStateManager.glVertex3f(originDrawX, originDrawY - 10, 0);
                 GlStateManager.glVertex3f(originDrawX, originDrawY + 10, 0);
                 GlStateManager.glEnd();
+            }
 
 
-                //Text setup
-                //TODO do special case for threat bypass
-                int targetID = detailData.targetID;
-                Entity target = (targetID == -1 || targetID == -2) ? null : entity.world.getEntityByID(targetID);
+            //Text setup
+            int targetID = detailData.targetID;
+            Entity target = (targetID == -1 || targetID == -2) ? null : entity.world.getEntityByID(targetID);
 
-                float padding = 1;
-                ArrayList<String> elements = new ArrayList<>();
+            float padding = 1;
+            ArrayList<String> elements = new ArrayList<>();
 
-                if (!Compat.neat) elements.add(entity.getName());
-                if (targetID != -1 && targetID != -2) elements.add("Targeting " + (target == null ? UNKNOWN : target.getName()));
-                else if (detailData.percent > 0) elements.add("Searching for target");
-                if (detailData.color == COLOR_BYPASS) elements.add("Threat: §k000");
-                else if (detailData.percent > 0) elements.add("Threat: " + detailData.percent + "%");
-                elements.add("Distance: " + oneDecimal.format(entity.getDistance(Minecraft.getMinecraft().player)));
+            if (!Compat.neat) elements.add(entity.getName());
+            if (targetID != -1 && targetID != -2) elements.add("Targeting " + (target == null ? UNKNOWN : target.getName()));
+            else if (detailData.percent > 0) elements.add("Searching for target");
+            if (detailData.color == COLOR_BYPASS) elements.add("Threat: §k000");
+            else if (detailData.percent > 0) elements.add("Threat: " + detailData.percent + "%");
+            elements.add("Distance: " + oneDecimal.format(entity.getDistance(Minecraft.getMinecraft().player)));
 
-                float width = 0;
-                for (String string : elements)
+            float width = 0;
+            for (String string : elements)
+            {
+                width = Tools.max(width, fontRenderer.getStringWidth(string));
+            }
+            float height = fontRenderer.FONT_HEIGHT * elements.size() + padding * (elements.size() - 1);
+
+
+            //Main detailed OPHUD
+            double offDist = entity.width / 2 + 0.6;
+            float offX = 30;
+            double scaledW = sr.getScaledWidth_double(), scaledH = sr.getScaledHeight_double();
+            if (originX < portW >> 1)
+            {
+                pos = MCTools.getEntityXYInWindow(entity, offDist * -ActiveRenderInfo.getRotationX(), entity.height * 0.5, offDist * -ActiveRenderInfo.getRotationZ());
+                float drawX = (pos.getKey() + offX) / sr.getScaleFactor(), drawY = pos.getValue() / sr.getScaleFactor();
+                if (drawX + width + padding - 1 > scaledW) drawX = (float) scaledW - width - padding + 1;
+                if (drawY - height / 2 - padding < 0) drawY = height / 2 + padding;
+                else if (drawY + height / 2 + padding - 1 > scaledH) drawY = (float) scaledH - height / 2 - padding + 1;
+
+                //TODO threat gauge
+
+                //Text background
+                GlStateManager.color(0, 0, 0, alpha);
+                GlStateManager.glBegin(GL_QUADS);
+                GlStateManager.glVertex3f(drawX - padding, drawY - height / 2 - padding, 0);
+                GlStateManager.glVertex3f(drawX - padding, drawY + height / 2 + padding - 1, 0);
+                GlStateManager.glVertex3f(drawX + width + padding - 1, drawY + height / 2 + padding - 1, 0);
+                GlStateManager.glVertex3f(drawX + width + padding - 1, drawY - height / 2 - padding, 0);
+                GlStateManager.glEnd();
+
+                //Text elements
+                GlStateManager.enableTexture2D();
+                for (int i = 0; i < elements.size(); i++)
                 {
-                    width = Tools.max(width, fontRenderer.getStringWidth(string));
+                    fontRenderer.drawString(elements.get(i), drawX, drawY - height / 2 + height * i / elements.size(), color, false);
                 }
-                float height = fontRenderer.FONT_HEIGHT * elements.size() + padding * (elements.size() - 1);
+            }
+            else
+            {
+                pos = MCTools.getEntityXYInWindow(entity, offDist * ActiveRenderInfo.getRotationX(), entity.height * 0.5, offDist * ActiveRenderInfo.getRotationZ());
+                float drawX = (pos.getKey() - offX) / sr.getScaleFactor(), drawY = pos.getValue() / sr.getScaleFactor();
+                if (drawX - width - padding < 0) drawX = width + padding;
+                if (drawY - height / 2 - padding < 0) drawY = height / 2 + padding;
+                else if (drawY + height / 2 + padding - 1 > scaledH) drawY = (float) scaledH - height / 2 - padding + 1;
 
+                //TODO threat gauge
 
-                //Main detailed OPHUD
-                double offDist = entity.width / 2 + 0.6;
-                float offX = 30;
-                double scaledW = sr.getScaledWidth_double(), scaledH = sr.getScaledHeight_double();
-                if (originX < portW >> 1)
+                //Text background
+                GlStateManager.color(0, 0, 0, alpha);
+                GlStateManager.glBegin(GL_QUADS);
+                GlStateManager.glVertex3f(drawX - width - padding, drawY - height / 2 - padding, 0);
+                GlStateManager.glVertex3f(drawX - width - padding, drawY + height / 2 + padding - 1, 0);
+                GlStateManager.glVertex3f(drawX + padding - 1, drawY + height / 2 + padding - 1, 0);
+                GlStateManager.glVertex3f(drawX + padding - 1, drawY - height / 2 - padding, 0);
+                GlStateManager.glEnd();
+
+                //Text elements
+                GlStateManager.enableTexture2D();
+                for (int i = 0; i < elements.size(); i++)
                 {
-                    pos = MCTools.getEntityXYInWindow(entity, offDist * -ActiveRenderInfo.getRotationX(), entity.height * 0.5, offDist * -ActiveRenderInfo.getRotationZ());
-                    float drawX = (pos.getKey() + offX) / sr.getScaleFactor(), drawY = pos.getValue() / sr.getScaleFactor();
-                    if (drawX + width + padding - 1 > scaledW) drawX = (float) scaledW - width - padding + 1;
-                    if (drawY - height / 2 - padding < 0) drawY = height / 2 + padding;
-                    else if (drawY + height / 2 + padding - 1 > scaledH) drawY = (float) scaledH - height / 2 - padding + 1;
-
-                    //TODO threat gauge
-
-                    //Text background
-                    GlStateManager.color(0, 0, 0, alpha);
-                    GlStateManager.glBegin(GL_QUADS);
-                    GlStateManager.glVertex3f(drawX - padding, drawY - height / 2 - padding, 0);
-                    GlStateManager.glVertex3f(drawX - padding, drawY + height / 2 + padding - 1, 0);
-                    GlStateManager.glVertex3f(drawX + width + padding - 1, drawY + height / 2 + padding - 1, 0);
-                    GlStateManager.glVertex3f(drawX + width + padding - 1, drawY - height / 2 - padding, 0);
-                    GlStateManager.glEnd();
-
-                    //Text elements
-                    GlStateManager.enableTexture2D();
-                    for (int i = 0; i < elements.size(); i++)
-                    {
-                        fontRenderer.drawString(elements.get(i), drawX, drawY - height / 2 + height * i / elements.size(), color, false);
-                    }
-                }
-                else
-                {
-
+                    fontRenderer.drawString(elements.get(i), drawX - width, drawY - height / 2 + height * i / elements.size(), color, false);
                 }
             }
         }

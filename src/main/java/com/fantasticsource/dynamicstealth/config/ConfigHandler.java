@@ -18,9 +18,8 @@ public class ConfigHandler
     private static String configDir = Loader.instance().getConfigDir().getAbsolutePath() + File.separator;
     private static String dsDir = configDir + DynamicStealth.MODID + File.separator;
     private static File currentFile = new File(dsDir + DynamicStealth.CONFIG_VERSION + "+.cfg");
-    private static File mostRecentFile = new File(dsDir + DynamicStealth.CONFIG_VERSION + "+.cfg");
-
     public static String fullConfigFilename = currentFile.getAbsolutePath();
+    private static File mostRecentFile = new File(dsDir + DynamicStealth.CONFIG_VERSION + "+.cfg");
 
     public static void init()
     {
