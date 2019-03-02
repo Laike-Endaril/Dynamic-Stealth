@@ -303,7 +303,7 @@ public class HUD extends Gui
 
                 if (!Compat.neat) elements.add(entity.getName());
                 if (detailData.percent > 0) elements.add("Threat: " + detailData.percent);
-                if (target != null) elements.add("Targeting " + target.getName());
+                if (targetID != -1 && targetID != -2) elements.add("Targeting " + (target == null ? UNKNOWN : target.getName()));
 
                 float width = 0;
                 for (String string : elements)
