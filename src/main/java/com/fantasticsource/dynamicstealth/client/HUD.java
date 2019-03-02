@@ -12,6 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -271,7 +272,6 @@ public class HUD extends Gui
             Pair<Float, Float> pos = MCTools.getEntityXYInWindow(entity, 0, entity.height * 0.5, 0);
             float originX = pos.getKey(), originY = pos.getValue();
 
-            double xOffset, yOffset;
             if (originX < 0 || originX > MCTools.getViewportWidth() || originY < 0 || originY > MCTools.getViewportHeight())
             {
                 //Draw offscreen indicator and return
@@ -281,17 +281,15 @@ public class HUD extends Gui
             else
             {
                 ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
-                pos = MCTools.getEntityXYInWindow(entity, 0, entity.height * 0.5, 0);
-                float drawX = pos.getKey() / sr.getScaleFactor(), drawY = pos.getValue() / sr.getScaleFactor();
 
                 //Reticle (if any)
-                Color c = new Color(detailData.color << 8 | (int) (0xFF * alpha));
-                GlStateManager.color(c.rf(), c.gf(), c.bf(), c.af());
+                float originDrawX = originX / sr.getScaleFactor(), originDrawY = originY / sr.getScaleFactor();
+                GlStateManager.color(1, 1, 1, 1);
                 GlStateManager.glBegin(GL_LINES);
-                GlStateManager.glVertex3f(drawX - 10, drawY, 0);
-                GlStateManager.glVertex3f(drawX + 10, drawY, 0);
-                GlStateManager.glVertex3f(drawX, drawY - 10, 0);
-                GlStateManager.glVertex3f(drawX, drawY + 10, 0);
+                GlStateManager.glVertex3f(originDrawX - 10, originDrawY, 0);
+                GlStateManager.glVertex3f(originDrawX + 10, originDrawY, 0);
+                GlStateManager.glVertex3f(originDrawX, originDrawY - 10, 0);
+                GlStateManager.glVertex3f(originDrawX, originDrawY + 10, 0);
                 GlStateManager.glEnd();
 
 
@@ -316,8 +314,13 @@ public class HUD extends Gui
 
 
                 //Main detailed OPHUD
+                double offDist = entity.width / 2 + 0.6;
+                float offX = 30;
                 if (originX < MCTools.getViewportWidth() >> 1)
                 {
+                    pos = MCTools.getEntityXYInWindow(entity, offDist * -ActiveRenderInfo.getRotationX(), entity.height * 0.5, offDist * -ActiveRenderInfo.getRotationZ()); //TODO change this to get position to right side of entity
+                    float drawX = (pos.getKey() + offX) / sr.getScaleFactor(), drawY = pos.getValue() / sr.getScaleFactor(); //TODO and then if this would be partially off-screen, adjust until on-screen
+
                     //TODO threat gauge
 
                     //Text background
