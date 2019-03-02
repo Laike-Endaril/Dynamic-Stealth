@@ -5,11 +5,13 @@ import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatNeat;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.ReflectionTool;
+import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.datastructures.Color;
 import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -22,6 +24,7 @@ import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 import static com.fantasticsource.dynamicstealth.common.ClientData.*;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.clientSettings;
@@ -257,37 +260,87 @@ public class HUD extends Gui
     {
         try
         {
-            GlStateManager.enableAlpha();
             GlStateManager.disableTexture2D();
+            GlStateManager.enableBlend();
 
+
+            //General Setup
+            float alpha = 0.6f;
+            int color = detailData.color | ((int) (0xFF * alpha) << 24);
 
             Pair<Float, Float> pos = MCTools.getEntityXYInWindow(entity, 0, entity.height * 0.5, 0);
-            float x = pos.getKey(), y = pos.getValue();
+            float originX = pos.getKey(), originY = pos.getValue();
 
-            int color = detailData.color;
-            Color c = new Color(color, true);
-            GlStateManager.color(c.r(), c.g(), c.b(), c.a());
+            double xOffset, yOffset;
+            if (originX < 0 || originX > MCTools.getViewportWidth() || originY < 0 || originY > MCTools.getViewportHeight())
+            {
+                //Draw offscreen indicator and return
+                //TODO offscreen indicator
+                return;
+            }
+            else
+            {
+                ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
+                pos = MCTools.getEntityXYInWindow(entity, 0, entity.height * 0.5, 0);
+                float drawX = pos.getKey() / sr.getScaleFactor(), drawY = pos.getValue() / sr.getScaleFactor();
 
-            GlStateManager.glBegin(GL_LINES);
-            GlStateManager.glVertex3f(x - 10, y, 0);
-            GlStateManager.glVertex3f(x + 10, y, 0);
-            GlStateManager.glVertex3f(x, y - 10, 0);
-            GlStateManager.glVertex3f(x, y + 10, 0);
-            GlStateManager.glEnd();
+                //Reticle (if any)
+                Color c = new Color(detailData.color << 8 | (int) (0xFF * alpha));
+                GlStateManager.color(c.rf(), c.gf(), c.bf(), c.af());
+                GlStateManager.glBegin(GL_LINES);
+                GlStateManager.glVertex3f(drawX - 10, drawY, 0);
+                GlStateManager.glVertex3f(drawX + 10, drawY, 0);
+                GlStateManager.glVertex3f(drawX, drawY - 10, 0);
+                GlStateManager.glVertex3f(drawX, drawY + 10, 0);
+                GlStateManager.glEnd();
 
 
-            GlStateManager.enableTexture2D();
+                //Text setup
+                //TODO do special case for threat bypass
+                int targetID = detailData.targetID;
+                Entity target = (targetID == -1 || targetID == -2) ? null : entity.world.getEntityByID(targetID);
+
+                float padding = 1;
+                ArrayList<String> elements = new ArrayList<>();
+
+                if (!Compat.neat) elements.add(entity.getName());
+                if (detailData.percent > 0) elements.add("Threat: " + detailData.percent);
+                if (target != null) elements.add("Targeting " + target.getName());
+
+                float width = 0;
+                for (String string : elements)
+                {
+                    width = Tools.max(width, fontRenderer.getStringWidth(string));
+                }
+                float height = fontRenderer.FONT_HEIGHT * elements.size() + padding * (elements.size() - 1);
 
 
-            int targetID = detailData.targetID;
-            Entity target = (targetID == -1 || targetID == -2) ? null : entity.world.getEntityByID(targetID);
+                //Main detailed OPHUD
+                if (originX < MCTools.getViewportWidth() >> 1)
+                {
+                    //TODO threat gauge
 
-            drawString(fontRenderer, entity.getName(), (int) x + 30, (int) y - 10, color);
-            drawString(fontRenderer, targetID == -1 ? EMPTY : target == null ? UNKNOWN : target.getName(), (int) x + 30, (int) y, color);
-            drawString(fontRenderer, detailData.percent < 0 ? UNKNOWN : detailData.percent == 0 ? EMPTY : detailData.percent + "%", (int) x + 30, (int) y + 10, color);
+                    //Text background
+                    GlStateManager.color(0, 0, 0, alpha);
+                    GlStateManager.glBegin(GL_QUADS);
+                    GlStateManager.glVertex3f(drawX - padding, drawY - height / 2 - padding, 0);
+                    GlStateManager.glVertex3f(drawX - padding, drawY + height / 2 + padding - 1, 0);
+                    GlStateManager.glVertex3f(drawX + width + padding - 1, drawY + height / 2 + padding - 1, 0);
+                    GlStateManager.glVertex3f(drawX + width + padding - 1, drawY - height / 2 - padding, 0);
+                    GlStateManager.glEnd();
 
+                    //Text elements
+                    GlStateManager.enableTexture2D();
+                    for (int i = 0; i < elements.size(); i++)
+                    {
+                        fontRenderer.drawString(elements.get(i), drawX, drawY - height / 2 + height * i / elements.size(), color, false);
+                    }
+                }
+                else
+                {
 
-            GlStateManager.disableAlpha();
+                }
+            }
         }
         catch (IllegalAccessException e)
         {
