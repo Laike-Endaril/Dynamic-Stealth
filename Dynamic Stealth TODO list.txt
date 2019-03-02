@@ -13,7 +13,6 @@ Create graphics for edge-of-screen nomral OPHUDs...
 ...just a translucent colored arrow
 
 Do something about threat bypass text in targeting HUD; dark grey on translucent black is not good contrast
-Fix targeting HUD text drawing in front of hotbar (but behind items in hotbar...but in front of text on items in hotbar?!)
 
 Seem to have some screwy stuff going on with threat?  May need to do general threat testing
 

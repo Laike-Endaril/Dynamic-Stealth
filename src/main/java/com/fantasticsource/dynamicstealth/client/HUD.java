@@ -22,6 +22,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.lang.reflect.Field;
@@ -60,8 +61,8 @@ public class HUD extends Gui
         GlStateManager.color(1, 1, 1, 1);
     }
 
-    @SubscribeEvent
-    public static void drawHUD(RenderGameOverlayEvent.Post event)
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void drawHUD(RenderGameOverlayEvent.Pre event)
     {
         if (event.getType() == RenderGameOverlayEvent.ElementType.ALL)
         {
