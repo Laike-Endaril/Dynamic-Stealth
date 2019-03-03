@@ -1,35 +1,81 @@
 package com.fantasticsource.dynamicstealth.client;
 
+import com.fantasticsource.dynamicstealth.client.layeredits.LayerEndermanEyesEdit;
+import com.fantasticsource.dynamicstealth.client.layeredits.LayerSpiderEyesEdit;
 import com.fantasticsource.dynamicstealth.common.ClientData;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.config.DynamicStealthConfig;
+import com.fantasticsource.mctools.MCTools;
+import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderEnderman;
+import net.minecraft.client.renderer.entity.RenderLivingBase;
+import net.minecraft.client.renderer.entity.RenderSpider;
+import net.minecraft.client.renderer.entity.layers.LayerEndermanEyes;
+import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.client.renderer.entity.layers.LayerSpiderEyes;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 
+@SideOnly(Side.CLIENT)
 public class RenderAlterer
 {
-    private static ArrayList<EntityLivingBase> soulSightCache = new ArrayList<>();
-    private static Scoreboard scoreboard = Minecraft.getMinecraft().world.getScoreboard();
+    private static Field renderLivingBaseLayerRenderersField;
 
-    static
+    private static Scoreboard scoreboard;
+    private static ArrayList<EntityLivingBase> glowCache = new ArrayList<>();
+
+    private static boolean ready = false;
+
+    @SubscribeEvent
+    public static void init(EntityJoinWorldEvent event)
     {
-        scoreboard.createTeam("green").setPrefix(TextFormatting.GREEN.toString());
-        scoreboard.createTeam("blue").setPrefix(TextFormatting.BLUE.toString());
-        scoreboard.createTeam("yellow").setPrefix(TextFormatting.YELLOW.toString());
-        scoreboard.createTeam("orange").setPrefix(TextFormatting.GOLD.toString());
-        scoreboard.createTeam("red").setPrefix(TextFormatting.RED.toString());
-        scoreboard.createTeam("black").setPrefix(TextFormatting.BLACK.toString());
-        scoreboard.createTeam("purple").setPrefix(TextFormatting.DARK_PURPLE.toString());
+        if (!ready && event.getEntity() == Minecraft.getMinecraft().player)
+        {
+            scoreboard = Minecraft.getMinecraft().world.getScoreboard();
+
+            scoreboard.createTeam("green").setPrefix(TextFormatting.GREEN.toString());
+            scoreboard.createTeam("blue").setPrefix(TextFormatting.BLUE.toString());
+            scoreboard.createTeam("yellow").setPrefix(TextFormatting.YELLOW.toString());
+            scoreboard.createTeam("orange").setPrefix(TextFormatting.GOLD.toString());
+            scoreboard.createTeam("red").setPrefix(TextFormatting.RED.toString());
+            scoreboard.createTeam("black").setPrefix(TextFormatting.BLACK.toString());
+            scoreboard.createTeam("purple").setPrefix(TextFormatting.DARK_PURPLE.toString());
+
+            try
+            {
+                renderLivingBaseLayerRenderersField = ReflectionTool.getField(RenderLivingBase.class, "field_177097_h", "layerRenderers");
+            }
+            catch (NoSuchFieldException | IllegalAccessException e)
+            {
+                MCTools.crash(e, 156, true);
+            }
+
+            ready = true;
+        }
+    }
+
+    @SubscribeEvent
+    public static void reset(FMLNetworkEvent.ClientDisconnectionFromServerEvent event)
+    {
+        ready = false;
     }
 
 
@@ -57,86 +103,138 @@ public class RenderAlterer
 
 
     @SubscribeEvent
+    public static void tick(TickEvent.WorldTickEvent event)
+    {
+        if (event.side == Side.CLIENT && event.phase == TickEvent.Phase.END)
+        {
+            for (EntityLivingBase livingBase : (ArrayList<EntityLivingBase>) glowCache.clone())
+            {
+                livingBase.setGlowing(false);
+                glowCache.remove(livingBase);
+            }
+        }
+    }
+
+    @SubscribeEvent
     public static void preRender(RenderLivingEvent.Pre event)
     {
-        EntityLivingBase livingBase = event.getEntity();
-
-
-        //Don't draw seen entities as invisible, because they've been SEEN
-        if (Compat.statues && livingBase.getClass().getName().contains("party.lemons.statue")) return;
-        livingBase.setInvisible(false);
-
-
-        //Soul sight glow effect
-        if (soulSightCache.contains(livingBase))
+        if (ready)
         {
-            soulSightCache.remove(livingBase);
-            livingBase.setGlowing(false);
-        }
-
-        //Focused target glow effect
-        ClientData.OnPointData data = ClientData.detailData;
-        if (data != null && data.searcherID == livingBase.getEntityId())
-        {
-            scoreboard.addPlayerToTeam(livingBase.getUniqueID().toString(), getTeam(data.color));
-        }
+            EntityLivingBase livingBase = event.getEntity();
 
 
-        //Entity opacity based on visibility
-        if (ClientData.usePlayerSenses && livingBase != Minecraft.getMinecraft().player)
-        {
-            int id = livingBase.getEntityId();
-            double min = DynamicStealthConfig.clientSettings.entityFading.mobOpacityMin;
-            double visibility = ClientData.visibilityMap.containsKey(id) ? ClientData.visibilityMap.get(id) : 1;
-            double maxOpacityAt = DynamicStealthConfig.clientSettings.entityFading.fullOpacityAt;
-            if (visibility != 0)
+            //Don't draw seen entities as invisible, because they've been SEEN
+            if (Compat.statues && livingBase.getClass().getName().contains("party.lemons.statue")) return;
+            livingBase.setInvisible(false);
+
+
+            //Soul sight glow effect
+            if (glowCache.contains(livingBase))
             {
-                if (maxOpacityAt == 0) visibility = 1;
-                else visibility /= maxOpacityAt;
+                glowCache.remove(livingBase);
+                livingBase.setGlowing(false);
             }
 
-            GlStateManager.enableBlend();
-            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-            GlStateManager.enableCull();
-            GlStateManager.cullFace(GlStateManager.CullFace.BACK);
+            //Focused target glow effect
+            ClientData.OnPointData data = ClientData.detailData;
+            if (data != null && data.searcherID == livingBase.getEntityId())
+            {
+                scoreboard.addPlayerToTeam(livingBase.getUniqueID().toString(), getTeam(data.color));
+            }
 
-            GlStateManager.color(1, 1, 1, 1);
-            GL11.glColor4f(1, 1, 1, (float) (min + (1d - min) * visibility));
+
+            //Entity opacity based on visibility
+            if (ClientData.usePlayerSenses && livingBase != Minecraft.getMinecraft().player)
+            {
+                int id = livingBase.getEntityId();
+                double min = DynamicStealthConfig.clientSettings.entityFading.mobOpacityMin;
+                double visibility = ClientData.visibilityMap.containsKey(id) ? ClientData.visibilityMap.get(id) : 1;
+                double maxOpacityAt = DynamicStealthConfig.clientSettings.entityFading.fullOpacityAt;
+                if (visibility != 0)
+                {
+                    if (maxOpacityAt == 0) visibility = 1;
+                    else visibility /= maxOpacityAt;
+                }
+
+                GlStateManager.enableBlend();
+                GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
+                GlStateManager.enableCull();
+                GlStateManager.cullFace(GlStateManager.CullFace.BACK);
+
+                GlStateManager.color(1, 1, 1, 1);
+                GL11.glColor4f(1, 1, 1, (float) (min + (1d - min) * visibility));
+            }
         }
     }
 
     @SubscribeEvent
     public static void postRender(RenderLivingEvent.Post event)
     {
-        EntityLivingBase livingBase = event.getEntity();
-
-
-        //Focused target glowing effect
-        Team team = livingBase.getTeam();
-        if (team != null)
+        if (ready)
         {
-            scoreboard.removePlayerFromTeam(livingBase.getCachedUniqueIdString(), (ScorePlayerTeam) team);
-            livingBase.setGlowing(false);
-        }
+            EntityLivingBase livingBase = event.getEntity();
 
-        //Focused target and soul sight glowing effects
-        ClientData.OnPointData data = ClientData.detailData;
-        if (data != null && data.searcherID == livingBase.getEntityId())
+
+            //Focused target glowing effect
+            Team team = livingBase.getTeam();
+            if (team != null)
+            {
+                scoreboard.removePlayerFromTeam(livingBase.getCachedUniqueIdString(), (ScorePlayerTeam) team);
+                livingBase.setGlowing(false);
+            }
+
+            //Focused target and soul sight glowing effects
+            ClientData.OnPointData data = ClientData.detailData;
+            if (data != null && data.searcherID == livingBase.getEntityId())
+            {
+                setTempGlow(event);
+            }
+            else if (ClientData.soulSight && !livingBase.isGlowing())
+            {
+                setTempGlow(event);
+            }
+
+
+            if (Compat.statues && livingBase.getClass().getName().contains("party.lemons.statue")) return;
+            GlStateManager.color(1, 1, 1, 1);
+            GL11.glColor4f(1, 1, 1, 1);
+            GlStateManager.disableBlend();
+        }
+    }
+
+    private static void setTempGlow(RenderLivingEvent.Post event)
+    {
+        EntityLivingBase entity = event.getEntity();
+        entity.setGlowing(true);
+        glowCache.add(entity);
+    }
+
+
+    public static void replaceLayers(EntityLivingBase livingBase)
+    {
+        Render render = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(livingBase);
+        try
         {
-            livingBase.setGlowing(true);
-            soulSightCache.add(livingBase);
+            List<LayerRenderer> list = (List<LayerRenderer>) renderLivingBaseLayerRenderersField.get(render);
+            for (LayerRenderer layer : list.toArray(new LayerRenderer[list.size()]))
+            {
+                if (layer instanceof LayerSpiderEyes)
+                {
+                    list.remove(layer);
+                    list.add(new LayerSpiderEyesEdit((RenderSpider) render));
+                }
+                else if (layer instanceof LayerEndermanEyes)
+                {
+                    list.remove(layer);
+                    list.add(new LayerEndermanEyesEdit((RenderEnderman) render));
+                }
+            }
         }
-        else if (ClientData.soulSight && !livingBase.isGlowing())
+        catch (IllegalAccessException e)
         {
-            livingBase.setGlowing(true);
-            soulSightCache.add(livingBase);
+            MCTools.crash(e, 157, false);
         }
-
-
-        if (Compat.statues && livingBase.getClass().getName().contains("party.lemons.statue")) return;
-        GlStateManager.color(1, 1, 1, 1);
-        GL11.glColor4f(1, 1, 1, 1);
-        GlStateManager.disableBlend();
     }
 }

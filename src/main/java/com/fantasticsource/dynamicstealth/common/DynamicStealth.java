@@ -564,7 +564,7 @@ public class DynamicStealth
         {
             lookHelperField.set(living, new EntityLookHelperEdit(living));
 
-            if (!living.world.isRemote)
+            if (!living.world.isRemote) //Server-side
             {
                 sensesField.set(living, new EntitySensesEdit(living));
 
@@ -580,6 +580,10 @@ public class DynamicStealth
 
                 //Entity AI task additions
                 if (!EntityThreatData.bypassesThreat(living)) addTasks(living.targetTasks, living.tasks, living);
+            }
+            else //Client-side
+            {
+                RenderAlterer.replaceLayers(living);
             }
         }
         catch (Exception e)
