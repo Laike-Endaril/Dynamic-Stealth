@@ -12,8 +12,6 @@ Create graphics for edge-of-screen detailed OPHUD (in case focused entity is off
 Create graphics for edge-of-screen nomral OPHUDs...
 ...just a translucent colored arrow
 
-Do something about threat bypass text in targeting HUD; dark grey on translucent black is not good contrast
-
 Fix mysterious but consistent dedicated server crash (introduced between 55 release and current indev)
 
 When the player has soulsight, sometimes certain entities don't render, probably due to vanilla chunk render check
