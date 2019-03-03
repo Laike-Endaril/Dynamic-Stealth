@@ -1,8 +1,8 @@
 CURRENTLY WORKING ON ===================================================
 
-Explain library situation in curseforge description
-
 Update fantasticlib requirement, and release new fantasticlib
+
+Fix mysterious but consistent dedicated server crash (introduced between 55 release and current indev)
 
 Create new threat gauge graphics for detailed OPHUD
 
@@ -11,10 +11,6 @@ Create graphics for edge-of-screen detailed OPHUD (in case focused entity is off
 
 Create graphics for edge-of-screen nomral OPHUDs...
 ...just a translucent colored arrow
-
-Fix mysterious but consistent dedicated server crash (introduced between 55 release and current indev)
-
-When the player has soulsight, sometimes certain entities don't render, probably due to vanilla chunk render check
 
 Seem to have some screwy stuff going on with threat?  May need to do general threat testing
 
@@ -56,6 +52,8 @@ Use tracking system (Tracking class) for something, or remove it
 
 
 BUG FIXES ==============================================================
+
+When the player has soulsight, sometimes certain entities don't render, probably due to vanilla chunk render check?
 
 Fix entities attempting to path through diagonal walls; this may very well fix (or at least mostly fix) the issue below
 Fix entities being able to attack through glass diagonally (because they can see through it...)
