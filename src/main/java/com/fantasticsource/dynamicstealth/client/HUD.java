@@ -327,7 +327,10 @@ public class HUD extends Gui
             {
                 pos = MCTools.getEntityXYInWindow(entity, offDist * -ActiveRenderInfo.getRotationX(), entity.height * 0.5, offDist * -ActiveRenderInfo.getRotationZ());
                 float drawX = (pos.getKey() + offX) / sr.getScaleFactor(), drawY = pos.getValue() / sr.getScaleFactor();
-                if (drawX + width + padding - 1 > scaledW) drawX = (float) scaledW - width - padding + 1;
+
+                if (drawX - padding < 0) drawX = padding;
+                else if (drawX + width + padding - 1 > scaledW) drawX = (float) scaledW - width - padding + 1;
+
                 if (drawY - height / 2 - padding < 0) drawY = height / 2 + padding;
                 else if (drawY + height / 2 + padding - 1 > scaledH) drawY = (float) scaledH - height / 2 - padding + 1;
 
@@ -353,7 +356,10 @@ public class HUD extends Gui
             {
                 pos = MCTools.getEntityXYInWindow(entity, offDist * ActiveRenderInfo.getRotationX(), entity.height * 0.5, offDist * ActiveRenderInfo.getRotationZ());
                 float drawX = (pos.getKey() - offX) / sr.getScaleFactor(), drawY = pos.getValue() / sr.getScaleFactor();
+
                 if (drawX - width - padding < 0) drawX = width + padding;
+                else if (drawX + padding - 1 > scaledW) drawX = (float) scaledW - padding + 1;
+
                 if (drawY - height / 2 - padding < 0) drawY = height / 2 + padding;
                 else if (drawY + height / 2 + padding - 1 > scaledH) drawY = (float) scaledH - height / 2 - padding + 1;
 
