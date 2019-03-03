@@ -722,6 +722,7 @@ public class DynamicStealth
         if (Loader.isModLoaded("iceandfire")) Compat.iceandfire = true;
         if (Loader.isModLoaded("neat")) Compat.neat = true;
         if (Loader.isModLoaded("statues")) Compat.statues = true;
+        if (Loader.isModLoaded("primitivemobs")) Compat.primitivemobs = true;
         if (Loader.isModLoaded("dissolution"))
         {
             Compat.dissolution = true;

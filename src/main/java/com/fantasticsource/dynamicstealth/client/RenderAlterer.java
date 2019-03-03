@@ -121,10 +121,11 @@ public class RenderAlterer
         if (ready)
         {
             EntityLivingBase livingBase = event.getEntity();
+            //Hard stops
+            if (Compat.statues && livingBase.getClass().getName().contains("party.lemons.statue")) return;
 
 
             //Don't draw seen entities as invisible, because they've been SEEN
-            if (Compat.statues && livingBase.getClass().getName().contains("party.lemons.statue")) return;
             livingBase.setInvisible(false);
 
 
@@ -163,8 +164,10 @@ public class RenderAlterer
                 GlStateManager.enableCull();
                 GlStateManager.cullFace(GlStateManager.CullFace.BACK);
 
-                GlStateManager.color(1, 1, 1, 1);
-                GL11.glColor4f(1, 1, 1, (float) (min + (1d - min) * visibility));
+
+                GlStateManager.Color c = GlStateManager.colorState;
+                c.alpha = (float) (min + (1d - min) * visibility);
+                GL11.glColor4f(c.red, c.green, c.blue, c.alpha);
             }
         }
     }
@@ -175,6 +178,8 @@ public class RenderAlterer
         if (ready)
         {
             EntityLivingBase livingBase = event.getEntity();
+            //Hard stops
+            if (Compat.statues && livingBase.getClass().getName().contains("party.lemons.statue")) return;
 
 
             //Focused target glowing effect
@@ -197,9 +202,7 @@ public class RenderAlterer
             }
 
 
-            if (Compat.statues && livingBase.getClass().getName().contains("party.lemons.statue")) return;
             GlStateManager.color(1, 1, 1, 1);
-            GL11.glColor4f(1, 1, 1, 1);
             GlStateManager.disableBlend();
         }
     }
