@@ -33,7 +33,7 @@ public class ClientData
             COLOR_IDLE = 0x4444FF,
             COLOR_PASSIVE = 0x00CC00,
             COLOR_FLEEING = 0x770077,
-            COLOR_BYPASS = 0x333333;
+            COLOR_BYPASS = 0x555555;
 
     public static final String EMPTY = "----------";
     public static final String UNKNOWN = "???";

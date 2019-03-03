@@ -56,7 +56,7 @@ public class RenderAlterer
             scoreboard.createTeam("yellow").setPrefix(TextFormatting.YELLOW.toString());
             scoreboard.createTeam("orange").setPrefix(TextFormatting.GOLD.toString());
             scoreboard.createTeam("red").setPrefix(TextFormatting.RED.toString());
-            scoreboard.createTeam("darkgray").setPrefix(TextFormatting.DARK_GRAY.toString());
+            scoreboard.createTeam("black").setPrefix(TextFormatting.BLACK.toString());
             scoreboard.createTeam("purple").setPrefix(TextFormatting.DARK_PURPLE.toString());
 
             try
@@ -94,7 +94,7 @@ public class RenderAlterer
             case ClientData.COLOR_ATTACKING_YOU:
                 return "red";
             case ClientData.COLOR_BYPASS:
-                return "darkgray";
+                return "black";
             case ClientData.COLOR_FLEEING:
                 return "purple";
         }
