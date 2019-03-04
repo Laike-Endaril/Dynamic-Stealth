@@ -4,6 +4,7 @@ import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatNeat;
 import com.fantasticsource.mctools.MCTools;
+import com.fantasticsource.mctools.Render;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.datastructures.Color;
@@ -32,6 +33,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import static com.fantasticsource.dynamicstealth.common.ClientData.*;
+import static com.fantasticsource.dynamicstealth.common.DynamicStealth.TRIG_TABLE;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.clientSettings;
 import static net.minecraft.client.renderer.vertex.DefaultVertexFormats.POSITION_TEX_LMAP_COLOR;
 import static org.lwjgl.opengl.GL11.*;
@@ -276,11 +278,11 @@ public class HUD extends Gui
             float alpha = 0.6f;
             int color = detailData.color | ((int) (0xFF * alpha) << 24);
 
-            Pair<Float, Float> pos = MCTools.getEntityXYInWindow(entity, 0, entity.height * 0.5, 0);
+            Pair<Float, Float> pos = Render.getEntityXYInWindow(entity, 0, entity.height * 0.5, 0, TRIG_TABLE);
             float originX = pos.getKey(), originY = pos.getValue();
-            int portW = MCTools.getViewportWidth();
+            int portW = Render.getViewportWidth();
             ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
-            boolean offScreen = originX < 0 || originX > portW || originY < 0 || originY > MCTools.getViewportHeight();
+            boolean offScreen = originX < 0 || originX > portW || originY < 0 || originY > Render.getViewportHeight();
 
 
             //Reticle (if any)
@@ -325,7 +327,7 @@ public class HUD extends Gui
             double scaledW = sr.getScaledWidth_double(), scaledH = sr.getScaledHeight_double();
             if (originX < portW >> 1)
             {
-                pos = MCTools.getEntityXYInWindow(entity, offDist * -ActiveRenderInfo.getRotationX(), entity.height * 0.5, offDist * -ActiveRenderInfo.getRotationZ());
+                pos = Render.getEntityXYInWindow(entity, offDist * -ActiveRenderInfo.getRotationX(), entity.height * 0.5, offDist * -ActiveRenderInfo.getRotationZ(), TRIG_TABLE);
                 float drawX = (pos.getKey() + offX) / sr.getScaleFactor(), drawY = pos.getValue() / sr.getScaleFactor();
 
                 if (drawX - padding < 0) drawX = padding;
@@ -354,7 +356,7 @@ public class HUD extends Gui
             }
             else
             {
-                pos = MCTools.getEntityXYInWindow(entity, offDist * ActiveRenderInfo.getRotationX(), entity.height * 0.5, offDist * ActiveRenderInfo.getRotationZ());
+                pos = Render.getEntityXYInWindow(entity, offDist * ActiveRenderInfo.getRotationX(), entity.height * 0.5, offDist * ActiveRenderInfo.getRotationZ(), TRIG_TABLE);
                 float drawX = (pos.getKey() - offX) / sr.getScaleFactor(), drawY = pos.getValue() / sr.getScaleFactor();
 
                 if (drawX - width - padding < 0) drawX = width + padding;

@@ -12,8 +12,6 @@ Create graphics for edge-of-screen detailed OPHUD (in case focused entity is off
 Create graphics for edge-of-screen nomral OPHUDs...
 ...just a translucent colored arrow
 
-Seem to have some screwy stuff going on with threat?  May need to do general threat testing
-
 Skyrim-style "eye" indicator
 
 Add wiki / guide videos

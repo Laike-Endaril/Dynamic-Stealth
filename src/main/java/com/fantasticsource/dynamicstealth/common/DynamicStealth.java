@@ -50,6 +50,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -206,6 +207,7 @@ public class DynamicStealth
                                 }
                                 else if (feeler instanceof EntityLiving)
                                 {
+                                    //TODO filter out recently felt entities for the look toward entity call; entities felt on the previous tick is good enough
                                     EntityLiving feelerLiving = (EntityLiving) feeler;
                                     makeLivingLookTowardEntity(feelerLiving, felt);
                                     feelerLiving.getNavigator().clearPath();
@@ -509,7 +511,9 @@ public class DynamicStealth
 
     public static void makeLivingLookTowardEntity(EntityLiving living, Entity target) throws InvocationTargetException, IllegalAccessException
     {
-        makeLivingLookDirection(living, MCTools.getYaw(living.getPositionVector(), target.getPositionVector(), TRIG_TABLE), MCTools.getPitch(living.getPositionVector(), target.getPositionVector(), TRIG_TABLE));
+        Vec3d pos1 = living.getPositionVector().add(new Vec3d(0, living.getEyeHeight(), 0));
+        Vec3d pos2 = target.getPositionVector().add(new Vec3d(0, target.height * 0.5, 0));
+        makeLivingLookDirection(living, MCTools.getYawDeg(pos1, pos2, TRIG_TABLE), MCTools.getPitchDeg(pos1, pos2, TRIG_TABLE));
     }
 
     public static void makeLivingLookDirection(EntityLiving living, double yawDegrees, double pitchDegrees) throws InvocationTargetException, IllegalAccessException
