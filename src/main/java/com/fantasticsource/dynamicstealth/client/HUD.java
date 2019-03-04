@@ -282,7 +282,7 @@ public class HUD extends Gui
             float originX = pos.getKey(), originY = pos.getValue();
             int portW = Render.getViewportWidth();
             ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
-            boolean offScreen = originX < 0 || originX > portW || originY < 0 || originY > Render.getViewportHeight();
+            boolean offScreen = originX < 0 || originX >= portW || originY < 0 || originY >= Render.getViewportHeight();
 
 
             //Reticle (if any)

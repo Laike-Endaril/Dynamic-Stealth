@@ -2,8 +2,6 @@ CURRENTLY WORKING ON ===================================================
 
 Update fantasticlib requirement, and release new fantasticlib
 
-Adjust 3D -> 2D position detection for when 3D position is behind camera
-
 Create new threat gauge graphics for detailed OPHUD
 
 Create graphics for edge-of-screen detailed OPHUD (in case focused entity is offscreen)...
