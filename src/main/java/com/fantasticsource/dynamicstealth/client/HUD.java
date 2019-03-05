@@ -41,7 +41,7 @@ import static org.lwjgl.opengl.GL11.*;
 @SideOnly(Side.CLIENT)
 public class HUD extends Gui
 {
-    private static final ResourceLocation ICON_LOCATION = new ResourceLocation(DynamicStealth.MODID, "indicator.png");
+    private static final ResourceLocation ICON_LOCATION = new ResourceLocation(DynamicStealth.MODID, "image/basicgauge.png");
     private static final int TEX_SIZE = 32;
     private static final double UV_HALF_PIXEL = 0.5 / TEX_SIZE, UV_SUBTEX_SIZE = 0.5 - UV_HALF_PIXEL * 2;
     private static Field renderManagerRenderOutlinesField;
@@ -85,14 +85,12 @@ public class HUD extends Gui
             {
                 int id = livingBase.getEntityId();
 
-                if (detailData == null || id != detailData.searcherID)
+                OnPointData data = opMap.get(id);
+                if (data == null && detailData != null && detailData.searcherID == id) data = detailData;
+                if (data != null && onPointFilter(data.color))
                 {
-                    OnPointData data = opMap.get(id);
-                    if (data != null && (data == detailData || onPointFilter(data.color)))
-                    {
-                        //Normal OPHUD
-                        drawNormalOPHUD(event.getRenderer().getRenderManager(), event.getX(), event.getY(), event.getZ(), livingBase, data);
-                    }
+                    //Normal OPHUD
+                    drawNormalOPHUD(event.getRenderer().getRenderManager(), event.getX(), event.getY(), event.getZ(), livingBase, data);
                 }
             }
         }
@@ -285,38 +283,39 @@ public class HUD extends Gui
             int portH = Render.getViewportHeight();
 
             boolean offScreen = false;
-            if (originX < 1)
+            float boundX = originX, boundY = originY;
+            if (boundX < 1)
             {
-                originX = 1;
+                boundX = 1;
                 offScreen = true;
             }
-            else if (originX > portW - 1)
+            else if (boundX > portW - 1)
             {
-                originX = portW - 1;
+                boundX = portW - 1;
                 offScreen = true;
             }
-            if (originY < 1)
+            if (boundY < 1)
             {
-                originY = 1;
+                boundY = 1;
                 offScreen = true;
             }
-            else if (originY > portH - 1)
+            else if (boundY > portH - 1)
             {
-                originY = portH - 1;
+                boundY = portH - 1;
                 offScreen = true;
             }
-
 
 
             ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
-            float originDrawX = originX / sr.getScaleFactor();
-            float originDrawY = originY / sr.getScaleFactor();
 
             if (offScreen)
             {
+                double centerX = Render.getViewportWidth() * 0.5, centerY = Render.getViewportHeight() * 0.5;
+                double theta = TRIG_TABLE.arctanFullcircle(centerX, centerY, originX, originY);
+                float originDrawX = (float) (centerX + 20 * TRIG_TABLE.cos(theta)) / sr.getScaleFactor();
+                float originDrawY = (float) (centerY - 20 * TRIG_TABLE.sin(theta)) / sr.getScaleFactor();
+
                 //Offscreen reticle
-
-
                 GlStateManager.color(1, 1, 1, 1);
                 GlStateManager.glBegin(GL_LINES);
                 GlStateManager.glVertex3f(originDrawX - 10, originDrawY, 0);
@@ -329,6 +328,9 @@ public class HUD extends Gui
             }
             else
             {
+                float originDrawX = boundX / sr.getScaleFactor();
+                float originDrawY = boundY / sr.getScaleFactor();
+
                 //Onscreen reticle
                 GlStateManager.color(1, 1, 1, 1);
                 GlStateManager.glBegin(GL_LINES);
