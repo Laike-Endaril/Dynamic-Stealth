@@ -5,19 +5,16 @@ Update fantasticlib requirement, and release new fantasticlib
 Create new threat gauge graphics for detailed OPHUD
 
 Create graphics for edge-of-screen detailed OPHUD (in case focused entity is offscreen)...
-...colored arrow and offset details so they don't overlap it
+...colored arrow
 
-Create graphics for edge-of-screen nomral OPHUDs...
-...just a translucent colored arrow
+Directional indicators...
+...add optional "damaged from" indicator, which draws an indicator pointing the direction damage was recently received from
+...add optional touch detection indicator for players (see to do in DynamicStealth.java)
 
 Skyrim-style "eye" indicator
 
 Add wiki / guide videos
 Add guidebook, possibly using guide api or patchouli
-
-Directional indicators...
-...add optional "damaged from" indicator, which draws an indicator pointing the direction damage was recently received from
-...add optional touch detection indicator for players (see to do in DynamicStealth.java)
 
 
 

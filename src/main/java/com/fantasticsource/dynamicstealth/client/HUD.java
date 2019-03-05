@@ -285,9 +285,9 @@ public class HUD extends Gui
             int portH = Render.getViewportHeight();
 
             boolean offScreen = false;
-            if (originX < 0)
+            if (originX < 1)
             {
-                originX = 0;
+                originX = 1;
                 offScreen = true;
             }
             else if (originX > portW - 1)
@@ -295,9 +295,9 @@ public class HUD extends Gui
                 originX = portW - 1;
                 offScreen = true;
             }
-            if (originY < 0)
+            if (originY < 1)
             {
-                originY = 0;
+                originY = 1;
                 offScreen = true;
             }
             else if (originY > portH - 1)
