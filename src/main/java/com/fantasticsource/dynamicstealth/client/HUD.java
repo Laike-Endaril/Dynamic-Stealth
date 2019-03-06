@@ -276,7 +276,7 @@ public class HUD extends Gui
             float alpha = 0.6f;
             int color = detailData.color | ((int) (0xFF * alpha) << 24);
 
-            Pair<Float, Float> pos = Render.getEntityXYInWindow(entity, 0, entity.height * 0.5, 0, TRIG_TABLE);
+            Pair<Float, Float> pos = Render.getEntityXYInWindow(entity, 0, entity.height * 0.5, 0);
             float originX = pos.getKey(), originY = pos.getValue();
 
             int portW = Render.getViewportWidth();
@@ -310,12 +310,10 @@ public class HUD extends Gui
 
             if (offScreen)
             {
-                double centerX = Render.getViewportWidth() * 0.5, centerY = Render.getViewportHeight() * 0.5;
-                double theta = TRIG_TABLE.arctanFullcircle(centerX, centerY, originX, originY);
-                float originDrawX = (float) (centerX + 20 * TRIG_TABLE.cos(theta)) / sr.getScaleFactor();
-                float originDrawY = (float) (centerY - 20 * TRIG_TABLE.sin(theta)) / sr.getScaleFactor();
+                //Onscreen reticle
+                float originDrawX = boundX / sr.getScaleFactor();
+                float originDrawY = boundY / sr.getScaleFactor();
 
-                //Offscreen reticle
                 GlStateManager.color(1, 1, 1, 1);
                 GlStateManager.glBegin(GL_LINES);
                 GlStateManager.glVertex3f(originDrawX - 10, originDrawY, 0);
@@ -324,14 +322,30 @@ public class HUD extends Gui
                 GlStateManager.glVertex3f(originDrawX, originDrawY + 10, 0);
                 GlStateManager.glEnd();
 
+
+                //Offscreen reticle
+//                double centerX = Render.getViewportWidth() * 0.5, centerY = Render.getViewportHeight() * 0.5;
+//                double theta = TRIG_TABLE.arctanFullcircle(centerX, centerY, originX, originY);
+//                float originDrawX = (float) (centerX + 20 * TRIG_TABLE.cos(theta)) / sr.getScaleFactor();
+//                float originDrawY = (float) (centerY - 20 * TRIG_TABLE.sin(theta)) / sr.getScaleFactor();
+
+//                GlStateManager.color(1, 1, 1, 1);
+//                GlStateManager.glBegin(GL_LINES);
+//                GlStateManager.glVertex3f(originDrawX - 10, originDrawY, 0);
+//                GlStateManager.glVertex3f(originDrawX + 10, originDrawY, 0);
+//                GlStateManager.glVertex3f(originDrawX, originDrawY - 10, 0);
+//                GlStateManager.glVertex3f(originDrawX, originDrawY + 10, 0);
+//                GlStateManager.glEnd();
+
+
                 GlStateManager.enableTexture2D();
             }
             else
             {
+                //Onscreen reticle
                 float originDrawX = boundX / sr.getScaleFactor();
                 float originDrawY = boundY / sr.getScaleFactor();
 
-                //Onscreen reticle
                 GlStateManager.color(1, 1, 1, 1);
                 GlStateManager.glBegin(GL_LINES);
                 GlStateManager.glVertex3f(originDrawX - 10, originDrawY, 0);
@@ -369,7 +383,7 @@ public class HUD extends Gui
                 double scaledW = sr.getScaledWidth_double(), scaledH = sr.getScaledHeight_double();
                 if (originX < portW >> 1)
                 {
-                    pos = Render.getEntityXYInWindow(entity, offDist * -ActiveRenderInfo.getRotationX(), entity.height * 0.5, offDist * -ActiveRenderInfo.getRotationZ(), TRIG_TABLE);
+                    pos = Render.getEntityXYInWindow(entity, offDist * -ActiveRenderInfo.getRotationX(), entity.height * 0.5, offDist * -ActiveRenderInfo.getRotationZ());
                     float drawX = (pos.getKey() + offX) / sr.getScaleFactor(), drawY = pos.getValue() / sr.getScaleFactor();
 
                     if (drawX - padding < 0) drawX = padding;
@@ -398,7 +412,7 @@ public class HUD extends Gui
                 }
                 else
                 {
-                    pos = Render.getEntityXYInWindow(entity, offDist * ActiveRenderInfo.getRotationX(), entity.height * 0.5, offDist * ActiveRenderInfo.getRotationZ(), TRIG_TABLE);
+                    pos = Render.getEntityXYInWindow(entity, offDist * ActiveRenderInfo.getRotationX(), entity.height * 0.5, offDist * ActiveRenderInfo.getRotationZ());
                     float drawX = (pos.getKey() - offX) / sr.getScaleFactor(), drawY = pos.getValue() / sr.getScaleFactor();
 
                     if (drawX - width - padding < 0) drawX = width + padding;

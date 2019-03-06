@@ -4,8 +4,6 @@ Update fantasticlib requirement, and release new fantasticlib
 
 Create new threat gauge graphics for detailed OPHUD
 
-Fix 3D -> 2D positioning...again...
-
 Create graphics for edge-of-screen detailed OPHUD (in case focused entity is offscreen)...
 ...colored arrow
 
