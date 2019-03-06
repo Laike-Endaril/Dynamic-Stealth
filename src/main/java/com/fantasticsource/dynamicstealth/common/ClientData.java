@@ -35,7 +35,6 @@ public class ClientData
             COLOR_FLEEING = 0x770077,
             COLOR_BYPASS = 0x555555;
 
-    public static final String EMPTY = "----------";
     public static final String UNKNOWN = "???";
 
     public static boolean soulSight = false;
