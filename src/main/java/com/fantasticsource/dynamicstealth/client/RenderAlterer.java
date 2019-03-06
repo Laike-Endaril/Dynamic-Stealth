@@ -4,7 +4,6 @@ import com.fantasticsource.dynamicstealth.client.layeredits.LayerEndermanEyesEdi
 import com.fantasticsource.dynamicstealth.client.layeredits.LayerSpiderEyesEdit;
 import com.fantasticsource.dynamicstealth.common.ClientData;
 import com.fantasticsource.dynamicstealth.compat.Compat;
-import com.fantasticsource.dynamicstealth.config.DynamicStealthConfig;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.client.Minecraft;
@@ -33,6 +32,8 @@ import org.lwjgl.opengl.GL11;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.clientSettings;
 
 @SideOnly(Side.CLIENT)
 public class RenderAlterer
@@ -129,7 +130,7 @@ public class RenderAlterer
             livingBase.setInvisible(false);
 
 
-            //Soul sight glow effect
+            //Remove glow effect if cached
             if (glowCache.contains(livingBase))
             {
                 glowCache.remove(livingBase);
@@ -138,10 +139,13 @@ public class RenderAlterer
 
 
             //Focused target glow effect
-            ClientData.OnPointData data = ClientData.detailData;
-            if (data != null && data.searcherID == livingBase.getEntityId())
+            if (clientSettings.hudSettings.targetingStyle.glow && clientSettings.hudSettings.targetingStyle.colorGlow)
             {
-                scoreboard.addPlayerToTeam(livingBase.getUniqueID().toString(), getTeam(data.color));
+                ClientData.OnPointData data = ClientData.detailData;
+                if (data != null && data.searcherID == livingBase.getEntityId())
+                {
+                    scoreboard.addPlayerToTeam(livingBase.getUniqueID().toString(), getTeam(data.color));
+                }
             }
 
 
@@ -149,9 +153,9 @@ public class RenderAlterer
             if (ClientData.usePlayerSenses && livingBase != Minecraft.getMinecraft().player)
             {
                 int id = livingBase.getEntityId();
-                double min = DynamicStealthConfig.clientSettings.entityFading.mobOpacityMin;
+                double min = clientSettings.entityFading.mobOpacityMin;
                 double visibility = ClientData.visibilityMap.containsKey(id) ? ClientData.visibilityMap.get(id) : 1;
-                double maxOpacityAt = DynamicStealthConfig.clientSettings.entityFading.fullOpacityAt;
+                double maxOpacityAt = clientSettings.entityFading.fullOpacityAt;
                 if (visibility != 0)
                 {
                     if (maxOpacityAt == 0) visibility = 1;
@@ -192,7 +196,7 @@ public class RenderAlterer
 
             //Focused target and soul sight glowing effects
             ClientData.OnPointData data = ClientData.detailData;
-            if (data != null && data.searcherID == livingBase.getEntityId())
+            if (clientSettings.hudSettings.targetingStyle.glow && data != null && data.searcherID == livingBase.getEntityId())
             {
                 setTempGlow(event);
             }

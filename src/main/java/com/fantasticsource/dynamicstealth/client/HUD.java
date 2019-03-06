@@ -42,21 +42,17 @@ import static org.lwjgl.opengl.GL11.*;
 @SideOnly(Side.CLIENT)
 public class HUD extends Gui
 {
-    private static Field renderManagerRenderOutlinesField;
-    private static TextureManager textureManager = Minecraft.getMinecraft().renderEngine;
-
     private static final ResourceLocation BASIC_GAUGE_TEXTURE = new ResourceLocation(DynamicStealth.MODID, "image/basicgauge.png");
     private static final int BASIC_GAUGE_SIZE = 32;
     private static final double BASIC_GAUGE_UV_HALF_PIXEL = 0.5 / BASIC_GAUGE_SIZE, BASIC_GAUGE_UV_SUBTEX_SIZE = 0.5 - BASIC_GAUGE_UV_HALF_PIXEL * 2;
-
     private static final ResourceLocation ARROW_TEXTURE = new ResourceLocation(DynamicStealth.MODID, "image/arrow.png");
-    private static final float ARROW_GOAL_SIZE = 32;
     private static final float ARROW_WIDTH = 152, ARROW_HEIGHT = 87;
-    private static final float ARROW_SCALE = ARROW_GOAL_SIZE / Tools.max(ARROW_WIDTH, ARROW_HEIGHT);
     private static final float ARROW_ORIGIN_X = 151, ARROW_ORIGIN_Y = 43;
     private static final float ARROW_LEFT = ARROW_ORIGIN_X, ARROW_RIGHT = ARROW_WIDTH - ARROW_ORIGIN_X;
     private static final float ARROW_ABOVE = ARROW_ORIGIN_Y, ARROW_BELOW = ARROW_HEIGHT - ARROW_ORIGIN_Y;
     private static final float ARROW_UV_HALF_PIXEL_W = 0.5f / ARROW_WIDTH, ARROW_UV_HALF_PIXEL_H = 0.5f / ARROW_HEIGHT;
+    private static Field renderManagerRenderOutlinesField;
+    private static TextureManager textureManager = Minecraft.getMinecraft().renderEngine;
 
     static
     {
@@ -110,13 +106,13 @@ public class HUD extends Gui
 
     private static boolean onPointFilter(int color)
     {
-        if (color == COLOR_BYPASS) return clientSettings.hudSettings.filterOP.showBypass;
-        else if (color == COLOR_PASSIVE) return clientSettings.hudSettings.filterOP.showPassive;
-        else if (color == COLOR_IDLE) return clientSettings.hudSettings.filterOP.showIdle;
-        else if (color == COLOR_ALERT) return clientSettings.hudSettings.filterOP.showAlert;
-        else if (color == COLOR_ATTACKING_YOU) return clientSettings.hudSettings.filterOP.showAttackingYou;
-        else if (color == COLOR_ATTACKING_OTHER) return clientSettings.hudSettings.filterOP.showAttackingOther;
-        else if (color == COLOR_FLEEING) return clientSettings.hudSettings.filterOP.showFleeing;
+        if (color == COLOR_BYPASS) return clientSettings.hudSettings.ophudFilter.showBypass;
+        else if (color == COLOR_PASSIVE) return clientSettings.hudSettings.ophudFilter.showPassive;
+        else if (color == COLOR_IDLE) return clientSettings.hudSettings.ophudFilter.showIdle;
+        else if (color == COLOR_ALERT) return clientSettings.hudSettings.ophudFilter.showAlert;
+        else if (color == COLOR_ATTACKING_YOU) return clientSettings.hudSettings.ophudFilter.showAttackingYou;
+        else if (color == COLOR_ATTACKING_OTHER) return clientSettings.hudSettings.ophudFilter.showAttackingOther;
+        else if (color == COLOR_FLEEING) return clientSettings.hudSettings.ophudFilter.showFleeing;
         return false;
     }
 
@@ -128,11 +124,11 @@ public class HUD extends Gui
         Color c = new Color(color, true);
         int r = c.r(), g = c.g(), b = c.b();
 
-        boolean depth = clientSettings.hudSettings.styleOP.depth;
-        double scale = clientSettings.hudSettings.styleOP.scale * 0.025;
+        boolean depth = clientSettings.hudSettings.ophudStyle.depth;
+        double scale = clientSettings.hudSettings.ophudStyle.scale * 0.025;
         double halfSize2D = BASIC_GAUGE_SIZE / 4D;
-        double hOff2D = clientSettings.hudSettings.styleOP.horizontalOffset2D;
-        double vOff2D = Compat.neat ? clientSettings.hudSettings.styleOP.verticalOffset2D - 11 : clientSettings.hudSettings.styleOP.verticalOffset2D;
+        double hOff2D = clientSettings.hudSettings.ophudStyle.horizontalOffset2D;
+        double vOff2D = Compat.neat ? clientSettings.hudSettings.ophudStyle.verticalOffset2D - 11 : clientSettings.hudSettings.ophudStyle.verticalOffset2D;
 
 
         GlStateManager.disableLighting();
@@ -157,19 +153,19 @@ public class HUD extends Gui
 
         if (Compat.neat)
         {
-            GlStateManager.translate(x, y + entity.height * clientSettings.hudSettings.styleOP.verticalPercent + clientSettings.hudSettings.styleOP.verticalOffset - 0.5 + CompatNeat.heightAboveMob, z);
+            GlStateManager.translate(x, y + entity.height * clientSettings.hudSettings.ophudStyle.verticalPercent + clientSettings.hudSettings.ophudStyle.verticalOffset - 0.5 + CompatNeat.heightAboveMob, z);
             GlStateManager.rotate(-viewerYaw, 0, 1, 0);
             GlStateManager.rotate(renderManager.options.thirdPersonView == 2 ? -viewerPitch : viewerPitch, 1, 0, 0);
-            GlStateManager.translate(entity.width * clientSettings.hudSettings.styleOP.horizontalPercent, 0, 0);
+            GlStateManager.translate(entity.width * clientSettings.hudSettings.ophudStyle.horizontalPercent, 0, 0);
             GlStateManager.scale(-scale, -scale, scale);
         }
         else if (Compat.customnpcs && entity.getClass().getName().equals("noppes.npcs.entity.EntityCustomNpc"))
         {
             double cnpcScale = entity.height / 1.8;
-            GlStateManager.translate(x, y + entity.height * clientSettings.hudSettings.styleOP.verticalPercent + clientSettings.hudSettings.styleOP.verticalOffset - 0.5 - 0.108 * cnpcScale, z);
+            GlStateManager.translate(x, y + entity.height * clientSettings.hudSettings.ophudStyle.verticalPercent + clientSettings.hudSettings.ophudStyle.verticalOffset - 0.5 - 0.108 * cnpcScale, z);
             GlStateManager.rotate(-viewerYaw, 0, 1, 0);
             GlStateManager.rotate(renderManager.options.thirdPersonView == 2 ? -viewerPitch : viewerPitch, 1, 0, 0);
-            GlStateManager.translate(entity.width * clientSettings.hudSettings.styleOP.horizontalPercent, 0, 0);
+            GlStateManager.translate(entity.width * clientSettings.hudSettings.ophudStyle.horizontalPercent, 0, 0);
 
             scale *= cnpcScale;
             GlStateManager.scale(-scale, -scale, scale);
@@ -178,10 +174,10 @@ public class HUD extends Gui
         }
         else
         {
-            GlStateManager.translate(x, y + entity.height * clientSettings.hudSettings.styleOP.verticalPercent - (clientSettings.hudSettings.styleOP.accountForSneak && entity.isSneaking() ? 0.25 : 0) + clientSettings.hudSettings.styleOP.verticalOffset, z);
+            GlStateManager.translate(x, y + entity.height * clientSettings.hudSettings.ophudStyle.verticalPercent - (clientSettings.hudSettings.ophudStyle.accountForSneak && entity.isSneaking() ? 0.25 : 0) + clientSettings.hudSettings.ophudStyle.verticalOffset, z);
             GlStateManager.rotate(-viewerYaw, 0, 1, 0);
             GlStateManager.rotate(renderManager.options.thirdPersonView == 2 ? -viewerPitch : viewerPitch, 1, 0, 0);
-            GlStateManager.translate(entity.width * clientSettings.hudSettings.styleOP.horizontalPercent, 0, 0);
+            GlStateManager.translate(entity.width * clientSettings.hudSettings.ophudStyle.horizontalPercent, 0, 0);
             GlStateManager.scale(-scale, -scale, scale);
         }
 
@@ -254,14 +250,39 @@ public class HUD extends Gui
 
     public static boolean detailFilter(int color)
     {
-        if (color == COLOR_BYPASS) return clientSettings.hudSettings.filterDetail.showBypass;
-        else if (color == COLOR_PASSIVE) return clientSettings.hudSettings.filterDetail.showPassive;
-        else if (color == COLOR_IDLE) return clientSettings.hudSettings.filterDetail.showIdle;
-        else if (color == COLOR_ALERT) return clientSettings.hudSettings.filterDetail.showAlert;
-        else if (color == COLOR_ATTACKING_YOU) return clientSettings.hudSettings.filterDetail.showAttackingYou;
-        else if (color == COLOR_ATTACKING_OTHER) return clientSettings.hudSettings.filterDetail.showAttackingOther;
-        else if (color == COLOR_FLEEING) return clientSettings.hudSettings.filterDetail.showFleeing;
+        if (color == COLOR_BYPASS) return clientSettings.hudSettings.targetingFilter.showBypass;
+        else if (color == COLOR_PASSIVE) return clientSettings.hudSettings.targetingFilter.showPassive;
+        else if (color == COLOR_IDLE) return clientSettings.hudSettings.targetingFilter.showIdle;
+        else if (color == COLOR_ALERT) return clientSettings.hudSettings.targetingFilter.showAlert;
+        else if (color == COLOR_ATTACKING_YOU) return clientSettings.hudSettings.targetingFilter.showAttackingYou;
+        else if (color == COLOR_ATTACKING_OTHER) return clientSettings.hudSettings.targetingFilter.showAttackingOther;
+        else if (color == COLOR_FLEEING) return clientSettings.hudSettings.targetingFilter.showFleeing;
         return false;
+    }
+
+    private static void drawArrow(float x, float y, float angleDeg)
+    {
+        GlStateManager.enableTexture2D();
+        textureManager.bindTexture(ARROW_TEXTURE);
+
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x, y, 0);
+        GlStateManager.rotate(angleDeg, 0, 0, 1);
+        float arrowScale = clientSettings.hudSettings.targetingStyle.arrowSize / Tools.max(ARROW_WIDTH, ARROW_HEIGHT);
+        GlStateManager.scale(arrowScale, arrowScale, 1);
+
+        GlStateManager.glBegin(GL_QUADS);
+        GlStateManager.glTexCoord2f(ARROW_UV_HALF_PIXEL_W, ARROW_UV_HALF_PIXEL_H);
+        GlStateManager.glVertex3f(-ARROW_LEFT, -ARROW_ABOVE, 0);
+        GlStateManager.glTexCoord2f(ARROW_UV_HALF_PIXEL_W, 1f - ARROW_UV_HALF_PIXEL_H);
+        GlStateManager.glVertex3f(-ARROW_LEFT, ARROW_BELOW, 0);
+        GlStateManager.glTexCoord2f(1f - ARROW_UV_HALF_PIXEL_W, 1f - ARROW_UV_HALF_PIXEL_H);
+        GlStateManager.glVertex3f(ARROW_RIGHT, ARROW_BELOW, 0);
+        GlStateManager.glTexCoord2f(1f - ARROW_UV_HALF_PIXEL_W, ARROW_UV_HALF_PIXEL_H);
+        GlStateManager.glVertex3f(ARROW_RIGHT, -ARROW_ABOVE, 0);
+        GlStateManager.glEnd();
+
+        GlStateManager.popMatrix();
     }
 
     private void drawHUD(Minecraft mc)
@@ -321,8 +342,7 @@ public class HUD extends Gui
             {
                 //Offscreen indicator
                 Color c = new Color(detailData.color, true);
-                float alpha = 0.5f;
-                GlStateManager.color(c.rf(), c.gf(), c.bf(), alpha);
+                GlStateManager.color(c.rf(), c.gf(), c.bf(), (float) clientSettings.hudSettings.targetingStyle.arrowAlpha);
 
                 double centerX = Render.getViewportWidth() * 0.5, centerY = Render.getViewportHeight() * 0.5;
                 double angleRad = TRIG_TABLE.arctanFullcircle(centerX, centerY, originX, originY);
@@ -355,8 +375,15 @@ public class HUD extends Gui
                 ArrayList<String> elements = new ArrayList<>();
 
                 if (!Compat.neat) elements.add(entity.getName());
-                if (targetID != -1 && targetID != -2) elements.add("Targeting " + (target == null ? UNKNOWN : target.getName()));
-                else if (detailData.percent > 0) elements.add("Searching for target");
+                if (detailData.color == COLOR_FLEEING)
+                {
+                    elements.add("Fleeing from " + (target == null ? UNKNOWN : target.getName()));
+                }
+                else
+                {
+                    if (targetID != -1 && targetID != -2) elements.add("Targeting " + (target == null ? UNKNOWN : target.getName()));
+                    else if (detailData.percent > 0) elements.add("Searching for target");
+                }
                 if (detailData.color == COLOR_BYPASS) elements.add("Threat: §k000");
                 else if (detailData.percent > 0) elements.add("Threat: " + detailData.percent + "%");
                 elements.add("Distance: " + oneDecimal.format(entity.getDistance(Minecraft.getMinecraft().player)));
@@ -373,7 +400,7 @@ public class HUD extends Gui
                 double offDist = entity.width / 2 + 0.6;
                 float offX = 30;
                 double scaledW = sr.getScaledWidth_double(), scaledH = sr.getScaledHeight_double();
-                float alpha = 0.5f;
+                float alpha = (float) clientSettings.hudSettings.targetingStyle.mainAlpha;
                 int color = detailData.color | ((int) (0xFF * alpha) << 24);
                 if (originX < portW >> 1)
                 {
@@ -439,29 +466,5 @@ public class HUD extends Gui
         {
             MCTools.crash(e, 155, false);
         }
-    }
-
-    private static void drawArrow(float x, float y, float angleDeg)
-    {
-        GlStateManager.enableTexture2D();
-        textureManager.bindTexture(ARROW_TEXTURE);
-
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(x, y, 0);
-        GlStateManager.rotate(angleDeg, 0, 0, 1);
-        GlStateManager.scale(ARROW_SCALE, ARROW_SCALE, 1);
-
-        GlStateManager.glBegin(GL_QUADS);
-        GlStateManager.glTexCoord2f(ARROW_UV_HALF_PIXEL_W, ARROW_UV_HALF_PIXEL_H);
-        GlStateManager.glVertex3f(-ARROW_LEFT, -ARROW_ABOVE, 0);
-        GlStateManager.glTexCoord2f(ARROW_UV_HALF_PIXEL_W, 1f - ARROW_UV_HALF_PIXEL_H);
-        GlStateManager.glVertex3f(-ARROW_LEFT, ARROW_BELOW, 0);
-        GlStateManager.glTexCoord2f(1f - ARROW_UV_HALF_PIXEL_W, 1f - ARROW_UV_HALF_PIXEL_H);
-        GlStateManager.glVertex3f(ARROW_RIGHT, ARROW_BELOW, 0);
-        GlStateManager.glTexCoord2f(1f - ARROW_UV_HALF_PIXEL_W, ARROW_UV_HALF_PIXEL_H);
-        GlStateManager.glVertex3f(ARROW_RIGHT, -ARROW_ABOVE, 0);
-        GlStateManager.glEnd();
-
-        GlStateManager.popMatrix();
     }
 }

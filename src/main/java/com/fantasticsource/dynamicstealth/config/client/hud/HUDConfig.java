@@ -5,11 +5,14 @@ import net.minecraftforge.common.config.Config;
 public class HUDConfig
 {
     @Config.Name("On-point HUD Filter")
-    public OPHUDFilterConfig filterOP = new OPHUDFilterConfig();
+    public OPHUDFilterConfig ophudFilter = new OPHUDFilterConfig();
 
     @Config.Name("On-point HUD Style")
-    public OPHUDStyleConfig styleOP = new OPHUDStyleConfig();
+    public OPHUDStyleConfig ophudStyle = new OPHUDStyleConfig();
 
-    @Config.Name("Detail HUD Filter")
-    public DetailHUDFilterConfig filterDetail = new DetailHUDFilterConfig();
+    @Config.Name("Targeting Filter")
+    public TargetingFilterConfig targetingFilter = new TargetingFilterConfig();
+
+    @Config.Name("Targeting HUD Style")
+    public TargetingHUDStyleConfig targetingStyle = new TargetingHUDStyleConfig();
 }

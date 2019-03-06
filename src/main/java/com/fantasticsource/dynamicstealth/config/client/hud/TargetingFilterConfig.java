@@ -2,7 +2,7 @@ package com.fantasticsource.dynamicstealth.config.client.hud;
 
 import net.minecraftforge.common.config.Config;
 
-public class DetailHUDFilterConfig
+public class TargetingFilterConfig
 {
     @Config.Name("Passive")
     @Config.Comment({"If true, the detail HUD shows when focused on a passive entity"})
