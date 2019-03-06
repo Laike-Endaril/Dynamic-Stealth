@@ -37,6 +37,8 @@ public class ClientData
 
     public static final String UNKNOWN = "???";
 
+    public static int stealthLevel = Byte.MIN_VALUE;
+
     public static boolean soulSight = false;
     public static boolean usePlayerSenses = false;
 
@@ -50,6 +52,8 @@ public class ClientData
     @SubscribeEvent
     public static void clearClientData(FMLNetworkEvent.ClientDisconnectionFromServerEvent event)
     {
+        stealthLevel = Byte.MIN_VALUE;
+
         soulSight = false;
         usePlayerSenses = false;
 

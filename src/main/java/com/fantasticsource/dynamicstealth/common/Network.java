@@ -49,7 +49,7 @@ public class Network
         if (event.side == Side.SERVER && event.phase == TickEvent.Phase.END)
         {
             EntityPlayerMP player = (EntityPlayerMP) event.player;
-            if (player != null && player.world.loadedEntityList.contains(player))
+            if (player != null && player.world.loadedEntityList.contains(player) && player.isEntityAlive())
             {
                 if (EntitySightData.hasSoulSight(player))
                 {
@@ -70,19 +70,21 @@ public class Network
 
                 if (serverSettings.senses.usePlayerSenses) WRAPPER.sendTo(new VisibilityPacket(player), player);
 
-                boolean opHUD, detailedOPHUD;
+                boolean opHUD, detailedOPHUD, stealthGauge;
                 if (isOP(player))
                 {
                     opHUD = serverSettings.hud.allowOPHUD > 0;
                     detailedOPHUD = serverSettings.hud.allowDetailedOPHUD > 0;
+                    stealthGauge = serverSettings.hud.allowStealthGauge > 0;
                 }
                 else
                 {
                     opHUD = serverSettings.hud.allowOPHUD > 1;
                     detailedOPHUD = serverSettings.hud.allowDetailedOPHUD > 1;
+                    stealthGauge = serverSettings.hud.allowStealthGauge > 1;
                 }
 
-                if (opHUD) WRAPPER.sendTo(new HUDPacket(player, detailedOPHUD), player);
+                if (opHUD || stealthGauge) WRAPPER.sendTo(new HUDPacket(player, opHUD, detailedOPHUD, stealthGauge ? (int) (Sight.totalStealthLevel(player) * 100d) : Byte.MIN_VALUE), player);
             }
         }
     }
@@ -270,6 +272,7 @@ public class Network
         ExplicitPriorityQueue<EntityLivingBase> queue;
 
         boolean detailHUD;
+        int stealthLevel;
 
         ArrayList<ClientData.OnPointData> list = new ArrayList<>();
 
@@ -277,12 +280,13 @@ public class Network
         {
         }
 
-        public HUDPacket(EntityPlayerMP player, boolean detailHUD)
+        public HUDPacket(EntityPlayerMP player, boolean opHUD, boolean detailHUD, int stealthLevel)
         {
             this.player = player;
             this.detailHUD = detailHUD;
+            this.stealthLevel = stealthLevel;
 
-            queue = Sight.seenEntities(player, true);
+            queue = opHUD ? Sight.seenEntities(player, true) : new ExplicitPriorityQueue<>();
         }
 
         @Override
@@ -290,6 +294,8 @@ public class Network
         {
             EntityLivingBase searcher;
             int maxThreat = serverSettings.threat.maxThreat;
+
+            buf.writeByte(stealthLevel);
 
             buf.writeBoolean(detailHUD);
             buf.writeInt(queue.size());
@@ -360,6 +366,8 @@ public class Network
         {
             list.clear();
 
+            stealthLevel = buf.readByte();
+
             detailHUD = buf.readBoolean();
             int remaining = buf.readInt();
 
@@ -389,6 +397,9 @@ public class Network
             {
                 Minecraft.getMinecraft().addScheduledTask(() ->
                 {
+                    ClientData.stealthLevel = packet.stealthLevel;
+                    System.out.println(ClientData.stealthLevel);
+
                     ClientData.detailData = null;
                     for (ClientData.OnPointData data : packet.list)
                     {

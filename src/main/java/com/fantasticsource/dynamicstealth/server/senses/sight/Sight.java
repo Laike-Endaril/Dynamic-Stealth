@@ -31,7 +31,6 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -50,8 +49,9 @@ public class Sight
 
     private static Map<EntityLivingBase, Map<Entity, SeenData>> recentlySeenMap = new LinkedHashMap<>();
 
+    private static Map<Entity, Double> stealthLevels = new LinkedHashMap<>();
+
     private static Map<Pair<EntityPlayerMP, Boolean>, ExplicitPriorityQueue<EntityLivingBase>> playerSeenThisTickMap = new LinkedHashMap<>();
-    private static Map<EntityLiving, ArrayList<EntityLivingBase>> entitySeenThisTickMap = new LinkedHashMap<>();
 
 
     @SubscribeEvent
@@ -59,8 +59,8 @@ public class Sight
     {
         if (event.phase == TickEvent.Phase.END)
         {
+            stealthLevels.clear();
             playerSeenThisTickMap.clear();
-            entitySeenThisTickMap.clear();
             recentlySeenMap.entrySet().removeIf(Sight::entityRemoveIfEmpty);
         }
     }
@@ -128,6 +128,7 @@ public class Sight
         searcher.world.profiler.endSection();
 
         //Save cache
+        stealthLevels.put(target, Tools.min(stealthLevels.getOrDefault(target, result), result) - 1);
         if (map == null)
         {
             map = new LinkedHashMap<>();
@@ -397,7 +398,7 @@ public class Sight
         EntityLivingBase targetLivingBase = isLivingBase ? (EntityLivingBase) target : null;
 
         //Glowing (absolute, after Angles)
-        if (sight.g_absolutes.seeGlowing && isLivingBase && targetLivingBase.getActivePotionEffect(MobEffects.GLOWING) != null) return 0;
+        if (sight.g_absolutes.seeGlowing && isLivingBase && targetLivingBase.getActivePotionEffect(MobEffects.GLOWING) != null) return -777;
 
 
         //LOS check (absolute, after Angles, after Glowing)
@@ -467,6 +468,13 @@ public class Sight
 
         //Final calculation
         return Math.sqrt(distSquared) / (distanceThreshold * lightFactor * configMultipliers * attributeMultipliers);
+    }
+
+    public static double totalStealthLevel(Entity entity)
+    {
+        double r = Tools.min(Tools.max(stealthLevels.getOrDefault(entity, 1d), -1), 1);
+        System.out.println(r);
+        return r;
     }
 
     private static class SeenData

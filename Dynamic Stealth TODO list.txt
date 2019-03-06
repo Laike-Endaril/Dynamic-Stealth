@@ -2,7 +2,11 @@ CURRENTLY WORKING ON ===================================================
 
 Update fantasticlib requirement, and release new fantasticlib
 
-Stealth gauge
+Check stealth formulas; they seem broken
+
+Stealth gauge using ClientData.stealthLevel...
+...Byte.MIN_VALUE means disabled by server
+...else percentage from -100 to +100?
 
 Directional indicators...
 ...add optional "damaged from" indicator, which draws an indicator pointing the direction damage was recently received from
