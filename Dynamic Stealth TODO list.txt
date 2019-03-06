@@ -2,11 +2,14 @@ CURRENTLY WORKING ON ===================================================
 
 Update fantasticlib requirement, and release new fantasticlib
 
+Stealth gauge
+
 Directional indicators...
 ...add optional "damaged from" indicator, which draws an indicator pointing the direction damage was recently received from
 ...add optional touch detection indicator for players (see to do in DynamicStealth.java)
 
-Skyrim-style "eye" indicator
+"Lock Target" key (press to lock/unlock current target)
+"Aim Assist" key (hold to automatically face current target)
 
 Add wiki / guide videos
 Add guidebook, possibly using guide api or patchouli
@@ -40,8 +43,6 @@ Use tracking system (Tracking class) for something, or remove it
 
 
 BUG FIXES ==============================================================
-
-When the player has soulsight, sometimes certain entities don't render, probably due to vanilla chunk render check?
 
 Fix entities attempting to path through diagonal walls; this may very well fix (or at least mostly fix) the issue below
 Fix entities being able to attack through glass diagonally (because they can see through it...)
@@ -83,12 +84,6 @@ VISUAL INDICATORS ======================================================
 Add indicator for where a mob WAS when you last saw it...
 ...show the mob, as it was last seen, but black and white with partial transparency
 ...make the on-point HUD above it into an X with coloration
-
-Add target locking (press button to lock/unlock on current target)
-
-Add to HUD...
-...light
-...combined stealth multiplier?
 
 
 

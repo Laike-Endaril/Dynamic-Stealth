@@ -345,7 +345,7 @@ public class AIDynamicStealth extends EntityAIBase
             navigator.clearPath();
 
             EntityLivingBase target = Threat.getTarget(searcher);
-            if (canSee(searcher, target, false, true, MCTools.getYawDeg(searcher.getPositionVector(), new Vec3d(lastKnownPosition), TRIG_TABLE), MCTools.getPitchDeg(searcher.getPositionVector(), new Vec3d(lastKnownPosition), TRIG_TABLE)))
+            if (canSee(searcher, target, false, MCTools.getYawDeg(searcher.getPositionVector(), new Vec3d(lastKnownPosition), TRIG_TABLE), MCTools.getPitchDeg(searcher.getPositionVector(), new Vec3d(lastKnownPosition), TRIG_TABLE)))
             {
                 //See target; warn, apply desperation effects if flee reason is low hp, and retaliate
                 lastKnownPosition = target.getPosition();

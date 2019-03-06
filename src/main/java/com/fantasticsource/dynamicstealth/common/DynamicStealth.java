@@ -427,7 +427,7 @@ public class DynamicStealth
 
                 //Look toward damage, check sight, and set perceived position
                 makeLivingLookTowardEntity(target, attacker);
-                boolean canSee = Sight.canSee(target, attacker, false, true);
+                boolean canSee = Sight.canSee(target, attacker, false);
                 BlockPos perceivedPos = attacker.getPosition();
                 if (!canSee)
                 {

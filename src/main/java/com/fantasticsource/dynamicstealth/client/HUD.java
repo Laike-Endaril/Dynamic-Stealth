@@ -468,6 +468,9 @@ public class HUD extends Gui
                 }
 
                 GlStateManager.popMatrix();
+
+
+                //TODO stealth gauge
             }
         }
         catch (IllegalAccessException e)

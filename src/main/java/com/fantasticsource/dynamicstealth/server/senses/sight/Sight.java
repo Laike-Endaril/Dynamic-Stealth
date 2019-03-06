@@ -90,62 +90,62 @@ public class Sight
 
     public static boolean canSee(EntityLivingBase searcher, Entity target)
     {
-        return visualStealthLevel(searcher, target, true, true, searcher.rotationYawHead, searcher.rotationPitch) <= 1;
+        return visualStealthLevel(searcher, target, true, searcher.rotationYawHead, searcher.rotationPitch) <= 1;
     }
 
-    public static boolean canSee(EntityLivingBase searcher, Entity target, boolean useCache, boolean saveCache)
+    public static boolean canSee(EntityLivingBase searcher, Entity target, boolean useCache)
     {
-        return visualStealthLevel(searcher, target, useCache, saveCache, searcher.rotationYawHead, searcher.rotationPitch) <= 1;
+        return visualStealthLevel(searcher, target, useCache, searcher.rotationYawHead, searcher.rotationPitch) <= 1;
     }
 
-    public static boolean canSee(EntityLivingBase searcher, Entity target, boolean useCache, boolean saveCache, double yaw, double pitch)
+    public static boolean canSee(EntityLivingBase searcher, Entity target, boolean useCache, double yaw, double pitch)
     {
-        return visualStealthLevel(searcher, target, useCache, saveCache, yaw, pitch) <= 1;
+        return visualStealthLevel(searcher, target, useCache, yaw, pitch) <= 1;
     }
 
     public static double visualStealthLevel(EntityLivingBase searcher, Entity target)
     {
-        return visualStealthLevel(searcher, target, true, true, searcher.rotationYawHead, searcher.rotationPitch);
+        return visualStealthLevel(searcher, target, true, searcher.rotationYawHead, searcher.rotationPitch);
     }
 
-    public static double visualStealthLevel(EntityLivingBase searcher, Entity target, boolean useCache, boolean saveCache, double yaw, double pitch)
+    public static double visualStealthLevel(EntityLivingBase searcher, Entity target, boolean useCache, double yaw, double pitch)
     {
         if (searcher == null || target == null || !searcher.world.isBlockLoaded(searcher.getPosition()) || !target.world.isBlockLoaded(target.getPosition())) return 777;
         if (searcher.world != target.world) return 777;
 
         Map<Entity, SeenData> map = recentlySeenMap.get(searcher);
 
+        //If applicable, load from cache and return
         if (map != null && useCache)
         {
             SeenData data = map.get(target);
             if (data != null && data.lastUpdateTime == currentTick()) return data.lastStealthLevel;
         }
 
+        //Calculate
         searcher.world.profiler.startSection("DS Sight checks");
         double result = visualStealthLevelInternal(searcher, target, yaw, pitch);
         searcher.world.profiler.endSection();
 
-        if (saveCache)
+        //Save cache
+        if (map == null)
         {
-            if (map == null)
-            {
-                map = new LinkedHashMap<>();
-                recentlySeenMap.put(searcher, map);
-                map.put(target, new SeenData(result));
-            }
+            map = new LinkedHashMap<>();
+            recentlySeenMap.put(searcher, map);
+            map.put(target, new SeenData(result));
+        }
+        else
+        {
+            SeenData data = map.get(target);
+            if (data == null) map.put(target, new SeenData(result));
             else
             {
-                SeenData data = map.get(target);
-                if (data == null) map.put(target, new SeenData(result));
-                else
+                data.lastUpdateTime = currentTick();
+                data.lastStealthLevel = result;
+                if (result <= 1)
                 {
-                    data.lastUpdateTime = currentTick();
-                    data.lastStealthLevel = result;
-                    if (result <= 1)
-                    {
-                        data.seen = true;
-                        data.lastSeenTime = currentTick();
-                    }
+                    data.seen = true;
+                    data.lastSeenTime = currentTick();
                 }
             }
         }
