@@ -58,7 +58,6 @@ public class Commands extends CommandBase
         {
             try
             {
-                System.out.println(ConfigHandler.fullConfigFilename);
                 MCTools.reloadConfig(ConfigHandler.fullConfigFilename, DynamicStealth.MODID);
                 notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.reloaded");
             }
