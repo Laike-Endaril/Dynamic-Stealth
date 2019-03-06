@@ -6,11 +6,44 @@ public class TargetingHUDStyleConfig
 {
     @Config.Name("Glow")
     @Config.Comment("If true, the currently targeted entity is highlighted with a glow effect")
-    public boolean glow = true;
+    public boolean glow = false;
 
-    @Config.Name("Colored Glow")
+    @Config.Name("State-Colored Glow")
     @Config.Comment("If this and Glow are both set to true, the currently targeted entity glows in a color pertaining to its current state instead of white")
-    public boolean colorGlow = true;
+    public boolean stateColoredGlow = true;
+
+    @Config.Name("Reticle Opacity")
+    @Config.Comment(
+            {
+                    "How visible the targeting reticle is, transparency-wise",
+                    "",
+                    "0 means invisible, 1 means completely opaque"
+            })
+    @Config.RangeDouble(min = 0, max = 1)
+    public double reticleAlpha = 1;
+
+    @Config.Name("Default Reticle Color")
+    @Config.Comment(
+            {
+                    "The color of the targeting reticle, if state-colored reticle is false",
+                    "",
+                    "This uses the format RRGGBB color format (if you google RRGGBB you'll find a color picker you can use)"
+            })
+    public String defaultReticleColor = "FFFFFF";
+
+    @Config.Name("State-Colored Reticle")
+    @Config.Comment("If true, the targeting reticle is drawn in a color pertaining to the target's current state")
+    public boolean stateColoredReticle = true;
+
+    @Config.Name("Reticle Spacing")
+    @Config.Comment("How far the parts of the targeting reticle are from the center")
+    @Config.RangeInt(min = 0)
+    public int reticleSpacing = 7;
+
+    @Config.Name("Reticle Size")
+    @Config.Comment("The size of the reticle parts")
+    @Config.RangeInt(min = 1)
+    public int reticleSize = 10;
 
     @Config.Name("Main HUD Opacity")
     @Config.Comment(
@@ -33,11 +66,29 @@ public class TargetingHUDStyleConfig
     @Config.RangeDouble(min = 0, max = 1)
     public double arrowAlpha = 0.5;
 
+    @Config.Name("Default Arrow Color")
+    @Config.Comment(
+            {
+                    "The color of the directional indicator for the main target, if state-colored arrow is false",
+                    "This arrow is only visible when the current target is off-screen",
+                    "",
+                    "This uses the format RRGGBB color format (if you google RRGGBB you'll find a color picker you can use)"
+            })
+    public String defaultArrowColor = "FFFFFF";
+
+    @Config.Name("State-Colored Arrow")
+    @Config.Comment(
+            {
+                    "If true, the directional indicator for the main target is drawn in a color pertaining to the target's current state",
+                    "This arrow is only visible when the current target is off-screen"
+            })
+    public boolean stateColoredArrow = true;
+
     @Config.Name("Arrow Size")
     @Config.Comment(
             {
                     "The size of the directional indicator for the main target",
-                    "This arrow is only visible when the current target is off-screen",
+                    "This arrow is only visible when the current target is off-screen"
             })
     @Config.RangeInt(min = 1)
     public int arrowSize = 32;

@@ -139,7 +139,7 @@ public class RenderAlterer
 
 
             //Focused target glow effect
-            if (clientSettings.hudSettings.targetingStyle.glow && clientSettings.hudSettings.targetingStyle.colorGlow)
+            if (clientSettings.hudSettings.targetingStyle.glow && clientSettings.hudSettings.targetingStyle.stateColoredGlow)
             {
                 ClientData.OnPointData data = ClientData.detailData;
                 if (data != null && data.searcherID == livingBase.getEntityId())

@@ -260,7 +260,7 @@ public class HUD extends Gui
         return false;
     }
 
-    private static void drawArrow(float x, float y, float angleDeg)
+    private static void drawArrow(float x, float y, float angleDeg, float scale)
     {
         GlStateManager.enableTexture2D();
         textureManager.bindTexture(ARROW_TEXTURE);
@@ -268,8 +268,7 @@ public class HUD extends Gui
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, 0);
         GlStateManager.rotate(angleDeg, 0, 0, 1);
-        float arrowScale = clientSettings.hudSettings.targetingStyle.arrowSize / Tools.max(ARROW_WIDTH, ARROW_HEIGHT);
-        GlStateManager.scale(arrowScale, arrowScale, 1);
+        GlStateManager.scale(scale, scale, 1);
 
         GlStateManager.glBegin(GL_QUADS);
         GlStateManager.glTexCoord2f(ARROW_UV_HALF_PIXEL_W, ARROW_UV_HALF_PIXEL_H);
@@ -283,6 +282,17 @@ public class HUD extends Gui
         GlStateManager.glEnd();
 
         GlStateManager.popMatrix();
+    }
+
+    private static void drawReticle(float x, float y)
+    {
+        int spacing = clientSettings.hudSettings.targetingStyle.reticleSpacing;
+        float scale = clientSettings.hudSettings.targetingStyle.reticleSize / Tools.max(ARROW_WIDTH, ARROW_HEIGHT);
+
+        drawArrow(x - spacing, y + spacing, -45, scale);
+        drawArrow(x + spacing, y + spacing, -135, scale);
+        drawArrow(x - spacing, y - spacing, 45, scale);
+        drawArrow(x + spacing, y - spacing, 135, scale);
     }
 
     private void drawHUD(Minecraft mc)
@@ -341,7 +351,12 @@ public class HUD extends Gui
             if (offScreen)
             {
                 //Offscreen indicator
-                Color c = new Color(detailData.color, true);
+                Color c;
+                if (clientSettings.hudSettings.targetingStyle.stateColoredArrow)
+                {
+                    c = new Color(detailData.color, true);
+                }
+                else c = new Color(Integer.parseInt(clientSettings.hudSettings.targetingStyle.defaultArrowColor), true);
                 GlStateManager.color(c.rf(), c.gf(), c.bf(), (float) clientSettings.hudSettings.targetingStyle.arrowAlpha);
 
                 double centerX = Render.getViewportWidth() * 0.5, centerY = Render.getViewportHeight() * 0.5;
@@ -350,7 +365,7 @@ public class HUD extends Gui
                 double originDrawX = (centerX + dist * 0.4 * TRIG_TABLE.cos(angleRad)) / sr.getScaleFactor();
                 double originDrawY = (centerY - dist * 0.4 * TRIG_TABLE.sin(angleRad)) / sr.getScaleFactor();
 
-                drawArrow((float) originDrawX, (float) originDrawY, 360f - (float) Tools.radtodeg(angleRad));
+                drawArrow((float) originDrawX, (float) originDrawY, 360f - (float) Tools.radtodeg(angleRad), clientSettings.hudSettings.targetingStyle.arrowSize / Tools.max(ARROW_WIDTH, ARROW_HEIGHT));
             }
             else
             {
@@ -358,13 +373,15 @@ public class HUD extends Gui
                 float originDrawX = boundX / sr.getScaleFactor();
                 float originDrawY = boundY / sr.getScaleFactor();
 
-                GlStateManager.color(1, 1, 1, 1);
-                GlStateManager.glBegin(GL_LINES);
-                GlStateManager.glVertex3f(originDrawX - 10, originDrawY, 0);
-                GlStateManager.glVertex3f(originDrawX + 10, originDrawY, 0);
-                GlStateManager.glVertex3f(originDrawX, originDrawY - 10, 0);
-                GlStateManager.glVertex3f(originDrawX, originDrawY + 10, 0);
-                GlStateManager.glEnd();
+                Color c;
+                if (clientSettings.hudSettings.targetingStyle.stateColoredReticle)
+                {
+                    c = new Color(detailData.color, true);
+                }
+                else c = new Color(Integer.parseInt(clientSettings.hudSettings.targetingStyle.defaultReticleColor), true);
+                GlStateManager.color(c.rf(), c.gf(), c.bf(), (float) clientSettings.hudSettings.targetingStyle.reticleAlpha);
+
+                drawReticle(originDrawX, originDrawY);
 
 
                 //Text setup
@@ -402,6 +419,7 @@ public class HUD extends Gui
                 double scaledW = sr.getScaledWidth_double(), scaledH = sr.getScaledHeight_double();
                 float alpha = (float) clientSettings.hudSettings.targetingStyle.mainAlpha;
                 int color = detailData.color | ((int) (0xFF * alpha) << 24);
+                GlStateManager.disableTexture2D();
                 if (originX < portW >> 1)
                 {
                     pos = Render.getEntityXYInWindow(entity, offDist * -ActiveRenderInfo.getRotationX(), entity.height * 0.5, offDist * -ActiveRenderInfo.getRotationZ());
