@@ -13,7 +13,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -356,7 +355,7 @@ public class HUD extends Gui
                 {
                     c = new Color(detailData.color, true);
                 }
-                else c = new Color(Integer.parseInt(clientSettings.hudSettings.targetingStyle.defaultArrowColor), true);
+                else c = new Color(Integer.parseInt(clientSettings.hudSettings.targetingStyle.defaultArrowColor, 16), true);
                 GlStateManager.color(c.rf(), c.gf(), c.bf(), (float) clientSettings.hudSettings.targetingStyle.arrowAlpha);
 
                 double centerX = Render.getViewportWidth() * 0.5, centerY = Render.getViewportHeight() * 0.5;
@@ -378,7 +377,7 @@ public class HUD extends Gui
                 {
                     c = new Color(detailData.color, true);
                 }
-                else c = new Color(Integer.parseInt(clientSettings.hudSettings.targetingStyle.defaultReticleColor), true);
+                else c = new Color(Integer.parseInt(clientSettings.hudSettings.targetingStyle.defaultReticleColor, 16), true);
                 GlStateManager.color(c.rf(), c.gf(), c.bf(), (float) clientSettings.hudSettings.targetingStyle.reticleAlpha);
 
                 drawReticle(originDrawX, originDrawY);
@@ -413,71 +412,62 @@ public class HUD extends Gui
                 float height = fontRenderer.FONT_HEIGHT * elements.size() + padding * (elements.size() - 1);
 
 
-                //Main detailed OPHUD
-                double offDist = entity.width / 2 + 0.6;
-                float offX = 30;
-                double scaledW = sr.getScaledWidth_double(), scaledH = sr.getScaledHeight_double();
-                float alpha = (float) clientSettings.hudSettings.targetingStyle.mainAlpha;
-                int color = detailData.color | ((int) (0xFF * alpha) << 24);
+                //Targeting HUD text
+                float textScale = (float) clientSettings.hudSettings.targetingStyle.textScale;
+
+                float offX = 20;
+                float alpha = (float) clientSettings.hudSettings.targetingStyle.textAlpha;
+                int color = clientSettings.hudSettings.targetingStyle.stateColoredText ? detailData.color : Integer.parseInt(clientSettings.hudSettings.targetingStyle.defaultTextColor, 16);
+                color |= ((int) (0xFF * alpha) << 24);
                 GlStateManager.disableTexture2D();
-                if (originX < portW >> 1)
+
+                boolean toRight = originX < portW >> 1;
+                if (!toRight) offX = -offX;
+
+                pos = Render.getEntityXYInWindow(entity, 0, entity.height * 0.5, 0);
+                float drawX = pos.getKey() / sr.getScaleFactor() + offX, drawY = pos.getValue() / sr.getScaleFactor();
+
+                GlStateManager.pushMatrix();
+                GlStateManager.translate(drawX, drawY, 0);
+                GlStateManager.scale(textScale, textScale, 1);
+                GlStateManager.color(0, 0, 0, alpha);
+
+                if (toRight)
                 {
-                    pos = Render.getEntityXYInWindow(entity, offDist * -ActiveRenderInfo.getRotationX(), entity.height * 0.5, offDist * -ActiveRenderInfo.getRotationZ());
-                    float drawX = (pos.getKey() + offX) / sr.getScaleFactor(), drawY = pos.getValue() / sr.getScaleFactor();
-
-                    if (drawX - padding < 0) drawX = padding;
-                    else if (drawX + width + padding - 1 > scaledW) drawX = (float) scaledW - width - padding + 1;
-
-                    if (drawY - height / 2 - padding < 0) drawY = height / 2 + padding;
-                    else if (drawY + height / 2 + padding - 1 > scaledH) drawY = (float) scaledH - height / 2 - padding + 1;
-
-                    //TODO threat gauge
-
                     //Text background
-                    GlStateManager.color(0, 0, 0, alpha);
                     GlStateManager.glBegin(GL_QUADS);
-                    GlStateManager.glVertex3f(drawX - padding, drawY - height / 2 - padding, 0);
-                    GlStateManager.glVertex3f(drawX - padding, drawY + height / 2 + padding - 1, 0);
-                    GlStateManager.glVertex3f(drawX + width + padding - 1, drawY + height / 2 + padding - 1, 0);
-                    GlStateManager.glVertex3f(drawX + width + padding - 1, drawY - height / 2 - padding, 0);
+                    GlStateManager.glVertex3f(-padding, -height / 2 - padding, 0);
+                    GlStateManager.glVertex3f(-padding, height / 2 + padding - 1, 0);
+                    GlStateManager.glVertex3f(width + padding - 1, height / 2 + padding - 1, 0);
+                    GlStateManager.glVertex3f(width + padding - 1, -height / 2 - padding, 0);
                     GlStateManager.glEnd();
 
                     //Text elements
                     GlStateManager.enableTexture2D();
                     for (int i = 0; i < elements.size(); i++)
                     {
-                        fontRenderer.drawString(elements.get(i), drawX, drawY - height / 2 + height * i / elements.size(), color, false);
+                        fontRenderer.drawString(elements.get(i), 0, -height / 2 + height * i / elements.size(), color, false);
                     }
                 }
                 else
                 {
-                    pos = Render.getEntityXYInWindow(entity, offDist * ActiveRenderInfo.getRotationX(), entity.height * 0.5, offDist * ActiveRenderInfo.getRotationZ());
-                    float drawX = (pos.getKey() - offX) / sr.getScaleFactor(), drawY = pos.getValue() / sr.getScaleFactor();
-
-                    if (drawX - width - padding < 0) drawX = width + padding;
-                    else if (drawX + padding - 1 > scaledW) drawX = (float) scaledW - padding + 1;
-
-                    if (drawY - height / 2 - padding < 0) drawY = height / 2 + padding;
-                    else if (drawY + height / 2 + padding - 1 > scaledH) drawY = (float) scaledH - height / 2 - padding + 1;
-
-                    //TODO threat gauge
-
                     //Text background
-                    GlStateManager.color(0, 0, 0, alpha);
                     GlStateManager.glBegin(GL_QUADS);
-                    GlStateManager.glVertex3f(drawX - width - padding, drawY - height / 2 - padding, 0);
-                    GlStateManager.glVertex3f(drawX - width - padding, drawY + height / 2 + padding - 1, 0);
-                    GlStateManager.glVertex3f(drawX + padding - 1, drawY + height / 2 + padding - 1, 0);
-                    GlStateManager.glVertex3f(drawX + padding - 1, drawY - height / 2 - padding, 0);
+                    GlStateManager.glVertex3f(-width - padding, -height / 2 - padding, 0);
+                    GlStateManager.glVertex3f(-width - padding, height / 2 + padding - 1, 0);
+                    GlStateManager.glVertex3f(padding - 1, height / 2 + padding - 1, 0);
+                    GlStateManager.glVertex3f(padding - 1, -height / 2 - padding, 0);
                     GlStateManager.glEnd();
 
                     //Text elements
                     GlStateManager.enableTexture2D();
                     for (int i = 0; i < elements.size(); i++)
                     {
-                        fontRenderer.drawString(elements.get(i), drawX - width, drawY - height / 2 + height * i / elements.size(), color, false);
+                        fontRenderer.drawString(elements.get(i), -width, -height / 2 + height * i / elements.size(), color, false);
                     }
                 }
+
+                GlStateManager.popMatrix();
             }
         }
         catch (IllegalAccessException e)

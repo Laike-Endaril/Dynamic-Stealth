@@ -45,15 +45,33 @@ public class TargetingHUDStyleConfig
     @Config.RangeInt(min = 1)
     public int reticleSize = 10;
 
-    @Config.Name("Main HUD Opacity")
+    @Config.Name("Text Opacity")
     @Config.Comment(
             {
-                    "How visible the main targeting HUD is, transparency-wise",
+                    "How visible the text of the targeting HUD is, transparency-wise",
                     "",
                     "0 means invisible, 1 means completely opaque"
             })
     @Config.RangeDouble(min = 0, max = 1)
-    public double mainAlpha = 0.7;
+    public double textAlpha = 0.7;
+
+    @Config.Name("Default Text Color")
+    @Config.Comment(
+            {
+                    "The color of the targeting HUD text, if state-colored text is false",
+                    "",
+                    "This uses the format RRGGBB color format (if you google RRGGBB you'll find a color picker you can use)"
+            })
+    public String defaultTextColor = "FFFFFF";
+
+    @Config.Name("State-Colored Text")
+    @Config.Comment("If true, the targeting HUD text is drawn in a color pertaining to the target's current state")
+    public boolean stateColoredText = true;
+
+    @Config.Name("Text Scale")
+    @Config.Comment("The scale of the text for the targeting HUD")
+    @Config.RangeDouble(min = 0.1)
+    public double textScale = 0.6;
 
     @Config.Name("Arrow Opacity")
     @Config.Comment(
