@@ -50,10 +50,12 @@ public class HUD extends Gui
     private static final double BASIC_GAUGE_UV_HALF_PIXEL = 0.5 / BASIC_GAUGE_SIZE, BASIC_GAUGE_UV_SUBTEX_SIZE = 0.5 - BASIC_GAUGE_UV_HALF_PIXEL * 2;
 
     private static final ResourceLocation ARROW_TEXTURE = new ResourceLocation(DynamicStealth.MODID, "image/arrow.png");
-    private static final int ARROW_WIDTH = 30, ARROW_HEIGHT = 17;
-    private static final int ARROW_ORIGIN_X = 29, ARROW_ORIGIN_Y = 8;
-    private static final int ARROW_LEFT = ARROW_ORIGIN_X, ARROW_RIGHT = ARROW_WIDTH - ARROW_ORIGIN_X;
-    private static final int ARROW_ABOVE = ARROW_ORIGIN_Y, ARROW_BELOW = ARROW_HEIGHT - ARROW_ORIGIN_Y;
+    private static final float ARROW_GOAL_SIZE = 32;
+    private static final float ARROW_WIDTH = 152, ARROW_HEIGHT = 87;
+    private static final float ARROW_SCALE = ARROW_GOAL_SIZE / Tools.max(ARROW_WIDTH, ARROW_HEIGHT);
+    private static final float ARROW_ORIGIN_X = 151, ARROW_ORIGIN_Y = 43;
+    private static final float ARROW_LEFT = ARROW_ORIGIN_X, ARROW_RIGHT = ARROW_WIDTH - ARROW_ORIGIN_X;
+    private static final float ARROW_ABOVE = ARROW_ORIGIN_Y, ARROW_BELOW = ARROW_HEIGHT - ARROW_ORIGIN_Y;
     private static final float ARROW_UV_HALF_PIXEL_W = 0.5f / ARROW_WIDTH, ARROW_UV_HALF_PIXEL_H = 0.5f / ARROW_HEIGHT;
 
     static
@@ -283,9 +285,6 @@ public class HUD extends Gui
 
 
             //General Setup
-            float alpha = 0.6f;
-            int color = detailData.color | ((int) (0xFF * alpha) << 24);
-
             Pair<Float, Float> pos = Render.getEntityXYInWindow(entity, 0, entity.height * 0.5, 0);
             float originX = pos.getKey(), originY = pos.getValue();
 
@@ -322,6 +321,7 @@ public class HUD extends Gui
             {
                 //Offscreen indicator
                 Color c = new Color(detailData.color, true);
+                float alpha = 0.5f;
                 GlStateManager.color(c.rf(), c.gf(), c.bf(), alpha);
 
                 double centerX = Render.getViewportWidth() * 0.5, centerY = Render.getViewportHeight() * 0.5;
@@ -373,6 +373,8 @@ public class HUD extends Gui
                 double offDist = entity.width / 2 + 0.6;
                 float offX = 30;
                 double scaledW = sr.getScaledWidth_double(), scaledH = sr.getScaledHeight_double();
+                float alpha = 0.5f;
+                int color = detailData.color | ((int) (0xFF * alpha) << 24);
                 if (originX < portW >> 1)
                 {
                     pos = Render.getEntityXYInWindow(entity, offDist * -ActiveRenderInfo.getRotationX(), entity.height * 0.5, offDist * -ActiveRenderInfo.getRotationZ());
@@ -447,6 +449,7 @@ public class HUD extends Gui
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, 0);
         GlStateManager.rotate(angleDeg, 0, 0, 1);
+        GlStateManager.scale(ARROW_SCALE, ARROW_SCALE, 1);
 
         GlStateManager.glBegin(GL_QUADS);
         GlStateManager.glTexCoord2f(ARROW_UV_HALF_PIXEL_W, ARROW_UV_HALF_PIXEL_H);
