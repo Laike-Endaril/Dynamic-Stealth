@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
@@ -41,10 +42,19 @@ import static org.lwjgl.opengl.GL11.*;
 @SideOnly(Side.CLIENT)
 public class HUD extends Gui
 {
-    private static final ResourceLocation ICON_LOCATION = new ResourceLocation(DynamicStealth.MODID, "image/basicgauge.png");
-    private static final int TEX_SIZE = 32;
-    private static final double UV_HALF_PIXEL = 0.5 / TEX_SIZE, UV_SUBTEX_SIZE = 0.5 - UV_HALF_PIXEL * 2;
     private static Field renderManagerRenderOutlinesField;
+    private static TextureManager textureManager = Minecraft.getMinecraft().renderEngine;
+
+    private static final ResourceLocation BASIC_GAUGE_TEXTURE = new ResourceLocation(DynamicStealth.MODID, "image/basicgauge.png");
+    private static final int BASIC_GAUGE_SIZE = 32;
+    private static final double BASIC_GAUGE_UV_HALF_PIXEL = 0.5 / BASIC_GAUGE_SIZE, BASIC_GAUGE_UV_SUBTEX_SIZE = 0.5 - BASIC_GAUGE_UV_HALF_PIXEL * 2;
+
+    private static final ResourceLocation ARROW_TEXTURE = new ResourceLocation(DynamicStealth.MODID, "image/arrow.png");
+    private static final int ARROW_WIDTH = 30, ARROW_HEIGHT = 17;
+    private static final int ARROW_ORIGIN_X = 29, ARROW_ORIGIN_Y = 8;
+    private static final int ARROW_LEFT = ARROW_ORIGIN_X, ARROW_RIGHT = ARROW_WIDTH - ARROW_ORIGIN_X;
+    private static final int ARROW_ABOVE = ARROW_ORIGIN_Y, ARROW_BELOW = ARROW_HEIGHT - ARROW_ORIGIN_Y;
+    private static final float ARROW_UV_HALF_PIXEL_W = 0.5f / ARROW_WIDTH, ARROW_UV_HALF_PIXEL_H = 0.5f / ARROW_HEIGHT;
 
     static
     {
@@ -118,7 +128,7 @@ public class HUD extends Gui
 
         boolean depth = clientSettings.hudSettings.styleOP.depth;
         double scale = clientSettings.hudSettings.styleOP.scale * 0.025;
-        double halfSize2D = TEX_SIZE / 4D;
+        double halfSize2D = BASIC_GAUGE_SIZE / 4D;
         double hOff2D = clientSettings.hudSettings.styleOP.horizontalOffset2D;
         double vOff2D = Compat.neat ? clientSettings.hudSettings.styleOP.verticalOffset2D - 11 : clientSettings.hudSettings.styleOP.verticalOffset2D;
 
@@ -139,7 +149,7 @@ public class HUD extends Gui
         GlStateManager.blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         GlStateManager.enableTexture2D();
-        Minecraft.getMinecraft().renderEngine.bindTexture(ICON_LOCATION);
+        textureManager.bindTexture(BASIC_GAUGE_TEXTURE);
 
         GlStateManager.pushMatrix();
 
@@ -185,46 +195,46 @@ public class HUD extends Gui
         if (color == COLOR_PASSIVE || color == COLOR_IDLE || data.percent == -1)
         {
             //Fill for states that are always 100%
-            bufferbuilder.pos(left, top, 0).tex(UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(left, bottom, 0).tex(UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(right, bottom, 0).tex(0.5 - UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(right, top, 0).tex(0.5 - UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(left, top, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(left, bottom, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, 0.5 - BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(right, bottom, 0).tex(0.5 - BASIC_GAUGE_UV_HALF_PIXEL, 0.5 - BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(right, top, 0).tex(0.5 - BASIC_GAUGE_UV_HALF_PIXEL, BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
         }
         else
         {
             double amount = (double) data.percent / 100;
             double level = bottom - halfSize2D * 2 * amount;
-            double uvLevel = 0.5 - UV_HALF_PIXEL - UV_SUBTEX_SIZE * amount;
+            double uvLevel = 0.5 - BASIC_GAUGE_UV_HALF_PIXEL - BASIC_GAUGE_UV_SUBTEX_SIZE * amount;
 
             //Background fill
-            bufferbuilder.pos(left, top, 0).tex(UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
-            bufferbuilder.pos(left, level, 0).tex(UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
-            bufferbuilder.pos(right, level, 0).tex(0.5 - UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
-            bufferbuilder.pos(right, top, 0).tex(0.5 - UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
+            bufferbuilder.pos(left, top, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
+            bufferbuilder.pos(left, level, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
+            bufferbuilder.pos(right, level, 0).tex(0.5 - BASIC_GAUGE_UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
+            bufferbuilder.pos(right, top, 0).tex(0.5 - BASIC_GAUGE_UV_HALF_PIXEL, BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
 
             //Threat level fill
-            bufferbuilder.pos(left, level, 0).tex(UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(left, bottom, 0).tex(UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(right, bottom, 0).tex(0.5 - UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(right, level, 0).tex(0.5 - UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(left, level, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(left, bottom, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, 0.5 - BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(right, bottom, 0).tex(0.5 - BASIC_GAUGE_UV_HALF_PIXEL, 0.5 - BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(right, level, 0).tex(0.5 - BASIC_GAUGE_UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
         }
 
         //Outline and eyes
         if (color == COLOR_ATTACKING_YOU || color == COLOR_ALERT || color == COLOR_BYPASS)
         {
             //Angry, lit up eyes
-            bufferbuilder.pos(left, top, 0).tex(UV_HALF_PIXEL, 0.5 + UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(left, bottom, 0).tex(UV_HALF_PIXEL, 1 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(right, bottom, 0).tex(0.5 - UV_HALF_PIXEL, 1 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(right, top, 0).tex(0.5 - UV_HALF_PIXEL, 0.5 + UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(left, top, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, 0.5 + BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(left, bottom, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, 1 - BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(right, bottom, 0).tex(0.5 - BASIC_GAUGE_UV_HALF_PIXEL, 1 - BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(right, top, 0).tex(0.5 - BASIC_GAUGE_UV_HALF_PIXEL, 0.5 + BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
         }
         else
         {
             //Normal, empty eyes
-            bufferbuilder.pos(left, top, 0).tex(0.5 + UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(left, bottom, 0).tex(0.5 + UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(right, bottom, 0).tex(1 - UV_HALF_PIXEL, 0.5 - UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(right, top, 0).tex(1 - UV_HALF_PIXEL, UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(left, top, 0).tex(0.5 + BASIC_GAUGE_UV_HALF_PIXEL, BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(left, bottom, 0).tex(0.5 + BASIC_GAUGE_UV_HALF_PIXEL, 0.5 - BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(right, bottom, 0).tex(1 - BASIC_GAUGE_UV_HALF_PIXEL, 0.5 - BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            bufferbuilder.pos(right, top, 0).tex(1 - BASIC_GAUGE_UV_HALF_PIXEL, BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
         }
 
         tessellator.draw();
@@ -310,35 +320,17 @@ public class HUD extends Gui
 
             if (offScreen)
             {
-                //Onscreen reticle
-                float originDrawX = boundX / sr.getScaleFactor();
-                float originDrawY = boundY / sr.getScaleFactor();
+                //Offscreen indicator
+                Color c = new Color(detailData.color, true);
+                GlStateManager.color(c.rf(), c.gf(), c.bf(), alpha);
 
-                GlStateManager.color(1, 1, 1, 1);
-                GlStateManager.glBegin(GL_LINES);
-                GlStateManager.glVertex3f(originDrawX - 10, originDrawY, 0);
-                GlStateManager.glVertex3f(originDrawX + 10, originDrawY, 0);
-                GlStateManager.glVertex3f(originDrawX, originDrawY - 10, 0);
-                GlStateManager.glVertex3f(originDrawX, originDrawY + 10, 0);
-                GlStateManager.glEnd();
+                double centerX = Render.getViewportWidth() * 0.5, centerY = Render.getViewportHeight() * 0.5;
+                double angleRad = TRIG_TABLE.arctanFullcircle(centerX, centerY, originX, originY);
+                double dist = Tools.min(Render.getViewportWidth(), Render.getViewportHeight());
+                double originDrawX = (centerX + dist * 0.4 * TRIG_TABLE.cos(angleRad)) / sr.getScaleFactor();
+                double originDrawY = (centerY - dist * 0.4 * TRIG_TABLE.sin(angleRad)) / sr.getScaleFactor();
 
-
-                //Offscreen reticle
-//                double centerX = Render.getViewportWidth() * 0.5, centerY = Render.getViewportHeight() * 0.5;
-//                double theta = TRIG_TABLE.arctanFullcircle(centerX, centerY, originX, originY);
-//                float originDrawX = (float) (centerX + 20 * TRIG_TABLE.cos(theta)) / sr.getScaleFactor();
-//                float originDrawY = (float) (centerY - 20 * TRIG_TABLE.sin(theta)) / sr.getScaleFactor();
-
-//                GlStateManager.color(1, 1, 1, 1);
-//                GlStateManager.glBegin(GL_LINES);
-//                GlStateManager.glVertex3f(originDrawX - 10, originDrawY, 0);
-//                GlStateManager.glVertex3f(originDrawX + 10, originDrawY, 0);
-//                GlStateManager.glVertex3f(originDrawX, originDrawY - 10, 0);
-//                GlStateManager.glVertex3f(originDrawX, originDrawY + 10, 0);
-//                GlStateManager.glEnd();
-
-
-                GlStateManager.enableTexture2D();
+                drawArrow((float) originDrawX, (float) originDrawY, 360f - (float) Tools.radtodeg(angleRad));
             }
             else
             {
@@ -445,5 +437,28 @@ public class HUD extends Gui
         {
             MCTools.crash(e, 155, false);
         }
+    }
+
+    private static void drawArrow(float x, float y, float angleDeg)
+    {
+        GlStateManager.enableTexture2D();
+        textureManager.bindTexture(ARROW_TEXTURE);
+
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x, y, 0);
+        GlStateManager.rotate(angleDeg, 0, 0, 1);
+
+        GlStateManager.glBegin(GL_QUADS);
+        GlStateManager.glTexCoord2f(ARROW_UV_HALF_PIXEL_W, ARROW_UV_HALF_PIXEL_H);
+        GlStateManager.glVertex3f(-ARROW_LEFT, -ARROW_ABOVE, 0);
+        GlStateManager.glTexCoord2f(ARROW_UV_HALF_PIXEL_W, 1f - ARROW_UV_HALF_PIXEL_H);
+        GlStateManager.glVertex3f(-ARROW_LEFT, ARROW_BELOW, 0);
+        GlStateManager.glTexCoord2f(1f - ARROW_UV_HALF_PIXEL_W, 1f - ARROW_UV_HALF_PIXEL_H);
+        GlStateManager.glVertex3f(ARROW_RIGHT, ARROW_BELOW, 0);
+        GlStateManager.glTexCoord2f(1f - ARROW_UV_HALF_PIXEL_W, ARROW_UV_HALF_PIXEL_H);
+        GlStateManager.glVertex3f(ARROW_RIGHT, -ARROW_ABOVE, 0);
+        GlStateManager.glEnd();
+
+        GlStateManager.popMatrix();
     }
 }
