@@ -180,6 +180,15 @@ public class ConfigHandler
         Configuration current = new Configuration(currentFile);
         Configuration old = new Configuration(mostRecentFile);
 
+        log("Setting \"Allow On-Point HUD For Clients\" based on \"On-Point HUD for OP players\" and \"On-Point HUD for normal players\"");
+        Property p = current.getCategory("general.server settings.client hud allowances").get("Allow On-Point HUD For Clients");
+        if (old.get("general.server settings.client hud allowances", "On-Point HUD for normal players", 2).getInt() > 0) p.set(2);
+        else if (old.get("general.server settings.client hud allowances", "On-Point HUD for OP players", 2).getInt() > 0) p.set(1);
+        else p.set(0);
+        log();
+        log();
+        log();
+
         rename(old, current, "general.server settings.client hud allowances", "Allow detailed HUD on clients", "general.server settings.client hud allowances", "Allow Targeting HUD For Clients");
 
         log();
