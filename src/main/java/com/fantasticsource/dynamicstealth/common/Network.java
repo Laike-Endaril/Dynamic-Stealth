@@ -75,13 +75,13 @@ public class Network
                 if (isOP(player))
                 {
                     opHUD = serverSettings.hud.allowOPHUD > 0;
-                    detailedOPHUD = serverSettings.hud.allowDetailedOPHUD > 0;
+                    detailedOPHUD = serverSettings.hud.allowTargetingHUD > 0;
                     stealthGauge = serverSettings.hud.allowStealthGauge > 0;
                 }
                 else
                 {
                     opHUD = serverSettings.hud.allowOPHUD > 1;
-                    detailedOPHUD = serverSettings.hud.allowDetailedOPHUD > 1;
+                    detailedOPHUD = serverSettings.hud.allowTargetingHUD > 1;
                     stealthGauge = serverSettings.hud.allowStealthGauge > 1;
                 }
 

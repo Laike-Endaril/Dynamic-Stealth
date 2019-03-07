@@ -684,7 +684,7 @@ public class DynamicStealth
     }
 
     @EventHandler
-    public void preInit(FMLPreInitializationEvent event) throws NoSuchFieldException, IllegalAccessException
+    public void preInit(FMLPreInitializationEvent event) throws Exception
     {
         ConfigHandler.update();
 
