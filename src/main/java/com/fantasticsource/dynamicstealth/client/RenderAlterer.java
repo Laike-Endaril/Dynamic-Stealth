@@ -222,26 +222,29 @@ public class RenderAlterer
     public static void replaceLayers(EntityLivingBase livingBase)
     {
         Render render = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(livingBase);
-        try
+        if (render instanceof LayerRenderer)
         {
-            List<LayerRenderer> list = (List<LayerRenderer>) renderLivingBaseLayerRenderersField.get(render);
-            for (LayerRenderer layer : list.toArray(new LayerRenderer[list.size()]))
+            try
             {
-                if (layer instanceof LayerSpiderEyes)
+                List<LayerRenderer> list = (List<LayerRenderer>) renderLivingBaseLayerRenderersField.get(render);
+                for (LayerRenderer layer : list.toArray(new LayerRenderer[list.size()]))
                 {
-                    list.remove(layer);
-                    list.add(new LayerSpiderEyesEdit((RenderSpider) render));
-                }
-                else if (layer instanceof LayerEndermanEyes)
-                {
-                    list.remove(layer);
-                    list.add(new LayerEndermanEyesEdit((RenderEnderman) render));
+                    if (layer instanceof LayerSpiderEyes)
+                    {
+                        list.remove(layer);
+                        list.add(new LayerSpiderEyesEdit((RenderSpider) render));
+                    }
+                    else if (layer instanceof LayerEndermanEyes)
+                    {
+                        list.remove(layer);
+                        list.add(new LayerEndermanEyesEdit((RenderEnderman) render));
+                    }
                 }
             }
-        }
-        catch (IllegalAccessException e)
-        {
-            MCTools.crash(e, 157, false);
+            catch (IllegalAccessException e)
+            {
+                MCTools.crash(e, 157, false);
+            }
         }
     }
 }

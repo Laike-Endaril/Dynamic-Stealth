@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
+Make stealth level / visibility transitions smoother? (ie. change at a rate)
+
 Directional indicators...
 ...add optional "damaged from" indicator, which draws an indicator pointing the direction damage was recently received from
 ...add optional touch detection indicator for players (see to do in DynamicStealth.java)
