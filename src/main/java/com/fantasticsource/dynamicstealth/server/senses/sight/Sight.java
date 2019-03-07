@@ -48,12 +48,10 @@ public class Sight
     private static final SensesConfig senses = serverSettings.senses;
     private static final SightConfig sight = senses.sight;
 
+    public static int maxAITickrate = 1;
+    private static Map<Entity, Double> stealthLevels = new LinkedHashMap<>();
 
     private static Map<EntityLivingBase, Map<Entity, SeenData>> recentlySeenMap = new LinkedHashMap<>();
-
-    private static Map<Entity, Double> stealthLevels = new LinkedHashMap<>();
-    public static int maxAITickrate = 1;
-
     private static Map<Pair<EntityPlayerMP, Boolean>, ExplicitPriorityQueue<EntityLivingBase>> playerSeenThisTickMap = new LinkedHashMap<>();
 
 
