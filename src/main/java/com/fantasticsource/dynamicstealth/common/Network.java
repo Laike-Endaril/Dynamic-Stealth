@@ -5,6 +5,7 @@ import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
+import com.fantasticsource.mctools.ServerTickTimer;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -84,7 +85,11 @@ public class Network
                     stealthGauge = serverSettings.hud.allowStealthGauge > 1;
                 }
 
-                if (opHUD || stealthGauge) WRAPPER.sendTo(new HUDPacket(player, opHUD, detailedOPHUD, stealthGauge ? (int) (Sight.totalStealthLevel(player) * 100d) : Byte.MIN_VALUE), player);
+                if (opHUD || stealthGauge)
+                {
+                    double totalStealth = Sight.totalStealthLevel(player);
+                    WRAPPER.sendTo(new HUDPacket(player, opHUD, detailedOPHUD, !stealthGauge ? Byte.MIN_VALUE : totalStealth == Double.MAX_VALUE ? Byte.MIN_VALUE + 1 : (int) (totalStealth * 100)), player); //Byte.MIN_VALUE means disabled
+                }
             }
         }
     }
@@ -284,7 +289,9 @@ public class Network
         {
             this.player = player;
             this.detailHUD = detailHUD;
-            this.stealthLevel = stealthLevel;
+
+            if (ServerTickTimer.currentTick() % Sight.maxAITickrate == 0) this.stealthLevel = stealthLevel;
+            else this.stealthLevel = Byte.MIN_VALUE + 1;
 
             queue = opHUD ? Sight.seenEntities(player, true) : new ExplicitPriorityQueue<>();
         }
@@ -397,8 +404,11 @@ public class Network
             {
                 Minecraft.getMinecraft().addScheduledTask(() ->
                 {
-                    ClientData.stealthLevel = packet.stealthLevel;
-                    System.out.println(ClientData.stealthLevel);
+                    int stealth = packet.stealthLevel;
+                    if (stealth != Byte.MIN_VALUE + 1)
+                    {
+                        ClientData.stealthLevel = stealth;
+                    }
 
                     ClientData.detailData = null;
                     for (ClientData.OnPointData data : packet.list)

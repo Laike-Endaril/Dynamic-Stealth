@@ -4,8 +4,10 @@ import com.fantasticsource.dynamicstealth.compat.CompatDissolution;
 import com.fantasticsource.dynamicstealth.config.server.senses.SensesConfig;
 import com.fantasticsource.dynamicstealth.config.server.senses.sight.SightConfig;
 import com.fantasticsource.dynamicstealth.server.Attributes;
+import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
+import com.fantasticsource.mctools.ServerTickTimer;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import com.fantasticsource.tools.datastructures.Pair;
@@ -50,6 +52,7 @@ public class Sight
     private static Map<EntityLivingBase, Map<Entity, SeenData>> recentlySeenMap = new LinkedHashMap<>();
 
     private static Map<Entity, Double> stealthLevels = new LinkedHashMap<>();
+    public static int maxAITickrate = 1;
 
     private static Map<Pair<EntityPlayerMP, Boolean>, ExplicitPriorityQueue<EntityLivingBase>> playerSeenThisTickMap = new LinkedHashMap<>();
 
@@ -59,7 +62,7 @@ public class Sight
     {
         if (event.phase == TickEvent.Phase.END)
         {
-            stealthLevels.clear();
+            if (ServerTickTimer.currentTick() % maxAITickrate == 0) stealthLevels.clear();
             playerSeenThisTickMap.clear();
             recentlySeenMap.entrySet().removeIf(Sight::entityRemoveIfEmpty);
         }
@@ -128,7 +131,10 @@ public class Sight
         searcher.world.profiler.endSection();
 
         //Save cache
-        stealthLevels.put(target, Tools.min(stealthLevels.getOrDefault(target, result), result) - 1);
+        if (!EntityThreatData.isPassive(searcher))
+        {
+            stealthLevels.put(target, Tools.min(stealthLevels.getOrDefault(target, result - 1), result - 1));
+        }
         if (map == null)
         {
             map = new LinkedHashMap<>();
@@ -472,9 +478,7 @@ public class Sight
 
     public static double totalStealthLevel(Entity entity)
     {
-        double r = Tools.min(Tools.max(stealthLevels.getOrDefault(entity, 1d), -1), 1);
-        System.out.println(r);
-        return r;
+        return Tools.min(Tools.max(stealthLevels.getOrDefault(entity, Double.MAX_VALUE), -1), 1);
     }
 
     private static class SeenData
