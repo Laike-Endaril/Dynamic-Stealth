@@ -1,6 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-Update fantasticlib requirement, and release new fantasticlib
+Double check config conversion
 
 Directional indicators...
 ...add optional "damaged from" indicator, which draws an indicator pointing the direction damage was recently received from
