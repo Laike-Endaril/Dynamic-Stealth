@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.client;
 
+import com.fantasticsource.dynamicstealth.common.ClientData;
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatNeat;
@@ -44,12 +45,24 @@ public class HUD extends Gui
     private static final ResourceLocation BASIC_GAUGE_TEXTURE = new ResourceLocation(DynamicStealth.MODID, "image/basicgauge.png");
     private static final int BASIC_GAUGE_SIZE = 32;
     private static final double BASIC_GAUGE_UV_HALF_PIXEL = 0.5 / BASIC_GAUGE_SIZE, BASIC_GAUGE_UV_SUBTEX_SIZE = 0.5 - BASIC_GAUGE_UV_HALF_PIXEL * 2;
+
     private static final ResourceLocation ARROW_TEXTURE = new ResourceLocation(DynamicStealth.MODID, "image/arrow.png");
     private static final float ARROW_WIDTH = 152, ARROW_HEIGHT = 87;
+    private static final float ARROW_UV_HALF_PIXEL_W = 0.5f / ARROW_WIDTH, ARROW_UV_HALF_PIXEL_H = 0.5f / ARROW_HEIGHT;
     private static final float ARROW_ORIGIN_X = 151, ARROW_ORIGIN_Y = 43;
     private static final float ARROW_LEFT = ARROW_ORIGIN_X, ARROW_RIGHT = ARROW_WIDTH - ARROW_ORIGIN_X;
     private static final float ARROW_ABOVE = ARROW_ORIGIN_Y, ARROW_BELOW = ARROW_HEIGHT - ARROW_ORIGIN_Y;
-    private static final float ARROW_UV_HALF_PIXEL_W = 0.5f / ARROW_WIDTH, ARROW_UV_HALF_PIXEL_H = 0.5f / ARROW_HEIGHT;
+    private static final float ARROW_CENTER_ORIGIN_X = 45;
+    private static final float ARROW_CENTER_LEFT = ARROW_CENTER_ORIGIN_X, ARROW_CENTER_RIGHT = ARROW_WIDTH - ARROW_CENTER_ORIGIN_X;
+
+    private static final ResourceLocation STEALTH_GAUGE_TEXTURE = new ResourceLocation(DynamicStealth.MODID, "image/stealthgauge.png");
+    private static final int STEALTH_GAUGE_SIZE = 128;
+    private static final float STEALTH_GAUGE_UV_HALF_PIXEL = 0.5f / STEALTH_GAUGE_SIZE;
+
+    private static final ResourceLocation STEALTH_GAUGE_RIM_TEXTURE = new ResourceLocation(DynamicStealth.MODID, "image/stealthgaugerim.png");
+    private static final int STEALTH_GAUGE_RIM_SIZE = 256;
+    private static final float STEALTH_GAUGE_RIM_UV_HALF_PIXEL = 0.5f / STEALTH_GAUGE_RIM_SIZE;
+
     private static Field renderManagerRenderOutlinesField;
     private static TextureManager textureManager = Minecraft.getMinecraft().renderEngine;
 
@@ -261,6 +274,11 @@ public class HUD extends Gui
 
     private static void drawArrow(float x, float y, float angleDeg, float scale)
     {
+        drawArrow(x, y, angleDeg, scale, false);
+    }
+
+    private static void drawArrow(float x, float y, float angleDeg, float scale, boolean fromCenter)
+    {
         GlStateManager.enableTexture2D();
         textureManager.bindTexture(ARROW_TEXTURE);
 
@@ -269,15 +287,27 @@ public class HUD extends Gui
         GlStateManager.rotate(angleDeg, 0, 0, 1);
         GlStateManager.scale(scale, scale, 1);
 
+        float l, r;
+        if (fromCenter)
+        {
+            l = -ARROW_CENTER_LEFT;
+            r = ARROW_CENTER_RIGHT;
+        }
+        else
+        {
+            l = -ARROW_LEFT;
+            r = ARROW_RIGHT;
+        }
+
         GlStateManager.glBegin(GL_QUADS);
         GlStateManager.glTexCoord2f(ARROW_UV_HALF_PIXEL_W, ARROW_UV_HALF_PIXEL_H);
-        GlStateManager.glVertex3f(-ARROW_LEFT, -ARROW_ABOVE, 0);
+        GlStateManager.glVertex3f(l, -ARROW_ABOVE, 0);
         GlStateManager.glTexCoord2f(ARROW_UV_HALF_PIXEL_W, 1f - ARROW_UV_HALF_PIXEL_H);
-        GlStateManager.glVertex3f(-ARROW_LEFT, ARROW_BELOW, 0);
+        GlStateManager.glVertex3f(l, ARROW_BELOW, 0);
         GlStateManager.glTexCoord2f(1f - ARROW_UV_HALF_PIXEL_W, 1f - ARROW_UV_HALF_PIXEL_H);
-        GlStateManager.glVertex3f(ARROW_RIGHT, ARROW_BELOW, 0);
+        GlStateManager.glVertex3f(r, ARROW_BELOW, 0);
         GlStateManager.glTexCoord2f(1f - ARROW_UV_HALF_PIXEL_W, ARROW_UV_HALF_PIXEL_H);
-        GlStateManager.glVertex3f(ARROW_RIGHT, -ARROW_ABOVE, 0);
+        GlStateManager.glVertex3f(r, -ARROW_ABOVE, 0);
         GlStateManager.glEnd();
 
         GlStateManager.popMatrix();
@@ -296,13 +326,70 @@ public class HUD extends Gui
 
     private void drawHUD(Minecraft mc)
     {
-        //TODO main HUD
-
         //Detailed OPHUD
         if (detailData != null)
         {
             Entity entity = mc.player.world.getEntityByID(detailData.searcherID);
             if (entity != null) drawDetailedOPHUD(entity, mc.fontRenderer);
+        }
+
+
+        //Main HUD below this point
+
+
+        //Stealth Gauge
+        int stealth = ClientData.stealthLevel;
+        if (stealth != Byte.MIN_VALUE)
+        {
+            GlStateManager.enableBlend();
+            GlStateManager.enableTexture2D();
+
+            int radius = clientSettings.hudSettings.mainStyle.stealthGaugeSize / 2;
+            ScaledResolution sr = new ScaledResolution(mc);
+            float theta = 0.9f * stealth;
+
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(sr.getScaledWidth() - radius, sr.getScaledHeight() - radius, 0);
+            GlStateManager.rotate(theta, 0, 0, 1);
+
+            //Fill
+            textureManager.bindTexture(STEALTH_GAUGE_TEXTURE);
+            Color c = new Color(Integer.parseInt(clientSettings.hudSettings.mainStyle.stealthGaugeColor, 16), true);
+            GlStateManager.color(c.rf(), c.gf(), c.bf(), (float) clientSettings.hudSettings.mainStyle.stealthGaugeAlpha);
+
+            GlStateManager.glBegin(GL_QUADS);
+            GlStateManager.glTexCoord2f(STEALTH_GAUGE_UV_HALF_PIXEL, STEALTH_GAUGE_UV_HALF_PIXEL);
+            GlStateManager.glVertex3f(-radius, -radius, 0);
+            GlStateManager.glTexCoord2f(STEALTH_GAUGE_UV_HALF_PIXEL, 1f - STEALTH_GAUGE_UV_HALF_PIXEL);
+            GlStateManager.glVertex3f(-radius, radius, 0);
+            GlStateManager.glTexCoord2f(1f - STEALTH_GAUGE_UV_HALF_PIXEL, 1f - STEALTH_GAUGE_UV_HALF_PIXEL);
+            GlStateManager.glVertex3f(radius, radius, 0);
+            GlStateManager.glTexCoord2f(1f - STEALTH_GAUGE_UV_HALF_PIXEL, STEALTH_GAUGE_UV_HALF_PIXEL);
+            GlStateManager.glVertex3f(radius, -radius, 0);
+            GlStateManager.glEnd();
+
+            //Rim
+            GlStateManager.rotate(-theta, 0, 0, 1);
+
+            textureManager.bindTexture(STEALTH_GAUGE_RIM_TEXTURE);
+            c = new Color(Integer.parseInt(clientSettings.hudSettings.mainStyle.stealthGaugeRimColor, 16), true);
+            GlStateManager.color(c.rf(), c.gf(), c.bf(), 1);
+
+            GlStateManager.glBegin(GL_QUADS);
+            GlStateManager.glTexCoord2f(STEALTH_GAUGE_RIM_UV_HALF_PIXEL, STEALTH_GAUGE_RIM_UV_HALF_PIXEL);
+            GlStateManager.glVertex3f(-radius, -radius, 0);
+            GlStateManager.glTexCoord2f(STEALTH_GAUGE_RIM_UV_HALF_PIXEL, 1f - STEALTH_GAUGE_RIM_UV_HALF_PIXEL);
+            GlStateManager.glVertex3f(-radius, radius, 0);
+            GlStateManager.glTexCoord2f(1f - STEALTH_GAUGE_RIM_UV_HALF_PIXEL, 1f - STEALTH_GAUGE_RIM_UV_HALF_PIXEL);
+            GlStateManager.glVertex3f(radius, radius, 0);
+            GlStateManager.glTexCoord2f(1f - STEALTH_GAUGE_RIM_UV_HALF_PIXEL, STEALTH_GAUGE_RIM_UV_HALF_PIXEL);
+            GlStateManager.glVertex3f(radius, -radius, 0);
+            GlStateManager.glEnd();
+
+            //Arrow
+            drawArrow(0, -radius, 90, 0.06f, true);
+
+            GlStateManager.popMatrix();
         }
     }
 
@@ -468,9 +555,6 @@ public class HUD extends Gui
                 }
 
                 GlStateManager.popMatrix();
-
-
-                //TODO stealth gauge
             }
         }
         catch (IllegalAccessException e)

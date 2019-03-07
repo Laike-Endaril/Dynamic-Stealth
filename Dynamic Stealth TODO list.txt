@@ -2,10 +2,6 @@ CURRENTLY WORKING ON ===================================================
 
 Update fantasticlib requirement, and release new fantasticlib
 
-Stealth gauge using ClientData.stealthLevel...
-...Byte.MIN_VALUE means no data received
-...else percentage from 0 to 100
-
 Directional indicators...
 ...add optional "damaged from" indicator, which draws an indicator pointing the direction damage was recently received from
 ...add optional touch detection indicator for players (see to do in DynamicStealth.java)
@@ -15,6 +11,22 @@ Directional indicators...
 
 Add wiki / guide videos
 Add guidebook, possibly using guide api or patchouli
+
+
+
+BUG FIXES ==============================================================
+
+Villagers run WAY too fast
+
+Spiders can home in on their threat target even if they can't see it
+
+Fix entities attempting to path through diagonal walls; this may very well fix (or at least mostly fix) the issue below
+Fix entities being able to attack through glass diagonally (because they can see through it...)
+
+Make stuck detection account for jumping by allowing for more play along y axis
+
+Fix leashes not rendering sometimes (not a vanilla bug)...
+...can reproduce by leashing a horse, flying into the air, and dropping into water while facing down
 
 
 
@@ -41,20 +53,6 @@ Add disguise system; conditionally prevents targeting even if seen, but not if t
 ...for players, this may be more complicated, and involve sending fake entities...
 
 Use tracking system (Tracking class) for something, or remove it
-
-
-
-BUG FIXES ==============================================================
-
-Spiders can home in on their threat target even if they can't see it
-
-Fix entities attempting to path through diagonal walls; this may very well fix (or at least mostly fix) the issue below
-Fix entities being able to attack through glass diagonally (because they can see through it...)
-
-Make stuck detection account for jumping by allowing for more play along y axis
-
-Fix leashes not rendering sometimes (not a vanilla bug)...
-...can reproduce by leashing a horse, flying into the air, and dropping into water while facing down
 
 
 

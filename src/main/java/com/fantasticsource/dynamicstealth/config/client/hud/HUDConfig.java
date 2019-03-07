@@ -4,6 +4,9 @@ import net.minecraftforge.common.config.Config;
 
 public class HUDConfig
 {
+    @Config.Name("Main HUD Style")
+    public MainHUDStyleConfig mainStyle = new MainHUDStyleConfig();
+
     @Config.Name("On-point HUD Filter")
     public OPHUDFilterConfig ophudFilter = new OPHUDFilterConfig();
 
