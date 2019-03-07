@@ -83,7 +83,7 @@ processResources {
 
 jar {
     manifest {
-        attributes 'FMLAT': 'MODID_at.cfg'
+        attributes 'FMLAT': 'dynamicstealth_at.cfg'
     }
 }
 
