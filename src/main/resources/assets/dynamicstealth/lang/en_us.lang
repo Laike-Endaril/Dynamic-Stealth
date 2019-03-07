@@ -21,4 +21,4 @@ potion.effect.dynamicstealth.glowing=Potion of Glowing
 splash_potion.effect.dynamicstealth.glowing=Splash Potion of Glowing
 lingering_potion.effect.dynamicstealth.glowing=Lingering Potion of Glowing
 
-dynamicstealth.cmd.reloaded=Server reloaded config from file
+dynamicstealth.cmd.reloaded=Server reloaded config from file (the "reset to default" buttons for DS may be glitched until MC is restarted)
