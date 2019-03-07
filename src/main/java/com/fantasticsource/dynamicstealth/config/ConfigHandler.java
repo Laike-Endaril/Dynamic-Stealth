@@ -151,7 +151,7 @@ public class ConfigHandler
         {
             case 0:
                 //Config versions 55-
-                updatePre56To56(mostRecentFile);
+                updatePre56To56();
             case 56:
                 //TODO This is where changes go for 56+ -> XX+ (w/e the next config version is)
                 //Would look something like...
@@ -159,17 +159,6 @@ public class ConfigHandler
                 //Don't use break here; allow cases to pass to the next one, so it does each update function incrementally
         }
 
-
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-    }
-
-    private static void updatePre56To56(File oldConfig) throws IOException
-    {
-        transferAll(oldConfig);
         try
         {
             MCTools.reloadConfig(fullConfigFilename, DynamicStealth.MODID);
@@ -178,13 +167,38 @@ public class ConfigHandler
         {
             MCTools.crash(e, 152, true);
         }
+
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
     }
 
-    private static void transferAll(File oldConfig) throws IOException
+    private static void updatePre56To56() throws IOException
     {
         Configuration current = new Configuration(currentFile);
-        Configuration old = new Configuration(oldConfig);
+        Configuration old = new Configuration(mostRecentFile);
 
+        rename(old, current, "general.server settings.client hud allowances", "Allow detailed HUD on clients", "general.server settings.client hud allowances", "Allow Targeting HUD For Clients");
+
+        log();
+        log();
+        log();
+
+        transferAll(old, current);
+    }
+
+    private static void rename(Configuration old, Configuration current, String oldCat, String oldName, String newCat, String newName) throws IOException
+    {
+        log("* Renaming... " + oldCat + " -> " + oldName);
+        log("* To... " + newCat + " -> " + newName);
+        old.moveProperty(oldCat, oldName, newCat);
+        old.renameProperty(newCat, oldName, newName);
+    }
+
+    private static void transferAll(Configuration old, Configuration current) throws IOException
+    {
         for (String string : current.getCategoryNames())
         {
             if (old.hasCategory(string))
