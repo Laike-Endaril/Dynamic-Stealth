@@ -334,7 +334,7 @@ public class HUD extends Gui
         }
 
 
-        //Main HUD below this point
+        //Main HUD below this point =============================================
 
 
         //Stealth Gauge
