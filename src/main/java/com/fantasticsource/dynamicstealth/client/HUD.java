@@ -339,7 +339,8 @@ public class HUD extends Gui
 
         //Stealth Gauge
         int stealth = ClientData.stealthLevel;
-        if (stealth != Byte.MIN_VALUE)
+        float alpha = (float) clientSettings.hudSettings.mainStyle.stealthGaugeAlpha;
+        if (stealth != Byte.MIN_VALUE && alpha > 0)
         {
             GlStateManager.enableBlend();
             GlStateManager.enableTexture2D();
@@ -355,7 +356,7 @@ public class HUD extends Gui
             //Fill
             textureManager.bindTexture(STEALTH_GAUGE_TEXTURE);
             Color c = new Color(Integer.parseInt(clientSettings.hudSettings.mainStyle.stealthGaugeColor, 16), true);
-            GlStateManager.color(c.rf(), c.gf(), c.bf(), (float) clientSettings.hudSettings.mainStyle.stealthGaugeAlpha);
+            GlStateManager.color(c.rf(), c.gf(), c.bf(), alpha);
 
             GlStateManager.glBegin(GL_QUADS);
             GlStateManager.glTexCoord2f(STEALTH_GAUGE_UV_HALF_PIXEL, STEALTH_GAUGE_UV_HALF_PIXEL);
