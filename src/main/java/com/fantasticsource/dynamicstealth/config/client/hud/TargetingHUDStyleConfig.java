@@ -110,4 +110,7 @@ public class TargetingHUDStyleConfig
             })
     @Config.RangeInt(min = 1)
     public int arrowSize = 32;
+
+    @Config.Name("Components")
+    public TargetingHUDComponents components = new TargetingHUDComponents();
 }

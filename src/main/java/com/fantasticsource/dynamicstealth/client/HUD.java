@@ -477,19 +477,28 @@ public class HUD extends Gui
                 float padding = 1;
                 ArrayList<String> elements = new ArrayList<>();
 
-                if (!Compat.neat) elements.add(entity.getName());
-                if (detailData.color == COLOR_FLEEING)
+                if (clientSettings.hudSettings.targetingStyle.components.name) elements.add(entity.getName());
+                if (clientSettings.hudSettings.targetingStyle.components.target)
                 {
-                    elements.add("Fleeing from " + (target == null ? UNKNOWN : target.getName()));
+                    if (detailData.color == COLOR_FLEEING)
+                    {
+                        elements.add("Fleeing from " + (target == null ? UNKNOWN : target.getName()));
+                    }
+                    else
+                    {
+                        if (targetID != -1 && targetID != -2) elements.add("Targeting " + (target == null ? UNKNOWN : target.getName()));
+                        else if (detailData.percent > 0) elements.add("Searching for target");
+                    }
                 }
-                else
+                if (clientSettings.hudSettings.targetingStyle.components.threat)
                 {
-                    if (targetID != -1 && targetID != -2) elements.add("Targeting " + (target == null ? UNKNOWN : target.getName()));
-                    else if (detailData.percent > 0) elements.add("Searching for target");
+                    if (detailData.color == COLOR_BYPASS) elements.add("Threat: §k000");
+                    else if (detailData.percent > 0) elements.add("Threat: " + detailData.percent + "%");
                 }
-                if (detailData.color == COLOR_BYPASS) elements.add("Threat: §k000");
-                else if (detailData.percent > 0) elements.add("Threat: " + detailData.percent + "%");
-                elements.add("Distance: " + oneDecimal.format(entity.getDistance(Minecraft.getMinecraft().player)));
+                if (clientSettings.hudSettings.targetingStyle.components.distance)
+                {
+                    elements.add("Distance: " + oneDecimal.format(entity.getDistance(Minecraft.getMinecraft().player)));
+                }
 
                 float width = 0;
                 for (String string : elements)
