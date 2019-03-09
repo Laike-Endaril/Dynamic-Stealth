@@ -45,10 +45,10 @@ public class WeaponEntry
         }
     }
 
-    public WeaponEntry(String configEntry, int type)
+    public static WeaponEntry getInstance(String configEntry, int type)
     {
         //Defaults
-        this(type);
+        WeaponEntry result = new WeaponEntry(type);
 
 
         String[] tokens = configEntry.split(Pattern.quote(","));
@@ -56,12 +56,12 @@ public class WeaponEntry
         if (tokens.length < 2)
         {
             System.err.println("Not enough arguments for weapon entry: " + configEntry);
-            return;
+            return null;
         }
         if (((type == TYPE_NORMAL || type == TYPE_STEALTH) && tokens.length > 6) || (type == TYPE_ASSASSINATION && tokens.length > 2))
         {
             System.err.println("Too many arguments for weapon entry: " + configEntry);
-            return;
+            return null;
         }
 
 
@@ -80,31 +80,36 @@ public class WeaponEntry
                 break;
             }
         }
-        filter = new ItemFilter(nameAndNBT, suppressMissingItemError);
+
+        result.filter = ItemFilter.getInstance(nameAndNBT, suppressMissingItemError);
+        if (result.filter == null) return null;
 
 
         //Easy stuff...
         if (type == TYPE_NORMAL || type == TYPE_STEALTH)
         {
-            armorPenetration = Boolean.parseBoolean(tokens[1]);
-            if (tokens.length > 2) damageMultiplier = Double.parseDouble(tokens[2]);
+            result.armorPenetration = Boolean.parseBoolean(tokens[1]);
+            if (tokens.length > 2) result.damageMultiplier = Double.parseDouble(tokens[2]);
         }
 
 
         //Potion effects
-        if (type == TYPE_ASSASSINATION) attackerEffects = Potions.parsePotions(tokens[1]);
+        if (type == TYPE_ASSASSINATION) result.attackerEffects = Potions.parsePotions(tokens[1]);
         else if (tokens.length > 3)
         {
-            attackerEffects = Potions.parsePotions(tokens[3]);
+            result.attackerEffects = Potions.parsePotions(tokens[3]);
             if (tokens.length > 4)
             {
-                victimEffects = Potions.parsePotions(tokens[4]);
+                result.victimEffects = Potions.parsePotions(tokens[4]);
             }
         }
 
 
         //More easy stuff...
-        if (tokens.length > 5) consumeItem = Boolean.parseBoolean(tokens[5].trim());
+        if (tokens.length > 5) result.consumeItem = Boolean.parseBoolean(tokens[5].trim());
+
+
+        return result;
     }
 
     public static WeaponEntry get(ItemStack itemStack, int type)

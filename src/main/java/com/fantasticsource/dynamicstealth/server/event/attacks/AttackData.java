@@ -35,7 +35,8 @@ public class AttackData
 
         for (String string : normalConfig.weaponSpecific)
         {
-            normalWeaponSpecific.add(new WeaponEntry(string, WeaponEntry.TYPE_NORMAL));
+            WeaponEntry entry = WeaponEntry.getInstance(string, WeaponEntry.TYPE_NORMAL);
+            if (entry != null) normalWeaponSpecific.add(entry);
         }
 
 
@@ -44,7 +45,8 @@ public class AttackData
 
         for (String string : stealthConfig.weaponSpecific)
         {
-            stealthWeaponSpecific.add(new WeaponEntry(string, WeaponEntry.TYPE_STEALTH));
+            WeaponEntry entry = WeaponEntry.getInstance(string, WeaponEntry.TYPE_STEALTH);
+            if (entry != null) stealthWeaponSpecific.add(entry);
         }
 
 
@@ -52,7 +54,8 @@ public class AttackData
 
         for (String string : assassinationConfig.weaponSpecific)
         {
-            assassinationWeaponSpecific.add(new WeaponEntry(string, WeaponEntry.TYPE_ASSASSINATION));
+            WeaponEntry entry = WeaponEntry.getInstance(string, WeaponEntry.TYPE_ASSASSINATION);
+            if (entry != null) assassinationWeaponSpecific.add(entry);
         }
     }
 
