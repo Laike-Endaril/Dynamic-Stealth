@@ -3,6 +3,7 @@ package com.fantasticsource.dynamicstealth.server.event.attacks;
 import com.fantasticsource.dynamicstealth.config.server.interactions.AssassinationConfig;
 import com.fantasticsource.dynamicstealth.config.server.interactions.NormalAttackConfig;
 import com.fantasticsource.dynamicstealth.config.server.interactions.StealthAttackConfig;
+import com.fantasticsource.mctools.potions.Potions;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 
@@ -31,8 +32,8 @@ public class AttackData
 
     static
     {
-        normalAttackerEffects = WeaponEntry.getPotions(normalConfig.attackerEffects);
-        normalVictimEffects = WeaponEntry.getPotions(normalConfig.victimEffects);
+        normalAttackerEffects = Potions.parsePotions(normalConfig.attackerEffects);
+        normalVictimEffects = Potions.parsePotions(normalConfig.victimEffects);
 
         for (String string : normalConfig.weaponSpecific)
         {
@@ -42,8 +43,8 @@ public class AttackData
         }
 
 
-        stealthAttackerEffects = WeaponEntry.getPotions(stealthConfig.attackerEffects);
-        stealthVictimEffects = WeaponEntry.getPotions(stealthConfig.victimEffects);
+        stealthAttackerEffects = Potions.parsePotions(stealthConfig.attackerEffects);
+        stealthVictimEffects = Potions.parsePotions(stealthConfig.victimEffects);
 
         for (String string : stealthConfig.weaponSpecific)
         {
@@ -53,7 +54,7 @@ public class AttackData
         }
 
 
-        assassinationAttackerEffects = WeaponEntry.getPotions(assassinationConfig.attackerEffects);
+        assassinationAttackerEffects = Potions.parsePotions(assassinationConfig.attackerEffects);
 
         for (String string : assassinationConfig.weaponSpecific)
         {

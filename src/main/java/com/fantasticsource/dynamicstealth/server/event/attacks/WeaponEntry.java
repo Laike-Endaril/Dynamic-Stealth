@@ -1,11 +1,11 @@
 package com.fantasticsource.dynamicstealth.server.event.attacks;
 
+import com.fantasticsource.mctools.potions.Potions;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -169,13 +169,13 @@ public class WeaponEntry
 
 
         //Potion effects
-        if (type == TYPE_ASSASSINATION) attackerEffects = getPotions(tokens[1].split(Pattern.quote("&")));
+        if (type == TYPE_ASSASSINATION) attackerEffects = Potions.parsePotions(tokens[1]);
         else if (tokens.length > 3)
         {
-            attackerEffects = getPotions(tokens[3].split(Pattern.quote("&")));
+            attackerEffects = Potions.parsePotions(tokens[3]);
             if (tokens.length > 4)
             {
-                victimEffects = getPotions(tokens[4].split(Pattern.quote("&")));
+                victimEffects = Potions.parsePotions(tokens[4]);
             }
         }
 
@@ -225,50 +225,5 @@ public class WeaponEntry
         }
 
         return new WeaponEntry(type);
-    }
-
-
-    public static ArrayList<PotionEffect> getPotions(String[] potionList)
-    {
-        String[] tokens;
-        int duration, amplifier;
-        Potion potion;
-        ArrayList<PotionEffect> result = new ArrayList<>();
-
-        for (String string : potionList)
-        {
-            string = string.trim();
-            if (!string.equals(""))
-            {
-                tokens = string.split(Pattern.quote("."));
-                if (tokens.length > 3)
-                {
-                    System.err.println("Too many arguments for potion effect; should be max of 3 (see the Attacker Effects config tooltip for example)");
-                    continue;
-                }
-
-                duration = 0;
-                amplifier = 0;
-
-                if (tokens.length > 0)
-                {
-                    potion = ForgeRegistries.POTIONS.getValue(new ResourceLocation(tokens[0].trim()));
-
-                    if (potion == null)
-                    {
-                        System.err.println("ResourceLocation for potion \"" + string + "\" not found!");
-                        continue;
-                    }
-
-                    if (tokens.length > 1) duration = Integer.parseInt(tokens[1].trim());
-                    if (tokens.length > 2) amplifier = Integer.parseInt(tokens[2].trim());
-                    if (amplifier > 0) amplifier--; //Makes it so ppl can just type 2 for stength 2 instead of typing 1
-
-                    result.add(new PotionEffect(potion, duration, amplifier, false, true));
-                }
-            }
-        }
-
-        return result;
     }
 }
