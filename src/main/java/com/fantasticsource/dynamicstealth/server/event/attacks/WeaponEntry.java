@@ -74,16 +74,16 @@ public class WeaponEntry
             return;
         }
 
-        String[] namePlusTags = tokens[0].trim().split(Pattern.quote(">"));
-        if (namePlusTags.length > 2)
+        String[] registryAndNBT = tokens[0].trim().split(Pattern.quote(">"));
+        if (registryAndNBT.length > 2)
         {
-            System.err.println("Too many arguments for name/NBT pair in weapon entry: " + configEntry);
+            System.err.println("Too many arguments for name/NBT in weapon entry: " + tokens[0]);
             return;
         }
 
 
         //Item and meta
-        token = namePlusTags[0].trim();
+        token = registryAndNBT[0].trim();
         if (token.equals("")) itemStack = new ItemStack(Items.AIR);
         else
         {
@@ -139,9 +139,9 @@ public class WeaponEntry
 
 
         //NBT
-        if (namePlusTags.length > 1)
+        if (registryAndNBT.length > 1)
         {
-            String[] tags = namePlusTags[1].trim().split(Pattern.quote("&"));
+            String[] tags = registryAndNBT[1].trim().split(Pattern.quote("&"));
             for (String tag : tags)
             {
                 tag = tag.trim();
