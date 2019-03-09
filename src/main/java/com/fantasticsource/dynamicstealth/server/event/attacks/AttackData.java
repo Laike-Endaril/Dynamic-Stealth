@@ -4,11 +4,9 @@ import com.fantasticsource.dynamicstealth.config.server.interactions.Assassinati
 import com.fantasticsource.dynamicstealth.config.server.interactions.NormalAttackConfig;
 import com.fantasticsource.dynamicstealth.config.server.interactions.StealthAttackConfig;
 import com.fantasticsource.mctools.potions.Potions;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 
@@ -16,14 +14,14 @@ public class AttackData
 {
     public static ArrayList<PotionEffect> normalAttackerEffects;
     public static ArrayList<PotionEffect> normalVictimEffects;
-    public static LinkedHashMap<ItemStack, WeaponEntry> normalWeaponSpecific = new LinkedHashMap<>();
+    public static ArrayList<WeaponEntry> normalWeaponSpecific = new ArrayList<>();
 
     public static ArrayList<PotionEffect> stealthAttackerEffects;
     public static ArrayList<PotionEffect> stealthVictimEffects;
-    public static LinkedHashMap<ItemStack, WeaponEntry> stealthWeaponSpecific = new LinkedHashMap<>();
+    public static ArrayList<WeaponEntry> stealthWeaponSpecific = new ArrayList<>();
 
     public static ArrayList<PotionEffect> assassinationAttackerEffects;
-    public static LinkedHashMap<ItemStack, WeaponEntry> assassinationWeaponSpecific = new LinkedHashMap<>();
+    public static ArrayList<WeaponEntry> assassinationWeaponSpecific = new ArrayList<>();
 
     private static NormalAttackConfig normalConfig = serverSettings.interactions.attack;
     private static StealthAttackConfig stealthConfig = serverSettings.interactions.stealthAttack;
@@ -37,9 +35,7 @@ public class AttackData
 
         for (String string : normalConfig.weaponSpecific)
         {
-            WeaponEntry entry = new WeaponEntry(string, WeaponEntry.TYPE_NORMAL);
-            ItemStack itemStack = entry.itemStack;
-            if (itemStack != null) normalWeaponSpecific.put(itemStack, entry);
+            normalWeaponSpecific.add(new WeaponEntry(string, WeaponEntry.TYPE_NORMAL));
         }
 
 
@@ -48,9 +44,7 @@ public class AttackData
 
         for (String string : stealthConfig.weaponSpecific)
         {
-            WeaponEntry entry = new WeaponEntry(string, WeaponEntry.TYPE_STEALTH);
-            ItemStack itemStack = entry.itemStack;
-            if (itemStack != null) stealthWeaponSpecific.put(itemStack, entry);
+            stealthWeaponSpecific.add(new WeaponEntry(string, WeaponEntry.TYPE_STEALTH));
         }
 
 
@@ -58,9 +52,7 @@ public class AttackData
 
         for (String string : assassinationConfig.weaponSpecific)
         {
-            WeaponEntry entry = new WeaponEntry(string, WeaponEntry.TYPE_ASSASSINATION);
-            ItemStack itemStack = entry.itemStack;
-            if (itemStack != null) assassinationWeaponSpecific.put(itemStack, entry);
+            assassinationWeaponSpecific.add(new WeaponEntry(string, WeaponEntry.TYPE_ASSASSINATION));
         }
     }
 

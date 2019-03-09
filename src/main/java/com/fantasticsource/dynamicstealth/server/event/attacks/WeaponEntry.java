@@ -1,19 +1,11 @@
 package com.fantasticsource.dynamicstealth.server.event.attacks;
 
+import com.fantasticsource.mctools.items.ItemFilter;
 import com.fantasticsource.mctools.potions.Potions;
-import net.minecraft.block.Block;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
@@ -28,8 +20,7 @@ public class WeaponEntry
     public ArrayList<PotionEffect> victimEffects = new ArrayList<>();
     public boolean consumeItem = false;
 
-    public ItemStack itemStack = null;
-    private LinkedHashMap<String, String> tags = new LinkedHashMap<>();
+    public ItemFilter filter;
 
     private WeaponEntry(int type)
     {
@@ -61,7 +52,6 @@ public class WeaponEntry
 
 
         String[] tokens = configEntry.split(Pattern.quote(","));
-        String token;
 
         if (tokens.length < 2)
         {
@@ -74,90 +64,23 @@ public class WeaponEntry
             return;
         }
 
-        String[] registryAndNBT = tokens[0].trim().split(Pattern.quote(">"));
-        if (registryAndNBT.length > 2)
+
+        //Item, meta, and NBT
+        String nameAndNBT = tokens[0].trim();
+        boolean suppressMissingItemError = false;
+        ArrayList<String> list = null;
+        if (type == TYPE_NORMAL) list = AttackDefaults.normalAttackDefaults;
+        else if (type == TYPE_STEALTH) list = AttackDefaults.stealthAttackDefaults;
+        else if (type == TYPE_ASSASSINATION) list = AttackDefaults.assassinationDefaults;
+        for (String entry : list)
         {
-            System.err.println("Too many arguments for name/NBT in weapon entry: " + tokens[0]);
-            return;
-        }
-
-
-        //Item and meta
-        token = registryAndNBT[0].trim();
-        if (token.equals("")) itemStack = new ItemStack(Items.AIR);
-        else
-        {
-            ResourceLocation resourceLocation;
-            int meta = 0;
-
-            String[] innerTokens = token.split(Pattern.quote(":"));
-            if (innerTokens.length > 3)
+            if (entry.split(",")[0].trim().equals(nameAndNBT))
             {
-                System.err.println("Bad item name: " + token);
-                return;
-            }
-            if (innerTokens.length == 3)
-            {
-                resourceLocation = new ResourceLocation(innerTokens[0], innerTokens[1]);
-                meta = Integer.parseInt(innerTokens[2]);
-            }
-            else if (innerTokens.length == 1) resourceLocation = new ResourceLocation("minecraft", innerTokens[0]);
-            else
-            {
-                try
-                {
-                    meta = Integer.parseInt(innerTokens[1]);
-                    resourceLocation = new ResourceLocation("minecraft", innerTokens[0]);
-                }
-                catch (NumberFormatException e)
-                {
-                    meta = 0;
-                    resourceLocation = new ResourceLocation(innerTokens[0], innerTokens[1]);
-                }
-            }
-
-
-            Item item = ForgeRegistries.ITEMS.getValue(resourceLocation);
-            if (item != null)
-            {
-                itemStack = new ItemStack(item, 1, meta);
-            }
-            else
-            {
-                Block block = ForgeRegistries.BLOCKS.containsKey(resourceLocation) ? ForgeRegistries.BLOCKS.getValue(resourceLocation) : null;
-                if (block != null) itemStack = new ItemStack(block, 1, Integer.parseInt(innerTokens[2]));
+                suppressMissingItemError = true;
+                break;
             }
         }
-
-        if (itemStack == null)
-        {
-            if (type == TYPE_NORMAL && !AttackDefaults.normalAttackDefaults.contains(configEntry)) System.err.println("Item for normal attack weapon entry not found: " + token);
-            if (type == TYPE_STEALTH && !AttackDefaults.stealthAttackDefaults.contains(configEntry)) System.err.println("Item for stealth attack weapon entry not found: " + token);
-            if (type == TYPE_ASSASSINATION && !AttackDefaults.assassinationDefaults.contains(configEntry)) System.err.println("Item for assassination weapon entry not found: " + token);
-            return;
-        }
-
-
-        //NBT
-        if (registryAndNBT.length > 1)
-        {
-            String[] tags = registryAndNBT[1].trim().split(Pattern.quote("&"));
-            for (String tag : tags)
-            {
-                tag = tag.trim();
-                if (tag.equals("")) continue;
-
-                String[] keyValue = tag.split(Pattern.quote("="));
-                if (keyValue.length > 2)
-                {
-                    System.err.println("Each NBT tag can only be set to one value!  Error in weapon entry: " + configEntry);
-                    return;
-                }
-
-                String key = keyValue[0].trim();
-                if (!key.equals("")) this.tags.put(key, keyValue.length == 2 ? keyValue[1].trim() : null);
-            }
-        }
+        filter = new ItemFilter(nameAndNBT, suppressMissingItemError);
 
 
         //Easy stuff...
@@ -186,42 +109,14 @@ public class WeaponEntry
 
     public static WeaponEntry get(ItemStack itemStack, int type)
     {
-        NBTTagCompound compound;
-        boolean match;
+        ArrayList<WeaponEntry> list = null;
+        if (type == TYPE_NORMAL) list = AttackData.normalWeaponSpecific;
+        else if (type == TYPE_STEALTH) list = AttackData.stealthWeaponSpecific;
+        else if (type == TYPE_ASSASSINATION) list = AttackData.assassinationWeaponSpecific;
 
-        LinkedHashMap<ItemStack, WeaponEntry> map = null;
-        if (type == TYPE_NORMAL) map = AttackData.normalWeaponSpecific;
-        else if (type == TYPE_STEALTH) map = AttackData.stealthWeaponSpecific;
-        else if (type == TYPE_ASSASSINATION) map = AttackData.assassinationWeaponSpecific;
-
-        for (Map.Entry<ItemStack, WeaponEntry> weaponMapping : map.entrySet())
+        for (WeaponEntry weaponEntry : list)
         {
-            WeaponEntry weaponEntry = weaponMapping.getValue();
-            ItemStack item = weaponMapping.getKey();
-            if (item.getItem().equals(itemStack.getItem()) && (itemStack.isItemStackDamageable() || item.getMetadata() == itemStack.getMetadata()))
-            {
-                match = true;
-                Set<Map.Entry<String, String>> entrySet = weaponEntry.tags.entrySet();
-
-                if (entrySet.size() > 0)
-                {
-                    compound = itemStack.getTagCompound();
-                    if (compound == null) match = false;
-                    else
-                    {
-                        for (Map.Entry<String, String> entry : entrySet)
-                        {
-                            if (!compound.hasKey(entry.getKey()) || (entry.getValue() != null && !compound.getTag(entry.getKey()).toString().equals(entry.getValue())))
-                            {
-                                match = false;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if (match) return weaponEntry;
-            }
+            if (weaponEntry.filter.matches(itemStack)) return weaponEntry;
         }
 
         return new WeaponEntry(type);
