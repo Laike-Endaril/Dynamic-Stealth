@@ -31,17 +31,22 @@ import org.lwjgl.opengl.GL11;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.clientSettings;
 
 @SideOnly(Side.CLIENT)
 public class RenderAlterer
 {
+    private static ArrayList<ScorePlayerTeam> colorTeams = new ArrayList<>();
+
     private static Field renderLivingBaseLayerRenderersField;
 
     private static Scoreboard scoreboard;
     private static ArrayList<EntityLivingBase> glowCache = new ArrayList<>();
+    private static LinkedHashMap<EntityLivingBase, Team> teamCache = new LinkedHashMap<>();
 
     private static boolean ready = false;
 
@@ -52,13 +57,27 @@ public class RenderAlterer
         {
             scoreboard = Minecraft.getMinecraft().world.getScoreboard();
 
-            scoreboard.createTeam("green").setPrefix(TextFormatting.GREEN.toString());
-            scoreboard.createTeam("blue").setPrefix(TextFormatting.BLUE.toString());
-            scoreboard.createTeam("yellow").setPrefix(TextFormatting.YELLOW.toString());
-            scoreboard.createTeam("orange").setPrefix(TextFormatting.GOLD.toString());
-            scoreboard.createTeam("red").setPrefix(TextFormatting.RED.toString());
-            scoreboard.createTeam("black").setPrefix(TextFormatting.BLACK.toString());
-            scoreboard.createTeam("purple").setPrefix(TextFormatting.DARK_PURPLE.toString());
+            ScorePlayerTeam team = scoreboard.createTeam("green");
+            team.setPrefix(TextFormatting.GREEN.toString());
+            colorTeams.add(team);
+            team = scoreboard.createTeam("blue");
+            team.setPrefix(TextFormatting.BLUE.toString());
+            colorTeams.add(team);
+            team = scoreboard.createTeam("yellow");
+            team.setPrefix(TextFormatting.YELLOW.toString());
+            colorTeams.add(team);
+            team = scoreboard.createTeam("orange");
+            team.setPrefix(TextFormatting.GOLD.toString());
+            colorTeams.add(team);
+            team = scoreboard.createTeam("red");
+            team.setPrefix(TextFormatting.RED.toString());
+            colorTeams.add(team);
+            team = scoreboard.createTeam("black");
+            team.setPrefix(TextFormatting.BLACK.toString());
+            colorTeams.add(team);
+            team = scoreboard.createTeam("purple");
+            team.setPrefix(TextFormatting.DARK_PURPLE.toString());
+            colorTeams.add(team);
 
             try
             {
@@ -113,6 +132,17 @@ public class RenderAlterer
                 livingBase.setGlowing(false);
                 glowCache.remove(livingBase);
             }
+
+            for (Object object : teamCache.entrySet().toArray())
+            {
+                Map.Entry<EntityLivingBase, ScorePlayerTeam> entry = (Map.Entry<EntityLivingBase, ScorePlayerTeam>) object;
+                EntityLivingBase livingBase = entry.getKey();
+                Team team = entry.getKey().getTeam();
+
+                if (team != null) scoreboard.addPlayerToTeam(livingBase.getUniqueID().toString(), team.getName());
+
+                teamCache.remove(livingBase);
+            }
         }
     }
 
@@ -144,6 +174,8 @@ public class RenderAlterer
                 ClientData.OnPointData data = ClientData.detailData;
                 if (data != null && data.searcherID == livingBase.getEntityId())
                 {
+                    Team team = livingBase.getTeam();
+                    if (team != null) teamCache.put(livingBase, team);
                     scoreboard.addPlayerToTeam(livingBase.getUniqueID().toString(), getTeam(data.color));
                 }
             }
@@ -188,9 +220,13 @@ public class RenderAlterer
 
             //Focused target glowing effect
             Team team = livingBase.getTeam();
-            if (team != null)
+            if (colorTeams.contains(team))
             {
                 scoreboard.removePlayerFromTeam(livingBase.getCachedUniqueIdString(), (ScorePlayerTeam) team);
+                if (teamCache.containsKey(livingBase))
+                {
+                    scoreboard.addPlayerToTeam(livingBase.getCachedUniqueIdString(), teamCache.get(livingBase).getName());
+                }
                 livingBase.setGlowing(false);
             }
 
