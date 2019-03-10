@@ -1,6 +1,8 @@
 CURRENTLY WORKING ON ===================================================
 
-Remove special filter for ice and fire mobs when they release the fix on their side (they already fixed in a commit, just not sure if it's released yet)
+Add support for Skyrim "eye" style indicator animation
+
+Remove special filter for ice and fire mobs when they release the fix on their side (they already fixed in a commit, it's just not released yet)
 
 Make stealth level / visibility transitions smoother? (ie. change at a rate)
 
