@@ -2,8 +2,6 @@ CURRENTLY WORKING ON ===================================================
 
 Add support for Skyrim "eye" style indicator animation
 
-Remove special filter for ice and fire mobs when they release the fix on their side (they already fixed in a commit, it's just not released yet)
-
 Make stealth level / visibility transitions smoother? (ie. change at a rate)
 
 Directional indicators...
@@ -15,6 +13,8 @@ Directional indicators...
 
 Add wiki / guide videos
 Add guidebook, possibly using guide api or patchouli
+
+Remove special filter for ice and fire mobs when they release the fix on their side (they already fixed in a commit, it's just not released yet)
 
 
 
@@ -85,14 +85,6 @@ Add entity-specific filter for detail HUD
 
 
 
-VISUAL INDICATORS ======================================================
-
-Add indicator for where a mob WAS when you last saw it...
-...show the mob, as it was last seen, but black and white with partial transparency
-...make the on-point HUD above it into an X with coloration
-
-
-
 AI =====================================================================
 
 Can probably combine the two below into a single AI task...
@@ -120,17 +112,9 @@ Deafened: Cannot hear
 Fear: Makes them flee
 Courage: Applies rally effect if they were fleeing; grants immunity to fleeing for the duration
 
-Doom: Instant death if it is not removed before the countdown hits 0.  OP if not filtered carefully
-Voidwalker: Allows you to walk on / place blocks on the void at the bottom of the world, as if it were solid; mostly useful in the end
-Wet: Triggers if you touch water.  If you are burning at any time for its duration, it removes burning and then removes itself
-Frozen: Triggers if you touch ice while wet.  Removes wet and stops movement until you take damage once or the duration runs out.  If you start burning while frozen, frozen and burning are both removed.
-Burning: Triggers when set on fire, and sets you on fire when it is triggered.  Puts out the fire when it ends...basically just trying to link normal burning to a usable potion effect
-
 
 
 BLOCKS =================================================================
-
-Punji (wood/reed): Deals medium damage + bonus damage based on movement speed in the correct direction, then breaks
 
 Pitfall: TE which destroys the dirt block it's on if something walks on it.
 
@@ -147,50 +131,19 @@ Torch arrows (yes I know some other mods already do, but I want them in mine)
 
 Make sticks throwable (act like snowballs; 0 damage projectile, but if they hit a block, then instead create small sound.  Either way, drop as stick item again)
 
-Smoke bombs - Block LOS
-
 Hand mirror - Allows you to peek around corners (changes camera position while in use, based on which hand it is in)
 
 Pebbles - Can be thrown as a 0 damage projectile like a snowball, but drops as an item again on impact.  Crafted from cobblestone
-
-Darts - Dan be thrown as a low damage weapon, and can have potions applied to them
-
-Blowpipe - Can fire darts as a weapon, or can be used to breathe underwater, when an air block is near
 
 Make firework stars throwable; they go off after a short delay, or if in water, drop as an item again
 
 Slingshot - Can fire pebbles, smoke bombs, splash/lingering potions, or firework stars as low-damage projectiles
 
-Kunai - Melee/throwing weapon; can be used to craft Rope Dart, stacks up to 4
-
-Rope Dart - Re-usable medium range thrown weapon with 3 second chargeup
-
-Shuriken - Throwing weapon; stacks up to 8
-
-Caltrops - Create a small entity which damages and slows a running entity with a %chance (destroyed if so).  Can be spam-used to leave a trail.  Can be right-clicked to pick up
-
-Kama
-
 Grappling hook - Only works if it latches to something
-
-Chain - Material crafted from 3 iron ingots
-
-Kusarigama - Crafted from a kama, a chain, and an iron ingot.  Cannot be used as a grappling hook, but if no offhand is equipped, right click acts like a rope dart attack (but only kama attack can have potions applied)
-
-Tabi - Footwear that silences your movement noise (no protection)
-
-Mossy Tabi - Like Tabi, but also reduces your chance of leaving footprints
-
-Add armor/baubles that improve stealth/anti-stealth attributes
 
 
 
 MOBS ===================================================================
-
-Ninjas...
-...Ninjas try to use stealth mechanics
-...Make ninjas sometimes disguise themselves as players who play on the server, but with slight typos in the nametag
-...If they kill a player while disguised, it still says the player was killed by a ninja, to help prevent confused players raging at each other
 
 Gray Men...
 ...Gray men are considered invisible if you are facing them directly
