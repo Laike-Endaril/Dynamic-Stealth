@@ -28,7 +28,6 @@ public class EntitySightData
     private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityAngles = new LinkedHashMap<>();
     private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityDistances = new LinkedHashMap<>();
     private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityLighting = new LinkedHashMap<>();
-    private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Double, Double>> entitySpeeds = new LinkedHashMap<>();
 
     static
     {

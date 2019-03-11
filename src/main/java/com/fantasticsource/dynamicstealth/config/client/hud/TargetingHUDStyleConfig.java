@@ -6,7 +6,7 @@ public class TargetingHUDStyleConfig
 {
     @Config.Name("Glow")
     @Config.Comment("If true, the currently targeted entity is highlighted with a glow effect")
-    public boolean glow = false;
+    public boolean glow = true;
 
     @Config.Name("State-Colored Glow")
     @Config.Comment("If this and Glow are both set to true, the currently targeted entity glows in a color pertaining to its current state instead of white")
