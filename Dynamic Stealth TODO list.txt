@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
+Switch to a one=subscriber system for events, to reduce invoke() calls from the event bus
+
 Add support for Skyrim "eye" style indicator animation
 
 Make stealth level / visibility transitions smoother? (ie. change at a rate)

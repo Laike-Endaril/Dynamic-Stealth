@@ -29,6 +29,7 @@ import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.ServerTickTimer;
+import com.fantasticsource.mctools.WorldEventDistributor;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.TrigLookupTable;
@@ -89,12 +90,12 @@ import java.util.Set;
 
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 
-@Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, dependencies = "required-after:fantasticlib@[1.12.2.003,)")
+@Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, dependencies = "required-after:fantasticlib@[1.12.2.004a,)")
 public class DynamicStealth
 {
     public static final String MODID = "dynamicstealth";
     public static final String NAME = "Dynamic Stealth";
-    public static final String VERSION = "1.12.2.059";
+    public static final String VERSION = "1.12.2.059a";
     public static final String CONFIG_VERSION = "1.12.2.056"; //The lowest compatible config version
 
     public static final TrigLookupTable TRIG_TABLE = new TrigLookupTable(1024);
@@ -124,6 +125,7 @@ public class DynamicStealth
         MinecraftForge.EVENT_BUS.register(Communication.class);
         MinecraftForge.EVENT_BUS.register(Potions.class);
         MinecraftForge.EVENT_BUS.register(Tracking.class);
+        MinecraftForge.EVENT_BUS.register(WorldEventDistributor.class);
 
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
         {
@@ -131,6 +133,13 @@ public class DynamicStealth
             MinecraftForge.EVENT_BUS.register(ClientData.class);
             MinecraftForge.EVENT_BUS.register(RenderAlterer.class);
         }
+    }
+
+    @SubscribeEvent
+    public static void test(WorldEventDistributor.DSoundEvent event)
+    {
+        //TODO remove this
+        System.out.println(event.getEntity().getName());
     }
 
     @SubscribeEvent
