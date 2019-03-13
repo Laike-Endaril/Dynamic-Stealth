@@ -1,13 +1,13 @@
 CURRENTLY WORKING ON ===================================================
 
+Add code side of support for Skyrim "eye" style indicator animation
+
 Add sound-based detection
 Apply stealth-based sound attributes
 
 Switch to a one-subscriber system for events, to reduce invoke() calls from the event bus
 
 Look into using instances of MethodHandle instead of reflection where possible
-
-Add support for Skyrim "eye" style indicator animation
 
 Make stealth level / visibility transitions smoother? (ie. change at a rate)
 
