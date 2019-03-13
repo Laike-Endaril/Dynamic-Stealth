@@ -90,7 +90,7 @@ import java.util.Set;
 
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 
-@Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, dependencies = "required-after:fantasticlib@[1.12.2.004a,)")
+@Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, dependencies = "required-after:fantasticlib@[1.12.2.005,)")
 public class DynamicStealth
 {
     public static final String MODID = "dynamicstealth";
@@ -139,7 +139,7 @@ public class DynamicStealth
     public static void test(WorldEventDistributor.DSoundEvent event)
     {
         //TODO remove this
-        System.out.println(event.getEntity().getName());
+        event.setCanceled(true);
     }
 
     @SubscribeEvent
