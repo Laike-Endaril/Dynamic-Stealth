@@ -22,6 +22,7 @@ import com.fantasticsource.dynamicstealth.server.event.attacks.WeaponEntry;
 import com.fantasticsource.dynamicstealth.server.senses.EntitySensesEdit;
 import com.fantasticsource.dynamicstealth.server.senses.EntityTouchData;
 import com.fantasticsource.dynamicstealth.server.senses.hearing.Communication;
+import com.fantasticsource.dynamicstealth.server.senses.hearing.Hearing;
 import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Tracking;
@@ -136,10 +137,9 @@ public class DynamicStealth
     }
 
     @SubscribeEvent
-    public static void test(WorldEventDistributor.DSoundEvent event)
+    public static void soundEvent(WorldEventDistributor.DSoundEvent event)
     {
-        //TODO remove this
-        event.setCanceled(true);
+        Hearing.checkSound(event);
     }
 
     @SubscribeEvent
