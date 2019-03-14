@@ -413,7 +413,7 @@ public class Network
                     ClientData.targetData = null;
                     for (ClientData.OnPointData data : packet.list)
                     {
-                        if (HUD.targetingFilter(data.color))
+                        if (HUD.targetingFilter(data))
                         {
                             ClientData.targetData = data;
                             break;

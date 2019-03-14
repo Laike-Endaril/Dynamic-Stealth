@@ -21,7 +21,9 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -260,16 +262,34 @@ public class HUD extends Gui
         GlStateManager.color(1, 1, 1, 1);
     }
 
-    public static boolean targetingFilter(int color)
+    public static boolean targetingFilter(OnPointData data)
     {
-        if (color == COLOR_BYPASS) return clientSettings.hudSettings.targetingFilter.showBypass;
-        else if (color == COLOR_PASSIVE) return clientSettings.hudSettings.targetingFilter.showPassive;
-        else if (color == COLOR_IDLE) return clientSettings.hudSettings.targetingFilter.showIdle;
-        else if (color == COLOR_ALERT) return clientSettings.hudSettings.targetingFilter.showAlert;
-        else if (color == COLOR_ATTACKING_YOU) return clientSettings.hudSettings.targetingFilter.showAttackingYou;
-        else if (color == COLOR_ATTACKING_OTHER) return clientSettings.hudSettings.targetingFilter.showAttackingOther;
-        else if (color == COLOR_FLEEING) return clientSettings.hudSettings.targetingFilter.showFleeing;
-        return false;
+        int color = data.color;
+        if (color == COLOR_BYPASS && !clientSettings.hudSettings.targetingFilter.showBypass) return false;
+        if (color == COLOR_PASSIVE && !clientSettings.hudSettings.targetingFilter.showPassive) return false;
+        if (color == COLOR_IDLE && !clientSettings.hudSettings.targetingFilter.showIdle) return false;
+        if (color == COLOR_ALERT && !clientSettings.hudSettings.targetingFilter.showAlert) return false;
+        if (color == COLOR_ATTACKING_YOU && !clientSettings.hudSettings.targetingFilter.showAttackingYou) return false;
+        if (color == COLOR_ATTACKING_OTHER && !clientSettings.hudSettings.targetingFilter.showAttackingOther) return false;
+        if (color == COLOR_FLEEING && !clientSettings.hudSettings.targetingFilter.showFleeing) return false;
+
+        int maxDist = clientSettings.hudSettings.targetingFilter.maxDist;
+        int maxAngle = clientSettings.hudSettings.targetingFilter.maxAngle;
+        if (maxDist <= 0 || maxAngle < 0) return false;
+
+        EntityPlayer player = Minecraft.getMinecraft().player;
+        Entity entity = player.world.getEntityByID(data.searcherID);
+        if (player.getDistanceSq(entity) > Math.pow(maxDist, 2)) return false;
+
+        double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, (entity.posY + entity.height * 0.5) - (player.posY + player.eyeHeight), entity.posZ - player.posZ).normalize());
+        //And because Vec3d.fromPitchYaw occasionally returns values barely out of the range of (-1, 1)...
+        if (angleDif < -1) angleDif = -1;
+        else if (angleDif > 1) angleDif = 1;
+        angleDif = Tools.radtodeg(TRIG_TABLE.arccos(angleDif)); //0 in front, pi in back
+        System.out.println(angleDif);
+        if (angleDif > maxAngle) return false;
+
+        return true;
     }
 
     private static void drawArrow(float x, float y, float angleDeg, float scale)

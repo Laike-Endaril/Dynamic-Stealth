@@ -31,4 +31,17 @@ public class TargetingFilterConfig
     @Config.Name("Flee")
     @Config.Comment({"If true, the targeting HUD shows when focused on an entity that is fleeing from combat"})
     public boolean showFleeing = true;
+
+    @Config.Name("Max Distance")
+    @Config.Comment({"The maximum distance at which the targeting system will acquire a target"})
+    public int maxDist = Integer.MAX_VALUE;
+
+    @Config.Name("Max Angle")
+    @Config.Comment(
+            {
+                    "The maximum angle at which the targeting system will acquire a target",
+                    "If set to -1, targeting is disabled"
+            })
+    @Config.RangeInt(min = -1, max = 180)
+    public int maxAngle = 180;
 }
