@@ -1,1 +1,3 @@
 /give @p minecraft:leather_chestplate 1 0 {AttributeModifiers:[{Slot:"chest",UUIDLeast:78632,UUIDMost:67568,AttributeName:"dynamicstealth.visibilityReduction",Name:"dynamicstealth.visibilityReduction",Amount:100}]}
+/give @p minecraft:leather_chestplate 1 0 {AttributeModifiers:[{Slot:"chest",UUIDLeast:78632,UUIDMost:67568,AttributeName:"dynamicstealth.visibilityReduction",Name:"dynamicstealth.visibilityReduction",Amount:100,Operation:1}]}
+/give @p minecraft:leather_chestplate 1 0 {AttributeModifiers:[{Slot:"chest",UUIDLeast:78632,UUIDMost:67568,AttributeName:"dynamicstealth.visibilityReduction",Name:"dynamicstealth.visibilityReduction",Amount:100,Operation:2}]}
