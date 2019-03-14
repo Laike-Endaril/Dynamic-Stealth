@@ -252,7 +252,7 @@ public class Sight
                         {
                             if (isForHUD)
                             {
-                                double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, (entity.posY - entity.height * 0.5) - (player.posY - player.eyeHeight), entity.posZ - player.posZ).normalize());
+                                double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, (entity.posY + entity.height * 0.5) - (player.posY + player.eyeHeight), entity.posZ - player.posZ).normalize());
 
                                 //And because Vec3d.fromPitchYaw occasionally returns values barely out of the range of (-1, 1)...
                                 if (angleDif < -1) angleDif = -1;
@@ -288,7 +288,7 @@ public class Sight
                         {
                             if (isForHUD)
                             {
-                                double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, (entity.posY - entity.height * 0.5) - (player.posY - player.eyeHeight), entity.posZ - player.posZ).normalize());
+                                double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, (entity.posY + entity.height * 0.5) - (player.posY + player.eyeHeight), entity.posZ - player.posZ).normalize());
 
                                 //And because Vec3d.fromPitchYaw occasionally returns values barely out of the range of (-1, 1)...
                                 if (angleDif < -1) angleDif = -1;
@@ -324,7 +324,7 @@ public class Sight
                         double distSquared = player.getDistanceSq(entity);
                         if (distSquared <= Math.pow(playerMaxSightDistance, 2) && los(player, entity))
                         {
-                            double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, (entity.posY - entity.height * 0.5) - (player.posY - player.eyeHeight), entity.posZ - player.posZ).normalize());
+                            double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, (entity.posY + entity.height * 0.5) - (player.posY + player.eyeHeight), entity.posZ - player.posZ).normalize());
 
                             //And because Vec3d.fromPitchYaw occasionally returns values barely out of the range of (-1, 1)...
                             if (angleDif < -1) angleDif = -1;
