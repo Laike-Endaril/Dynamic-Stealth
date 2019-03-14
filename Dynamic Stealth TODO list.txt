@@ -2,6 +2,10 @@ CURRENTLY WORKING ON ===================================================
 
 Add code side of support for Skyrim "eye" style indicator animation
 
+If possible, client-side configs for targeting logic...
+...whether it forces a LOS check
+...max angle at which a target can be acquired
+
 Add sound-based detection
 Apply stealth-based sound attributes
 
