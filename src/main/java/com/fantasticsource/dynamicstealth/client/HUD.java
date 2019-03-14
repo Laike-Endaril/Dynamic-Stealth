@@ -286,7 +286,6 @@ public class HUD extends Gui
         if (angleDif < -1) angleDif = -1;
         else if (angleDif > 1) angleDif = 1;
         angleDif = Tools.radtodeg(TRIG_TABLE.arccos(angleDif)); //0 in front, pi in back
-        System.out.println(angleDif);
         if (angleDif > maxAngle) return false;
 
         return true;
