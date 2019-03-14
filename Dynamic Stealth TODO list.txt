@@ -94,7 +94,7 @@ Add config option for "Can See Through" Blocks
 Add entity-specific configs for helper system
 
 Add entity-specific filter for OPHUD
-Add entity-specific filter for detail HUD
+Add entity-specific filter for targeting HUD
 
 
 

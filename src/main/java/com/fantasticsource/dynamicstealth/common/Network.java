@@ -71,24 +71,24 @@ public class Network
 
                 if (serverSettings.senses.usePlayerSenses) WRAPPER.sendTo(new VisibilityPacket(player), player);
 
-                boolean opHUD, detailedOPHUD, stealthGauge;
+                boolean opHUD, targetingHUD, stealthGauge;
                 if (isOP(player))
                 {
                     opHUD = serverSettings.hud.allowOPHUD > 0;
-                    detailedOPHUD = serverSettings.hud.allowTargetingHUD > 0;
+                    targetingHUD = serverSettings.hud.allowTargetingHUD > 0;
                     stealthGauge = serverSettings.hud.allowStealthGauge > 0;
                 }
                 else
                 {
                     opHUD = serverSettings.hud.allowOPHUD > 1;
-                    detailedOPHUD = serverSettings.hud.allowTargetingHUD > 1;
+                    targetingHUD = serverSettings.hud.allowTargetingHUD > 1;
                     stealthGauge = serverSettings.hud.allowStealthGauge > 1;
                 }
 
                 if (opHUD || stealthGauge)
                 {
                     double totalStealth = Sight.totalStealthLevel(player);
-                    WRAPPER.sendTo(new HUDPacket(player, opHUD, detailedOPHUD, !stealthGauge ? Byte.MIN_VALUE : totalStealth == Double.MAX_VALUE ? Byte.MIN_VALUE + 1 : (int) (totalStealth * 100)), player); //Byte.MIN_VALUE means disabled
+                    WRAPPER.sendTo(new HUDPacket(player, opHUD, targetingHUD, !stealthGauge ? Byte.MIN_VALUE : totalStealth == Double.MAX_VALUE ? Byte.MIN_VALUE + 1 : (int) (totalStealth * 100)), player); //Byte.MIN_VALUE means disabled
                 }
             }
         }
@@ -276,7 +276,7 @@ public class Network
         EntityPlayerMP player;
         ExplicitPriorityQueue<EntityLivingBase> queue;
 
-        boolean detailHUD;
+        boolean targetingHUD;
         int stealthLevel;
 
         ArrayList<ClientData.OnPointData> list = new ArrayList<>();
@@ -285,10 +285,10 @@ public class Network
         {
         }
 
-        public HUDPacket(EntityPlayerMP player, boolean opHUD, boolean detailHUD, int stealthLevel)
+        public HUDPacket(EntityPlayerMP player, boolean opHUD, boolean targetingHUD, int stealthLevel)
         {
             this.player = player;
-            this.detailHUD = detailHUD;
+            this.targetingHUD = targetingHUD;
 
             if (ServerTickTimer.currentTick() % Sight.maxAITickrate == 0) this.stealthLevel = stealthLevel;
             else this.stealthLevel = Byte.MIN_VALUE + 1;
@@ -304,10 +304,10 @@ public class Network
 
             buf.writeByte(stealthLevel);
 
-            buf.writeBoolean(detailHUD);
+            buf.writeBoolean(targetingHUD);
             buf.writeInt(queue.size());
 
-            if (detailHUD)
+            if (targetingHUD)
             {
                 while (queue.size() > 0)
                 {
@@ -375,10 +375,10 @@ public class Network
 
             stealthLevel = buf.readByte();
 
-            detailHUD = buf.readBoolean();
+            targetingHUD = buf.readBoolean();
             int remaining = buf.readInt();
 
-            if (detailHUD)
+            if (targetingHUD)
             {
                 for (; remaining > 0; remaining--)
                 {
@@ -410,18 +410,18 @@ public class Network
                         ClientData.stealthLevel = stealth;
                     }
 
-                    ClientData.detailData = null;
+                    ClientData.targetData = null;
                     for (ClientData.OnPointData data : packet.list)
                     {
-                        if (HUD.detailFilter(data.color))
+                        if (HUD.targetingFilter(data.color))
                         {
-                            ClientData.detailData = data;
+                            ClientData.targetData = data;
                             break;
                         }
                     }
 
                     ClientData.opList = packet.list;
-                    if (ClientData.detailData != null) ClientData.opList.remove(ClientData.detailData);
+                    if (ClientData.targetData != null) ClientData.opList.remove(ClientData.targetData);
 
                     ClientData.opMap.clear();
                     for (ClientData.OnPointData data : ClientData.opList)

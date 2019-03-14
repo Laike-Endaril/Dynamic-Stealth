@@ -44,7 +44,7 @@ public class ClientData
 
     public static ArrayList<OnPointData> opList = new ArrayList<>();
     public static LinkedHashMap<Integer, OnPointData> opMap = new LinkedHashMap<>();
-    public static OnPointData detailData = null;
+    public static OnPointData targetData = null;
 
     public static LinkedHashMap<Integer, Float> visibilityMap = new LinkedHashMap<>();
 
@@ -59,7 +59,7 @@ public class ClientData
 
         opList.clear();
         opMap.clear();
-        detailData = null;
+        targetData = null;
 
         visibilityMap.clear();
     }

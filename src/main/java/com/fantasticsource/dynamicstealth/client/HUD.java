@@ -106,7 +106,7 @@ public class HUD extends Gui
                 int id = livingBase.getEntityId();
 
                 OnPointData data = opMap.get(id);
-                if (data == null && detailData != null && detailData.searcherID == id) data = detailData;
+                if (data == null && targetData != null && targetData.searcherID == id) data = targetData;
                 if (data != null && onPointFilter(data.color))
                 {
                     //Normal OPHUD
@@ -260,7 +260,7 @@ public class HUD extends Gui
         GlStateManager.color(1, 1, 1, 1);
     }
 
-    public static boolean detailFilter(int color)
+    public static boolean targetingFilter(int color)
     {
         if (color == COLOR_BYPASS) return clientSettings.hudSettings.targetingFilter.showBypass;
         else if (color == COLOR_PASSIVE) return clientSettings.hudSettings.targetingFilter.showPassive;
@@ -327,10 +327,10 @@ public class HUD extends Gui
     private void drawHUD(Minecraft mc)
     {
         //Detailed OPHUD
-        if (detailData != null)
+        if (targetData != null)
         {
-            Entity entity = mc.player.world.getEntityByID(detailData.searcherID);
-            if (entity != null) drawDetailedOPHUD(entity, mc.fontRenderer);
+            Entity entity = mc.player.world.getEntityByID(targetData.searcherID);
+            if (entity != null) drawTargetingHUD(entity, mc.fontRenderer);
         }
 
 
@@ -394,7 +394,7 @@ public class HUD extends Gui
         }
     }
 
-    public void drawDetailedOPHUD(Entity entity, FontRenderer fontRenderer)
+    public void drawTargetingHUD(Entity entity, FontRenderer fontRenderer)
     {
         try
         {
@@ -441,7 +441,7 @@ public class HUD extends Gui
                 Color c;
                 if (clientSettings.hudSettings.targetingStyle.stateColoredArrow)
                 {
-                    c = new Color(detailData.color, true);
+                    c = new Color(targetData.color, true);
                 }
                 else c = new Color(Integer.parseInt(clientSettings.hudSettings.targetingStyle.defaultArrowColor, 16), true);
                 GlStateManager.color(c.rf(), c.gf(), c.bf(), (float) clientSettings.hudSettings.targetingStyle.arrowAlpha);
@@ -463,7 +463,7 @@ public class HUD extends Gui
                 Color c;
                 if (clientSettings.hudSettings.targetingStyle.stateColoredReticle)
                 {
-                    c = new Color(detailData.color, true);
+                    c = new Color(targetData.color, true);
                 }
                 else c = new Color(Integer.parseInt(clientSettings.hudSettings.targetingStyle.defaultReticleColor, 16), true);
                 GlStateManager.color(c.rf(), c.gf(), c.bf(), (float) clientSettings.hudSettings.targetingStyle.reticleAlpha);
@@ -472,7 +472,7 @@ public class HUD extends Gui
 
 
                 //Text setup
-                int targetID = detailData.targetID;
+                int targetID = targetData.targetID;
                 Entity target = (targetID == -1 || targetID == -2) ? null : entity.world.getEntityByID(targetID);
 
                 float padding = 1;
@@ -481,20 +481,20 @@ public class HUD extends Gui
                 if (clientSettings.hudSettings.targetingStyle.components.name) elements.add(entity.getName());
                 if (clientSettings.hudSettings.targetingStyle.components.target)
                 {
-                    if (detailData.color == COLOR_FLEEING)
+                    if (targetData.color == COLOR_FLEEING)
                     {
                         elements.add("Fleeing from " + (target == null ? UNKNOWN : target.getName()));
                     }
                     else
                     {
                         if (targetID != -1 && targetID != -2) elements.add("Targeting " + (target == null ? UNKNOWN : target.getName()));
-                        else if (detailData.percent > 0) elements.add("Searching for target");
+                        else if (targetData.percent > 0) elements.add("Searching for target");
                     }
                 }
                 if (clientSettings.hudSettings.targetingStyle.components.threat)
                 {
-                    if (detailData.color == COLOR_BYPASS) elements.add("Threat: §k000");
-                    else if (detailData.percent > 0) elements.add("Threat: " + detailData.percent + "%");
+                    if (targetData.color == COLOR_BYPASS) elements.add("Threat: §k000");
+                    else if (targetData.percent > 0) elements.add("Threat: " + targetData.percent + "%");
                 }
                 if (clientSettings.hudSettings.targetingStyle.components.distance)
                 {
@@ -514,7 +514,7 @@ public class HUD extends Gui
 
                 float offX = 20;
                 float alpha = (float) clientSettings.hudSettings.targetingStyle.textAlpha;
-                int color = clientSettings.hudSettings.targetingStyle.stateColoredText ? detailData.color : Integer.parseInt(clientSettings.hudSettings.targetingStyle.defaultTextColor, 16);
+                int color = clientSettings.hudSettings.targetingStyle.stateColoredText ? targetData.color : Integer.parseInt(clientSettings.hudSettings.targetingStyle.defaultTextColor, 16);
                 color |= ((int) (0xFF * alpha) << 24);
                 GlStateManager.disableTexture2D();
 

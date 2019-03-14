@@ -171,7 +171,7 @@ public class RenderAlterer
             //Focused target glow effect
             if (clientSettings.hudSettings.targetingStyle.glow && clientSettings.hudSettings.targetingStyle.stateColoredGlow)
             {
-                ClientData.OnPointData data = ClientData.detailData;
+                ClientData.OnPointData data = ClientData.targetData;
                 if (data != null && data.searcherID == livingBase.getEntityId())
                 {
                     Team team = livingBase.getTeam();
@@ -231,7 +231,7 @@ public class RenderAlterer
             }
 
             //Focused target and soul sight glowing effects
-            ClientData.OnPointData data = ClientData.detailData;
+            ClientData.OnPointData data = ClientData.targetData;
             if (clientSettings.hudSettings.targetingStyle.glow && data != null && data.searcherID == livingBase.getEntityId())
             {
                 setTempGlow(event);
