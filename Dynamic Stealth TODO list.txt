@@ -2,8 +2,6 @@ CURRENTLY WORKING ON ===================================================
 
 Add code side of support for Skyrim "eye" style indicator animation
 
-Make it easier for users to find entity registry names to use in the configs
-
 Add sound-based detection
 Apply stealth-based sound attributes
 

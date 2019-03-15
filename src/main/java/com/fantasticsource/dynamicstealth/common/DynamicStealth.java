@@ -91,7 +91,7 @@ import java.util.Set;
 
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 
-@Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, dependencies = "required-after:fantasticlib@[1.12.2.005,)")
+@Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, dependencies = "required-after:fantasticlib@[1.12.2.005a,)")
 public class DynamicStealth
 {
     public static final String MODID = "dynamicstealth";
