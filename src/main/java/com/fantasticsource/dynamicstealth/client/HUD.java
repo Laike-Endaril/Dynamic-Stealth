@@ -60,6 +60,11 @@ public class HUD extends Gui
     private static final ResourceLocation STEALTH_GAUGE_TEXTURE = new ResourceLocation(DynamicStealth.MODID, "image/stealthgauge.png");
     private static final int STEALTH_GAUGE_SIZE = 128;
     private static final float STEALTH_GAUGE_UV_HALF_PIXEL = 0.5f / STEALTH_GAUGE_SIZE;
+    private static final ResourceLocation STEALTH_GAUGE_TEXTURE_2 = new ResourceLocation(DynamicStealth.MODID, "image/stealthgauge2.png");
+    private static final float STEALTH_GAUGE_2_UV_HALF_PIXEL_W = 0.5f / (STEALTH_GAUGE_SIZE * 10);
+    private static final float STEALTH_GAUGE_2_UV_HALF_PIXEL_H = 0.5f / (STEALTH_GAUGE_SIZE * 5);
+    private static final float STEALTH_GAUGE_2_UV_W = 0.1f;
+    private static final float STEALTH_GAUGE_2_UV_H = 0.2f;
 
     private static final ResourceLocation STEALTH_GAUGE_RIM_TEXTURE = new ResourceLocation(DynamicStealth.MODID, "image/stealthgaugerim.png");
     private static final int STEALTH_GAUGE_RIM_SIZE = 256;
@@ -357,60 +362,7 @@ public class HUD extends Gui
 
 
         //Stealth Gauge
-        int stealth = ClientData.stealthLevel;
-        float alpha = (float) clientSettings.hudSettings.mainStyle.stealthGaugeAlpha;
-        if (stealth != Byte.MIN_VALUE && alpha > 0)
-        {
-            GlStateManager.enableBlend();
-            GlStateManager.enableTexture2D();
-
-            int radius = clientSettings.hudSettings.mainStyle.stealthGaugeSize / 2;
-            ScaledResolution sr = new ScaledResolution(mc);
-            float theta = 0.9f * stealth;
-
-            GlStateManager.pushMatrix();
-            GlStateManager.translate(sr.getScaledWidth() - radius, sr.getScaledHeight() - radius, 0);
-            GlStateManager.rotate(theta, 0, 0, 1);
-
-            //Fill
-            textureManager.bindTexture(STEALTH_GAUGE_TEXTURE);
-            Color c = new Color(Integer.parseInt(clientSettings.hudSettings.mainStyle.stealthGaugeColor, 16), true);
-            GlStateManager.color(c.rf(), c.gf(), c.bf(), alpha);
-
-            GlStateManager.glBegin(GL_QUADS);
-            GlStateManager.glTexCoord2f(STEALTH_GAUGE_UV_HALF_PIXEL, STEALTH_GAUGE_UV_HALF_PIXEL);
-            GlStateManager.glVertex3f(-radius, -radius, 0);
-            GlStateManager.glTexCoord2f(STEALTH_GAUGE_UV_HALF_PIXEL, 1f - STEALTH_GAUGE_UV_HALF_PIXEL);
-            GlStateManager.glVertex3f(-radius, radius, 0);
-            GlStateManager.glTexCoord2f(1f - STEALTH_GAUGE_UV_HALF_PIXEL, 1f - STEALTH_GAUGE_UV_HALF_PIXEL);
-            GlStateManager.glVertex3f(radius, radius, 0);
-            GlStateManager.glTexCoord2f(1f - STEALTH_GAUGE_UV_HALF_PIXEL, STEALTH_GAUGE_UV_HALF_PIXEL);
-            GlStateManager.glVertex3f(radius, -radius, 0);
-            GlStateManager.glEnd();
-
-            //Rim
-            GlStateManager.rotate(-theta, 0, 0, 1);
-
-            textureManager.bindTexture(STEALTH_GAUGE_RIM_TEXTURE);
-            c = new Color(Integer.parseInt(clientSettings.hudSettings.mainStyle.stealthGaugeRimColor, 16), true);
-            GlStateManager.color(c.rf(), c.gf(), c.bf(), 1);
-
-            GlStateManager.glBegin(GL_QUADS);
-            GlStateManager.glTexCoord2f(STEALTH_GAUGE_RIM_UV_HALF_PIXEL, STEALTH_GAUGE_RIM_UV_HALF_PIXEL);
-            GlStateManager.glVertex3f(-radius, -radius, 0);
-            GlStateManager.glTexCoord2f(STEALTH_GAUGE_RIM_UV_HALF_PIXEL, 1f - STEALTH_GAUGE_RIM_UV_HALF_PIXEL);
-            GlStateManager.glVertex3f(-radius, radius, 0);
-            GlStateManager.glTexCoord2f(1f - STEALTH_GAUGE_RIM_UV_HALF_PIXEL, 1f - STEALTH_GAUGE_RIM_UV_HALF_PIXEL);
-            GlStateManager.glVertex3f(radius, radius, 0);
-            GlStateManager.glTexCoord2f(1f - STEALTH_GAUGE_RIM_UV_HALF_PIXEL, STEALTH_GAUGE_RIM_UV_HALF_PIXEL);
-            GlStateManager.glVertex3f(radius, -radius, 0);
-            GlStateManager.glEnd();
-
-            //Arrow
-            drawArrow(0, -radius, 90, 0.06f, true);
-
-            GlStateManager.popMatrix();
-        }
+        drawStealthGauge(mc, clientSettings.hudSettings.mainStyle.stealthGaugeMode);
     }
 
     public void drawTargetingHUD(Entity entity, FontRenderer fontRenderer)
@@ -590,5 +542,96 @@ public class HUD extends Gui
         {
             MCTools.crash(e, 155, false);
         }
+    }
+
+    private static void drawStealthGauge(Minecraft mc, int mode)
+    {
+        if (mode == 0) return;
+
+        float alpha = (float) clientSettings.hudSettings.mainStyle.stealthGaugeAlpha;
+        if (alpha <= 0) return;
+
+        int stealth = ClientData.stealthLevel;
+        if (stealth == Byte.MIN_VALUE) return;
+
+
+        GlStateManager.enableBlend();
+        GlStateManager.enableTexture2D();
+
+        GlStateManager.pushMatrix();
+        ScaledResolution sr = new ScaledResolution(mc);
+        int halfSize = clientSettings.hudSettings.mainStyle.stealthGaugeSize / 2;
+        GlStateManager.translate(sr.getScaledWidth() - halfSize, sr.getScaledHeight() - halfSize, 0);
+
+        if (mode == 1)
+        {
+            float theta = 0.9f * stealth;
+            GlStateManager.rotate(theta, 0, 0, 1);
+
+            //Fill
+            textureManager.bindTexture(STEALTH_GAUGE_TEXTURE);
+            Color c = new Color(Integer.parseInt(clientSettings.hudSettings.mainStyle.stealthGaugeColor, 16), true);
+            GlStateManager.color(c.rf(), c.gf(), c.bf(), alpha);
+
+            GlStateManager.glBegin(GL_QUADS);
+            GlStateManager.glTexCoord2f(STEALTH_GAUGE_UV_HALF_PIXEL, STEALTH_GAUGE_UV_HALF_PIXEL);
+            GlStateManager.glVertex3f(-halfSize, -halfSize, 0);
+            GlStateManager.glTexCoord2f(STEALTH_GAUGE_UV_HALF_PIXEL, 1f - STEALTH_GAUGE_UV_HALF_PIXEL);
+            GlStateManager.glVertex3f(-halfSize, halfSize, 0);
+            GlStateManager.glTexCoord2f(1f - STEALTH_GAUGE_UV_HALF_PIXEL, 1f - STEALTH_GAUGE_UV_HALF_PIXEL);
+            GlStateManager.glVertex3f(halfSize, halfSize, 0);
+            GlStateManager.glTexCoord2f(1f - STEALTH_GAUGE_UV_HALF_PIXEL, STEALTH_GAUGE_UV_HALF_PIXEL);
+            GlStateManager.glVertex3f(halfSize, -halfSize, 0);
+            GlStateManager.glEnd();
+
+            //Rim
+            GlStateManager.rotate(-theta, 0, 0, 1);
+
+            textureManager.bindTexture(STEALTH_GAUGE_RIM_TEXTURE);
+            c = new Color(Integer.parseInt(clientSettings.hudSettings.mainStyle.stealthGaugeRimColor, 16), true);
+            GlStateManager.color(c.rf(), c.gf(), c.bf(), 1);
+
+            GlStateManager.glBegin(GL_QUADS);
+            GlStateManager.glTexCoord2f(STEALTH_GAUGE_RIM_UV_HALF_PIXEL, STEALTH_GAUGE_RIM_UV_HALF_PIXEL);
+            GlStateManager.glVertex3f(-halfSize, -halfSize, 0);
+            GlStateManager.glTexCoord2f(STEALTH_GAUGE_RIM_UV_HALF_PIXEL, 1f - STEALTH_GAUGE_RIM_UV_HALF_PIXEL);
+            GlStateManager.glVertex3f(-halfSize, halfSize, 0);
+            GlStateManager.glTexCoord2f(1f - STEALTH_GAUGE_RIM_UV_HALF_PIXEL, 1f - STEALTH_GAUGE_RIM_UV_HALF_PIXEL);
+            GlStateManager.glVertex3f(halfSize, halfSize, 0);
+            GlStateManager.glTexCoord2f(1f - STEALTH_GAUGE_RIM_UV_HALF_PIXEL, STEALTH_GAUGE_RIM_UV_HALF_PIXEL);
+            GlStateManager.glVertex3f(halfSize, -halfSize, 0);
+            GlStateManager.glEnd();
+
+            //Arrow
+            drawArrow(0, -halfSize, 90, 0.06f, true);
+        }
+        else if (mode == 2)
+        {
+            textureManager.bindTexture(STEALTH_GAUGE_TEXTURE_2);
+            Color c = new Color(Integer.parseInt(clientSettings.hudSettings.mainStyle.stealthGaugeColor, 16), true);
+            GlStateManager.color(c.rf(), c.gf(), c.bf(), alpha);
+
+            int index = Tools.min((100 - stealth) >> 2, 49);
+            int gridX = index % 10;
+            int gridY = index / 10;
+
+            float uvleft = gridX * STEALTH_GAUGE_2_UV_W + STEALTH_GAUGE_2_UV_HALF_PIXEL_W;
+            float uvright = (gridX + 1) * STEALTH_GAUGE_2_UV_W - STEALTH_GAUGE_2_UV_HALF_PIXEL_W;
+            float uvtop = gridY * STEALTH_GAUGE_2_UV_H + STEALTH_GAUGE_2_UV_HALF_PIXEL_H;
+            float uvbottom = (gridY + 1) * STEALTH_GAUGE_2_UV_H - STEALTH_GAUGE_2_UV_HALF_PIXEL_H;
+
+            GlStateManager.glBegin(GL_QUADS);
+            GlStateManager.glTexCoord2f(uvleft, uvtop);
+            GlStateManager.glVertex3f(-halfSize, -halfSize, 0);
+            GlStateManager.glTexCoord2f(uvleft, uvbottom);
+            GlStateManager.glVertex3f(-halfSize, halfSize, 0);
+            GlStateManager.glTexCoord2f(uvright, uvbottom);
+            GlStateManager.glVertex3f(halfSize, halfSize, 0);
+            GlStateManager.glTexCoord2f(uvright, uvtop);
+            GlStateManager.glVertex3f(halfSize, -halfSize, 0);
+            GlStateManager.glEnd();
+        }
+
+        GlStateManager.popMatrix();
     }
 }

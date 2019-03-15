@@ -1,6 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-Add code side of support for Skyrim "eye" style indicator animation
+Change default animated gauge from (no eye -> closed eye -> open eye) to (closed eye -> open eye -> bloodshot eye)
 
 Add sound-based detection
 Apply stealth-based sound attributes

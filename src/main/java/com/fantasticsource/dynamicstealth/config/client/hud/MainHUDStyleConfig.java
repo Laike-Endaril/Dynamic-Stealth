@@ -36,4 +36,16 @@ public class MainHUDStyleConfig
     @Config.Comment("The size of the stealth gauge")
     @Config.RangeInt(min = 1)
     public int stealthGaugeSize = 50;
+
+    @Config.Name("Stealth Gauge Mode")
+    @Config.Comment(
+            {
+                    "The general display mode of the stealth gauge",
+                    "",
+                    "0 = None",
+                    "1 = Rotational",
+                    "2 = Animated",
+            })
+    @Config.RangeInt(min = 0, max = 2)
+    public int stealthGaugeMode = 1;
 }
