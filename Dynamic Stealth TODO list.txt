@@ -10,6 +10,7 @@ Switch to a one-subscriber system for events, to reduce invoke() calls from the 
 Look into using instances of MethodHandle instead of reflection where possible
 
 Make stealth level / visibility transitions smoother? (ie. change at a rate)
+"maybe if they see you less than a second or two, instead of being alerted they could go look first"
 
 Directional indicators...
 ...add optional "damaged from" indicator, which draws an indicator pointing the direction damage was recently received from
