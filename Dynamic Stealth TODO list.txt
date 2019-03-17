@@ -2,9 +2,6 @@ CURRENTLY WORKING ON ===================================================
 
 Change default animated gauge from (no eye -> closed eye -> open eye) to (closed eye -> open eye -> bloodshot eye)
 
-Add sound-based detection
-Apply stealth-based sound attributes
-
 Switch to a one-subscriber system for events, to reduce invoke() calls from the event bus
 
 Look into using instances of MethodHandle instead of reflection where possible
@@ -106,6 +103,10 @@ SENSES =================================================================
 Add scent-based detection (wolves, cats, bears)
 ...Add the ability for entities to smell not only other living entities, but also ground items, etc.
 Apply stealth-based scent attributes
+
+Do sound mappings in library
+Add sound-based detection
+Apply stealth-based sound attributes
 
 
 

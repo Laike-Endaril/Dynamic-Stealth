@@ -22,7 +22,6 @@ import com.fantasticsource.dynamicstealth.server.event.attacks.WeaponEntry;
 import com.fantasticsource.dynamicstealth.server.senses.EntitySensesEdit;
 import com.fantasticsource.dynamicstealth.server.senses.EntityTouchData;
 import com.fantasticsource.dynamicstealth.server.senses.hearing.Communication;
-import com.fantasticsource.dynamicstealth.server.senses.hearing.Hearing;
 import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Tracking;
@@ -30,7 +29,6 @@ import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.ServerTickTimer;
-import com.fantasticsource.mctools.WorldEventDistributor;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.TrigLookupTable;
@@ -126,7 +124,6 @@ public class DynamicStealth
         MinecraftForge.EVENT_BUS.register(Communication.class);
         MinecraftForge.EVENT_BUS.register(Potions.class);
         MinecraftForge.EVENT_BUS.register(Tracking.class);
-        MinecraftForge.EVENT_BUS.register(WorldEventDistributor.class);
 
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
         {
@@ -135,12 +132,6 @@ public class DynamicStealth
             MinecraftForge.EVENT_BUS.register(ClientData.class);
             MinecraftForge.EVENT_BUS.register(RenderAlterer.class);
         }
-    }
-
-    @SubscribeEvent
-    public static void soundEvent(WorldEventDistributor.DSoundEvent event)
-    {
-        Hearing.checkSound(event);
     }
 
     @SubscribeEvent

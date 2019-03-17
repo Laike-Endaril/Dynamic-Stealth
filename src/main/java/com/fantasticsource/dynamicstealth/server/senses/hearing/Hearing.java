@@ -2,7 +2,6 @@ package com.fantasticsource.dynamicstealth.server.senses.hearing;
 
 import com.fantasticsource.dynamicstealth.server.Attributes;
 import com.fantasticsource.dynamicstealth.server.senses.sight.LOS;
-import com.fantasticsource.mctools.WorldEventDistributor;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.Vec3d;
 
@@ -24,11 +23,5 @@ public class Hearing
         double range = entity.getEntityAttribute(Attributes.HEARING).getAttributeValue() / 100;
         if (LOS.rayTraceBlocks(entity.world, new Vec3d(entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ), soundPos, true)) return range;
         return range * serverSettings.senses.hearing.noLOSMultiplier;
-    }
-
-
-    public static void checkSound(WorldEventDistributor.DSoundEvent event)
-    {
-        //TODO
     }
 }
