@@ -1,5 +1,9 @@
 CURRENTLY WORKING ON ===================================================
 
+If an entity triggers can't reach flee mode without seeing the target, sometimes it flees toward target, allowing expoit?
+
+Some way to prevent certain friendly CNPCs from moving
+
 Change default animated gauge from (no eye -> closed eye -> open eye) to (closed eye -> open eye -> bloodshot eye)
 
 Switch to a one-subscriber system for events, to reduce invoke() calls from the event bus
@@ -57,7 +61,7 @@ Make held items, armor, elytra, etc. fade with entity?
 Add disguise system; conditionally prevents targeting even if seen, but not if the enemy has threat against you...
 ...for AI, probably call the method for this check in EntitySensesEdit#canSee()
 ...make it so skulls use disguise system instead of doing a stealth multiplier
-...make it so morphing into a creature using Morph mod or Metamorph mod acts as a disguise against that mob type, or remove the Morph API if it remains unused
+...make it so morphing into a creature using Morph mod or Metamorph mod acts as a disguise against that mob type
 ...for players, this may be more complicated, and involve sending fake entities...
 
 Use tracking system (Tracking class) for something, or remove it
