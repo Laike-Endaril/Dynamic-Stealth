@@ -1,8 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-If an entity triggers can't reach flee mode without seeing the target, sometimes it flees toward target, allowing expoit?
-
-Some way to prevent certain friendly CNPCs from moving
+CNPC faction name threat bypass filter
 
 Change default animated gauge from (no eye -> closed eye -> open eye) to (closed eye -> open eye -> bloodshot eye)
 

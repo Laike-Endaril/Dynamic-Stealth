@@ -114,6 +114,11 @@ public class AIDynamicStealth extends EntityAIBase
         return fleeReason != FLEE_NONE;
     }
 
+    public int getMode()
+    {
+        return mode;
+    }
+
     public void fleeIfYouShould(float hpOffset)
     {
         if (!EntityThreatData.bypassesThreat(searcher) && (fleeReason == FLEE_CANTREACH || !EntityThreatData.isFearless(searcher)))

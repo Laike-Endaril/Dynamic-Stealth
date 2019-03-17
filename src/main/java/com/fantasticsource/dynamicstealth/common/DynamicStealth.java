@@ -445,13 +445,12 @@ public class DynamicStealth
                 //Threat, AI, and vanilla attack target
                 AIDynamicStealth stealthAI = AIDynamicStealth.getStealthAI(target);
                 boolean hasAI = stealthAI != null;
-                boolean fleeing = hasAI && stealthAI.isFleeing();
 
                 Threat.ThreatData threatData = Threat.get(target);
                 EntityLivingBase threatTarget = threatData.target;
                 int threat = threatData.threatLevel;
 
-                if (fleeing)
+                if (hasAI && (stealthAI.isFleeing() || stealthAI.getMode() == AIDynamicStealth.MODE_COWER))
                 {
                     //Be brave, Sir Robin
                     if (serverSettings.ai.flee.increaseOnDamage) Threat.set(target, canSee ? attacker : threatTarget, threat + (int) (event.getAmount() * serverSettings.threat.attackedThreatMultiplierTarget / target.getMaxHealth()));
