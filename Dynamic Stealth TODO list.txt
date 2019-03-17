@@ -18,11 +18,11 @@ Directional indicators...
 
 Remove special filter for ice and fire mobs when they release the fix on their side (they already fixed in a commit, it's just not released yet)
 
+Set Bonus integration for stealth attacks and assassinations
+
 
 
 BUG FIXES ==============================================================
-
-Villagers run WAY too fast
 
 Spiders can home in on their threat target even if they can't see it
 
@@ -33,6 +33,8 @@ Make stuck detection account for jumping by allowing for more play along y axis
 
 Fix leashes not rendering sometimes (not a vanilla bug)...
 ...can reproduce by leashing a horse, flying into the air, and dropping into water while facing down
+
+Villagers run WAY too fast (confirmed vanilla bug - https://bugs.mojang.com/browse/MC-15080)
 
 
 
