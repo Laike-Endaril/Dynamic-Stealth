@@ -9,6 +9,9 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import noppes.npcs.api.NpcAPI;
+import noppes.npcs.api.entity.ICustomNpc;
+import noppes.npcs.api.entity.IEntity;
 
 import java.util.ArrayList;
 
@@ -114,6 +117,20 @@ public class EntityThreatData
         if (serverSettings.threat.bypassThreatSystem || livingBase == null) return true;
 
         if (Compat.dissolution && livingBase instanceof IPossessable && ((IPossessable) livingBase).getPossessingEntity() != null) return true;
+
+        if (Compat.customnpcs)
+        {
+            IEntity iEntity = NpcAPI.Instance().getIEntity(livingBase);
+            if (iEntity instanceof ICustomNpc)
+            {
+                ICustomNpc npc = (ICustomNpc) iEntity;
+                String faction = npc.getFaction().getName();
+                for (String string : serverSettings.threat.cnpcThreatConfig.threatBypassFactions)
+                {
+                    if (faction.equals(string)) return true;
+                }
+            }
+        }
 
         for (Class<? extends Entity> clss : threatBypass)
         {

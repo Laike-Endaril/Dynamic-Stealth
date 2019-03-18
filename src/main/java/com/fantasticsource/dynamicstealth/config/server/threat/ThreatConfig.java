@@ -70,4 +70,7 @@ public class ThreatConfig
 
     @Config.Name("Entity-Specific Settings (Advanced)")
     public SpecificThreatConfig y_entityOverrides = new SpecificThreatConfig();
+
+    @Config.Name("CNPC Threat Settings")
+    public CNPCThreatConfig cnpcThreatConfig = new CNPCThreatConfig();
 }
