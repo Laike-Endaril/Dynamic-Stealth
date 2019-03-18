@@ -53,6 +53,8 @@ dynamicstealth.config.stealthGaugeColor=Stealth Gauge Color
 dynamicstealth.config.stealthGaugeRimColor=Stealth Gauge Rim Color
 dynamicstealth.config.stealthGaugeSize=Stealth Gauge Size
 dynamicstealth.config.stealthGaugeMode=Stealth Gauge Mode
+dynamicstealth.config.stealthGaugeX=Stealth Gauge X Position
+dynamicstealth.config.stealthGaugeY=Stealth Gauge Y Position
 
 dynamicstealth.config.opHUDShowPassive=Passive
 dynamicstealth.config.opHUDShowBypass=Bypass

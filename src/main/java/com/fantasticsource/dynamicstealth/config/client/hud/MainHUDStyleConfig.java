@@ -54,4 +54,26 @@ public class MainHUDStyleConfig
             })
     @Config.RangeInt(min = 0, max = 2)
     public int stealthGaugeMode = 1;
+
+    @Config.Name("Stealth Gauge X Position")
+    @Config.LangKey(DynamicStealth.MODID + ".config.stealthGaugeX")
+    @Config.Comment(
+            {
+                    "The x position of the stealth gauge",
+                    "",
+                    "0 is far left, 0.5 is center, 1 is far right"
+            })
+    @Config.RangeDouble(min = 0, max = 1)
+    public double stealthGaugeX = 1;
+
+    @Config.Name("Stealth Gauge Y Position")
+    @Config.LangKey(DynamicStealth.MODID + ".config.stealthGaugeY")
+    @Config.Comment(
+            {
+                    "The y position of the stealth gauge",
+                    "",
+                    "0 is top, 0.5 is center, 1 is bottom"
+            })
+    @Config.RangeDouble(min = 0, max = 1)
+    public double stealthGaugeY = 1;
 }

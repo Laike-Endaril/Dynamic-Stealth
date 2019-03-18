@@ -366,7 +366,9 @@ public class HUD extends Gui
         GlStateManager.pushMatrix();
         ScaledResolution sr = new ScaledResolution(mc);
         int halfSize = clientSettings.hudSettings.mainStyle.stealthGaugeSize / 2;
-        GlStateManager.translate(sr.getScaledWidth() - halfSize, sr.getScaledHeight() - halfSize, 0);
+        double x = halfSize + (sr.getScaledWidth() - halfSize * 2) * clientSettings.hudSettings.mainStyle.stealthGaugeX;
+        double y = halfSize + (sr.getScaledHeight() - halfSize * 2) * clientSettings.hudSettings.mainStyle.stealthGaugeY;
+        GlStateManager.translate(x, y, 0);
 
         if (mode == 1)
         {
