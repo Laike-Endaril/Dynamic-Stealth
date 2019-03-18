@@ -1,9 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-CNPC faction name threat bypass filter
-
-Change default animated gauge from (no eye -> closed eye -> open eye) to (closed eye -> open eye -> bloodshot eye)
-
 Switch to a one-subscriber system for events, to reduce invoke() calls from the event bus
 
 Look into using instances of MethodHandle instead of reflection where possible
