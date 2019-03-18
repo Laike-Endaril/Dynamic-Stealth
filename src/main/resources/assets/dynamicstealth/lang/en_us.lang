@@ -8,6 +8,7 @@ attribute.name.dynamicstealth.scentReduction=% Scent Reduction
 attribute.name.dynamicstealth.smelling=% Smelling
 
 
+
 dynamicstealth.soulsight=Soul Sight
 potion.effect.dynamicstealth.soulsight=Potion of Soul Sight
 splash_potion.effect.dynamicstealth.soulsight=Splash Potion of Soul Sight
@@ -21,4 +22,26 @@ potion.effect.dynamicstealth.glowing=Potion of Glowing
 splash_potion.effect.dynamicstealth.glowing=Splash Potion of Glowing
 lingering_potion.effect.dynamicstealth.glowing=Lingering Potion of Glowing
 
+
+
 dynamicstealth.cmd.reloaded=Server reloaded config from file (the "reset to default" buttons for DS may be glitched until MC is restarted)
+
+
+
+dynamicstealth.config.clientSettings=Client Settings
+dynamicstealth.config.serverSettings=Server Settings
+
+dynamicstealth.config.hud=HUD
+dynamicstealth.config.entityFading=Entity Fading
+
+dynamicstealth.config.mainHUDStyle=Main HUD Style
+dynamicstealth.config.opHUDFilter=On-point HUD Filter
+dynamicstealth.config.opHUDStyle=On-point HUD Style
+dynamicstealth.config.targetingFilter=Targeting Filter
+dynamicstealth.config.targetingStyle=Targeting HUD Style
+
+dynamicstealth.config.stealthGaugeAlpha=Stealth Gauge Opacity
+dynamicstealth.config.stealthGaugeColor=Stealth Gauge Color
+dynamicstealth.config.stealthGaugeRimColor=Stealth Gauge Rim Color
+dynamicstealth.config.stealthGaugeSize=Stealth Gauge Size
+dynamicstealth.config.stealthGaugeMode=Stealth Gauge Mode

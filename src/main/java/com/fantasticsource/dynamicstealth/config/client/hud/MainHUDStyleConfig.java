@@ -1,10 +1,12 @@
 package com.fantasticsource.dynamicstealth.config.client.hud;
 
+import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import net.minecraftforge.common.config.Config;
 
 public class MainHUDStyleConfig
 {
     @Config.Name("Stealth Gauge Opacity")
+    @Config.LangKey(DynamicStealth.MODID + ".config.stealthGaugeAlpha")
     @Config.Comment(
             {
                     "How visible the stealth gauge is, transparency-wise",
@@ -15,6 +17,7 @@ public class MainHUDStyleConfig
     public double stealthGaugeAlpha = 0.6;
 
     @Config.Name("Stealth Gauge Color")
+    @Config.LangKey(DynamicStealth.MODID + ".config.stealthGaugeColor")
     @Config.Comment(
             {
                     "The color of the stealth gauge",
@@ -24,6 +27,7 @@ public class MainHUDStyleConfig
     public String stealthGaugeColor = "FFFFFF";
 
     @Config.Name("Stealth Gauge Rim Color")
+    @Config.LangKey(DynamicStealth.MODID + ".config.stealthGaugeRimColor")
     @Config.Comment(
             {
                     "The color of the stealth gauge's rim and arrow",
@@ -33,11 +37,13 @@ public class MainHUDStyleConfig
     public String stealthGaugeRimColor = "222222";
 
     @Config.Name("Stealth Gauge Size")
+    @Config.LangKey(DynamicStealth.MODID + ".config.stealthGaugeSize")
     @Config.Comment("The size of the stealth gauge")
     @Config.RangeInt(min = 1)
     public int stealthGaugeSize = 50;
 
     @Config.Name("Stealth Gauge Mode")
+    @Config.LangKey(DynamicStealth.MODID + ".config.stealthGaugeMode")
     @Config.Comment(
             {
                     "The general display mode of the stealth gauge",

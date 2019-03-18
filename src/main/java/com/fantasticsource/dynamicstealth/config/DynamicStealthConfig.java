@@ -11,8 +11,10 @@ import static com.fantasticsource.dynamicstealth.config.ConfigHandler.CONFIG_NAM
 public class DynamicStealthConfig
 {
     @Config.Name("Client Settings")
+    @Config.LangKey(DynamicStealth.MODID + ".config.clientSettings")
     public static ClientConfig clientSettings = new ClientConfig();
 
     @Config.Name("Server Settings")
+    @Config.LangKey(DynamicStealth.MODID + ".config.serverSettings")
     public static ServerConfig serverSettings = new ServerConfig();
 }
