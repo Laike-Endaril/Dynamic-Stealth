@@ -444,7 +444,7 @@ public class HUD extends Gui
 
     private void drawHUD(Minecraft mc)
     {
-        //Detailed OPHUD
+        //Targeting HUD
         if (targetData != null)
         {
             Entity entity = mc.player.world.getEntityByID(targetData.searcherID);
@@ -544,7 +544,7 @@ public class HUD extends Gui
                 ArrayList<String> elements = new ArrayList<>();
 
                 if (clientSettings.hudSettings.targetingStyle.components.name) elements.add(entity.getName());
-                if (clientSettings.hudSettings.targetingStyle.components.target)
+                if (clientSettings.hudSettings.targetingStyle.components.target && targetID != -2)
                 {
                     if (targetData.color == COLOR_FLEEING)
                     {
@@ -552,7 +552,7 @@ public class HUD extends Gui
                     }
                     else
                     {
-                        if (targetID != -1 && targetID != -2) elements.add(I18n.format(DynamicStealth.MODID + ".hud.targeting", target == null ? UNKNOWN : target.getName()));
+                        if (targetID != -1) elements.add(I18n.format(DynamicStealth.MODID + ".hud.targeting", target == null ? UNKNOWN : target.getName()));
                         else if (targetData.percent > 0) elements.add(I18n.format(DynamicStealth.MODID + ".hud.searchingForTarget"));
                     }
                 }

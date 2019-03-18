@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
+CNPC faction targeting filter
+
 Switch to a one-subscriber system for events, to reduce invoke() calls from the event bus
 
 Look into using instances of MethodHandle instead of reflection where possible
@@ -22,7 +24,8 @@ Set Bonus integration for stealth attacks and assassinations
 
 BUG FIXES ==============================================================
 
-Spiders can home in on their threat target even if they can't see it (must have a threat target)
+Spiders path toward their threat target even if they can't see it (must have a threat target)...
+...caused by longmemory in EntityAIAttackMelee?
 
 Fix entities attempting to path through diagonal walls; this may very well fix (or at least mostly fix) the issue below
 Fix entities being able to attack through glass diagonally (because they can see through it...)
