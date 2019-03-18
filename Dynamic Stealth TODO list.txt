@@ -22,7 +22,7 @@ Set Bonus integration for stealth attacks and assassinations
 
 BUG FIXES ==============================================================
 
-Spiders can home in on their threat target even if they can't see it
+Spiders can home in on their threat target even if they can't see it (must have a threat target)
 
 Fix entities attempting to path through diagonal walls; this may very well fix (or at least mostly fix) the issue below
 Fix entities being able to attack through glass diagonally (because they can see through it...)
@@ -41,8 +41,6 @@ GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES ============================
 "Noisiness" block trait; block filter to determine how much noise walking/running/landing makes
 
 "Footprint Duration" block trait; block filter for how long visible footprints/tracks last on the block type.  Add (long to short); clay, snow, sand, mycelium, dirt, coarse dirt, podzol
-
-Make held items, armor, elytra, etc. fade with entity?
 
 Add disguise system; conditionally prevents targeting even if seen, but not if the enemy has threat against you...
 ...for AI, probably call the method for this check in EntitySensesEdit#canSee()
