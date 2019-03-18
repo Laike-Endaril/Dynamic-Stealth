@@ -17,26 +17,4 @@ public class DynamicStealthConfig
     @Config.Name("Server Settings")
     @Config.LangKey(DynamicStealth.MODID + ".config.serverSettings")
     public static ServerConfig serverSettings = new ServerConfig();
-
-    @Config.Name("Test")
-    @Config.LangKey(DynamicStealth.MODID + ".config.testcat")
-    public static TestConfig testConfig = new TestConfig();
-
-    public static class TestConfig
-    {
-        @Config.Name("Test")
-        @Config.LangKey(DynamicStealth.MODID + ".config.testbool")
-        public boolean test = false;
-
-        @Config.Name("Test 2")
-        @Config.LangKey(DynamicStealth.MODID + ".config.testcat2")
-        public TestConfig2 testConfig2 = new TestConfig2();
-
-        public static class TestConfig2
-        {
-            @Config.Name("Test 2")
-            @Config.LangKey(DynamicStealth.MODID + ".config.testbool2")
-            public boolean test = true;
-        }
-    }
 }
