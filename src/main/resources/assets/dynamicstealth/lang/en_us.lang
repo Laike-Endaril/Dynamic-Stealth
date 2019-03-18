@@ -28,6 +28,14 @@ dynamicstealth.cmd.reloaded=Server reloaded config from file (the "reset to defa
 
 
 
+dynamicstealth.hud.fleeFrom=Fleeing from %s
+dynamicstealth.hud.targeting=Targeting %s
+dynamicstealth.hud.searchingForTarget=Searching for target
+dynamicstealth.hud.threat=Threat: %s%%
+dynamicstealth.hud.distance=Distance: %s
+
+
+
 dynamicstealth.config.clientSettings=Client Settings
 dynamicstealth.config.serverSettings=Server Settings
 

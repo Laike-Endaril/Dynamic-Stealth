@@ -1,8 +1,8 @@
 CURRENTLY WORKING ON ===================================================
 
-Add lang keys for all targeting HUD text elements; remember to use %s
-
 Update comments for item filters with new NBT syntax
+
+Add options for stealth gauge position
 
 Switch to a one-subscriber system for events, to reduce invoke() calls from the event bus
 
