@@ -1,8 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-Switch to a one-subscriber system for events, to reduce invoke() calls from the event bus
-
-Look into using instances of MethodHandle instead of reflection where possible
+Fix spin bug for CNPCs with threat bypass
 
 Make stealth level / visibility transitions smoother? (ie. change at a rate)
 "maybe if they see you less than a second or two, instead of being alerted they could go look first"
@@ -17,6 +15,14 @@ Directional indicators...
 Remove special filter for ice and fire mobs when they release the fix on their side (they already fixed in a commit, it's just not released yet)
 
 Set Bonus integration for stealth attacks and assassinations
+
+
+
+EFFICIENCY =============================================================
+
+Switch to a one-subscriber system for events, to reduce invoke() calls from the event bus
+
+Look into using instances of MethodHandle instead of reflection where possible
 
 
 
