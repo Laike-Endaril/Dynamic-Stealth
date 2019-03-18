@@ -45,3 +45,8 @@ dynamicstealth.config.stealthGaugeColor=Stealth Gauge Color
 dynamicstealth.config.stealthGaugeRimColor=Stealth Gauge Rim Color
 dynamicstealth.config.stealthGaugeSize=Stealth Gauge Size
 dynamicstealth.config.stealthGaugeMode=Stealth Gauge Mode
+
+dynamicstealth.config.testcat=Test Cat
+dynamicstealth.config.testbool=Test Bool
+dynamicstealth.config.testcat2=Test Cat 2
+dynamicstealth.config.testbool2=Test Bool 2
