@@ -585,7 +585,7 @@ public class DynamicStealth
                 Compat.replaceNPEAttackTargetTasks(living);
 
                 //Entity AI task additions
-                if (!EntityThreatData.bypassesThreat(living)) addTasks(living.targetTasks, living.tasks, living);
+                addTasks(living.targetTasks, living.tasks, living);
             }
             else //Client-side
             {
