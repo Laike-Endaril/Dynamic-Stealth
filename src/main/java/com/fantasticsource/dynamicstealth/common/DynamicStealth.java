@@ -109,7 +109,7 @@ public class DynamicStealth
         ConfigHandler.init();
     }
 
-GlState
+
     public DynamicStealth()
     {
         Attributes.init();
