@@ -38,14 +38,6 @@ Villagers run WAY too fast (confirmed vanilla bug - https://bugs.mojang.com/brow
 
 GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES ============================
 
-"Climbing" item trait; item filter for weapons/tools that can be used for climbing...
-...climbing tools are effective on vertical surfaces of a lower mining level than their material
-...when wielding one climbing tool, you can catch yourself / hold yourself on vertical surfaces
-...when wielding two, you can climb up vertical surfaces
-...both features use durability
-
-"Potion Applier" item trait; item filter for weapons that can have potions applied to them
-
 "Noisiness" block trait; block filter to determine how much noise walking/running/landing makes
 
 "Footprint Duration" block trait; block filter for how long visible footprints/tracks last on the block type.  Add (long to short); clay, snow, sand, mycelium, dirt, coarse dirt, podzol
@@ -144,8 +136,6 @@ Pebbles - Can be thrown as a 0 damage projectile like a snowball, but drops as a
 Make firework stars throwable; they go off after a short delay, or if in water, drop as an item again
 
 Slingshot - Can fire pebbles, smoke bombs, splash/lingering potions, or firework stars as low-damage projectiles
-
-Grappling hook - Only works if it latches to something
 
 
 
