@@ -1,11 +1,13 @@
 package com.fantasticsource.dynamicstealth.config.server.threat;
 
+import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatDefaults;
 import net.minecraftforge.common.config.Config;
 
 public class SpecificThreatConfig
 {
     @Config.Name("Threat Bypass")
+    @Config.LangKey(DynamicStealth.MODID + ".config.entitySpecificBypass")
     @Config.Comment(
             {
                     "Entities in this bypass the threat system",
@@ -18,6 +20,7 @@ public class SpecificThreatConfig
     public String[] threatBypass = EntityThreatDefaults.threatBypassDefaults.toArray(new String[EntityThreatDefaults.threatBypassDefaults.size()]);
 
     @Config.Name("Passiveness")
+    @Config.LangKey(DynamicStealth.MODID + ".config.entityPassiveness")
     @Config.Comment(
             {
                     "Sets whether the threat system detects and entity as passive or not",

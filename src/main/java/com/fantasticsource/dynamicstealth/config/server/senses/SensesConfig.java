@@ -1,11 +1,13 @@
 package com.fantasticsource.dynamicstealth.config.server.senses;
 
+import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.dynamicstealth.config.server.senses.sight.SightConfig;
 import net.minecraftforge.common.config.Config;
 
 public class SensesConfig
 {
     @Config.Name("Use player senses")
+    @Config.LangKey(DynamicStealth.MODID + ".config.playerSenses")
     @Config.Comment(
             {
                     "If enabled, stealth mechanics work on players",
@@ -16,11 +18,14 @@ public class SensesConfig
     public boolean usePlayerSenses = true;
 
     @Config.Name("Touch")
+    @Config.LangKey(DynamicStealth.MODID + ".config.touch")
     public TouchConfig touch = new TouchConfig();
 
     @Config.Name("Sight")
+    @Config.LangKey(DynamicStealth.MODID + ".config.sight")
     public SightConfig sight = new SightConfig();
 
     @Config.Name("Hearing")
+    @Config.LangKey(DynamicStealth.MODID + ".config.hearing")
     public HearingConfig hearing = new HearingConfig();
 }

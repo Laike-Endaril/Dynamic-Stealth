@@ -45,3 +45,218 @@ dynamicstealth.config.stealthGaugeColor=Stealth Gauge Color
 dynamicstealth.config.stealthGaugeRimColor=Stealth Gauge Rim Color
 dynamicstealth.config.stealthGaugeSize=Stealth Gauge Size
 dynamicstealth.config.stealthGaugeMode=Stealth Gauge Mode
+
+dynamicstealth.config.opHUDShowPassive=Passive
+dynamicstealth.config.opHUDShowBypass=Bypass
+dynamicstealth.config.opHUDShowIdle=Idle
+dynamicstealth.config.opHUDShowAtkOther=Attacking Other
+dynamicstealth.config.opHUDShowAlert=Alert
+dynamicstealth.config.opHUDShowAtkYou=Attacking You
+dynamicstealth.config.opHUDShowFlee=Flee
+
+dynamicstealth.config.opHUDDepth=0: Use Depth
+dynamicstealth.config.opHUD3DVPercent=1: 3D Vertical Percentage
+dynamicstealth.config.opHUDSneakOffset=2: Account For Sneaking
+dynamicstealth.config.opHUD3DVOffset=3: 3D Vertical Offset
+dynamicstealth.config.opHUD3DHPercent=4: 3D Horizontal Percentage
+dynamicstealth.config.opHUD2DHOffset=5: 2D Horizontal Offset
+dynamicstealth.config.opHUD2DVOffset=6: 2D Vertical Offset
+dynamicstealth.config.opHUDScale=7: Scale
+
+dynamicstealth.config.targetingShowPassive=Passive
+dynamicstealth.config.targetingShowBypass=Bypass
+dynamicstealth.config.targetingShowIdle=Idle
+dynamicstealth.config.targetingShowAtkOther=Attacking Other
+dynamicstealth.config.targetingShowAlert=Alert
+dynamicstealth.config.targetingShowAtkYou=Attacking You
+dynamicstealth.config.targetingShowFlee=Flee
+dynamicstealth.config.targetingMaxDist=Max Distance
+dynamicstealth.config.targetingMaxAngle=Max Angle
+
+dynamicstealth.config.targetingGlow=Glow
+dynamicstealth.config.targetingGlowStateColor=State-Colored Glow
+dynamicstealth.config.targetingAlpha=Reticle Opacity
+dynamicstealth.config.targetingColor=Default Reticle Color
+dynamicstealth.config.targetingStateColor=State-Colored Reticle
+dynamicstealth.config.targetingSpacing=Reticle Spacing
+dynamicstealth.config.targetingSize=Reticle Size
+dynamicstealth.config.targetingAlpha=Text Opacity
+dynamicstealth.config.targetingTextColor=Default Text Color
+dynamicstealth.config.targetingTextStateColor=State-Colored Text
+dynamicstealth.config.targetingTextScale=Text Scale
+dynamicstealth.config.targetingArrowAlpha=Arrow Opacity
+dynamicstealth.config.targetingArrowColor=Default Arrow Color
+dynamicstealth.config.targetingArrowStateColor=State-Colored Arrow
+dynamicstealth.config.targetingArrowSize=Arrow Size
+dynamicstealth.config.targetingComponents=Components
+
+dynamicstealth.config.targetShowName=Target's Name
+dynamicstealth.config.targetShowTarget=Target's Target
+dynamicstealth.config.targetShowThreat=Target's Threat
+dynamicstealth.config.targetShowDistance=Target's Distance
+
+dynamicstealth.config.fadeMinAlpha=Minimum Entity Opacity
+dynamicstealth.config.fadeMaxAt=Full Opacity At...
+
+dynamicstealth.config.ai=AI
+dynamicstealth.config.HUDAllowances=Client HUD allowances
+dynamicstealth.config.senses=Senses
+dynamicstealth.config.threat=Threat System
+dynamicstealth.config.helperSys=Helper System
+dynamicstealth.config.interact=Interactions
+dynamicstealth.config.items=Items
+
+dynamicstealth.config.aiHeadSpeed=Head Turn Speed
+dynamicstealth.config.aiEntitySpecific=Entity-Specific Settings (Advanced)
+dynamicstealth.config.aiFlee=Flee
+dynamicstealth.config.aiCantReach=Can't Reach
+dynamicstealth.config.aiNoPetTeleport=Prevent Pet Teleport
+
+dynamicstealth.config.entitySpecificHeadSpeed=Head Turn Speed
+
+dynamicstealth.config.fleeThreshold=HP Threshold
+dynamicstealth.config.fleeRate=Degredation Rate
+dynamicstealth.config.fleeDamageLengthen=Damage Increases Flee Duration
+dynamicstealth.config.fleeHome=CNPCs flee To Home Position
+dynamicstealth.config.fearless=Fearless
+
+dynamicstealth.config.cantReachCombatTime=Combat Time
+dynamicstealth.config.cantReachNoAttackTime=No Attack Time
+dynamicstealth.config.cantReachNoPathTime=No Path Time
+dynamicstealth.config.cantReachTargetTime=Target Time
+dynamicstealth.config.cantReachFlee=Flee If Unreachable
+
+dynamicstealth.config.allowOPHUD=Allow On-Point HUD For Clients
+dynamicstealth.config.allowTargeting=Allow Targeting HUD For Clients
+dynamicstealth.config.allowPassiveRecognition=Recognize Passives Automatically
+dynamicstealth.config.allowStealthGauge=Allow Stealth Gauge For Clients
+
+dynamicstealth.config.playerSenses=Use player senses
+dynamicstealth.config.touch=Touch
+dynamicstealth.config.sight=Sight
+dynamicstealth.config.hearing=Hearing
+
+dynamicstealth.config.enabletouch=Enable Touch
+dynamicstealth.config.unfeeling=Unfeeling
+
+dynamicstealth.config.stealthMultipliers=Stealth Multipliers
+dynamicstealth.config.visibilityMultipliers=Visibility Multipliers
+dynamicstealth.config.lighting=Lighting
+dynamicstealth.config.angle=Angle
+dynamicstealth.config.distance=Distance
+dynamicstealth.config.absolutes=Absolute Cases
+dynamicstealth.config.entitySpecificSight=Entity-Specific Settings (Advanced)
+
+dynamicstealth.config.crouchMultiplier=Crouching Multiplier
+dynamicstealth.config.mobHeadMultiplier=Mob Head Multiplier
+dynamicstealth.config.invisibilityMultiplier=Invisibility Multiplier
+dynamicstealth.config.blindnessMultiplier=Blindness Multiplier
+
+dynamicstealth.config.armorMultiplier=Armor Multiplier (Cumulative)
+dynamicstealth.config.alertMultiplier="Alert" Multiplier
+dynamicstealth.config.seenMultiplier="Seen" Multiplier
+
+dynamicstealth.config.lightHigh=Light (High/Bright)
+dynamicstealth.config.lightLow=Light (Low/Dark)
+dynamicstealth.config.nightvisionBonus=Nightvision Bonus
+
+dynamicstealth.config.angleNear=Angle (Large/Wide; Near)
+dynamicstealth.config.angleFar=Angle (Small/Thin; Far)
+
+dynamicstealth.config.distanceFar=Distance (Far)
+dynamicstealth.config.distanceNear=Distance (Near)
+
+dynamicstealth.config.seeGlowing=See Glowing
+dynamicstealth.config.seeBurning=See Burning
+
+dynamicstealth.config.entitySpecificAngle=Angle
+dynamicstealth.config.entitySpecificDistance=Distance
+dynamicstealth.config.entitySpecificLighting=Lighting
+dynamicstealth.config.naturallyBright=Naturally Bright
+dynamicstealth.config.naturalNightvision=Natural Nightvision
+dynamicstealth.config.naturalSoulSight=Natural Soul Sight
+
+dynamicstealth.config.warningRange=Warning Range
+dynamicstealth.config.notificationRange=Notification Range
+dynamicstealth.config.noLOSMultiplier=No LOS Multiplier
+
+dynamicstealth.config.threatDealtDamage=Dealt Damage Multiplier
+dynamicstealth.config.threatAttackedBySame="Attacked By Same" Multiplier
+dynamicstealth.config.threatAttackedByOther="Attacked By Other" Multiplier
+dynamicstealth.config.threatBypassGlobal=Bypass Threat System (Global)
+dynamicstealth.config.threatInitialAttack=Initial Attack Multiplier
+dynamicstealth.config.threatInitialSpotted=Initial "Target Spotted" Threat
+dynamicstealth.config.threatAllyKilled="Ally Killed" Threat
+dynamicstealth.config.threatWarned="Warned" Threat
+dynamicstealth.config.threatMax=Maximum Threat
+dynamicstealth.config.threatUnseenMinThreshold=Unseen Target Minimum Threat Level
+dynamicstealth.config.threatUnseenRate=Unseen Target Degredation Rate
+dynamicstealth.config.threatSeenRate=Seen Target Threat Rate
+dynamicstealth.config.threatCantReachRate=Owned Can't Reach Degredation Rate
+dynamicstealth.config.threatEntitySpecific=Entity-Specific Settings (Advanced)
+dynamicstealth.config.threatCNPC=CNPC Threat Settings
+
+dynamicstealth.config.entitySpecificBypass=Threat Bypass
+dynamicstealth.config.entityPassiveness=Passiveness
+
+dynamicstealth.config.CNPCFactionBypass=Faction Threat Bypass
+
+dynamicstealth.config.helperOwnership=Ownership
+dynamicstealth.config.helperTeams=Teams
+dynamicstealth.config.helperCNPCFactions=Custom NPCs Factions
+dynamicstealth.config.helperType=Help Same Entity Type
+
+dynamicstealth.config.helpOwner=Help Owner
+dynamicstealth.config.helpSameOwner=Help If Same Owner
+dynamicstealth.config.helpDedicated=Dedicated
+dynamicstealth.config.helpOwned=Help Owned
+
+dynamicstealth.config.helpTeam=Help Same Team
+dynamicstealth.config.dontHelpOtherTeam=Don't Help Other Teams
+
+dynamicstealth.config.helpGoodRep=Help If Good Rep
+dynamicstealth.config.dontHelpBadRep=Don't Help If Bad Rep
+
+dynamicstealth.config.interactAttack=Attack
+dynamicstealth.config.interactStealthAtk=Stealth Attack
+dynamicstealth.config.interactAssassination=Assassination
+dynamicstealth.config.interactCalmDown=Calm Down
+dynamicstealth.config.interactRally=Rally
+dynamicstealth.config.interactDesperation=Desperation
+dynamicstealth.config.interactCantReach=Can't Reach
+
+dynamicstealth.config.removeInvis=Remove Invisibility On Hit
+dynamicstealth.config.removeBlind=Remove Blindness On Hit
+dynamicstealth.config.attackArmorPenetration=Armor Penetration
+dynamicstealth.config.attackDamageMult=Damage Multiplier
+dynamicstealth.config.attackAEffects=Attacker Effects
+dynamicstealth.config.attackVEffects=Victim Effects
+dynamicstealth.config.attackWeaponSpecific=Weapon-Specific Settings
+
+dynamicstealth.config.stealthAtkArmorPenetration=Armor Penetration
+dynamicstealth.config.stealthAtkDamageMult=Damage Multiplier
+dynamicstealth.config.stealthAtkAEffects=Attacker Effects
+dynamicstealth.config.stealthAtkVEffects=Victim Effects
+dynamicstealth.config.stealthAtkWeaponSpecific=Weapon-Specific Settings
+
+dynamicstealth.config.assassinationAEffects=Attacker Effects
+dynamicstealth.config.assassinationWeaponSpecific=Weapon-Specific Settings
+
+dynamicstealth.config.calmDownFullHP=Recover all HP
+dynamicstealth.config.calmDownCNPCWarp=CNPCs Warp Home
+dynamicstealth.config.calmDownPotions=Potion Effects
+
+dynamicstealth.config.rallyPotions=Potion Effects
+
+dynamicstealth.config.desperationPotions=Potion Effects
+
+dynamicstealth.config.cantReachPotions=Potion Effects
+
+dynamicstealth.config.potions=Potions
+
+dynamicstealth.config.potionSoulSight=Soul Sight Potions
+dynamicstealth.config.potionSoulSightRecipe=Soul Sight Potion Recipes
+dynamicstealth.config.potionBlindness=Blindness Potions
+dynamicstealth.config.potionBlindnessRecipe=Blindness Potion Recipes
+dynamicstealth.config.potionGlowing=Glowing Potions
+dynamicstealth.config.potionGlowingRecipe=Glowing Potion Recipes

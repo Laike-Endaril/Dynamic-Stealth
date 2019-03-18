@@ -1,10 +1,12 @@
 package com.fantasticsource.dynamicstealth.config.server.senses.sight;
 
+import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import net.minecraftforge.common.config.Config;
 
 public class AngleConfig
 {
     @Config.Name("Angle (Large/Wide; Near)")
+    @Config.LangKey(DynamicStealth.MODID + ".config.angleNear")
     @Config.Comment(
             {
                     "The angle inside which an entity can see another entity at close range (distance <= distanceNear), in degrees",
@@ -19,6 +21,7 @@ public class AngleConfig
     public int angleLarge = 85;
 
     @Config.Name("Angle (Small/Thin; Far)")
+    @Config.LangKey(DynamicStealth.MODID + ".config.angleFar")
     @Config.Comment(
             {
                     "The angle inside which an entity can see another entity at long range (distance >= distanceFar, in degrees",

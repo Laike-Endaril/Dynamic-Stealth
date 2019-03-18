@@ -1,10 +1,12 @@
 package com.fantasticsource.dynamicstealth.config.server.interactions;
 
+import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import net.minecraftforge.common.config.Config;
 
 public class RallyConfig
 {
     @Config.Name("Potion Effects")
+    @Config.LangKey(DynamicStealth.MODID + ".config.rallyPotions")
     @Config.Comment(
             {
                     "Potion effects to apply when something rallies",

@@ -1,10 +1,12 @@
 package com.fantasticsource.dynamicstealth.config.server.interactions;
 
+import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import net.minecraftforge.common.config.Config;
 
 public class DesperationConfig
 {
     @Config.Name("Potion Effects")
+    @Config.LangKey(DynamicStealth.MODID + ".config.desperationPotions")
     @Config.Comment(
             {
                     "Potion effects to apply when something gets cornered and desperate",

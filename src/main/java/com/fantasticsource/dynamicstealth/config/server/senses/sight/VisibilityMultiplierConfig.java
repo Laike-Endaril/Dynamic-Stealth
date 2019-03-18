@@ -1,10 +1,12 @@
 package com.fantasticsource.dynamicstealth.config.server.senses.sight;
 
+import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import net.minecraftforge.common.config.Config;
 
 public class VisibilityMultiplierConfig
 {
     @Config.Name("Armor Multiplier (Cumulative)")
+    @Config.LangKey(DynamicStealth.MODID + ".config.armorMultiplier")
     @Config.Comment(
             {
                     "An entity's visibility is multiplied by 1 + (this setting * armor)",
@@ -17,6 +19,7 @@ public class VisibilityMultiplierConfig
     public double armorMultiplierCumulative = 0.25;
 
     @Config.Name("'Alert' Multiplier")
+    @Config.LangKey(DynamicStealth.MODID + ".config.alertMultiplier")
     @Config.Comment(
             {
                     "If an entity is alert, their visual perception is multiplied by this",
@@ -29,6 +32,7 @@ public class VisibilityMultiplierConfig
     public double alertMultiplier = 1.25;
 
     @Config.Name("'Seen' Multiplier")
+    @Config.LangKey(DynamicStealth.MODID + ".config.seenMultiplier")
     @Config.Comment(
             {
                     "If an entity has recently seen its target, their visual perception is multiplied by this",

@@ -1,10 +1,12 @@
 package com.fantasticsource.dynamicstealth.config.server.senses.sight;
 
+import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import net.minecraftforge.common.config.Config;
 
 public class AbsoluteCasesConfig
 {
     @Config.Name("See Glowing")
+    @Config.LangKey(DynamicStealth.MODID + ".config.seeGlowing")
     @Config.Comment(
             {
                     "If set to true, glowing entities will be seen when inside another entity's FOV, ignoring all other factors",
@@ -14,6 +16,7 @@ public class AbsoluteCasesConfig
     public boolean seeGlowing = true;
 
     @Config.Name("See Burning")
+    @Config.LangKey(DynamicStealth.MODID + ".config.seeBurning")
     @Config.Comment("If set to true, burning entities are always considered to be standing in full light")
     public boolean seeBurning = true;
 }

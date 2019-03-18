@@ -1,10 +1,12 @@
 package com.fantasticsource.dynamicstealth.config.client;
 
+import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import net.minecraftforge.common.config.Config;
 
 public class EntityFadeConfig
 {
     @Config.Name("Minimum Entity Opacity")
+    @Config.LangKey(DynamicStealth.MODID + ".config.fadeMinAlpha")
     @Config.Comment(
             {
                     "The opacity of an entity when you just barely see it",
@@ -17,6 +19,7 @@ public class EntityFadeConfig
     public double mobOpacityMin = 0.1;
 
     @Config.Name("Full Opacity At...")
+    @Config.LangKey(DynamicStealth.MODID + ".config.fadeMaxAt")
     @Config.Comment(
             {
                     "The stealth rating at or above which an entity is drawn at full opacity",

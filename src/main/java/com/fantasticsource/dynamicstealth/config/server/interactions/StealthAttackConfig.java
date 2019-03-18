@@ -1,20 +1,24 @@
 package com.fantasticsource.dynamicstealth.config.server.interactions;
 
+import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.dynamicstealth.server.event.attacks.AttackDefaults;
 import net.minecraftforge.common.config.Config;
 
 public class StealthAttackConfig
 {
     @Config.Name("Armor Penetration")
+    @Config.LangKey(DynamicStealth.MODID + ".config.stealthAtkArmorPenetration")
     @Config.Comment({"Whether stealth attacks bypass armor or not"})
     public boolean armorPenetration = false;
 
     @Config.Name("Damage Multiplier")
+    @Config.LangKey(DynamicStealth.MODID + ".config.stealthAtkDamageMult")
     @Config.Comment("Damage is multiplied by this when attacking from stealth")
     @Config.RangeDouble(min = 1)
     public double damageMultiplier = 1.25;
 
     @Config.Name("Attacker Effects")
+    @Config.LangKey(DynamicStealth.MODID + ".config.stealthAtkAEffects")
     @Config.Comment(
             {
                     "Potion effects that are applied to the attacker when a stealth attack happens",
@@ -29,6 +33,7 @@ public class StealthAttackConfig
     public String[] attackerEffects = {};
 
     @Config.Name("Victim Effects")
+    @Config.LangKey(DynamicStealth.MODID + ".config.stealthAtkVEffects")
     @Config.Comment(
             {
                     "Potion effects that are applied to the victim when a stealth attack happens",
@@ -40,6 +45,7 @@ public class StealthAttackConfig
     public String[] victimEffects = {};
 
     @Config.Name("Weapon-Specific Settings")
+    @Config.LangKey(DynamicStealth.MODID + ".config.stealthAtkWeaponSpecific")
     @Config.Comment(
             {
                     "Weapon-specific overrides",

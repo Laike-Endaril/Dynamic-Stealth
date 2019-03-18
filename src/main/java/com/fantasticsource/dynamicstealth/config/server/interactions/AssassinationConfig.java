@@ -1,11 +1,13 @@
 package com.fantasticsource.dynamicstealth.config.server.interactions;
 
+import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.dynamicstealth.server.event.attacks.AttackDefaults;
 import net.minecraftforge.common.config.Config;
 
 public class AssassinationConfig
 {
     @Config.Name("Attacker Effects")
+    @Config.LangKey(DynamicStealth.MODID + ".config.assassinationAEffects")
     @Config.Comment(
             {
                     "Potion effects that are applied to the attacker when an assassination happens",
@@ -24,6 +26,7 @@ public class AssassinationConfig
             };
 
     @Config.Name("Weapon-Specific Settings")
+    @Config.LangKey(DynamicStealth.MODID + ".config.assassinationWeaponSpecific")
     @Config.Comment(
             {
                     "Weapon-specific overrides",

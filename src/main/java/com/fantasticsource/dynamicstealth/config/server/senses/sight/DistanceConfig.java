@@ -1,10 +1,12 @@
 package com.fantasticsource.dynamicstealth.config.server.senses.sight;
 
+import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import net.minecraftforge.common.config.Config;
 
 public class DistanceConfig
 {
     @Config.Name("Distance (Far)")
+    @Config.LangKey(DynamicStealth.MODID + ".config.distanceFar")
     @Config.Comment(
             {
                     "The absolute maximum distance that an entity can see another entity from, in blocks",
@@ -19,6 +21,7 @@ public class DistanceConfig
     public int distanceFar = 40;
 
     @Config.Name("Distance (Near)")
+    @Config.LangKey(DynamicStealth.MODID + ".config.distanceNear")
     @Config.Comment(
             {
                     "The distance before an entity's sight starts degrading naturally (even in good conditions),  in blocks",

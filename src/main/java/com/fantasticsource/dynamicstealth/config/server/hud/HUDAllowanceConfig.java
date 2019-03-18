@@ -1,10 +1,12 @@
 package com.fantasticsource.dynamicstealth.config.server.hud;
 
+import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import net.minecraftforge.common.config.Config;
 
 public class HUDAllowanceConfig
 {
     @Config.Name("Allow On-Point HUD For Clients")
+    @Config.LangKey(DynamicStealth.MODID + ".config.allowOPHUD")
     @Config.Comment(
             {
                     "If enabled, clients can turn on/off a HUD which appears above each entity",
@@ -17,6 +19,7 @@ public class HUDAllowanceConfig
     public int allowOPHUD = 2;
 
     @Config.Name("Allow Targeting HUD For Clients")
+    @Config.LangKey(DynamicStealth.MODID + ".config.allowTargeting")
     @Config.Comment(
             {
                     "If enabled, clients can see detailed information for a single, targeted entity",
@@ -29,10 +32,12 @@ public class HUDAllowanceConfig
     public int allowTargetingHUD = 2;
 
     @Config.Name("Recognize Passives Automatically")
+    @Config.LangKey(DynamicStealth.MODID + ".config.allowPassiveRecognition")
     @Config.Comment("If enabled, clients' threat HUDs will display green for passive mobs.  If disabled, passives appear as idle (blue).")
     public boolean recognizePassive = true;
 
     @Config.Name("Allow Stealth Gauge For Clients")
+    @Config.LangKey(DynamicStealth.MODID + ".config.allowStealthGauge")
     @Config.Comment(
             {
                     "If enabled, clients can see their current stealth level in their HUD",

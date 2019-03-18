@@ -1,10 +1,12 @@
 package com.fantasticsource.dynamicstealth.config.server.interactions;
 
+import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import net.minecraftforge.common.config.Config;
 
 public class CantReachConfig
 {
     @Config.Name("Potion Effects")
+    @Config.LangKey(DynamicStealth.MODID + ".config.cantReachPotions")
     @Config.Comment(
             {
                     "Potion effects to apply when something can't reach its target",
