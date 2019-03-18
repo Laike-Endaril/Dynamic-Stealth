@@ -1,6 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-Finish lang keys for config
+Add lang keys for all targeting HUD text elements; remember to use %s
 
 Update comments for item filters with new NBT syntax
 
