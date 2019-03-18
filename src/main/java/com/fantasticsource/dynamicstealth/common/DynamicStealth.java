@@ -89,7 +89,7 @@ import java.util.Set;
 
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 
-@Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, dependencies = "required-after:fantasticlib@[1.12.2.007,)")
+@Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, dependencies = "required-after:fantasticlib@[1.12.2.007a,)")
 public class DynamicStealth
 {
     public static final String MODID = "dynamicstealth";
@@ -582,6 +582,7 @@ public class DynamicStealth
                 //Entity AI task replacements
                 replaceTasks(living.tasks, living);
                 replaceTasks(living.targetTasks, living);
+                Compat.replaceNPEAttackTargetTasks(living);
 
                 //Entity AI task additions
                 if (!EntityThreatData.bypassesThreat(living)) addTasks(living.targetTasks, living.tasks, living);
@@ -599,8 +600,6 @@ public class DynamicStealth
 
     private static void replaceTasks(EntityAITasks tasks, EntityLiving living) throws Exception
     {
-        Compat.replaceNPEAttackTargetTasks(living);
-
         Set<EntityAITasks.EntityAITaskEntry> taskSet = tasks.taskEntries;
         EntityAITasks.EntityAITaskEntry[] taskArray = new EntityAITasks.EntityAITaskEntry[taskSet.size()];
         taskSet.toArray(taskArray);
