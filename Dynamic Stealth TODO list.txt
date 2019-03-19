@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
+Look into internationalized config tooltips/comments further
+
 Make stealth level / visibility transitions smoother? (ie. change at a rate)
 "maybe if they see you less than a second or two, instead of being alerted they could go look first"
 
