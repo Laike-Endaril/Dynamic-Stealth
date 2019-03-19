@@ -99,7 +99,7 @@ public class DynamicStealth
 
     public static final TrigLookupTable TRIG_TABLE = new TrigLookupTable(1024);
 
-    private static Field sensesField, lookHelperField, abstractSkeletonAIArrowAttackField, abstractSkeletonAIAttackOnCollideField, worldServerEntityTrackerField;
+    private static Field sensesField, abstractSkeletonAIArrowAttackField, abstractSkeletonAIAttackOnCollideField, worldServerEntityTrackerField;
     private static Class aiSlimeFaceRandomClass, aiEvilAttackClass, aiBearMeleeClass, aiSpiderAttackClass, aiSpiderTargetClass, aiBearAttackPlayerClass, aiLlamaDefendTarget,
             aiPigmanHurtByAggressorClass, aiLlamaHurtByTargetClass, aiPigmanTargetAggressorClass, aiVindicatorJohnnyAttackClass, aiBearHurtByTargetClass, aiGuardianAttackClass,
             aiBlazeFireballAttackClass, aiVexChargeAttackClass, aiShulkerAttackClass, aiShulkerAttackNearestClass, aiShulkerDefenseAttackClass;
@@ -513,16 +513,12 @@ public class DynamicStealth
     {
         Vec3d pos1 = living.getPositionVector().add(new Vec3d(0, living.getEyeHeight(), 0));
         Vec3d pos2 = target.getPositionVector().add(new Vec3d(0, target.height * 0.5, 0));
-        makeLivingLookDirection(living, MCTools.getYawDeg(pos1, pos2, TRIG_TABLE), MCTools.getPitchDeg(pos1, pos2, TRIG_TABLE));
-    }
 
-    public static void makeLivingLookDirection(EntityLiving living, double yawDegrees, double pitchDegrees) throws InvocationTargetException, IllegalAccessException
-    {
-        float fYaw = (float) yawDegrees;
+        float fYaw = (float) MCTools.getYawDeg(pos1, pos2, TRIG_TABLE);
         living.rotationYaw = fYaw;
         living.rotationYawHead = fYaw;
 
-        living.rotationPitch = (float) pitchDegrees;
+        living.rotationPitch = (float) MCTools.getPitchDeg(pos1, pos2, TRIG_TABLE);
 
         if (living instanceof EntitySlime)
         {
@@ -536,6 +532,8 @@ public class DynamicStealth
                 }
             }
         }
+
+        living.lookHelper.setLookPositionWithEntity(target, 180, 180);
     }
 
 
@@ -567,7 +565,7 @@ public class DynamicStealth
         //Set the new senses handler for all living entities (not including players)
         try
         {
-            lookHelperField.set(living, new EntityLookHelperEdit(living));
+            living.lookHelper = new EntityLookHelperEdit(living);
 
             if (!living.world.isRemote) //Server-side
             {
@@ -690,7 +688,6 @@ public class DynamicStealth
         Network.init();
 
         sensesField = ReflectionTool.getField(EntityLiving.class, "field_70723_bA", "senses");
-        lookHelperField = ReflectionTool.getField(EntityLiving.class, "field_70749_g", "lookHelper");
         worldServerEntityTrackerField = ReflectionTool.getField(WorldServer.class, "field_73062_L", "entityTracker");
 
         abstractSkeletonAIArrowAttackField = ReflectionTool.getField(AbstractSkeleton.class, "field_85037_d", "aiArrowAttack");

@@ -1,9 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Fix spin bug for CNPCs with threat bypass...
-...caused by something in EntityLookHelperEdit
-...try switching to a wrapper style
-
 Make stealth level / visibility transitions smoother? (ie. change at a rate)
 "maybe if they see you less than a second or two, instead of being alerted they could go look first"
 

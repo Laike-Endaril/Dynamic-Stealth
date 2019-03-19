@@ -1,32 +1,20 @@
 package com.fantasticsource.dynamicstealth.server;
 
-import com.fantasticsource.dynamicstealth.common.DynamicStealth;
-import com.fantasticsource.mctools.MCTools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityLookHelper;
-import net.minecraft.util.math.MathHelper;
-
-import java.lang.reflect.InvocationTargetException;
+import net.minecraft.util.math.Vec3d;
 
 public class EntityLookHelperEdit extends EntityLookHelper
 {
     public EntityLookHelperEdit(EntityLiving entitylivingIn)
     {
         super(entitylivingIn);
-        entity = entitylivingIn;
 
         if (!entity.world.isRemote)
         {
-            try
-            {
-                DynamicStealth.makeLivingLookDirection(entity, Math.random() * 360, 0);
-            }
-            catch (InvocationTargetException | IllegalAccessException e)
-            {
-                MCTools.crash(e, 146, false);
-            }
+            Vec3d vec = entitylivingIn.getPositionVector();
+            setLookPosition(vec.x + Math.random() - 0.5, vec.y + entitylivingIn.getEyeHeight(), vec.z + Math.random() - 0.5, 180, 180);
         }
         else
         {
@@ -34,6 +22,15 @@ public class EntityLookHelperEdit extends EntityLookHelper
             entity.rotationYaw = entity.rotationYawHead;
             entity.prevRotationYaw = entity.rotationYawHead;
         }
+
+        EntityLookHelper old = entitylivingIn.lookHelper;
+        entity = old.entity;
+        deltaLookYaw = old.deltaLookYaw;
+        deltaLookPitch = old.deltaLookPitch;
+        isLooking = old.isLooking;
+        posX = old.posX;
+        posY = old.posY;
+        posZ = old.posZ;
     }
 
     public void setLookPositionWithEntity(Entity entityIn, float deltaYaw, float deltaPitch)
