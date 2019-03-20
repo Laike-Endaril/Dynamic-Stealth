@@ -255,7 +255,7 @@ public class ConfigHandler
                 log("- Removing old category: \"" + string + "\"...");
                 log();
 
-                for (Map.Entry<String, Property> entry : current.getCategory(string).entrySet())
+                for (Map.Entry<String, Property> entry : old.getCategory(string).entrySet())
                 {
                     log("- Removing old entry: \"" + entry.getKey() + "\"");
                 }
