@@ -5,8 +5,6 @@ Brush up config...
 ...maybe merge flee, rally, etc categories, since they exist in two places (AI and interactions)
 ...change setting names to re-order config setting elements so the order makes sense, since we have lang files now for displayed names
 
-Look into internationalized config tooltips/comments further
-
 Make stealth level / visibility transitions smoother? (ie. change at a rate)
 "maybe if they see you less than a second or two, instead of being alerted they could go look first"
 
