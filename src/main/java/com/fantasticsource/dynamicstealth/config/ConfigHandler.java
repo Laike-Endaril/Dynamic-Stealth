@@ -22,13 +22,15 @@ public class ConfigHandler
     private static String dsDir = configDir + DynamicStealth.MODID + File.separator;
     private static File currentFile = new File(dsDir + DynamicStealth.CONFIG_VERSION + "+.cfg");
     public static String fullConfigFilename = currentFile.getAbsolutePath();
-    private static File mostRecentFile = new File(dsDir + DynamicStealth.CONFIG_VERSION + "+.cfg");
+    private static File mostRecentFile;
     private static File logFile;
     private static BufferedWriter logWriter;
+    private static boolean currentAlreadyExists = false;
 
     public static void init()
     {
         mostRecentFile = mostRecent();
+        currentAlreadyExists = mostRecentFile.exists();
     }
 
     private static File mostRecent()
@@ -104,20 +106,17 @@ public class ConfigHandler
 
 
         //If newest config version already exists or no config of any version exists, do nothing special
-        if (mostRecentFile == null)
-        {
-            System.out.println("No config found; generating new config file");
-            System.out.println();
-            System.out.println();
-            System.out.println();
-            System.out.println();
-            System.out.println();
-            return;
-        }
-
         if (mostRecentFile == currentFile)
         {
-            System.out.println("Compatible config file found; loading existing config file");
+            if (currentAlreadyExists)
+            {
+                System.out.println("Compatible config file found; loading existing config file");
+            }
+            else
+            {
+                System.out.println("No config found; generating new config file");
+            }
+
             System.out.println();
             System.out.println();
             System.out.println();
