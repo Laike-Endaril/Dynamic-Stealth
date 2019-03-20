@@ -71,24 +71,24 @@ public class Network
 
                 if (serverSettings.senses.usePlayerSenses) WRAPPER.sendTo(new VisibilityPacket(player), player);
 
-                boolean opHUD, targetingHUD, stealthGauge;
+                boolean opHUD, targetElement, stealthGauge;
                 if (isOP(player))
                 {
                     opHUD = serverSettings.hud.allowOPHUD > 0;
-                    targetingHUD = serverSettings.hud.allowTargetingHUD > 0;
+                    targetElement = serverSettings.hud.allowTargetElement > 0;
                     stealthGauge = serverSettings.hud.allowStealthGauge > 0;
                 }
                 else
                 {
                     opHUD = serverSettings.hud.allowOPHUD > 1;
-                    targetingHUD = serverSettings.hud.allowTargetingHUD > 1;
+                    targetElement = serverSettings.hud.allowTargetElement > 1;
                     stealthGauge = serverSettings.hud.allowStealthGauge > 1;
                 }
 
                 if (opHUD || stealthGauge)
                 {
                     double totalStealth = Sight.totalStealthLevel(player);
-                    WRAPPER.sendTo(new HUDPacket(player, opHUD, targetingHUD, !stealthGauge ? Byte.MIN_VALUE : totalStealth == Double.MAX_VALUE ? Byte.MIN_VALUE + 1 : (int) (totalStealth * 100)), player); //Byte.MIN_VALUE means disabled
+                    WRAPPER.sendTo(new HUDPacket(player, opHUD, targetElement, !stealthGauge ? Byte.MIN_VALUE : totalStealth == Double.MAX_VALUE ? Byte.MIN_VALUE + 1 : (int) (totalStealth * 100)), player); //Byte.MIN_VALUE means disabled
                 }
             }
         }
@@ -276,7 +276,7 @@ public class Network
         EntityPlayerMP player;
         ExplicitPriorityQueue<EntityLivingBase> queue;
 
-        boolean targetingHUD;
+        boolean targetElement;
         int stealthLevel;
 
         ArrayList<ClientData.OnPointData> list = new ArrayList<>();
@@ -285,10 +285,10 @@ public class Network
         {
         }
 
-        public HUDPacket(EntityPlayerMP player, boolean opHUD, boolean targetingHUD, int stealthLevel)
+        public HUDPacket(EntityPlayerMP player, boolean opHUD, boolean targetElement, int stealthLevel)
         {
             this.player = player;
-            this.targetingHUD = targetingHUD;
+            this.targetElement = targetElement;
 
             if (ServerTickTimer.currentTick() % Sight.maxAITickrate == 0) this.stealthLevel = stealthLevel;
             else this.stealthLevel = Byte.MIN_VALUE + 1;
@@ -304,10 +304,10 @@ public class Network
 
             buf.writeByte(stealthLevel);
 
-            buf.writeBoolean(targetingHUD);
+            buf.writeBoolean(targetElement);
             buf.writeInt(queue.size());
 
-            if (targetingHUD)
+            if (targetElement)
             {
                 while (queue.size() > 0)
                 {
@@ -375,10 +375,10 @@ public class Network
 
             stealthLevel = buf.readByte();
 
-            targetingHUD = buf.readBoolean();
+            targetElement = buf.readBoolean();
             int remaining = buf.readInt();
 
-            if (targetingHUD)
+            if (targetElement)
             {
                 for (; remaining > 0; remaining--)
                 {

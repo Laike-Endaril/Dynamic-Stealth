@@ -22,14 +22,14 @@ public class HUDAllowanceConfig
     @Config.LangKey(DynamicStealth.MODID + ".config.allowTargeting")
     @Config.Comment(
             {
-                    "If enabled, clients can see detailed information for a single, targeted entity",
+                    "If enabled, clients can see what other entities are targeting",
                     "",
                     "0 means disabled for all players",
                     "1 means enabled for OP players ONLY",
                     "2 means enabled for all players"
             })
     @Config.RangeInt(min = 0, max = 2)
-    public int allowTargetingHUD = 2;
+    public int allowTargetElement = 2;
 
     @Config.Name("Recognize Passives Automatically")
     @Config.LangKey(DynamicStealth.MODID + ".config.allowPassiveRecognition")

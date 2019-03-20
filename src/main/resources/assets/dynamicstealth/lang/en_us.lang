@@ -136,10 +136,10 @@ dynamicstealth.config.cantReachNoPathTime=No Path Time
 dynamicstealth.config.cantReachTargetTime=Target Time
 dynamicstealth.config.cantReachFlee=Flee If Unreachable
 
-dynamicstealth.config.allowOPHUD=Allow On-Point HUD For Clients
-dynamicstealth.config.allowTargeting=Allow Targeting HUD For Clients
+dynamicstealth.config.allowOPHUD=Allow On-Point HUD
+dynamicstealth.config.allowTargeting=Allow "Target's Target" Display
 dynamicstealth.config.allowPassiveRecognition=Recognize Passives Automatically
-dynamicstealth.config.allowStealthGauge=Allow Stealth Gauge For Clients
+dynamicstealth.config.allowStealthGauge=Allow Stealth Gauge
 
 dynamicstealth.config.playerSenses=Use player senses
 dynamicstealth.config.touch=Touch
