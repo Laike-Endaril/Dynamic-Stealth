@@ -40,7 +40,9 @@ dynamicstealth.config.clientSettings=Client Settings
 dynamicstealth.config.serverSettings=Server Settings
 
 dynamicstealth.config.hud=HUD
+dynamicstealth.config.hud.tooltip=What information you want to have displayed on the screen\n
 dynamicstealth.config.entityFading=Entity Fading
+dynamicstealth.config.entityFading.tooltip=How entities fade in and out, if at all\n
 
 dynamicstealth.config.mainHUDStyle=Main HUD Style
 dynamicstealth.config.opHUDFilter=On-point HUD Filter
@@ -49,224 +51,389 @@ dynamicstealth.config.targetingFilter=Targeting Filter
 dynamicstealth.config.targetingStyle=Targeting HUD Style
 
 dynamicstealth.config.stealthGaugeAlpha=Stealth Gauge Opacity
+dynamicstealth.config.stealthGaugeAlpha.tooltip=How visible the stealth gauge is, transparency-wise\n\n0 means invisible, 1 means completely opaque\n
 dynamicstealth.config.stealthGaugeColor=Stealth Gauge Color
+dynamicstealth.config.stealthGaugeColor.tooltip=The color of the stealth gauge\n\nThis uses the format RRGGBB color format (if you google RRGGBB you'll find a color picker you can use)\n
 dynamicstealth.config.stealthGaugeRimColor=Stealth Gauge Rim Color
+dynamicstealth.config.stealthGaugeRimColor.tooltip=The color of the stealth gauge's rim and arrow\n\nThis uses the format RRGGBB color format (if you google RRGGBB you'll find a color picker you can use)\n
 dynamicstealth.config.stealthGaugeSize=Stealth Gauge Size
+dynamicstealth.config.stealthGaugeSize.tooltip=The size of the stealth gauge\n
 dynamicstealth.config.stealthGaugeMode=Stealth Gauge Mode
+dynamicstealth.config.stealthGaugeMode.tooltip=The general display mode of the stealth gauge\n\n0 = None\n1 = Rotational\n2 = Animated\n
 dynamicstealth.config.stealthGaugeX=Stealth Gauge X Position
+dynamicstealth.config.stealthGaugeX.tooltip=The x position of the stealth gauge\n\n0 is far left, 0.5 is center, 1 is far right\n
 dynamicstealth.config.stealthGaugeY=Stealth Gauge Y Position
+dynamicstealth.config.stealthGaugeY.tooltip=The y position of the stealth gauge\n\n0 is top, 0.5 is center, 1 is bottom\n
 
 dynamicstealth.config.opHUDShowPassive=Passive
+dynamicstealth.config.opHUDShowPassive.tooltip=If true, on-point indicators appear for passive entities\n
 dynamicstealth.config.opHUDShowBypass=Bypass
+dynamicstealth.config.opHUDShowBypass.tooltip=If true, on-point indicators appear for entities that bypass the threat system\n
 dynamicstealth.config.opHUDShowIdle=Idle
+dynamicstealth.config.opHUDShowIdle.tooltip=If true, on-point indicators appear for idle entities\n
 dynamicstealth.config.opHUDShowAtkOther=Attacking Other
+dynamicstealth.config.opHUDShowAtkOther.tooltip=If true, on-point indicators appear for entities which are attacking something besides you\n
 dynamicstealth.config.opHUDShowAlert=Alert
+dynamicstealth.config.opHUDShowAlert.tooltip=If true, on-point indicators appear for alerted entities who are actively searching for a target\n
 dynamicstealth.config.opHUDShowAtkYou=Attacking You
+dynamicstealth.config.opHUDShowAtkYou.tooltip=If true, on-point indicators appear for entities that are attacking YOU\n
 dynamicstealth.config.opHUDShowFlee=Flee
+dynamicstealth.config.opHUDShowFlee.tooltip=If true, on-point indicators appear for entities that are fleeing from combat\n
 
-dynamicstealth.config.opHUDDepth=0: Use Depth
-dynamicstealth.config.opHUD3DVPercent=1: 3D Vertical Percentage
-dynamicstealth.config.opHUDSneakOffset=2: Account For Sneaking
-dynamicstealth.config.opHUD3DVOffset=3: 3D Vertical Offset
-dynamicstealth.config.opHUD3DHPercent=4: 3D Horizontal Percentage
-dynamicstealth.config.opHUD2DHOffset=5: 2D Horizontal Offset
-dynamicstealth.config.opHUD2DVOffset=6: 2D Vertical Offset
-dynamicstealth.config.opHUDScale=7: Scale
+dynamicstealth.config.opHUDDepth=Use Depth
+dynamicstealth.config.opHUDDepth.tooltip=If false, on-point HUDs will display on top of blocks and models, but below shadows (bit glitchy when overlapping shadows)\n\nIf true, on-point HUDs will display on top of shadows correctly, but at their position in-world, ie. they can be hidden behind blocks/models\n
+dynamicstealth.config.opHUD3DVPercent=3D Vertical Percentage
+dynamicstealth.config.opHUD3DVPercent.tooltip=3D position height is <this setting * entity height + vertical offset>\n\nBasically, if you want to use the top of the head as the base position (and then add offsets), set this to 1\n\nAt the feet would be 0, and 0.5 would make the base position the 3D center of the entity\n
+dynamicstealth.config.opHUDSneakOffset=Account For Sneaking
+dynamicstealth.config.opHUDSneakOffset.tooltip=If set to true, vertical position is shifted down a bit when the entity is sneaking, similar to default nameplate behavior\n
+dynamicstealth.config.opHUD3DVOffset=3D Vertical Offset
+dynamicstealth.config.opHUD3DVOffset.tooltip=3D position height is <vertical percentage * entity height + this setting>\n\nSo if you want the 3D position to be half a  block above the head (synced with nameplate), set vertical percentage to 1, and this setting to 0.5\n
+dynamicstealth.config.opHUD3DHPercent=3D Horizontal Percentage
+dynamicstealth.config.opHUD3DHPercent.tooltip=This setting alters the horizontal 3D position *after* rotation happens\n\nIf you set this to 0.5, it will be centered on the left side of the entity, and -0.5 will be centered on the right\n
+dynamicstealth.config.opHUD2DHOffset=2D Horizontal Offset
+dynamicstealth.config.opHUD2DHOffset.tooltip=Slides the indicator left and right in relation to your screen\n
+dynamicstealth.config.opHUD2DVOffset=2D Vertical Offset
+dynamicstealth.config.opHUD2DVOffset.tooltip=Slides the indicator up and down in relation to your screen\n
+dynamicstealth.config.opHUDScale=Scale
+dynamicstealth.config.opHUDScale.tooltip=The scale of the indicator itself; how big the indicator is\n
 
 dynamicstealth.config.targetingShowPassive=Passive
+dynamicstealth.config.targetingShowPassive.tooltip=If true, the targeting HUD shows when focused on a passive entity\n
 dynamicstealth.config.targetingShowBypass=Bypass
+dynamicstealth.config.targetingShowBypass.tooltip=If true, the targeting HUD shows when focused on an entity that bypasses the threat system\n
 dynamicstealth.config.targetingShowIdle=Idle
+dynamicstealth.config.targetingShowIdle.tooltip=If true, the targeting HUD shows when focused on an idle entity\n
 dynamicstealth.config.targetingShowAtkOther=Attacking Other
+dynamicstealth.config.targetingShowAtkOther.tooltip=If true, the targeting HUD shows when focused on an entity that is attacking something besides you\n
 dynamicstealth.config.targetingShowAlert=Alert
+dynamicstealth.config.targetingShowAlert.tooltip=If true, the targeting HUD shows when focused on an entity that is actively searching for a target\n
 dynamicstealth.config.targetingShowAtkYou=Attacking You
+dynamicstealth.config.targetingShowAtkYou.tooltip=If true, the targeting HUD shows when focused on an entity that is attacking YOU\n
 dynamicstealth.config.targetingShowFlee=Flee
+dynamicstealth.config.targetingShowFlee.tooltip=If true, the targeting HUD shows when focused on an entity that is fleeing from combat\n
 dynamicstealth.config.targetingMaxDist=Max Distance
+dynamicstealth.config.targetingMaxDist.tooltip=The maximum distance at which the targeting system will acquire a target\n
 dynamicstealth.config.targetingMaxAngle=Max Angle
+dynamicstealth.config.targetingMaxAngle.tooltip=The maximum angle at which the targeting system will acquire a target\nIf set to -1, targeting is disabled\n
 
 dynamicstealth.config.targetingGlow=Glow
+dynamicstealth.config.targetingGlow.tooltip=If true, the currently targeted entity is highlighted with a glow effect\n
 dynamicstealth.config.targetingGlowStateColor=State-Colored Glow
+dynamicstealth.config.targetingGlowStateColor.tooltip=If this and Glow are both set to true, the currently targeted entity glows in a color pertaining to its current state instead of white\n
 dynamicstealth.config.targetingAlpha=Reticle Opacity
+dynamicstealth.config.targetingAlpha.tooltip=How visible the targeting reticle is, transparency-wise\n\n0 means invisible, 1 means completely opaque\n
 dynamicstealth.config.targetingColor=Default Reticle Color
+dynamicstealth.config.targetingColor.tooltip=The color of the targeting reticle, if state-colored reticle is false\n\nThis uses the format RRGGBB color format (if you google RRGGBB you'll find a color picker you can use)\n
 dynamicstealth.config.targetingStateColor=State-Colored Reticle
+dynamicstealth.config.targetingStateColor.tooltip=If true, the targeting reticle is drawn in a color pertaining to the target's current state\n
 dynamicstealth.config.targetingSpacing=Reticle Spacing
+dynamicstealth.config.targetingSpacing.tooltip=How far the parts of the targeting reticle are from the center\n
 dynamicstealth.config.targetingSize=Reticle Size
+dynamicstealth.config.targetingSize.tooltip=The size of the reticle parts\n
 dynamicstealth.config.targetingAlpha=Text Opacity
+dynamicstealth.config.targetingAlpha.tooltip=How visible the text of the targeting HUD is, transparency-wise\n\n0 means invisible, 1 means completely opaque\n
 dynamicstealth.config.targetingTextColor=Default Text Color
+dynamicstealth.config.targetingTextColor.tooltip=The color of the targeting HUD text, if state-colored text is false\n\nThis uses the format RRGGBB color format (if you google RRGGBB you'll find a color picker you can use)\n
 dynamicstealth.config.targetingTextStateColor=State-Colored Text
+dynamicstealth.config.targetingTextStateColor.tooltip=If true, the targeting HUD text is drawn in a color pertaining to the target's current state\n
 dynamicstealth.config.targetingTextScale=Text Scale
+dynamicstealth.config.targetingTextScale.tooltip=The scale of the text for the targeting HUD\n
 dynamicstealth.config.targetingArrowAlpha=Arrow Opacity
+dynamicstealth.config.targetingArrowAlpha.tooltip=How visible the directional indicator for the main target is, transparency-wise\nThis arrow is only visible when the current target is off-screen\n\n0 means invisible, 1 means completely opaque\n
 dynamicstealth.config.targetingArrowColor=Default Arrow Color
+dynamicstealth.config.targetingArrowColor.tooltip=The color of the directional indicator for the main target, if state-colored arrow is false\nThis arrow is only visible when the current target is off-screen\n\nThis uses the format RRGGBB color format (if you google RRGGBB you'll find a color picker you can use)\n
 dynamicstealth.config.targetingArrowStateColor=State-Colored Arrow
+dynamicstealth.config.targetingArrowStateColor.tooltip=If true, the directional indicator for the main target is drawn in a color pertaining to the target's current state\nThis arrow is only visible when the current target is off-screen\n
 dynamicstealth.config.targetingArrowSize=Arrow Size
+dynamicstealth.config.targetingArrowSize.tooltip=The size of the directional indicator for the main target\nThis arrow is only visible when the current target is off-screen\n
 dynamicstealth.config.targetingComponents=Components
 
 dynamicstealth.config.targetShowName=Target's Name
+dynamicstealth.config.targetShowName.tooltip=If true, the targeted entity's name is shown (if available)\n
 dynamicstealth.config.targetShowTarget=Target's Target
+dynamicstealth.config.targetShowTarget.tooltip=If true, the targeted entity's target is shown (if available)\n
 dynamicstealth.config.targetShowThreat=Target's Threat
+dynamicstealth.config.targetShowThreat.tooltip=If true, the targeted entity's threat level is shown (if available)\n
 dynamicstealth.config.targetShowDistance=Target's Distance
+dynamicstealth.config.targetShowDistance.tooltip=If true, the targeted entity's distance is shown (if available)\n
 
 dynamicstealth.config.fadeMinAlpha=Minimum Entity Opacity
+dynamicstealth.config.fadeMinAlpha.tooltip=The opacity of an entity when you just barely see it\n\nIf set to 0, entities on the edge of your vision are nearly invisible\n\nIf set to 1, entities always appear at full visibility\n
 dynamicstealth.config.fadeMaxAt=Full Opacity At...
+dynamicstealth.config.fadeMaxAt.tooltip=The stealth rating at or above which an entity is drawn at full opacity\n\nIf set to 1, entities are only drawn at full opacity in the very best of visibility conditions\n\nDecreasing the value makes entities appear opaque at further distances and in lower lighting, etc\n
 
 dynamicstealth.config.ai=AI
 dynamicstealth.config.HUDAllowances=Client HUD allowances
 dynamicstealth.config.senses=Senses
 dynamicstealth.config.threat=Threat System
+dynamicstealth.config.threat.tooltip=The threat system decides when an entity switches from one attack target to another\n\nThis is similar to threat systems found in some MMORPGs\n
 dynamicstealth.config.helperSys=Helper System
+dynamicstealth.config.helperSys.tooltip=Which entities come to the aid of which other entities\n
 dynamicstealth.config.interact=Interactions
+dynamicstealth.config.interact.tooltip=Things that happen under special circumstances, eg. stealth attacks\n
 dynamicstealth.config.items=Items
 
 dynamicstealth.config.aiHeadSpeed=Head Turn Speed
+dynamicstealth.config.aiHeadSpeed.tooltip=How quickly entities' heads spin during eg. a search sequence\n
 dynamicstealth.config.aiEntitySpecific=Entity-Specific Settings (Advanced)
 dynamicstealth.config.aiFlee=Flee
 dynamicstealth.config.aiCantReach=Can't Reach
 dynamicstealth.config.aiNoPetTeleport=Prevent Pet Teleport
+dynamicstealth.config.aiNoPetTeleport.tooltip=If set to true, wolves, cats, and parrots do not teleport while following their owners\n
 
 dynamicstealth.config.entitySpecificHeadSpeed=Head Turn Speed
+dynamicstealth.config.entitySpecificHeadSpeed.tooltip=How quickly entities' heads spin during eg. a search sequence\n\nentityID, headTurnSpeed\n\neg...\n\nminecraft:skeleton, 5\n
 
 dynamicstealth.config.fleeThreshold=HP Threshold
+dynamicstealth.config.fleeThreshold.tooltip=The %% of health at which entities start to flee\n
 dynamicstealth.config.fleeRate=Degredation Rate
+dynamicstealth.config.fleeRate.tooltip=How fast the flee gauge decreases; lower number means they flee for a longer time\n
 dynamicstealth.config.fleeDamageLengthen=Damage Increases Flee Duration
+dynamicstealth.config.fleeDamageLengthen.tooltip=If set to true, then when an entity is *already* in flee mode, damage will increase its flee duration\n
 dynamicstealth.config.fleeHome=CNPCs flee To Home Position
+dynamicstealth.config.fleeHome.tooltip=If enabled, Custom NPCs flee to their home position instead of away from what hit them\n
 dynamicstealth.config.fearless=Fearless
+dynamicstealth.config.fearless.tooltip=These entities will not use the flee mechanic when low on health\n\nEntities that bypass threat are automatically fearless\n
 
 dynamicstealth.config.cantReachCombatTime=Combat Time
+dynamicstealth.config.cantReachCombatTime.tooltip=Deciding we can't reach the target requires at least this many ticks in combat\n
 dynamicstealth.config.cantReachNoAttackTime=No Attack Time
+dynamicstealth.config.cantReachNoAttackTime.tooltip=Deciding we can't reach the target requires at least this many ticks since the last successful attack\n
 dynamicstealth.config.cantReachNoPathTime=No Path Time
+dynamicstealth.config.cantReachNoPathTime.tooltip=Deciding we can't reach the target requires at least this many ticks without a path to the target\n
 dynamicstealth.config.cantReachTargetTime=Target Time
+dynamicstealth.config.cantReachTargetTime.tooltip=Deciding we can't reach the target requires at least this many ticks with a valid target\n
 dynamicstealth.config.cantReachFlee=Flee If Unreachable
+dynamicstealth.config.cantReachFlee.tooltip=If we can't reach the target, do what brave Sir Robin does\n
 
 dynamicstealth.config.allowOPHUD=Allow On-Point HUD
+dynamicstealth.config.allowOPHUD.tooltip=If enabled, clients can turn on/off a HUD which appears above each entity\n\n0 means disabled for all players\n1 means enabled for OP players ONLY\n2 means enabled for all players\n
 dynamicstealth.config.allowTargeting=Allow "Target's Target" Display
+dynamicstealth.config.allowTargeting.tooltip=If enabled, clients can see what other entities are targeting\n\n0 means disabled for all players\n1 means enabled for OP players ONLY\n2 means enabled for all players\n
 dynamicstealth.config.allowPassiveRecognition=Recognize Passives Automatically
+dynamicstealth.config.allowPassiveRecognition.tooltip=If enabled, clients' threat HUDs will display green for passive mobs.  If disabled, passives appear as idle (blue).\n
 dynamicstealth.config.allowStealthGauge=Allow Stealth Gauge
+dynamicstealth.config.allowStealthGauge.tooltip=If enabled, clients can see their current stealth level in their HUD\n\n0 means disabled for all players\n1 means enabled for OP players ONLY\n2 means enabled for all players\n
 
 dynamicstealth.config.playerSenses=Use player senses
+dynamicstealth.config.playerSenses.tooltip=If enabled, stealth mechanics work on players\n\nBasically if this is turned on and that skeleton is holding still in the dark, you might not be able to see him until you get close\n
 dynamicstealth.config.touch=Touch
 dynamicstealth.config.sight=Sight
 dynamicstealth.config.hearing=Hearing
 
 dynamicstealth.config.enabletouch=Enable Touch
+dynamicstealth.config.enabletouch.tooltip=If true, entities can feel each other if they bump into one another\n
 dynamicstealth.config.unfeeling=Unfeeling
+dynamicstealth.config.unfeeling.tooltip=Entities in this list don't notice when something bumps them\n
 
 dynamicstealth.config.stealthMultipliers=Stealth Multipliers
+dynamicstealth.config.stealthMultipliers.tooltip=Contains multipliers that increase stealth / decrease awareness\n\nWhichever of these multipliers is currently giving the best (lowest) multiplier is used\n
 dynamicstealth.config.visibilityMultipliers=Visibility Multipliers
+dynamicstealth.config.visibilityMultipliers.tooltip=Contains multipliers that decrease stealth / increase awareness\n\nWhichever of these multipliers is currently giving the worst (highest) multiplier is used\n
 dynamicstealth.config.lighting=Lighting
+dynamicstealth.config.lighting.tooltip=How much of an effect lighting has on stealth.  Nightvision is in here as well\n
 dynamicstealth.config.angle=Angle
+dynamicstealth.config.angle.tooltip=FOV angles\n
 dynamicstealth.config.distance=Distance
+dynamicstealth.config.distance.tooltip=FOV distances\n
 dynamicstealth.config.absolutes=Absolute Cases
+dynamicstealth.config.absolutes.tooltip=Special cases, eg. glowing\n
 dynamicstealth.config.entitySpecificSight=Entity-Specific Settings (Advanced)
 
 dynamicstealth.config.crouchMultiplier=Crouching Multiplier
+dynamicstealth.config.crouchMultiplier.tooltip=Multiplies an entity's visibility by this decimal when crouching\n\nIf set to 1, there is no effect\n\nIf set to 0, crouching entities are invisible (except in special cases)\n
 dynamicstealth.config.mobHeadMultiplier=Mob Head Multiplier
+dynamicstealth.config.mobHeadMultiplier.tooltip=When an entity (including a player) is wearing a mob head, mobs of that type have reduced chance to realize they're a target\n\nIf set to 1, there is no effect\n\nIf set to 0, mobs of the mob head type cannot notice entities wearing their heads\n
 dynamicstealth.config.invisibilityMultiplier=Invisibility Multiplier
+dynamicstealth.config.invisibilityMultiplier.tooltip=Invisible entities' visibility is multiplied by this\n\nIf set to 1, there is no effect\n\nIf set to 0, invisible entities are, uh...invisible\n
 dynamicstealth.config.blindnessMultiplier=Blindness Multiplier
+dynamicstealth.config.blindnessMultiplier.tooltip=Blinded entities' detection range is multiplied by this\n\nIf set to 1, there is no effect\n\nIf set to 0, blind entities can't see\n
 
 dynamicstealth.config.armorMultiplier=Armor Multiplier (Cumulative)
+dynamicstealth.config.armorMultiplier.tooltip=An entity's visibility is multiplied by 1 + (this setting * armor)\n\nIf set to 0, there is no effect\n\nIf set to 0.25, an entity with 20 armor (full diamond) is 5x as likely to be seen\n
 dynamicstealth.config.alertMultiplier="Alert" Multiplier
+dynamicstealth.config.alertMultiplier.tooltip=If an entity is alert, their visual perception is multiplied by this\n\nIf set to 1, there is no effect\n\nIf set to 2, an alerted entity can generally see targets twice as easily (but still not beyond Distance (Far))\n
 dynamicstealth.config.seenMultiplier="Seen" Multiplier
+dynamicstealth.config.seenMultiplier.tooltip=If an entity has recently seen its target, their visual perception is multiplied by this\n\nIf set to 1, there is no effect\n\nIf set to 2, the searcher can generally see targets twice as easily (but still not beyond Distance (Far))\n
 
 dynamicstealth.config.lightHigh=Light (High/Bright)
+dynamicstealth.config.lightHigh.tooltip=The lowest light level at which entities take no sight penalty\n\nEntities are harder to see in light levels lower than this\n
 dynamicstealth.config.lightLow=Light (Low/Dark)
+dynamicstealth.config.lightLow.tooltip=At or below this light level, entities cannot be seen at all\n\nInclusive, so if set to 0, then in 0 lighting, entities cannot be seen by other entities\n
 dynamicstealth.config.nightvisionBonus=Nightvision Bonus
+dynamicstealth.config.nightvisionBonus.tooltip=When an entity has the nightvision effect, this value is added to their perceived light levels (and then set to 15 if larger than 15)\n
 
 dynamicstealth.config.angleNear=Angle (Large/Wide; Near)
+dynamicstealth.config.angleNear.tooltip=The angle inside which an entity can see another entity at close range (distance <= distanceNear), in degrees\n\nThis is otherwise similar to angleSmall\n\nIf this and angleSmall are both 0, entities (other than exceptions) are blind\n\nCannot be smaller than angleSmall\n
 dynamicstealth.config.angleFar=Angle (Small/Thin; Far)
+dynamicstealth.config.angleFar.tooltip=The angle inside which an entity can see another entity at long range (distance >= distanceFar, in degrees\n\nThis is a cone-shaped FOV, and the setting is the angle between the center axis of the cone and the outer surface of the cone\n\nUnless you make it > 90* in which case it's everywhere *except* a cone behind the entity, but w/e\n\nAlso, it's technically not a cone shape with other settings accounted for, but let's not get into that\n\nIf this and angleLarge are both 0, entities (other than exceptions) are blind\n\nCannot be larger than angleLarge\n
 
 dynamicstealth.config.distanceFar=Distance (Far)
+dynamicstealth.config.distanceFar.tooltip=The absolute maximum distance that an entity can see another entity from, in blocks\n\nExclusive, so if set to 0 mobs NEVER see anything, with a few exceptions, eg...\n\nZombies will still attack villagers as normal; this uses completely different logic than what I'm accessing atm so I'm not trying to change it for now\n\nSome mobs are not affected at all, for the same reason as stated above, including endermen and the ender dragon\n
 dynamicstealth.config.distanceNear=Distance (Near)
+dynamicstealth.config.distanceNear.tooltip=The distance before an entity's sight starts degrading naturally (even in good conditions),  in blocks\n\nExclusive, so if set to 0 mobs NEVER see anything, with a few exceptions, eg...\n\n...zombies will still attack villagers as normal; this uses completely different logic than what I'm accessing atm so I'm not trying to change it for now\n\n...some mobs are not affected at all, for the same reason as stated above, including endermen and the ender dragon\n
 
 dynamicstealth.config.seeGlowing=See Glowing
+dynamicstealth.config.seeGlowing.tooltip=If set to true, glowing entities will be seen when inside another entity's FOV, ignoring all other factors\n\nAllows entities to see invisible players who are glowing, but does not remove invisibility; if glowing runs out before invisibility, you're hard to see again\n
 dynamicstealth.config.seeBurning=See Burning
+dynamicstealth.config.seeBurning.tooltip=If set to true, burning entities are always considered to be standing in full light\n
 
 dynamicstealth.config.entitySpecificAngle=Angle
+dynamicstealth.config.entitySpecificAngle.tooltip=How wide an entity's vision is, near and far away\n\nentityID, angleLarge, angleSmall\n\neg...\n\nminecraft:skeleton, 90, 45\n
 dynamicstealth.config.entitySpecificDistance=Distance
+dynamicstealth.config.entitySpecificDistance.tooltip=How far an entity can see, at the edge of its vision and at its focal point\n\nentityID, distanceFar, distanceNear\n\neg...\n\nminecraft:skeleton, 40, 3\n
 dynamicstealth.config.entitySpecificLighting=Lighting
+dynamicstealth.config.entitySpecificLighting.tooltip=How well an entity sees in the dark\n\nentityID, lightHigh, lightLow\n\neg...\n\nminecraft:skeleton, 15, -1\n
 dynamicstealth.config.naturallyBright=Naturally Bright
+dynamicstealth.config.naturallyBright.tooltip=Entities in this list are always treated as if they are standing in max light level\n
 dynamicstealth.config.naturalNightvision=Natural Nightvision
+dynamicstealth.config.naturalNightvision.tooltip=Entities in this list ALWAYS get the nightvision bonus\n
 dynamicstealth.config.naturalSoulSight=Natural Soul Sight
+dynamicstealth.config.naturalSoulSight.tooltip=Entities in this list pretty much see everything\n\nAdding the player keyword to this list makes all players see all entities as if they had glowing (visible through walls)\n
 
 dynamicstealth.config.warningRange=Warning Range
+dynamicstealth.config.warningRange.tooltip=How far away entities can hear warnings, by default\n
 dynamicstealth.config.notificationRange=Notification Range
+dynamicstealth.config.notificationRange.tooltip=How far away entities can hear target death notifications, by default\n\nHearing a target death notification from an entity they trust makes them drop threat target\n
 dynamicstealth.config.noLOSMultiplier=No LOS Multiplier
+dynamicstealth.config.noLOSMultiplier.tooltip=If the observer doesn't have LOS to the source of the sound, its hearing range is multiplied by this\n
 
 dynamicstealth.config.threatDealtDamage=Dealt Damage Multiplier
+dynamicstealth.config.threatDealtDamage.tooltip=When an in-combat entity damages its current target, its threat is increased by the damage dealt times this, divided by its target's max HP\n
 dynamicstealth.config.threatAttackedBySame="Attacked By Same" Multiplier
+dynamicstealth.config.threatAttackedBySame.tooltip=When an in-combat entity is attacked by its current target, its threat is increased by the damage taken times this, divided by its max HP\n
 dynamicstealth.config.threatAttackedByOther="Attacked By Other" Multiplier
+dynamicstealth.config.threatAttackedByOther.tooltip=When an in-combat entity is attacked by something that is *not* its current target, its threat is decreased by damage taken times this, divided by its max HP\n
 dynamicstealth.config.threatBypassGlobal=Bypass Threat System (Global)
+dynamicstealth.config.threatBypassGlobal.tooltip=If enabled, all entities should bypass the threat system\n
 dynamicstealth.config.threatInitialAttack=Initial Attack Multiplier
+dynamicstealth.config.threatInitialAttack.tooltip=When an out-of-combat entity is attacked, its threat is set to the damage taken times this, divided by its max HP\n
 dynamicstealth.config.threatInitialSpotted=Initial "Target Spotted" Threat
+dynamicstealth.config.threatInitialSpotted.tooltip=When an out-of-combat entity spots a valid target, its threat is set to this\n
 dynamicstealth.config.threatAllyKilled="Ally Killed" Threat
+dynamicstealth.config.threatAllyKilled.tooltip=When an out-of-combat entity spots a valid target, its threat is set to this\n
 dynamicstealth.config.threatWarned="Warned" Threat
+dynamicstealth.config.threatWarned.tooltip=When an entity heeds a warning from another entity, its threat is set to this (if less than this)\n
 dynamicstealth.config.threatMax=Maximum Threat
+dynamicstealth.config.threatMax.tooltip=The maximum threat level an entity can reach\n
 dynamicstealth.config.threatUnseenMinThreshold=Unseen Target Minimum Threat Level
+dynamicstealth.config.threatUnseenMinThreshold.tooltip=If an entity's threat level falls below this and they don't see their target, they go out-of-combat / stop searching\n
 dynamicstealth.config.threatUnseenRate=Unseen Target Degredation Rate
+dynamicstealth.config.threatUnseenRate.tooltip=Every time an entity updates and their target's position is unknown, this is subtracted from their threat\n
 dynamicstealth.config.threatSeenRate=Seen Target Threat Rate
+dynamicstealth.config.threatSeenRate.tooltip=Every time an entity updates and their target is visible and reachable, this is added to their threat\n
 dynamicstealth.config.threatCantReachRate=Owned Can't Reach Degredation Rate
+dynamicstealth.config.threatCantReachRate.tooltip=Every time an owned entity updates and can't reach their target, this is subtracted from their threat\n
 dynamicstealth.config.threatEntitySpecific=Entity-Specific Settings (Advanced)
 dynamicstealth.config.threatCNPC=CNPC Threat Settings
 
 dynamicstealth.config.entitySpecificBypass=Threat Bypass
+dynamicstealth.config.entitySpecificBypass.tooltip=Entities in this bypass the threat system\n\nThis means they will not use the search AI, will appear with ???? as their target and threat level in the targeting HUD, and always appear as full alert in the on-point HUD\n\nFor some entities, this option is necessary for them to work right, such as slimes.  For others, like the ender dragon and other players, it has no effect besides how they appear in the HUD\n
 dynamicstealth.config.entityPassiveness=Passiveness
+dynamicstealth.config.entityPassiveness.tooltip=Sets whether the threat system detects and entity as passive or not\n\nentityID, passivity\n\neg...\n\nminecraft:skeleton, true\n
 
 dynamicstealth.config.CNPCFactionBypass=Faction Threat Bypass
+dynamicstealth.config.CNPCFactionBypass.tooltip=All CNPCs in these factions will bypass the threat system\n
 
 dynamicstealth.config.helperOwnership=Ownership
 dynamicstealth.config.helperTeams=Teams
 dynamicstealth.config.helperCNPCFactions=Custom NPCs Factions
+dynamicstealth.config.helperCNPCFactions.tooltip=These settings only matter if Custom NPCs is installed\n
 dynamicstealth.config.helperType=Help Same Entity Type
+dynamicstealth.config.helperType.tooltip=Whether to help entities of the same type\n\nEg. if set to true, skeletons will help other skeletons (but not zombies)\n
 
 dynamicstealth.config.helpOwner=Help Owner
+dynamicstealth.config.helpOwner.tooltip=Help our owner (if we have one)\n
 dynamicstealth.config.helpSameOwner=Help If Same Owner
+dynamicstealth.config.helpSameOwner.tooltip=Help them if we both have the same owner (if we have one)\n
 dynamicstealth.config.helpDedicated=Dedicated
+dynamicstealth.config.helpDedicated.tooltip=DON'T help them if they don't have the same owner (if we have one)\n
 dynamicstealth.config.helpOwned=Help Owned
+dynamicstealth.config.helpOwned.tooltip=Help them if we own them\n
 
 dynamicstealth.config.helpTeam=Help Same Team
+dynamicstealth.config.helpTeam.tooltip=Help other entities on our team\n
 dynamicstealth.config.dontHelpOtherTeam=Don't Help Other Teams
+dynamicstealth.config.dontHelpOtherTeam.tooltip=Make sure NOT to help entities on other teams\n
 
 dynamicstealth.config.helpGoodRep=Help If Good Rep
+dynamicstealth.config.helpGoodRep.tooltip=Help npcs in the same faction and players with good faction rep\n
 dynamicstealth.config.dontHelpBadRep=Don't Help If Bad Rep
+dynamicstealth.config.dontHelpBadRep.tooltip=Make sure NOT to help those we're hostile to\n
 
 dynamicstealth.config.interactAttack=Attack
+dynamicstealth.config.interactAttack.tooltip=When anything attacks anything else\n
 dynamicstealth.config.interactStealthAtk=Stealth Attack
+dynamicstealth.config.interactStealthAtk.tooltip=When something attacks an unaware victim\n
 dynamicstealth.config.interactAssassination=Assassination
+dynamicstealth.config.interactAssassination.tooltip=When something kills without being detected\n
 dynamicstealth.config.interactCalmDown=Calm Down
+dynamicstealth.config.interactCalmDown.tooltip=When something was fleeing, but ran out of threat\n
 dynamicstealth.config.interactRally=Rally
+dynamicstealth.config.interactRally.tooltip=When something was fleeing, but regained health\n
 dynamicstealth.config.interactDesperation=Desperation
+dynamicstealth.config.interactDesperation.tooltip=When something is cornered while fleeing\n
 dynamicstealth.config.interactCantReach=Can't Reach
+dynamicstealth.config.interactCantReach.tooltip=When something cannot reach its target\n
 
 dynamicstealth.config.removeInvis=Remove Invisibility On Hit
+dynamicstealth.config.removeInvis.tooltip=If set to true, when one living entity hits another living entity, they both lose invisibility\n\nThis happens before any new effects are applied\n
 dynamicstealth.config.removeBlind=Remove Blindness On Hit
+dynamicstealth.config.removeBlind.tooltip=If set to true, when one living entity hits another living entity, they both lose blindness\n\nThis happens before any new effects are applied\n
 dynamicstealth.config.attackArmorPenetration=Armor Penetration
+dynamicstealth.config.attackArmorPenetration.tooltip=Whether stealth attacks bypass armor or not\n
 dynamicstealth.config.attackDamageMult=Damage Multiplier
+dynamicstealth.config.attackDamageMult.tooltip=Damage is multiplied by this when attacking from stealth\n
 dynamicstealth.config.attackAEffects=Attacker Effects
+dynamicstealth.config.attackAEffects.tooltip=Potion effects that are applied to the attacker when an attack happens\n\nThis applies strength 2 for 200 ticks (10 seconds):\nstrength.200.2"\n\nThis applies soul sight for 100 ticks (5 seconds):\ndynamicstealth:soulsight.100\n
 dynamicstealth.config.attackVEffects=Victim Effects
+dynamicstealth.config.attackVEffects.tooltip=Potion effects that are applied to the victim when an attack happens\n\nThis applies blindness for 100 ticks (5 seconds):\nblindness.100\n
 dynamicstealth.config.attackWeaponSpecific=Weapon-Specific Settings
+dynamicstealth.config.attackWeaponSpecific.tooltip=Weapon-specific overrides\nSyntax is...\n\ndomain:item:meta > nbtkey1 = nbtvalue1 & nbtkey2 = nbtvalue2, armorpenetration, multiplier, attackerpotion1 & attackerpotion2, vidtimpotion1 & victimpotion2, consumeitem\n\neg...\n\nbackstab:diamond_dagger, true, 3\n\ntetra:duplex_tool_modular > duplex/sickle_left_material & duplex/butt_right_material, true, 3, regeneration.60.3, wither.60.3\n\ndye, false, 0, , blindness.20, true\n
 
 dynamicstealth.config.stealthAtkArmorPenetration=Armor Penetration
+dynamicstealth.config.stealthAtkArmorPenetration.tooltip=Whether stealth attacks bypass armor or not\n
 dynamicstealth.config.stealthAtkDamageMult=Damage Multiplier
+dynamicstealth.config.stealthAtkDamageMult.tooltip=Damage is multiplied by this when attacking from stealth\n
 dynamicstealth.config.stealthAtkAEffects=Attacker Effects
+dynamicstealth.config.stealthAtkAEffects.tooltip=Potion effects that are applied to the attacker when a stealth attack happens\n\nThis applies strength 2 for 200 ticks (10 seconds):\nstrength.200.2\n\nThis applies soul sight for 100 ticks (5 seconds):\ndynamicstealth:soulsight.100\n
 dynamicstealth.config.stealthAtkVEffects=Victim Effects
+dynamicstealth.config.stealthAtkVEffects.tooltip=Potion effects that are applied to the victim when a stealth attack happens\n\nThis applies blindness for 100 ticks (5 seconds):\nblindness.100\n
 dynamicstealth.config.stealthAtkWeaponSpecific=Weapon-Specific Settings
+dynamicstealth.config.stealthAtkWeaponSpecific.tooltip=Weapon-specific overrides\nSyntax is...\n\ndomain:item:meta > nbtkey1 = nbtvalue1 & nbtkey2 = nbtvalue2, armorpenetration, multiplier, attackerpotion1 & attackerpotion2, vidtimpotion1 & victimpotion2, consumeitem\n\neg...\n\nbackstab:diamond_dagger, true, 3\n\ntetra:duplex_tool_modular > duplex/sickle_left_material & duplex/butt_right_material, true, 3, regeneration.60.3, wither.60.3\n\ndye, false, 0, , blindness.20, true\n
 
 dynamicstealth.config.assassinationAEffects=Attacker Effects
+dynamicstealth.config.assassinationAEffects.tooltip=Potion effects that are applied to the attacker when an assassination happens\n\nThis applies strength 2 for 200 ticks (10 seconds):\nstrength.200.2\n\nThis applies soul sight for 100 ticks (5 seconds):\ndynamicstealth:soulsight.100\n
 dynamicstealth.config.assassinationWeaponSpecific=Weapon-Specific Settings
+dynamicstealth.config.assassinationWeaponSpecific.tooltip=Weapon-specific overrides\nSyntax is...\n\ndomain:item:meta > nbtkey1 = nbtvalue1 & nbtkey2 = nbtvalue2, attackerpotion1 & attackerpotion2\n\neg...\n\nbackstab:diamond_dagger, invisibility.200\n\ntetra:duplex_tool_modular > duplex/sickle_left_material & duplex/butt_right_material, regeneration.60.3\n
 
 dynamicstealth.config.calmDownFullHP=Recover all HP
+dynamicstealth.config.calmDownFullHP.tooltip=If set to true, all hp is instantly recovered when calming down\n
 dynamicstealth.config.calmDownCNPCWarp=CNPCs Warp Home
+dynamicstealth.config.calmDownCNPCWarp.tooltip=If set to true, cnpcs warp home when calming down
 dynamicstealth.config.calmDownPotions=Potion Effects
+dynamicstealth.config.calmDownPotions.tooltip=Potion effects to apply when something calms down after fleeing\n\nThis applies strength 2 for 200 ticks (10 seconds):\nstrength.200.2\n\nThis applies soul sight for 100 ticks (5 seconds):\ndynamicstealth:soulsight.100\n
 
 dynamicstealth.config.rallyPotions=Potion Effects
+dynamicstealth.config.rallyPotions.tooltip=Potion effects to apply when something rallies\n\nThis applies strength 2 for 200 ticks (10 seconds):\nstrength.200.2\n\nThis applies soul sight for 100 ticks (5 seconds):\ndynamicstealth:soulsight.100\n
 
 dynamicstealth.config.desperationPotions=Potion Effects
+dynamicstealth.config.desperationPotions.tooltip=Potion effects to apply when something gets cornered and desperate\n\nThis applies strength 2 for 200 ticks (10 seconds):\nstrength.200.2\n\nThis applies soul sight for 100 ticks (5 seconds):\ndynamicstealth:soulsight.100\n
 
 dynamicstealth.config.cantReachPotions=Potion Effects
+dynamicstealth.config.cantReachPotions.tooltip=Potion effects to apply when something can't reach its target\n\nThis applies strength 2 for 200 ticks (10 seconds):\nstrength.200.2\n\nThis applies soul sight for 100 ticks (5 seconds):\ndynamicstealth:soulsight.100\n
 
 dynamicstealth.config.potions=Potions
 
 dynamicstealth.config.potionSoulSight=Soul Sight Potions
+dynamicstealth.config.potionSoulSight.tooltip=Whether to load soul sight potions (accessible from the brewing tab of the creative menu)\n
 dynamicstealth.config.potionSoulSightRecipe=Soul Sight Potion Recipes
+dynamicstealth.config.potionSoulSightRecipe.tooltip=Whether to load the soul sight potion recipe (thick potion + ender eye)\n
 dynamicstealth.config.potionBlindness=Blindness Potions
+dynamicstealth.config.potionBlindness.tooltip=Whether to load blindness potions (accessible from the brewing tab of the creative menu)\n
 dynamicstealth.config.potionBlindnessRecipe=Blindness Potion Recipes
+dynamicstealth.config.potionBlindnessRecipe.tooltip=Whether to load the blindness potion recipe (thick potion + ink sac)\n
 dynamicstealth.config.potionGlowing=Glowing Potions
+dynamicstealth.config.potionGlowing.tooltip=Whether to load glowing potions (accessible from the brewing tab of the creative menu)\n
 dynamicstealth.config.potionGlowingRecipe=Glowing Potion Recipes
+dynamicstealth.config.potionGlowingRecipe.tooltip=Whether to load the glowing potion recipe (thick potion + glowstone dust)\n
