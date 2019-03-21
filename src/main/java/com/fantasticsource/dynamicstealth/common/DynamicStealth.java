@@ -181,7 +181,7 @@ public class DynamicStealth
 
 
     @SubscribeEvent
-    public static void worldTick(TickEvent.WorldTickEvent event) throws InvocationTargetException, IllegalAccessException
+    public static void worldTick(TickEvent.WorldTickEvent event)
     {
         World world = event.world;
         if (!world.isRemote && event.phase == TickEvent.Phase.START)
