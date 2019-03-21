@@ -159,16 +159,16 @@ public class Sight
     }
 
 
-    public static double lightLevelTotal(Entity entity)
+    public static double lightLevelTotal(Entity entity, Vec3d vec)
     {
-        BlockPos blockpos = new BlockPos(entity.posX, entity.getEntityBoundingBox().minY, entity.posZ);
-        if (!entity.world.isAreaLoaded(entity.getPosition(), 1)) return 0;
+        BlockPos blockpos = new BlockPos(vec);
+        if (!entity.world.isAreaLoaded(blockpos, 1)) return 0;
         return entity.world.getLightFromNeighbors(blockpos);
     }
 
-    public static boolean los(Entity searcher, Entity target)
+    public static Vec3d los(Entity searcher, Entity target)
     {
-        if (searcher.world != target.world) return false;
+        if (searcher.world != target.world) return null;
 
         double halfWidth = target.width / 2;
         double halfHeight = target.height / 2;
@@ -178,48 +178,55 @@ public class Sight
         double z = target.posZ;
 
         //Center
-        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), new Vec3d(x, y, z), false))
+        Vec3d testVec = new Vec3d(x, y, z);
+        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), testVec, false))
         {
-            return true;
+            return testVec;
         }
 
         //+Y
-        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), new Vec3d(x, y + halfHeight, z), false))
+        testVec = new Vec3d(x, y + halfHeight, z);
+        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), testVec, false))
         {
-            return true;
+            return testVec;
         }
 
         //-Y
-        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), new Vec3d(x, y - halfHeight, z), false))
+        testVec = new Vec3d(x, y - halfHeight, z);
+        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), testVec, false))
         {
-            return true;
+            return testVec;
         }
 
         //+X
-        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), new Vec3d(x + halfWidth, y, z), false))
+        testVec = new Vec3d(x + halfWidth, y, z);
+        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), testVec, false))
         {
-            return true;
+            return testVec;
         }
 
         //-X
-        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), new Vec3d(x - halfWidth, y, z), false))
+        testVec = new Vec3d(x - halfWidth, y, z);
+        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), testVec, false))
         {
-            return true;
+            return testVec;
         }
 
         //+Z
-        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), new Vec3d(x, y, z + halfWidth), false))
+        testVec = new Vec3d(x, y, z + halfWidth);
+        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), testVec, false))
         {
-            return true;
+            return testVec;
         }
 
         //-Z
-        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), new Vec3d(x, y, z - halfWidth), false))
+        testVec = new Vec3d(x, y, z - halfWidth);
+        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), testVec, false))
         {
-            return true;
+            return testVec;
         }
 
-        return false;
+        return null;
     }
 
 
@@ -322,7 +329,7 @@ public class Sight
                     if (!isForHUD || !(MCTools.isRidingOrRiddenBy(player, entity) || CompatDissolution.isPossessing(player, entity) || !entity.isEntityAlive()))
                     {
                         double distSquared = player.getDistanceSq(entity);
-                        if (distSquared <= Math.pow(playerMaxSightDistance, 2) && los(player, entity))
+                        if (distSquared <= Math.pow(playerMaxSightDistance, 2) && los(player, entity) != null)
                         {
                             double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, (entity.posY + entity.height * 0.5) - (player.posY + player.eyeHeight), entity.posZ - player.posZ).normalize());
 
@@ -361,8 +368,6 @@ public class Sight
 
         if (target instanceof EntityPlayerMP && ((EntityPlayerMP) target).capabilities.disableDamage) return 777;
 
-
-        //Soul Sight (absolute)
         if (hasSoulSight(searcher)) return -777;
 
 
@@ -406,11 +411,12 @@ public class Sight
 
 
         //LOS check (absolute, after Angles, after Glowing)
-        if (!los(searcher, target)) return 777;
+        Vec3d resultVec = los(searcher, target);
+        if (resultVec == null) return 777;
 
 
         //Lighting (absolute, factor, after Angles, after Glowing, after LOS)
-        double lightFactor = isLivingBase && isBright(targetLivingBase) ? 15 : lightLevelTotal(target);
+        double lightFactor = isLivingBase && isBright(targetLivingBase) ? 15 : lightLevelTotal(target, resultVec);
         if (hasNightvision(searcher))
         {
             lightFactor = Math.min(15, lightFactor + sight.c_lighting.nightvisionBonus);
