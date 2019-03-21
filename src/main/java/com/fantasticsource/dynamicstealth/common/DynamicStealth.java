@@ -194,7 +194,7 @@ public class DynamicStealth
                     {
                         for (Entity felt : world.getEntitiesWithinAABBExcludingEntity(feeler, feeler.getEntityBoundingBox()))
                         {
-                            if (felt.isEntityAlive() && (felt instanceof EntityPlayer || (felt instanceof EntityLiving && !(felt instanceof EntityBat))))
+                            if (felt.isEntityAlive() && (felt instanceof EntityPlayer || (felt instanceof EntityLiving && !(felt instanceof EntityBat))) && !MCTools.isRidingOrRiddenBy(feeler, felt))
                             {
                                 if (feeler instanceof EntityPlayerMP)
                                 {
