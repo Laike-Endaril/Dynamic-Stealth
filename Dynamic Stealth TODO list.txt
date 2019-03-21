@@ -29,7 +29,14 @@ Switch to a one-subscriber system for events, to reduce invoke() calls from the 
 
 BUG FIXES ==============================================================
 
-Spiders path toward their threat target even if they can't see it (must have a threat target)
+Spiders path toward their threat target even if they can't see it (must have a threat target)...
+...happens when all AI besides mine is removed, so either something to do with my AI or something outside AI, or both
+...since it only happens with spiders and not other mobs, I'd think it has to do with something outside the AI, at least partially
+
+Spider riders sometimes move really fast...is that normal?...
+...comes from skeleton, not spider (removed all AI from spiders and it still happened)
+
+Spider glow color is broken...didn't I already fix this?
 
 Fix entities attempting to path through diagonal walls; this may very well fix (or at least mostly fix) the issue below
 Fix entities being able to attack through glass diagonally (because they can see through it...)
