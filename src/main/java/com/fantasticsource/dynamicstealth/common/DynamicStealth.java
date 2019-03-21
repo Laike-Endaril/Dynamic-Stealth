@@ -591,7 +591,7 @@ public class DynamicStealth
         }
     }
 
-    private static void replaceTasks(EntityAITasks tasks, EntityLiving living) throws Exception
+    private static void replaceTasks(EntityAITasks tasks, EntityLiving living)
     {
         Set<EntityAITasks.EntityAITaskEntry> taskSet = tasks.taskEntries;
         EntityAITasks.EntityAITaskEntry[] taskArray = new EntityAITasks.EntityAITaskEntry[taskSet.size()];
