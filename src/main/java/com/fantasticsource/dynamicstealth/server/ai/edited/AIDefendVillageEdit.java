@@ -34,7 +34,7 @@ public class AIDefendVillageEdit extends AITargetEdit
     EntityIronGolem irongolem;
     EntityLivingBase villageAgressorTarget;
 
-    public AIDefendVillageEdit(EntityAIDefendVillage oldAI) throws IllegalAccessException
+    public AIDefendVillageEdit(EntityAIDefendVillage oldAI)
     {
         super(oldAI);
         irongolem = (EntityIronGolem) attacker;

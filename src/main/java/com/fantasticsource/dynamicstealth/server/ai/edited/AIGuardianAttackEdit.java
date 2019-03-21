@@ -1,38 +1,17 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
 import com.fantasticsource.mctools.MCTools;
-import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.monster.EntityElderGuardian;
 import net.minecraft.entity.monster.EntityGuardian;
-import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.EnumDifficulty;
-
-import java.lang.reflect.Field;
 
 
 public class AIGuardianAttackEdit extends EntityAIBase
 {
-    private static Field targetEntityField, wanderField;
-
-    static
-    {
-        try
-        {
-            targetEntityField = ReflectionTool.getField(EntityGuardian.class, "field_184723_b", "TARGET_ENTITY");
-            wanderField = ReflectionTool.getField(EntityGuardian.class, "field_175481_bq", "wander");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            MCTools.crash(e, 140, false);
-        }
-    }
-
-
     private final EntityGuardian guardian;
     private final boolean isElder;
     private int tickCounter;
@@ -68,26 +47,12 @@ public class AIGuardianAttackEdit extends EntityAIBase
     {
         setTargetedEntity(0);
         guardian.setAttackTarget(null);
-        try
-        {
-            ((EntityAIWander) wanderField.get(guardian)).makeUpdate();
-        }
-        catch (IllegalAccessException e)
-        {
-            MCTools.crash(e, 142, false);
-        }
+        guardian.wander.makeUpdate();
     }
 
     private void setTargetedEntity(int entityId)
     {
-        try
-        {
-            guardian.getDataManager().set((DataParameter<Integer>) targetEntityField.get(guardian), entityId);
-        }
-        catch (IllegalAccessException e)
-        {
-            MCTools.crash(e, 141, false);
-        }
+        guardian.getDataManager().set(guardian.TARGET_ENTITY, entityId);
     }
 
     public void updateTask()
@@ -101,14 +66,7 @@ public class AIGuardianAttackEdit extends EntityAIBase
 
         if (tickCounter == 0)
         {
-            try
-            {
-                guardian.getDataManager().set((DataParameter<Integer>) targetEntityField.get(guardian), target.getEntityId());
-            }
-            catch (IllegalAccessException e)
-            {
-                MCTools.crash(e, 143, false);
-            }
+            guardian.getDataManager().set(guardian.TARGET_ENTITY, target.getEntityId());
             guardian.world.setEntityState(guardian, (byte) 21);
         }
         else if (tickCounter >= guardian.getAttackDuration())

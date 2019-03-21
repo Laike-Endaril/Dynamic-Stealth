@@ -1,7 +1,5 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
-import com.fantasticsource.mctools.MCTools;
-import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,28 +14,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-import java.lang.reflect.Field;
-
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 
 public class AIFollowOwnerEdit extends EntityAIBase
 {
-    private static Field followSpeedField, minDistField, maxDistField;
-
-    static
-    {
-        try
-        {
-            followSpeedField = ReflectionTool.getField(EntityAIFollowOwner.class, "field_75336_f", "followSpeed");
-            minDistField = ReflectionTool.getField(EntityAIFollowOwner.class, "field_75341_c", "minDist");
-            maxDistField = ReflectionTool.getField(EntityAIFollowOwner.class, "field_75340_b", "maxDist");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            MCTools.crash(e, 153, false);
-        }
-    }
-
     private final EntityTameable tameable;
     private final PathNavigate petPathfinder;
     World world;
@@ -54,16 +34,9 @@ public class AIFollowOwnerEdit extends EntityAIBase
         world = tameableIn.world;
         petPathfinder = tameableIn.getNavigator();
 
-        try
-        {
-            followSpeed = (double) followSpeedField.get(oldAI);
-            minDist = (float) minDistField.get(oldAI);
-            maxDist = (float) maxDistField.get(oldAI);
-        }
-        catch (IllegalAccessException e)
-        {
-            MCTools.crash(e, 154, false);
-        }
+        followSpeed = oldAI.followSpeed;
+        minDist = oldAI.minDist;
+        maxDist = oldAI.maxDist;
 
         setMutexBits(3);
     }

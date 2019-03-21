@@ -6,7 +6,7 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 
 public class AISpiderTargetEdit<T extends EntityLivingBase> extends AINearestAttackableTargetEdit<T>
 {
-    public AISpiderTargetEdit(EntityAINearestAttackableTarget oldAI) throws IllegalAccessException
+    public AISpiderTargetEdit(EntityAINearestAttackableTarget oldAI)
     {
         super(oldAI);
     }

@@ -8,7 +8,7 @@ public class AIZombieAttackEdit extends AIAttackMeleeEdit
     private final EntityZombie zombie;
     private int raiseArmTicks;
 
-    public AIZombieAttackEdit(EntityAIAttackMelee oldAI) throws IllegalAccessException
+    public AIZombieAttackEdit(EntityAIAttackMelee oldAI)
     {
         super(oldAI);
         zombie = (EntityZombie) attacker;

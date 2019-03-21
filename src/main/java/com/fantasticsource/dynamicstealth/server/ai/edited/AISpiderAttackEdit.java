@@ -6,10 +6,10 @@ import net.minecraft.entity.ai.EntityAIAttackMelee;
 
 public class AISpiderAttackEdit extends AIAttackMeleeEdit
 {
-    public AISpiderAttackEdit(EntityAIAttackMelee oldAI) throws IllegalAccessException
+    public AISpiderAttackEdit(EntityAIAttackMelee oldAI)
     {
         super(oldAI);
-        speed = 1;
+        speedTowardsTarget = 1;
     }
 
     @Override

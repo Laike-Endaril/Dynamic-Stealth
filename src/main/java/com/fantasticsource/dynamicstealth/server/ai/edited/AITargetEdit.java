@@ -3,7 +3,6 @@ package com.fantasticsource.dynamicstealth.server.ai.edited;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.mctools.MCTools;
-import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITarget;
@@ -15,34 +14,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.Field;
 
 public abstract class AITargetEdit extends EntityAIBase
 {
-    private static Field taskOwnerField, nearbyOnlyField;
-
-    static
-    {
-        try
-        {
-            nearbyOnlyField = ReflectionTool.getField(EntityAITarget.class, "field_75303_a", "nearbyOnly");
-            taskOwnerField = ReflectionTool.getField(EntityAITarget.class, "field_75299_d", "taskOwner");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            MCTools.crash(e, 128, false);
-        }
-    }
-
-
     public final EntityCreature attacker;
     public final boolean nearbyOnly;
     public EntityLivingBase target;
 
-    public AITargetEdit(EntityAITarget oldAI) throws IllegalAccessException
+    public AITargetEdit(EntityAITarget oldAI)
     {
-        attacker = (EntityCreature) taskOwnerField.get(oldAI);
-        nearbyOnly = (boolean) nearbyOnlyField.get(oldAI);
+        attacker = oldAI.taskOwner;
+        nearbyOnly = oldAI.nearbyOnly;
     }
 
     public static boolean isSuitableTarget(EntityLiving attacker, @Nullable EntityLivingBase target)

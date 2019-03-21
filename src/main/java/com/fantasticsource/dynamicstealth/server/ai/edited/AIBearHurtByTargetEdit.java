@@ -7,7 +7,7 @@ import net.minecraft.entity.monster.EntityPolarBear;
 
 public class AIBearHurtByTargetEdit extends AIHurtByTargetEdit
 {
-    public AIBearHurtByTargetEdit(EntityAIHurtByTarget oldAI) throws IllegalAccessException
+    public AIBearHurtByTargetEdit(EntityAIHurtByTarget oldAI)
     {
         super(oldAI);
     }

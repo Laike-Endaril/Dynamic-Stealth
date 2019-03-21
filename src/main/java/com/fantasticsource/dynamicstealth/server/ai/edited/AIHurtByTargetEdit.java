@@ -1,42 +1,22 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
-import com.fantasticsource.mctools.MCTools;
-import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.util.math.AxisAlignedBB;
 
-import java.lang.reflect.Field;
-
 public class AIHurtByTargetEdit extends AITargetEdit
 {
-    private static Field entityCallsForHelpField, excludedReinforcementTypesField;
-
-    static
-    {
-        try
-        {
-            entityCallsForHelpField = ReflectionTool.getField(EntityAIHurtByTarget.class, "field_75312_a", "entityCallsForHelp");
-            excludedReinforcementTypesField = ReflectionTool.getField(EntityAIHurtByTarget.class, "field_179447_c", "excludedReinforcementTypes");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            MCTools.crash(e, 129, false);
-        }
-    }
-
-
     private final boolean entityCallsForHelp;
     private final Class<?>[] excludedReinforcementTypes;
     private int revengeTimerOld;
 
-    public AIHurtByTargetEdit(EntityAIHurtByTarget oldAI) throws IllegalAccessException
+    public AIHurtByTargetEdit(EntityAIHurtByTarget oldAI)
     {
         super(oldAI);
-        entityCallsForHelp = (boolean) entityCallsForHelpField.get(oldAI);
-        excludedReinforcementTypes = (Class<?>[]) excludedReinforcementTypesField.get(oldAI);
+        entityCallsForHelp = oldAI.entityCallsForHelp;
+        excludedReinforcementTypes = oldAI.excludedReinforcementTypes;
         setMutexBits(1);
     }
 

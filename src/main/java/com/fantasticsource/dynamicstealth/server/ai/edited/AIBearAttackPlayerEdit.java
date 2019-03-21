@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class AIBearAttackPlayerEdit extends AINearestAttackableTargetEdit<EntityPlayer>
 {
-    public AIBearAttackPlayerEdit(EntityAINearestAttackableTarget<EntityPlayer> oldAI) throws IllegalAccessException
+    public AIBearAttackPlayerEdit(EntityAINearestAttackableTarget<EntityPlayer> oldAI)
     {
         super(oldAI);
     }

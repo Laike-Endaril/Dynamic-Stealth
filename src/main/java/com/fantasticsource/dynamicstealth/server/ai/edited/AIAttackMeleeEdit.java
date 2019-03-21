@@ -1,44 +1,20 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
-import com.fantasticsource.mctools.MCTools;
-import com.fantasticsource.tools.ReflectionTool;
-import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EnumHand;
 
-import java.lang.reflect.Field;
-
 public class AIAttackMeleeEdit extends EntityAIAttackMelee
 {
-    private static Field attackerField, speedTowardsTargetField;
-
-    static
-    {
-        try
-        {
-            attackerField = ReflectionTool.getField(EntityAIAttackMelee.class, "field_75441_b", "attacker");
-            speedTowardsTargetField = ReflectionTool.getField(EntityAIAttackMelee.class, "field_75440_e", "speedTowardsTarget");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            MCTools.crash(e, 126, false);
-        }
-    }
-
     protected final int attackInterval = 20;
-    protected EntityCreature attacker;
     protected int attackTick;
-    double speed;
     Path path;
     private EntityLivingBase target;
 
-    public AIAttackMeleeEdit(EntityAIAttackMelee oldAI) throws IllegalAccessException
+    public AIAttackMeleeEdit(EntityAIAttackMelee oldAI)
     {
-        super((EntityCreature) attackerField.get(oldAI), 0, false);
-        attacker = (EntityCreature) attackerField.get(oldAI);
-        speed = (double) speedTowardsTargetField.get(oldAI);
+        super(oldAI.attacker, oldAI.speedTowardsTarget, false);
 
         setMutexBits(3);
     }
@@ -61,7 +37,7 @@ public class AIAttackMeleeEdit extends EntityAIAttackMelee
     {
         if (target == null || !target.isEntityAlive()) return false;
 
-        attacker.getMoveHelper().setMoveTo(target.posX, target.posY, target.posZ, speed);
+        attacker.getMoveHelper().setMoveTo(target.posX, target.posY, target.posZ, speedTowardsTarget);
         attacker.getLookHelper().setLookPositionWithEntity(target, 180, 180);
 
         if (!AITargetEdit.isSuitableTarget(attacker, target)) return false;
@@ -75,7 +51,7 @@ public class AIAttackMeleeEdit extends EntityAIAttackMelee
     @Override
     public void updateTask()
     {
-        attacker.getNavigator().setPath(path, speed);
+        attacker.getNavigator().setPath(path, speedTowardsTarget);
 
         double distSquared = attacker.getDistanceSq(target.posX, target.getEntityBoundingBox().minY, target.posZ);
 

@@ -2,8 +2,6 @@ package com.fantasticsource.dynamicstealth.server.ai.edited;
 
 import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
-import com.fantasticsource.mctools.MCTools;
-import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import com.google.common.base.Predicates;
 import net.minecraft.entity.Entity;
@@ -14,42 +12,25 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EntitySelectors;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 public class AIWatchClosestEdit extends EntityAIBase
 {
-    private static Field entityField, watchedClassField, chanceField;
-
-    static
-    {
-        try
-        {
-            entityField = ReflectionTool.getField(EntityAIWatchClosest.class, "field_75332_b", "entity");
-            watchedClassField = ReflectionTool.getField(EntityAIWatchClosest.class, "field_75329_f", "watchedClass");
-            chanceField = ReflectionTool.getField(EntityAIWatchClosest.class, "field_75331_e", "chance");
-        }
-        catch (Exception e)
-        {
-            MCTools.crash(e, 123, false);
-        }
-    }
-
     public final float chance;
     public EntityLiving entity;
     public Entity target;
     public int lookTime;
     public Class<? extends Entity> watchedClass;
 
-    public AIWatchClosestEdit(EntityAIWatchClosest oldAI) throws IllegalAccessException
+    public AIWatchClosestEdit(EntityAIWatchClosest oldAI)
     {
-        entity = (EntityLiving) entityField.get(oldAI);
-        watchedClass = (Class<? extends Entity>) watchedClassField.get(oldAI);
-        chance = (float) chanceField.get(oldAI);
+        entity = oldAI.entity;
+        watchedClass = oldAI.watchedClass;
+        chance = oldAI.chance;
         setMutexBits(2);
     }
 
-    public AIWatchClosestEdit(EntityAIWatchClosest oldAI, boolean isEntityAIWatchClosest2) throws IllegalAccessException
+    public AIWatchClosestEdit(EntityAIWatchClosest oldAI, boolean isEntityAIWatchClosest2)
     {
         this(oldAI);
         if (isEntityAIWatchClosest2) setMutexBits(3);

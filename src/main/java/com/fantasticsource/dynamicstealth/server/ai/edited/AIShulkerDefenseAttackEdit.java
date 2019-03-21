@@ -8,7 +8,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 
 public class AIShulkerDefenseAttackEdit extends AINearestAttackableTargetEdit<EntityLivingBase>
 {
-    public AIShulkerDefenseAttackEdit(EntityAINearestAttackableTarget<EntityLivingBase> oldAI) throws IllegalAccessException
+    public AIShulkerDefenseAttackEdit(EntityAINearestAttackableTarget<EntityLivingBase> oldAI)
     {
         super(oldAI);
     }

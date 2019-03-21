@@ -1,34 +1,17 @@
 package com.fantasticsource.dynamicstealth.compat;
 
 import com.fantasticsource.dynamicstealth.server.ai.edited.AIAttackMeleeEdit;
-import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.NPEAttackTargetTaskHolder;
-import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITasks;
 
-import java.lang.reflect.Field;
 import java.util.Set;
 
 public class Compat
 {
     public static boolean lycanites = false, ancientwarfare = false, customnpcs = false, iceandfire = false, neat = false, statues = false, primitivemobs = false, dissolution = false, thermalfoundation = false;
-
-    private static Field executingTaskEntriesField;
-
-    static
-    {
-        try
-        {
-            executingTaskEntriesField = ReflectionTool.getField(EntityAITasks.class, "field_75780_b", "executingTaskEntries");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            MCTools.crash(e, 144, false);
-        }
-    }
 
 
     public static void cancelTasksRequiringAttackTarget(EntityAITasks tasks)
@@ -40,15 +23,7 @@ public class Compat
                 //Hard reset; set using to false, call resetTask(), and remove task from executingTasks
                 task.using = false;
                 task.action.resetTask();
-                try
-                {
-                    Set<EntityAITasks.EntityAITaskEntry> executingTasks = (Set<EntityAITasks.EntityAITaskEntry>) executingTaskEntriesField.get(tasks);
-                    executingTasks.remove(task);
-                }
-                catch (IllegalAccessException e)
-                {
-                    MCTools.crash(e, 145, false);
-                }
+                tasks.executingTaskEntries.remove(task);
             }
         }
     }

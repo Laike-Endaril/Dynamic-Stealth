@@ -7,7 +7,7 @@ public class AITargetNonTamedEdit extends AINearestAttackableTargetEdit
 {
     private final EntityTameable tameable;
 
-    public AITargetNonTamedEdit(EntityAITargetNonTamed oldAI) throws IllegalAccessException
+    public AITargetNonTamedEdit(EntityAITargetNonTamed oldAI)
     {
         super(oldAI);
         tameable = (EntityTameable) attacker;

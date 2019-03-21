@@ -1,7 +1,5 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
-import com.fantasticsource.mctools.MCTools;
-import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IRangedAttackMob;
@@ -10,29 +8,8 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.MathHelper;
 
-import java.lang.reflect.Field;
-
 public class AIAttackRangedEdit extends EntityAIBase
 {
-    private static Field rangedAttackEntityHostField, entityMoveSpeedField, attackIntervalMinField, maxRangedAttackTimeField, attackRadiusField;
-
-    static
-    {
-        try
-        {
-            rangedAttackEntityHostField = ReflectionTool.getField(EntityAIAttackRanged.class, "field_82641_b", "rangedAttackEntityHost");
-            entityMoveSpeedField = ReflectionTool.getField(EntityAIAttackRanged.class, "field_75321_e", "entityMoveSpeed");
-            attackRadiusField = ReflectionTool.getField(EntityAIAttackRanged.class, "field_96562_i", "attackRadius");
-            attackIntervalMinField = ReflectionTool.getField(EntityAIAttackRanged.class, "field_96561_g", "attackIntervalMin");
-            maxRangedAttackTimeField = ReflectionTool.getField(EntityAIAttackRanged.class, "field_75325_h", "maxRangedAttackTime");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            MCTools.crash(e, 138, false);
-        }
-    }
-
-
     private final EntityLiving attacker;
     private final IRangedAttackMob rangedAttacker;
     private final double entityMoveSpeed;
@@ -44,14 +21,14 @@ public class AIAttackRangedEdit extends EntityAIBase
     private int seeTime;
     private Path path = null;
 
-    public AIAttackRangedEdit(EntityAIAttackRanged oldAI) throws IllegalAccessException
+    public AIAttackRangedEdit(EntityAIAttackRanged oldAI)
     {
-        rangedAttacker = (IRangedAttackMob) rangedAttackEntityHostField.get(oldAI);
-        entityMoveSpeed = (double) entityMoveSpeedField.get(oldAI);
-        attackIntervalMin = (int) attackIntervalMinField.get(oldAI);
-        attackRadius = (float) attackRadiusField.get(oldAI);
+        rangedAttacker = oldAI.rangedAttackEntityHost;
+        entityMoveSpeed = oldAI.entityMoveSpeed;
+        attackIntervalMin = oldAI.attackIntervalMin;
+        attackRadius = oldAI.attackRadius;
 
-        attackIntervalRange = (int) maxRangedAttackTimeField.get(oldAI) - attackIntervalMin;
+        attackIntervalRange = oldAI.maxRangedAttackTime - attackIntervalMin;
 
         attackRadiusSquared = attackRadius * attackRadius;
         attacker = (EntityLiving) rangedAttacker;

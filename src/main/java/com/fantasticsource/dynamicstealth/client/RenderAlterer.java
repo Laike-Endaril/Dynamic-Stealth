@@ -4,8 +4,6 @@ import com.fantasticsource.dynamicstealth.client.layeredits.LayerEndermanEyesEdi
 import com.fantasticsource.dynamicstealth.client.layeredits.LayerSpiderEyesEdit;
 import com.fantasticsource.dynamicstealth.common.ClientData;
 import com.fantasticsource.dynamicstealth.compat.Compat;
-import com.fantasticsource.mctools.MCTools;
-import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
@@ -29,7 +27,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -41,8 +38,6 @@ import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.cli
 public class RenderAlterer
 {
     private static ArrayList<ScorePlayerTeam> colorTeams = new ArrayList<>();
-
-    private static Field renderLivingBaseLayerRenderersField;
 
     private static Scoreboard scoreboard;
     private static ArrayList<EntityLivingBase> glowCache = new ArrayList<>();
@@ -78,15 +73,6 @@ public class RenderAlterer
             team = scoreboard.createTeam("purple");
             team.setPrefix(TextFormatting.DARK_PURPLE.toString());
             colorTeams.add(team);
-
-            try
-            {
-                renderLivingBaseLayerRenderersField = ReflectionTool.getField(RenderLivingBase.class, "field_177097_h", "layerRenderers");
-            }
-            catch (NoSuchFieldException | IllegalAccessException e)
-            {
-                MCTools.crash(e, 156, true);
-            }
 
             ready = true;
         }
@@ -258,28 +244,21 @@ public class RenderAlterer
     public static void replaceLayers(EntityLivingBase livingBase)
     {
         Render render = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(livingBase);
-        if (render instanceof LayerRenderer)
+        if (render instanceof LayerRenderer && render instanceof RenderLivingBase)
         {
-            try
+            List<LayerRenderer> list = ((RenderLivingBase) render).layerRenderers;
+            for (LayerRenderer layer : list.toArray(new LayerRenderer[list.size()]))
             {
-                List<LayerRenderer> list = (List<LayerRenderer>) renderLivingBaseLayerRenderersField.get(render);
-                for (LayerRenderer layer : list.toArray(new LayerRenderer[list.size()]))
+                if (layer instanceof LayerSpiderEyes)
                 {
-                    if (layer instanceof LayerSpiderEyes)
-                    {
-                        list.remove(layer);
-                        list.add(new LayerSpiderEyesEdit((RenderSpider) render));
-                    }
-                    else if (layer instanceof LayerEndermanEyes)
-                    {
-                        list.remove(layer);
-                        list.add(new LayerEndermanEyesEdit((RenderEnderman) render));
-                    }
+                    list.remove(layer);
+                    list.add(new LayerSpiderEyesEdit((RenderSpider) render));
                 }
-            }
-            catch (IllegalAccessException e)
-            {
-                MCTools.crash(e, 157, false);
+                else if (layer instanceof LayerEndermanEyes)
+                {
+                    list.remove(layer);
+                    list.add(new LayerEndermanEyesEdit((RenderEnderman) render));
+                }
             }
         }
     }

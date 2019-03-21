@@ -1,7 +1,5 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
-import com.fantasticsource.mctools.MCTools;
-import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.EntityLivingBase;
@@ -9,35 +7,19 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 public class AINearestAttackableTargetEdit<T extends EntityLivingBase> extends AITargetEdit
 {
-    private static Field targetClassField, targetEntitySelectorField;
-
-    static
-    {
-        try
-        {
-            targetClassField = ReflectionTool.getField(EntityAINearestAttackableTarget.class, "field_75307_b", "targetClass");
-            targetEntitySelectorField = ReflectionTool.getField(EntityAINearestAttackableTarget.class, "field_82643_g", "targetEntitySelector");
-        }
-        catch (Exception e)
-        {
-            MCTools.crash(e, 122, false);
-        }
-    }
-
     public Class<T> targetClass;
     public Predicate<? super T> targetEntitySelector;
     public T targetEntity;
 
-    public AINearestAttackableTargetEdit(EntityAINearestAttackableTarget oldAI) throws IllegalAccessException
+    public AINearestAttackableTargetEdit(EntityAINearestAttackableTarget oldAI)
     {
         super(oldAI);
-        targetClass = (Class) targetClassField.get(oldAI);
-        targetEntitySelector = (Predicate<? super T>) targetEntitySelectorField.get(oldAI);
+        targetClass = oldAI.targetClass;
+        targetEntitySelector = oldAI.targetEntitySelector;
     }
 
     @Override

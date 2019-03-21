@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class AIPigmanTargetAggressorEdit extends AINearestAttackableTargetEdit<EntityPlayer>
 {
-    public AIPigmanTargetAggressorEdit(EntityAINearestAttackableTarget oldAI) throws IllegalAccessException
+    public AIPigmanTargetAggressorEdit(EntityAINearestAttackableTarget oldAI)
     {
         super(oldAI);
     }

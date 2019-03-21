@@ -26,7 +26,6 @@ import net.minecraftforge.common.MinecraftForge;
 import noppes.npcs.api.NpcAPI;
 import noppes.npcs.api.entity.ICustomNpc;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -56,20 +55,11 @@ public class AIDynamicStealth extends EntityAIBase
             FLEE_HP = 3;
 
     private static Method navigatorCanNavigateMethod;
-    private static Field aiPanicSpeedField;
     private static TrigLookupTable trigTable = TRIG_TABLE;
 
     static
     {
-        try
-        {
-            aiPanicSpeedField = ReflectionTool.getField(EntityAIPanic.class, "field_75265_b", "speed");
-            navigatorCanNavigateMethod = ReflectionTool.getMethod(PathNavigate.class, "func_75485_k", "canNavigate");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            MCTools.crash(e, 148, true);
-        }
+        navigatorCanNavigateMethod = ReflectionTool.getMethod(PathNavigate.class, "func_75485_k", "canNavigate");
     }
 
     private final EntityLiving searcher;
@@ -788,15 +778,8 @@ public class AIDynamicStealth extends EntityAIBase
         {
             if (task.action instanceof EntityAIPanic)
             {
-                try
-                {
-                    normalSpeed = (double) aiPanicSpeedField.get(task.action);
-                    return normalSpeed <= 0 ? 1.25 : normalSpeed;
-                }
-                catch (IllegalAccessException e)
-                {
-                    MCTools.crash(e, 149, false);
-                }
+                normalSpeed = ((EntityAIPanic) task.action).speed;
+                return normalSpeed <= 0 ? 1.25 : normalSpeed;
             }
         }
 

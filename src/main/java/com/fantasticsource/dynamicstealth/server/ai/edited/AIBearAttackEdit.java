@@ -21,7 +21,7 @@ public class AIBearAttackEdit extends AIAttackMeleeEdit
 
     EntityPolarBear bear;
 
-    public AIBearAttackEdit(EntityAIAttackMelee oldAI) throws IllegalAccessException
+    public AIBearAttackEdit(EntityAIAttackMelee oldAI)
     {
         super(oldAI);
         bear = (EntityPolarBear) attacker;

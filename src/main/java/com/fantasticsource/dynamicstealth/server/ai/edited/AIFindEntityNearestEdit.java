@@ -1,8 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
 import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
-import com.fantasticsource.mctools.MCTools;
-import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
@@ -12,36 +10,21 @@ import net.minecraft.entity.ai.EntityAIFindEntityNearest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 public class AIFindEntityNearestEdit extends EntityAIBase
 {
     public static Logger LOGGER = LogManager.getLogger();
-    private static Field mobField, classToCheckField;
-
-    static
-    {
-        try
-        {
-            mobField = ReflectionTool.getField(EntityAIFindEntityNearest.class, "field_179442_b", "mob");
-            classToCheckField = ReflectionTool.getField(EntityAIFindEntityNearest.class, "field_179439_f", "classToCheck");
-        }
-        catch (Exception e)
-        {
-            MCTools.crash(e, 120, false);
-        }
-    }
 
     public EntityLiving searcher;
     public Class<? extends EntityLivingBase> targetClass;
     public EntityLivingBase target;
 
 
-    public AIFindEntityNearestEdit(EntityAIFindEntityNearest oldAI) throws IllegalAccessException
+    public AIFindEntityNearestEdit(EntityAIFindEntityNearest oldAI)
     {
-        searcher = (EntityLiving) mobField.get(oldAI);
-        targetClass = (Class<? extends EntityLivingBase>) classToCheckField.get(oldAI);
+        searcher = oldAI.mob;
+        targetClass = oldAI.classToCheck;
 
         if (searcher instanceof EntityCreature) LOGGER.warn("Use NearestAttackableTargetGoal.class for PathfinderMob mobs!");
     }

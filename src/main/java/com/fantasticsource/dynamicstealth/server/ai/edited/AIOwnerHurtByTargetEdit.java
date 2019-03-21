@@ -10,7 +10,7 @@ public class AIOwnerHurtByTargetEdit extends AITargetEdit
     EntityLivingBase ownerEnemy;
     private int timestamp;
 
-    public AIOwnerHurtByTargetEdit(EntityAIOwnerHurtByTarget oldAI) throws IllegalAccessException
+    public AIOwnerHurtByTargetEdit(EntityAIOwnerHurtByTarget oldAI)
     {
         super(oldAI);
         tameable = (EntityTameable) attacker;

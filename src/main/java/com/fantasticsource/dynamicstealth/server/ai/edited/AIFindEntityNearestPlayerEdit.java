@@ -1,8 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
 import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
-import com.fantasticsource.mctools.MCTools;
-import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
@@ -13,32 +11,18 @@ import net.minecraft.entity.player.EntityPlayer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 public class AIFindEntityNearestPlayerEdit extends EntityAIBase
 {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static Field entityLivingField;
-
-    static
-    {
-        try
-        {
-            entityLivingField = ReflectionTool.getField(EntityAIFindEntityNearestPlayer.class, "field_179434_b", "entityLiving");
-        }
-        catch (Exception e)
-        {
-            MCTools.crash(e, 125, false);
-        }
-    }
 
     private final EntityLiving searcher;
     private EntityLivingBase target;
 
-    public AIFindEntityNearestPlayerEdit(EntityAIFindEntityNearestPlayer oldAI) throws IllegalAccessException
+    public AIFindEntityNearestPlayerEdit(EntityAIFindEntityNearestPlayer oldAI)
     {
-        searcher = (EntityLiving) entityLivingField.get(oldAI);
+        searcher = oldAI.entityLiving;
 
         if (searcher instanceof EntityCreature) LOGGER.warn("Use NearestAttackableTargetGoal.class for PathfinderMob mobs!");
     }

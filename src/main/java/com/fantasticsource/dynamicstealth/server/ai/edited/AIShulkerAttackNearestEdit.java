@@ -9,7 +9,7 @@ import net.minecraft.world.EnumDifficulty;
 
 public class AIShulkerAttackNearestEdit extends AINearestAttackableTargetEdit<EntityPlayer>
 {
-    public AIShulkerAttackNearestEdit(EntityAINearestAttackableTarget<EntityPlayer> oldAI) throws IllegalAccessException
+    public AIShulkerAttackNearestEdit(EntityAINearestAttackableTarget<EntityPlayer> oldAI)
     {
         super(oldAI);
     }

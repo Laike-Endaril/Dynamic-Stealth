@@ -20,7 +20,7 @@ public class AIPigmanHurtByAggressorEdit extends AIHurtByTargetEdit
     }
 
 
-    public AIPigmanHurtByAggressorEdit(EntityAIHurtByTarget oldAI) throws IllegalAccessException
+    public AIPigmanHurtByAggressorEdit(EntityAIHurtByTarget oldAI)
     {
         super(oldAI);
     }

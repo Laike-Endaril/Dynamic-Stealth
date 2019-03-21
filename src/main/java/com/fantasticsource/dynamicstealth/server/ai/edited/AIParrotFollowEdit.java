@@ -1,8 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
-import com.fantasticsource.mctools.MCTools;
-import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.EntityLiving;
@@ -11,29 +9,10 @@ import net.minecraft.entity.ai.EntityAIFollow;
 import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.pathfinding.*;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 public class AIParrotFollowEdit extends EntityAIBase //In vanilla, this is only used by parrots, to randomly follow other mobs that are not parrots
 {
-    private static Field entityField, speedModifierField, stopDistanceField, areaSizeField;
-
-    static
-    {
-        try
-        {
-            entityField = ReflectionTool.getField(EntityAIFollow.class, "field_192372_a", "entity");
-            speedModifierField = ReflectionTool.getField(EntityAIFollow.class, "field_192375_d", "speedModifier");
-            stopDistanceField = ReflectionTool.getField(EntityAIFollow.class, "field_192378_g", "stopDistance");
-            areaSizeField = ReflectionTool.getField(EntityAIFollow.class, "field_192380_i", "areaSize");
-        }
-        catch (Exception e)
-        {
-            MCTools.crash(e, 121, false);
-        }
-    }
-
-
     private final EntityLiving searcher;
     private final Predicate<EntityLiving> followPredicate;
     private final double speedModifier;
@@ -45,12 +24,12 @@ public class AIParrotFollowEdit extends EntityAIBase //In vanilla, this is only 
     private int timeToRecalcPath;
     private float oldWaterCost;
 
-    public AIParrotFollowEdit(EntityAIFollow oldAI) throws IllegalAccessException
+    public AIParrotFollowEdit(EntityAIFollow oldAI)
     {
-        searcher = (EntityLiving) entityField.get(oldAI);
-        speedModifier = (double) speedModifierField.get(oldAI);
-        stopDistance = (float) stopDistanceField.get(oldAI);
-        areaSize = (float) areaSizeField.get(oldAI);
+        searcher = oldAI.entity;
+        speedModifier = oldAI.speedModifier;
+        stopDistance = oldAI.stopDistance;
+        areaSize = oldAI.areaSize;
 
         followPredicate = target -> target != null && searcher.getClass() != target.getClass();
         navigator = searcher.getNavigator();

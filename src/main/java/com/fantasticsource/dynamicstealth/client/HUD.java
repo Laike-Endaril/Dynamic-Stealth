@@ -6,7 +6,6 @@ import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatNeat;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.Render;
-import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.datastructures.Color;
 import com.fantasticsource.tools.datastructures.Pair;
@@ -32,7 +31,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -71,20 +69,7 @@ public class HUD extends Gui
     private static final int STEALTH_GAUGE_RIM_SIZE = 256;
     private static final float STEALTH_GAUGE_RIM_UV_HALF_PIXEL = 0.5f / STEALTH_GAUGE_RIM_SIZE;
 
-    private static Field renderManagerRenderOutlinesField;
     private static TextureManager textureManager = Minecraft.getMinecraft().renderEngine;
-
-    static
-    {
-        try
-        {
-            renderManagerRenderOutlinesField = ReflectionTool.getField(RenderManager.class, "field_178639_r", "renderOutlines");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            MCTools.crash(e, 147, false);
-        }
-    }
 
     private DecimalFormat oneDecimal = new DecimalFormat("0.0");
 
@@ -104,9 +89,9 @@ public class HUD extends Gui
     }
 
     @SubscribeEvent
-    public static void entityRender(RenderLivingEvent.Post event) throws IllegalAccessException
+    public static void entityRender(RenderLivingEvent.Post event)
     {
-        if (!((boolean) renderManagerRenderOutlinesField.get(event.getRenderer().getRenderManager())))
+        if (!event.getRenderer().getRenderManager().renderOutlines)
         {
             EntityLivingBase livingBase = event.getEntity();
             if (livingBase != null)

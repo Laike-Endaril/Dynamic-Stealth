@@ -5,7 +5,7 @@ import net.minecraft.entity.passive.EntityWolf;
 
 public class AILlamaDefendEdit extends AINearestAttackableTargetEdit<EntityWolf>
 {
-    public AILlamaDefendEdit(EntityAINearestAttackableTarget<EntityWolf> oldAI) throws IllegalAccessException
+    public AILlamaDefendEdit(EntityAINearestAttackableTarget<EntityWolf> oldAI)
     {
         super(oldAI);
     }
