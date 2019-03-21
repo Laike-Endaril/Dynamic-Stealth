@@ -40,8 +40,6 @@ Make stuck detection account for jumping by allowing for more play along y axis
 Fix leashes not rendering sometimes (not a vanilla bug)...
 ...can reproduce by leashing a horse, flying into the air, and dropping into water while facing down
 
-Villagers run WAY too fast (confirmed vanilla bug - https://bugs.mojang.com/browse/MC-15080)
-
 
 
 GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES ============================

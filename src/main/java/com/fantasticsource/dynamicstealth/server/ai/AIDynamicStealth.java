@@ -17,6 +17,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAITasks;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.potion.PotionEffect;
@@ -774,6 +775,8 @@ public class AIDynamicStealth extends EntityAIBase
 
     private double getFleeSpeed(double normalSpeed)
     {
+        if (searcher instanceof EntityVillager) return 0.6;
+
         for (EntityAITasks.EntityAITaskEntry task : searcher.tasks.taskEntries)
         {
             if (task.action instanceof EntityAIPanic)
