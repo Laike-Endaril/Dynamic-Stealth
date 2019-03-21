@@ -202,10 +202,23 @@ public class DynamicStealth
                                 }
                                 else if (feeler instanceof EntityLiving)
                                 {
-                                    //TODO filter out recently felt entities for the look toward entity call; entities felt on the previous tick is good enough
                                     EntityLiving feelerLiving = (EntityLiving) feeler;
-                                    makeLivingLookTowardEntity(feelerLiving, felt);
-                                    feelerLiving.getNavigator().clearPath();
+                                    //TODO filter out recently felt entities for the look toward entity call; entities felt on the previous tick is good enough
+
+                                    AIDynamicStealth ai = AIDynamicStealth.getStealthAI(feelerLiving);
+                                    if (ai != null)
+                                    {
+                                        if (ai.isFleeing()) return;
+
+                                        makeLivingLookTowardEntity(feelerLiving, felt);
+                                        feelerLiving.getNavigator().clearPath();
+                                        if (ai.getMode() != AIDynamicStealth.MODE_NONE) ai.restart(feelerLiving.getPosition());
+                                    }
+                                    else
+                                    {
+                                        makeLivingLookTowardEntity(feelerLiving, felt);
+                                        feelerLiving.getNavigator().clearPath();
+                                    }
                                 }
                             }
                         }
