@@ -503,7 +503,7 @@ public class DynamicStealth
     }
 
 
-    public static void makeLivingLookTowardEntity(EntityLiving living, Entity target) throws InvocationTargetException, IllegalAccessException
+    public static void makeLivingLookTowardEntity(EntityLiving living, Entity target)
     {
         Vec3d pos1 = living.getPositionVector().add(new Vec3d(0, living.getEyeHeight(), 0));
         Vec3d pos2 = target.getPositionVector().add(new Vec3d(0, target.height * 0.5, 0));

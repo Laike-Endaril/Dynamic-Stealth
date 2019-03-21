@@ -1,23 +1,12 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
-import com.fantasticsource.mctools.MCTools;
-import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.monster.EntitySlime;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Random;
 
 public class AISlimeFaceRandomEdit extends EntityAIBase
 {
-    private static Method slimeMoveHelperSetDirectionMethod;
-
-    static
-    {
-        slimeMoveHelperSetDirectionMethod = ReflectionTool.getMethod(EntitySlime.SlimeMoveHelper.class, "func_179920_a", "setDirection");
-    }
-
     public final EntitySlime slime;
     public float dirPrevious, dirChange;
     public int dirChangeMin = 10, dirChangeMax = 40, dirChangeRange = dirChangeMax - dirChangeMin;
@@ -61,14 +50,7 @@ public class AISlimeFaceRandomEdit extends EntityAIBase
         {
             if (++timer2 <= turnTime)
             {
-                try
-                {
-                    setDirection((int) calcDir(dirPrevious, dirChange, (float) timer2 / turnTime), false);
-                }
-                catch (IllegalAccessException | InvocationTargetException e)
-                {
-                    MCTools.crash(e, 124, false);
-                }
+                setDirection((int) calcDir(dirPrevious, dirChange, (float) timer2 / turnTime), false);
             }
             else resetTimer();
         }
@@ -80,13 +62,13 @@ public class AISlimeFaceRandomEdit extends EntityAIBase
         return timer2 <= turnTime;
     }
 
-    public void setDirection(float direction, boolean resetTimer) throws InvocationTargetException, IllegalAccessException
+    public void setDirection(float direction, boolean resetTimer)
     {
         slime.rotationYaw = direction;
         slime.rotationYawHead = direction;
         slime.renderYawOffset = direction;
 
-        slimeMoveHelperSetDirectionMethod.invoke(slime.getMoveHelper(), direction, false);
+        ((EntitySlime.SlimeMoveHelper) slime.getMoveHelper()).setDirection(direction, false);
 
         if (resetTimer) resetTimer();
     }
