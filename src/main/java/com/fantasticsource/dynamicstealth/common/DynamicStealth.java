@@ -100,9 +100,6 @@ public class DynamicStealth
     public static final TrigLookupTable TRIG_TABLE = new TrigLookupTable(1024);
 
     private static Field sensesField, abstractSkeletonAIArrowAttackField, abstractSkeletonAIAttackOnCollideField, worldServerEntityTrackerField;
-    private static Class aiSlimeFaceRandomClass, aiEvilAttackClass, aiBearMeleeClass, aiSpiderAttackClass, aiSpiderTargetClass, aiBearAttackPlayerClass, aiLlamaDefendTarget,
-            aiPigmanHurtByAggressorClass, aiLlamaHurtByTargetClass, aiPigmanTargetAggressorClass, aiVindicatorJohnnyAttackClass, aiBearHurtByTargetClass, aiGuardianAttackClass,
-            aiBlazeFireballAttackClass, aiVexChargeAttackClass, aiShulkerAttackClass, aiShulkerAttackNearestClass, aiShulkerDefenseAttackClass;
 
     static
     {
@@ -615,26 +612,26 @@ public class DynamicStealth
                 //All done
             else if (actionClass == EntityAIAttackMelee.class) replaceTask(tasks, task, new AIAttackMeleeEdit((EntityAIAttackMelee) task.action));
             else if (actionClass.getName().equals("net.minecraft.entity.monster.AbstractSkeleton$1")) replaceTask(tasks, task, new AIAttackMeleeEdit((EntityAIAttackMelee) task.action));
-            else if (actionClass == aiEvilAttackClass) replaceTask(tasks, task, new AIAttackMeleeEdit((EntityAIAttackMelee) task.action));
-            else if (actionClass == aiBearMeleeClass) replaceTask(tasks, task, new AIBearAttackEdit((EntityAIAttackMelee) task.action));
-            else if (actionClass == aiSpiderAttackClass) replaceTask(tasks, task, new AISpiderAttackEdit((EntityAIAttackMelee) task.action));
+            else if (actionClass == EntityRabbit.AIEvilAttack.class) replaceTask(tasks, task, new AIAttackMeleeEdit((EntityAIAttackMelee) task.action));
+            else if (actionClass == EntityPolarBear.AIMeleeAttack.class) replaceTask(tasks, task, new AIBearAttackEdit((EntityAIAttackMelee) task.action));
+            else if (actionClass == EntitySpider.AISpiderAttack.class) replaceTask(tasks, task, new AISpiderAttackEdit((EntityAIAttackMelee) task.action));
             else if (actionClass == EntityAIZombieAttack.class) replaceTask(tasks, task, new AIZombieAttackEdit((EntityAIZombieAttack) task.action));
 
                 //All done (except enderman stuff)
             else if (actionClass == EntityAINearestAttackableTarget.class) replaceTask(tasks, task, new AINearestAttackableTargetEdit((EntityAINearestAttackableTarget) task.action));
-            else if (actionClass == aiBearAttackPlayerClass) replaceTask(tasks, task, new AIBearAttackPlayerEdit((EntityAINearestAttackableTarget) task.action));
-            else if (actionClass == aiSpiderTargetClass) replaceTask(tasks, task, new AISpiderTargetEdit((EntityAINearestAttackableTarget) task.action));
-            else if (actionClass == aiLlamaDefendTarget) replaceTask(tasks, task, new AILlamaDefendEdit((EntityAINearestAttackableTarget) task.action));
-            else if (actionClass == aiVindicatorJohnnyAttackClass) replaceTask(tasks, task, new AIJohnnyAttackEdit((EntityAINearestAttackableTarget) task.action));
-            else if (actionClass == aiPigmanTargetAggressorClass) replaceTask(tasks, task, new AIPigmanTargetAggressorEdit((EntityAINearestAttackableTarget) task.action));
-            else if (actionClass == aiShulkerAttackNearestClass) replaceTask(tasks, task, new AIShulkerAttackNearestEdit((EntityAINearestAttackableTarget) task.action));
-            else if (actionClass == aiShulkerDefenseAttackClass) replaceTask(tasks, task, new AIShulkerDefenseAttackEdit((EntityAINearestAttackableTarget) task.action));
+            else if (actionClass == EntityPolarBear.AIAttackPlayer.class) replaceTask(tasks, task, new AIBearAttackPlayerEdit((EntityAINearestAttackableTarget) task.action));
+            else if (actionClass == EntitySpider.AISpiderTarget.class) replaceTask(tasks, task, new AISpiderTargetEdit((EntityAINearestAttackableTarget) task.action));
+            else if (actionClass == EntityLlama.AIDefendTarget.class) replaceTask(tasks, task, new AILlamaDefendEdit((EntityAINearestAttackableTarget) task.action));
+            else if (actionClass == EntityVindicator.AIJohnnyAttack.class) replaceTask(tasks, task, new AIJohnnyAttackEdit((EntityAINearestAttackableTarget) task.action));
+            else if (actionClass == EntityPigZombie.AITargetAggressor.class) replaceTask(tasks, task, new AIPigmanTargetAggressorEdit((EntityAINearestAttackableTarget) task.action));
+            else if (actionClass == EntityShulker.AIAttackNearest.class) replaceTask(tasks, task, new AIShulkerAttackNearestEdit((EntityAINearestAttackableTarget) task.action));
+            else if (actionClass == EntityShulker.AIDefenseAttack.class) replaceTask(tasks, task, new AIShulkerDefenseAttackEdit((EntityAINearestAttackableTarget) task.action));
 
                 //All done
             else if (actionClass == EntityAIHurtByTarget.class) replaceTask(tasks, task, new AIHurtByTargetEdit((EntityAIHurtByTarget) task.action));
-            else if (actionClass == aiPigmanHurtByAggressorClass) replaceTask(tasks, task, new AIPigmanHurtByAggressorEdit((EntityAIHurtByTarget) task.action));
-            else if (actionClass == aiLlamaHurtByTargetClass) replaceTask(tasks, task, new AILlamaHurtByTargetEdit((EntityAIHurtByTarget) task.action));
-            else if (actionClass == aiBearHurtByTargetClass) replaceTask(tasks, task, new AIBearHurtByTargetEdit((EntityAIHurtByTarget) task.action));
+            else if (actionClass == EntityPigZombie.AIHurtByAggressor.class) replaceTask(tasks, task, new AIPigmanHurtByAggressorEdit((EntityAIHurtByTarget) task.action));
+            else if (actionClass == EntityLlama.AIHurtByTarget.class) replaceTask(tasks, task, new AILlamaHurtByTargetEdit((EntityAIHurtByTarget) task.action));
+            else if (actionClass == EntityPolarBear.AIHurtByTarget.class) replaceTask(tasks, task, new AIBearHurtByTargetEdit((EntityAIHurtByTarget) task.action));
 
                 //Random section
             else if (actionClass == EntityAIAttackRanged.class) replaceTask(tasks, task, new AIAttackRangedEdit((EntityAIAttackRanged) task.action));
@@ -647,12 +644,12 @@ public class DynamicStealth
             else if (actionClass == EntityAIOwnerHurtByTarget.class) replaceTask(tasks, task, new AIOwnerHurtByTargetEdit((EntityAIOwnerHurtByTarget) task.action));
             else if (actionClass == EntityAIOwnerHurtTarget.class) replaceTask(tasks, task, new AIOwnerHurtTargetEdit((EntityAIOwnerHurtTarget) task.action));
             else if (actionClass == EntityAICreeperSwell.class) replaceTask(tasks, task, new AICreeperSwellEdit((EntityCreeper) living));
-            else if (actionClass == aiSlimeFaceRandomClass) replaceTask(tasks, task, new AISlimeFaceRandomEdit((EntitySlime) living));
+            else if (actionClass == EntitySlime.AISlimeFaceRandom.class) replaceTask(tasks, task, new AISlimeFaceRandomEdit((EntitySlime) living));
             else if (actionClass == EntityAIOcelotAttack.class) replaceTask(tasks, task, new AIOcelotAttackEdit(living));
-            else if (actionClass == aiGuardianAttackClass) replaceTask(tasks, task, new AIGuardianAttackEdit((EntityGuardian) living));
-            else if (actionClass == aiBlazeFireballAttackClass) replaceTask(tasks, task, new AIFireballAttackEdit((EntityBlaze) living));
-            else if (actionClass == aiVexChargeAttackClass) replaceTask(tasks, task, new AIVexChargeAttackEdit((EntityVex) living));
-            else if (actionClass == aiShulkerAttackClass) replaceTask(tasks, task, new AIShulkerAttackEdit((EntityShulker) living));
+            else if (actionClass == EntityGuardian.AIGuardianAttack.class) replaceTask(tasks, task, new AIGuardianAttackEdit((EntityGuardian) living));
+            else if (actionClass == EntityBlaze.AIFireballAttack.class) replaceTask(tasks, task, new AIFireballAttackEdit((EntityBlaze) living));
+            else if (actionClass == EntityVex.AIChargeAttack.class) replaceTask(tasks, task, new AIVexChargeAttackEdit((EntityVex) living));
+            else if (actionClass == EntityShulker.AIAttack.class) replaceTask(tasks, task, new AIShulkerAttackEdit((EntityShulker) living));
 
                 //Pet teleport prevention (depending on config)
             else if (actionClass == EntityAIFollowOwner.class) replaceTask(tasks, task, new AIFollowOwnerEdit((EntityTameable) living, (EntityAIFollowOwner) task.action));
@@ -692,25 +689,6 @@ public class DynamicStealth
 
         abstractSkeletonAIArrowAttackField = ReflectionTool.getField(AbstractSkeleton.class, "field_85037_d", "aiArrowAttack");
         abstractSkeletonAIAttackOnCollideField = ReflectionTool.getField(AbstractSkeleton.class, "field_85038_e", "aiAttackOnCollide");
-
-        aiSlimeFaceRandomClass = ReflectionTool.getInternalClass(EntitySlime.class, "AISlimeFaceRandom");
-        aiEvilAttackClass = ReflectionTool.getInternalClass(EntityRabbit.class, "AIEvilAttack");
-        aiBearMeleeClass = ReflectionTool.getInternalClass(EntityPolarBear.class, "AIMeleeAttack");
-        aiSpiderAttackClass = ReflectionTool.getInternalClass(EntitySpider.class, "AISpiderAttack");
-        aiSpiderTargetClass = ReflectionTool.getInternalClass(EntitySpider.class, "AISpiderTarget");
-        aiBearAttackPlayerClass = ReflectionTool.getInternalClass(EntityPolarBear.class, "AIAttackPlayer");
-        aiLlamaDefendTarget = ReflectionTool.getInternalClass(EntityLlama.class, "AIDefendTarget");
-        aiPigmanHurtByAggressorClass = ReflectionTool.getInternalClass(EntityPigZombie.class, "AIHurtByAggressor");
-        aiLlamaHurtByTargetClass = ReflectionTool.getInternalClass(EntityLlama.class, "AIHurtByTarget");
-        aiPigmanTargetAggressorClass = ReflectionTool.getInternalClass(EntityPigZombie.class, "AITargetAggressor");
-        aiVindicatorJohnnyAttackClass = ReflectionTool.getInternalClass(EntityVindicator.class, "AIJohnnyAttack");
-        aiBearHurtByTargetClass = ReflectionTool.getInternalClass(EntityPolarBear.class, "AIHurtByTarget");
-        aiGuardianAttackClass = ReflectionTool.getInternalClass(EntityGuardian.class, "AIGuardianAttack");
-        aiBlazeFireballAttackClass = ReflectionTool.getInternalClass(EntityBlaze.class, "AIFireballAttack");
-        aiVexChargeAttackClass = ReflectionTool.getInternalClass(EntityVex.class, "AIChargeAttack");
-        aiShulkerAttackClass = ReflectionTool.getInternalClass(EntityShulker.class, "AIAttack");
-        aiShulkerAttackNearestClass = ReflectionTool.getInternalClass(EntityShulker.class, "AIAttackNearest");
-        aiShulkerDefenseAttackClass = ReflectionTool.getInternalClass(EntityShulker.class, "AIDefenseAttack");
     }
 
     @EventHandler

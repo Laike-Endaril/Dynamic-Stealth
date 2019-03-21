@@ -11,13 +11,11 @@ import java.util.Random;
 
 public class AISlimeFaceRandomEdit extends EntityAIBase
 {
-    private static Class slimeMoveHelperClass;
     private static Method slimeMoveHelperSetDirectionMethod;
 
     static
     {
-        slimeMoveHelperClass = ReflectionTool.getInternalClass(EntitySlime.class, "SlimeMoveHelper");
-        slimeMoveHelperSetDirectionMethod = ReflectionTool.getMethod(slimeMoveHelperClass, "func_179920_a", "setDirection");
+        slimeMoveHelperSetDirectionMethod = ReflectionTool.getMethod(EntitySlime.SlimeMoveHelper.class, "func_179920_a", "setDirection");
     }
 
     public final EntitySlime slime;
