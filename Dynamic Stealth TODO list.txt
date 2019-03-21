@@ -25,8 +25,6 @@ EFFICIENCY =============================================================
 
 Switch to a one-subscriber system for events, to reduce invoke() calls from the event bus
 
-Look into using instances of MethodHandle instead of reflection where possible
-
 
 
 BUG FIXES ==============================================================
