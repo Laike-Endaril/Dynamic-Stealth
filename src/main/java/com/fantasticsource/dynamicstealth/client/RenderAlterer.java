@@ -244,7 +244,7 @@ public class RenderAlterer
     public static void replaceLayers(EntityLivingBase livingBase)
     {
         Render render = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(livingBase);
-        if (render instanceof LayerRenderer && render instanceof RenderLivingBase)
+        if (render instanceof RenderLivingBase)
         {
             List<LayerRenderer> list = ((RenderLivingBase) render).layerRenderers;
             for (LayerRenderer layer : list.toArray(new LayerRenderer[list.size()]))

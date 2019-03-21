@@ -36,8 +36,6 @@ Spiders path toward their threat target even if they can't see it (must have a t
 Spider riders sometimes move really fast...is that normal?...
 ...comes from skeleton, not spider (removed all AI from spiders and it still happened)
 
-Spider glow color is broken...didn't I already fix this?
-
 Fix entities attempting to path through diagonal walls; this may very well fix (or at least mostly fix) the issue below
 Fix entities being able to attack through glass diagonally (because they can see through it...)
 
