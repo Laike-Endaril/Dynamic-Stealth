@@ -1,11 +1,13 @@
 CURRENTLY WORKING ON ===================================================
 
+Add Morph / Metamorph stealth bonus
+
 Brush up config...
 ...move all threat rates/changes into threat settings if they exist in other categories
 ...maybe merge flee, rally, etc categories, since they exist in two places (AI and interactions)
 ...change setting names to re-order config setting elements so the order makes sense, since we have lang files now for displayed names
 
-Make stealth level / visibility transitions smoother? (ie. change at a rate)
+Make stealth level / visibility transitions smoother (ie. change at a rate)
 "maybe if they see you less than a second or two, instead of being alerted they could go look first"
 
 Directional indicators...
@@ -51,12 +53,6 @@ GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES ============================
 "Noisiness" block trait; block filter to determine how much noise walking/running/landing makes
 
 "Footprint Duration" block trait; block filter for how long visible footprints/tracks last on the block type.  Add (long to short); clay, snow, sand, mycelium, dirt, coarse dirt, podzol
-
-Add disguise system; conditionally prevents targeting even if seen, but not if the enemy has threat against you...
-...for AI, probably call the method for this check in EntitySensesEdit#canSee()
-...make it so skulls use disguise system instead of doing a stealth multiplier
-...make it so morphing into a creature using Morph mod or Metamorph mod acts as a disguise against that mob type
-...for players, this may be more complicated, and involve sending fake entities...
 
 Use tracking system (Tracking class) for something, or remove it
 
