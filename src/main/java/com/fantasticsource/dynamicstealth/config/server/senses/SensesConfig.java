@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.config.server.senses;
 
-import com.fantasticsource.dynamicstealth.common.DynamicStealth;
+import com.fantasticsource.dynamicstealth.DynamicStealth;
 import com.fantasticsource.dynamicstealth.config.server.senses.sight.SightConfig;
 import net.minecraftforge.common.config.Config;
 

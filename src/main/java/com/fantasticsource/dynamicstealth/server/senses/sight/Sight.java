@@ -35,7 +35,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static com.fantasticsource.dynamicstealth.common.DynamicStealth.TRIG_TABLE;
+import static com.fantasticsource.dynamicstealth.DynamicStealth.TRIG_TABLE;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData.*;
 import static com.fantasticsource.mctools.ServerTickTimer.currentTick;

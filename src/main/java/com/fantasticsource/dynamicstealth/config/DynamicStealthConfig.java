@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.config;
 
-import com.fantasticsource.dynamicstealth.common.DynamicStealth;
+import com.fantasticsource.dynamicstealth.DynamicStealth;
 import com.fantasticsource.dynamicstealth.config.client.ClientConfig;
 import com.fantasticsource.dynamicstealth.config.server.ServerConfig;
 import net.minecraftforge.common.config.Config;

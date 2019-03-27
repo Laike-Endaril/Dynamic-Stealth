@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.server;
 
-import com.fantasticsource.dynamicstealth.common.DynamicStealth;
+import com.fantasticsource.dynamicstealth.DynamicStealth;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 

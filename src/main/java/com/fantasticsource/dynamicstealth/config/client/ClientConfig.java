@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.config.client;
 
-import com.fantasticsource.dynamicstealth.common.DynamicStealth;
+import com.fantasticsource.dynamicstealth.DynamicStealth;
 import com.fantasticsource.dynamicstealth.config.client.hud.HUDConfig;
 import net.minecraftforge.common.config.Config;
 

@@ -1,7 +1,7 @@
 package com.fantasticsource.dynamicstealth.client;
 
+import com.fantasticsource.dynamicstealth.DynamicStealth;
 import com.fantasticsource.dynamicstealth.common.ClientData;
-import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatNeat;
 import com.fantasticsource.mctools.MCTools;
@@ -34,8 +34,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import static com.fantasticsource.dynamicstealth.DynamicStealth.TRIG_TABLE;
 import static com.fantasticsource.dynamicstealth.common.ClientData.*;
-import static com.fantasticsource.dynamicstealth.common.DynamicStealth.TRIG_TABLE;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.clientSettings;
 import static net.minecraft.client.renderer.vertex.DefaultVertexFormats.POSITION_TEX_LMAP_COLOR;
 import static org.lwjgl.opengl.GL11.*;

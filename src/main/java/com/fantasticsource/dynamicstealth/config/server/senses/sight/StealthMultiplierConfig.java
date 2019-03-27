@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.config.server.senses.sight;
 
-import com.fantasticsource.dynamicstealth.common.DynamicStealth;
+import com.fantasticsource.dynamicstealth.DynamicStealth;
 import net.minecraftforge.common.config.Config;
 
 public class StealthMultiplierConfig

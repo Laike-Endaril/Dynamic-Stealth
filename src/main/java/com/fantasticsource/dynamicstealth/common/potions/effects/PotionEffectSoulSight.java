@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.common.potions.effects;
 
-import com.fantasticsource.dynamicstealth.common.DynamicStealth;
+import com.fantasticsource.dynamicstealth.DynamicStealth;
 import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;

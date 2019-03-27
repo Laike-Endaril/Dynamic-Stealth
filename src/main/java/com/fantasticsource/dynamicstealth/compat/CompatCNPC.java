@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import noppes.npcs.api.NpcAPI;
 import noppes.npcs.api.entity.ICustomNpc;
 
-import static com.fantasticsource.dynamicstealth.common.DynamicStealth.livingJoinWorld;
+import static com.fantasticsource.dynamicstealth.DynamicStealth.livingJoinWorld;
 
 public class CompatCNPC
 {

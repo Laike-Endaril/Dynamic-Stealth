@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.config.server;
 
-import com.fantasticsource.dynamicstealth.common.DynamicStealth;
+import com.fantasticsource.dynamicstealth.DynamicStealth;
 import com.fantasticsource.dynamicstealth.config.server.ai.AIConfig;
 import com.fantasticsource.dynamicstealth.config.server.helpersystem.HelperSystemConfig;
 import com.fantasticsource.dynamicstealth.config.server.hud.HUDAllowanceConfig;

@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.config.server.interactions;
 
-import com.fantasticsource.dynamicstealth.common.DynamicStealth;
+import com.fantasticsource.dynamicstealth.DynamicStealth;
 import com.fantasticsource.dynamicstealth.server.event.attacks.AttackDefaults;
 import net.minecraftforge.common.config.Config;
 

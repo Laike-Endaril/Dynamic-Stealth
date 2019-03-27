@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.common;
 
+import com.fantasticsource.dynamicstealth.DynamicStealth;
 import com.fantasticsource.dynamicstealth.client.HUD;
 import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;

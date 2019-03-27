@@ -30,7 +30,7 @@ import noppes.npcs.api.entity.ICustomNpc;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import static com.fantasticsource.dynamicstealth.common.DynamicStealth.TRIG_TABLE;
+import static com.fantasticsource.dynamicstealth.DynamicStealth.TRIG_TABLE;
 import static com.fantasticsource.dynamicstealth.compat.Compat.cancelTasksRequiringAttackTarget;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.dynamicstealth.server.senses.hearing.Communication.warn;

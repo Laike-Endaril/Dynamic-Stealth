@@ -1,8 +1,9 @@
-package com.fantasticsource.dynamicstealth.common;
+package com.fantasticsource.dynamicstealth;
 
-import com.fantasticsource.dynamicstealth.Commands;
 import com.fantasticsource.dynamicstealth.client.HUD;
 import com.fantasticsource.dynamicstealth.client.RenderAlterer;
+import com.fantasticsource.dynamicstealth.common.ClientData;
+import com.fantasticsource.dynamicstealth.common.Network;
 import com.fantasticsource.dynamicstealth.common.potions.Potions;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatCNPC;

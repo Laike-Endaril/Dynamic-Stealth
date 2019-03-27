@@ -1,6 +1,5 @@
 package com.fantasticsource.dynamicstealth;
 
-import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.dynamicstealth.config.ConfigHandler;
 import com.fantasticsource.mctools.MCTools;
 import net.minecraft.command.CommandBase;

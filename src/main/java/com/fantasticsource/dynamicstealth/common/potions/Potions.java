@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.common.potions;
 
-import com.fantasticsource.dynamicstealth.common.DynamicStealth;
+import com.fantasticsource.dynamicstealth.DynamicStealth;
 import com.fantasticsource.dynamicstealth.common.potions.effects.PotionEffectSoulSight;
 import com.fantasticsource.dynamicstealth.common.potions.recipes.RecipePotionBlindness;
 import com.fantasticsource.dynamicstealth.common.potions.recipes.RecipePotionGlowing;
