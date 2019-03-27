@@ -83,7 +83,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import noppes.npcs.api.NpcAPI;
 import noppes.npcs.api.entity.ICustomNpc;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
