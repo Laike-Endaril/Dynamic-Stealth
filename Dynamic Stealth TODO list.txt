@@ -1,5 +1,8 @@
 CURRENTLY WORKING ON ===================================================
 
+Do all targeting and HUD filtering client-side
+Check client hud allowances
+
 Optimize Network.sendClientData()
 
 Add lang keys for all println() calls (make sure to use deprecated I18n, not the non-deprecated one)

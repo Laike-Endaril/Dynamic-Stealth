@@ -270,6 +270,7 @@ public class HUD extends Gui
 
         EntityPlayer player = Minecraft.getMinecraft().player;
         Entity entity = player.world.getEntityByID(data.searcherID);
+        if (entity == null) return false;
         if (player.getDistanceSq(entity) > Math.pow(maxDist, 2)) return false;
 
         double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, (entity.posY + entity.height * 0.5) - (player.posY + player.eyeHeight), entity.posZ - player.posZ).normalize());

@@ -121,7 +121,7 @@ public class Network
 
         public VisibilityPacket(EntityPlayerMP player)
         {
-            queue = Sight.seenEntities(player, false);
+            queue = Sight.seenEntities(player);
         }
 
 
@@ -131,21 +131,10 @@ public class Network
             int i = queue.size();
             buf.writeInt(i);
 
-            if (serverSettings.senses.usePlayerSenses)
+            for (; i > 0; i--)
             {
-                for (; i > 0; i--)
-                {
-                    buf.writeFloat((float) (1d - queue.peekPriority()));
-                    buf.writeInt(queue.poll().getEntityId());
-                }
-            }
-            else
-            {
-                for (; i > 0; i--)
-                {
-                    buf.writeFloat(1);
-                    buf.writeInt(queue.poll().getEntityId());
-                }
+                buf.writeFloat((float) (1d - queue.peekPriority()));
+                buf.writeInt(queue.poll().getEntityId());
             }
         }
 
@@ -296,7 +285,7 @@ public class Network
             if (ServerTickTimer.currentTick() % Sight.maxAITickrate == 0) this.stealthLevel = stealthLevel;
             else this.stealthLevel = Byte.MIN_VALUE + 1;
 
-            queue = opHUD ? Sight.seenEntities(player, true) : new ExplicitPriorityQueue<>();
+            queue = opHUD ? Sight.seenEntities(player) : new ExplicitPriorityQueue<>();
         }
 
         @Override
@@ -385,7 +374,8 @@ public class Network
             {
                 for (; remaining > 0; remaining--)
                 {
-                    list.add(new ClientData.OnPointData(ClientData.getColor(buf.readByte()), buf.readInt(), buf.readInt(), buf.readByte()));
+                    ClientData.OnPointData data = new ClientData.OnPointData(ClientData.getColor(buf.readByte()), buf.readInt(), buf.readInt(), buf.readByte());
+                    list.add(data);
                 }
             }
             else

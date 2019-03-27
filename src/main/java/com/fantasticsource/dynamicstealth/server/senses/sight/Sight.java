@@ -226,129 +226,44 @@ public class Sight
     }
 
 
-    public static ExplicitPriorityQueue<EntityLivingBase> seenEntities(EntityPlayerMP player, boolean isForHUD)
+    public static ExplicitPriorityQueue<EntityLivingBase> seenEntities(EntityPlayerMP player)
     {
-        ExplicitPriorityQueue<EntityLivingBase> queue = playerSeenThisTickMap.get(new Pair<>(player, isForHUD));
+        ExplicitPriorityQueue<EntityLivingBase> queue = playerSeenThisTickMap.get(new Pair<>(player, false));
         if (queue != null) return queue.clone();
 
-        ExplicitPriorityQueue<EntityLivingBase>[] queues = seenEntitiesInternal(player, isForHUD);
-        playerSeenThisTickMap.put(new Pair<>(player, isForHUD), queues[1]);
-        return queues[0];
+        queue = seenEntitiesInternal(player);
+        playerSeenThisTickMap.put(new Pair<>(player, false), queue.clone());
+        return queue;
     }
 
-    private static ExplicitPriorityQueue<EntityLivingBase>[] seenEntitiesInternal(EntityPlayerMP player, boolean isForHUD)
+    private static ExplicitPriorityQueue<EntityLivingBase> seenEntitiesInternal(EntityPlayerMP player)
     {
-        ExplicitPriorityQueue<EntityLivingBase>[] queues = new ExplicitPriorityQueue[]{new ExplicitPriorityQueue<>(10), new ExplicitPriorityQueue<>(10)};
-        double stealthLevel;
+        ExplicitPriorityQueue<EntityLivingBase> queue = new ExplicitPriorityQueue<>(10);
         Entity[] loadedEntities = player.world.loadedEntityList.toArray(new Entity[player.world.loadedEntityList.size()]);
 
-        if (EntitySightData.hasSoulSight(player))
-        {
-            for (Entity entity : loadedEntities)
-            {
-                if (!isForHUD || !(MCTools.isRidingOrRiddenBy(player, entity) || CompatDissolution.isPossessing(player, entity) || !entity.isEntityAlive()))
-                {
-                    if (entity instanceof EntityLivingBase && entity != player)
-                    {
-                        stealthLevel = visualStealthLevel(player, entity);
-                        if (stealthLevel <= 1)
-                        {
-                            if (isForHUD)
-                            {
-                                double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, (entity.posY + entity.height * 0.5) - (player.posY + player.eyeHeight), entity.posZ - player.posZ).normalize());
-
-                                //And because Vec3d.fromPitchYaw occasionally returns values barely out of the range of (-1, 1)...
-                                if (angleDif < -1) angleDif = -1;
-                                else if (angleDif > 1) angleDif = 1;
-
-                                angleDif = TRIG_TABLE.arccos(angleDif); //0 in front, pi in back
-
-                                double distSquared = player.getDistanceSq(entity);
-                                double priority = Math.pow(angleDif, 4) * distSquared;
-                                queues[0].add((EntityLivingBase) entity, priority); //Returned to external call
-                                queues[1].add((EntityLivingBase) entity, priority); //Used for playerSeenThisTickMap (result caching)
-                            }
-                            else
-                            {
-                                queues[0].add((EntityLivingBase) entity, stealthLevel); //Returned to external call
-                                queues[1].add((EntityLivingBase) entity, stealthLevel); //Used for playerSeenThisTickMap (result caching)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        else if (serverSettings.senses.usePlayerSenses)
+        if (serverSettings.senses.usePlayerSenses)
         {
             for (Entity entity : loadedEntities)
             {
                 if (entity instanceof EntityLivingBase && entity != player)
                 {
-                    if (!isForHUD || !(MCTools.isRidingOrRiddenBy(player, entity) || CompatDissolution.isPossessing(player, entity) || !entity.isEntityAlive()))
-                    {
-                        stealthLevel = visualStealthLevel(player, entity);
-                        if (stealthLevel <= 1)
-                        {
-                            if (isForHUD)
-                            {
-                                double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, (entity.posY + entity.height * 0.5) - (player.posY + player.eyeHeight), entity.posZ - player.posZ).normalize());
-
-                                //And because Vec3d.fromPitchYaw occasionally returns values barely out of the range of (-1, 1)...
-                                if (angleDif < -1) angleDif = -1;
-                                else if (angleDif > 1) angleDif = 1;
-
-                                angleDif = TRIG_TABLE.arccos(angleDif); //0 in front, pi in back
-
-                                double distSquared = player.getDistanceSq(entity);
-                                double priority = Math.pow(angleDif, 4) * distSquared;
-                                queues[0].add((EntityLivingBase) entity, priority); //Returned to external call
-                                queues[1].add((EntityLivingBase) entity, priority); //Used for playerSeenThisTickMap (result caching)
-                            }
-                            else
-                            {
-                                queues[0].add((EntityLivingBase) entity, stealthLevel); //Returned to external call
-                                queues[1].add((EntityLivingBase) entity, stealthLevel); //Used for playerSeenThisTickMap (result caching)
-                            }
-                        }
-                    }
+                    double stealthLevel = visualStealthLevel(player, entity);
+                    if (stealthLevel <= 1) queue.add((EntityLivingBase) entity, stealthLevel);
                 }
             }
         }
         else
         {
-            Map<Entity, SeenData> map = recentlySeenMap.computeIfAbsent(player, k -> new LinkedHashMap<>());
-
             for (Entity entity : loadedEntities)
             {
                 if (entity instanceof EntityLivingBase && entity != player)
                 {
-                    if (!isForHUD || !(MCTools.isRidingOrRiddenBy(player, entity) || CompatDissolution.isPossessing(player, entity) || !entity.isEntityAlive()))
-                    {
-                        double distSquared = player.getDistanceSq(entity);
-                        if (distSquared <= Math.pow(playerMaxSightDistance, 2) && los(player, entity) != null)
-                        {
-                            double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, (entity.posY + entity.height * 0.5) - (player.posY + player.eyeHeight), entity.posZ - player.posZ).normalize());
-
-                            //And because Vec3d.fromPitchYaw occasionally returns values barely out of the range of (-1, 1)...
-                            if (angleDif < -1) angleDif = -1;
-                            else if (angleDif > 1) angleDif = 1;
-
-                            angleDif = TRIG_TABLE.arccos(angleDif); //0 in front, pi in back
-
-                            if (angleDif / Math.PI * 180 <= 70)
-                            {
-                                double priority = Math.pow(angleDif, 4) * distSquared;
-                                queues[0].add((EntityLivingBase) entity, priority); //Returned to external call
-                                queues[1].add((EntityLivingBase) entity, priority); //Used for playerSeenThisTickMap (result caching)
-                                map.put(entity, new SeenData(priority, true)); //visualStealthLevelInternal was not called, so need to add to map manually
-                            }
-                        }
-                    }
+                    queue.add((EntityLivingBase) entity, -888);
                 }
             }
         }
 
-        return queues;
+        return queue;
     }
 
 
