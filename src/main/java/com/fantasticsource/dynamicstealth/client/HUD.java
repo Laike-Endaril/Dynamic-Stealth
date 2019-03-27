@@ -18,12 +18,12 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -533,22 +533,22 @@ public class HUD extends Gui
                 {
                     if (targetData.color == COLOR_FLEEING)
                     {
-                        elements.add(I18n.format(DynamicStealth.MODID + ".hud.fleeFrom", target == null ? UNKNOWN : target.getName()));
+                        elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.fleeFrom", target == null ? UNKNOWN : target.getName()));
                     }
                     else
                     {
-                        if (targetID != -1) elements.add(I18n.format(DynamicStealth.MODID + ".hud.targeting", target == null ? UNKNOWN : target.getName()));
-                        else if (targetData.percent > 0) elements.add(I18n.format(DynamicStealth.MODID + ".hud.searchingForTarget"));
+                        if (targetID != -1) elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.targeting", target == null ? UNKNOWN : target.getName()));
+                        else if (targetData.percent > 0) elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.searchingForTarget"));
                     }
                 }
                 if (clientSettings.hudSettings.targetingStyle.components.threat)
                 {
-                    if (targetData.color == COLOR_BYPASS) elements.add(I18n.format(DynamicStealth.MODID + ".hud.threat", "§k00"));
-                    else if (targetData.percent > 0) elements.add(I18n.format(DynamicStealth.MODID + ".hud.threat", targetData.percent));
+                    if (targetData.color == COLOR_BYPASS) elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.threat", "§k00"));
+                    else if (targetData.percent > 0) elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.threat", targetData.percent));
                 }
                 if (clientSettings.hudSettings.targetingStyle.components.distance)
                 {
-                    elements.add(I18n.format(DynamicStealth.MODID + ".hud.distance", oneDecimal.format(entity.getDistance(Minecraft.getMinecraft().player))));
+                    elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.distance", oneDecimal.format(entity.getDistance(Minecraft.getMinecraft().player))));
                 }
 
                 float width = 0;
