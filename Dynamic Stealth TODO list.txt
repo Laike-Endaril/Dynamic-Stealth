@@ -3,7 +3,6 @@ CURRENTLY WORKING ON ===================================================
 Do all targeting and HUD filtering client-side
 Check client hud allowances
 
-Optimize Network.sendClientData()
 
 Add lang keys for all println() calls (make sure to use deprecated I18n, not the non-deprecated one)
 
@@ -28,12 +27,6 @@ Directional indicators...
 Remove special filter for ice and fire mobs when they release the fix on their side (they already fixed in a commit, it's just not released yet)
 
 Set Bonus integration for stealth attacks and assassinations
-
-
-
-EFFICIENCY =============================================================
-
-Switch to a one-subscriber system for events, to reduce invoke() calls from the event bus
 
 
 
