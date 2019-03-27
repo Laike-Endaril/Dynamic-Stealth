@@ -48,6 +48,8 @@ public class Network
     @SubscribeEvent
     public static void sendClientData(TickEvent.PlayerTickEvent event)
     {
+        //TODO this needs optimization much more than any other part of the mod
+
         if (event.side == Side.SERVER && event.phase == TickEvent.Phase.END)
         {
             EntityPlayerMP player = (EntityPlayerMP) event.player;

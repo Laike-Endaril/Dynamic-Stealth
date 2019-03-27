@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
+Optimize Network.sendClientData()
+
 Add lang keys for all println() calls (make sure to use deprecated I18n, not the non-deprecated one)
 
 Add Morph / Metamorph stealth bonus
