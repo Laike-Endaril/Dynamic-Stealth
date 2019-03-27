@@ -1,8 +1,11 @@
 package com.fantasticsource.dynamicstealth.server.senses;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityArmorStand;
+import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
@@ -32,8 +35,9 @@ public class EntityTouchData
         }
     }
 
-    public static boolean canFeel(Entity feeler)
+    public static boolean canFeelTouch(Entity feeler)
     {
+        if (feeler instanceof EntityArmorStand || feeler instanceof EntityBat || feeler instanceof FakePlayer) return false;
         return !unfeelingEntities.contains(feeler.getClass());
     }
 }

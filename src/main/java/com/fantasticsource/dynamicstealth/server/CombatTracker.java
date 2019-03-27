@@ -76,24 +76,17 @@ public class CombatTracker
 
     public static boolean pathReachesThreatTarget(EntityLiving living, Path path)
     {
-        Threat.ThreatData data = Threat.get(living);
+        if (path == null) path = living.getNavigator().getPath();
+        if (path == null) return false;
 
-        if (data.threatLevel > 0 && data.target != null)
-        {
-            if (path == null) path = living.getNavigator().getPath();
+        EntityLivingBase target = Threat.getTarget(living);
+        if (target == null) return false;
 
-            if (path != null)
-            {
-                PathPoint point = path.getFinalPathPoint();
-                if (point != null && data.target.getPosition().distanceSq(new BlockPos(point.x, point.y, point.z)) < 2)
-                {
-                    CombatTracker.setSuccessfulPathTime(living);
-                    return true;
-                }
-            }
-        }
+        PathPoint point = path.getFinalPathPoint();
+        if (point == null || target.getPosition().distanceSq(new BlockPos(point.x, point.y, point.z)) > 2) return false;
 
-        return false;
+        CombatTracker.setSuccessfulPathTime(living);
+        return true;
     }
 
     public static void setSuccessfulPathTime(EntityLivingBase livingBase)

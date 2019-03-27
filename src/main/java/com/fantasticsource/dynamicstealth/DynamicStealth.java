@@ -37,7 +37,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.*;
-import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.passive.EntityLlama;
@@ -63,6 +62,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.ChunkEvent;
@@ -79,7 +79,6 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import noppes.npcs.api.NpcAPI;
 import noppes.npcs.api.entity.ICustomNpc;
@@ -186,7 +185,6 @@ public class DynamicStealth
         }
     }
 
-
     @SubscribeEvent
     public static void worldLoad(WorldEvent.Load event)
     {
@@ -198,59 +196,53 @@ public class DynamicStealth
         }
     }
 
-
     @SubscribeEvent
-    public static void worldTick(TickEvent.WorldTickEvent event)
+    public static void livingUpdate(LivingEvent.LivingUpdateEvent event)
     {
-        World world = event.world;
-        if (!world.isRemote && event.phase == TickEvent.Phase.START)
+        EntityLivingBase livingBase = event.getEntityLiving();
+        World world = livingBase.world;
+        if (!world.isRemote && livingBase.isEntityAlive())
         {
-            if (serverSettings.senses.touch.touchEnabled)
+            int type = livingBase instanceof EntityPlayerMP ? 1 : livingBase instanceof EntityLiving ? 2 : 0;
+
+            if (type != 0 && serverSettings.senses.touch.touchEnabled && EntityTouchData.canFeelTouch(livingBase))
             {
-                for (Entity feeler : world.loadedEntityList)
+                for (Entity felt : world.getEntitiesWithinAABBExcludingEntity(livingBase, livingBase.getEntityBoundingBox()))
                 {
-                    if (feeler instanceof EntityLivingBase && feeler.isEntityAlive() && !(feeler instanceof EntityArmorStand || feeler instanceof EntityBat || feeler instanceof FakePlayer) && EntityTouchData.canFeel(feeler))
+                    if (felt.isEntityAlive() && (felt instanceof EntityPlayer || (felt instanceof EntityLiving && !(felt instanceof EntityBat))) && !MCTools.isRidingOrRiddenBy(livingBase, felt))
                     {
-                        for (Entity felt : world.getEntitiesWithinAABBExcludingEntity(feeler, feeler.getEntityBoundingBox()))
+                        switch (type)
                         {
-                            if (felt.isEntityAlive() && (felt instanceof EntityPlayer || (felt instanceof EntityLiving && !(felt instanceof EntityBat))) && !MCTools.isRidingOrRiddenBy(feeler, felt))
-                            {
-                                if (feeler instanceof EntityPlayerMP)
-                                {
-                                    //TODO add indicator for players
-                                }
-                                else if (feeler instanceof EntityLiving)
-                                {
-                                    EntityLiving feelerLiving = (EntityLiving) feeler;
-                                    //TODO filter out recently felt entities for the look toward entity call; entities felt on the previous tick is good enough
+                            case 1:
+                                //TODO add indicator for players
+                                break;
+                            case 2:
+                                EntityLiving feelerLiving = (EntityLiving) livingBase;
+                                //TODO filter out recently felt entities for the look toward entity call; entities felt on the previous tick is good enough
 
-                                    AIDynamicStealth ai = AIDynamicStealth.getStealthAI(feelerLiving);
-                                    if (ai != null)
-                                    {
-                                        if (ai.isFleeing()) return;
+                                AIDynamicStealth ai = AIDynamicStealth.getStealthAI(feelerLiving);
+                                if (ai != null)
+                                {
+                                    if (ai.isFleeing()) return;
 
-                                        makeLivingLookTowardEntity(feelerLiving, felt);
-                                        feelerLiving.getNavigator().clearPath();
-                                        if (ai.getMode() != AIDynamicStealth.MODE_NONE) ai.restart(feelerLiving.getPosition());
-                                    }
-                                    else
-                                    {
-                                        makeLivingLookTowardEntity(feelerLiving, felt);
-                                        feelerLiving.getNavigator().clearPath();
-                                    }
+                                    makeLivingLookTowardEntity(feelerLiving, felt);
+                                    feelerLiving.getNavigator().clearPath();
+                                    if (ai.getMode() != AIDynamicStealth.MODE_NONE) ai.restart(feelerLiving.getPosition());
                                 }
-                            }
+                                else
+                                {
+                                    makeLivingLookTowardEntity(feelerLiving, felt);
+                                    feelerLiving.getNavigator().clearPath();
+                                }
+                                break;
                         }
                     }
                 }
             }
-        }
 
-        for (Entity entity : world.loadedEntityList)
-        {
-            if (entity instanceof EntityLiving && entity.isEntityAlive())
+            if (type == 2)
             {
-                CombatTracker.pathReachesThreatTarget((EntityLiving) entity);
+                CombatTracker.pathReachesThreatTarget((EntityLiving) livingBase);
             }
         }
     }

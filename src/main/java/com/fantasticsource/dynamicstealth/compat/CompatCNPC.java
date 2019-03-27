@@ -16,15 +16,11 @@ public class CompatCNPC
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void updateCNPC(LivingEvent.LivingUpdateEvent event)
     {
-        Entity entity = event.getEntity();
-        if (entity instanceof EntityLiving)
+        Entity livingBase = event.getEntityLiving();
+        if (livingBase instanceof EntityLiving && Compat.customnpcs && (NpcAPI.Instance().getIEntity(livingBase) instanceof ICustomNpc))
         {
-            EntityLiving living = (EntityLiving) entity;
-
-            if (Compat.customnpcs && (NpcAPI.Instance().getIEntity(living) instanceof ICustomNpc))
-            {
-                if (AIDynamicStealth.getStealthAI(living) == null) livingJoinWorld(living);
-            }
+            EntityLiving living = (EntityLiving) livingBase;
+            if (AIDynamicStealth.getStealthAI(living) == null) livingJoinWorld(living);
         }
     }
 }
