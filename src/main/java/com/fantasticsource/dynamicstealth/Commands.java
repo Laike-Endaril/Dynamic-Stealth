@@ -2,7 +2,6 @@ package com.fantasticsource.dynamicstealth;
 
 import com.fantasticsource.dynamicstealth.common.DynamicStealth;
 import com.fantasticsource.dynamicstealth.config.ConfigHandler;
-import com.fantasticsource.dynamicstealth.config.DynamicStealthConfig;
 import com.fantasticsource.mctools.MCTools;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -61,7 +60,6 @@ public class Commands extends CommandBase
             {
                 MCTools.reloadConfig(ConfigHandler.fullConfigFilename, DynamicStealth.MODID);
                 notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.reloaded");
-                System.out.println(DynamicStealthConfig.serverSettings.senses.usePlayerSenses);
             }
             catch (IllegalAccessException e)
             {
