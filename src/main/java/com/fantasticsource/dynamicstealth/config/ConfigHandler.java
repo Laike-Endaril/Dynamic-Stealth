@@ -188,7 +188,7 @@ public class ConfigHandler
         log();
         log();
 
-        rename(old, current, "general.server settings.client hud allowances", "Allow detailed HUD on clients", "general.server settings.client hud allowances", "Allow Targeting HUD For Clients");
+        rename(old, "general.server settings.client hud allowances", "Allow detailed HUD on clients", "general.server settings.client hud allowances", "Allow Targeting HUD For Clients");
 
         log();
         log();
@@ -197,7 +197,7 @@ public class ConfigHandler
         transferAll(old, current);
     }
 
-    private static void rename(Configuration old, Configuration current, String oldCat, String oldName, String newCat, String newName) throws IOException
+    private static void rename(Configuration old, String oldCat, String oldName, String newCat, String newName) throws IOException
     {
         log("* Renaming... " + oldCat + " -> " + oldName);
         log("* To... " + newCat + " -> " + newName);
