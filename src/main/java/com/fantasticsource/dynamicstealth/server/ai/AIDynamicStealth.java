@@ -419,30 +419,28 @@ public class AIDynamicStealth extends EntityAIBase
             else try
             {
                 if (!(boolean) navigatorCanNavigateMethod.invoke(navigator)) return;
+
+                //We can navigate, and have not reached lastKnownPosition
+                Path newPath;
+                if (distSquared < Math.pow(navigator.getPathSearchRange() - 2, 2))
+                {
+                    //Position in range
+                    newPath = navigator.getPathToPos(lastKnownPosition);
+                }
                 else
                 {
-                    //We can navigate, and have not reached lastKnownPosition
-                    Path newPath;
-                    if (distSquared < Math.pow(navigator.getPathSearchRange() - 2, 2))
-                    {
-                        //Position in range
-                        newPath = navigator.getPathToPos(lastKnownPosition);
-                    }
-                    else
-                    {
-                        //Position out of range
-                        BlockPos startPos = searcher.getPosition();
-                        BlockPos dif = lastKnownPosition.subtract(startPos);
-                        double ratio = navigator.getPathSearchRange() * 0.75 / Math.sqrt(dif.distanceSq(0, 0, 0));
-                        newPath = navigator.getPathToPos(startPos.add(new BlockPos(dif.getX() * ratio, dif.getY() * ratio, dif.getZ() * ratio)));
-                    }
+                    //Position out of range
+                    BlockPos startPos = searcher.getPosition();
+                    BlockPos dif = lastKnownPosition.subtract(startPos);
+                    double ratio = navigator.getPathSearchRange() * 0.75 / Math.sqrt(dif.distanceSq(0, 0, 0));
+                    newPath = navigator.getPathToPos(startPos.add(new BlockPos(dif.getX() * ratio, dif.getY() * ratio, dif.getZ() * ratio)));
+                }
 
-                    if (newPath == null || newPath.isSamePath(path)) mode(MODE_SPIN);
-                    else
-                    {
-                        path = newPath;
-                        mode(MODE_FOLLOW_PATH);
-                    }
+                if (newPath == null || newPath.isSamePath(path)) mode(MODE_SPIN);
+                else
+                {
+                    path = newPath;
+                    mode(MODE_FOLLOW_PATH);
                 }
             }
             catch (IllegalAccessException | InvocationTargetException e)
@@ -487,19 +485,17 @@ public class AIDynamicStealth extends EntityAIBase
             else try
             {
                 if (!(boolean) navigatorCanNavigateMethod.invoke(navigator)) return;
+
+                //We can navigate, and have not reached lastKnownPosition
+                //Position in range, because we calced it in range inside mode() method
+
+                Path newPath = navigator.getPathToPos(lastKnownPosition);
+                if (newPath == null || newPath.isSamePath(path)) mode(MODE_SPIN);
                 else
                 {
-                    //We can navigate, and have not reached lastKnownPosition
-                    //Position in range, because we calced it in range inside mode() method
-
-                    Path newPath = navigator.getPathToPos(lastKnownPosition);
-                    if (newPath == null || newPath.isSamePath(path)) mode(MODE_SPIN);
-                    else
-                    {
-                        path = newPath;
-                        if (findPathAngle()) mode(MODE_FACE_RANDOM_PATH);
-                        else mode(MODE_SPIN);
-                    }
+                    path = newPath;
+                    if (findPathAngle()) mode(MODE_FACE_RANDOM_PATH);
+                    else mode(MODE_SPIN);
                 }
             }
             catch (IllegalAccessException | InvocationTargetException e)
