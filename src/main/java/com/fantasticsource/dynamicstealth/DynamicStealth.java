@@ -426,7 +426,7 @@ public class DynamicStealth
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
-    public static void entityAttackedPost(LivingHurtEvent event) throws InvocationTargetException, IllegalAccessException
+    public static void entityAttackedPost(LivingHurtEvent event)
     {
         if (event.isCanceled() && event.getResult() == Event.Result.DENY) return;
 
