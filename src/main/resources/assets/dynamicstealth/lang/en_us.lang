@@ -40,9 +40,9 @@ dynamicstealth.config.clientSettings=Client Settings
 dynamicstealth.config.serverSettings=Server Settings
 
 dynamicstealth.config.hud=HUD
-dynamicstealth.config.hud.tooltip=What information you want to have displayed on the screen\n \n
+dynamicstealth.config.hud.tooltip=What information you want to have displayed on the screen
 dynamicstealth.config.entityFading=Entity Fading
-dynamicstealth.config.entityFading.tooltip=How entities fade in and out, if at all\n \n
+dynamicstealth.config.entityFading.tooltip=How entities fade in and out, if at all
 
 dynamicstealth.config.mainHUDStyle=Main HUD Style
 dynamicstealth.config.opHUDFilter=On-point HUD Filter
@@ -168,9 +168,9 @@ dynamicstealth.config.senses=Senses
 dynamicstealth.config.threat=Threat System
 dynamicstealth.config.threat.tooltip=The threat system decides when an entity switches from one attack target to another\n\nThis is similar to threat systems found in some MMORPGs\n \n
 dynamicstealth.config.helperSys=Helper System
-dynamicstealth.config.helperSys.tooltip=Which entities come to the aid of which other entities\n \n
+dynamicstealth.config.helperSys.tooltip=Which entities come to the aid of which other entities
 dynamicstealth.config.interact=Interactions
-dynamicstealth.config.interact.tooltip=Things that happen under special circumstances, eg. stealth attacks\n \n
+dynamicstealth.config.interact.tooltip=Things that happen under special circumstances, eg. stealth attacks
 dynamicstealth.config.items=Items
 
 dynamicstealth.config.aiHeadSpeed=Head Turn Speed
@@ -231,13 +231,13 @@ dynamicstealth.config.stealthMultipliers.tooltip=Contains multipliers that incre
 dynamicstealth.config.visibilityMultipliers=Visibility Multipliers
 dynamicstealth.config.visibilityMultipliers.tooltip=Contains multipliers that decrease stealth / increase awareness\n\nWhichever of these multipliers is currently giving the worst (highest) multiplier is used\n \n
 dynamicstealth.config.lighting=Lighting
-dynamicstealth.config.lighting.tooltip=How much of an effect lighting has on stealth.  Nightvision is in here as well\n \n
+dynamicstealth.config.lighting.tooltip=How much of an effect lighting has on stealth.  Nightvision is in here as well
 dynamicstealth.config.angle=Angle
-dynamicstealth.config.angle.tooltip=FOV angles\n \n
+dynamicstealth.config.angle.tooltip=FOV angles
 dynamicstealth.config.distance=Distance
-dynamicstealth.config.distance.tooltip=FOV distances\n \n
+dynamicstealth.config.distance.tooltip=FOV distances
 dynamicstealth.config.absolutes=Absolute Cases
-dynamicstealth.config.absolutes.tooltip=Special cases, eg. glowing\n \n
+dynamicstealth.config.absolutes.tooltip=Special cases, eg. glowing
 dynamicstealth.config.entitySpecificSight=Entity-Specific Settings (Advanced)
 
 dynamicstealth.config.crouchMultiplier=Crouching Multiplier
@@ -338,7 +338,7 @@ dynamicstealth.config.CNPCFactionBypass.tooltip=All CNPCs in these factions will
 dynamicstealth.config.helperOwnership=Ownership
 dynamicstealth.config.helperTeams=Teams
 dynamicstealth.config.helperCNPCFactions=Custom NPCs Factions
-dynamicstealth.config.helperCNPCFactions.tooltip=These settings only matter if Custom NPCs is installed\n \n
+dynamicstealth.config.helperCNPCFactions.tooltip=These settings only matter if Custom NPCs is installed
 dynamicstealth.config.helperType=Help Same Entity Type
 dynamicstealth.config.helperType.tooltip=Whether to help entities of the same type\n\nEg. if set to true, skeletons will help other skeletons (but not zombies)\n \n
 
@@ -362,19 +362,19 @@ dynamicstealth.config.dontHelpBadRep=Don't Help If Bad Rep
 dynamicstealth.config.dontHelpBadRep.tooltip=Make sure NOT to help those we're hostile to\n \n
 
 dynamicstealth.config.interactAttack=Attack
-dynamicstealth.config.interactAttack.tooltip=When anything attacks anything else\n \n
+dynamicstealth.config.interactAttack.tooltip=When anything attacks anything else
 dynamicstealth.config.interactStealthAtk=Stealth Attack
-dynamicstealth.config.interactStealthAtk.tooltip=When something attacks an unaware victim\n \n
+dynamicstealth.config.interactStealthAtk.tooltip=When something attacks an unaware victim
 dynamicstealth.config.interactAssassination=Assassination
-dynamicstealth.config.interactAssassination.tooltip=When something kills without being detected\n \n
+dynamicstealth.config.interactAssassination.tooltip=When something kills without being detected
 dynamicstealth.config.interactCalmDown=Calm Down
-dynamicstealth.config.interactCalmDown.tooltip=When something was fleeing, but ran out of threat\n \n
+dynamicstealth.config.interactCalmDown.tooltip=When something was fleeing, but ran out of threat
 dynamicstealth.config.interactRally=Rally
-dynamicstealth.config.interactRally.tooltip=When something was fleeing, but regained health\n \n
+dynamicstealth.config.interactRally.tooltip=When something was fleeing, but regained health
 dynamicstealth.config.interactDesperation=Desperation
-dynamicstealth.config.interactDesperation.tooltip=When something is cornered while fleeing\n \n
+dynamicstealth.config.interactDesperation.tooltip=When something is cornered while fleeing
 dynamicstealth.config.interactCantReach=Can't Reach
-dynamicstealth.config.interactCantReach.tooltip=When something cannot reach its target\n \n
+dynamicstealth.config.interactCantReach.tooltip=When something cannot reach its target
 
 dynamicstealth.config.removeInvis=Remove Invisibility On Hit
 dynamicstealth.config.removeInvis.tooltip=If set to true, when one living entity hits another living entity, they both lose invisibility\n\nThis happens before any new effects are applied\n \n
