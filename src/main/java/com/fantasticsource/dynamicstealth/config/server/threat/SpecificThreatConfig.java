@@ -16,7 +16,6 @@ public class SpecificThreatConfig
                     "",
                     "For some entities, this option is necessary for them to work right, such as slimes.  For others, like the ender dragon and other players, it has no effect besides how they appear in the HUD"
             })
-    @Config.RequiresMcRestart
     public String[] threatBypass = EntityThreatDefaults.threatBypassDefaults.toArray(new String[EntityThreatDefaults.threatBypassDefaults.size()]);
 
     @Config.Name("Passiveness")
@@ -31,6 +30,5 @@ public class SpecificThreatConfig
                     "",
                     "minecraft:skeleton, true"
             })
-    @Config.RequiresMcRestart
     public String[] isPassive = EntityThreatDefaults.passiveDefaults.toArray(new String[EntityThreatDefaults.passiveDefaults.size()]);
 }

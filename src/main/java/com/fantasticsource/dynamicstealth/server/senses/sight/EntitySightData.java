@@ -5,7 +5,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
@@ -16,20 +15,32 @@ import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.ser
 
 public class EntitySightData
 {
-    public static int playerMaxSightDistance = serverSettings.senses.sight.f_distances.distanceFar;
+    public static int playerMaxSightDistance;
 
-    public static ArrayList<EntityLivingBase> potionSoulSightEntities = new ArrayList<>();
-    public static ArrayList<EntityLivingBase> soulSightCache = new ArrayList<>();
+    public static ArrayList<EntityLivingBase> potionSoulSightEntities;
+    public static ArrayList<EntityLivingBase> soulSightCache;
 
-    private static ArrayList<Class<? extends EntityLivingBase>> naturallyBrightEntities = new ArrayList<>();
-    private static ArrayList<Class<? extends EntityLivingBase>> naturalNightvisionEntities = new ArrayList<>();
-    private static ArrayList<Class<? extends EntityLivingBase>> naturalSoulSightEntities = new ArrayList<>();
-    private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityAngles = new LinkedHashMap<>();
-    private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityDistances = new LinkedHashMap<>();
-    private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityLighting = new LinkedHashMap<>();
+    private static ArrayList<Class<? extends EntityLivingBase>> naturallyBrightEntities;
+    private static ArrayList<Class<? extends EntityLivingBase>> naturalNightvisionEntities;
+    private static ArrayList<Class<? extends EntityLivingBase>> naturalSoulSightEntities;
+    private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityAngles;
+    private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityDistances;
+    private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityLighting;
 
-    static
+    public static void update()
     {
+        playerMaxSightDistance = serverSettings.senses.sight.f_distances.distanceFar;
+
+        potionSoulSightEntities = new ArrayList<>();
+        soulSightCache = new ArrayList<>();
+
+        naturallyBrightEntities = new ArrayList<>();
+        naturalNightvisionEntities = new ArrayList<>();
+        naturalSoulSightEntities = new ArrayList<>();
+        entityAngles = new LinkedHashMap<>();
+        entityDistances = new LinkedHashMap<>();
+        entityLighting = new LinkedHashMap<>();
+
         EntityEntry entry;
         String[] tokens;
         String token;
@@ -155,16 +166,7 @@ public class EntitySightData
                 }
             }
         }
-    }
 
-
-    public static void postConfig(ConfigChangedEvent.PostConfigChangedEvent event)
-    {
-        update();
-    }
-
-    private static void update()
-    {
         if (serverSettings.senses.sight.e_angles.angleSmall > serverSettings.senses.sight.e_angles.angleLarge) throw new IllegalArgumentException("angleLarge must be greater than or equal to angleSmall");
         if (serverSettings.senses.sight.f_distances.distanceNear > serverSettings.senses.sight.f_distances.distanceFar) throw new IllegalArgumentException("distanceFar must be greater than or equal to distanceNear");
         if (serverSettings.senses.sight.c_lighting.lightLow > serverSettings.senses.sight.c_lighting.lightHigh) throw new IllegalArgumentException("lightHigh must be greater than or equal to lightLow");

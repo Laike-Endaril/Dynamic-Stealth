@@ -18,7 +18,6 @@ public class SpecificSightConfig
                     "",
                     "minecraft:skeleton, 90, 45"
             })
-    @Config.RequiresMcRestart
     public String[] angle = new String[]
             {
                     "ghast, 90, 0",
@@ -39,7 +38,6 @@ public class SpecificSightConfig
                     "",
                     "minecraft:skeleton, 40, 3"
             })
-    @Config.RequiresMcRestart
     public String[] distance = new String[]
             {
                     "ghast, 50, 20",
@@ -60,7 +58,6 @@ public class SpecificSightConfig
                     "",
                     "minecraft:skeleton, 15, -1"
             })
-    @Config.RequiresMcRestart
     public String[] lighting = new String[]
             {
                     "ghast, 0, -1",
@@ -71,13 +68,11 @@ public class SpecificSightConfig
     @Config.Name("Naturally Bright")
     @Config.LangKey(DynamicStealth.MODID + ".config.naturallyBright")
     @Config.Comment({"Entities in this list are always treated as if they are standing in max light level"})
-    @Config.RequiresMcRestart
     public String[] naturallyBrightEntities = EntitySightDefaults.naturallyBrightDefaults.toArray(new String[EntitySightDefaults.naturallyBrightDefaults.size()]);
 
     @Config.Name("Natural Nightvision")
     @Config.LangKey(DynamicStealth.MODID + ".config.naturalNightvision")
     @Config.Comment({"Entities in this list ALWAYS get the nightvision bonus"})
-    @Config.RequiresMcRestart
     public String[] naturalNightvisionMobs = new String[]
             {
                     "squid",
@@ -106,7 +101,6 @@ public class SpecificSightConfig
                     "",
                     "Adding the player keyword to this list makes all players see all entities as if they had glowing (visible through walls)"
             })
-    @Config.RequiresMcRestart
     public String[] naturalSoulSightMobs = new String[]
             {
                     "endermite",

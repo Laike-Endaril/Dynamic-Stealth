@@ -19,14 +19,19 @@ import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.ser
 
 public class EntityThreatData
 {
-    private static ArrayList<Class<? extends EntityLivingBase>> threatBypass = new ArrayList<>();
-    private static ArrayList<Class<? extends EntityLivingBase>> isPassive = new ArrayList<>();
-    private static ArrayList<Class<? extends EntityLivingBase>> isNonPassive = new ArrayList<>();
-    private static ArrayList<Class<? extends EntityLivingBase>> isFearless = new ArrayList<>();
+    private static ArrayList<Class<? extends EntityLivingBase>> threatBypass;
+    private static ArrayList<Class<? extends EntityLivingBase>> isPassive;
+    private static ArrayList<Class<? extends EntityLivingBase>> isNonPassive;
+    private static ArrayList<Class<? extends EntityLivingBase>> isFearless;
 
 
-    static
+    public static void update()
     {
+        threatBypass = new ArrayList<>();
+        isPassive = new ArrayList<>();
+        isNonPassive = new ArrayList<>();
+        isFearless = new ArrayList<>();
+
         EntityEntry entry;
         String[] tokens;
         String token;

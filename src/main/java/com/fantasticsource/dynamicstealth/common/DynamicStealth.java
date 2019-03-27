@@ -13,6 +13,7 @@ import com.fantasticsource.dynamicstealth.server.CombatTracker;
 import com.fantasticsource.dynamicstealth.server.EntityLookHelperEdit;
 import com.fantasticsource.dynamicstealth.server.HelperSystem;
 import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
+import com.fantasticsource.dynamicstealth.server.ai.EntityAIData;
 import com.fantasticsource.dynamicstealth.server.ai.edited.*;
 import com.fantasticsource.dynamicstealth.server.entitytracker.EntityTrackerEdit;
 import com.fantasticsource.dynamicstealth.server.event.attacks.AssassinationEvent;
@@ -125,12 +126,29 @@ public class DynamicStealth
             MinecraftForge.EVENT_BUS.register(ClientData.class);
             MinecraftForge.EVENT_BUS.register(RenderAlterer.class);
         }
+
+        update();
     }
 
     @SubscribeEvent
     public static void saveConfig(ConfigChangedEvent.OnConfigChangedEvent event)
     {
         if (event.getModID().equals(MODID)) ConfigManager.sync(MODID, Config.Type.INSTANCE);
+    }
+
+    @SubscribeEvent
+    public static void postConfigChanged(ConfigChangedEvent.PostConfigChangedEvent event)
+    {
+        update();
+    }
+
+    public static void update()
+    {
+        AttackData.update();
+        EntityAIData.update();
+        EntityTouchData.update();
+        EntitySightData.update();
+        EntityThreatData.update();
     }
 
     @SubscribeEvent

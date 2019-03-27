@@ -24,12 +24,6 @@ public class AttackData
     public static ArrayList<WeaponEntry> assassinationWeaponSpecific;
 
 
-    static
-    {
-        update();
-    }
-
-
     public static void update()
     {
         NormalAttackConfig normalConfig = serverSettings.interactions.attack;

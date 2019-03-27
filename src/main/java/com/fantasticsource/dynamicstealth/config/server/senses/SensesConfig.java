@@ -14,7 +14,6 @@ public class SensesConfig
                     "",
                     "Basically if this is turned on and that skeleton is holding still in the dark, you might not be able to see him until you get close"
             })
-    @Config.RequiresMcRestart
     public boolean usePlayerSenses = true;
 
     @Config.Name("Touch")

@@ -11,10 +11,12 @@ import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.ser
 
 public class EntityAIData
 {
-    public static LinkedHashMap<Class<? extends Entity>, Integer> entityHeadTurnSpeeds = new LinkedHashMap<>();
+    public static LinkedHashMap<Class<? extends Entity>, Integer> entityHeadTurnSpeeds;
 
-    static
+    public static void update()
     {
+        entityHeadTurnSpeeds = new LinkedHashMap<>();
+
         EntityEntry entry;
         String[] tokens;
         String token;

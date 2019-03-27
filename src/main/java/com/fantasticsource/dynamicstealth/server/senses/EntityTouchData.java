@@ -12,10 +12,12 @@ import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.ser
 
 public class EntityTouchData
 {
-    private static ArrayList<Class<? extends Entity>> unfeelingEntities = new ArrayList<>();
+    private static ArrayList<Class<? extends Entity>> unfeelingEntities;
 
-    static
+    public static void update()
     {
+        unfeelingEntities = new ArrayList<>();
+
         EntityEntry entry;
 
         for (String string : serverSettings.senses.touch.unfeelingEntities)

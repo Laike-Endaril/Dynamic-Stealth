@@ -29,7 +29,6 @@ public class StealthAttackConfig
                     "This applies soul sight for 100 ticks (5 seconds):",
                     "dynamicstealth:soulsight.100"
             })
-    @Config.RequiresMcRestart
     public String[] attackerEffects = {};
 
     @Config.Name("Victim Effects")
@@ -41,7 +40,6 @@ public class StealthAttackConfig
                     "This applies blindness for 100 ticks (5 seconds):",
                     "blindness.100"
             })
-    @Config.RequiresMcRestart
     public String[] victimEffects = {};
 
     @Config.Name("Weapon-Specific Settings")
@@ -61,6 +59,5 @@ public class StealthAttackConfig
                     "",
                     "dye, false, 0, , blindness.20, true"
             })
-    @Config.RequiresMcRestart
     public String[] weaponSpecific = AttackDefaults.stealthAttackDefaults.toArray(new String[AttackDefaults.stealthAttackDefaults.size()]);
 }

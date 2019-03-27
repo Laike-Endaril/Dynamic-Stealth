@@ -59,6 +59,7 @@ public class Commands extends CommandBase
             try
             {
                 MCTools.reloadConfig(ConfigHandler.fullConfigFilename, DynamicStealth.MODID);
+                DynamicStealth.update();
                 notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.reloaded");
             }
             catch (IllegalAccessException e)

@@ -17,6 +17,5 @@ public class CantReachConfig
                     "This applies soul sight for 100 ticks (5 seconds):",
                     "dynamicstealth:soulsight.100"
             })
-    @Config.RequiresMcRestart
     public String[] potionEffects = {};
 }

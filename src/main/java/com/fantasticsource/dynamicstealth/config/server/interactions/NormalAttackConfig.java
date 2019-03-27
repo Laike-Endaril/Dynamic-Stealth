@@ -49,7 +49,6 @@ public class NormalAttackConfig
                     "This applies soul sight for 100 ticks (5 seconds):",
                     "dynamicstealth:soulsight.100"
             })
-    @Config.RequiresMcRestart
     public String[] attackerEffects = {};
 
     @Config.Name("Victim Effects")
@@ -61,7 +60,6 @@ public class NormalAttackConfig
                     "This applies blindness for 100 ticks (5 seconds):",
                     "blindness.100"
             })
-    @Config.RequiresMcRestart
     public String[] victimEffects = {};
 
     @Config.Name("Weapon-Specific Settings")
@@ -81,6 +79,5 @@ public class NormalAttackConfig
                     "",
                     "dye, false, 0, , blindness.20, true"
             })
-    @Config.RequiresMcRestart
     public String[] weaponSpecific = AttackDefaults.normalAttackDefaults.toArray(new String[AttackDefaults.normalAttackDefaults.size()]);
 }

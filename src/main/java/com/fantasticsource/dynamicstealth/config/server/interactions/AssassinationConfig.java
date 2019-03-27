@@ -18,7 +18,6 @@ public class AssassinationConfig
                     "This applies soul sight for 100 ticks (5 seconds):",
                     "dynamicstealth:soulsight.100"
             })
-    @Config.RequiresMcRestart
     public String[] attackerEffects =
             {
                     "dynamicstealth:soulsight.60",
@@ -40,6 +39,5 @@ public class AssassinationConfig
                     "",
                     "tetra:duplex_tool_modular > duplex/sickle_left_material & duplex/butt_right_material, regeneration.60.3"
             })
-    @Config.RequiresMcRestart
     public String[] weaponSpecific = AttackDefaults.assassinationDefaults.toArray(new String[AttackDefaults.assassinationDefaults.size()]);
 }

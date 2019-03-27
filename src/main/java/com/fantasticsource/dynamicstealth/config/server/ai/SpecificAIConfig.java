@@ -17,6 +17,5 @@ public class SpecificAIConfig
                     "",
                     "minecraft:skeleton, 5"
             })
-    @Config.RequiresMcRestart
     public String[] headTurnSpeed = new String[]{"ghast, 10"};
 }
