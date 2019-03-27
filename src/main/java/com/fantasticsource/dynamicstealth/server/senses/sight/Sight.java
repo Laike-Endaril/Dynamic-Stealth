@@ -1,7 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.senses.sight;
 
 import com.fantasticsource.dynamicstealth.compat.CompatDissolution;
-import com.fantasticsource.dynamicstealth.config.server.senses.SensesConfig;
 import com.fantasticsource.dynamicstealth.config.server.senses.sight.SightConfig;
 import com.fantasticsource.dynamicstealth.server.Attributes;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
@@ -44,9 +43,6 @@ import static com.fantasticsource.mctools.ServerTickTimer.currentTick;
 public class Sight
 {
     private static final int SEEN_RECENT_TIMER = 60;
-
-    private static final SensesConfig senses = serverSettings.senses;
-    private static final SightConfig sight = senses.sight;
 
     public static int maxAITickrate = 1;
     private static Map<Entity, Double> stealthLevels = new LinkedHashMap<>();
@@ -407,6 +403,7 @@ public class Sight
         EntityLivingBase targetLivingBase = isLivingBase ? (EntityLivingBase) target : null;
 
         //Glowing (absolute, after Angles)
+        SightConfig sight = serverSettings.senses.sight;
         if (sight.g_absolutes.seeGlowing && isLivingBase && targetLivingBase.getActivePotionEffect(MobEffects.GLOWING) != null) return -777;
 
 

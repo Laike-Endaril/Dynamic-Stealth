@@ -14,25 +14,29 @@ public class AttackData
 {
     public static ArrayList<PotionEffect> normalAttackerEffects;
     public static ArrayList<PotionEffect> normalVictimEffects;
-    public static ArrayList<WeaponEntry> normalWeaponSpecific = new ArrayList<>();
+    public static ArrayList<WeaponEntry> normalWeaponSpecific;
 
     public static ArrayList<PotionEffect> stealthAttackerEffects;
     public static ArrayList<PotionEffect> stealthVictimEffects;
-    public static ArrayList<WeaponEntry> stealthWeaponSpecific = new ArrayList<>();
+    public static ArrayList<WeaponEntry> stealthWeaponSpecific;
 
     public static ArrayList<PotionEffect> assassinationAttackerEffects;
-    public static ArrayList<WeaponEntry> assassinationWeaponSpecific = new ArrayList<>();
-
-    private static NormalAttackConfig normalConfig = serverSettings.interactions.attack;
-    private static StealthAttackConfig stealthConfig = serverSettings.interactions.stealthAttack;
-    private static AssassinationConfig assassinationConfig = serverSettings.interactions.assassination;
+    public static ArrayList<WeaponEntry> assassinationWeaponSpecific;
 
 
     static
     {
+        update();
+    }
+
+
+    public static void update()
+    {
+        NormalAttackConfig normalConfig = serverSettings.interactions.attack;
         normalAttackerEffects = Potions.parsePotions(normalConfig.attackerEffects);
         normalVictimEffects = Potions.parsePotions(normalConfig.victimEffects);
 
+        normalWeaponSpecific = new ArrayList<>();
         for (String string : normalConfig.weaponSpecific)
         {
             WeaponEntry entry = WeaponEntry.getInstance(string, WeaponEntry.TYPE_NORMAL);
@@ -40,9 +44,11 @@ public class AttackData
         }
 
 
+        StealthAttackConfig stealthConfig = serverSettings.interactions.stealthAttack;
         stealthAttackerEffects = Potions.parsePotions(stealthConfig.attackerEffects);
         stealthVictimEffects = Potions.parsePotions(stealthConfig.victimEffects);
 
+        stealthWeaponSpecific = new ArrayList<>();
         for (String string : stealthConfig.weaponSpecific)
         {
             WeaponEntry entry = WeaponEntry.getInstance(string, WeaponEntry.TYPE_STEALTH);
@@ -50,8 +56,10 @@ public class AttackData
         }
 
 
+        AssassinationConfig assassinationConfig = serverSettings.interactions.assassination;
         assassinationAttackerEffects = Potions.parsePotions(assassinationConfig.attackerEffects);
 
+        assassinationWeaponSpecific = new ArrayList<>();
         for (String string : assassinationConfig.weaponSpecific)
         {
             WeaponEntry entry = WeaponEntry.getInstance(string, WeaponEntry.TYPE_ASSASSINATION);

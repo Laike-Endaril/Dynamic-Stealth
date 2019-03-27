@@ -159,11 +159,6 @@ public class EntitySightData
     }
 
 
-    public static void postInit(FMLPostInitializationEvent event)
-    {
-        update();
-    }
-
     public static void postConfig(ConfigChangedEvent.PostConfigChangedEvent event)
     {
         update();

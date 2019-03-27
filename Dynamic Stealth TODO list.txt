@@ -1,5 +1,10 @@
 CURRENTLY WORKING ON ===================================================
 
+Fix reload command...
+...make sure no config references are cached for more than the current method
+...make sure things have a correct update method for re-initializing from config settings
+...make sure said update is called from post config change event and from reload command
+
 Add Morph / Metamorph stealth bonus
 
 Brush up config...
