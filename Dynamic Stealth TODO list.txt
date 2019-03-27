@@ -1,6 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-Add lang keys for errors (make sure to use deprecated I18n, not the non-deprecated one)
+Add lang keys for all println() calls (make sure to use deprecated I18n, not the non-deprecated one)
 
 Add Morph / Metamorph stealth bonus
 
