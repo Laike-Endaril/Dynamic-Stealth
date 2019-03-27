@@ -24,7 +24,9 @@ lingering_potion.effect.dynamicstealth.glowing=Lingering Potion of Glowing
 
 
 
-dynamicstealth.cmd.reloaded=Server reloaded config from file (the "reset to default" buttons for DS may be glitched until MC is restarted)
+dynamicstealth.cmd.reloaded1=Server reloaded DS config from file
+dynamicstealth.cmd.reloaded2=Note: The "reset to default" buttons for DS may be glitched until MC is restarted
+dynamicstealth.cmd.reloaded3=Note: Some things may not update correctly until server reset (but most things should update just fine)
 
 
 
