@@ -1,7 +1,6 @@
 package com.fantasticsource.dynamicstealth.common;
 
 import com.fantasticsource.dynamicstealth.DynamicStealth;
-import com.fantasticsource.dynamicstealth.client.HUD;
 import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
@@ -48,8 +47,6 @@ public class Network
     @SubscribeEvent
     public static void sendClientData(TickEvent.PlayerTickEvent event)
     {
-        //TODO this needs optimization much more than any other part of the mod
-
         if (event.side == Side.SERVER && event.phase == TickEvent.Phase.END)
         {
             EntityPlayerMP player = (EntityPlayerMP) event.player;
@@ -398,26 +395,10 @@ public class Network
                 Minecraft.getMinecraft().addScheduledTask(() ->
                 {
                     int stealth = packet.stealthLevel;
-                    if (stealth != Byte.MIN_VALUE + 1)
-                    {
-                        ClientData.stealthLevel = stealth;
-                    }
+                    if (stealth != Byte.MIN_VALUE + 1) ClientData.stealthLevel = stealth;
 
                     ClientData.targetData = null;
                     for (ClientData.OnPointData data : packet.list)
-                    {
-                        if (HUD.targetingFilter(data))
-                        {
-                            ClientData.targetData = data;
-                            break;
-                        }
-                    }
-
-                    ClientData.opList = packet.list;
-                    if (ClientData.targetData != null) ClientData.opList.remove(ClientData.targetData);
-
-                    ClientData.opMap.clear();
-                    for (ClientData.OnPointData data : ClientData.opList)
                     {
                         ClientData.opMap.put(data.searcherID, data);
                     }

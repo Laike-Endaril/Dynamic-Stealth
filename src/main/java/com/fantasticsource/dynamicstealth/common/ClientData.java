@@ -8,7 +8,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
@@ -42,9 +41,8 @@ public class ClientData
     public static boolean soulSight = false;
     public static boolean usePlayerSenses = false;
 
-    public static ArrayList<OnPointData> opList = new ArrayList<>();
     public static LinkedHashMap<Integer, OnPointData> opMap = new LinkedHashMap<>();
-    public static OnPointData targetData = null;
+    public static OnPointData targetData = null; //TODO find a good place to set the current target based on client settings
 
     public static LinkedHashMap<Integer, Float> visibilityMap = new LinkedHashMap<>();
 
@@ -57,7 +55,6 @@ public class ClientData
         soulSight = false;
         usePlayerSenses = false;
 
-        opList.clear();
         opMap.clear();
         targetData = null;
 
