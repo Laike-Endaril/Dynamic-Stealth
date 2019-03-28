@@ -28,6 +28,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -77,6 +78,21 @@ public class HUD extends Gui
     {
         drawHUD(mc);
         GlStateManager.color(1, 1, 1, 1);
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void clientTick(TickEvent.ClientTickEvent event)
+    {
+        if (event.phase == TickEvent.Phase.START)
+        {
+            ClientData.targetData = null;
+            ClientData.targetPriority = Integer.MAX_VALUE;
+
+            for (OnPointData data : opMap.values())
+            {
+                makeTargetIfBetter(data);
+            }
+        }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -253,34 +269,41 @@ public class HUD extends Gui
         GlStateManager.color(1, 1, 1, 1);
     }
 
-    public static boolean targetingFilter(OnPointData data)
+    private static void makeTargetIfBetter(OnPointData data)
     {
         int color = data.color;
-        if (color == COLOR_BYPASS && !clientSettings.hudSettings.targetingFilter.showBypass) return false;
-        if (color == COLOR_PASSIVE && !clientSettings.hudSettings.targetingFilter.showPassive) return false;
-        if (color == COLOR_IDLE && !clientSettings.hudSettings.targetingFilter.showIdle) return false;
-        if (color == COLOR_ALERT && !clientSettings.hudSettings.targetingFilter.showAlert) return false;
-        if (color == COLOR_ATTACKING_YOU && !clientSettings.hudSettings.targetingFilter.showAttackingYou) return false;
-        if (color == COLOR_ATTACKING_OTHER && !clientSettings.hudSettings.targetingFilter.showAttackingOther) return false;
-        if (color == COLOR_FLEEING && !clientSettings.hudSettings.targetingFilter.showFleeing) return false;
+        if (color == COLOR_BYPASS && !clientSettings.hudSettings.targetingFilter.showBypass) return;
+        if (color == COLOR_PASSIVE && !clientSettings.hudSettings.targetingFilter.showPassive) return;
+        if (color == COLOR_IDLE && !clientSettings.hudSettings.targetingFilter.showIdle) return;
+        if (color == COLOR_ALERT && !clientSettings.hudSettings.targetingFilter.showAlert) return;
+        if (color == COLOR_ATTACKING_YOU && !clientSettings.hudSettings.targetingFilter.showAttackingYou) return;
+        if (color == COLOR_ATTACKING_OTHER && !clientSettings.hudSettings.targetingFilter.showAttackingOther) return;
+        if (color == COLOR_FLEEING && !clientSettings.hudSettings.targetingFilter.showFleeing) return;
 
         int maxDist = clientSettings.hudSettings.targetingFilter.maxDist;
         int maxAngle = clientSettings.hudSettings.targetingFilter.maxAngle;
-        if (maxDist <= 0 || maxAngle < 0) return false;
+        if (maxDist <= 0 || maxAngle < 0) return;
 
         EntityPlayer player = Minecraft.getMinecraft().player;
         Entity entity = player.world.getEntityByID(data.searcherID);
-        if (entity == null) return false;
-        if (player.getDistanceSq(entity) > Math.pow(maxDist, 2)) return false;
+        if (entity == null) return;
+        double distSquared = player.getDistanceSq(entity);
+        if (distSquared > Math.pow(maxDist, 2)) return;
 
         double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, (entity.posY + entity.height * 0.5) - (player.posY + player.eyeHeight), entity.posZ - player.posZ).normalize());
         //And because Vec3d.fromPitchYaw occasionally returns values barely out of the range of (-1, 1)...
         if (angleDif < -1) angleDif = -1;
         else if (angleDif > 1) angleDif = 1;
         angleDif = Tools.radtodeg(TRIG_TABLE.arccos(angleDif)); //0 in front, pi in back
-        if (angleDif > maxAngle) return false;
+        if (angleDif > maxAngle) return;
 
-        return true;
+        double priority = Math.pow(angleDif, 4) * distSquared;
+
+        if (priority < targetPriority)
+        {
+            targetData = data;
+            targetPriority = priority;
+        }
     }
 
     private static void drawArrow(float x, float y, float angleDeg, float scale)

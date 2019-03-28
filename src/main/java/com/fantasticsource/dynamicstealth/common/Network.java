@@ -397,7 +397,6 @@ public class Network
                     int stealth = packet.stealthLevel;
                     if (stealth != Byte.MIN_VALUE + 1) ClientData.stealthLevel = stealth;
 
-                    ClientData.targetData = null;
                     for (ClientData.OnPointData data : packet.list)
                     {
                         ClientData.opMap.put(data.searcherID, data);

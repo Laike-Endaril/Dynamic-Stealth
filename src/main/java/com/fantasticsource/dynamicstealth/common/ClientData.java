@@ -42,7 +42,8 @@ public class ClientData
     public static boolean usePlayerSenses = false;
 
     public static LinkedHashMap<Integer, OnPointData> opMap = new LinkedHashMap<>();
-    public static OnPointData targetData = null; //TODO find a good place to set the current target based on client settings
+    public static OnPointData targetData = null;
+    public static double targetPriority = Integer.MAX_VALUE;
 
     public static LinkedHashMap<Integer, Float> visibilityMap = new LinkedHashMap<>();
 
@@ -57,6 +58,7 @@ public class ClientData
 
         opMap.clear();
         targetData = null;
+        targetPriority = Integer.MAX_VALUE;
 
         visibilityMap.clear();
     }
