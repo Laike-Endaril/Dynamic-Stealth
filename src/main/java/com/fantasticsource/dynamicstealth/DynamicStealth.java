@@ -217,7 +217,6 @@ public class DynamicStealth
                                 break;
                             case 2:
                                 EntityLiving feelerLiving = (EntityLiving) livingBase;
-                                //TODO filter out recently felt entities for the look toward entity call; entities felt on the previous tick is good enough
 
                                 AIDynamicStealth ai = AIDynamicStealth.getStealthAI(feelerLiving);
                                 if (ai != null)
