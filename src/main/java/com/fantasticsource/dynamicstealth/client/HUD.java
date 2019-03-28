@@ -555,7 +555,7 @@ public class HUD extends Gui
 
                 if (clientSettings.hudSettings.targetingStyle.components.name) elements.add(entity.getName());
 
-                if (clientSettings.hudSettings.targetingStyle.components.target) //Actually now "action" and not just "target"
+                if (clientSettings.hudSettings.targetingStyle.components.target) //Actually now "action" and not just "target" TODO remove this comment when var name is changed
                 {
                     String action;
                     switch (color)
