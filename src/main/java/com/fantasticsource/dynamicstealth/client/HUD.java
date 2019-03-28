@@ -130,7 +130,7 @@ public class HUD extends Gui
         if (color == COLOR_BYPASS) return clientSettings.hudSettings.ophudFilter.showBypass;
         else if (color == COLOR_PASSIVE) return clientSettings.hudSettings.ophudFilter.showPassive;
         else if (color == COLOR_IDLE) return clientSettings.hudSettings.ophudFilter.showIdle;
-        else if (color == COLOR_ALERT) return clientSettings.hudSettings.ophudFilter.showAlert;
+        else if (color == COLOR_SEARCHING_FOR_UNSEEN) return clientSettings.hudSettings.ophudFilter.showAlert;
         else if (color == COLOR_ATTACKING_YOU) return clientSettings.hudSettings.ophudFilter.showAttackingYou;
         else if (color == COLOR_ATTACKING_OTHER) return clientSettings.hudSettings.ophudFilter.showAttackingOther;
         else if (color == COLOR_FLEEING) return clientSettings.hudSettings.ophudFilter.showFleeing;
@@ -211,7 +211,7 @@ public class HUD extends Gui
         double right = halfSize2D + hOff2D;
         double top = -halfSize2D + vOff2D;
         double bottom = halfSize2D + vOff2D;
-        if (color == COLOR_PASSIVE || color == COLOR_IDLE || data.percent == -1)
+        if (!canHaveThreat(color))
         {
             //Fill for states that are always 100%
             bufferbuilder.pos(left, top, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
@@ -239,7 +239,7 @@ public class HUD extends Gui
         }
 
         //Outline and eyes
-        if (color == COLOR_ATTACKING_YOU || color == COLOR_ALERT || color == COLOR_BYPASS)
+        if (color == COLOR_ATTACKING_YOU || color == COLOR_SEARCHING_FOR_UNSEEN || color == COLOR_BYPASS)
         {
             //Angry, lit up eyes
             bufferbuilder.pos(left, top, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, 0.5 + BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
@@ -275,7 +275,7 @@ public class HUD extends Gui
         if (color == COLOR_BYPASS && !clientSettings.hudSettings.targetingFilter.showBypass) return;
         if (color == COLOR_PASSIVE && !clientSettings.hudSettings.targetingFilter.showPassive) return;
         if (color == COLOR_IDLE && !clientSettings.hudSettings.targetingFilter.showIdle) return;
-        if (color == COLOR_ALERT && !clientSettings.hudSettings.targetingFilter.showAlert) return;
+        if (color == COLOR_SEARCHING_FOR_UNSEEN && !clientSettings.hudSettings.targetingFilter.showAlert) return;
         if (color == COLOR_ATTACKING_YOU && !clientSettings.hudSettings.targetingFilter.showAttackingYou) return;
         if (color == COLOR_ATTACKING_OTHER && !clientSettings.hudSettings.targetingFilter.showAttackingOther) return;
         if (color == COLOR_FLEEING && !clientSettings.hudSettings.targetingFilter.showFleeing) return;
@@ -534,10 +534,11 @@ public class HUD extends Gui
                 float originDrawX = boundX / sr.getScaleFactor();
                 float originDrawY = boundY / sr.getScaleFactor();
 
+                int color = targetData.color;
                 Color c;
                 if (clientSettings.hudSettings.targetingStyle.stateColoredReticle)
                 {
-                    c = new Color(targetData.color, true);
+                    c = new Color(color, true);
                 }
                 else c = new Color(Integer.parseInt(clientSettings.hudSettings.targetingStyle.defaultReticleColor, 16), true);
                 GlStateManager.color(c.rf(), c.gf(), c.bf(), (float) clientSettings.hudSettings.targetingStyle.reticleAlpha);
@@ -553,23 +554,40 @@ public class HUD extends Gui
                 ArrayList<String> elements = new ArrayList<>();
 
                 if (clientSettings.hudSettings.targetingStyle.components.name) elements.add(entity.getName());
-                if (clientSettings.hudSettings.targetingStyle.components.target && targetID != -2)
+
+                if (clientSettings.hudSettings.targetingStyle.components.target) //Actually now "action" and not just "target"
                 {
-                    if (targetData.color == COLOR_FLEEING)
+                    String action;
+                    switch (color)
                     {
-                        elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.fleeFrom", target == null ? UNKNOWN : target.getName()));
+                        case COLOR_FLEEING:
+                            action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.fleeFrom", target == null ? I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.unknown") : target.getName());
+                            break;
+                        case COLOR_SEARCHING_FOR_UNSEEN:
+                            action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.searchForUnseen");
+                            break;
+                        case COLOR_PASSIVE:
+                            action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.passive");
+                            break;
+                        case COLOR_IDLE:
+                            action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.idle");
+                            break;
+                        case COLOR_BYPASS:
+                            if (target != null) action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.targeting", target.getName());
+                            else action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.unknown");
+                            break;
+                        default: //COLOR_ATTACKING_YOU and COLOR_ATTACKING_OTHER
+                            action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.targeting", target == null ? I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.unknown") : target.getName());
                     }
-                    else
-                    {
-                        if (targetID != -1) elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.targeting", target == null ? UNKNOWN : target.getName()));
-                        else if (targetData.percent > 0) elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.searchingForTarget"));
-                    }
+                    elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.action", action));
                 }
+
                 if (clientSettings.hudSettings.targetingStyle.components.threat)
                 {
-                    if (targetData.color == COLOR_BYPASS) elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.threat", "§k00"));
+                    if (color == COLOR_BYPASS) elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.threatNotApplicable"));
                     else if (targetData.percent > 0) elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.threat", targetData.percent));
                 }
+
                 if (clientSettings.hudSettings.targetingStyle.components.distance)
                 {
                     elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.distance", oneDecimal.format(entity.getDistance(Minecraft.getMinecraft().player))));
@@ -588,7 +606,7 @@ public class HUD extends Gui
 
                 float offX = 20;
                 float alpha = (float) clientSettings.hudSettings.targetingStyle.textAlpha;
-                int color = clientSettings.hudSettings.targetingStyle.stateColoredText ? targetData.color : Integer.parseInt(clientSettings.hudSettings.targetingStyle.defaultTextColor, 16);
+                if (!clientSettings.hudSettings.targetingStyle.stateColoredText) color = Integer.parseInt(clientSettings.hudSettings.targetingStyle.defaultTextColor, 16);
                 color |= ((int) (0xFF * alpha) << 24);
                 GlStateManager.disableTexture2D();
 

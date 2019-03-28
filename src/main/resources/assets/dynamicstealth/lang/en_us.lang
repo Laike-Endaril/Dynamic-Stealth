@@ -30,10 +30,17 @@ dynamicstealth.cmd.reloaded3=Note: Some things may not update correctly until se
 
 
 
+dynamicstealth.hud.unknown=???
+
+dynamicstealth.hud.action=Action: %s
 dynamicstealth.hud.fleeFrom=Fleeing from %s
+dynamicstealth.hud.searchForUnseen=Searching for unseen target
+dynamicstealth.hud.passive=Passive
+dynamicstealth.hud.idle=Idle
 dynamicstealth.hud.targeting=Targeting %s
-dynamicstealth.hud.searchingForTarget=Searching for target
+
 dynamicstealth.hud.threat=Threat: %s%%
+dynamicstealth.hud.threatNotApplicable=Threat: N/A
 dynamicstealth.hud.distance=Distance: %s
 
 
@@ -152,8 +159,8 @@ dynamicstealth.config.targetingComponents=Components
 
 dynamicstealth.config.targetShowName=Target's Name
 dynamicstealth.config.targetShowName.tooltip=FILLSCREEN FIXNEWLINES If true, the targeted entity's name is shown (if available)\n \n
-dynamicstealth.config.targetShowTarget=Target's Target
-dynamicstealth.config.targetShowTarget.tooltip=FILLSCREEN FIXNEWLINES If true, the targeted entity's target is shown (if available)\n \n
+dynamicstealth.config.targetShowAction=Target's Action
+dynamicstealth.config.targetShowAction.tooltip=FILLSCREEN FIXNEWLINES If true, the targeted entity's current action is shown (if available)\n \n
 dynamicstealth.config.targetShowThreat=Target's Threat
 dynamicstealth.config.targetShowThreat.tooltip=FILLSCREEN FIXNEWLINES If true, the targeted entity's threat level is shown (if available)\n \n
 dynamicstealth.config.targetShowDistance=Target's Distance

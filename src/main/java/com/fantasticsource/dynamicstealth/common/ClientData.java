@@ -15,26 +15,22 @@ import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.ser
 public class ClientData
 {
     public static final byte
-            CID_NULL = 0,
-            CID_ATTACKING_YOU = 1,
-            CID_ALERT = 2,
-            CID_ATTACKING_OTHER = 3,
-            CID_IDLE = 4,
-            CID_PASSIVE = 5,
-            CID_FLEEING = 6,
-            CID_BYPASS = 7;
+            CID_ATTACKING_YOU = 0,
+            CID_SEARCHING_FOR_UNSEEN = 1,
+            CID_ATTACKING_OTHER = 2,
+            CID_IDLE = 3,
+            CID_PASSIVE = 4,
+            CID_FLEEING = 5,
+            CID_BYPASS = 6;
 
     public static final int
-            COLOR_NULL = 0x777777,
-            COLOR_ATTACKING_YOU = 0xFF0000,
-            COLOR_ALERT = 0xFF8800,
-            COLOR_ATTACKING_OTHER = 0xFFFF00,
-            COLOR_IDLE = 0x4444FF,
-            COLOR_PASSIVE = 0x00CC00,
-            COLOR_FLEEING = 0x770077,
-            COLOR_BYPASS = 0x555555;
-
-    public static final String UNKNOWN = "???";
+            COLOR_ATTACKING_YOU = 0xFF0000,         //Target: yes, Threat: yes
+            COLOR_ATTACKING_OTHER = 0xFFFF00,       //Target: yes, Threat: yes
+            COLOR_SEARCHING_FOR_UNSEEN = 0xFF8800,  //Target: no, Threat: yes
+            COLOR_IDLE = 0x4444FF,                  //Target: no, Threat: no
+            COLOR_PASSIVE = 0x00CC00,               //Target: no, Threat: no
+            COLOR_FLEEING = 0x770077,               //Target: maybe, Threat: yes
+            COLOR_BYPASS = 0x555555;                //Target: maybe, Threat: no
 
     public static int stealthLevel = Byte.MIN_VALUE;
 
@@ -68,12 +64,10 @@ public class ClientData
     {
         switch (color)
         {
-            case COLOR_NULL:
-                return CID_NULL;
             case COLOR_ATTACKING_YOU:
                 return CID_ATTACKING_YOU;
-            case COLOR_ALERT:
-                return CID_ALERT;
+            case COLOR_SEARCHING_FOR_UNSEEN:
+                return CID_SEARCHING_FOR_UNSEEN;
             case COLOR_ATTACKING_OTHER:
                 return CID_ATTACKING_OTHER;
             case COLOR_IDLE:
@@ -97,12 +91,10 @@ public class ClientData
     {
         switch (cid)
         {
-            case CID_NULL:
-                return COLOR_NULL;
             case CID_ATTACKING_YOU:
                 return COLOR_ATTACKING_YOU;
-            case CID_ALERT:
-                return COLOR_ALERT;
+            case CID_SEARCHING_FOR_UNSEEN:
+                return COLOR_SEARCHING_FOR_UNSEEN;
             case CID_ATTACKING_OTHER:
                 return COLOR_ATTACKING_OTHER;
             case CID_IDLE:
@@ -119,15 +111,34 @@ public class ClientData
 
     public static int getColor(EntityPlayer player, EntityLivingBase searcher, EntityLivingBase target, int threatLevel)
     {
-        if (searcher == null) return COLOR_NULL;
         if (EntityThreatData.bypassesThreat(searcher)) return COLOR_BYPASS;
         AIDynamicStealth stealthAI = searcher instanceof EntityLiving ? AIDynamicStealth.getStealthAI((EntityLiving) searcher) : null;
         if (stealthAI != null && stealthAI.isFleeing()) return COLOR_FLEEING;
         if (serverSettings.hud.recognizePassive && EntityThreatData.isPassive(searcher)) return COLOR_PASSIVE;
         if (threatLevel <= 0) return COLOR_IDLE;
-        if (target == null) return COLOR_ALERT;
+        if (target == null) return COLOR_SEARCHING_FOR_UNSEEN;
         if (target == player) return COLOR_ATTACKING_YOU;
         return COLOR_ATTACKING_OTHER;
+    }
+
+    public static boolean canHaveTarget(byte cid)
+    {
+        return cid != CID_PASSIVE && cid != CID_IDLE && cid != CID_SEARCHING_FOR_UNSEEN;
+    }
+
+    public static boolean canHaveTarget(int color)
+    {
+        return color != COLOR_PASSIVE && color != COLOR_IDLE && color != COLOR_SEARCHING_FOR_UNSEEN;
+    }
+
+    public static boolean canHaveThreat(byte cid)
+    {
+        return cid != CID_PASSIVE && cid != CID_IDLE && cid != CID_BYPASS;
+    }
+
+    public static boolean canHaveThreat(int color)
+    {
+        return color != COLOR_PASSIVE && color != COLOR_IDLE && color != COLOR_BYPASS;
     }
 
     public static class OnPointData

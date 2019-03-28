@@ -26,7 +26,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-import static com.fantasticsource.dynamicstealth.common.ClientData.COLOR_BYPASS;
+import static com.fantasticsource.dynamicstealth.common.ClientData.*;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.mctools.MCTools.isOP;
 
@@ -315,15 +315,17 @@ public class Network
                     else
                     {
                         Threat.ThreatData data = Threat.get(searcher);
+                        byte cid = ClientData.getCID(player, searcher, data.target, data.threatLevel);
 
                         //Color
-                        buf.writeByte(ClientData.getCID(player, searcher, data.target, data.threatLevel)); //else this is a normal entry
+                        buf.writeByte(cid);
                         //Searcher ID
                         buf.writeInt(searcher.getEntityId());
+
                         //Target ID
-                        buf.writeInt(data.target == null ? -1 : data.target.getEntityId());
+                        if (canHaveTarget(cid)) buf.writeInt(data.target == null ? -1 : data.target.getEntityId());
                         //Threat level
-                        buf.writeByte((int) (100D * data.threatLevel / maxThreat));
+                        if (canHaveThreat(cid)) buf.writeByte((int) (100D * data.threatLevel / maxThreat));
                     }
                 }
             }
@@ -342,13 +344,14 @@ public class Network
                     else
                     {
                         Threat.ThreatData data = Threat.get(searcher);
+                        byte cid = ClientData.getCID(player, searcher, data.target, data.threatLevel);
 
                         //Color
-                        buf.writeByte(ClientData.getCID(player, searcher, data.target, data.threatLevel)); //else this is a normal entry
+                        buf.writeByte(ClientData.getCID(player, searcher, data.target, data.threatLevel));
                         //Searcher ID
                         buf.writeInt(searcher.getEntityId());
                         //Threat level
-                        buf.writeByte((int) (100D * data.threatLevel / maxThreat));
+                        if (canHaveThreat(cid)) buf.writeByte((int) (100D * data.threatLevel / maxThreat));
                     }
                 }
             }
@@ -369,8 +372,7 @@ public class Network
                 for (; remaining > 0; remaining--)
                 {
                     int color = ClientData.getColor(buf.readByte());
-                    ClientData.OnPointData data = new ClientData.OnPointData(color, buf.readInt(), buf.readInt(), color == COLOR_BYPASS ? -1 : buf.readByte());
-                    list.add(data);
+                    list.add(new OnPointData(color, buf.readInt(), canHaveTarget(color) ? buf.readInt() : -1, canHaveThreat(color) ? buf.readByte() : 0));
                 }
             }
             else
@@ -378,7 +380,7 @@ public class Network
                 for (; remaining > 0; remaining--)
                 {
                     int color = ClientData.getColor(buf.readByte());
-                    list.add(new ClientData.OnPointData(color, buf.readInt(), -2, color == COLOR_BYPASS ? -1 : buf.readByte()));
+                    list.add(new OnPointData(color, buf.readInt(), -2, canHaveThreat(color) ? buf.readByte() : 0));
                 }
             }
         }

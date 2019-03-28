@@ -95,7 +95,7 @@ public class RenderAlterer
                 return "blue";
             case ClientData.COLOR_ATTACKING_OTHER:
                 return "yellow";
-            case ClientData.COLOR_ALERT:
+            case ClientData.COLOR_SEARCHING_FOR_UNSEEN:
                 return "orange";
             case ClientData.COLOR_ATTACKING_YOU:
                 return "red";
