@@ -10,10 +10,10 @@ public class TargetingHUDComponents
     @Config.Comment("If true, the targeted entity's name is shown (if available)")
     public boolean name = true;
 
-    @Config.Name("Target's Target") //TODO on config version change change to, "Target's Action"
+    @Config.Name("Target's Target") //TODO on config version change change to "Target's Action"
     @Config.LangKey(DynamicStealth.MODID + ".config.targetShowAction")
     @Config.Comment("If true, the targeted entity's current action is shown (if available)")
-    public boolean target = true; //TODO on config version change change to, "action"
+    public boolean target = true; //TODO on config version change change to "action"
 
     @Config.Name("Target's Threat")
     @Config.LangKey(DynamicStealth.MODID + ".config.targetShowThreat")

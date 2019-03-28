@@ -130,7 +130,7 @@ public class HUD extends Gui
         if (color == COLOR_BYPASS) return clientSettings.hudSettings.ophudFilter.showBypass;
         else if (color == COLOR_PASSIVE) return clientSettings.hudSettings.ophudFilter.showPassive;
         else if (color == COLOR_IDLE) return clientSettings.hudSettings.ophudFilter.showIdle;
-        else if (color == COLOR_SEARCHING_FOR_UNSEEN) return clientSettings.hudSettings.ophudFilter.showAlert;
+        else if (color == COLOR_SEARCHING) return clientSettings.hudSettings.ophudFilter.showAlert;
         else if (color == COLOR_ATTACKING_YOU) return clientSettings.hudSettings.ophudFilter.showAttackingYou;
         else if (color == COLOR_ATTACKING_OTHER) return clientSettings.hudSettings.ophudFilter.showAttackingOther;
         else if (color == COLOR_FLEEING) return clientSettings.hudSettings.ophudFilter.showFleeing;
@@ -239,7 +239,7 @@ public class HUD extends Gui
         }
 
         //Outline and eyes
-        if (color == COLOR_ATTACKING_YOU || color == COLOR_SEARCHING_FOR_UNSEEN || color == COLOR_BYPASS)
+        if (color == COLOR_ATTACKING_YOU || color == COLOR_SEARCHING || color == COLOR_BYPASS)
         {
             //Angry, lit up eyes
             bufferbuilder.pos(left, top, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, 0.5 + BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
@@ -275,7 +275,7 @@ public class HUD extends Gui
         if (color == COLOR_BYPASS && !clientSettings.hudSettings.targetingFilter.showBypass) return;
         if (color == COLOR_PASSIVE && !clientSettings.hudSettings.targetingFilter.showPassive) return;
         if (color == COLOR_IDLE && !clientSettings.hudSettings.targetingFilter.showIdle) return;
-        if (color == COLOR_SEARCHING_FOR_UNSEEN && !clientSettings.hudSettings.targetingFilter.showAlert) return;
+        if (color == COLOR_SEARCHING && !clientSettings.hudSettings.targetingFilter.showAlert) return;
         if (color == COLOR_ATTACKING_YOU && !clientSettings.hudSettings.targetingFilter.showAttackingYou) return;
         if (color == COLOR_ATTACKING_OTHER && !clientSettings.hudSettings.targetingFilter.showAttackingOther) return;
         if (color == COLOR_FLEEING && !clientSettings.hudSettings.targetingFilter.showFleeing) return;
@@ -563,8 +563,8 @@ public class HUD extends Gui
                         case COLOR_FLEEING:
                             action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.fleeFrom", target == null ? I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.unknown") : target.getName());
                             break;
-                        case COLOR_SEARCHING_FOR_UNSEEN:
-                            action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.searchForUnseen");
+                        case COLOR_SEARCHING:
+                            action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.search");
                             break;
                         case COLOR_PASSIVE:
                             action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.passive");

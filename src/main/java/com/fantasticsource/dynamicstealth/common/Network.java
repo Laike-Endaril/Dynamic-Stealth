@@ -323,7 +323,7 @@ public class Network
                         buf.writeInt(searcher.getEntityId());
 
                         //Target ID
-                        if (canHaveTarget(cid)) buf.writeInt(data.target == null ? -1 : data.target.getEntityId());
+                        if (canHaveClientTarget(cid)) buf.writeInt(data.target == null ? -1 : data.target.getEntityId());
                         //Threat level
                         if (canHaveThreat(cid)) buf.writeByte((int) (100D * data.threatLevel / maxThreat));
                     }
@@ -372,7 +372,7 @@ public class Network
                 for (; remaining > 0; remaining--)
                 {
                     int color = ClientData.getColor(buf.readByte());
-                    list.add(new OnPointData(color, buf.readInt(), canHaveTarget(color) ? buf.readInt() : -1, canHaveThreat(color) ? buf.readByte() : 0));
+                    list.add(new OnPointData(color, buf.readInt(), canHaveClientTarget(color) ? buf.readInt() : -1, canHaveThreat(color) ? buf.readByte() : 0));
                 }
             }
             else

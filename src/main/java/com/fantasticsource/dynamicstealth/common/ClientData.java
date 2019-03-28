@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.common;
 
 import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
+import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,7 +17,7 @@ public class ClientData
 {
     public static final byte
             CID_ATTACKING_YOU = 0,
-            CID_SEARCHING_FOR_UNSEEN = 1,
+            CID_SEARCHING = 1,
             CID_ATTACKING_OTHER = 2,
             CID_IDLE = 3,
             CID_PASSIVE = 4,
@@ -26,7 +27,7 @@ public class ClientData
     public static final int
             COLOR_ATTACKING_YOU = 0xFF0000,         //Target: yes, Threat: yes
             COLOR_ATTACKING_OTHER = 0xFFFF00,       //Target: yes, Threat: yes
-            COLOR_SEARCHING_FOR_UNSEEN = 0xFF8800,  //Target: no, Threat: yes
+            COLOR_SEARCHING = 0xFF8800,             //Target: only on server, Threat: yes
             COLOR_IDLE = 0x4444FF,                  //Target: no, Threat: no
             COLOR_PASSIVE = 0x00CC00,               //Target: no, Threat: no
             COLOR_FLEEING = 0x770077,               //Target: maybe, Threat: yes
@@ -66,8 +67,8 @@ public class ClientData
         {
             case COLOR_ATTACKING_YOU:
                 return CID_ATTACKING_YOU;
-            case COLOR_SEARCHING_FOR_UNSEEN:
-                return CID_SEARCHING_FOR_UNSEEN;
+            case COLOR_SEARCHING:
+                return CID_SEARCHING;
             case COLOR_ATTACKING_OTHER:
                 return CID_ATTACKING_OTHER;
             case COLOR_IDLE:
@@ -93,8 +94,8 @@ public class ClientData
         {
             case CID_ATTACKING_YOU:
                 return COLOR_ATTACKING_YOU;
-            case CID_SEARCHING_FOR_UNSEEN:
-                return COLOR_SEARCHING_FOR_UNSEEN;
+            case CID_SEARCHING:
+                return COLOR_SEARCHING;
             case CID_ATTACKING_OTHER:
                 return COLOR_ATTACKING_OTHER;
             case CID_IDLE:
@@ -116,19 +117,19 @@ public class ClientData
         if (stealthAI != null && stealthAI.isFleeing()) return COLOR_FLEEING;
         if (serverSettings.hud.recognizePassive && EntityThreatData.isPassive(searcher)) return COLOR_PASSIVE;
         if (threatLevel <= 0) return COLOR_IDLE;
-        if (target == null) return COLOR_SEARCHING_FOR_UNSEEN;
+        if (target == null || !Sight.canSee(searcher, target)) return COLOR_SEARCHING;
         if (target == player) return COLOR_ATTACKING_YOU;
         return COLOR_ATTACKING_OTHER;
     }
 
-    public static boolean canHaveTarget(byte cid)
+    public static boolean canHaveClientTarget(byte cid)
     {
-        return cid != CID_PASSIVE && cid != CID_IDLE && cid != CID_SEARCHING_FOR_UNSEEN;
+        return cid != CID_PASSIVE && cid != CID_IDLE && cid != CID_SEARCHING;
     }
 
-    public static boolean canHaveTarget(int color)
+    public static boolean canHaveClientTarget(int color)
     {
-        return color != COLOR_PASSIVE && color != COLOR_IDLE && color != COLOR_SEARCHING_FOR_UNSEEN;
+        return color != COLOR_PASSIVE && color != COLOR_IDLE && color != COLOR_SEARCHING;
     }
 
     public static boolean canHaveThreat(byte cid)

@@ -25,10 +25,10 @@ public class OPHUDFilterConfig
     @Config.Comment({"If true, on-point indicators appear for entities which are attacking something besides you"})
     public boolean showAttackingOther = true;
 
-    @Config.Name("Alert")
-    @Config.LangKey(DynamicStealth.MODID + ".config.opHUDShowAlert")
+    @Config.Name("Alert") //TODO on config version change change to, "Searching"
+    @Config.LangKey(DynamicStealth.MODID + ".config.opHUDShowSearching")
     @Config.Comment({"If true, on-point indicators appear for alerted entities who are actively searching for a target"})
-    public boolean showAlert = true;
+    public boolean showAlert = true; //TODO on config version change change to, "searching"
 
     @Config.Name("Attacking You")
     @Config.LangKey(DynamicStealth.MODID + ".config.opHUDShowAtkYou")
