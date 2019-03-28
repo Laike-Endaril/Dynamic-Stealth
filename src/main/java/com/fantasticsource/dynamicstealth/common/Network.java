@@ -26,6 +26,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+import static com.fantasticsource.dynamicstealth.common.ClientData.COLOR_BYPASS;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.mctools.MCTools.isOP;
 
@@ -50,7 +51,7 @@ public class Network
         if (event.side == Side.SERVER && event.phase == TickEvent.Phase.END)
         {
             EntityPlayerMP player = (EntityPlayerMP) event.player;
-            if (player != null && player.world.loadedEntityList.contains(player) && player.isEntityAlive())
+            if (player.world.loadedEntityList.contains(player) && player.isEntityAlive())
             {
                 if (EntitySightData.hasSoulSight(player))
                 {
@@ -310,8 +311,6 @@ public class Network
                         //Target ID
                         Entity target = (searcher instanceof EntityLiving) ? ((EntityLiving) searcher).getAttackTarget() : null;
                         buf.writeInt(target == null ? -1 : target.getEntityId());
-                        //Threat level
-                        buf.writeByte(-1);
                     }
                     else
                     {
@@ -339,8 +338,6 @@ public class Network
                         buf.writeByte(ClientData.CID_BYPASS);
                         //Searcher ID
                         buf.writeInt(searcher.getEntityId());
-                        //Threat level
-                        buf.writeByte(-1);
                     }
                     else
                     {
@@ -371,7 +368,8 @@ public class Network
             {
                 for (; remaining > 0; remaining--)
                 {
-                    ClientData.OnPointData data = new ClientData.OnPointData(ClientData.getColor(buf.readByte()), buf.readInt(), buf.readInt(), buf.readByte());
+                    int color = ClientData.getColor(buf.readByte());
+                    ClientData.OnPointData data = new ClientData.OnPointData(color, buf.readInt(), buf.readInt(), color == COLOR_BYPASS ? -1 : buf.readByte());
                     list.add(data);
                 }
             }
@@ -379,7 +377,8 @@ public class Network
             {
                 for (; remaining > 0; remaining--)
                 {
-                    list.add(new ClientData.OnPointData(ClientData.getColor(buf.readByte()), buf.readInt(), -2, buf.readByte()));
+                    int color = ClientData.getColor(buf.readByte());
+                    list.add(new ClientData.OnPointData(color, buf.readInt(), -2, color == COLOR_BYPASS ? -1 : buf.readByte()));
                 }
             }
         }
