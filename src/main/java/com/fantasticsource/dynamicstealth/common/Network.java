@@ -48,6 +48,7 @@ public class Network
     @SubscribeEvent
     public static void sendClientData(TickEvent.PlayerTickEvent event)
     {
+        event.player.world.profiler.startSection("DStealth: Send client data");
         if (event.side == Side.SERVER && event.phase == TickEvent.Phase.END)
         {
             EntityPlayerMP player = (EntityPlayerMP) event.player;
@@ -93,6 +94,7 @@ public class Network
                 }
             }
         }
+        event.player.world.profiler.endSection();
     }
 
 
@@ -289,6 +291,7 @@ public class Network
         @Override
         public void toBytes(ByteBuf buf)
         {
+            player.world.profiler.startSection("DStealth: HUDPacket");
             EntityLivingBase searcher;
             int maxThreat = serverSettings.threat.maxThreat;
 
@@ -355,6 +358,7 @@ public class Network
                     }
                 }
             }
+            player.world.profiler.startSection("DStealth: HUDPacket");
         }
 
         @Override
