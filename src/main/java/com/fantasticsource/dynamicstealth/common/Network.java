@@ -300,7 +300,7 @@ public class Network
             {
                 for (EntityLivingBase searcher : Sight.seenEntities(player).keySet())
                 {
-                    if (searcher.getDistanceSq(playerPos) <= rangeSq) inputList.add(searcher);
+                    if (searcher.isEntityAlive() && searcher.getDistanceSq(playerPos) <= rangeSq) inputList.add(searcher);
                 }
             }
         }
