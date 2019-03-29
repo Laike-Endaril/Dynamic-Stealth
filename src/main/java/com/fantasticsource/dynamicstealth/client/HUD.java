@@ -80,7 +80,7 @@ public class HUD extends Gui
         GlStateManager.color(1, 1, 1, 1);
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void clientTick(TickEvent.ClientTickEvent event)
     {
         if (event.phase == TickEvent.Phase.START)

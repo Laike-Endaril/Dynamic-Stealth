@@ -423,7 +423,6 @@ public class Network
                     {
                         ClientData.opMap.clear();
                         int target = ClientData.targetData == null ? -1 : ClientData.targetData.targetID;
-                        ClientData.targetData = null;
                         for (ClientData.OnPointData data : packet.outputList)
                         {
                             ClientData.opMap.put(data.searcherID, data);
