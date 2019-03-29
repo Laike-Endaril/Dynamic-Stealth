@@ -223,6 +223,10 @@ dynamicstealth.config.allowPassiveRecognition=Recognize Passives Automatically
 dynamicstealth.config.allowPassiveRecognition.tooltip=FILLSCREEN FIXNEWLINES If enabled, clients' threat HUDs will display green for passive mobs.  If disabled, passives appear as idle (blue).\n \n
 dynamicstealth.config.allowStealthGauge=Allow Stealth Gauge
 dynamicstealth.config.allowStealthGauge.tooltip=FILLSCREEN FIXNEWLINES If enabled, clients can see their current stealth level in their HUD\n\n0 means disabled for all players\n1 means enabled for OP players ONLY\n2 means enabled for all players\n \n
+dynamicstealth.config.OPHUDRange=OPHUD Range
+dynamicstealth.config.OPHUDRange.tooltip=FILLSCREEN FIXNEWLINES The maximum distance at which on-point HUDs will appear on clients; impacts server performance if too high\n \n
+dynamicstealth.config.OPHUDDelay=OPHUD Update Delay
+dynamicstealth.config.OPHUDDelay.tooltip=FILLSCREEN FIXNEWLINES How many ticks there are between on-point HUD updates; increasing this will reduce server load\n \n
 
 dynamicstealth.config.playerSenses=Use player senses
 dynamicstealth.config.playerSenses.tooltip=FILLSCREEN FIXNEWLINES If enabled, stealth mechanics work on players\n\nBasically if this is turned on and that skeleton is holding still in the dark, you might not be able to see him until you get close\n \n

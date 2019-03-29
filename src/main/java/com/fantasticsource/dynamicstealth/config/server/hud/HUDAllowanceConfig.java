@@ -48,4 +48,16 @@ public class HUDAllowanceConfig
             })
     @Config.RangeInt(min = 0, max = 2)
     public int allowStealthGauge = 2;
+
+    @Config.Name("OPHUD Range")
+    @Config.LangKey(DynamicStealth.MODID + ".config.OPHUDRange")
+    @Config.Comment("The maximum distance at which on-point HUDs will appear on clients; impacts server performance if too high")
+    @Config.RangeInt(min = 0, max = Integer.MAX_VALUE >> 1)
+    public int opHUDRange = 100;
+
+    @Config.Name("OPHUD Update Delay")
+    @Config.LangKey(DynamicStealth.MODID + ".config.OPHUDDelay")
+    @Config.Comment("How many ticks there are between on-point HUD updates; increasing this will reduce server load")
+    @Config.RangeInt(min = 1)
+    public int opHUDDelay = 5;
 }

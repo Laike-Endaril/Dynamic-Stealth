@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -270,12 +271,12 @@ public class Network
     public static class HUDPacket implements IMessage
     {
         EntityPlayerMP player;
-        LinkedHashMap<EntityLivingBase, Double> map;
-
-        boolean targetElement;
+        boolean targetElement, update;
         int stealthLevel;
+        ArrayList<EntityLivingBase> inputList = new ArrayList<>();
 
-        ArrayList<ClientData.OnPointData> list = new ArrayList<>();
+        ArrayList<ClientData.OnPointData> outputList = new ArrayList<>();
+
 
         public HUDPacket() //Required; probably for when the packet is received
         {
@@ -289,7 +290,19 @@ public class Network
             if (ServerTickTimer.currentTick() % Sight.maxAITickrate == 0) this.stealthLevel = stealthLevel;
             else this.stealthLevel = Byte.MIN_VALUE + 1;
 
-            map = opHUD ? Sight.seenEntities(player) : new LinkedHashMap<>();
+            BlockPos playerPos = player.getPosition();
+            int rangeSq = serverSettings.hud.opHUDRange << 1;
+            int delay = serverSettings.hud.opHUDDelay;
+
+            update = opHUD && ServerTickTimer.currentTick() % delay == player.getEntityId() % delay;
+
+            if (update)
+            {
+                for (EntityLivingBase searcher : Sight.seenEntities(player).keySet())
+                {
+                    if (searcher.getDistanceSq(playerPos) <= rangeSq) inputList.add(searcher);
+                }
+            }
         }
 
         @Override
@@ -299,62 +312,66 @@ public class Network
 
             buf.writeByte(stealthLevel);
 
-            buf.writeBoolean(targetElement);
-            buf.writeInt(map.size());
-
-            if (targetElement)
+            buf.writeBoolean(update);
+            if (update)
             {
-                for (EntityLivingBase searcher : map.keySet())
+                buf.writeBoolean(targetElement);
+                buf.writeInt(inputList.size());
+
+                if (targetElement)
                 {
-                    if (EntityThreatData.bypassesThreat(searcher))
+                    for (EntityLivingBase searcher : inputList)
                     {
-                        //Color
-                        buf.writeByte(ClientData.CID_BYPASS);
-                        //Searcher ID
-                        buf.writeInt(searcher.getEntityId());
-                        //Target ID
-                        Entity target = (searcher instanceof EntityLiving) ? ((EntityLiving) searcher).getAttackTarget() : null;
-                        buf.writeInt(target == null ? -1 : target.getEntityId());
-                    }
-                    else
-                    {
-                        Threat.ThreatData data = Threat.get(searcher);
-                        byte cid = ClientData.getCID(player, searcher, data.target, data.threatLevel);
+                        if (EntityThreatData.bypassesThreat(searcher))
+                        {
+                            //Color
+                            buf.writeByte(ClientData.CID_BYPASS);
+                            //Searcher ID
+                            buf.writeInt(searcher.getEntityId());
+                            //Target ID
+                            Entity target = (searcher instanceof EntityLiving) ? ((EntityLiving) searcher).getAttackTarget() : null;
+                            buf.writeInt(target == null ? -1 : target.getEntityId());
+                        }
+                        else
+                        {
+                            Threat.ThreatData data = Threat.get(searcher);
+                            byte cid = ClientData.getCID(player, searcher, data.target, data.threatLevel);
 
-                        //Color
-                        buf.writeByte(cid);
-                        //Searcher ID
-                        buf.writeInt(searcher.getEntityId());
+                            //Color
+                            buf.writeByte(cid);
+                            //Searcher ID
+                            buf.writeInt(searcher.getEntityId());
 
-                        //Target ID
-                        if (canHaveClientTarget(cid)) buf.writeInt(data.target == null ? -1 : data.target.getEntityId());
-                        //Threat level
-                        if (canHaveThreat(cid)) buf.writeByte((int) (100D * data.threatLevel / maxThreat));
+                            //Target ID
+                            if (canHaveClientTarget(cid)) buf.writeInt(data.target == null ? -1 : data.target.getEntityId());
+                            //Threat level
+                            if (canHaveThreat(cid)) buf.writeByte((int) (100D * data.threatLevel / maxThreat));
+                        }
                     }
                 }
-            }
-            else
-            {
-                for (EntityLivingBase searcher : map.keySet())
+                else
                 {
-                    if (EntityThreatData.bypassesThreat(searcher))
+                    for (EntityLivingBase searcher : inputList)
                     {
-                        //Color
-                        buf.writeByte(ClientData.CID_BYPASS);
-                        //Searcher ID
-                        buf.writeInt(searcher.getEntityId());
-                    }
-                    else
-                    {
-                        Threat.ThreatData data = Threat.get(searcher);
-                        byte cid = ClientData.getCID(player, searcher, data.target, data.threatLevel);
+                        if (EntityThreatData.bypassesThreat(searcher))
+                        {
+                            //Color
+                            buf.writeByte(ClientData.CID_BYPASS);
+                            //Searcher ID
+                            buf.writeInt(searcher.getEntityId());
+                        }
+                        else
+                        {
+                            Threat.ThreatData data = Threat.get(searcher);
+                            byte cid = ClientData.getCID(player, searcher, data.target, data.threatLevel);
 
-                        //Color
-                        buf.writeByte(ClientData.getCID(player, searcher, data.target, data.threatLevel));
-                        //Searcher ID
-                        buf.writeInt(searcher.getEntityId());
-                        //Threat level
-                        if (canHaveThreat(cid)) buf.writeByte((int) (100D * data.threatLevel / maxThreat));
+                            //Color
+                            buf.writeByte(ClientData.getCID(player, searcher, data.target, data.threatLevel));
+                            //Searcher ID
+                            buf.writeInt(searcher.getEntityId());
+                            //Threat level
+                            if (canHaveThreat(cid)) buf.writeByte((int) (100D * data.threatLevel / maxThreat));
+                        }
                     }
                 }
             }
@@ -363,27 +380,28 @@ public class Network
         @Override
         public void fromBytes(ByteBuf buf)
         {
-            list.clear();
-
             stealthLevel = buf.readByte();
-
-            targetElement = buf.readBoolean();
-            int remaining = buf.readInt();
-
-            if (targetElement)
+            update = buf.readBoolean();
+            if (update)
             {
-                for (; remaining > 0; remaining--)
+                targetElement = buf.readBoolean();
+                int remaining = buf.readInt();
+
+                if (targetElement)
                 {
-                    int color = ClientData.getColor(buf.readByte());
-                    list.add(new OnPointData(color, buf.readInt(), canHaveClientTarget(color) ? buf.readInt() : -1, canHaveThreat(color) ? buf.readByte() : 0));
+                    for (; remaining > 0; remaining--)
+                    {
+                        int color = ClientData.getColor(buf.readByte());
+                        outputList.add(new OnPointData(color, buf.readInt(), canHaveClientTarget(color) ? buf.readInt() : -1, canHaveThreat(color) ? buf.readByte() : 0));
+                    }
                 }
-            }
-            else
-            {
-                for (; remaining > 0; remaining--)
+                else
                 {
-                    int color = ClientData.getColor(buf.readByte());
-                    list.add(new OnPointData(color, buf.readInt(), -2, canHaveThreat(color) ? buf.readByte() : 0));
+                    for (; remaining > 0; remaining--)
+                    {
+                        int color = ClientData.getColor(buf.readByte());
+                        outputList.add(new OnPointData(color, buf.readInt(), -2, canHaveThreat(color) ? buf.readByte() : 0));
+                    }
                 }
             }
         }
@@ -401,9 +419,16 @@ public class Network
                     int stealth = packet.stealthLevel;
                     if (stealth != Byte.MIN_VALUE + 1) ClientData.stealthLevel = stealth;
 
-                    for (ClientData.OnPointData data : packet.list)
+                    if (packet.update)
                     {
-                        ClientData.opMap.put(data.searcherID, data);
+                        ClientData.opMap.clear();
+                        int target = ClientData.targetData == null ? -1 : ClientData.targetData.targetID;
+                        ClientData.targetData = null;
+                        for (ClientData.OnPointData data : packet.outputList)
+                        {
+                            ClientData.opMap.put(data.searcherID, data);
+                            if (data.searcherID == target) ClientData.targetData = data;
+                        }
                     }
                 });
             }
