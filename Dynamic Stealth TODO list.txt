@@ -1,5 +1,8 @@
 CURRENTLY WORKING ON ===================================================
 
+Limit range on targeting data with server setting
+Limit HUD update frequency with server setting
+
 Make stealth level / visibility transitions smoother (ie. change at a rate)
 "maybe if they see you less than a second or two, instead of being alerted they could go look first"
 

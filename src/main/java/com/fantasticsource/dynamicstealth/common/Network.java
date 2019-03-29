@@ -90,7 +90,11 @@ public class Network
                 if (opHUD || stealthGauge)
                 {
                     double totalStealth = Sight.totalStealthLevel(player);
-                    WRAPPER.sendTo(new HUDPacket(player, opHUD, targetElement, !stealthGauge ? Byte.MIN_VALUE : totalStealth == Double.MAX_VALUE ? Byte.MIN_VALUE + 1 : (int) (totalStealth * 100)), player); //Byte.MIN_VALUE means disabled
+                    player.world.profiler.startSection("DStealth: Create HUDPacket");
+                    IMessage packet = new HUDPacket(player, opHUD, targetElement, !stealthGauge ? Byte.MIN_VALUE : totalStealth == Double.MAX_VALUE ? Byte.MIN_VALUE + 1 : (int) (totalStealth * 100)); //Byte.MIN_VALUE means disabled
+                    player.world.profiler.endStartSection("DStealth: Send HUDPacket");
+                    WRAPPER.sendTo(packet, player);
+                    player.world.profiler.endSection();
                 }
             }
         }
@@ -291,7 +295,6 @@ public class Network
         @Override
         public void toBytes(ByteBuf buf)
         {
-            player.world.profiler.startSection("DStealth: HUDPacket");
             EntityLivingBase searcher;
             int maxThreat = serverSettings.threat.maxThreat;
 
@@ -358,7 +361,6 @@ public class Network
                     }
                 }
             }
-            player.world.profiler.startSection("DStealth: HUDPacket");
         }
 
         @Override
