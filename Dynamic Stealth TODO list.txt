@@ -1,5 +1,8 @@
 CURRENTLY WORKING ON ===================================================
 
+Make stealth level / visibility transitions smoother (ie. change at a rate)
+"maybe if they see you less than a second or two, instead of being alerted they could go look first"
+
 Add lang keys for all println() calls (make sure to use deprecated I18n, not the non-deprecated one)
 
 Add Morph / Metamorph stealth bonus
@@ -9,9 +12,6 @@ Brush up config...
 ...move all threat rates/changes into threat settings if they exist in other categories
 ...maybe merge flee, rally, etc categories, since they exist in two places (AI and interactions)
 ...change setting names to re-order config setting elements so the order makes sense, since we have lang files now for displayed names
-
-Make stealth level / visibility transitions smoother (ie. change at a rate)
-"maybe if they see you less than a second or two, instead of being alerted they could go look first"
 
 Directional indicators...
 ...add optional "damaged from" indicator, which draws an indicator pointing the direction damage was recently received from
