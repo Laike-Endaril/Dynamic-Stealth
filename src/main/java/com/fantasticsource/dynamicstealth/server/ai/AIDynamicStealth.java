@@ -363,9 +363,7 @@ public class AIDynamicStealth extends EntityAIBase
             }
             else
             {
-                //Don't see target; warn, but stay here and look in direction of last known position
-                warn(searcher, target, lastKnownPosition, false);
-
+                //Don't see target; stay here and look in direction of last known position
                 cornerLookYaw = (float) MCTools.getYawDeg(searcher.getPositionVector(), new Vec3d(lastKnownPosition), TRIG_TABLE);
                 searcher.rotationYaw = cornerLookYaw;
                 searcher.rotationYawHead = cornerLookYaw;
