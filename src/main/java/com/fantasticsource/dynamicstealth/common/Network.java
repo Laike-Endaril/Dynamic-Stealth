@@ -6,7 +6,6 @@ import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.ServerTickTimer;
-import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -25,6 +24,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static com.fantasticsource.dynamicstealth.common.ClientData.*;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
@@ -116,7 +116,7 @@ public class Network
 
     public static class VisibilityPacket implements IMessage
     {
-        ExplicitPriorityQueue<EntityLivingBase> queue;
+        LinkedHashMap<EntityLivingBase, Double> inputMap;
         LinkedHashMap<Integer, Float> visibilityMap;
 
         public VisibilityPacket() //Required; probably for when the packet is received
@@ -125,20 +125,20 @@ public class Network
 
         public VisibilityPacket(EntityPlayerMP player)
         {
-            queue = Sight.seenEntities(player);
+            inputMap = Sight.seenEntities(player);
         }
 
 
         @Override
         public void toBytes(ByteBuf buf)
         {
-            int i = queue.size();
+            int i = inputMap.size();
             buf.writeInt(i);
 
-            for (; i > 0; i--)
+            for (Map.Entry<EntityLivingBase, Double> entry : inputMap.entrySet())
             {
-                buf.writeFloat((float) (1d - queue.peekPriority()));
-                buf.writeInt(queue.poll().getEntityId());
+                buf.writeFloat((float) (1d - entry.getValue()));
+                buf.writeInt(entry.getKey().getEntityId());
             }
         }
 
@@ -270,7 +270,7 @@ public class Network
     public static class HUDPacket implements IMessage
     {
         EntityPlayerMP player;
-        ExplicitPriorityQueue<EntityLivingBase> queue;
+        LinkedHashMap<EntityLivingBase, Double> map;
 
         boolean targetElement;
         int stealthLevel;
@@ -289,25 +289,23 @@ public class Network
             if (ServerTickTimer.currentTick() % Sight.maxAITickrate == 0) this.stealthLevel = stealthLevel;
             else this.stealthLevel = Byte.MIN_VALUE + 1;
 
-            queue = opHUD ? Sight.seenEntities(player) : new ExplicitPriorityQueue<>();
+            map = opHUD ? Sight.seenEntities(player) : new LinkedHashMap<>();
         }
 
         @Override
         public void toBytes(ByteBuf buf)
         {
-            EntityLivingBase searcher;
             int maxThreat = serverSettings.threat.maxThreat;
 
             buf.writeByte(stealthLevel);
 
             buf.writeBoolean(targetElement);
-            buf.writeInt(queue.size());
+            buf.writeInt(map.size());
 
             if (targetElement)
             {
-                while (queue.size() > 0)
+                for (EntityLivingBase searcher : map.keySet())
                 {
-                    searcher = queue.poll();
                     if (EntityThreatData.bypassesThreat(searcher))
                     {
                         //Color
@@ -337,9 +335,8 @@ public class Network
             }
             else
             {
-                while (queue.size() > 0)
+                for (EntityLivingBase searcher : map.keySet())
                 {
-                    searcher = queue.poll();
                     if (EntityThreatData.bypassesThreat(searcher))
                     {
                         //Color

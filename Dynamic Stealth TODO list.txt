@@ -3,6 +3,10 @@ CURRENTLY WORKING ON ===================================================
 Limit range on targeting data with server setting
 Limit HUD update frequency with server setting
 
+"Lock Target" key (press to lock/unlock current target)
+...when target is locked, send target to server, which then allows you to see hud data even if it's far away
+"Aim Assist" key (hold to automatically face current target)
+
 Make stealth level / visibility transitions smoother (ie. change at a rate)
 "maybe if they see you less than a second or two, instead of being alerted they could go look first"
 
@@ -19,9 +23,6 @@ Brush up config...
 Directional indicators...
 ...add optional "damaged from" indicator, which draws an indicator pointing the direction damage was recently received from
 ...add optional touch detection indicator for players (see to do in DynamicStealth.java)
-
-"Lock Target" key (press to lock/unlock current target)
-"Aim Assist" key (hold to automatically face current target)
 
 Remove special filter for ice and fire mobs when they release the fix on their side (they already fixed in a commit, it's just not released yet)
 

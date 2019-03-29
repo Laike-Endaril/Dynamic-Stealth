@@ -8,7 +8,6 @@ import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.ServerTickTimer;
 import com.fantasticsource.tools.Tools;
-import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -48,7 +47,7 @@ public class Sight
     private static Map<Entity, Double> stealthLevels = new LinkedHashMap<>();
 
     private static Map<EntityLivingBase, Map<Entity, SeenData>> recentlySeenMap = new LinkedHashMap<>();
-    private static Map<Pair<EntityPlayerMP, Boolean>, ExplicitPriorityQueue<EntityLivingBase>> playerSeenThisTickMap = new LinkedHashMap<>();
+    private static Map<Pair<EntityPlayerMP, Boolean>, LinkedHashMap<EntityLivingBase, Double>> playerSeenThisTickMap = new LinkedHashMap<>();
 
 
     @SubscribeEvent
@@ -230,25 +229,25 @@ public class Sight
     }
 
 
-    public static ExplicitPriorityQueue<EntityLivingBase> seenEntities(EntityPlayerMP player)
+    public static LinkedHashMap<EntityLivingBase, Double> seenEntities(EntityPlayerMP player)
     {
         player.world.profiler.startSection("DStealth: Seen Entities");
-        ExplicitPriorityQueue<EntityLivingBase> queue = playerSeenThisTickMap.get(new Pair<>(player, false));
-        if (queue != null)
+        LinkedHashMap<EntityLivingBase, Double> map = playerSeenThisTickMap.get(new Pair<>(player, false));
+        if (map != null)
         {
             player.world.profiler.endSection();
-            return queue.clone();
+            return (LinkedHashMap<EntityLivingBase, Double>) map.clone();
         }
 
-        queue = seenEntitiesInternal(player);
-        playerSeenThisTickMap.put(new Pair<>(player, false), queue.clone());
+        map = seenEntitiesInternal(player);
+        playerSeenThisTickMap.put(new Pair<>(player, false), (LinkedHashMap<EntityLivingBase, Double>) map.clone());
         player.world.profiler.endSection();
-        return queue;
+        return map;
     }
 
-    private static ExplicitPriorityQueue<EntityLivingBase> seenEntitiesInternal(EntityPlayerMP player)
+    private static LinkedHashMap<EntityLivingBase, Double> seenEntitiesInternal(EntityPlayerMP player)
     {
-        ExplicitPriorityQueue<EntityLivingBase> queue = new ExplicitPriorityQueue<>(10);
+        LinkedHashMap<EntityLivingBase, Double> result = new LinkedHashMap<>();
         Entity[] loadedEntities = player.world.loadedEntityList.toArray(new Entity[player.world.loadedEntityList.size()]);
 
         if (serverSettings.senses.usePlayerSenses)
@@ -258,7 +257,7 @@ public class Sight
                 if (entity instanceof EntityLivingBase && entity != player)
                 {
                     double stealthLevel = visualStealthLevel(player, entity);
-                    if (stealthLevel <= 1) queue.add((EntityLivingBase) entity, stealthLevel);
+                    if (stealthLevel <= 1) result.put((EntityLivingBase) entity, stealthLevel);
                 }
             }
         }
@@ -268,12 +267,12 @@ public class Sight
             {
                 if (entity instanceof EntityLivingBase && entity != player)
                 {
-                    queue.add((EntityLivingBase) entity, -888);
+                    result.put((EntityLivingBase) entity, -888d);
                 }
             }
         }
 
-        return queue;
+        return result;
     }
 
 
