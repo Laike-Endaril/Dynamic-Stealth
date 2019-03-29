@@ -555,6 +555,14 @@ public class HUD extends Gui
 
                 if (clientSettings.hudSettings.targetingStyle.components.name) elements.add(entity.getName());
 
+                if (clientSettings.hudSettings.targetingStyle.components.hp && entity instanceof EntityLivingBase)
+                {
+                    EntityLivingBase livingBase = (EntityLivingBase) entity;
+                    float hp = livingBase.getHealth();
+                    float max = livingBase.getMaxHealth();
+                    elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.hp", hp, max, (int) (hp / max * 100)));
+                }
+
                 if (clientSettings.hudSettings.targetingStyle.components.target) //Actually now "action" and not just "target" TODO remove this comment when var name is changed
                 {
                     String action;

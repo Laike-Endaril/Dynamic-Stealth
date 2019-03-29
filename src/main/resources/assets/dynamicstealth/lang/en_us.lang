@@ -30,6 +30,8 @@ dynamicstealth.cmd.reloaded3=Note: Some things may not update correctly until se
 
 
 
+dynamicstealth.hud.hp=HP: %s / %s (%s%%)
+
 dynamicstealth.hud.unknown=???
 
 dynamicstealth.hud.action=Action: %s
@@ -159,6 +161,8 @@ dynamicstealth.config.targetingComponents=Components
 
 dynamicstealth.config.targetShowName=Target's Name
 dynamicstealth.config.targetShowName.tooltip=FILLSCREEN FIXNEWLINES If true, the targeted entity's name is shown (if available)\n \n
+dynamicstealth.config.targetShowHP=Target's Health
+dynamicstealth.config.targetShowHP.tooltip=FILLSCREEN FIXNEWLINES If true, the targeted entity's health is shown (if available)\n \n
 dynamicstealth.config.targetShowAction=Target's Action
 dynamicstealth.config.targetShowAction.tooltip=FILLSCREEN FIXNEWLINES If true, the targeted entity's current action is shown (if available)\n \n
 dynamicstealth.config.targetShowThreat=Target's Threat

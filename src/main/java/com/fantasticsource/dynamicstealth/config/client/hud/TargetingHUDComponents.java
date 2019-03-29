@@ -10,6 +10,11 @@ public class TargetingHUDComponents
     @Config.Comment("If true, the targeted entity's name is shown (if available)")
     public boolean name = true;
 
+    @Config.Name("Target's Health")
+    @Config.LangKey(DynamicStealth.MODID + ".config.targetShowHP")
+    @Config.Comment("If true, the targeted entity's health is shown (if available)")
+    public boolean hp = true;
+
     @Config.Name("Target's Target") //TODO on config version change change to "Target's Action"
     @Config.LangKey(DynamicStealth.MODID + ".config.targetShowAction")
     @Config.Comment("If true, the targeted entity's current action is shown (if available)")

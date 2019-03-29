@@ -77,7 +77,7 @@ public class TargetingHUDStyleConfig
     @Config.Name("State-Colored Text")
     @Config.LangKey(DynamicStealth.MODID + ".config.targetingTextStateColor")
     @Config.Comment("If true, the targeting HUD text is drawn in a color pertaining to the target's current state")
-    public boolean stateColoredText = true;
+    public boolean stateColoredText = false;
 
     @Config.Name("Text Scale")
     @Config.LangKey(DynamicStealth.MODID + ".config.targetingTextScale")
