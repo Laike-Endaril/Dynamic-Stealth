@@ -149,11 +149,13 @@ public class AIDynamicStealth extends EntityAIBase
     @Override
     public boolean shouldExecute()
     {
+        searcher.world.profiler.startSection("DStealth: AI");
         //Prevent any strangeness
         if (!searcher.isEntityAlive())
         {
             mode(MODE_NONE);
             Threat.set(searcher, null, 0);
+            searcher.world.profiler.endSection();
             return false;
         }
 
@@ -171,19 +173,25 @@ public class AIDynamicStealth extends EntityAIBase
                 clearAIPath();
                 warn(searcher, attackTarget, attackTarget.getPosition(), true);
                 MinecraftForge.EVENT_BUS.post(new BasicEvent.TargetSeenEvent(searcher));
+                searcher.world.profiler.endSection();
                 return false;
             }
 
             //No suitable target, old or new, and threat is <= 0
             searcher.setAttackTarget(null);
             cancelTasksRequiringAttackTarget(searcher.tasks);
+            searcher.world.profiler.endSection();
             return false;
         }
 
 
         //Threat > 0
 
-        if (fleeReason != FLEE_NONE) return true;
+        if (fleeReason != FLEE_NONE)
+        {
+            searcher.world.profiler.endSection();
+            return true;
+        }
 
         EntityLivingBase threatTarget = threatData.target;
 
@@ -198,11 +206,13 @@ public class AIDynamicStealth extends EntityAIBase
                 clearAIPath();
                 warn(searcher, attackTarget, attackTarget.getPosition(), true);
                 MinecraftForge.EVENT_BUS.post(new BasicEvent.TargetSeenEvent(searcher));
+                searcher.world.profiler.endSection();
                 return false;
             }
 
             //No suitable target, old or new, but threat is > 0
             cancelTasksRequiringAttackTarget(searcher.tasks);
+            searcher.world.profiler.endSection();
             return unseenTargetDegredation(threat);
         }
 
@@ -240,6 +250,7 @@ public class AIDynamicStealth extends EntityAIBase
                     if (serverSettings.ai.cantReach.flee)
                     {
                         fleeReason = FLEE_CANTREACH;
+                        searcher.world.profiler.endSection();
                         return true;
                     }
                 }
@@ -255,11 +266,13 @@ public class AIDynamicStealth extends EntityAIBase
             clearAIPath();
             searcher.setAttackTarget(threatTarget);
             Threat.setThreat(searcher, threat + serverSettings.threat.seenTargetThreatRate);
+            searcher.world.profiler.endSection();
             return false;
         }
 
         //Target's current position is unknown
         cancelTasksRequiringAttackTarget(searcher.tasks);
+        searcher.world.profiler.endSection();
         return unseenTargetDegredation(threat);
     }
 
@@ -294,6 +307,7 @@ public class AIDynamicStealth extends EntityAIBase
     @Override
     public void startExecuting()
     {
+        searcher.world.profiler.startSection("DStealth: AI");
         lastPos = null;
         timeAtPos = 0;
 
@@ -304,6 +318,7 @@ public class AIDynamicStealth extends EntityAIBase
 
             MinecraftForge.EVENT_BUS.post(new BasicEvent.SearchEvent(searcher));
         }
+        searcher.world.profiler.endSection();
     }
 
     @Override
@@ -379,11 +394,13 @@ public class AIDynamicStealth extends EntityAIBase
     @Override
     public void updateTask()
     {
+        searcher.world.profiler.startSection("DStealth: AI");
         //Prevent any strangeness
         if (!searcher.isEntityAlive())
         {
             mode(MODE_NONE);
             Threat.set(searcher, null, 0);
+            searcher.world.profiler.endSection();
             return;
         }
 
@@ -416,7 +433,11 @@ public class AIDynamicStealth extends EntityAIBase
             if (distSquared < 1 || timeAtPos > 60) mode(MODE_SPIN);
             else try
             {
-                if (!(boolean) navigatorCanNavigateMethod.invoke(navigator)) return;
+                if (!(boolean) navigatorCanNavigateMethod.invoke(navigator))
+                {
+                    searcher.world.profiler.endSection();
+                    return;
+                }
 
                 //We can navigate, and have not reached lastKnownPosition
                 Path newPath;
@@ -482,7 +503,11 @@ public class AIDynamicStealth extends EntityAIBase
             if (distSquared < 1 || timeAtPos > 60) mode(MODE_SPIN);
             else try
             {
-                if (!(boolean) navigatorCanNavigateMethod.invoke(navigator)) return;
+                if (!(boolean) navigatorCanNavigateMethod.invoke(navigator))
+                {
+                    searcher.world.profiler.endSection();
+                    return;
+                }
 
                 //We can navigate, and have not reached lastKnownPosition
                 //Position in range, because we calced it in range inside mode() method
@@ -599,6 +624,7 @@ public class AIDynamicStealth extends EntityAIBase
             {
                 clearAIPath();
                 if (Threat.getThreat(searcher) > 0) restart(lastKnownPosition);
+                searcher.world.profiler.endSection();
                 return;
             }
 
@@ -692,6 +718,7 @@ public class AIDynamicStealth extends EntityAIBase
                 }
             }
         }
+        searcher.world.profiler.endSection();
     }
 
     private void findShortRangeGoalPos()

@@ -110,19 +110,22 @@ public class Sight
         if (searcher == null || target == null || !searcher.world.isBlockLoaded(searcher.getPosition()) || !target.world.isBlockLoaded(target.getPosition())) return 777;
         if (searcher.world != target.world) return 777;
 
+        searcher.world.profiler.startSection("DStealth: Visual Stealth");
         Map<Entity, SeenData> map = recentlySeenMap.get(searcher);
 
         //If applicable, load from cache and return
         if (map != null && useCache)
         {
             SeenData data = map.get(target);
-            if (data != null && data.lastUpdateTime == currentTick()) return data.lastStealthLevel;
+            if (data != null && data.lastUpdateTime == currentTick())
+            {
+                searcher.world.profiler.endSection();
+                return data.lastStealthLevel;
+            }
         }
 
         //Calculate
-        searcher.world.profiler.startSection("DS Sight checks");
         double result = visualStealthLevelInternal(searcher, target, yaw, pitch);
-        searcher.world.profiler.endSection();
 
         //Save cache
         if (!EntityThreatData.isPassive(searcher))
@@ -151,6 +154,7 @@ public class Sight
             }
         }
 
+        searcher.world.profiler.endSection();
         return result;
     }
 
@@ -228,11 +232,17 @@ public class Sight
 
     public static ExplicitPriorityQueue<EntityLivingBase> seenEntities(EntityPlayerMP player)
     {
+        player.world.profiler.startSection("DStealth: Seen Entities");
         ExplicitPriorityQueue<EntityLivingBase> queue = playerSeenThisTickMap.get(new Pair<>(player, false));
-        if (queue != null) return queue.clone();
+        if (queue != null)
+        {
+            player.world.profiler.endSection();
+            return queue.clone();
+        }
 
         queue = seenEntitiesInternal(player);
         playerSeenThisTickMap.put(new Pair<>(player, false), queue.clone());
+        player.world.profiler.endSection();
         return queue;
     }
 

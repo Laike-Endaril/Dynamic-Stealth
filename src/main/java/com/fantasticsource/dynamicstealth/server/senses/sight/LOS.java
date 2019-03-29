@@ -19,6 +19,7 @@ public class LOS
     //Yes I'm lazy, I know
     public static boolean rayTraceBlocks(World world, Vec3d vec, Vec3d vecEnd, boolean collideOnAllSolids)
     {
+        world.profiler.startSection("DStealth: Raytrace");
         if (vec.x < vecEnd.x)
         {
             Vec3d swap = vec;
@@ -36,19 +37,31 @@ public class LOS
 
         //Check starting block
         BlockPos blockPos = new BlockPos(x, y, z);
-        if (!world.isBlockLoaded(blockPos)) return false;
+        if (!world.isBlockLoaded(blockPos))
+        {
+            world.profiler.endSection();
+            return false;
+        }
 
 
         IBlockState blockState = world.getBlockState(blockPos);
         if ((collideOnAllSolids || !canSeeThrough(blockState)) && blockState.getCollisionBoundingBox(world, blockPos) != Block.NULL_AABB)
         {
-            if (blockState.collisionRayTrace(world, blockPos, vec, vecEnd) != null) return false;
+            if (blockState.collisionRayTrace(world, blockPos, vec, vecEnd) != null)
+            {
+                world.profiler.endSection();
+                return false;
+            }
         }
 
         //Iterate through all non-starting blocks and check them
         for (int i = 1; i <= MAX_ITERATIONS; i++)
         {
-            if (x == endX && y == endY && z == endZ) return true;
+            if (x == endX && y == endY && z == endZ)
+            {
+                world.profiler.endSection();
+                return true;
+            }
 
             boolean xMotion = true;
             boolean yMotion = true;
@@ -110,15 +123,24 @@ public class LOS
             z = MathHelper.floor(vec.z) - (enumfacing == EnumFacing.SOUTH ? 1 : 0);
 
             blockPos = new BlockPos(x, y, z);
-            if (!world.isBlockLoaded(blockPos)) return false;
+            if (!world.isBlockLoaded(blockPos))
+            {
+                world.profiler.endSection();
+                return false;
+            }
 
             blockState = world.getBlockState(blockPos);
             if ((collideOnAllSolids || !canSeeThrough(blockState)) && blockState.getCollisionBoundingBox(world, blockPos) != Block.NULL_AABB)
             {
-                if (blockState.collisionRayTrace(world, blockPos, vec, vecEnd) != null) return false;
+                if (blockState.collisionRayTrace(world, blockPos, vec, vecEnd) != null)
+                {
+                    world.profiler.endSection();
+                    return false;
+                }
             }
         }
 
+        world.profiler.endSection();
         return false; //Too far to see
     }
 
