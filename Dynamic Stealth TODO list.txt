@@ -1,7 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-In theory, server-side stealth level smoothing should be working
-In actuality, I'm getting what I'm fairly certain is an "impossible" NPE
+Something is very wrong with the stealth gauge render values; need to check entire data pipeline
 
 Do sinuous partialtick smoothing of stealth gauge
 
