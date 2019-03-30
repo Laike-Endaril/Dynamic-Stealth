@@ -9,6 +9,7 @@ import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.ServerTickTimer;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.datastructures.Pair;
+import com.fantasticsource.tools.datastructures.WrappingQueue;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -41,10 +42,9 @@ import static com.fantasticsource.mctools.ServerTickTimer.currentTick;
 
 public class Sight
 {
-    private static final int SEEN_RECENT_TIMER = 60;
+    private static final int SEEN_RECENT_TIMER = 60, GLOBAL_STEALTH_SMOOTHING = 3;
 
-    public static int maxAITickrate = 1;
-    private static Map<Entity, Double> stealthLevels = new LinkedHashMap<>();
+    private static Map<EntityPlayer, Pair<WrappingQueue<Double>, Long>> globalPlayerStealthHistory = new LinkedHashMap<>();
 
     private static Map<EntityLivingBase, Map<Entity, SeenData>> recentlySeenMap = new LinkedHashMap<>();
     private static Map<Pair<EntityPlayerMP, Boolean>, LinkedHashMap<EntityLivingBase, Double>> playerSeenThisTickMap = new LinkedHashMap<>();
@@ -55,13 +55,27 @@ public class Sight
     {
         if (event.phase == TickEvent.Phase.END)
         {
-            if (ServerTickTimer.currentTick() % maxAITickrate == 0) stealthLevels.clear();
             playerSeenThisTickMap.clear();
-            recentlySeenMap.entrySet().removeIf(Sight::entityRemoveIfEmpty);
+            recentlySeenMap.entrySet().removeIf(Sight::updateRecentlySeen);
+            globalPlayerStealthHistory.entrySet().removeIf(Sight::updateStealthHistory);
         }
     }
 
-    private static boolean entityRemoveIfEmpty(Map.Entry<EntityLivingBase, Map<Entity, SeenData>> entry)
+    private static boolean updateStealthHistory(Map.Entry<EntityPlayer, Pair<WrappingQueue<Double>, Long>> entry)
+    {
+        if (!entry.getKey().isEntityAlive()) return true;
+
+        Pair<WrappingQueue<Double>, Long> pair = entry.getValue();
+        long tick = currentTick();
+        if (pair.getValue() != tick)
+        {
+            pair.getKey().add(1d);
+            pair.setValue(tick);
+        }
+        return false;
+    }
+
+    private static boolean updateRecentlySeen(Map.Entry<EntityLivingBase, Map<Entity, SeenData>> entry)
     {
         if (!entry.getKey().isEntityAlive()) return true;
 
@@ -111,12 +125,13 @@ public class Sight
 
         searcher.world.profiler.startSection("DStealth: Visual Stealth");
         Map<Entity, SeenData> map = recentlySeenMap.get(searcher);
+        long tick = ServerTickTimer.currentTick();
 
         //If applicable, load from cache and return
         if (map != null && useCache)
         {
             SeenData data = map.get(target);
-            if (data != null && data.lastUpdateTime == currentTick())
+            if (data != null && data.lastUpdateTime == tick)
             {
                 searcher.world.profiler.endSection();
                 return data.lastStealthLevel;
@@ -126,11 +141,24 @@ public class Sight
         //Calculate
         double result = visualStealthLevelInternal(searcher, target, yaw, pitch);
 
-        //Save cache
-        if ((searcher instanceof EntityLiving && ((EntityLiving) searcher).getAttackTarget() == target) || (!EntityThreatData.isPassive(searcher) && !EntityThreatData.bypassesThreat(searcher)))
+        //Save first cache
+        if (target instanceof EntityPlayer && ((searcher instanceof EntityLiving && ((EntityLiving) searcher).getAttackTarget() == target) || (!EntityThreatData.isPassive(searcher) && !EntityThreatData.bypassesThreat(searcher))))
         {
-            stealthLevels.put(target, Tools.min(stealthLevels.getOrDefault(target, result - 1), result - 1));
+            EntityPlayer player = (EntityPlayer) target;
+            Pair<WrappingQueue<Double>, Long> pair = globalPlayerStealthHistory.computeIfAbsent(player, k -> new Pair<>(new WrappingQueue<>(GLOBAL_STEALTH_SMOOTHING + 2), tick - 1));
+            WrappingQueue<Double> queue = pair.getKey();
+
+            double clampedResult = Tools.min(Tools.max(-1, result - 1), 1);
+            if (queue.size() != 0 && pair.getValue() == tick)
+            {
+                queue.setNewestToOldest(0, Tools.min(clampedResult, queue.getNewestToOldest(0)));
+            }
+            else queue.add(clampedResult);
+
+            pair.setValue(tick);
         }
+
+        //Save second cache
         if (map == null)
         {
             map = new LinkedHashMap<>();
@@ -143,12 +171,12 @@ public class Sight
             if (data == null) map.put(target, new SeenData(result));
             else
             {
-                data.lastUpdateTime = currentTick();
+                data.lastUpdateTime = tick;
                 data.lastStealthLevel = result;
                 if (result <= 1)
                 {
                     data.seen = true;
-                    data.lastSeenTime = currentTick();
+                    data.lastSeenTime = tick;
                 }
             }
         }
@@ -401,9 +429,48 @@ public class Sight
         return Math.sqrt(distSquared) / (distanceThreshold * lightFactor * configMultipliers * attributeMultipliers);
     }
 
-    public static double totalStealthLevel(Entity entity)
+    public static double globalPlayerStealthLevel(EntityPlayer player)
     {
-        return Tools.min(Tools.max(stealthLevels.getOrDefault(entity, Double.MAX_VALUE), -1), 1);
+        WrappingQueue<Double> queue;
+        long tick = currentTick();
+
+        Pair<WrappingQueue<Double>, Long> pair = globalPlayerStealthHistory.get(player);
+        if (pair == null)
+        {
+            queue = new WrappingQueue<>(GLOBAL_STEALTH_SMOOTHING + 2);
+            queue.add(1d);
+            globalPlayerStealthHistory.put(player, new Pair<>(queue, tick));
+            return 1;
+        }
+
+        queue = pair.getKey();
+        if (pair.getValue() != tick)
+        {
+            queue.add(1d);
+            pair.setValue(tick);
+        }
+
+        int size = queue.size();
+        if (size == 1) return 1;
+        if (size == 2) return queue.getOldestToNewest(0);
+
+        if (size < GLOBAL_STEALTH_SMOOTHING + 2)
+        {
+            double result = 1;
+            for (int i = size - 2; i >= 0; i--)
+            {
+                result = Tools.min(result, queue.getOldestToNewest(i));
+            }
+            return result;
+        }
+
+        double first = queue.getOldestToNewest(0), result = 1;
+        for (int i = 1; i < size - 1; i++)
+        {
+            result = Tools.min(result, queue.getOldestToNewest(i));
+            if (result < first) return result;
+        }
+        return (first + result) / 2;
     }
 
     private static class SeenData

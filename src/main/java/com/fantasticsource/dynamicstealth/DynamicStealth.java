@@ -570,9 +570,7 @@ public class DynamicStealth
         Entity entity = event.getEntity();
         if (entity instanceof EntityLiving)
         {
-            EntityLiving living = (EntityLiving) entity;
-            Sight.maxAITickrate = Tools.max(living.tasks.tickRate, Sight.maxAITickrate);
-            if (!Compat.customnpcs || !(NpcAPI.Instance().getIEntity(living) instanceof ICustomNpc)) livingJoinWorld(living);
+            if (!Compat.customnpcs || !(NpcAPI.Instance().getIEntity(entity) instanceof ICustomNpc)) livingJoinWorld((EntityLiving) entity);
         }
     }
 
