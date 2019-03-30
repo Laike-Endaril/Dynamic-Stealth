@@ -365,7 +365,8 @@ public class HUD extends Gui
         float alpha = (float) clientSettings.hudSettings.mainStyle.stealthGaugeAlpha;
         if (alpha <= 0) return;
 
-        int stealth = ClientData.stealthLevel;
+        float partialTick = mc.getRenderPartialTicks();
+        float stealth = partialTick * (ClientData.stealthLevel - ClientData.prevStealthLevel) + ClientData.prevStealthLevel;
         if (stealth == Byte.MIN_VALUE) return;
 
 
@@ -427,7 +428,7 @@ public class HUD extends Gui
             Color c = new Color(Integer.parseInt(clientSettings.hudSettings.mainStyle.stealthGaugeColor, 16), true);
             GlStateManager.color(c.rf(), c.gf(), c.bf(), alpha);
 
-            int index = Tools.min((100 - stealth) >> 2, 49);
+            int index = Tools.min((100 - (int) stealth) >> 2, 49);
             int gridX = index % 10;
             int gridY = index / 10;
 

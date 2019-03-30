@@ -33,7 +33,7 @@ public class ClientData
             COLOR_FLEEING = 0x770077,               //Target: maybe, Threat: yes
             COLOR_BYPASS = 0x555555;                //Target: maybe, Threat: no
 
-    public static int stealthLevel = Byte.MIN_VALUE;
+    public static int stealthLevel = Byte.MIN_VALUE, prevStealthLevel = Byte.MIN_VALUE;
 
     public static boolean soulSight = false;
     public static boolean usePlayerSenses = false;
@@ -49,6 +49,7 @@ public class ClientData
     public static void clearClientData(FMLNetworkEvent.ClientDisconnectionFromServerEvent event)
     {
         stealthLevel = Byte.MIN_VALUE;
+        prevStealthLevel = Byte.MIN_VALUE;
 
         soulSight = false;
         usePlayerSenses = false;

@@ -1,8 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-Something is very wrong with the stealth gauge render values; need to check entire data pipeline
-
-Do sinuous partialtick smoothing of stealth gauge
+Attacking zombies don't always count for stealth gauge?
 
 Do sight LOS checks in order of highest light level to lowest, and return light level on successful LOS check
 

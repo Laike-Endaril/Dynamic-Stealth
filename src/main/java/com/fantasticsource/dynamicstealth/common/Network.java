@@ -90,9 +90,8 @@ public class Network
 
                 if (opHUD || stealthGauge)
                 {
-                    double totalStealth = Sight.globalPlayerStealthLevel(player);
                     player.world.profiler.startSection("DStealth: Create HUDPacket");
-                    IMessage packet = new HUDPacket(player, opHUD, targetElement, !stealthGauge ? Byte.MIN_VALUE : totalStealth == Double.MAX_VALUE ? Byte.MIN_VALUE + 1 : (int) (totalStealth * 100)); //Byte.MIN_VALUE means disabled
+                    IMessage packet = new HUDPacket(player, opHUD, targetElement, !stealthGauge ? Byte.MIN_VALUE : (int) (Sight.globalPlayerStealthLevel(player) * 100)); //Byte.MIN_VALUE means disabled
                     player.world.profiler.endStartSection("DStealth: Send HUDPacket");
                     WRAPPER.sendTo(packet, player);
                     player.world.profiler.endSection();
@@ -415,6 +414,11 @@ public class Network
             {
                 Minecraft.getMinecraft().addScheduledTask(() ->
                 {
+                    if ((ClientData.stealthLevel == Byte.MIN_VALUE || packet.stealthLevel == Byte.MIN_VALUE) && ClientData.stealthLevel != packet.stealthLevel)
+                    {
+                        ClientData.prevStealthLevel = packet.stealthLevel;
+                    }
+                    else ClientData.prevStealthLevel = ClientData.stealthLevel;
                     ClientData.stealthLevel = packet.stealthLevel;
 
                     if (packet.update)
