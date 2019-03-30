@@ -127,7 +127,7 @@ public class Sight
         double result = visualStealthLevelInternal(searcher, target, yaw, pitch);
 
         //Save cache
-        if (!EntityThreatData.isPassive(searcher))
+        if ((searcher instanceof EntityLiving && ((EntityLiving) searcher).getAttackTarget() == target) || (!EntityThreatData.isPassive(searcher) && !EntityThreatData.bypassesThreat(searcher)))
         {
             stealthLevels.put(target, Tools.min(stealthLevels.getOrDefault(target, result - 1), result - 1));
         }
