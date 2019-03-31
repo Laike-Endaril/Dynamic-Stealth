@@ -53,45 +53,57 @@ public class Network
         if (event.side == Side.SERVER && event.phase == TickEvent.Phase.END)
         {
             EntityPlayerMP player = (EntityPlayerMP) event.player;
-            if (player.world.loadedEntityList.contains(player) && player.isEntityAlive())
+            if (player.world.loadedEntityList.contains(player))
             {
-                if (EntitySightData.hasSoulSight(player))
+                if (player.isEntityAlive())
                 {
-                    if (!EntitySightData.soulSightCache.contains(player))
+                    if (EntitySightData.hasSoulSight(player))
                     {
-                        EntitySightData.soulSightCache.add(player);
-                        WRAPPER.sendTo(new SoulSightPacket(true), player);
+                        if (!EntitySightData.soulSightCache.contains(player))
+                        {
+                            EntitySightData.soulSightCache.add(player);
+                            WRAPPER.sendTo(new SoulSightPacket(true), player);
+                        }
+                    }
+                    else
+                    {
+                        if (EntitySightData.soulSightCache.contains(player))
+                        {
+                            EntitySightData.soulSightCache.remove(player);
+                            WRAPPER.sendTo(new SoulSightPacket(false), player);
+                        }
+                    }
+
+                    if (serverSettings.senses.usePlayerSenses) WRAPPER.sendTo(new VisibilityPacket(player), player);
+
+                    boolean opHUD, targetElement, stealthGauge;
+                    if (isOP(player))
+                    {
+                        opHUD = serverSettings.hud.allowOPHUD > 0;
+                        targetElement = serverSettings.hud.allowTargetElement > 0;
+                        stealthGauge = serverSettings.hud.allowStealthGauge > 0;
+                    }
+                    else
+                    {
+                        opHUD = serverSettings.hud.allowOPHUD > 1;
+                        targetElement = serverSettings.hud.allowTargetElement > 1;
+                        stealthGauge = serverSettings.hud.allowStealthGauge > 1;
+                    }
+
+                    if (opHUD || stealthGauge)
+                    {
+                        player.world.profiler.startSection("DStealth: Create HUDPacket");
+                        IMessage packet = new HUDPacket(player, opHUD, targetElement, !stealthGauge ? Byte.MIN_VALUE : (int) (Sight.globalPlayerStealthLevel(player) * 100)); //Byte.MIN_VALUE means disabled
+                        player.world.profiler.endStartSection("DStealth: Send HUDPacket");
+                        WRAPPER.sendTo(packet, player);
+                        player.world.profiler.endSection();
                     }
                 }
                 else
                 {
-                    if (EntitySightData.soulSightCache.contains(player))
-                    {
-                        EntitySightData.soulSightCache.remove(player);
-                        WRAPPER.sendTo(new SoulSightPacket(false), player);
-                    }
-                }
-
-                if (serverSettings.senses.usePlayerSenses) WRAPPER.sendTo(new VisibilityPacket(player), player);
-
-                boolean opHUD, targetElement, stealthGauge;
-                if (isOP(player))
-                {
-                    opHUD = serverSettings.hud.allowOPHUD > 0;
-                    targetElement = serverSettings.hud.allowTargetElement > 0;
-                    stealthGauge = serverSettings.hud.allowStealthGauge > 0;
-                }
-                else
-                {
-                    opHUD = serverSettings.hud.allowOPHUD > 1;
-                    targetElement = serverSettings.hud.allowTargetElement > 1;
-                    stealthGauge = serverSettings.hud.allowStealthGauge > 1;
-                }
-
-                if (opHUD || stealthGauge)
-                {
+                    //Player is dead
                     player.world.profiler.startSection("DStealth: Create HUDPacket");
-                    IMessage packet = new HUDPacket(player, opHUD, targetElement, !stealthGauge ? Byte.MIN_VALUE : (int) (Sight.globalPlayerStealthLevel(player) * 100)); //Byte.MIN_VALUE means disabled
+                    IMessage packet = new HUDPacket(player, false, false, Byte.MIN_VALUE); //Byte.MIN_VALUE means disabled
                     player.world.profiler.endStartSection("DStealth: Send HUDPacket");
                     WRAPPER.sendTo(packet, player);
                     player.world.profiler.endSection();
