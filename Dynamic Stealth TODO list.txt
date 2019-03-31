@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Attacking zombies don't always count for stealth gauge?
-
 Do sight LOS checks in order of highest light level to lowest, and return light level on successful LOS check
 
 Make client acquire target for any entity they have LOS to, then get the data for it from the map, as late as possible, if it exists

@@ -140,6 +140,7 @@ public class Sight
 
         //Calculate
         double result = visualStealthLevelInternal(searcher, target, yaw, pitch);
+        boolean debug = target instanceof EntityPlayer && result <= 1;
 
         //Save first cache
         if (target instanceof EntityPlayer && ((searcher instanceof EntityLiving && ((EntityLiving) searcher).getAttackTarget() == target) || (!EntityThreatData.isPassive(searcher) && !EntityThreatData.bypassesThreat(searcher))))
