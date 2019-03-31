@@ -292,7 +292,6 @@ public class Sight
 
         //Lighting and LOS checks (absolute, factor, after Angles, after Glowing)
         double lightFactor = bestLightingAtLOSHit(searcher, target, isLivingBase && isBright(targetLivingBase));
-        if (target instanceof EntityPlayer && searcher instanceof EntitySpider) System.out.println(lightFactor);
         if (lightFactor == -777) return 777;
 
         if (hasNightvision(searcher))
@@ -469,9 +468,9 @@ public class Sight
         for (int i = 1; i < size - 1; i++)
         {
             result = Tools.min(result, queue.getOldestToNewest(i));
-            if (result < first) return result;
+            if (result < first) break;
         }
-        return (first + result) / 2;
+        return result;
     }
 
     private static class SeenData
