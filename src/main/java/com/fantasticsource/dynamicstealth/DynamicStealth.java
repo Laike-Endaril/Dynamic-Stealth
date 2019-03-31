@@ -125,8 +125,6 @@ public class DynamicStealth
             MinecraftForge.EVENT_BUS.register(ClientData.class);
             MinecraftForge.EVENT_BUS.register(RenderAlterer.class);
         }
-
-        update();
     }
 
     @SubscribeEvent
@@ -338,6 +336,7 @@ public class DynamicStealth
                             //Assassinations
                             ItemStack itemStack = killer.getHeldItemMainhand();
                             WeaponEntry weaponEntry = WeaponEntry.get(itemStack, WeaponEntry.TYPE_ASSASSINATION);
+
 
                             for (PotionEffect potionEffect : weaponEntry.attackerEffects)
                             {
@@ -725,6 +724,6 @@ public class DynamicStealth
             MinecraftForge.EVENT_BUS.register(CompatCNPC.class);
         }
 
-        AttackData.init();
+        update();
     }
 }

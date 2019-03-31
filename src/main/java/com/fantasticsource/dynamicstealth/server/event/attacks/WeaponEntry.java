@@ -16,8 +16,8 @@ public class WeaponEntry
 
     public boolean armorPenetration = false;
     public double damageMultiplier = 1;
-    public ArrayList<PotionEffect> attackerEffects = new ArrayList<>();
-    public ArrayList<PotionEffect> victimEffects = new ArrayList<>();
+    public ArrayList<PotionEffect> attackerEffects;
+    public ArrayList<PotionEffect> victimEffects;
     public boolean consumeItem = false;
 
     public ItemFilter filter;

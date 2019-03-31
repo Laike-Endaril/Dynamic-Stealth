@@ -60,10 +60,4 @@ public class AttackData
             if (entry != null) assassinationWeaponSpecific.add(entry);
         }
     }
-
-
-    public static void init()
-    {
-        //Indirectly initializes the class
-    }
 }
