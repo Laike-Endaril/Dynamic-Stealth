@@ -34,7 +34,6 @@ import static com.fantasticsource.dynamicstealth.DynamicStealth.TRIG_TABLE;
 import static com.fantasticsource.dynamicstealth.compat.Compat.cancelTasksRequiringAttackTarget;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.dynamicstealth.server.senses.hearing.Communication.warn;
-import static com.fantasticsource.dynamicstealth.server.senses.sight.Sight.canSee;
 
 public class AIDynamicStealth extends EntityAIBase
 {
@@ -356,7 +355,7 @@ public class AIDynamicStealth extends EntityAIBase
             navigator.clearPath();
 
             EntityLivingBase target = Threat.getTarget(searcher);
-            if (canSee(searcher, target, false, MCTools.getYawDeg(searcher.getPositionVector(), new Vec3d(lastKnownPosition), TRIG_TABLE), MCTools.getPitchDeg(searcher.getPositionVector(), new Vec3d(lastKnownPosition), TRIG_TABLE)))
+            if (Sight.canSee(searcher, target, false, true, MCTools.getYawDeg(searcher.getPositionVector(), new Vec3d(lastKnownPosition), TRIG_TABLE), MCTools.getPitchDeg(searcher.getPositionVector(), new Vec3d(lastKnownPosition), TRIG_TABLE)))
             {
                 //See target; warn, apply desperation effects if flee reason is low hp, and retaliate
                 lastKnownPosition = target.getPosition();
@@ -593,7 +592,7 @@ public class AIDynamicStealth extends EntityAIBase
                     if (fleeReason == FLEE_NONE && !MinecraftForge.EVENT_BUS.post(new BasicEvent.RallyEvent(searcher, oldReason)))
                     {
                         EntityLivingBase target = Threat.getTarget(searcher);
-                        warn(searcher, target, lastKnownPosition, canSee(searcher, target));
+                        warn(searcher, target, lastKnownPosition, Sight.canSee(searcher, target));
 
                         for (PotionEffect potionEffect : EventData.rallyPotions)
                         {
@@ -610,7 +609,7 @@ public class AIDynamicStealth extends EntityAIBase
                     if (fleeReason == FLEE_NONE && !MinecraftForge.EVENT_BUS.post(new BasicEvent.RallyEvent(searcher, oldReason)))
                     {
                         EntityLivingBase target = Threat.getTarget(searcher);
-                        warn(searcher, target, lastKnownPosition, canSee(searcher, target));
+                        warn(searcher, target, lastKnownPosition, Sight.canSee(searcher, target));
 
                         for (PotionEffect potionEffect : EventData.rallyPotions)
                         {
@@ -697,7 +696,7 @@ public class AIDynamicStealth extends EntityAIBase
 
 
                 EntityLivingBase target = Threat.getTarget(searcher);
-                if (canSee(searcher, target))
+                if (Sight.canSee(searcher, target))
                 {
                     //See target; warn, apply desperation effects if flee reason is low hp, and retaliate
                     lastKnownPosition = target.getPosition();

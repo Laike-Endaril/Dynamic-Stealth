@@ -102,25 +102,25 @@ public class Sight
 
     public static boolean canSee(EntityLivingBase searcher, Entity target)
     {
-        return visualStealthLevel(searcher, target, true, searcher.rotationYawHead, searcher.rotationPitch) <= 1;
+        return visualStealthLevel(searcher, target, true, true, searcher.rotationYawHead, searcher.rotationPitch) <= 1;
     }
 
-    public static boolean canSee(EntityLivingBase searcher, Entity target, boolean useCache)
+    public static boolean canSee(EntityLivingBase searcher, Entity target, boolean useCache, boolean saveCache)
     {
-        return visualStealthLevel(searcher, target, useCache, searcher.rotationYawHead, searcher.rotationPitch) <= 1;
+        return visualStealthLevel(searcher, target, useCache, saveCache, searcher.rotationYawHead, searcher.rotationPitch) <= 1;
     }
 
-    public static boolean canSee(EntityLivingBase searcher, Entity target, boolean useCache, double yaw, double pitch)
+    public static boolean canSee(EntityLivingBase searcher, Entity target, boolean useCache, boolean saveCache, double yaw, double pitch)
     {
-        return visualStealthLevel(searcher, target, useCache, yaw, pitch) <= 1;
+        return visualStealthLevel(searcher, target, useCache, saveCache, yaw, pitch) <= 1;
     }
 
     public static double visualStealthLevel(EntityLivingBase searcher, Entity target)
     {
-        return visualStealthLevel(searcher, target, true, searcher.rotationYawHead, searcher.rotationPitch);
+        return visualStealthLevel(searcher, target, true, true, searcher.rotationYawHead, searcher.rotationPitch);
     }
 
-    public static double visualStealthLevel(EntityLivingBase searcher, Entity target, boolean useCache, double yaw, double pitch)
+    public static double visualStealthLevel(EntityLivingBase searcher, Entity target, boolean useCache, boolean saveCache, double yaw, double pitch)
     {
         if (searcher == null || target == null || !searcher.world.isBlockLoaded(searcher.getPosition()) || !target.world.isBlockLoaded(target.getPosition())) return 777;
         if (searcher.world != target.world) return 777;
@@ -143,42 +143,45 @@ public class Sight
         //Calculate
         double result = visualStealthLevelInternal(searcher, target, yaw, pitch);
 
-        //Save first cache
-        if (target instanceof EntityPlayer && ((searcher instanceof EntityLiving && ((EntityLiving) searcher).getAttackTarget() == target) || (!EntityThreatData.isPassive(searcher) && !EntityThreatData.bypassesThreat(searcher))))
+        if (saveCache)
         {
-            EntityPlayer player = (EntityPlayer) target;
-            Pair<WrappingQueue<Double>, Long> pair = globalPlayerStealthHistory.computeIfAbsent(player, k -> new Pair<>(new WrappingQueue<>(GLOBAL_STEALTH_SMOOTHING + 2), tick - 1));
-            WrappingQueue<Double> queue = pair.getKey();
-
-            double clampedResult = Tools.min(Tools.max(-1, result - 1), 1);
-            if (queue.size() != 0 && pair.getValue() == tick)
+            //Save first cache
+            if (target instanceof EntityPlayer && ((searcher instanceof EntityLiving && ((EntityLiving) searcher).getAttackTarget() == target) || (!EntityThreatData.isPassive(searcher) && !EntityThreatData.bypassesThreat(searcher))))
             {
-                queue.setNewestToOldest(0, Tools.min(clampedResult, queue.getNewestToOldest(0)));
+                EntityPlayer player = (EntityPlayer) target;
+                Pair<WrappingQueue<Double>, Long> pair = globalPlayerStealthHistory.computeIfAbsent(player, k -> new Pair<>(new WrappingQueue<>(GLOBAL_STEALTH_SMOOTHING + 2), tick - 1));
+                WrappingQueue<Double> queue = pair.getKey();
+
+                double clampedResult = Tools.min(Tools.max(-1, result - 1), 1);
+                if (queue.size() != 0 && pair.getValue() == tick)
+                {
+                    queue.setNewestToOldest(0, Tools.min(clampedResult, queue.getNewestToOldest(0)));
+                }
+                else queue.add(clampedResult);
+
+                pair.setValue(tick);
             }
-            else queue.add(clampedResult);
 
-            pair.setValue(tick);
-        }
-
-        //Save second cache
-        if (map == null)
-        {
-            map = new LinkedHashMap<>();
-            recentlySeenMap.put(searcher, map);
-            map.put(target, new SeenData(result));
-        }
-        else
-        {
-            SeenData data = map.get(target);
-            if (data == null) map.put(target, new SeenData(result));
+            //Save second cache
+            if (map == null)
+            {
+                map = new LinkedHashMap<>();
+                recentlySeenMap.put(searcher, map);
+                map.put(target, new SeenData(result));
+            }
             else
             {
-                data.lastUpdateTime = tick;
-                data.lastStealthLevel = result;
-                if (result <= 1)
+                SeenData data = map.get(target);
+                if (data == null) map.put(target, new SeenData(result));
+                else
                 {
-                    data.seen = true;
-                    data.lastSeenTime = tick;
+                    data.lastUpdateTime = tick;
+                    data.lastStealthLevel = result;
+                    if (result <= 1)
+                    {
+                        data.seen = true;
+                        data.lastSeenTime = tick;
+                    }
                 }
             }
         }
