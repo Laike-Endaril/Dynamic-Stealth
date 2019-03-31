@@ -8,6 +8,7 @@ import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.ServerTickTimer;
 import com.fantasticsource.tools.Tools;
+import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import com.fantasticsource.tools.datastructures.Pair;
 import com.fantasticsource.tools.datastructures.WrappingQueue;
 import net.minecraft.entity.Entity;
@@ -28,6 +29,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -186,77 +188,6 @@ public class Sight
     }
 
 
-    public static double lightLevelTotal(Entity entity, Vec3d vec)
-    {
-        BlockPos blockpos = new BlockPos(vec);
-        if (!entity.world.isAreaLoaded(blockpos, 1)) return 0;
-        return entity.world.getLightFromNeighbors(blockpos);
-    }
-
-    public static Vec3d los(Entity searcher, Entity target)
-    {
-        if (searcher.world != target.world) return null;
-
-        double halfWidth = target.width / 2;
-        double halfHeight = target.height / 2;
-
-        double x = target.posX;
-        double y = target.posY + halfHeight;
-        double z = target.posZ;
-
-        //Center
-        Vec3d testVec = new Vec3d(x, y, z);
-        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), testVec, false))
-        {
-            return testVec;
-        }
-
-        //+Y
-        testVec = new Vec3d(x, y + halfHeight, z);
-        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), testVec, false))
-        {
-            return testVec;
-        }
-
-        //-Y
-        testVec = new Vec3d(x, y - halfHeight, z);
-        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), testVec, false))
-        {
-            return testVec;
-        }
-
-        //+X
-        testVec = new Vec3d(x + halfWidth, y, z);
-        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), testVec, false))
-        {
-            return testVec;
-        }
-
-        //-X
-        testVec = new Vec3d(x - halfWidth, y, z);
-        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), testVec, false))
-        {
-            return testVec;
-        }
-
-        //+Z
-        testVec = new Vec3d(x, y, z + halfWidth);
-        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), testVec, false))
-        {
-            return testVec;
-        }
-
-        //-Z
-        testVec = new Vec3d(x, y, z - halfWidth);
-        if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), testVec, false))
-        {
-            return testVec;
-        }
-
-        return null;
-    }
-
-
     public static LinkedHashMap<EntityLivingBase, Double> seenEntities(EntityPlayerMP player)
     {
         player.world.profiler.startSection("DStealth: Seen Entities");
@@ -359,13 +290,11 @@ public class Sight
         if (sight.g_absolutes.seeGlowing && isLivingBase && targetLivingBase.getActivePotionEffect(MobEffects.GLOWING) != null) return -777;
 
 
-        //LOS check (absolute, after Angles, after Glowing)
-        Vec3d resultVec = los(searcher, target);
-        if (resultVec == null) return 777;
+        //Lighting and LOS checks (absolute, factor, after Angles, after Glowing)
+        double lightFactor = bestLightingAtLOSHit(searcher, target, isLivingBase && isBright(targetLivingBase));
+        if (target instanceof EntityPlayer && searcher instanceof EntitySpider) System.out.println(lightFactor);
+        if (lightFactor == -777) return 777;
 
-
-        //Lighting (absolute, factor, after Angles, after Glowing, after LOS)
-        double lightFactor = isLivingBase && isBright(targetLivingBase) ? 15 : lightLevelTotal(target, resultVec);
         if (hasNightvision(searcher))
         {
             lightFactor = Math.min(15, lightFactor + sight.c_lighting.nightvisionBonus);
@@ -428,6 +357,78 @@ public class Sight
         //Final calculation
         return Math.sqrt(distSquared) / (distanceThreshold * lightFactor * configMultipliers * attributeMultipliers);
     }
+
+
+    private static double bestLightingAtLOSHit(Entity searcher, Entity target, boolean forceMaxLight)
+    {
+        World world = searcher.world;
+        if (world != target.world) return -777;
+
+        double halfWidth = target.width / 2;
+        double halfHeight = target.height / 2;
+
+        double x = target.posX;
+        double y = target.posY + halfHeight;
+        double z = target.posZ;
+
+
+        ExplicitPriorityQueue<Vec3d> queue = new ExplicitPriorityQueue<>();
+        Vec3d testVec = new Vec3d(x, y, z); //Center
+
+        if (forceMaxLight)
+        {
+            queue.add(testVec, 0);
+            testVec = new Vec3d(x, y + halfHeight, z); //+Y
+            queue.add(testVec, 0);
+            testVec = new Vec3d(x, y - halfHeight, z); //-Y
+            queue.add(testVec, 0);
+            testVec = new Vec3d(x + halfWidth, y, z); //+X
+            queue.add(testVec, 0);
+            testVec = new Vec3d(x - halfWidth, y, z); //-X
+            queue.add(testVec, 0);
+            testVec = new Vec3d(x, y, z + halfWidth); //+Z
+            queue.add(testVec, 0);
+            testVec = new Vec3d(x, y, z - halfWidth); //-Z
+            queue.add(testVec, 0);
+        }
+        else
+        {
+            queue.add(testVec, 15 - lightLevelTotal(world, testVec));
+            testVec = new Vec3d(x, y + halfHeight, z); //+Y
+            queue.add(testVec, 15 - lightLevelTotal(world, testVec));
+            testVec = new Vec3d(x, y - halfHeight, z); //-Y
+            queue.add(testVec, 15 - lightLevelTotal(world, testVec));
+            testVec = new Vec3d(x + halfWidth, y, z); //+X
+            queue.add(testVec, 15 - lightLevelTotal(world, testVec));
+            testVec = new Vec3d(x - halfWidth, y, z); //-X
+            queue.add(testVec, 15 - lightLevelTotal(world, testVec));
+            testVec = new Vec3d(x, y, z + halfWidth); //+Z
+            queue.add(testVec, 15 - lightLevelTotal(world, testVec));
+            testVec = new Vec3d(x, y, z - halfWidth); //-Z
+            queue.add(testVec, 15 - lightLevelTotal(world, testVec));
+        }
+
+        double result;
+        while (queue.size() > 0)
+        {
+            result = queue.peekPriority();
+            testVec = queue.poll();
+            if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), testVec, false))
+            {
+                return 15 - result;
+            }
+        }
+
+        return -777;
+    }
+
+    public static double lightLevelTotal(World world, Vec3d vec)
+    {
+        BlockPos blockpos = new BlockPos(vec);
+        if (!world.isAreaLoaded(blockpos, 1)) return 0;
+        return world.getLightFromNeighbors(blockpos);
+    }
+
 
     public static double globalPlayerStealthLevel(EntityPlayer player)
     {

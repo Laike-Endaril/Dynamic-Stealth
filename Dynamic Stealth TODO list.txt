@@ -1,14 +1,12 @@
 CURRENTLY WORKING ON ===================================================
 
-Do sight LOS checks in order of highest light level to lowest, and return light level on successful LOS check
+Make stealth level / visibility transitions smoother (ie. change at a rate)
+"maybe if they see you less than a second or two, instead of being alerted they could go look first"
 
 Make client acquire target for any entity they have LOS to, then get the data for it from the map, as late as possible, if it exists
 "Lock Target" key (press to lock/unlock current target)
 ...when target is locked, send target to server, which then allows you to see hud data even if it's far away
 "Aim Assist" key (hold to automatically face current target)
-
-Make stealth level / visibility transitions smoother (ie. change at a rate)
-"maybe if they see you less than a second or two, instead of being alerted they could go look first"
 
 Add lang keys for all println() calls (make sure to use deprecated I18n, not the non-deprecated one)
 
@@ -41,6 +39,7 @@ Spider riders sometimes move really fast...is that normal?...
 
 Fix entities attempting to path through diagonal walls; this may very well fix (or at least mostly fix) the issue below
 Fix entities being able to attack through glass diagonally (because they can see through it...)
+...fixing pathing should also fix some cases for "can't reach" since it relies on accurate pathing
 
 Make stuck detection account for jumping by allowing for more play along y axis
 
