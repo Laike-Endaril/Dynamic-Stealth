@@ -1,6 +1,11 @@
 CURRENTLY WORKING ON ===================================================
 
-Make stealth level / visibility transitions smoother (ie. change at a rate)
+Current high CPU events...
+1. ServerTick       709 microseconds (About 3.65% of total used on Faerun, or 1.5% of "full total" if comparing with other values in the debug output)
+2. LivingUpdate     595 microseconds
+
+
+Make stealth level / visibility transitions smoother (ie. change at a rate)?
 "maybe if they see you less than a second or two, instead of being alerted they could go look first"
 
 Make client acquire target for any entity they have LOS to, then get the data for it from the map, as late as possible, if it exists
