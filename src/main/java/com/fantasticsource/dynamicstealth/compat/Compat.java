@@ -11,11 +11,22 @@ import java.util.Set;
 
 public class Compat
 {
-    public static boolean lycanites = false, ancientwarfare = false, customnpcs = false, iceandfire = false, neat = false, statues = false, primitivemobs = false, dissolution = false, thermalfoundation = false;
+    public static boolean
+            lycanites = false,
+            ancientwarfare = false,
+            customnpcs = false,
+            iceandfire = false,
+            neat = false,
+            statues = false,
+            primitivemobs = false,
+            dissolution = false,
+            abyssalcraft = false,
+            thermalfoundation = false;
 
 
     public static void cancelTasksRequiringAttackTarget(EntityAITasks tasks)
     {
+        //TODO make this convert the tasks instead, using NPEAttackTargetTaskHolder
         for (EntityAITasks.EntityAITaskEntry task : tasks.taskEntries)
         {
             if (badNullTargetHandling(task.action))
@@ -38,6 +49,7 @@ public class Compat
         if (ancientwarfare && aiClassname.equals("net.shadowmage.ancientwarfare.npc.ai.vehicle.NpcAIAimVehicle")) return true;
         if (thermalfoundation && aiClassname.contains("cofh.thermalfoundation.entity.monster")) return true; //Should cover Basalz, Blitz, and Blizz
         if (iceandfire && (aiClassname.contains("iceandfire.entity.ai.DragonAIAttackMelee") || aiClassname.contains("iceandfire.entity.ai.HippogryphAIAttackMelee") || aiClassname.contains("iceandfire.entity.ai.SeaSerpentAIAttackMelee"))) return true;
+        if (abyssalcraft && aiClassname.contains("abyssalcraft.common.entity.ai")) return true;
 
         return false;
     }
