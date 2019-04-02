@@ -9,15 +9,13 @@ import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
+import com.fantasticsource.mctools.NPEAttackTargetTaskHolder;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.TrigLookupTable;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAIPanic;
-import net.minecraft.entity.ai.EntityAITasks;
-import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.ai.*;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.potion.PotionEffect;
@@ -64,7 +62,7 @@ public class AIDynamicStealth extends EntityAIBase
 
     private final EntityLiving searcher;
     private final PathNavigate navigator;
-    public double speed;
+    public double speed, fleeSpeed;
     public Path path = null;
     public BlockPos lastKnownPosition = null, fleeToPos = null;
     public boolean triedTriggerCantReach = false;
@@ -78,16 +76,52 @@ public class AIDynamicStealth extends EntityAIBase
     private float cornerLookYaw, cornerLookPitch;
 
 
-    public AIDynamicStealth(EntityLiving living, double speedIn)
+    private AIDynamicStealth(EntityLiving living, double speedIn)
     {
         searcher = living;
         navigator = living.getNavigator();
         speed = speedIn;
+        fleeSpeed = speed * 1.25;
 
         headTurnSpeed = EntityAIData.headTurnSpeed(searcher);
         isCNPC = Compat.customnpcs && NpcAPI.Instance().getIEntity(searcher) instanceof ICustomNpc;
 
         setMutexBits(3);
+    }
+
+    public static AIDynamicStealth getInstance(EntityLiving living)
+    {
+        double lowSpeed = 0, normalSpeed = 0, highSpeed = Integer.MAX_VALUE;
+        for (EntityAITasks.EntityAITaskEntry entry : living.tasks.taskEntries)
+        {
+            EntityAIBase ai = entry.action;
+            if (ai instanceof NPEAttackTargetTaskHolder) ai = ((NPEAttackTargetTaskHolder) ai).getBadAI();
+
+            //Use maximum for normal speeds
+            if (ai instanceof EntityAIAttackMelee) normalSpeed = Tools.max(normalSpeed, ((EntityAIAttackMelee) ai).speedTowardsTarget);
+            else if (ai instanceof EntityAIAttackRanged) normalSpeed = Tools.max(normalSpeed, ((EntityAIAttackRanged) ai).entityMoveSpeed);
+            else if (ai instanceof EntityAIAttackRangedBow) normalSpeed = Tools.max(normalSpeed, ((EntityAIAttackRangedBow) ai).moveSpeedAmp);
+            else if (ai instanceof EntityAIFollow) normalSpeed = Tools.max(normalSpeed, ((EntityAIFollow) ai).speedModifier);
+            else if (ai instanceof EntityAIFollowOwner) normalSpeed = Tools.max(normalSpeed, ((EntityAIFollowOwner) ai).followSpeed);
+            else if (ai instanceof EntityAIMate) normalSpeed = Tools.max(normalSpeed, ((EntityAIMate) ai).moveSpeed);
+            else if (ai instanceof EntityAIFleeSun) normalSpeed = Tools.max(normalSpeed, ((EntityAIFleeSun) ai).movementSpeed);
+            else if (ai instanceof EntityAIFollowParent) normalSpeed = Tools.max(normalSpeed, ((EntityAIFollowParent) ai).moveSpeed);
+
+                //Use maximum for low speeds
+            else if (ai instanceof EntityAIWander) lowSpeed = Tools.max(lowSpeed, ((EntityAIWander) ai).speed);
+
+                //Use minimum for high speeds
+            else if (ai instanceof EntityAIPanic) highSpeed = Tools.min(highSpeed, ((EntityAIPanic) ai).speed);
+            else if (ai instanceof EntityAIRunAroundLikeCrazy) highSpeed = Tools.min(highSpeed, ((EntityAIRunAroundLikeCrazy) ai).speed);
+            else if (ai instanceof EntityAIAvoidEntity) highSpeed = Tools.min(highSpeed, ((EntityAIAvoidEntity) ai).nearSpeed);
+        }
+
+
+        //Best case is highest of normal speeds, then lowest of high speeds, then highest of low speeds...then a default value which may be way off the mark depending on the entity
+        if (normalSpeed != 0) return new AIDynamicStealth(living, normalSpeed);
+        if (highSpeed != Integer.MAX_VALUE) return new AIDynamicStealth(living, highSpeed / 1.2);
+        if (lowSpeed != 0) return new AIDynamicStealth(living, lowSpeed * 1.7);
+        return new AIDynamicStealth(living, 1);
     }
 
     public static AIDynamicStealth getStealthAI(EntityLiving living)
@@ -648,9 +682,9 @@ public class AIDynamicStealth extends EntityAIBase
                     if ((fleeToPos.getX() != searcher.getPosition().getX() || fleeToPos.getZ() != searcher.getPosition().getZ()) && (path == null || path.isFinished()))
                     {
                         path = navigator.getPathToPos(fleeToPos);
-                        navigator.setPath(path, getFleeSpeed(speed));
+                        navigator.setPath(path, fleeSpeed);
                     }
-                    else if (navigator.getPath() != path) navigator.setPath(path, getFleeSpeed(speed));
+                    else if (navigator.getPath() != path) navigator.setPath(path, fleeSpeed);
                 }
                 else
                 {
@@ -676,10 +710,10 @@ public class AIDynamicStealth extends EntityAIBase
                         else
                         {
                             path = navigator.getPathToPos(fleeToPos);
-                            navigator.setPath(path, getFleeSpeed(speed));
+                            navigator.setPath(path, fleeSpeed);
                         }
                     }
-                    else if (navigator.getPath() != path) navigator.setPath(path, getFleeSpeed(speed));
+                    else if (navigator.getPath() != path) navigator.setPath(path, fleeSpeed);
                 }
             }
             else if (mode == MODE_COWER)
@@ -791,21 +825,5 @@ public class AIDynamicStealth extends EntityAIBase
         pathAngle = 360 - Tools.radtodeg(TRIG_TABLE.arctanFullcircle(pos.z, -pos.x, nextPos.z, -nextPos.x));
 
         return true;
-    }
-
-    private double getFleeSpeed(double normalSpeed)
-    {
-        if (searcher instanceof EntityVillager) return 0.6;
-
-        for (EntityAITasks.EntityAITaskEntry task : searcher.tasks.taskEntries)
-        {
-            if (task.action instanceof EntityAIPanic)
-            {
-                normalSpeed = ((EntityAIPanic) task.action).speed;
-                return normalSpeed <= 0 ? 1.25 : normalSpeed;
-            }
-        }
-
-        return normalSpeed <= 0 ? 1.25 : normalSpeed * 1.25;
     }
 }

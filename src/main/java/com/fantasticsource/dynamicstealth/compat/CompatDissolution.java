@@ -42,7 +42,7 @@ public class CompatDissolution
                 {
                     if (entry.action instanceof AIDynamicStealth)
                     {
-                        AIDynamicStealth ai = new AIDynamicStealth(living, 1);
+                        AIDynamicStealth ai = AIDynamicStealth.getInstance(living);
                         int priority = entry.priority;
                         living.tasks.removeTask(entry.action);
                         living.tasks.addTask(priority, ai);

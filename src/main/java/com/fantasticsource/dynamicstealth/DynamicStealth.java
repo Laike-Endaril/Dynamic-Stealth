@@ -684,7 +684,7 @@ public class DynamicStealth
     {
         if (!EntityThreatData.bypassesThreat(living))
         {
-            tasks.addTask(-7777777, new AIDynamicStealth(living, 1));
+            tasks.addTask(-7777777, AIDynamicStealth.getInstance(living));
         }
     }
 
