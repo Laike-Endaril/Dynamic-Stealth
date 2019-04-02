@@ -18,8 +18,8 @@ public class Compat
             iceandfire = false,
             neat = false,
             statues = false,
-            primitivemobs = false,
             dissolution = false,
+            magma_monsters = false,
             abyssalcraft = false,
             thermalfoundation = false;
 
@@ -50,6 +50,7 @@ public class Compat
         if (thermalfoundation && aiClassname.contains("cofh.thermalfoundation.entity.monster")) return true; //Should cover Basalz, Blitz, and Blizz
         if (iceandfire && (aiClassname.contains("iceandfire.entity.ai.DragonAIAttackMelee") || aiClassname.contains("iceandfire.entity.ai.HippogryphAIAttackMelee") || aiClassname.contains("iceandfire.entity.ai.SeaSerpentAIAttackMelee"))) return true;
         if (abyssalcraft && aiClassname.contains("abyssalcraft.common.entity.ai")) return true;
+        if (magma_monsters && aiClassname.contains("EntityMagmaMonster")) return true;
 
         return false;
     }

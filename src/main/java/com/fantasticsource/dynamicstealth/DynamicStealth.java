@@ -713,7 +713,7 @@ public class DynamicStealth
         if (Loader.isModLoaded("abyssalcraft")) Compat.abyssalcraft = true;
         if (Loader.isModLoaded("neat")) Compat.neat = true;
         if (Loader.isModLoaded("statues")) Compat.statues = true;
-        if (Loader.isModLoaded("primitivemobs")) Compat.primitivemobs = true;
+        if (Loader.isModLoaded("magma_monsters")) Compat.magma_monsters = true;
         if (Loader.isModLoaded("dissolution"))
         {
             Compat.dissolution = true;
