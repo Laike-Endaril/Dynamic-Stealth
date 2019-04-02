@@ -92,9 +92,9 @@ public class RenderAlterer
     {
         switch (color)
         {
-            case ClientData.COLOR_PASSIVE:
+            case ClientData.COLOR_IDLE_PASSIVE:
                 return "green";
-            case ClientData.COLOR_IDLE:
+            case ClientData.COLOR_IDLE_NON_PASSIVE:
                 return "blue";
             case ClientData.COLOR_ATTACKING_OTHER:
                 return "yellow";

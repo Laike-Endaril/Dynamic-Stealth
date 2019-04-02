@@ -19,8 +19,8 @@ public class ClientData
             CID_ATTACKING_YOU = 0,
             CID_SEARCHING = 1,
             CID_ATTACKING_OTHER = 2,
-            CID_IDLE = 3,
-            CID_PASSIVE = 4,
+            CID_IDLE_NON_PASSIVE = 3,
+            CID_IDLE_PASSIVE = 4,
             CID_FLEEING_NON_PASSIVE = 5,
             CID_FLEEING_PASSIVE = 6,
             CID_BYPASS = 7;
@@ -29,8 +29,8 @@ public class ClientData
             COLOR_ATTACKING_YOU = 0xFF0000,         //Target: yes, Threat: yes
             COLOR_ATTACKING_OTHER = 0xFFFF00,       //Target: yes, Threat: yes
             COLOR_SEARCHING = 0xFF8800,             //Target: only on server, Threat: yes
-            COLOR_IDLE = 0x4444FF,                  //Target: no, Threat: no
-            COLOR_PASSIVE = 0x00CC00,               //Target: no, Threat: no
+            COLOR_IDLE_NON_PASSIVE = 0x4444FF,                  //Target: no, Threat: no
+            COLOR_IDLE_PASSIVE = 0x00CC00,               //Target: no, Threat: no
             COLOR_FLEEING_N0N_PASSIVE = 0xFF55FF,   //Target: maybe, Threat: yes
             COLOR_FLEEING_PASSIVE = 0xAA00AA,       //Target: maybe, Threat: yes
             COLOR_BYPASS = 0x555555;                //Target: maybe, Threat: no
@@ -74,10 +74,10 @@ public class ClientData
                 return CID_SEARCHING;
             case COLOR_ATTACKING_OTHER:
                 return CID_ATTACKING_OTHER;
-            case COLOR_IDLE:
-                return CID_IDLE;
-            case COLOR_PASSIVE:
-                return CID_PASSIVE;
+            case COLOR_IDLE_NON_PASSIVE:
+                return CID_IDLE_NON_PASSIVE;
+            case COLOR_IDLE_PASSIVE:
+                return CID_IDLE_PASSIVE;
             case COLOR_FLEEING_N0N_PASSIVE:
                 return CID_FLEEING_NON_PASSIVE;
             case COLOR_FLEEING_PASSIVE:
@@ -103,10 +103,10 @@ public class ClientData
                 return COLOR_SEARCHING;
             case CID_ATTACKING_OTHER:
                 return COLOR_ATTACKING_OTHER;
-            case CID_IDLE:
-                return COLOR_IDLE;
-            case CID_PASSIVE:
-                return COLOR_PASSIVE;
+            case CID_IDLE_NON_PASSIVE:
+                return COLOR_IDLE_NON_PASSIVE;
+            case CID_IDLE_PASSIVE:
+                return COLOR_IDLE_PASSIVE;
             case CID_FLEEING_NON_PASSIVE:
                 return COLOR_FLEEING_N0N_PASSIVE;
             case CID_FLEEING_PASSIVE:
@@ -125,8 +125,8 @@ public class ClientData
         {
             return (serverSettings.hud.recognizePassive && EntityThreatData.isPassive(searcher)) ? COLOR_FLEEING_PASSIVE : COLOR_FLEEING_N0N_PASSIVE;
         }
-        if (serverSettings.hud.recognizePassive && EntityThreatData.isPassive(searcher)) return COLOR_PASSIVE;
-        if (threatLevel <= 0) return COLOR_IDLE;
+        if (serverSettings.hud.recognizePassive && EntityThreatData.isPassive(searcher)) return COLOR_IDLE_PASSIVE;
+        if (threatLevel <= 0) return COLOR_IDLE_NON_PASSIVE;
         if (target == null || !Sight.canSee(searcher, target)) return COLOR_SEARCHING;
         if (target == player) return COLOR_ATTACKING_YOU;
         return COLOR_ATTACKING_OTHER;
@@ -134,22 +134,22 @@ public class ClientData
 
     public static boolean canHaveClientTarget(byte cid)
     {
-        return cid != CID_PASSIVE && cid != CID_IDLE && cid != CID_SEARCHING;
+        return cid != CID_IDLE_PASSIVE && cid != CID_IDLE_NON_PASSIVE && cid != CID_SEARCHING;
     }
 
     public static boolean canHaveClientTarget(int color)
     {
-        return color != COLOR_PASSIVE && color != COLOR_IDLE && color != COLOR_SEARCHING;
+        return color != COLOR_IDLE_PASSIVE && color != COLOR_IDLE_NON_PASSIVE && color != COLOR_SEARCHING;
     }
 
     public static boolean canHaveThreat(byte cid)
     {
-        return cid != CID_PASSIVE && cid != CID_IDLE && cid != CID_BYPASS;
+        return cid != CID_IDLE_PASSIVE && cid != CID_IDLE_NON_PASSIVE && cid != CID_BYPASS;
     }
 
     public static boolean canHaveThreat(int color)
     {
-        return color != COLOR_PASSIVE && color != COLOR_IDLE && color != COLOR_BYPASS;
+        return color != COLOR_IDLE_PASSIVE && color != COLOR_IDLE_NON_PASSIVE && color != COLOR_BYPASS;
     }
 
     public static class OnPointData

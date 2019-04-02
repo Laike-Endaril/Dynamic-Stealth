@@ -6,9 +6,9 @@ import net.minecraftforge.common.config.Config;
 public class OPHUDFilterConfig
 {
     @Config.Name("Passive")
-    @Config.LangKey(DynamicStealth.MODID + ".config.opHUDShowPassive")
-    @Config.Comment({"If true, on-point indicators appear for passive entities"})
-    public boolean showPassive = true;
+    @Config.LangKey(DynamicStealth.MODID + ".config.opHUDShowIdlePassive")
+    @Config.Comment({"If true, on-point indicators appear for idle passive entities"})
+    public boolean showPassive = true; //TODO change to showIdlePassive
 
     @Config.Name("Bypass")
     @Config.LangKey(DynamicStealth.MODID + ".config.opHUDShowBypass")
@@ -16,9 +16,9 @@ public class OPHUDFilterConfig
     public boolean showBypass = true;
 
     @Config.Name("Idle")
-    @Config.LangKey(DynamicStealth.MODID + ".config.opHUDShowIdle")
-    @Config.Comment({"If true, on-point indicators appear for idle entities"})
-    public boolean showIdle = true;
+    @Config.LangKey(DynamicStealth.MODID + ".config.opHUDShowIdleNonPassive")
+    @Config.Comment({"If true, on-point indicators appear for idle non-passive entities.  This also applies to idle passive entities if the server has passive recognition disabled"})
+    public boolean showIdle = true; //TODO change to showIdleNonPassive
 
     @Config.Name("Attacking Other")
     @Config.LangKey(DynamicStealth.MODID + ".config.opHUDShowAtkOther")

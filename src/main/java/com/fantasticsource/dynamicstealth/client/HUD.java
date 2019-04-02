@@ -128,8 +128,8 @@ public class HUD extends Gui
     private static boolean onPointFilter(int color)
     {
         if (color == COLOR_BYPASS) return clientSettings.hudSettings.ophudFilter.showBypass;
-        else if (color == COLOR_PASSIVE) return clientSettings.hudSettings.ophudFilter.showPassive;
-        else if (color == COLOR_IDLE) return clientSettings.hudSettings.ophudFilter.showIdle;
+        else if (color == COLOR_IDLE_PASSIVE) return clientSettings.hudSettings.ophudFilter.showPassive;
+        else if (color == COLOR_IDLE_NON_PASSIVE) return clientSettings.hudSettings.ophudFilter.showIdle;
         else if (color == COLOR_SEARCHING) return clientSettings.hudSettings.ophudFilter.showAlert;
         else if (color == COLOR_ATTACKING_YOU) return clientSettings.hudSettings.ophudFilter.showAttackingYou;
         else if (color == COLOR_ATTACKING_OTHER) return clientSettings.hudSettings.ophudFilter.showAttackingOther;
@@ -274,8 +274,8 @@ public class HUD extends Gui
     {
         int color = data.color;
         if (color == COLOR_BYPASS && !clientSettings.hudSettings.targetingFilter.showBypass) return;
-        if (color == COLOR_PASSIVE && !clientSettings.hudSettings.targetingFilter.showPassive) return;
-        if (color == COLOR_IDLE && !clientSettings.hudSettings.targetingFilter.showIdle) return;
+        if (color == COLOR_IDLE_PASSIVE && !clientSettings.hudSettings.targetingFilter.showPassive) return;
+        if (color == COLOR_IDLE_NON_PASSIVE && !clientSettings.hudSettings.targetingFilter.showIdle) return;
         if (color == COLOR_SEARCHING && !clientSettings.hudSettings.targetingFilter.showAlert) return;
         if (color == COLOR_ATTACKING_YOU && !clientSettings.hudSettings.targetingFilter.showAttackingYou) return;
         if (color == COLOR_ATTACKING_OTHER && !clientSettings.hudSettings.targetingFilter.showAttackingOther) return;
@@ -578,11 +578,11 @@ public class HUD extends Gui
                         case COLOR_SEARCHING:
                             action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.search");
                             break;
-                        case COLOR_PASSIVE:
-                            action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.passive");
+                        case COLOR_IDLE_PASSIVE:
+                            action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.idlePassive");
                             break;
-                        case COLOR_IDLE:
-                            action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.idle");
+                        case COLOR_IDLE_NON_PASSIVE:
+                            action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.idleNonPassive");
                             break;
                         case COLOR_BYPASS:
                             if (target != null) action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.targeting", target.getName());

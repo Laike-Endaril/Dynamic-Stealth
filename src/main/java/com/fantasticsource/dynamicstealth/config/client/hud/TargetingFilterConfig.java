@@ -6,9 +6,9 @@ import net.minecraftforge.common.config.Config;
 public class TargetingFilterConfig
 {
     @Config.Name("Passive")
-    @Config.LangKey(DynamicStealth.MODID + ".config.targetingPassive")
-    @Config.Comment({"If true, the targeting HUD shows when focused on a passive entity"})
-    public boolean showPassive = false; //TODO change to "passive"
+    @Config.LangKey(DynamicStealth.MODID + ".config.targetingIdlePassive")
+    @Config.Comment({"If true, the targeting HUD shows when focused on an idle passive entity"})
+    public boolean showPassive = false; //TODO change to "idlePassive"
 
     @Config.Name("Bypass")
     @Config.LangKey(DynamicStealth.MODID + ".config.targetingBypass")
@@ -16,9 +16,9 @@ public class TargetingFilterConfig
     public boolean showBypass = true; //TODO change to "bypass"
 
     @Config.Name("Idle")
-    @Config.LangKey(DynamicStealth.MODID + ".config.targetingIdle")
-    @Config.Comment({"If true, the targeting HUD shows when focused on an idle entity"})
-    public boolean showIdle = true; //TODO change to "idle"
+    @Config.LangKey(DynamicStealth.MODID + ".config.targetingIdleNonPassive")
+    @Config.Comment({"If true, the targeting HUD shows when focused on an idle non-passive entity.  This also applies to idle passive entities if the server has passive recognition disabled"})
+    public boolean showIdle = true; //TODO change to "idleNonPassive"
 
     @Config.Name("Attacking Other")
     @Config.LangKey(DynamicStealth.MODID + ".config.targetingAtkOther")
