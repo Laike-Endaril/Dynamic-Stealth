@@ -37,6 +37,11 @@ public class OPHUDFilterConfig
 
     @Config.Name("Flee")
     @Config.LangKey(DynamicStealth.MODID + ".config.opHUDShowFlee")
-    @Config.Comment({"If true, on-point indicators appear for entities that are fleeing from combat"})
-    public boolean showFleeing = true;
+    @Config.Comment({"If true, on-point indicators appear for non-passive entities that are fleeing"})
+    public boolean showFleeing = true; //TODO change to "fleeing"
+
+    @Config.Name("Flee2")
+    @Config.LangKey(DynamicStealth.MODID + ".config.opHUDShowFleePassive")
+    @Config.Comment({"If true, on-point indicators appear for passive entities that are fleeing"})
+    public boolean showFleeingPassive = true;
 }

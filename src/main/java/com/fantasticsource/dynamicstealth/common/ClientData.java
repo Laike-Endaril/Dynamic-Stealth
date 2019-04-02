@@ -21,8 +21,9 @@ public class ClientData
             CID_ATTACKING_OTHER = 2,
             CID_IDLE = 3,
             CID_PASSIVE = 4,
-            CID_FLEEING = 5,
-            CID_BYPASS = 6;
+            CID_FLEEING_NON_PASSIVE = 5,
+            CID_FLEEING_PASSIVE = 6,
+            CID_BYPASS = 7;
 
     public static final int
             COLOR_ATTACKING_YOU = 0xFF0000,         //Target: yes, Threat: yes
@@ -30,7 +31,8 @@ public class ClientData
             COLOR_SEARCHING = 0xFF8800,             //Target: only on server, Threat: yes
             COLOR_IDLE = 0x4444FF,                  //Target: no, Threat: no
             COLOR_PASSIVE = 0x00CC00,               //Target: no, Threat: no
-            COLOR_FLEEING = 0x770077,               //Target: maybe, Threat: yes
+            COLOR_FLEEING_N0N_PASSIVE = 0xFF55FF,   //Target: maybe, Threat: yes
+            COLOR_FLEEING_PASSIVE = 0xAA00AA,       //Target: maybe, Threat: yes
             COLOR_BYPASS = 0x555555;                //Target: maybe, Threat: no
 
     public static int stealthLevel = Byte.MIN_VALUE, prevStealthLevel = Byte.MIN_VALUE;
@@ -76,8 +78,10 @@ public class ClientData
                 return CID_IDLE;
             case COLOR_PASSIVE:
                 return CID_PASSIVE;
-            case COLOR_FLEEING:
-                return CID_FLEEING;
+            case COLOR_FLEEING_N0N_PASSIVE:
+                return CID_FLEEING_NON_PASSIVE;
+            case COLOR_FLEEING_PASSIVE:
+                return CID_FLEEING_PASSIVE;
             case COLOR_BYPASS:
                 return CID_BYPASS;
         }
@@ -103,8 +107,10 @@ public class ClientData
                 return COLOR_IDLE;
             case CID_PASSIVE:
                 return COLOR_PASSIVE;
-            case CID_FLEEING:
-                return COLOR_FLEEING;
+            case CID_FLEEING_NON_PASSIVE:
+                return COLOR_FLEEING_N0N_PASSIVE;
+            case CID_FLEEING_PASSIVE:
+                return COLOR_FLEEING_PASSIVE;
             case CID_BYPASS:
                 return COLOR_BYPASS;
         }
@@ -115,7 +121,10 @@ public class ClientData
     {
         if (EntityThreatData.bypassesThreat(searcher)) return COLOR_BYPASS;
         AIDynamicStealth stealthAI = searcher instanceof EntityLiving ? AIDynamicStealth.getStealthAI((EntityLiving) searcher) : null;
-        if (stealthAI != null && stealthAI.isFleeing()) return COLOR_FLEEING;
+        if (stealthAI != null && stealthAI.isFleeing())
+        {
+            return (serverSettings.hud.recognizePassive && EntityThreatData.isPassive(searcher)) ? COLOR_FLEEING_PASSIVE : COLOR_FLEEING_N0N_PASSIVE;
+        }
         if (serverSettings.hud.recognizePassive && EntityThreatData.isPassive(searcher)) return COLOR_PASSIVE;
         if (threatLevel <= 0) return COLOR_IDLE;
         if (target == null || !Sight.canSee(searcher, target)) return COLOR_SEARCHING;

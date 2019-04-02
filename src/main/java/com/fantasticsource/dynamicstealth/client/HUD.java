@@ -133,7 +133,8 @@ public class HUD extends Gui
         else if (color == COLOR_SEARCHING) return clientSettings.hudSettings.ophudFilter.showAlert;
         else if (color == COLOR_ATTACKING_YOU) return clientSettings.hudSettings.ophudFilter.showAttackingYou;
         else if (color == COLOR_ATTACKING_OTHER) return clientSettings.hudSettings.ophudFilter.showAttackingOther;
-        else if (color == COLOR_FLEEING) return clientSettings.hudSettings.ophudFilter.showFleeing;
+        else if (color == COLOR_FLEEING_N0N_PASSIVE) return clientSettings.hudSettings.ophudFilter.showFleeing;
+        else if (color == COLOR_FLEEING_PASSIVE) return clientSettings.hudSettings.ophudFilter.showFleeingPassive;
         return false;
     }
 
@@ -278,7 +279,8 @@ public class HUD extends Gui
         if (color == COLOR_SEARCHING && !clientSettings.hudSettings.targetingFilter.showAlert) return;
         if (color == COLOR_ATTACKING_YOU && !clientSettings.hudSettings.targetingFilter.showAttackingYou) return;
         if (color == COLOR_ATTACKING_OTHER && !clientSettings.hudSettings.targetingFilter.showAttackingOther) return;
-        if (color == COLOR_FLEEING && !clientSettings.hudSettings.targetingFilter.showFleeing) return;
+        if (color == COLOR_FLEEING_N0N_PASSIVE && !clientSettings.hudSettings.targetingFilter.showFleeing) return;
+        if (color == COLOR_FLEEING_PASSIVE && !clientSettings.hudSettings.targetingFilter.fleeingPassive) return;
 
         int maxDist = clientSettings.hudSettings.targetingFilter.maxDist;
         int maxAngle = clientSettings.hudSettings.targetingFilter.maxAngle;
@@ -569,7 +571,8 @@ public class HUD extends Gui
                     String action;
                     switch (color)
                     {
-                        case COLOR_FLEEING:
+                        case COLOR_FLEEING_N0N_PASSIVE:
+                        case COLOR_FLEEING_PASSIVE:
                             action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.fleeFrom", target == null ? I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.unknown") : target.getName());
                             break;
                         case COLOR_SEARCHING:

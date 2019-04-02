@@ -70,6 +70,9 @@ public class RenderAlterer
             team = scoreboard.createTeam("black");
             team.setPrefix(TextFormatting.BLACK.toString());
             colorTeams.add(team);
+            team = scoreboard.createTeam("pink");
+            team.setPrefix(TextFormatting.LIGHT_PURPLE.toString());
+            colorTeams.add(team);
             team = scoreboard.createTeam("purple");
             team.setPrefix(TextFormatting.DARK_PURPLE.toString());
             colorTeams.add(team);
@@ -101,7 +104,9 @@ public class RenderAlterer
                 return "red";
             case ClientData.COLOR_BYPASS:
                 return "black";
-            case ClientData.COLOR_FLEEING:
+            case ClientData.COLOR_FLEEING_N0N_PASSIVE:
+                return "pink";
+            case ClientData.COLOR_FLEEING_PASSIVE:
                 return "purple";
         }
         return null;

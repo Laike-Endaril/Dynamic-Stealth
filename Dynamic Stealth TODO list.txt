@@ -1,6 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-Differentiate between fleeing passives and fleeing non-passives for targeting filter, to prevent flickering on and off if a passive switches between flee and no flee
+Change "passive" to "idle (passive)"
 
 Make stealth level / visibility transitions smoother (ie. change at a rate)?
 "maybe if they see you less than a second or two, instead of being alerted they could go look first"
