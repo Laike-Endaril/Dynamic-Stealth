@@ -1,5 +1,9 @@
 CURRENTLY WORKING ON ===================================================
 
+Add lang keys for all println() calls (make sure to use deprecated I18n, not the non-deprecated one)
+
+Add Morph / Metamorph stealth bonus
+
 Make stealth level / visibility transitions smoother (ie. change at a rate)?
 "maybe if they see you less than a second or two, instead of being alerted they could go look first"
 
@@ -7,10 +11,6 @@ Make client acquire target for any entity they have LOS to, then get the data fo
 "Lock Target" key (press to lock/unlock current target)
 ...when target is locked, send target to server, which then allows you to see hud data even if it's far away
 "Aim Assist" key (hold to automatically face current target)
-
-Add lang keys for all println() calls (make sure to use deprecated I18n, not the non-deprecated one)
-
-Add Morph / Metamorph stealth bonus
 
 Brush up config...
 ...remove minimum unseen threat level
@@ -37,6 +37,7 @@ Spiders path toward their threat target even if they can't see it (must have a t
 Spider riders sometimes move really fast...is that normal?...
 ...comes from skeleton, not spider (removed all AI from spiders and it still happened)
 
+Fix entities being able to attack through glass due to same raytrace being used for attacks and vision
 Fix entities attempting to path through diagonal walls; this may very well fix (or at least mostly fix) the issue below
 Fix entities being able to attack through glass diagonally (because they can see through it...)
 ...fixing pathing should also fix some cases for "can't reach" since it relies on accurate pathing
@@ -118,7 +119,7 @@ Courage: Applies rally effect if they were fleeing; grants immunity to fleeing f
 
 BLOCKS =================================================================
 
-Pitfall: TE which destroys the dirt block it's on if something walks on it.
+Pitfall: Entity which destroys the dirt block it's on if something walks on it.
 
 
 
