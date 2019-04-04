@@ -1,5 +1,8 @@
 CURRENTLY WORKING ON ===================================================
 
+Use tracking system (Tracking class) to allow certain players to track each other (with consent), so they can coordinate easier
+Of course, make a server config for whether this feature is enabled or not
+
 Go through configs and do @RequiresMCRestart
 
 Add lang keys for all println() calls (make sure to use deprecated I18n, not the non-deprecated one)
@@ -56,8 +59,6 @@ GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES ============================
 "Noisiness" block trait; block filter to determine how much noise walking/running/landing makes
 
 "Footprint Duration" block trait; block filter for how long visible footprints/tracks last on the block type.  Add (long to short); clay, snow, sand, mycelium, dirt, coarse dirt, podzol
-
-Use tracking system (Tracking class) for something, or remove it
 
 Add wiki / guide videos
 Add guidebook, possibly using guide api or patchouli
