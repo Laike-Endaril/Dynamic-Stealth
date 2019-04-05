@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
+Make config handler move any old files to new directory, then check new directory
+
 Use tracking system (Tracking class) to allow certain players to track each other (with consent), so they can coordinate easier
 Of course, make a server config for whether this feature is enabled or not
 

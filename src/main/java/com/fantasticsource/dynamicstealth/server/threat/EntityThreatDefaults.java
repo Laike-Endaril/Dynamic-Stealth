@@ -17,6 +17,7 @@ public class EntityThreatDefaults
         threatBypassDefaults.add("magma_cube");
         threatBypassDefaults.add("ender_dragon");
 
+
         //Compat; these should be added absolutely, not conditionally
         passiveDefaults.add("ebwizardry:wizard, false");
         passiveDefaults.add("techguns:turret, false");
