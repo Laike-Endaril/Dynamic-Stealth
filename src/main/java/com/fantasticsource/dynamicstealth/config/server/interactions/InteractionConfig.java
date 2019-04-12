@@ -25,6 +25,11 @@ public class InteractionConfig
     @Config.Comment("When something was fleeing, but ran out of threat")
     public CalmDownConfig calmDown = new CalmDownConfig();
 
+    @Config.Name("Give Up Search")
+    @Config.LangKey(DynamicStealth.MODID + ".config.interactGiveUpSearch")
+    @Config.Comment("When something was searching for a target, but ran out of threat")
+    public GiveUpSearchConfig giveUpSearch = new GiveUpSearchConfig();
+
     @Config.Name("Rally")
     @Config.LangKey(DynamicStealth.MODID + ".config.interactRally")
     @Config.Comment("When something was fleeing, but regained health")

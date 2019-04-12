@@ -390,6 +390,8 @@ dynamicstealth.config.interactAssassination=Assassination
 dynamicstealth.config.interactAssassination.tooltip=FILLSCREEN When something kills without being detected
 dynamicstealth.config.interactCalmDown=Calm Down
 dynamicstealth.config.interactCalmDown.tooltip=FILLSCREEN When something was fleeing, but ran out of threat
+dynamicstealth.config.interactGiveUpSearch=Give Up Search
+dynamicstealth.config.interactGiveUpSearch.tooltip=FILLSCREEN When something was searching for a target, but ran out of threat
 dynamicstealth.config.interactRally=Rally
 dynamicstealth.config.interactRally.tooltip=FILLSCREEN When something was fleeing, but regained health
 dynamicstealth.config.interactDesperation=Desperation
@@ -434,6 +436,11 @@ dynamicstealth.config.calmDownCNPCWarp=CNPCs Warp Home
 dynamicstealth.config.calmDownCNPCWarp.tooltip=FILLSCREEN If set to true, cnpcs warp home when calming down
 dynamicstealth.config.calmDownPotions=Potion Effects
 dynamicstealth.config.calmDownPotions.tooltip=FILLSCREEN FIXNEWLINES Potion effects to apply when something calms down after fleeing\n\nThis applies strength 2 for 200 ticks (10 seconds):\nstrength.200.2\n\nThis applies soul sight for 100 ticks (5 seconds):\ndynamicstealth:soulsight.100\n \n
+
+dynamicstealth.config.giveUpSearchFullHP=Recover all HP
+dynamicstealth.config.giveUpSearchFullHP.tooltip=FILLSCREEN FIXNEWLINES If set to true, all hp is instantly recovered when giving up searching for a target\n \n
+dynamicstealth.config.giveUpSearchCNPCWarp=CNPCs Warp Home
+dynamicstealth.config.giveUpSearchCNPCWarp.tooltip=FILLSCREEN If set to true, cnpcs warp home when they give up searching for a target
 
 dynamicstealth.config.rallyPotions=Potion Effects
 dynamicstealth.config.rallyPotions.tooltip=FILLSCREEN FIXNEWLINES Potion effects to apply when something rallies\n\nThis applies strength 2 for 200 ticks (10 seconds):\nstrength.200.2\n\nThis applies soul sight for 100 ticks (5 seconds):\ndynamicstealth:soulsight.100\n \n

@@ -321,6 +321,12 @@ public class AIDynamicStealth extends EntityAIBase
             {
                 threat = 0;
                 clearAIPath();
+                if (serverSettings.interactions.giveUpSearch.fullHPRecovery) searcher.setHealth(searcher.getMaxHealth());
+                if (isCNPC && serverSettings.interactions.giveUpSearch.cnpcsWarpHome)
+                {
+                    ICustomNpc cnpc = (ICustomNpc) NpcAPI.Instance().getIEntity(searcher);
+                    MCTools.teleport(searcher, cnpc.getHomeX() + 0.5, cnpc.getHomeY() + 1.5, cnpc.getHomeZ() + 0.5, false, 0);
+                }
             }
 
             Threat.setThreat(searcher, threat);
