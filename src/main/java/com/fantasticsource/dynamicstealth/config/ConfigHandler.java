@@ -29,6 +29,9 @@ public class ConfigHandler
 
     public static void init()
     {
+        File file = new File(MCTools.getConfigDir() + "dynamicstealth.cfg");
+        if (file.exists()) file.renameTo(new File(MCTools.getConfigDir() + "dynamicstealth/dynamicstealth (old).cfg"));
+
         mostRecentFile = mostRecent();
         currentAlreadyExists = mostRecentFile.exists();
     }
@@ -65,7 +68,7 @@ public class ConfigHandler
             if (result != null) return result;
         }
 
-        result = new File(configDir + "dynamicstealth.cfg");
+        result = new File(configDir + "dynamicstealth/dynamicstealth.cfg");
         if (result.exists()) return result;
 
         return currentFile;
