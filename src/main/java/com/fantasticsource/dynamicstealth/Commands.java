@@ -7,6 +7,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import javax.annotation.Nullable;
@@ -32,10 +33,10 @@ public class Commands extends CommandBase
     @Override
     public String getUsage(ICommandSender sender)
     {
-        return AQUA + "/dstealth reload" + WHITE + " - " + LIGHT_PURPLE + "Makes server reload config from file\n" +
-                AQUA + "/dstealth hidefrom <playername> <t/f/true/false>" + WHITE + " - " + LIGHT_PURPLE + "True is normal/default, false means the player can always see you\n" +
-                AQUA + "/dstealth hidefrom <playername>" + WHITE + " - " + LIGHT_PURPLE + "Show whether or not you're attempting to hide from the player\n" +
-                AQUA + "/dstealth hidefrom" + WHITE + " - " + LIGHT_PURPLE + "Show a list of players you are NOT attempting to hide from";
+        return AQUA + "/dstealth reload" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.reload.comment") + "\n" +
+                AQUA + "/dstealth hidefrom <playername> <t/f/true/false>" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.hidefromPlayerTF.comment") + "\n" +
+                AQUA + "/dstealth hidefrom <playername>" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.hidefromPlayer.comment") + "\n" +
+                AQUA + "/dstealth hidefrom" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.hidefrom.comment");
     }
 
     public void execute(MinecraftServer server, ICommandSender sender, String[] args)
@@ -103,17 +104,29 @@ public class Commands extends CommandBase
             case "hidefrom":
                 if (args.length == 1)
                 {
-                    notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromList");
+                    notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefrom");
                 }
                 else if (args.length == 2)
                 {
-                    notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerTrue");
-                    notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerFalse");
+                    notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerTrue", args[1]);
+                    notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerFalse", args[1]);
                 }
                 else
                 {
-                    notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerSetTrue");
-                    notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerSetFalse");
+                    if (args[2].equalsIgnoreCase("t") || args[2].equalsIgnoreCase("true"))
+                    {
+                        notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerSetTrue", args[1]);
+                        notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerTrue", args[1]);
+                    }
+                    else if (args[2].equalsIgnoreCase("f") || args[2].equalsIgnoreCase("false"))
+                    {
+                        notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerSetFalse", args[1]);
+                        notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerFalse", args[1]);
+                    }
+                    else
+                    {
+
+                    }
                 }
                 break;
             default:
