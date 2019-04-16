@@ -39,6 +39,7 @@ dynamicstealth.cmd.hidefromPlayerTrue=§aYou are currently attempting to hide fr
 dynamicstealth.cmd.hidefromPlayerFalse=§eYou are currently NOT attempting to hide from %s
 dynamicstealth.cmd.hidefromPlayerSetTrue=§aYou are now attempting to hide from %s
 dynamicstealth.cmd.hidefromPlayerSetFalse=§eYou are now NOT attempting to hide from %s
+dynamicstealth.cmd.hidefromPlayerSetError=§cThird argument must be one of these: §dt, true, f, false
 
 
 

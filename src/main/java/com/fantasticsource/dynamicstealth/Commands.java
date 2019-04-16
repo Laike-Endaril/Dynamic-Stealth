@@ -15,7 +15,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static net.minecraft.util.text.TextFormatting.*;
+import static net.minecraft.util.text.TextFormatting.AQUA;
+import static net.minecraft.util.text.TextFormatting.WHITE;
 
 public class Commands extends CommandBase
 {
@@ -108,6 +109,7 @@ public class Commands extends CommandBase
                 }
                 else if (args.length == 2)
                 {
+                    //TODO check from tracked list, not from online players
                     notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerTrue", args[1]);
                     notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerFalse", args[1]);
                 }
@@ -115,6 +117,9 @@ public class Commands extends CommandBase
                 {
                     if (args[2].equalsIgnoreCase("t") || args[2].equalsIgnoreCase("true"))
                     {
+                        //TODO check from tracked list first
+                        //TODO if not found, check online players
+                        //TODO if not found, check offline players, using player data files
                         notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerSetTrue", args[1]);
                         notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerTrue", args[1]);
                     }
@@ -125,7 +130,7 @@ public class Commands extends CommandBase
                     }
                     else
                     {
-
+                        notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerSetError");
                     }
                 }
                 break;
