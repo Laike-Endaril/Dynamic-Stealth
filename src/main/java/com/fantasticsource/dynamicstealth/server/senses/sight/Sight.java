@@ -243,7 +243,10 @@ public class Sight
         //Hard checks (absolute)
         if (searcher.world != target.world || target.isDead || target instanceof FakePlayer) return 777;
 
-        if (Tracking.isTracking(searcher, target)) return -777;
+        if (searcher instanceof EntityPlayer && target instanceof EntityPlayer)
+        {
+            //TODO check for hidefrom command entries
+        }
         if (target instanceof EntityDragon || target instanceof EntityWither) return -777;
         if (searcher instanceof EntityPlayer && CompatDissolution.isPossessing((EntityPlayer) searcher, target)) return -777;
         if (MCTools.isRidingOrRiddenBy(searcher, target)) return -777;

@@ -1,7 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
-Let players allow other specific players to track them, using a command system and server-side preference storage
-Of course, make a server config for whether this feature is enabled or not
+Finish hidefrom command
 
 Go through configs and do @RequiresMCRestart
 

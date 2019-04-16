@@ -105,7 +105,9 @@ public class Commands extends CommandBase
             case "hidefrom":
                 if (args.length == 1)
                 {
+                    //TODO check from tracked list, not from online players
                     notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefrom");
+                    notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromEmpty");
                 }
                 else if (args.length == 2)
                 {
@@ -117,20 +119,20 @@ public class Commands extends CommandBase
                 {
                     if (args[2].equalsIgnoreCase("t") || args[2].equalsIgnoreCase("true"))
                     {
-                        //TODO check from tracked list first
-                        //TODO if not found, check online players
-                        //TODO if not found, check offline players, using player data files
+                        //TODO check from tracked list, not from online players
                         notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerSetTrue", args[1]);
                         notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerTrue", args[1]);
                     }
                     else if (args[2].equalsIgnoreCase("f") || args[2].equalsIgnoreCase("false"))
                     {
+                        //TODO check from tracked list first
+                        //TODO if not found, check player cache
                         notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerSetFalse", args[1]);
                         notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerFalse", args[1]);
                     }
                     else
                     {
-                        notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerSetError");
+                        notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerTFError");
                     }
                 }
                 break;
