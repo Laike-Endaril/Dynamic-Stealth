@@ -23,6 +23,7 @@ import com.fantasticsource.dynamicstealth.server.event.attacks.StealthAttackEven
 import com.fantasticsource.dynamicstealth.server.event.attacks.WeaponEntry;
 import com.fantasticsource.dynamicstealth.server.senses.EntitySensesEdit;
 import com.fantasticsource.dynamicstealth.server.senses.EntityTouchData;
+import com.fantasticsource.dynamicstealth.server.senses.HidingData;
 import com.fantasticsource.dynamicstealth.server.senses.hearing.Communication;
 import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
@@ -78,6 +79,7 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import noppes.npcs.api.NpcAPI;
 import noppes.npcs.api.entity.ICustomNpc;
@@ -86,7 +88,7 @@ import java.util.Set;
 
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 
-@Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, dependencies = "required-after:fantasticlib@[1.12.2.011,)")
+@Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, dependencies = "required-after:fantasticlib@[1.12.2.011a,)")
 public class DynamicStealth
 {
     public static final String MODID = "dynamicstealth";
@@ -190,6 +192,14 @@ public class DynamicStealth
             worldServer.entityTracker = new EntityTrackerEdit(worldServer);
         }
     }
+
+
+    @SubscribeEvent
+    public static void playerLogon(PlayerEvent.PlayerLoggedInEvent event)
+    {
+        HidingData.load(event.player);
+    }
+
 
     @SubscribeEvent
     public static void livingUpdate(LivingEvent.LivingUpdateEvent event)

@@ -1,9 +1,13 @@
 package com.fantasticsource.dynamicstealth;
 
 import com.fantasticsource.dynamicstealth.config.ConfigHandler;
+import com.fantasticsource.dynamicstealth.server.senses.HidingData;
 import com.fantasticsource.mctools.MCTools;
+import com.fantasticsource.mctools.PlayerData;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.PlayerNotFoundException;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
@@ -14,6 +18,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static net.minecraft.util.text.TextFormatting.AQUA;
 import static net.minecraft.util.text.TextFormatting.WHITE;
@@ -65,6 +70,7 @@ public class Commands extends CommandBase
         {
             if (args[0].equals("hidefrom"))
             {
+                //TODO change to tracked list + cache instead of online players
                 result.addAll(Arrays.asList(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getOnlinePlayerNames()));
 
                 if (partial.length() != 0) result.removeIf(k -> partial.length() > k.length() || !k.substring(0, partial.length()).equalsIgnoreCase(partial));
@@ -103,37 +109,54 @@ public class Commands extends CommandBase
                 }
                 break;
             case "hidefrom":
-                if (args.length == 1)
+                try
                 {
-                    //TODO check from tracked list, not from online players
-                    notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefrom");
-                    notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromEmpty");
-                }
-                else if (args.length == 2)
-                {
-                    //TODO check from tracked list, not from online players
-                    notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerTrue", args[1]);
-                    notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerFalse", args[1]);
-                }
-                else
-                {
-                    if (args[2].equalsIgnoreCase("t") || args[2].equalsIgnoreCase("true"))
+                    EntityPlayer player = getCommandSenderAsPlayer(sender);
+                    if (args.length == 1)
                     {
-                        //TODO check from tracked list, not from online players
-                        notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerSetTrue", args[1]);
-                        notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerTrue", args[1]);
+                        ArrayList<UUID> list = HidingData.hidingData.computeIfAbsent(player.getPersistentID(), k -> new HidingData(player)).notHidingFrom;
+                        if (list.size() == 0) notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromEmpty");
+                        else
+                        {
+                            StringBuilder textList = new StringBuilder();
+                            for (UUID id : list) textList.append("\n§e").append(PlayerData.getName(id));
+                            notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefrom", textList.toString());
+                        }
                     }
-                    else if (args[2].equalsIgnoreCase("f") || args[2].equalsIgnoreCase("false"))
+                    else if (args.length == 2)
                     {
-                        //TODO check from tracked list first
-                        //TODO if not found, check player cache
-                        notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerSetFalse", args[1]);
-                        notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerFalse", args[1]);
+                        if (HidingData.isHidingFrom(player, args[1])) notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerTrue", args[1]);
+                        else notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerFalse", args[1]);
                     }
                     else
                     {
-                        notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerTFError");
+                        if (args[2].equalsIgnoreCase("t") || args[2].equalsIgnoreCase("true"))
+                        {
+                            if (HidingData.isHidingFrom(player, args[1])) notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerTrue", args[1]);
+                            else
+                            {
+                                HidingData.hideFrom(player, args[1], true);
+                                notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerSetTrue", args[1]);
+                            }
+                        }
+                        else if (args[2].equalsIgnoreCase("f") || args[2].equalsIgnoreCase("false"))
+                        {
+                            if (!HidingData.isHidingFrom(player, args[1])) notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerFalse", args[1]);
+                            else
+                            {
+                                HidingData.hideFrom(player, args[1], false);
+                                notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerSetFalse", args[1]);
+                            }
+                        }
+                        else
+                        {
+                            notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerTFError");
+                        }
                     }
+                }
+                catch (PlayerNotFoundException e)
+                {
+                    e.printStackTrace();
                 }
                 break;
             default:

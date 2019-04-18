@@ -34,8 +34,8 @@ dynamicstealth.cmd.hidefromPlayerTF.comment=§dTrue is normal/default, false mea
 dynamicstealth.cmd.hidefromPlayer.comment=§dShow whether or not you're attempting to hide from the player
 dynamicstealth.cmd.hidefrom.comment=§dShow a list of players you are NOT attempting to hide from
 
-dynamicstealth.cmd.hidefrom=§dYou are currently NOT attempting to hide from...
-dynamicstealth.cmd.hidefromEmpty=§dYou are currently attempting to hide from all players
+dynamicstealth.cmd.hidefromEmpty=§aYou are currently attempting to hide from all players
+dynamicstealth.cmd.hidefrom=§eYou are currently NOT attempting to hide from...%s
 dynamicstealth.cmd.hidefromPlayerTrue=§aYou are currently attempting to hide from %s
 dynamicstealth.cmd.hidefromPlayerFalse=§eYou are currently NOT attempting to hide from %s
 dynamicstealth.cmd.hidefromPlayerSetTrue=§aYou are now attempting to hide from %s

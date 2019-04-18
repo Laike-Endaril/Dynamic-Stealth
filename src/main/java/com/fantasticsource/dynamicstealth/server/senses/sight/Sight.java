@@ -3,6 +3,7 @@ package com.fantasticsource.dynamicstealth.server.senses.sight;
 import com.fantasticsource.dynamicstealth.compat.CompatDissolution;
 import com.fantasticsource.dynamicstealth.config.server.senses.sight.SightConfig;
 import com.fantasticsource.dynamicstealth.server.Attributes;
+import com.fantasticsource.dynamicstealth.server.senses.HidingData;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
@@ -245,7 +246,7 @@ public class Sight
 
         if (searcher instanceof EntityPlayer && target instanceof EntityPlayer)
         {
-            //TODO check for hidefrom command entries
+            if (!HidingData.isHidingFrom((EntityPlayer) target, searcher.getName())) return -777;
         }
         if (target instanceof EntityDragon || target instanceof EntityWither) return -777;
         if (searcher instanceof EntityPlayer && CompatDissolution.isPossessing((EntityPlayer) searcher, target)) return -777;
