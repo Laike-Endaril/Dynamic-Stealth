@@ -70,8 +70,12 @@ public class Commands extends CommandBase
         {
             if (args[0].equals("hidefrom"))
             {
-                //TODO change to tracked list + cache instead of online players
                 result.addAll(Arrays.asList(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getOnlinePlayerNames()));
+
+                for (PlayerData data : PlayerData.playerData.values())
+                {
+                    if (!result.contains(data.name)) result.add(data.name);
+                }
 
                 if (partial.length() != 0) result.removeIf(k -> partial.length() > k.length() || !k.substring(0, partial.length()).equalsIgnoreCase(partial));
             }
