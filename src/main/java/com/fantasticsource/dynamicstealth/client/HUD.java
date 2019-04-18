@@ -24,6 +24,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.translation.I18n;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -287,8 +288,14 @@ public class HUD extends Gui
         if (maxDist <= 0 || maxAngle < 0) return;
 
         EntityPlayer player = Minecraft.getMinecraft().player;
-        Entity entity = player.world.getEntityByID(data.searcherID);
+        if (player == null) return;
+
+        World world = player.world;
+        if (world == null) return;
+
+        Entity entity = world.getEntityByID(data.searcherID);
         if (entity == null) return;
+
         double distSquared = player.getDistanceSq(entity);
         if (distSquared > Math.pow(maxDist, 2)) return;
 
