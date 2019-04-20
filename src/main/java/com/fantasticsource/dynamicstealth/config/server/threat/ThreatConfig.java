@@ -58,12 +58,6 @@ public class ThreatConfig
     @Config.RangeInt(min = 0)
     public int maxThreat = 1000;
 
-    @Config.Name("Unseen Target Minimum Threat Level")
-    @Config.LangKey(DynamicStealth.MODID + ".config.threatUnseenMinThreshold")
-    @Config.Comment({"If an entity's threat level falls below this and they don't see their target, they go out-of-combat / stop searching"})
-    @Config.RangeInt(min = 0)
-    public int unseenMinimumThreat = 0;
-
     @Config.Name("Unseen Target Degredation Rate")
     @Config.LangKey(DynamicStealth.MODID + ".config.threatUnseenRate")
     @Config.Comment({"Every time an entity updates and their target's position is unknown, this is subtracted from their threat"})

@@ -317,7 +317,7 @@ public class AIDynamicStealth extends EntityAIBase
             searcher.setAttackTarget(null);
 
             threat = Math.max(0, threat - serverSettings.threat.unseenTargetDegredationRate);
-            if (threat <= serverSettings.threat.unseenMinimumThreat)
+            if (threat <= 0)
             {
                 threat = 0;
                 clearAIPath();
