@@ -287,8 +287,8 @@ dynamicstealth.config.entitySpecificSight=Entity-Specific Settings (Advanced)
 
 dynamicstealth.config.crouchMultiplier=Crouching Multiplier
 dynamicstealth.config.crouchMultiplier.tooltip=FILLSCREEN FIXNEWLINES Multiplies an entity's visibility by this decimal when crouching\n\nIf set to 1, there is no effect\n\nIf set to 0, crouching entities are invisible (except in special cases)\n \n
-dynamicstealth.config.disguiseMultiplier=Disguise Multiplier
-dynamicstealth.config.disguiseMultiplier.tooltip=FILLSCREEN FIXNEWLINES When an entity (including a player) is wearing a mob head, mobs of that type are less likely to notice them\n\nIf set to 1, there is no effect\n\nIf set to 0, mobs of the mob head type cannot notice entities wearing their heads\n \n
+dynamicstealth.config.mobHeadMultiplier=Mob Head Multiplier
+dynamicstealth.config.mobHeadMultiplier.tooltip=FILLSCREEN FIXNEWLINES When an entity (including a player) is wearing a mob head, mobs of that type have reduced chance to realize they're a target\n\nIf set to 1, there is no effect\n\nIf set to 0, mobs of the mob head type cannot notice entities wearing their heads\n \n
 dynamicstealth.config.invisibilityMultiplier=Invisibility Multiplier
 dynamicstealth.config.invisibilityMultiplier.tooltip=FILLSCREEN FIXNEWLINES Invisible entities' visibility is multiplied by this\n\nIf set to 1, there is no effect\n\nIf set to 0, invisible entities are, uh...invisible\n \n
 dynamicstealth.config.blindnessMultiplier=Blindness Multiplier

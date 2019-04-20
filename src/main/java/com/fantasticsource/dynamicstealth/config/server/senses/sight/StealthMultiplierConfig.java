@@ -18,18 +18,18 @@ public class StealthMultiplierConfig
     @Config.RangeDouble(min = 0, max = 1)
     public double crouchingMultiplier = 0.75;
 
-    @Config.Name("Disguise Multiplier")
-    @Config.LangKey(DynamicStealth.MODID + ".config.disguiseMultiplier")
+    @Config.Name("Mob Head Multiplier")
+    @Config.LangKey(DynamicStealth.MODID + ".config.mobHeadMultiplier")
     @Config.Comment(
             {
-                    "When an entity (including a player) is wearing a mob head, mobs of that type are less likely to notice them",
+                    "When an entity (including a player) is wearing a mob head, mobs of that type have reduced chance to realize they're a target",
                     "",
                     "If set to 1, there is no effect",
                     "",
                     "If set to 0, mobs of the mob head type cannot notice entities wearing their heads"
             })
     @Config.RangeDouble(min = 0, max = 1)
-    public double disguiseMultiplier = 0.5;
+    public double mobHeadMultiplier = 0.5;
 
     @Config.Name("Invisibility Multiplier")
     @Config.LangKey(DynamicStealth.MODID + ".config.invisibilityMultiplier")

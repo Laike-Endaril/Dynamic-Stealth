@@ -249,8 +249,6 @@ public class ConfigHandler
         rename(old, "general.server settings.ai.flee", "Degredation Rate", "general.server settings.threat system", "070 Flee Degredation Rate");
         rename(old, "general.server settings.threat system", "Owned Can't Reach Degredation Rate", "general.server settings.threat system", "075 Owned Can't Reach Degredation Rate");
 
-        rename(old, "general.server settings.senses.sight.stealth multipliers", "Mob Head Multiplier", "general.server settings.senses.sight.stealth multipliers", "Disguise Multiplier");
-
         log();
         log();
         log();

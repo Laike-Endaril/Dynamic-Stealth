@@ -1,5 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
+Rename head multiplier to disguise multiplier
 Add other mob heads from other mods to disguise multiplier
 Add Morph / Metamorph transformation support to disguise multiplier
 
