@@ -1,9 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Rename head multiplier to disguise multiplier
-Add other mob heads from other mods to disguise multiplier
-Add Morph / Metamorph transformation support to disguise multiplier
-
 Add lang keys for all println() calls (make sure to use deprecated I18n, not the non-deprecated one)
 
 Make stealth level / visibility transitions smoother (ie. change at a rate)?
@@ -51,6 +47,8 @@ GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES ============================
 
 Add wiki / guide videos
 Add guidebook, possibly using guide api or patchouli
+
+Add other mob heads from other mods to disguise multiplier
 
 
 
