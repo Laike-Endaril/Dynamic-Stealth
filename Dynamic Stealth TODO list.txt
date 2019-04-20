@@ -1,10 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Brush up config...
-...maybe merge flee, rally, etc categories, since they exist in two places (AI and interactions)
-...change setting names to re-order config setting elements so the order makes sense, since we have lang files now for displayed names
-...go through configs and do @RequiresMCRestart
-
 Add lang keys for all println() calls (make sure to use deprecated I18n, not the non-deprecated one)
 
 Add Morph / Metamorph stealth bonus
