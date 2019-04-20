@@ -220,11 +220,20 @@ public class ConfigHandler
         rename(old, "general.client settings.hud.targeting filter", "Bypass", "general.client settings.hud.targeting filter", "070 Bypass");
         rename(old, "general.client settings.hud.targeting filter", "Passive", "general.client settings.hud.targeting filter", "071 Idle (Passive)");
         rename(old, "general.client settings.hud.targeting filter", "Idle", "general.client settings.hud.targeting filter", "072 Idle (Non-Passive)");
-        rename(old, "general.client settings.hud.targeting filter", "Attacking Other", "general.client settings.hud.targeting filter", "073 Attacking Other");
-        rename(old, "general.client settings.hud.targeting filter", "Alert", "general.client settings.hud.targeting filter", "074 Alert");
-        rename(old, "general.client settings.hud.targeting filter", "Attacking You", "general.client settings.hud.targeting filter", "075 Attacking You");
+        rename(old, "general.client settings.hud.targeting filter", "Attacking You", "general.client settings.hud.targeting filter", "073 Attacking You");
+        rename(old, "general.client settings.hud.targeting filter", "Attacking Other", "general.client settings.hud.targeting filter", "074 Attacking Other");
+        rename(old, "general.client settings.hud.targeting filter", "Alert", "general.client settings.hud.targeting filter", "075 Searching");
         rename(old, "general.client settings.hud.targeting filter", "Flee2", "general.client settings.hud.targeting filter", "076 Fleeing (Passive)");
         rename(old, "general.client settings.hud.targeting filter", "Flee", "general.client settings.hud.targeting filter", "077 Fleeing (Non-Passive)");
+
+        rename(old, "general.client settings.hud.on-point hud filter", "Bypass", "general.client settings.hud.on-point hud filter", "070 Bypass");
+        rename(old, "general.client settings.hud.on-point hud filter", "Passive", "general.client settings.hud.on-point hud filter", "071 Idle (Passive)");
+        rename(old, "general.client settings.hud.on-point hud filter", "Idle", "general.client settings.hud.on-point hud filter", "072 Idle (Non-Passive)");
+        rename(old, "general.client settings.hud.on-point hud filter", "Attacking You", "general.client settings.hud.on-point hud filter", "073 Attacking You");
+        rename(old, "general.client settings.hud.on-point hud filter", "Attacking Other", "general.client settings.hud.on-point hud filter", "074 Attacking Other");
+        rename(old, "general.client settings.hud.on-point hud filter", "Alert", "general.client settings.hud.on-point hud filter", "075 Searching");
+        rename(old, "general.client settings.hud.on-point hud filter", "Flee2", "general.client settings.hud.on-point hud filter", "076 Fleeing (Passive)");
+        rename(old, "general.client settings.hud.on-point hud filter", "Flee", "general.client settings.hud.on-point hud filter", "077 Fleeing (Non-Passive)");
 
         log();
         log();

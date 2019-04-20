@@ -128,14 +128,14 @@ public class HUD extends Gui
 
     private static boolean onPointFilter(int color)
     {
-        if (color == COLOR_BYPASS) return clientSettings.hudSettings.ophudFilter.showBypass;
-        else if (color == COLOR_IDLE_PASSIVE) return clientSettings.hudSettings.ophudFilter.showPassive;
-        else if (color == COLOR_IDLE_NON_PASSIVE) return clientSettings.hudSettings.ophudFilter.showIdle;
-        else if (color == COLOR_SEARCHING) return clientSettings.hudSettings.ophudFilter.showAlert;
-        else if (color == COLOR_ATTACKING_YOU) return clientSettings.hudSettings.ophudFilter.showAttackingYou;
-        else if (color == COLOR_ATTACKING_OTHER) return clientSettings.hudSettings.ophudFilter.showAttackingOther;
-        else if (color == COLOR_FLEEING_N0N_PASSIVE) return clientSettings.hudSettings.ophudFilter.showFleeing;
-        else if (color == COLOR_FLEEING_PASSIVE) return clientSettings.hudSettings.ophudFilter.showFleeingPassive;
+        if (color == COLOR_BYPASS) return clientSettings.hudSettings.ophudFilter.bypass;
+        else if (color == COLOR_IDLE_PASSIVE) return clientSettings.hudSettings.ophudFilter.idlePassive;
+        else if (color == COLOR_IDLE_NON_PASSIVE) return clientSettings.hudSettings.ophudFilter.idleNonPassive;
+        else if (color == COLOR_SEARCHING) return clientSettings.hudSettings.ophudFilter.alert;
+        else if (color == COLOR_ATTACKING_YOU) return clientSettings.hudSettings.ophudFilter.attackingYou;
+        else if (color == COLOR_ATTACKING_OTHER) return clientSettings.hudSettings.ophudFilter.attackingOther;
+        else if (color == COLOR_FLEEING_N0N_PASSIVE) return clientSettings.hudSettings.ophudFilter.fleeingNonPassive;
+        else if (color == COLOR_FLEEING_PASSIVE) return clientSettings.hudSettings.ophudFilter.fleeingPassive;
         return false;
     }
 

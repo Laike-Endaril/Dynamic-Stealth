@@ -35,20 +35,20 @@ public class TargetingFilterConfig
     @Config.Comment({"If true, the targeting HUD shows when focused on an idle non-passive entity.  This also applies to idle passive entities if the server has passive recognition disabled"})
     public boolean idleNonPassive = true;
 
-    @Config.Name("073 Attacking Other")
+    @Config.Name("073 Attacking You")
+    @Config.LangKey(DynamicStealth.MODID + ".config.targetingAtkYou")
+    @Config.Comment({"If true, the targeting HUD shows when focused on an entity that is attacking YOU"})
+    public boolean attackingYou = true;
+
+    @Config.Name("074 Attacking Other")
     @Config.LangKey(DynamicStealth.MODID + ".config.targetingAtkOther")
     @Config.Comment({"If true, the targeting HUD shows when focused on an entity that is attacking something besides you"})
     public boolean attackingOther = true;
 
-    @Config.Name("074 Alert")
-    @Config.LangKey(DynamicStealth.MODID + ".config.targetingAlert")
+    @Config.Name("075 Searching")
+    @Config.LangKey(DynamicStealth.MODID + ".config.targetingSearching")
     @Config.Comment({"If true, the targeting HUD shows when focused on an entity that is actively searching for a target"})
     public boolean alert = true;
-
-    @Config.Name("075 Attacking You")
-    @Config.LangKey(DynamicStealth.MODID + ".config.targetingAtkYou")
-    @Config.Comment({"If true, the targeting HUD shows when focused on an entity that is attacking YOU"})
-    public boolean attackingYou = true;
 
     @Config.Name("076 Fleeing (Passive)")
     @Config.LangKey(DynamicStealth.MODID + ".config.targetingFleePassive")
