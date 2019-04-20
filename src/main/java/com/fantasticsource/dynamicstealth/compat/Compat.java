@@ -25,7 +25,6 @@ public class Compat
 
     public static void cancelTasksRequiringAttackTarget(EntityAITasks tasks)
     {
-        //TODO make this convert the tasks instead, using NPEAttackTargetTaskHolder
         for (EntityAITasks.EntityAITaskEntry task : tasks.taskEntries)
         {
             if (badNullTargetHandling(task.action))
