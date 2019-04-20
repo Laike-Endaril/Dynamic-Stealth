@@ -573,7 +573,7 @@ public class HUD extends Gui
                     elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.hp", hp, max, (int) (hp / max * 100)));
                 }
 
-                if (clientSettings.hudSettings.targetingStyle.components.target) //Actually now "action" and not just "target" TODO remove this comment when var name is changed
+                if (clientSettings.hudSettings.targetingStyle.components.action)
                 {
                     String action;
                     switch (color)

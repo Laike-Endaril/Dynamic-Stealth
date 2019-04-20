@@ -209,6 +209,12 @@ public class ConfigHandler
         rename(old, "general.server settings.client hud allowances", "OPHUD Range", "general.server settings.client hud allowances.ophud allowances", "010 OPHUD Range");
         rename(old, "general.server settings.client hud allowances", "OPHUD Update Delay", "general.server settings.client hud allowances.ophud allowances", "020 OPHUD Update Delay");
 
+        rename(old, "general.client settings.hud.targeting hud style.components", "Target's Name", "general.client settings.hud.targeting hud style.components", "010 Name");
+        rename(old, "general.client settings.hud.targeting hud style.components", "Target's Health", "general.client settings.hud.targeting hud style.components", "020 Health");
+        rename(old, "general.client settings.hud.targeting hud style.components", "Target's Target", "general.client settings.hud.targeting hud style.components", "030 Action");
+        rename(old, "general.client settings.hud.targeting hud style.components", "Target's Threat", "general.client settings.hud.targeting hud style.components", "040 Threat");
+        rename(old, "general.client settings.hud.targeting hud style.components", "Target's Distance", "general.client settings.hud.targeting hud style.components", "050 Distance");
+
         log();
         log();
         log();

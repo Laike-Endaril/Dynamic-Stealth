@@ -177,15 +177,15 @@ dynamicstealth.config.targetingArrowSize=Arrow Size
 dynamicstealth.config.targetingArrowSize.tooltip=FILLSCREEN FIXNEWLINES The size of the directional indicator for the main target\nThis arrow is only visible when the current target is off-screen\n \n
 dynamicstealth.config.targetingComponents=Components
 
-dynamicstealth.config.targetShowName=Target's Name
+dynamicstealth.config.targetShowName=Name
 dynamicstealth.config.targetShowName.tooltip=FILLSCREEN FIXNEWLINES If true, the targeted entity's name is shown (if available)\n \n
-dynamicstealth.config.targetShowHP=Target's Health
+dynamicstealth.config.targetShowHP=Health
 dynamicstealth.config.targetShowHP.tooltip=FILLSCREEN FIXNEWLINES If true, the targeted entity's health is shown (if available)\n \n
-dynamicstealth.config.targetShowAction=Target's Action
+dynamicstealth.config.targetShowAction=Action
 dynamicstealth.config.targetShowAction.tooltip=FILLSCREEN FIXNEWLINES If true, the targeted entity's current action is shown (if available)\n \n
-dynamicstealth.config.targetShowThreat=Target's Threat
+dynamicstealth.config.targetShowThreat=Threat
 dynamicstealth.config.targetShowThreat.tooltip=FILLSCREEN FIXNEWLINES If true, the targeted entity's threat level is shown (if available)\n \n
-dynamicstealth.config.targetShowDistance=Target's Distance
+dynamicstealth.config.targetShowDistance=Distance
 dynamicstealth.config.targetShowDistance.tooltip=FILLSCREEN FIXNEWLINES If true, the targeted entity's distance is shown (if available)\n \n
 
 dynamicstealth.config.fadeMinAlpha=Minimum Entity Opacity
