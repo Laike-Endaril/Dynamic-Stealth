@@ -274,13 +274,13 @@ public class HUD extends Gui
     private static void makeTargetIfBetter(OnPointData data)
     {
         int color = data.color;
-        if (color == COLOR_BYPASS && !clientSettings.hudSettings.targetingFilter.showBypass) return;
-        if (color == COLOR_IDLE_PASSIVE && !clientSettings.hudSettings.targetingFilter.showPassive) return;
-        if (color == COLOR_IDLE_NON_PASSIVE && !clientSettings.hudSettings.targetingFilter.showIdle) return;
-        if (color == COLOR_SEARCHING && !clientSettings.hudSettings.targetingFilter.showAlert) return;
-        if (color == COLOR_ATTACKING_YOU && !clientSettings.hudSettings.targetingFilter.showAttackingYou) return;
-        if (color == COLOR_ATTACKING_OTHER && !clientSettings.hudSettings.targetingFilter.showAttackingOther) return;
-        if (color == COLOR_FLEEING_N0N_PASSIVE && !clientSettings.hudSettings.targetingFilter.showFleeing) return;
+        if (color == COLOR_BYPASS && !clientSettings.hudSettings.targetingFilter.bypass) return;
+        if (color == COLOR_IDLE_PASSIVE && !clientSettings.hudSettings.targetingFilter.idlePassive) return;
+        if (color == COLOR_IDLE_NON_PASSIVE && !clientSettings.hudSettings.targetingFilter.idleNonPassive) return;
+        if (color == COLOR_SEARCHING && !clientSettings.hudSettings.targetingFilter.alert) return;
+        if (color == COLOR_ATTACKING_YOU && !clientSettings.hudSettings.targetingFilter.attackingYou) return;
+        if (color == COLOR_ATTACKING_OTHER && !clientSettings.hudSettings.targetingFilter.attackingOther) return;
+        if (color == COLOR_FLEEING_N0N_PASSIVE && !clientSettings.hudSettings.targetingFilter.fleeingNonPassive) return;
         if (color == COLOR_FLEEING_PASSIVE && !clientSettings.hudSettings.targetingFilter.fleeingPassive) return;
 
         int maxDist = clientSettings.hudSettings.targetingFilter.maxDist;

@@ -215,6 +215,17 @@ public class ConfigHandler
         rename(old, "general.client settings.hud.targeting hud style.components", "Target's Threat", "general.client settings.hud.targeting hud style.components", "040 Threat");
         rename(old, "general.client settings.hud.targeting hud style.components", "Target's Distance", "general.client settings.hud.targeting hud style.components", "050 Distance");
 
+        rename(old, "general.client settings.hud.targeting filter", "Max Distance", "general.client settings.hud.targeting filter", "020 Max Distance");
+        rename(old, "general.client settings.hud.targeting filter", "Max Angle", "general.client settings.hud.targeting filter", "030 Max Angle");
+        rename(old, "general.client settings.hud.targeting filter", "Bypass", "general.client settings.hud.targeting filter", "070 Bypass");
+        rename(old, "general.client settings.hud.targeting filter", "Passive", "general.client settings.hud.targeting filter", "071 Idle (Passive)");
+        rename(old, "general.client settings.hud.targeting filter", "Idle", "general.client settings.hud.targeting filter", "072 Idle (Non-Passive)");
+        rename(old, "general.client settings.hud.targeting filter", "Attacking Other", "general.client settings.hud.targeting filter", "073 Attacking Other");
+        rename(old, "general.client settings.hud.targeting filter", "Alert", "general.client settings.hud.targeting filter", "074 Alert");
+        rename(old, "general.client settings.hud.targeting filter", "Attacking You", "general.client settings.hud.targeting filter", "075 Attacking You");
+        rename(old, "general.client settings.hud.targeting filter", "Flee2", "general.client settings.hud.targeting filter", "076 Fleeing (Passive)");
+        rename(old, "general.client settings.hud.targeting filter", "Flee", "general.client settings.hud.targeting filter", "077 Fleeing (Non-Passive)");
+
         log();
         log();
         log();
