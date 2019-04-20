@@ -487,7 +487,7 @@ public class DynamicStealth
                 if (hasAI && (stealthAI.isFleeing() || stealthAI.getMode() == AIDynamicStealth.MODE_COWER))
                 {
                     //Be brave, Sir Robin
-                    if (serverSettings.ai.flee.increaseOnDamage) Threat.set(target, canSee ? attacker : threatTarget, threat + (int) (event.getAmount() * serverSettings.threat.attackedThreatMultiplierTarget / target.getMaxHealth()));
+                    if (serverSettings.ai.flee.increaseOnDamage) Threat.set(target, canSee ? attacker : threatTarget, threat + (int) (event.getAmount() * serverSettings.threat.attackedBySameMultiplier / target.getMaxHealth()));
                     target.setAttackTarget(null);
                     stealthAI.restart(perceivedPos);
                 }
@@ -500,7 +500,7 @@ public class DynamicStealth
                 else if (threatTarget == attacker || threatTarget == null)
                 {
                     //In combat (not fleeing), and hit by threat target or what is presumed to be threat target (if null)
-                    Threat.set(target, canSee ? attacker : null, threat + (int) (event.getAmount() * serverSettings.threat.attackedThreatMultiplierTarget / target.getMaxHealth()));
+                    Threat.set(target, canSee ? attacker : null, threat + (int) (event.getAmount() * serverSettings.threat.attackedBySameMultiplier / target.getMaxHealth()));
                     target.setAttackTarget(canSee ? attacker : threatTarget);
                     if (hasAI) stealthAI.restart(perceivedPos);
                 }
@@ -508,7 +508,7 @@ public class DynamicStealth
                 {
                     //In combat (not fleeing), and hit by an entity besides our threat target
                     double changeFactor = event.getAmount() / target.getMaxHealth();
-                    threat -= changeFactor * serverSettings.threat.attackedThreatMultiplierOther;
+                    threat -= changeFactor * serverSettings.threat.attackedByOtherMultiplier;
                     if (threat <= 0)
                     {
                         //Switching targets
@@ -538,7 +538,7 @@ public class DynamicStealth
         {
             EntityLiving livingSource = (EntityLiving) source;
             Threat.ThreatData data = Threat.get(livingSource);
-            if (data.target == targetBase) Threat.setThreat(livingSource, data.threatLevel + (int) (event.getAmount() * serverSettings.threat.damageDealtThreatMultiplier / targetBase.getMaxHealth()));
+            if (data.target == targetBase) Threat.setThreat(livingSource, data.threatLevel + (int) (event.getAmount() * serverSettings.threat.damageDealtMultiplier / targetBase.getMaxHealth()));
         }
     }
 

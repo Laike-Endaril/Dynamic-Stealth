@@ -235,6 +235,20 @@ public class ConfigHandler
         rename(old, "general.client settings.hud.on-point hud filter", "Flee2", "general.client settings.hud.on-point hud filter", "076 Fleeing (Passive)");
         rename(old, "general.client settings.hud.on-point hud filter", "Flee", "general.client settings.hud.on-point hud filter", "077 Fleeing (Non-Passive)");
 
+        rename(old, "general.server settings.threat system", "Bypass Threat System (Global)", "general.server settings.threat system", "000 Bypass Threat System (Global)");
+        rename(old, "general.server settings.threat system", "Maximum Threat", "general.server settings.threat system", "005 Maximum Threat");
+        rename(old, "general.server settings.threat system", "Initial 'Target Spotted' Threat", "general.server settings.threat system", "010 Initial 'Target Spotted' Threat");
+        rename(old, "general.server settings.threat system", "Initial Attack Multiplier", "general.server settings.threat system", "015 Initial Attack Multiplier");
+        rename(old, "general.server settings.threat system", "Dealt Damage Multiplier", "general.server settings.threat system", "020 Dealt Damage Multiplier");
+        rename(old, "general.server settings.threat system", "'Attacked By Same' Multiplier", "general.server settings.threat system", "025 'Attacked By Same' Multiplier");
+        rename(old, "general.server settings.threat system", "'Attacked By Other' Multiplier", "general.server settings.threat system", "030 'Attacked By Other' Multiplier");
+        rename(old, "general.server settings.threat system", "'Warned' Threat", "general.server settings.threat system", "035 'Warned' Threat");
+        rename(old, "general.server settings.threat system", "'Ally Killed' Threat", "general.server settings.threat system", "040 'Ally Killed' Threat");
+        rename(old, "general.server settings.threat system", "Seen Target Threat Rate", "general.server settings.threat system", "060 Seen Target Threat Rate");
+        rename(old, "general.server settings.threat system", "Unseen Target Degredation Rate", "general.server settings.threat system", "065 Unseen Target Degredation Rate");
+        rename(old, "general.server settings.ai.flee", "Degredation Rate", "general.server settings.threat system", "070 Flee Degredation Rate");
+        rename(old, "general.server settings.threat system", "Owned Can't Reach Degredation Rate", "general.server settings.threat system", "075 Owned Can't Reach Degredation Rate");
+
         log();
         log();
         log();

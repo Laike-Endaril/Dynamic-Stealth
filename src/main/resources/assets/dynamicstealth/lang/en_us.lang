@@ -217,8 +217,6 @@ dynamicstealth.config.entitySpecificHeadSpeed.tooltip=FILLSCREEN FIXNEWLINES How
 
 dynamicstealth.config.fleeThreshold=HP Threshold
 dynamicstealth.config.fleeThreshold.tooltip=FILLSCREEN FIXNEWLINES The %% of health at which entities start to flee\n \n
-dynamicstealth.config.fleeRate=Degredation Rate
-dynamicstealth.config.fleeRate.tooltip=FILLSCREEN FIXNEWLINES How fast the flee gauge decreases; lower number means they flee for a longer time\n \n
 dynamicstealth.config.fleeDamageLengthen=Damage Increases Flee Duration
 dynamicstealth.config.fleeDamageLengthen.tooltip=FILLSCREEN FIXNEWLINES If set to true, then when an entity is *already* in flee mode, damage will increase its flee duration\n \n
 dynamicstealth.config.fleeHome=CNPCs flee To Home Position
@@ -345,6 +343,8 @@ dynamicstealth.config.notificationRange.tooltip=FILLSCREEN FIXNEWLINES How far a
 dynamicstealth.config.noLOSMultiplier=No LOS Multiplier
 dynamicstealth.config.noLOSMultiplier.tooltip=FILLSCREEN FIXNEWLINES If the observer doesn't have LOS to the source of the sound, its hearing range is multiplied by this\n \n
 
+dynamicstealth.config.threatEntitySpecific=Entity-Specific Settings (Advanced)
+dynamicstealth.config.threatCNPC=CNPC Threat Settings
 dynamicstealth.config.threatDealtDamage=Dealt Damage Multiplier
 dynamicstealth.config.threatDealtDamage.tooltip=FILLSCREEN FIXNEWLINES When an in-combat entity damages its current target, its threat is increased by the damage dealt times this, divided by its target's max HP\n \n
 dynamicstealth.config.threatAttackedBySame="Attacked By Same" Multiplier
@@ -367,12 +367,12 @@ dynamicstealth.config.threatUnseenMinThreshold=Unseen Target Minimum Threat Leve
 dynamicstealth.config.threatUnseenMinThreshold.tooltip=FILLSCREEN FIXNEWLINES If an entity's threat level falls below this and they don't see their target, they go out-of-combat / stop searching\n \n
 dynamicstealth.config.threatUnseenRate=Unseen Target Degredation Rate
 dynamicstealth.config.threatUnseenRate.tooltip=FILLSCREEN FIXNEWLINES Every time an entity updates and their target's position is unknown, this is subtracted from their threat\n \n
+dynamicstealth.config.threatFleeRate=Flee Degredation Rate
+dynamicstealth.config.threatFleeRate.tooltip=FILLSCREEN FIXNEWLINES How fast the threat gauge decreases while fleeing; lower number means they flee for a longer time\n \n
 dynamicstealth.config.threatSeenRate=Seen Target Threat Rate
 dynamicstealth.config.threatSeenRate.tooltip=FILLSCREEN FIXNEWLINES Every time an entity updates and their target is visible and reachable, this is added to their threat\n \n
 dynamicstealth.config.threatCantReachRate=Owned Can't Reach Degredation Rate
 dynamicstealth.config.threatCantReachRate.tooltip=FILLSCREEN FIXNEWLINES Every time an owned entity updates and can't reach their target, this is subtracted from their threat\n \n
-dynamicstealth.config.threatEntitySpecific=Entity-Specific Settings (Advanced)
-dynamicstealth.config.threatCNPC=CNPC Threat Settings
 
 dynamicstealth.config.entitySpecificBypass=Threat Bypass
 dynamicstealth.config.entitySpecificBypass.tooltip=FILLSCREEN FIXNEWLINES Entities in this bypass the threat system\n\nThis means they will not use the search AI, will appear with ???? as their target and threat level in the targeting HUD, and always appear as full alert in the on-point HUD\n\nFor some entities, this option is necessary for them to work right, such as slimes.  For others, like the ender dragon and other players, it has no effect besides how they appear in the HUD\n \n

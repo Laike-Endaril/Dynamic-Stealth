@@ -600,7 +600,7 @@ public class AIDynamicStealth extends EntityAIBase
         {
             //Threat calc
             Threat.ThreatData data = Threat.get(searcher);
-            int threat = Math.max(0, data.threatLevel - serverSettings.ai.flee.degredationRate);
+            int threat = Math.max(0, data.threatLevel - serverSettings.threat.fleeDegredationRate);
             Threat.setThreat(searcher, threat);
 
 

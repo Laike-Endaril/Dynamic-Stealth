@@ -1,7 +1,6 @@
 CURRENTLY WORKING ON ===================================================
 
 Brush up config...
-...move all threat rates/changes into threat settings if they exist in other categories
 ...maybe merge flee, rally, etc categories, since they exist in two places (AI and interactions)
 ...change setting names to re-order config setting elements so the order makes sense, since we have lang files now for displayed names
 ...go through configs and do @RequiresMCRestart
