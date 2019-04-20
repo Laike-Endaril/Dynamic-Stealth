@@ -340,10 +340,10 @@ public class Sight
                 int damage = helmet.getItemDamage();
                 if (target instanceof EntitySkeleton && damage == 0 || target instanceof EntityWitherSkeleton && damage == 1 || target instanceof EntityZombie && damage == 2 || target instanceof EntityCreeper && damage == 4)
                 {
-                    mobHeadMultiplier = sight.a_stealthMultipliers.mobHeadMultiplier;
+                    mobHeadMultiplier = sight.a_stealthMultipliers.disguiseMultiplier;
                 }
             }
-            else if ((helmet.getItem() == Item.getItemFromBlock(Blocks.PUMPKIN) && helmet.getItem() == Item.getItemFromBlock(Blocks.LIT_PUMPKIN)) && target instanceof EntitySnowman) mobHeadMultiplier = sight.a_stealthMultipliers.mobHeadMultiplier;
+            else if ((helmet.getItem() == Item.getItemFromBlock(Blocks.PUMPKIN) && helmet.getItem() == Item.getItemFromBlock(Blocks.LIT_PUMPKIN)) && target instanceof EntitySnowman) mobHeadMultiplier = sight.a_stealthMultipliers.disguiseMultiplier;
         }
 
 
