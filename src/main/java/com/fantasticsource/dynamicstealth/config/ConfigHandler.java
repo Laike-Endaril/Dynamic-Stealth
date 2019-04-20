@@ -154,9 +154,10 @@ public class ConfigHandler
             case 0:
                 //Config versions 55-
                 updatePre56To56();
+                //Don't use break here; allow cases to pass to the next one, so it does each update function incrementally
             case 56:
-                //Config versions 56 - 68
-                update56To68();
+                //Config versions 56-68
+                update56To69();
                 //Don't use break here; allow cases to pass to the next one, so it does each update function incrementally
         }
 
@@ -199,7 +200,7 @@ public class ConfigHandler
         transferAll(old, current);
     }
 
-    private static void update56To68() throws IOException
+    private static void update56To69() throws IOException
     {
         Configuration current = new Configuration(currentFile);
         Configuration old = new Configuration(mostRecentFile);
