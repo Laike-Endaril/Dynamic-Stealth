@@ -1,8 +1,10 @@
 CURRENTLY WORKING ON ===================================================
 
-Add lang keys for all println() calls (make sure to use deprecated I18n, not the non-deprecated one)
+Rename head multiplier to disguise multiplier
+Add other mob heads from other mods to disguise multiplier
+Add Morph / Metamorph transformation support to disguise multiplier
 
-Add Morph / Metamorph stealth bonus
+Add lang keys for all println() calls (make sure to use deprecated I18n, not the non-deprecated one)
 
 Make stealth level / visibility transitions smoother (ie. change at a rate)?
 "maybe if they see you less than a second or two, instead of being alerted they could go look first"
