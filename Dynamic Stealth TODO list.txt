@@ -18,8 +18,6 @@ Directional indicators...
 ...add optional "damaged from" indicator, which draws an indicator pointing the direction damage was recently received from
 ...add optional touch detection indicator for players (see to do in DynamicStealth.java)
 
-Remove special filter for ice and fire mobs when they release the fix on their side (they already fixed in a commit, it's just not released yet)
-
 Set Bonus integration for stealth attacks and assassinations
 
 
