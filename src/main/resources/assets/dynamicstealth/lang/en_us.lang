@@ -237,14 +237,26 @@ dynamicstealth.config.cantReachTargetTime.tooltip=FILLSCREEN FIXNEWLINES Decidin
 dynamicstealth.config.cantReachFlee=Flee If Unreachable
 dynamicstealth.config.cantReachFlee.tooltip=FILLSCREEN FIXNEWLINES If we can't reach the target, do what brave Sir Robin does\n \n
 
-dynamicstealth.config.allowOPHUD=Allow On-Point HUD
-dynamicstealth.config.allowOPHUD.tooltip=FILLSCREEN FIXNEWLINES If enabled, clients can turn on/off a HUD which appears above each entity\n\n0 means disabled for all players\n1 means enabled for OP players ONLY\n2 means enabled for all players\n \n
-dynamicstealth.config.allowTargeting=Allow "Target's Target" Display
-dynamicstealth.config.allowTargeting.tooltip=FILLSCREEN FIXNEWLINES If enabled, clients can see what other entities are targeting\n\n0 means disabled for all players\n1 means enabled for OP players ONLY\n2 means enabled for all players\n \n
+dynamicstealth.config.targetingAllowances=Targeting allowances
+dynamicstealth.config.OPHUDAllowances=OPHUD allowances
 dynamicstealth.config.allowPassiveRecognition=Recognize Passives Automatically
 dynamicstealth.config.allowPassiveRecognition.tooltip=FILLSCREEN FIXNEWLINES If enabled, clients' threat HUDs will display green for passive mobs.  If disabled, passives appear as idle (blue).\n \n
 dynamicstealth.config.allowStealthGauge=Allow Stealth Gauge
 dynamicstealth.config.allowStealthGauge.tooltip=FILLSCREEN FIXNEWLINES If enabled, clients can see their current stealth level in their HUD\n\n0 means disabled for all players\n1 means enabled for OP players ONLY\n2 means enabled for all players\n \n
+
+dynamicstealth.config.allowTargetName=Allow "Name" Display
+dynamicstealth.config.allowTargetName.tooltip=FILLSCREEN FIXNEWLINES If enabled, clients can see the names of entities\n\n0 means disabled for all players\n1 means enabled for OP players ONLY\n2 means enabled for all players\n \n
+dynamicstealth.config.allowTargetHP=Allow "HP" Display
+dynamicstealth.config.allowTargetHP.tooltip=FILLSCREEN FIXNEWLINES If enabled, clients can see the HP of entities\n\n0 means disabled for all players\n1 means enabled for OP players ONLY\n2 means enabled for all players\n \n
+dynamicstealth.config.allowTargeting=Allow "Target's Target" Display
+dynamicstealth.config.allowTargeting.tooltip=FILLSCREEN FIXNEWLINES If enabled, clients can see what other entities are targeting\n\n0 means disabled for all players\n1 means enabled for OP players ONLY\n2 means enabled for all players\n \n
+dynamicstealth.config.allowTargetThreat=Allow "Threat" Display
+dynamicstealth.config.allowTargetThreat.tooltip=FILLSCREEN FIXNEWLINES If enabled, clients can see the numerical threat % of entities\n\n0 means disabled for all players\n1 means enabled for OP players ONLY\n2 means enabled for all players\n \n
+dynamicstealth.config.allowTargetDistance=Allow "Distance" Display
+dynamicstealth.config.allowTargetDistance.tooltip=FILLSCREEN FIXNEWLINES If enabled, clients can see the distance to entities\n\n0 means disabled for all players\n1 means enabled for OP players ONLY\n2 means enabled for all players\n \n
+
+dynamicstealth.config.allowOPHUD=Allow On-Point HUD
+dynamicstealth.config.allowOPHUD.tooltip=FILLSCREEN FIXNEWLINES If enabled, clients can turn on/off a HUD which appears above each entity\n\n0 means disabled for all players\n1 means enabled for OP players ONLY\n2 means enabled for all players\n \n
 dynamicstealth.config.OPHUDRange=OPHUD Range
 dynamicstealth.config.OPHUDRange.tooltip=FILLSCREEN FIXNEWLINES The maximum distance at which on-point HUDs will appear on clients; impacts server performance if too high\n \n
 dynamicstealth.config.OPHUDDelay=OPHUD Update Delay

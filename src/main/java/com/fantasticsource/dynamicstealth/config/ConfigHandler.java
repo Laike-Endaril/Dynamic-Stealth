@@ -155,9 +155,8 @@ public class ConfigHandler
                 //Config versions 55-
                 updatePre56To56();
             case 56:
-                //TODO This is where changes go for 56+ -> XX+ (w/e the next config version is)
-                //Would look something like...
-                //update56ToXX();
+                //Config versions 56 - 68
+                update56To68();
                 //Don't use break here; allow cases to pass to the next one, so it does each update function incrementally
         }
 
@@ -192,6 +191,23 @@ public class ConfigHandler
         log();
 
         rename(old, "general.server settings.client hud allowances", "Allow detailed HUD on clients", "general.server settings.client hud allowances", "Allow Targeting HUD For Clients");
+
+        log();
+        log();
+        log();
+
+        transferAll(old, current);
+    }
+
+    private static void update56To68() throws IOException
+    {
+        Configuration current = new Configuration(currentFile);
+        Configuration old = new Configuration(mostRecentFile);
+
+        rename(old, "general.server settings.client hud allowances", "Allow Targeting HUD For Clients", "general.server settings.client hud allowances.targeting allowances", "050 Allow 'Action' Element");
+        rename(old, "general.server settings.client hud allowances", "Allow On-Point HUD For Clients", "general.server settings.client hud allowances.ophud allowances", "000 Allow On-Point HUD For Clients");
+        rename(old, "general.server settings.client hud allowances", "OPHUD Range", "general.server settings.client hud allowances.ophud allowances", "010 OPHUD Range");
+        rename(old, "general.server settings.client hud allowances", "OPHUD Update Delay", "general.server settings.client hud allowances.ophud allowances", "020 OPHUD Update Delay");
 
         log();
         log();

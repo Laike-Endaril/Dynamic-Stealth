@@ -39,6 +39,7 @@ public class ClientData
 
     public static boolean soulSight = false;
     public static boolean usePlayerSenses = false;
+    public static boolean allowTargetingName = true, allowTargetingHP = true, allowTargetingThreat = true, allowTargetingDistance = true;
 
     public static LinkedHashMap<Integer, OnPointData> opMap = new LinkedHashMap<>();
     public static OnPointData targetData = null;
@@ -55,6 +56,10 @@ public class ClientData
 
         soulSight = false;
         usePlayerSenses = false;
+        allowTargetingName = true;
+        allowTargetingHP = true;
+        allowTargetingThreat = true;
+        allowTargetingDistance = true;
 
         opMap.clear();
         targetData = null;

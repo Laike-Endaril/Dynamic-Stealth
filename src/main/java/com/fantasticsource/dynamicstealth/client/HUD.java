@@ -563,9 +563,9 @@ public class HUD extends Gui
                 float padding = 1;
                 ArrayList<String> elements = new ArrayList<>();
 
-                if (clientSettings.hudSettings.targetingStyle.components.name) elements.add(entity.getName());
+                if (ClientData.allowTargetingName && clientSettings.hudSettings.targetingStyle.components.name) elements.add(entity.getName());
 
-                if (clientSettings.hudSettings.targetingStyle.components.hp && entity instanceof EntityLivingBase)
+                if (ClientData.allowTargetingHP && clientSettings.hudSettings.targetingStyle.components.hp && entity instanceof EntityLivingBase)
                 {
                     EntityLivingBase livingBase = (EntityLivingBase) entity;
                     float hp = livingBase.getHealth();
@@ -601,13 +601,13 @@ public class HUD extends Gui
                     elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.action", action));
                 }
 
-                if (clientSettings.hudSettings.targetingStyle.components.threat)
+                if (ClientData.allowTargetingThreat && clientSettings.hudSettings.targetingStyle.components.threat)
                 {
                     if (color == COLOR_BYPASS) elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.threatNotApplicable"));
                     else if (targetData.percent > 0) elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.threat", targetData.percent));
                 }
 
-                if (clientSettings.hudSettings.targetingStyle.components.distance)
+                if (ClientData.allowTargetingDistance && clientSettings.hudSettings.targetingStyle.components.distance)
                 {
                     elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.distance", oneDecimal.format(entity.getDistance(Minecraft.getMinecraft().player))));
                 }

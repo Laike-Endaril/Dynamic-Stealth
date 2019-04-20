@@ -11,10 +11,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -79,14 +80,14 @@ public class Network
                     boolean opHUD, targetElement, stealthGauge;
                     if (isOP(player))
                     {
-                        opHUD = serverSettings.hud.allowOPHUD > 0;
-                        targetElement = serverSettings.hud.allowTargetElement > 0;
+                        opHUD = serverSettings.hud.ophud.allowOPHUD > 0;
+                        targetElement = serverSettings.hud.targeting.allowTargetElement > 0;
                         stealthGauge = serverSettings.hud.allowStealthGauge > 0;
                     }
                     else
                     {
-                        opHUD = serverSettings.hud.allowOPHUD > 1;
-                        targetElement = serverSettings.hud.allowTargetElement > 1;
+                        opHUD = serverSettings.hud.ophud.allowOPHUD > 1;
+                        targetElement = serverSettings.hud.targeting.allowTargetElement > 1;
                         stealthGauge = serverSettings.hud.allowStealthGauge > 1;
                     }
 
@@ -115,14 +116,9 @@ public class Network
 
 
     @SubscribeEvent
-    public static void sendClientInitData(EntityJoinWorldEvent event)
+    public static void playerLogon(PlayerEvent.PlayerLoggedInEvent event)
     {
-        Entity entity = event.getEntity();
-        if (entity instanceof EntityPlayerMP)
-        {
-            EntityPlayerMP player = (EntityPlayerMP) entity;
-            WRAPPER.sendTo(new ClientInitPacket(player), player);
-        }
+        WRAPPER.sendTo(new ClientInitPacket(event.player), (EntityPlayerMP) event.player);
     }
 
 
@@ -234,15 +230,31 @@ public class Network
     {
         boolean soulSight;
         boolean usePlayerSenses;
+        boolean allowTargetingName, allowTargetingHP, allowTargetingThreat, allowTargetingDistance;
 
         public ClientInitPacket() //Required; probably for when the packet is received
         {
         }
 
-        public ClientInitPacket(EntityPlayerMP player)
+        public ClientInitPacket(EntityPlayer player)
         {
             soulSight = EntitySightData.hasSoulSight(player);
             if (soulSight) EntitySightData.soulSightCache.add(player);
+
+            if (isOP((EntityPlayerMP) player))
+            {
+                allowTargetingName = serverSettings.hud.targeting.allowNameElement > 0;
+                allowTargetingHP = serverSettings.hud.targeting.allowHPElement > 0;
+                allowTargetingThreat = serverSettings.hud.targeting.allowThreatElement > 0;
+                allowTargetingDistance = serverSettings.hud.targeting.allowDistanceElement > 0;
+            }
+            else
+            {
+                allowTargetingName = serverSettings.hud.targeting.allowNameElement > 1;
+                allowTargetingHP = serverSettings.hud.targeting.allowHPElement > 1;
+                allowTargetingThreat = serverSettings.hud.targeting.allowThreatElement > 1;
+                allowTargetingDistance = serverSettings.hud.targeting.allowDistanceElement > 1;
+            }
         }
 
         @Override
@@ -250,6 +262,11 @@ public class Network
         {
             buf.writeBoolean(soulSight);
             buf.writeBoolean(serverSettings.senses.usePlayerSenses);
+
+            buf.writeBoolean(allowTargetingName);
+            buf.writeBoolean(allowTargetingHP);
+            buf.writeBoolean(allowTargetingThreat);
+            buf.writeBoolean(allowTargetingDistance);
         }
 
         @Override
@@ -257,6 +274,11 @@ public class Network
         {
             soulSight = buf.readBoolean();
             usePlayerSenses = buf.readBoolean();
+
+            allowTargetingName = buf.readBoolean();
+            allowTargetingHP = buf.readBoolean();
+            allowTargetingThreat = buf.readBoolean();
+            allowTargetingDistance = buf.readBoolean();
         }
     }
 
@@ -271,6 +293,11 @@ public class Network
                 {
                     ClientData.soulSight = packet.soulSight;
                     ClientData.usePlayerSenses = packet.usePlayerSenses;
+
+                    ClientData.allowTargetingName = packet.allowTargetingName;
+                    ClientData.allowTargetingHP = packet.allowTargetingHP;
+                    ClientData.allowTargetingThreat = packet.allowTargetingThreat;
+                    ClientData.allowTargetingDistance = packet.allowTargetingDistance;
                 });
             }
 
@@ -301,8 +328,8 @@ public class Network
             this.stealthLevel = stealthLevel;
 
             BlockPos playerPos = player.getPosition();
-            int rangeSq = serverSettings.hud.opHUDRange << 1;
-            int delay = serverSettings.hud.opHUDDelay;
+            int rangeSq = serverSettings.hud.ophud.opHUDRange << 1;
+            int delay = serverSettings.hud.ophud.opHUDDelay;
 
             update = opHUD && ServerTickTimer.currentTick() % delay == player.getEntityId() % delay;
 

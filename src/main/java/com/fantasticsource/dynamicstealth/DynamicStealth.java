@@ -48,6 +48,7 @@ import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -86,6 +87,7 @@ import noppes.npcs.api.entity.ICustomNpc;
 
 import java.util.Set;
 
+import static com.fantasticsource.dynamicstealth.common.Network.WRAPPER;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 
 @Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, dependencies = "required-after:fantasticlib@[1.12.2.012,)")
@@ -94,7 +96,7 @@ public class DynamicStealth
     public static final String MODID = "dynamicstealth";
     public static final String NAME = "Dynamic Stealth";
     public static final String VERSION = "1.12.2.068";
-    public static final String CONFIG_VERSION = "1.12.2.056"; //The lowest compatible config version
+    public static final String CONFIG_VERSION = "1.12.2.069"; //The lowest compatible config version
 
     public static final TrigLookupTable TRIG_TABLE = new TrigLookupTable(1024);
 
@@ -146,6 +148,15 @@ public class DynamicStealth
         EntityTouchData.update();
         EntitySightData.update();
         EntityThreatData.update();
+
+        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        if (server != null)
+        {
+            for (EntityPlayerMP player : server.getPlayerList().getPlayers())
+            {
+                WRAPPER.sendTo(new Network.ClientInitPacket(player), player);
+            }
+        }
     }
 
     @SubscribeEvent
