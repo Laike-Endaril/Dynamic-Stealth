@@ -1,5 +1,9 @@
 CURRENTLY WORKING ON ===================================================
 
+Add invisibility command
+
+Add a natural soul sight filter for CNPC factions
+
 Add lang keys for all println() calls (make sure to use deprecated I18n, not the non-deprecated one)
 
 Make stealth level / visibility transitions smoother (ie. change at a rate)?
