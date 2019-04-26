@@ -252,8 +252,6 @@ public class Sight
         if (searcher instanceof EntityPlayer && CompatDissolution.isPossessing((EntityPlayer) searcher, target)) return -777;
         if (MCTools.isRidingOrRiddenBy(searcher, target)) return -777;
 
-        if (target instanceof EntityPlayerMP && ((EntityPlayerMP) target).capabilities.disableDamage) return 777;
-
         if (hasSoulSight(searcher)) return -777;
 
 

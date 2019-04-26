@@ -7,6 +7,7 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.scoreboard.Team;
@@ -61,6 +62,8 @@ public abstract class AITargetEdit extends EntityAIBase
 
     protected boolean isSuitableTarget(@Nullable EntityLivingBase target)
     {
+        if (target instanceof EntityPlayerMP && ((EntityPlayerMP) target).capabilities.disableDamage) return false;
+
         if (target == null || (nearbyOnly && !canEasilyReach(target))) return false;
 
         return isSuitableTarget(attacker, target) && attacker.isWithinHomeDistanceFromPosition(new BlockPos(target));
