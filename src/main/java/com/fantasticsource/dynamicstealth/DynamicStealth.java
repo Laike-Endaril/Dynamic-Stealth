@@ -49,6 +49,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -152,9 +153,13 @@ public class DynamicStealth
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
         if (server != null)
         {
-            for (EntityPlayerMP player : server.getPlayerList().getPlayers())
+            PlayerList playerList = server.getPlayerList();
+            if (playerList != null)
             {
-                WRAPPER.sendTo(new Network.ClientInitPacket(player), player);
+                for (EntityPlayerMP player : playerList.getPlayers())
+                {
+                    WRAPPER.sendTo(new Network.ClientInitPacket(player), player);
+                }
             }
         }
     }
