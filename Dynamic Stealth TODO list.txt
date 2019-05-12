@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
+Add limit to soul sight distance based on potion effect level
+
 Add invisibility command
 
 Add a natural soul sight filter for CNPC factions
