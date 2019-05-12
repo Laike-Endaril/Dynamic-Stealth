@@ -109,6 +109,9 @@ public class WeaponEntry
         if (tokens.length > 5) result.consumeItem = Boolean.parseBoolean(tokens[5].trim());
 
 
+        if (result.attackerEffects == null) result.attackerEffects = new ArrayList<>();
+        if (result.victimEffects == null) result.victimEffects = new ArrayList<>();
+
         return result;
     }
 
