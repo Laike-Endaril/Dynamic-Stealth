@@ -438,7 +438,7 @@ dynamicstealth.config.attackAEffects.tooltip=FILLSCREEN FIXNEWLINES Potion effec
 dynamicstealth.config.attackVEffects=Victim Effects
 dynamicstealth.config.attackVEffects.tooltip=FILLSCREEN FIXNEWLINES Potion effects that are applied to the victim when an attack happens\n\nThis applies blindness for 100 ticks (5 seconds):\nblindness.100\n \n
 dynamicstealth.config.attackWeaponSpecific=Weapon-Specific Settings
-dynamicstealth.config.attackWeaponSpecific.tooltip=FILLSCREEN FIXNEWLINES Weapon-specific overrides\nSyntax is...\n\ndomain:item:meta > nbtkey1 = nbtvalue1 & nbtkey2 = nbtvalue2, armorpenetration, multiplier, attackerpotion1 & attackerpotion2, vidtimpotion1 & victimpotion2, consumeitem\n\neg...\n\nbackstab:diamond_dagger, true, 3\n\ntetra:duplex_tool_modular > duplex/sickle_left_material & duplex/butt_right_material, true, 3, regeneration.60.3, wither.60.3\n\ndye, false, 0, , blindness.20, true\n \n
+dynamicstealth.config.attackWeaponSpecific.tooltip=FILLSCREEN FIXNEWLINES Weapon-specific overrides\nSyntax is...\n\ndomain:item:meta > nbtkey1 = nbtvalue1 & nbtkey2 = nbtvalue2, armorpenetration, multiplier, attackerpotion1 & attackerpotion2, victimpotion1 & victimpotion2, consumeitem\n\neg...\n\nbackstab:diamond_dagger, true, 3\n\ntetra:duplex_tool_modular > duplex/sickle_left_material & duplex/butt_right_material, true, 3, regeneration.60.3, wither.60.3\n\ndye, false, 0, , blindness.20, true\n \n
 
 dynamicstealth.config.stealthAtkArmorPenetration=Armor Penetration
 dynamicstealth.config.stealthAtkArmorPenetration.tooltip=FILLSCREEN FIXNEWLINES Whether stealth attacks bypass armor or not\n \n
@@ -449,7 +449,7 @@ dynamicstealth.config.stealthAtkAEffects.tooltip=FILLSCREEN FIXNEWLINES Potion e
 dynamicstealth.config.stealthAtkVEffects=Victim Effects
 dynamicstealth.config.stealthAtkVEffects.tooltip=FILLSCREEN FIXNEWLINES Potion effects that are applied to the victim when a stealth attack happens\n\nThis applies blindness for 100 ticks (5 seconds):\nblindness.100\n \n
 dynamicstealth.config.stealthAtkWeaponSpecific=Weapon-Specific Settings
-dynamicstealth.config.stealthAtkWeaponSpecific.tooltip=FILLSCREEN FIXNEWLINES Weapon-specific overrides\nSyntax is...\n\ndomain:item:meta > nbtkey1 = nbtvalue1 & nbtkey2 = nbtvalue2, armorpenetration, multiplier, attackerpotion1 & attackerpotion2, vidtimpotion1 & victimpotion2, consumeitem\n\neg...\n\nbackstab:diamond_dagger, true, 3\n\ntetra:duplex_tool_modular > duplex/sickle_left_material & duplex/butt_right_material, true, 3, regeneration.60.3, wither.60.3\n\ndye, false, 0, , blindness.20, true\n \n
+dynamicstealth.config.stealthAtkWeaponSpecific.tooltip=FILLSCREEN FIXNEWLINES Weapon-specific overrides\nSyntax is...\n\ndomain:item:meta > nbtkey1 = nbtvalue1 & nbtkey2 = nbtvalue2, armorpenetration, multiplier, attackerpotion1 & attackerpotion2, victimpotion1 & victimpotion2, consumeitem\n\neg...\n\nbackstab:diamond_dagger, true, 3\n\ntetra:duplex_tool_modular > duplex/sickle_left_material & duplex/butt_right_material, true, 3, regeneration.60.3, wither.60.3\n\ndye, false, 0, , blindness.20, true\n \n
 
 dynamicstealth.config.assassinationAEffects=Attacker Effects
 dynamicstealth.config.assassinationAEffects.tooltip=FILLSCREEN FIXNEWLINES Potion effects that are applied to the attacker when an assassination happens\n\nThis applies strength 2 for 200 ticks (10 seconds):\nstrength.200.2\n\nThis applies soul sight for 100 ticks (5 seconds):\ndynamicstealth:soulsight.100\n \n
