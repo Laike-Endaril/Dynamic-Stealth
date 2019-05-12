@@ -2,6 +2,8 @@ CURRENTLY WORKING ON ===================================================
 
 Add limit to soul sight distance based on potion effect level
 
+Fix stealth gauge glitch when in creative and an enemy is searching and facing you
+
 Add invisibility command
 
 Add a natural soul sight filter for CNPC factions
