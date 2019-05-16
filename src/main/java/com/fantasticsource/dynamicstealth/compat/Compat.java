@@ -20,6 +20,7 @@ public class Compat
             dissolution = false,
             magma_monsters = false,
             abyssalcraft = false,
+            emberroot = false,
             primitivemobs = false,
             thermalfoundation = false;
 
@@ -50,6 +51,7 @@ public class Compat
         if (abyssalcraft && aiClassname.contains("abyssalcraft.common.entity.ai")) return true;
         if (magma_monsters && aiClassname.contains("EntityMagmaMonster")) return true;
         if (primitivemobs && aiClassname.contains("AIFlameSpewAttack")) return true;
+        if (emberroot && aiClassname.contains("EntityAIAttackOnCollideAggressive")) return true;
 
         return false;
     }

@@ -734,6 +734,7 @@ public class DynamicStealth
         if (Loader.isModLoaded("thermalfoundation")) Compat.thermalfoundation = true;
         if (Loader.isModLoaded("ancientwarfare")) Compat.ancientwarfare = true;
         if (Loader.isModLoaded("abyssalcraft")) Compat.abyssalcraft = true;
+        if (Loader.isModLoaded("emberroot")) Compat.emberroot = true;
         if (Loader.isModLoaded("primitivemobs")) Compat.primitivemobs = true;
         if (Loader.isModLoaded("neat")) Compat.neat = true;
         if (Loader.isModLoaded("statues")) Compat.statues = true;
