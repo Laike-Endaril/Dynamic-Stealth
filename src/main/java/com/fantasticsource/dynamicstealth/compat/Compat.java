@@ -20,6 +20,7 @@ public class Compat
             dissolution = false,
             magma_monsters = false,
             abyssalcraft = false,
+            primitivemobs = false,
             thermalfoundation = false;
 
 
@@ -48,6 +49,7 @@ public class Compat
         if (thermalfoundation && aiClassname.contains("cofh.thermalfoundation.entity.monster")) return true; //Should cover Basalz, Blitz, and Blizz
         if (abyssalcraft && aiClassname.contains("abyssalcraft.common.entity.ai")) return true;
         if (magma_monsters && aiClassname.contains("EntityMagmaMonster")) return true;
+        if (primitivemobs && aiClassname.contains("AIFlameSpewAttack")) return true;
 
         return false;
     }
