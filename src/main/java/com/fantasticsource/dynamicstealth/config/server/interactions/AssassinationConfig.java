@@ -20,8 +20,8 @@ public class AssassinationConfig
             })
     public String[] attackerEffects =
             {
-                    "dynamicstealth:soulsight.60",
-                    "invisibility.100"
+                    "dynamicstealth:soulsight.140",
+                    "invisibility.140"
             };
 
     @Config.Name("Weapon-Specific Settings")
