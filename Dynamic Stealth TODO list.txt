@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
+Add lowLightMultiplier and highLightMultiplier for lighting
+
 Add "revealed" status effect which reduces the effectiveness of invisibility
 Add touch event
 Add revealed effect to touch event defaults
@@ -15,26 +17,11 @@ Add limit to soul sight distance based on potion effect level
 
 Fix stealth gauge glitch when in creative and an enemy is searching and facing you
 
-Add invisibility command
-
 Add a natural soul sight filter for CNPC factions
-
-Add lang keys for all println() calls (make sure to use deprecated I18n, not the non-deprecated one)
 
 Make stealth level / visibility transitions smoother (ie. change at a rate)
 Track the stealth level of each entity against each other entity, but only while it's less than 100%
 "maybe if they see you less than a second or two, instead of being alerted they could go look first"
-
-Make client acquire target for any entity they have LOS to, then get the data for it from the map, as late as possible, if it exists
-"Lock Target" key (press to lock/unlock current target)
-...when target is locked, send target to server, which then allows you to see hud data even if it's far away
-"Aim Assist" key (hold to automatically face current target)
-
-Directional indicators...
-...add optional "damaged from" indicator, which draws an indicator pointing the direction damage was recently received from
-...add optional touch detection indicator for players (see to do in DynamicStealth.java)
-
-Set Bonus integration for stealth attacks and assassinations
 
 
 
@@ -60,6 +47,20 @@ Fix leashes not rendering sometimes (not a vanilla bug)...
 
 
 GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES ============================
+
+Make client acquire target for any entity they have LOS to, then get the data for it from the map, as late as possible, if it exists
+"Lock Target" key (press to lock/unlock current target)
+...when target is locked, send target to server, which then allows you to see hud data even if it's far away
+"Aim Assist" key (hold to automatically face current target)
+
+Directional indicators...
+...add optional "damaged from" indicator, which draws an indicator pointing the direction damage was recently received from
+...add optional touch detection indicator for players (see to do in DynamicStealth.java)
+
+Add creativeinvis command
+True by default (creative mode players are completely invisible except to other creative mode players)
+
+Add lang keys for all println() calls (make sure to use deprecated I18n, not the non-deprecated one)
 
 "Noisiness" block trait; block filter to determine how much noise walking/running/landing makes
 
@@ -163,6 +164,8 @@ Gray Men...
 
 
 MOD COMPATIBILITY ======================================================
+
+Set Bonus integration for stealth attacks and assassinations
 
 Add bright mobs from mods to EntitySightDefaults.naturallyBrightEntities
 
