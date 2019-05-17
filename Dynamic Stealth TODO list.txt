@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ===================================================
 
+Fix bug where entities searching for YOU or fleeing from YOU can still be assassinated
+
 Add limit to soul sight distance based on potion effect level
 
 Fix stealth gauge glitch when in creative and an enemy is searching and facing you
