@@ -7,8 +7,6 @@ Replace on-attack invis removal with revealed status?
 
 Change nightvision so that it has levels pertaining to distance
 
-Alter weapon tooltips to reflect settings for normal attacks and stealth attacks
-
 Add limit to soul sight distance based on potion effect level
 
 Fix stealth gauge glitch when in creative and an enemy is searching and facing you
@@ -19,7 +17,7 @@ Make stealth level / visibility transitions smoother (ie. change at a rate)
 Track the stealth level of each entity against each other entity, but only while it's less than 100%
 "maybe if they see you less than a second or two, instead of being alerted they could go look first"
 
-
+Add config filter for entities that don't trigger the stealth gauge
 
 BUG FIXES ==============================================================
 
@@ -43,6 +41,8 @@ Fix leashes not rendering sometimes (not a vanilla bug)...
 
 
 GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES ============================
+
+Alter weapon tooltips to reflect settings for normal attacks and stealth attacks
 
 Make client acquire target for any entity they have LOS to, then get the data for it from the map, as late as possible, if it exists
 "Lock Target" key (press to lock/unlock current target)
