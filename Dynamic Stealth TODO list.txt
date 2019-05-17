@@ -1,23 +1,12 @@
-CURRENTLY WORKING ON ===================================================
-
-Add "revealed" status effect which reduces the effectiveness of invisibility
-Add touch event
-Add revealed effect to touch event defaults
-Replace on-attack invis removal with revealed status?
-
-Change nightvision so that it has levels pertaining to distance
+CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
 Fix stealth gauge glitch when in creative and an enemy is searching and facing you
 
-Add a natural soul sight filter for CNPC factions
-
-Make stealth level / visibility transitions smoother (ie. change at a rate)
-Track the stealth level of each entity against each other entity, but only while it's less than 100%
-"maybe if they see you less than a second or two, instead of being alerted they could go look first"
-
 Add config filter for entities that don't trigger the stealth gauge
 
-BUG FIXES ==============================================================
+
+
+BUG FIXES ===================================================================================================================================================================================================================
 
 Spiders path toward their threat target even if they can't see it (must have a threat target)...
 ...happens when all AI besides mine is removed, so either something to do with my AI or something outside AI, or both
@@ -38,7 +27,16 @@ Fix leashes not rendering sometimes (not a vanilla bug)...
 
 
 
-GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES ============================
+GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES =================================================================================================================================================================================
+
+Add "revealed" status effect which reduces the effectiveness of invisibility
+Add touch event
+Add revealed effect to touch event defaults
+Replace on-attack invis removal with revealed status?
+
+Make stealth level / visibility transitions smoother (ie. change at a rate)
+Track the stealth level of each entity against each other entity, but only while it's less than 100%
+"maybe if they see you less than a second or two, instead of being alerted they could go look first"
 
 Alter weapon tooltips to reflect settings for normal attacks and stealth attacks
 
@@ -65,9 +63,11 @@ Add guidebook, possibly using guide api or patchouli
 
 Add other mob heads from other mods to disguise multiplier
 
+Add a natural soul sight filter for CNPC factions
 
 
-KEYBOUND ACTIONS =======================================================
+
+KEYBOUND ACTIONS ============================================================================================================================================================================================================
 
 Add action wheel which opens on keybind
 Add actions...
@@ -80,7 +80,7 @@ Add actions...
 
 
 
-CONFIG =================================================================
+CONFIG ======================================================================================================================================================================================================================
 
 Add config option for "Can See Through" Materials
 Add config option for "Can See Through" Blocks
@@ -92,7 +92,7 @@ Add entity-specific filter for targeting HUD
 
 
 
-AI =====================================================================
+AI ==========================================================================================================================================================================================================================
 
 Can probably combine the two below into a single AI task...
 ...Replace EntityAILookIdle with a new version that has gradual head rotation, instead of just removing it
@@ -100,7 +100,7 @@ Can probably combine the two below into a single AI task...
 
 
 
-SENSES =================================================================
+SENSES ======================================================================================================================================================================================================================
 
 Add scent-based detection (wolves, cats, bears)
 ...Add the ability for entities to smell not only other living entities, but also ground items, etc.
@@ -112,7 +112,7 @@ Apply stealth-based sound attributes
 
 
 
-STATUS EFFECTS =========================================================
+STATUS EFFECTS ==============================================================================================================================================================================================================
 
 Keen Nose: Get visible indicators for scents and scent trails
 Silenced: Cannot warn others
@@ -122,13 +122,13 @@ Courage: Applies rally effect if they were fleeing; grants immunity to fleeing f
 
 
 
-BLOCKS =================================================================
+BLOCKS ======================================================================================================================================================================================================================
 
 Pitfall: Entity which destroys the dirt block it's on if something walks on it.
 
 
 
-ITEMS ==================================================================
+ITEMS =======================================================================================================================================================================================================================
 
 Water potions...yes...for applying the wetness effect (for normal one, try to make it usable faster and play water splash sound)
 Fire potions, for burning effect
@@ -149,7 +149,7 @@ Slingshot - Can fire pebbles, smoke bombs, splash/lingering potions, or firework
 
 
 
-MOBS ===================================================================
+MOBS ========================================================================================================================================================================================================================
 
 Gray Men...
 ...Gray men are considered invisible if you are facing them directly
@@ -157,7 +157,7 @@ Gray Men...
 
 
 
-MOD COMPATIBILITY ======================================================
+MOD COMPATIBILITY ===========================================================================================================================================================================================================
 
 Set Bonus integration for stealth attacks and assassinations
 
