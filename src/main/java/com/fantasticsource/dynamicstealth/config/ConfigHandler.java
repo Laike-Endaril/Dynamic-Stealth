@@ -159,6 +159,10 @@ public class ConfigHandler
                 //Config versions 56-68
                 update56To69();
                 //Don't use break here; allow cases to pass to the next one, so it does each update function incrementally
+            case 69:
+                //Config versions 69-71
+                update69To72();
+                //Don't use break here; allow cases to pass to the next one, so it does each update function incrementally
         }
 
         try
@@ -249,6 +253,18 @@ public class ConfigHandler
         rename(old, "general.server settings.threat system", "Unseen Target Degredation Rate", "general.server settings.threat system", "065 Unseen Target Degredation Rate");
         rename(old, "general.server settings.ai.flee", "Degredation Rate", "general.server settings.threat system", "070 Flee Degredation Rate");
         rename(old, "general.server settings.threat system", "Owned Can't Reach Degredation Rate", "general.server settings.threat system", "075 Owned Can't Reach Degredation Rate");
+
+        log();
+        log();
+        log();
+
+        transferAll(old, current);
+    }
+
+    private static void update69To72() throws IOException
+    {
+        Configuration current = new Configuration(currentFile);
+        Configuration old = new Configuration(mostRecentFile);
 
         log();
         log();

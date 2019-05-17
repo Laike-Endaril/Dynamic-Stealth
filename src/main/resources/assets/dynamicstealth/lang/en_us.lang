@@ -296,10 +296,6 @@ dynamicstealth.config.blindnessMultiplier.tooltip=FILLSCREEN FIXNEWLINES Blinded
 
 dynamicstealth.config.armorMultiplier=Armor Multiplier (Cumulative)
 dynamicstealth.config.armorMultiplier.tooltip=FILLSCREEN FIXNEWLINES An entity's visibility is multiplied by 1 + (this setting * armor)\n\nIf set to 0, there is no effect\n\nIf set to 0.25, an entity with 20 armor (full diamond) is 5x as likely to be seen\n \n
-dynamicstealth.config.alertMultiplier="Alert" Multiplier
-dynamicstealth.config.alertMultiplier.tooltip=FILLSCREEN FIXNEWLINES If an entity is alert, their visual perception is multiplied by this\n\nIf set to 1, there is no effect\n\nIf set to 2, an alerted entity can generally see targets twice as easily (but still not beyond Distance (Far))\n \n
-dynamicstealth.config.seenMultiplier="Seen" Multiplier
-dynamicstealth.config.seenMultiplier.tooltip=FILLSCREEN FIXNEWLINES If an entity has recently seen its target, their visual perception is multiplied by this\n\nIf set to 1, there is no effect\n\nIf set to 2, the searcher can generally see targets twice as easily (but still not beyond Distance (Far))\n \n
 
 dynamicstealth.config.lightHigh=Light (High/Bright)
 dynamicstealth.config.lightHigh.tooltip=FILLSCREEN FIXNEWLINES The lowest light level at which entities take no sight penalty\n\nEntities are harder to see in light levels lower than this\n \n

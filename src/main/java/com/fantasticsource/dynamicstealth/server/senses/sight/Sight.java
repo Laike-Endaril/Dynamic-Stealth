@@ -5,7 +5,6 @@ import com.fantasticsource.dynamicstealth.config.server.senses.sight.SightConfig
 import com.fantasticsource.dynamicstealth.server.Attributes;
 import com.fantasticsource.dynamicstealth.server.senses.HidingData;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
-import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.ServerTickTimer;
 import com.fantasticsource.tools.Tools;
@@ -318,12 +317,6 @@ public class Sight
         double invisibilityMultiplier = isLivingBase && targetLivingBase.getActivePotionEffect(MobEffects.INVISIBILITY) != null ? sight.a_stealthMultipliers.invisibilityMultiplier : 1;
 
 
-        //Alerted multiplier
-        double alertMultiplier = searcher instanceof EntityLiving && Threat.get(searcher).threatLevel > 0 ? sight.b_visibilityMultipliers.alertMultiplier : 1;
-
-        //Seen multiplier
-        double seenMultiplier = recentlySeen(searcher, target) ? sight.b_visibilityMultipliers.seenMultiplier : 1;
-
         //Crouching (multiplier)
         double crouchingMultiplier = target.isSneaking() ? sight.a_stealthMultipliers.crouchingMultiplier : 1;
 
@@ -351,7 +344,7 @@ public class Sight
 
         //Combine multipliers
         double stealthMultiplier = blindnessMultiplier * Tools.min(invisibilityMultiplier, crouchingMultiplier, mobHeadMultiplier);
-        double visibilityMultiplier = armorMultiplier * alertMultiplier * seenMultiplier;
+        double visibilityMultiplier = armorMultiplier;
         double configMultipliers = Tools.min(Tools.max(stealthMultiplier * visibilityMultiplier, 0), 1);
 
         double visReduction = !isLivingBase ? 0 : targetLivingBase.getEntityAttribute(Attributes.VISIBILITY_REDUCTION).getAttributeValue();
