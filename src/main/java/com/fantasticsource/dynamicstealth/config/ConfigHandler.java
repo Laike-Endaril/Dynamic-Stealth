@@ -274,6 +274,9 @@ public class ConfigHandler
         rename(old, "general.server settings.senses.sight.lighting", "Light (Low/Dark)", "general.server settings.senses.sight.lighting", "040 Light Level (Low/Dark)");
         rename(old, "general.server settings.senses.sight.lighting", "Nightvision Bonus", "general.server settings.senses.sight.lighting", "080 Nightvision Bonus");
 
+        log("Clearing entity-specific lighting settings due to changes; your old config file is available for reference if you need it (config/dynamicstealth/1.12.2.069+.cfg)");
+        old.get("general.server settings.senses.sight.entity-specific settings (advanced)", "Lighting", new String[0]).set(new String[0]);
+
         log();
         log();
         log();
