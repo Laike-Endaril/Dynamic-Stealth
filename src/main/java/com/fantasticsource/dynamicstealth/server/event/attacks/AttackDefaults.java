@@ -13,6 +13,12 @@ public class AttackDefaults
         normalAttackDefaults.add("dye, false, 0, , blindness.20, true");
         normalAttackDefaults.add("glowstone_dust, false, 0, , glowing.20, true");
 
+        normalAttackDefaults.add("wooden_axe, false, 0.5");
+        normalAttackDefaults.add("stone_axe, false, 0.5");
+        normalAttackDefaults.add("iron_axe, false, 0.5");
+        normalAttackDefaults.add("golden_axe, false, 0.5");
+        normalAttackDefaults.add("diamond_axe, false, 0.5");
+
         stealthAttackDefaults.add("backstab:wood_dagger, true, 3");
         stealthAttackDefaults.add("backstab:stone_dagger, true, 3");
         stealthAttackDefaults.add("backstab:iron_dagger, true, 3");
