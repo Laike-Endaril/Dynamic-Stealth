@@ -343,7 +343,7 @@ public class Sight
 
 
         //Combine multipliers
-        double stealthMultiplier = blindnessMultiplier * Tools.min(invisibilityMultiplier, crouchingMultiplier, mobHeadMultiplier);
+        double stealthMultiplier = Tools.min(mobHeadMultiplier, blindnessMultiplier * invisibilityMultiplier * crouchingMultiplier);
         double visibilityMultiplier = armorMultiplier;
         double configMultipliers = Tools.min(Tools.max(stealthMultiplier * visibilityMultiplier, 0), 1);
 
