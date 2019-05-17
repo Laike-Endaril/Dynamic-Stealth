@@ -1,8 +1,9 @@
 CURRENTLY WORKING ON ===================================================
 
-Alter lighting factor...
-...change min from -1 to 0
-...add setting for % when at min light level
+Add "revealed" status effect which reduces the effectiveness of invisibility
+Add touch event
+Add revealed effect to touch event defaults
+Replace on-attack invis removal with revealed status?
 
 Fix bug where entities searching for YOU or fleeing from YOU can still be assassinated
 
@@ -18,7 +19,8 @@ Add a natural soul sight filter for CNPC factions
 
 Add lang keys for all println() calls (make sure to use deprecated I18n, not the non-deprecated one)
 
-Make stealth level / visibility transitions smoother (ie. change at a rate)?
+Make stealth level / visibility transitions smoother (ie. change at a rate)
+Track the stealth level of each entity against each other entity, but only while it's less than 100%
 "maybe if they see you less than a second or two, instead of being alerted they could go look first"
 
 Make client acquire target for any entity they have LOS to, then get the data for it from the map, as late as possible, if it exists
