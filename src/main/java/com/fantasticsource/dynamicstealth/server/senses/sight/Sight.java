@@ -250,16 +250,22 @@ public class Sight
         if (searcher instanceof EntityPlayer && CompatDissolution.isPossessing((EntityPlayer) searcher, target)) return -777;
         if (MCTools.isRidingOrRiddenBy(searcher, target)) return -777;
 
-        if (hasSoulSight(searcher)) return -777;
 
-
-        //Angles and Distances (absolute, base FOV)
-        int angleLarge = angleLarge(searcher);
-        if (angleLarge == 0) return 777;
-
+        //Distance, soul sight, and angle (absolute, base FOV)
         double distSquared = searcher.getDistanceSq(target);
         int distanceFar = distanceFar(searcher);
-        if (distSquared > Math.pow(distanceFar, 2)) return 777;
+
+        if (hasSoulSight(searcher))
+        {
+            if (distSquared > 10000) return 777;
+        }
+        else
+        {
+            if (distSquared > Math.pow(distanceFar, 2)) return 777;
+        }
+
+        int angleLarge = angleLarge(searcher);
+        if (angleLarge == 0) return 777;
 
         double distanceThreshold;
         int angleSmall = angleSmall(searcher);

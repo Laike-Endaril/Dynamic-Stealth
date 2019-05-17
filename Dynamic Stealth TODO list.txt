@@ -7,8 +7,6 @@ Replace on-attack invis removal with revealed status?
 
 Change nightvision so that it has levels pertaining to distance
 
-Add limit to soul sight distance based on potion effect level
-
 Fix stealth gauge glitch when in creative and an enemy is searching and facing you
 
 Add a natural soul sight filter for CNPC factions
