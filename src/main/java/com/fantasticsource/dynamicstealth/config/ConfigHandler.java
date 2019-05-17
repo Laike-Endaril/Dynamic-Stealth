@@ -266,6 +266,14 @@ public class ConfigHandler
         Configuration current = new Configuration(currentFile);
         Configuration old = new Configuration(mostRecentFile);
 
+        rename(old, "general.server settings.senses.sight.lighting", "Light (High/Bright)", "general.server settings.senses.sight.lighting", "000 Light Level (High/Bright)");
+        if (old.get("general.server settings.senses.sight.lighting", "Light (Low/Dark)", -1).getInt() < 0)
+        {
+            old.getCategory("general.server settings.senses.sight.lighting").get("Light (Low/Dark)").set(0);
+        }
+        rename(old, "general.server settings.senses.sight.lighting", "Light (Low/Dark)", "general.server settings.senses.sight.lighting", "040 Light Level (Low/Dark)");
+        rename(old, "general.server settings.senses.sight.lighting", "Nightvision Bonus", "general.server settings.senses.sight.lighting", "080 Nightvision Bonus");
+
         log();
         log();
         log();

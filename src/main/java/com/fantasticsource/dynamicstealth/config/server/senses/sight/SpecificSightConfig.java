@@ -52,18 +52,13 @@ public class SpecificSightConfig
             {
                     "How well an entity sees in the dark",
                     "",
-                    "entityID, lightHigh, lightLow",
+                    "entityID, lightLevelHigh, lightMultHigh, lightLevelLow, lightMultLow",
                     "",
                     "eg...",
                     "",
-                    "minecraft:skeleton, 15, -1"
+                    "minecraft:skeleton, 15, 1, 0, 0"
             })
-    public String[] lighting = new String[]
-            {
-                    "ghast, 0, -1",
-                    "wither, 0, -1",
-                    "ender_dragon, 0, -1"
-            };
+    public String[] lighting = new String[]{};
 
     @Config.Name("Naturally Bright")
     @Config.LangKey(DynamicStealth.MODID + ".config.naturallyBright")

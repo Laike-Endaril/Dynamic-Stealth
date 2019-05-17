@@ -5,29 +5,39 @@ import net.minecraftforge.common.config.Config;
 
 public class LightingConfig
 {
-    @Config.Name("Light (High/Bright)")
-    @Config.LangKey(DynamicStealth.MODID + ".config.lightHigh")
-    @Config.Comment(
-            {
-                    "The lowest light level at which entities take no sight penalty",
-                    "",
-                    "Entities are harder to see in light levels lower than this"
-            })
+    @Config.Name("000 Light Level (High/Bright)")
+    @Config.LangKey(DynamicStealth.MODID + ".config.lightLevelHigh")
+    @Config.Comment("At or above this light level, entities receive the maximum light level multiplier")
     @Config.RangeInt(min = 0, max = 15)
-    public int lightHigh = 8;
+    public int lightLevelHigh = 11;
 
-    @Config.Name("Light (Low/Dark)")
-    @Config.LangKey(DynamicStealth.MODID + ".config.lightLow")
+    @Config.Name("020 Multiplier (High/Bright)")
+    @Config.LangKey(DynamicStealth.MODID + ".config.lightMultHigh")
     @Config.Comment(
             {
-                    "At or below this light level, entities cannot be seen at all",
-                    "",
-                    "Inclusive, so if set to 0, then in 0 lighting, entities cannot be seen by other entities"
+                    "The light level visibility multiplier when standing in bright areas",
+                    "0 means invisible, 1 means fully visible (other factors not accounted for)"
             })
-    @Config.RangeInt(min = -1, max = 15)
-    public int lightLow = -1;
+    @Config.RangeDouble(min = 0, max = 1)
+    public double lightMultHigh = 1;
 
-    @Config.Name("Nightvision Bonus")
+    @Config.Name("040 Light Level (Low/Dark)")
+    @Config.LangKey(DynamicStealth.MODID + ".config.lightLevelLow")
+    @Config.Comment("At or below this light level, entities receive the minimum light level multiplier")
+    @Config.RangeInt(min = 0, max = 15)
+    public int lightLevelLow = 0;
+
+    @Config.Name("060 Multiplier (Low/Dark)")
+    @Config.LangKey(DynamicStealth.MODID + ".config.lightMultLow")
+    @Config.Comment(
+            {
+                    "The light level visibility multiplier when standing in dark areas",
+                    "0 means invisible, 1 means fully visible (other factors not accounted for)"
+            })
+    @Config.RangeDouble(min = 0, max = 1)
+    public double lightMultLow = 0.1;
+
+    @Config.Name("080 Nightvision Bonus")
     @Config.LangKey(DynamicStealth.MODID + ".config.nightvisionBonus")
     @Config.Comment("When an entity has the nightvision effect, this value is added to their perceived light levels (and then set to 15 if larger than 15)")
     @Config.RangeInt(min = 0, max = 15)

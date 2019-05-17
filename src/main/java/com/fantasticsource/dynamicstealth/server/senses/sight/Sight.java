@@ -303,10 +303,19 @@ public class Sight
             lightFactor = Math.min(15, lightFactor + sight.c_lighting.nightvisionBonus);
         }
 
-        int lightLow = lightLow(searcher);
-        if (lightFactor <= lightLow) return 777;
-        int lightHigh = lightHigh(searcher);
-        lightFactor = lightFactor >= lightHigh ? 1 : lightFactor / (lightHigh - lightLow);
+        int lightLevelLow = lightLevelLow(searcher);
+        double lightMultLow = lightMultLow(searcher);
+        if (lightFactor <= lightLevelLow) lightFactor = lightMultLow;
+        else
+        {
+            int lightLevelHigh = lightLevelHigh(searcher);
+            double lightMultHigh = lightMultHigh(searcher);
+            if (lightFactor >= lightLevelHigh) lightFactor = lightMultHigh;
+            else
+            {
+                lightFactor = (lightFactor - lightLevelLow) / (lightLevelHigh - lightLevelLow) * (lightMultHigh - lightMultLow) + lightMultLow;
+            }
+        }
 
 
         //Blindness (multiplier)

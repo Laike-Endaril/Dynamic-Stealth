@@ -25,7 +25,7 @@ public class EntitySightData
     private static ArrayList<Class<? extends EntityLivingBase>> naturalSoulSightEntities;
     private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityAngles;
     private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityDistances;
-    private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityLighting;
+    private static LinkedHashMap<Class<? extends EntityLivingBase>, SpecificLighting> entityLighting;
 
     public static void update()
     {
@@ -148,11 +148,11 @@ public class EntitySightData
         for (String string : serverSettings.senses.sight.y_entityOverrides.lighting)
         {
             tokens = string.split(",");
-            if (tokens.length != 3) System.err.println("Wrong number of arguments for entity-specific lighting override; please check example in tooltip");
+            if (tokens.length != 5) System.err.println("Wrong number of arguments for entity-specific lighting override; please check example in tooltip");
             else
             {
                 token = tokens[0].trim();
-                if (token.equals("player")) entityLighting.put(EntityPlayerMP.class, new Pair<>(Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
+                if (token.equals("player")) entityLighting.put(EntityPlayerMP.class, new SpecificLighting(Integer.parseInt(tokens[1].trim()), Double.parseDouble(tokens[2].trim()), Integer.parseInt(tokens[3].trim()), Double.parseDouble(tokens[4].trim())));
                 else
                 {
                     entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(token));
@@ -160,7 +160,7 @@ public class EntitySightData
                     else
                     {
                         Class c = entry.getEntityClass();
-                        if (EntityLivingBase.class.isAssignableFrom(c)) entityLighting.put(c, new Pair<>(Integer.parseInt(tokens[1].trim()), Integer.parseInt(tokens[2].trim())));
+                        if (EntityLivingBase.class.isAssignableFrom(c)) entityLighting.put(c, new SpecificLighting(Integer.parseInt(tokens[1].trim()), Double.parseDouble(tokens[2].trim()), Integer.parseInt(tokens[3].trim()), Double.parseDouble(tokens[4].trim())));
                         else System.err.println("Entity \"" + string + "\" does not extend EntityLivingBase!");
                     }
                 }
@@ -169,7 +169,7 @@ public class EntitySightData
 
         if (serverSettings.senses.sight.e_angles.angleSmall > serverSettings.senses.sight.e_angles.angleLarge) throw new IllegalArgumentException("angleLarge must be greater than or equal to angleSmall");
         if (serverSettings.senses.sight.f_distances.distanceNear > serverSettings.senses.sight.f_distances.distanceFar) throw new IllegalArgumentException("distanceFar must be greater than or equal to distanceNear");
-        if (serverSettings.senses.sight.c_lighting.lightLow > serverSettings.senses.sight.c_lighting.lightHigh) throw new IllegalArgumentException("lightHigh must be greater than or equal to lightLow");
+        if (serverSettings.senses.sight.c_lighting.lightLevelLow > serverSettings.senses.sight.c_lighting.lightLevelHigh) throw new IllegalArgumentException("lightLevelHigh must be greater than or equal to lightLevelLow");
     }
 
 
@@ -214,15 +214,42 @@ public class EntitySightData
     }
 
 
-    public static int lightHigh(EntityLivingBase searcher)
+    public static int lightLevelHigh(EntityLivingBase searcher)
     {
-        Pair<Integer, Integer> pair = entityLighting.get(searcher.getClass());
-        return pair == null ? serverSettings.senses.sight.c_lighting.lightHigh : pair.getKey();
+        SpecificLighting specificLighting = entityLighting.get(searcher.getClass());
+        return specificLighting == null ? serverSettings.senses.sight.c_lighting.lightLevelHigh : specificLighting.levelHigh;
     }
 
-    public static int lightLow(EntityLivingBase searcher)
+    public static double lightMultHigh(EntityLivingBase searcher)
     {
-        Pair<Integer, Integer> pair = entityLighting.get(searcher.getClass());
-        return pair == null ? serverSettings.senses.sight.c_lighting.lightLow : pair.getValue();
+        SpecificLighting specificLighting = entityLighting.get(searcher.getClass());
+        return specificLighting == null ? serverSettings.senses.sight.c_lighting.lightMultHigh : specificLighting.multHigh;
+    }
+
+    public static int lightLevelLow(EntityLivingBase searcher)
+    {
+        SpecificLighting specificLighting = entityLighting.get(searcher.getClass());
+        return specificLighting == null ? serverSettings.senses.sight.c_lighting.lightLevelLow : specificLighting.levelLow;
+    }
+
+    public static double lightMultLow(EntityLivingBase searcher)
+    {
+        SpecificLighting specificLighting = entityLighting.get(searcher.getClass());
+        return specificLighting == null ? serverSettings.senses.sight.c_lighting.lightMultLow : specificLighting.multLow;
+    }
+
+
+    private static class SpecificLighting
+    {
+        int levelHigh, levelLow;
+        double multHigh, multLow;
+
+        public SpecificLighting(int levelHigh, double multHigh, int levelLow, double multLow)
+        {
+            this.levelHigh = levelHigh;
+            this.multHigh = multHigh;
+            this.levelLow = levelLow;
+            this.multLow = multLow;
+        }
     }
 }

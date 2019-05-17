@@ -297,10 +297,14 @@ dynamicstealth.config.blindnessMultiplier.tooltip=FILLSCREEN FIXNEWLINES Blinded
 dynamicstealth.config.armorMultiplier=Armor Multiplier (Cumulative)
 dynamicstealth.config.armorMultiplier.tooltip=FILLSCREEN FIXNEWLINES An entity's visibility is multiplied by 1 + (this setting * armor)\n\nIf set to 0, there is no effect\n\nIf set to 0.25, an entity with 20 armor (full diamond) is 5x as likely to be seen\n \n
 
-dynamicstealth.config.lightHigh=Light (High/Bright)
-dynamicstealth.config.lightHigh.tooltip=FILLSCREEN FIXNEWLINES The lowest light level at which entities take no sight penalty\n\nEntities are harder to see in light levels lower than this\n \n
-dynamicstealth.config.lightLow=Light (Low/Dark)
-dynamicstealth.config.lightLow.tooltip=FILLSCREEN FIXNEWLINES At or below this light level, entities cannot be seen at all\n\nInclusive, so if set to 0, then in 0 lighting, entities cannot be seen by other entities\n \n
+dynamicstealth.config.lightLevelHigh=Light Level (High/Bright)
+dynamicstealth.config.lightLevelHigh.tooltip=FILLSCREEN FIXNEWLINES At or above this light level, entities receive the maximum light level multiplier\n \n
+dynamicstealth.config.lightLevelLow=Light Level (Low/Dark)
+dynamicstealth.config.lightLevelLow.tooltip=FILLSCREEN FIXNEWLINES At or below this light level, entities receive the minimum light level multiplier\n \n
+dynamicstealth.config.lightMultHigh=Multiplier (High/Bright)
+dynamicstealth.config.lightMultHigh.tooltip=FILLSCREEN FIXNEWLINES The light level visibility multiplier when standing in bright areas\n\n0 means invisible, 1 means fully visible (other factors not accounted for)\n \n
+dynamicstealth.config.lightMultLow=Multiplier (Low/Dark)
+dynamicstealth.config.lightMultLow.tooltip=FILLSCREEN FIXNEWLINES The light level visibility multiplier when standing in dark areas\n\n0 means invisible, 1 means fully visible (other factors not accounted for)\n \n
 dynamicstealth.config.nightvisionBonus=Nightvision Bonus
 dynamicstealth.config.nightvisionBonus.tooltip=FILLSCREEN FIXNEWLINES When an entity has the nightvision effect, this value is added to their perceived light levels (and then set to 15 if larger than 15)\n \n
 
@@ -324,7 +328,7 @@ dynamicstealth.config.entitySpecificAngle.tooltip=FILLSCREEN FIXNEWLINES How wid
 dynamicstealth.config.entitySpecificDistance=Distance
 dynamicstealth.config.entitySpecificDistance.tooltip=FILLSCREEN FIXNEWLINES How far an entity can see, at the edge of its vision and at its focal point\n\nentityID, distanceFar, distanceNear\n\neg...\n\nminecraft:skeleton, 40, 3\n \n
 dynamicstealth.config.entitySpecificLighting=Lighting
-dynamicstealth.config.entitySpecificLighting.tooltip=FILLSCREEN FIXNEWLINES How well an entity sees in the dark\n\nentityID, lightHigh, lightLow\n\neg...\n\nminecraft:skeleton, 15, -1\n \n
+dynamicstealth.config.entitySpecificLighting.tooltip=FILLSCREEN FIXNEWLINES How well an entity sees in the dark\n\nentityID, lightLevelHigh, lightMultHigh, lightLevelLow, lightMultLow\n\neg...\n\nminecraft:skeleton, 15, 1, 0, 0\n \n
 dynamicstealth.config.naturallyBright=Naturally Bright
 dynamicstealth.config.naturallyBright.tooltip=FILLSCREEN FIXNEWLINES Entities in this list are always treated as if they are standing in max light level\n \n
 dynamicstealth.config.naturalNightvision=Natural Nightvision

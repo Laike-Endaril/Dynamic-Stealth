@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ===================================================
 
-Add lowLightMultiplier and highLightMultiplier for lighting
-
 Add "revealed" status effect which reduces the effectiveness of invisibility
 Add touch event
 Add revealed effect to touch event defaults
