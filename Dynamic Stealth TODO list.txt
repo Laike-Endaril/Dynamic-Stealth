@@ -1,5 +1,9 @@
 CURRENTLY WORKING ON ===================================================
 
+Alter lighting factor...
+...change min from -1 to 0
+...add setting for % when at min light level
+
 Fix bug where entities searching for YOU or fleeing from YOU can still be assassinated
 
 Alter weapon tooltips to reflect settings for normal attacks and stealth attacks
