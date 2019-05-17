@@ -21,7 +21,8 @@ public class AssassinationConfig
     public String[] attackerEffects =
             {
                     "dynamicstealth:soulsight.140",
-                    "invisibility.140"
+                    "invisibility.140",
+                    "night_vision.140"
             };
 
     @Config.Name("Weapon-Specific Settings")
