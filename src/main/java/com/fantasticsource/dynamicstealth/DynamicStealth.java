@@ -284,10 +284,12 @@ public class DynamicStealth
     public static void entityDeath(LivingDeathEvent event)
     {
         EntityLivingBase victim = event.getEntityLiving();
-        Threat.set(victim, null, 0);
 
         Entity source = event.getSource().getTrueSource();
         if (source == null) source = event.getSource().getImmediateSource();
+
+        boolean areThreatTarget = Threat.getTarget(victim) == source;
+        Threat.set(victim, null, 0);
 
         if (source instanceof EntityLivingBase)
         {
@@ -352,9 +354,9 @@ public class DynamicStealth
                 if (!Sight.canSee(victim, source))
                 {
                     //Target cannot see us
-                    if (Threat.getTarget(victim) != source)
+                    if (!areThreatTarget)
                     {
-                        //Target is not searching for *us*
+                        //Target is not searching for / fleeing from *us specifically*
                         if (!(killer instanceof FakePlayer) && !MinecraftForge.EVENT_BUS.post(new AssassinationEvent(killer, victim)))
                         {
                             //Assassinations

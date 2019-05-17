@@ -7,8 +7,6 @@ Replace on-attack invis removal with revealed status?
 
 Change nightvision so that it has levels pertaining to distance
 
-Fix bug where entities searching for YOU or fleeing from YOU can still be assassinated
-
 Alter weapon tooltips to reflect settings for normal attacks and stealth attacks
 
 Add limit to soul sight distance based on potion effect level
