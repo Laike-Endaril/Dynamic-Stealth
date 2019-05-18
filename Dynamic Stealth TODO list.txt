@@ -1,8 +1,10 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Alternate sneak mode, so as not to trigger "don't step off edge", ebwizardry staff spell selection, hookd grapple prevention, etc
+Fix stealth gauge registering when an enderman looks at you (not when they're facing you, but when they idly look at you); may be related to below
 
-Fix stealth gauge glitch when in creative and an enemy is searching and facing you
+Fix stealth gauge glitch when in creative and an enemy is searching and facing you; may be related to above
+
+Alternate sneak mode, so as not to trigger "don't step off edge", ebwizardry staff spell selection, hookd grapple prevention, etc
 
 Add config filter for entities that don't trigger the stealth gauge
 
