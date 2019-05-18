@@ -14,7 +14,7 @@ public class MainHUDStyleConfig
                     "0 means invisible, 1 means completely opaque"
             })
     @Config.RangeDouble(min = 0, max = 1)
-    public double stealthGaugeAlpha = 0.6;
+    public double stealthGaugeAlpha = 0.4;
 
     @Config.Name("Stealth Gauge Color")
     @Config.LangKey(DynamicStealth.MODID + ".config.stealthGaugeColor")
@@ -53,7 +53,7 @@ public class MainHUDStyleConfig
                     "2 = Animated",
             })
     @Config.RangeInt(min = 0, max = 2)
-    public int stealthGaugeMode = 1;
+    public int stealthGaugeMode = 2;
 
     @Config.Name("Stealth Gauge X Position")
     @Config.LangKey(DynamicStealth.MODID + ".config.stealthGaugeX")
@@ -64,7 +64,7 @@ public class MainHUDStyleConfig
                     "0 is far left, 0.5 is center, 1 is far right"
             })
     @Config.RangeDouble(min = 0, max = 1)
-    public double stealthGaugeX = 1;
+    public double stealthGaugeX = 0.5;
 
     @Config.Name("Stealth Gauge Y Position")
     @Config.LangKey(DynamicStealth.MODID + ".config.stealthGaugeY")
@@ -75,5 +75,5 @@ public class MainHUDStyleConfig
                     "0 is top, 0.5 is center, 1 is bottom"
             })
     @Config.RangeDouble(min = 0, max = 1)
-    public double stealthGaugeY = 1;
+    public double stealthGaugeY = 0.5;
 }
