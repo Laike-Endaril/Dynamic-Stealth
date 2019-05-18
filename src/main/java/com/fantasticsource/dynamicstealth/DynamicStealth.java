@@ -101,6 +101,8 @@ public class DynamicStealth
 
     public static final TrigLookupTable TRIG_TABLE = new TrigLookupTable(1024);
 
+    private static EntityLivingBase victimThreatTarget = null;
+
     static
     {
         ConfigHandler.init();
@@ -288,7 +290,6 @@ public class DynamicStealth
         Entity source = event.getSource().getTrueSource();
         if (source == null) source = event.getSource().getImmediateSource();
 
-        boolean areThreatTarget = Threat.getTarget(victim) == source;
         Threat.set(victim, null, 0);
 
         if (source instanceof EntityLivingBase)
@@ -354,7 +355,7 @@ public class DynamicStealth
                 if (!Sight.canSee(victim, source))
                 {
                     //Target cannot see us
-                    if (!areThreatTarget)
+                    if (victimThreatTarget != source)
                     {
                         //Target is not searching for / fleeing from *us specifically*
                         if (!(killer instanceof FakePlayer) && !MinecraftForge.EVENT_BUS.post(new AssassinationEvent(killer, victim)))
@@ -379,6 +380,7 @@ public class DynamicStealth
     public static void entityAttackedPre(LivingHurtEvent event)
     {
         EntityLivingBase victim = event.getEntityLiving();
+        victimThreatTarget = Threat.getTarget(victim);
 
         DamageSource dmgSource = event.getSource();
         Entity source = dmgSource.getTrueSource();
