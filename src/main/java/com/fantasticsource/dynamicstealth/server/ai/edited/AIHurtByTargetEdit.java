@@ -46,7 +46,8 @@ public class AIHurtByTargetEdit extends AITargetEdit
 
         for (EntityCreature entitycreature : attacker.world.getEntitiesWithinAABB(attacker.getClass(), (new AxisAlignedBB(attacker.posX, attacker.posY, attacker.posZ, attacker.posX + 1, attacker.posY + 1, attacker.posZ + 1)).grow(followDistance, 10, followDistance)))
         {
-            if (attacker != entitycreature && entitycreature.getAttackTarget() == null && (!(attacker instanceof EntityTameable) || ((EntityTameable) attacker).getOwner() == ((EntityTameable) entitycreature).getOwner()) && !entitycreature.isOnSameTeam(attacker.getRevengeTarget()))
+            EntityLivingBase revengeTarget = attacker.getRevengeTarget();
+            if (revengeTarget != null && attacker != entitycreature && entitycreature.getAttackTarget() == null && (!(attacker instanceof EntityTameable) || ((EntityTameable) attacker).getOwner() == ((EntityTameable) entitycreature).getOwner()) && !entitycreature.isOnSameTeam(attacker.getRevengeTarget()))
             {
                 boolean shouldAttack = true;
                 for (Class<?> excludedClass : excludedReinforcementTypes)
