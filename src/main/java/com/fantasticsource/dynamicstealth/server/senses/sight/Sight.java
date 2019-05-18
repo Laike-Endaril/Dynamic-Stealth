@@ -258,6 +258,7 @@ public class Sight
         if (hasSoulSight(searcher))
         {
             if (distSquared > 10000) return 777;
+            else return -777;
         }
         else
         {
