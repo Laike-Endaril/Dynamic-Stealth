@@ -140,11 +140,12 @@ public class Sight
         }
 
         //Calculate
-        double result = visualStealthLevelInternal(searcher, target, yaw, pitch);
+        double result = visualStealthLevelInternal(searcher, target, isAggressive, yaw, pitch);
 
         if (saveCache)
         {
             //Save first cache
+            //This is where the stealth gauge checks are done
             if (isAggressive && target instanceof EntityPlayer)
             {
                 if (searcher instanceof EntityPlayer || (searcher instanceof EntityLiving && (((EntityLiving) searcher).getAttackTarget() == target || (!EntityThreatData.isPassive(searcher) && !EntityThreatData.bypassesThreat(searcher)))))
@@ -240,14 +241,21 @@ public class Sight
     }
 
 
-    private static double visualStealthLevelInternal(EntityLivingBase searcher, Entity target, double yaw, double pitch)
+    private static double visualStealthLevelInternal(EntityLivingBase searcher, Entity target, boolean isAggressive, double yaw, double pitch)
     {
         //Hard checks (absolute)
         if (searcher.world != target.world || target.isDead || target instanceof FakePlayer) return 777;
 
-        if (searcher instanceof EntityPlayer && target instanceof EntityPlayer)
+        if (target instanceof EntityPlayer)
         {
-            if (!HidingData.isHidingFrom((EntityPlayer) target, searcher.getName())) return -777;
+            if (searcher instanceof EntityPlayer)
+            {
+                if (!HidingData.isHidingFrom((EntityPlayer) target, searcher.getName())) return -777;
+            }
+            else if (searcher instanceof EntityLiving)
+            {
+                if (isAggressive && ((EntityPlayer) target).capabilities.isCreativeMode) return 777;
+            }
         }
         if (target instanceof EntityDragon || target instanceof EntityWither) return -777;
         if (searcher instanceof EntityPlayer && CompatDissolution.isPossessing((EntityPlayer) searcher, target)) return -777;
