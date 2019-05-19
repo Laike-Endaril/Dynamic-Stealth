@@ -554,6 +554,8 @@ public class DynamicStealth
 
     public static void makeLivingLookTowardEntity(EntityLiving living, Entity target)
     {
+        if (Compat.testdummy && living.getClass().getName().equals("boni.dummy.EntityDummy")) return;
+
         Vec3d pos1 = living.getPositionVector().add(new Vec3d(0, living.getEyeHeight(), 0));
         Vec3d pos2 = target.getPositionVector().add(new Vec3d(0, target.height * 0.5, 0));
 
@@ -741,6 +743,7 @@ public class DynamicStealth
         if (Loader.isModLoaded("emberroot")) Compat.emberroot = true;
         if (Loader.isModLoaded("primitivemobs")) Compat.primitivemobs = true;
         if (Loader.isModLoaded("neat")) Compat.neat = true;
+        if (Loader.isModLoaded("testdummy")) Compat.testdummy = true;
         if (Loader.isModLoaded("statues")) Compat.statues = true;
         if (Loader.isModLoaded("magma_monsters")) Compat.magma_monsters = true;
         if (Loader.isModLoaded("dissolution"))

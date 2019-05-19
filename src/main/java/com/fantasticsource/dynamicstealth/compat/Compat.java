@@ -21,6 +21,7 @@ public class Compat
             magma_monsters = false,
             abyssalcraft = false,
             emberroot = false,
+            testdummy = false,
             primitivemobs = false,
             thermalfoundation = false;
 
