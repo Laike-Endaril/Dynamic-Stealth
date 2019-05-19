@@ -19,6 +19,7 @@ public class AttackDefaults
         stealthAttackDefaults.add("backstab:iron_dagger, true, 5");
         stealthAttackDefaults.add("backstab:diamond_dagger, true, 5");
         stealthAttackDefaults.add("backstab:gold_dagger, true, 5");
+        stealthAttackDefaults.add("tetra:sword_modular > sword/short_blade_material, true, 5");
 
         stealthAttackDefaults.add("natura:ghostwood_kama, true, 3");
         stealthAttackDefaults.add("natura:bloodwood_kama, true, 3");
