@@ -4,8 +4,7 @@ Add per-dimension minimum light level override
 Set default minimum light level for nether to 8
 Set default minimum light level for end to 10
 
-Fix stealth gauge registering when an enderman looks at you (not when they're facing you, but when they idly look at you); may be related to below
-Fix stealth gauge glitch when in creative and an enemy is searching and facing you; may be related to above
+Fix stealth gauge glitch when in creative and an enemy is searching and facing you
 
 Alternate sneak mode, so as not to trigger "don't step off edge", ebwizardry staff spell selection, hookd grapple prevention, etc
 
