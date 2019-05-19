@@ -54,7 +54,7 @@ public class Compat
         if (magma_monsters && aiClassname.contains("EntityMagmaMonster")) return true;
         if (primitivemobs && (aiClassname.contains("AIFlameSpewAttack") || aiClassname.contains("AIChargeAttack"))) return true;
         if (emberroot && aiClassname.contains("EntityAIAttackOnCollideAggressive")) return true;
-        if (defiledlands && aiClassname.contains("EntityAIAttackMeleeStrafe")) return true;
+        if (defiledlands && aiClassname.contains("EntityScuttler.AISpiderAttack")) return true;
 
         return false;
     }
