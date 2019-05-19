@@ -14,13 +14,20 @@ public class AttackDefaults
         normalAttackDefaults.add("glowstone_dust, false, 0, , glowing.20, true");
 
 
+        //Daggers
         stealthAttackDefaults.add("backstab:wood_dagger, true, 5");
         stealthAttackDefaults.add("backstab:stone_dagger, true, 5");
         stealthAttackDefaults.add("backstab:iron_dagger, true, 5");
         stealthAttackDefaults.add("backstab:diamond_dagger, true, 5");
         stealthAttackDefaults.add("backstab:gold_dagger, true, 5");
         stealthAttackDefaults.add("tetra:sword_modular > sword/short_blade_material, true, 5");
+        stealthAttackDefaults.add("architecturecraft:chisel, true, 5");
+        stealthAttackDefaults.add("chisel:chisel_iron, true, 5");
+        stealthAttackDefaults.add("chisel:chisel_diamond, true, 5");
+        stealthAttackDefaults.add("chisel:chisel_hitech, true, 5");
+        stealthAttackDefaults.add("tcomplement:chisel, true, 5");
 
+        //Kamas
         stealthAttackDefaults.add("natura:ghostwood_kama, true, 3");
         stealthAttackDefaults.add("natura:bloodwood_kama, true, 3");
         stealthAttackDefaults.add("natura:darkwood_kama, true, 3");
