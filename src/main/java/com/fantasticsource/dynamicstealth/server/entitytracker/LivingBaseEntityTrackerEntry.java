@@ -388,7 +388,7 @@ public class LivingBaseEntityTrackerEntry extends EntityTrackerEntry
 
     public boolean isVisibleTo(EntityPlayerMP playerMP)
     {
-        return Sight.canSee(playerMP, livingBase);
+        return Sight.canSee(playerMP, livingBase, true);
     }
 
     public void updatePlayerEntities(List<EntityPlayer> players)

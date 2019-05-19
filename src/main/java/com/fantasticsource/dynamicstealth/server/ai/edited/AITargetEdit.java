@@ -57,7 +57,7 @@ public abstract class AITargetEdit extends EntityAIBase
 
         if (target instanceof EntityPlayer && ((EntityPlayer) target).capabilities.disableDamage) return false;
 
-        return Sight.canSee(attacker, target);
+        return Sight.canSee(attacker, target, true);
     }
 
     protected boolean isSuitableTarget(@Nullable EntityLivingBase target)
@@ -82,7 +82,7 @@ public abstract class AITargetEdit extends EntityAIBase
 
         if (target instanceof EntityPlayer && ((EntityPlayer) target).capabilities.disableDamage) return false;
 
-        if (!Sight.canSee(attacker, target)) return false;
+        if (!Sight.canSee(attacker, target, true)) return false;
 
         attacker.setAttackTarget(target);
         return true;

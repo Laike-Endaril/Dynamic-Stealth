@@ -93,7 +93,7 @@ public class Communication
                 Threat.ThreatData helperThreat = Threat.get(livingHelper);
                 if ((helperThreat.target == null || helperThreat.target == danger) && canHear(livingHelper, warner, serverSettings.senses.hearing.warningRange))
                 {
-                    boolean canSee = sawDanger && Sight.canSee(livingHelper, danger, false, true, MCTools.getYawDeg(livingHelper.getPositionVector().add(new Vec3d(0, livingHelper.getEyeHeight(), 0)), danger.getPositionVector().add(new Vec3d(0, danger.height * 0.5, 0)), TRIG_TABLE), MCTools.getPitchDeg(livingHelper.getPositionVector(), danger.getPositionVector(), TRIG_TABLE));
+                    boolean canSee = sawDanger && Sight.canSee(livingHelper, danger, true, false, true, MCTools.getYawDeg(livingHelper.getPositionVector().add(new Vec3d(0, livingHelper.getEyeHeight(), 0)), danger.getPositionVector().add(new Vec3d(0, danger.height * 0.5, 0)), TRIG_TABLE), MCTools.getPitchDeg(livingHelper.getPositionVector(), danger.getPositionVector(), TRIG_TABLE));
                     if (canSee) Threat.set(livingHelper, danger, Tools.max(serverSettings.threat.warnedThreat, helperThreat.threatLevel));
                     else Threat.setThreat(livingHelper, Tools.max(serverSettings.threat.warnedThreat, helperThreat.threatLevel));
 

@@ -100,27 +100,27 @@ public class Sight
     }
 
 
-    public static boolean canSee(EntityLivingBase searcher, Entity target)
+    public static boolean canSee(EntityLivingBase searcher, Entity target, boolean isAggressive)
     {
-        return visualStealthLevel(searcher, target, true, true, searcher.rotationYawHead, searcher.rotationPitch) <= 1;
+        return visualStealthLevel(searcher, target, isAggressive, true, true, searcher.rotationYawHead, searcher.rotationPitch) <= 1;
     }
 
-    public static boolean canSee(EntityLivingBase searcher, Entity target, boolean useCache, boolean saveCache)
+    public static boolean canSee(EntityLivingBase searcher, Entity target, boolean isAggressive, boolean useCache, boolean saveCache)
     {
-        return visualStealthLevel(searcher, target, useCache, saveCache, searcher.rotationYawHead, searcher.rotationPitch) <= 1;
+        return visualStealthLevel(searcher, target, isAggressive, useCache, saveCache, searcher.rotationYawHead, searcher.rotationPitch) <= 1;
     }
 
-    public static boolean canSee(EntityLivingBase searcher, Entity target, boolean useCache, boolean saveCache, double yaw, double pitch)
+    public static boolean canSee(EntityLivingBase searcher, Entity target, boolean isAggressive, boolean useCache, boolean saveCache, double yaw, double pitch)
     {
-        return visualStealthLevel(searcher, target, useCache, saveCache, yaw, pitch) <= 1;
+        return visualStealthLevel(searcher, target, isAggressive, useCache, saveCache, yaw, pitch) <= 1;
     }
 
-    public static double visualStealthLevel(EntityLivingBase searcher, Entity target)
+    public static double visualStealthLevel(EntityLivingBase searcher, Entity target, boolean isAggressive)
     {
-        return visualStealthLevel(searcher, target, true, true, searcher.rotationYawHead, searcher.rotationPitch);
+        return visualStealthLevel(searcher, target, isAggressive, true, true, searcher.rotationYawHead, searcher.rotationPitch);
     }
 
-    public static double visualStealthLevel(EntityLivingBase searcher, Entity target, boolean useCache, boolean saveCache, double yaw, double pitch)
+    public static double visualStealthLevel(EntityLivingBase searcher, Entity target, boolean isAggressive, boolean useCache, boolean saveCache, double yaw, double pitch)
     {
         if (searcher == null || target == null || !searcher.world.isBlockLoaded(searcher.getPosition()) || !target.world.isBlockLoaded(target.getPosition())) return 777;
 
@@ -145,20 +145,23 @@ public class Sight
         if (saveCache)
         {
             //Save first cache
-            if (target instanceof EntityPlayer && ((searcher instanceof EntityLiving && ((EntityLiving) searcher).getAttackTarget() == target) || (!EntityThreatData.isPassive(searcher) && !EntityThreatData.bypassesThreat(searcher))))
+            if (isAggressive && target instanceof EntityPlayer)
             {
-                EntityPlayer player = (EntityPlayer) target;
-                Pair<WrappingQueue<Double>, Long> pair = globalPlayerStealthHistory.computeIfAbsent(player, k -> new Pair<>(new WrappingQueue<>(GLOBAL_STEALTH_SMOOTHING + 2), tick - 1));
-                WrappingQueue<Double> queue = pair.getKey();
-
-                double clampedResult = Tools.min(Tools.max(-1, result - 1), 1);
-                if (queue.size() != 0 && pair.getValue() == tick)
+                if (searcher instanceof EntityPlayer || (searcher instanceof EntityLiving && (((EntityLiving) searcher).getAttackTarget() == target || (!EntityThreatData.isPassive(searcher) && !EntityThreatData.bypassesThreat(searcher)))))
                 {
-                    queue.setNewestToOldest(0, Tools.min(clampedResult, queue.getNewestToOldest(0)));
-                }
-                else queue.add(clampedResult);
+                    EntityPlayer player = (EntityPlayer) target;
+                    Pair<WrappingQueue<Double>, Long> pair = globalPlayerStealthHistory.computeIfAbsent(player, k -> new Pair<>(new WrappingQueue<>(GLOBAL_STEALTH_SMOOTHING + 2), tick - 1));
+                    WrappingQueue<Double> queue = pair.getKey();
 
-                pair.setValue(tick);
+                    double clampedResult = Tools.min(Tools.max(-1, result - 1), 1);
+                    if (queue.size() != 0 && pair.getValue() == tick)
+                    {
+                        queue.setNewestToOldest(0, Tools.min(clampedResult, queue.getNewestToOldest(0)));
+                    }
+                    else queue.add(clampedResult);
+
+                    pair.setValue(tick);
+                }
             }
 
             //Save second cache
@@ -217,7 +220,7 @@ public class Sight
             {
                 if (entity instanceof EntityLivingBase && entity != player)
                 {
-                    double stealthLevel = visualStealthLevel(player, entity);
+                    double stealthLevel = visualStealthLevel(player, entity, true);
                     if (stealthLevel <= 1) result.put((EntityLivingBase) entity, stealthLevel);
                 }
             }

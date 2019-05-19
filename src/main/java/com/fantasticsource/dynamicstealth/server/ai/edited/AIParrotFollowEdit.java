@@ -56,7 +56,7 @@ public class AIParrotFollowEdit extends EntityAIBase //In vanilla, this is only 
         }
 
         target = queue.poll();
-        while (target != null && !Sight.canSee(searcher, target)) //Doesn't need isSuitableTarget because it's not always used for attacking
+        while (target != null && !Sight.canSee(searcher, target, false)) //Doesn't need isSuitableTarget because it's not always used for attacking
         {
             target = queue.poll();
         }
@@ -66,7 +66,7 @@ public class AIParrotFollowEdit extends EntityAIBase //In vanilla, this is only 
     @Override
     public boolean shouldContinueExecuting()
     {
-        return Sight.canSee(searcher, target) && !navigator.noPath() && searcher.getDistanceSq(target) > Math.pow(stopDistance, 2);
+        return Sight.canSee(searcher, target, false) && !navigator.noPath() && searcher.getDistanceSq(target) > Math.pow(stopDistance, 2);
     }
 
     @Override

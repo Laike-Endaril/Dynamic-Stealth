@@ -72,7 +72,7 @@ public class AIWatchClosestEdit extends EntityAIBase
         }
 
         target = queue.poll();
-        while (target != null && !Sight.canSee(entity, target)) //Doesn't need isSuitableTarget because it's not always used for attacking
+        while (target != null && !Sight.canSee(entity, target, false)) //Doesn't need isSuitableTarget because it's not always used for attacking
         {
             target = queue.poll();
         }
@@ -83,7 +83,7 @@ public class AIWatchClosestEdit extends EntityAIBase
     @Override
     public boolean shouldContinueExecuting()
     {
-        return (target.isEntityAlive() && Sight.canSee(entity, target) && lookTime > 0);
+        return (target.isEntityAlive() && Sight.canSee(entity, target, false) && lookTime > 0);
     }
 
     @Override

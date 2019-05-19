@@ -132,7 +132,7 @@ public class ClientData
         }
         if (serverSettings.hud.recognizePassive && EntityThreatData.isPassive(searcher)) return COLOR_IDLE_PASSIVE;
         if (threatLevel <= 0) return COLOR_IDLE_NON_PASSIVE;
-        if (target == null || !Sight.canSee(searcher, target)) return COLOR_SEARCHING;
+        if (target == null || !Sight.canSee(searcher, target, true)) return COLOR_SEARCHING;
         if (target == player) return COLOR_ATTACKING_YOU;
         return COLOR_ATTACKING_OTHER;
     }

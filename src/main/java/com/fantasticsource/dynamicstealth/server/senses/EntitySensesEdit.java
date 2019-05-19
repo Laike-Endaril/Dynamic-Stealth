@@ -24,6 +24,6 @@ public class EntitySensesEdit extends EntitySenses
     @Override
     public boolean canSee(Entity target)
     {
-        return Sight.canSee(searcher, target);
+        return Sight.canSee(searcher, target, true);
     }
 }

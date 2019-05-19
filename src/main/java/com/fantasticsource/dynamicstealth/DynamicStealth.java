@@ -307,7 +307,7 @@ public class DynamicStealth
 
                     if (Threat.getTarget(witness) == victim)
                     {
-                        if (Sight.canSee(witness, victim))
+                        if (Sight.canSee(witness, victim, true))
                         {
                             if (MCTools.isOwned(witness)) Threat.set(witness, null, 0);
                             else Threat.clearTarget(witness);
@@ -316,10 +316,10 @@ public class DynamicStealth
                     }
                     else if (HelperSystem.isAlly(witness, victim))
                     {
-                        if (Sight.canSee(witness, victim))
+                        if (Sight.canSee(witness, victim, false))
                         {
                             //Witness saw victim die
-                            if (Sight.canSee(witness, source))
+                            if (Sight.canSee(witness, source, true))
                             {
                                 //Witness saw everything
                                 wasSeen = true;
@@ -352,7 +352,7 @@ public class DynamicStealth
             if (!wasSeen && !EntityThreatData.isPassive(victim))
             {
                 //Target's friends didn't see
-                if (!Sight.canSee(victim, source))
+                if (!Sight.canSee(victim, source, true))
                 {
                     //Target cannot see us
                     if (victimThreatTarget != source)
@@ -424,7 +424,7 @@ public class DynamicStealth
 
 
                 //Stealth attacks
-                if (!Sight.canSee(victim, attacker))
+                if (!Sight.canSee(victim, attacker, true))
                 {
                     if (!MinecraftForge.EVENT_BUS.post(new StealthAttackEvent(victim, dmgSource, event.getAmount())))
                     {
@@ -471,7 +471,7 @@ public class DynamicStealth
 
                 //Look toward damage, check sight, and set perceived position
                 makeLivingLookTowardEntity(target, attacker);
-                boolean canSee = Sight.canSee(target, attacker, false, false);
+                boolean canSee = Sight.canSee(target, attacker, true, false, false);
                 BlockPos perceivedPos = attacker.getPosition();
                 if (!canSee)
                 {
