@@ -21,6 +21,7 @@ public class Compat
             magma_monsters = false,
             abyssalcraft = false,
             emberroot = false,
+            defiledlands = false,
             testdummy = false,
             primitivemobs = false,
             thermalfoundation = false;
@@ -53,6 +54,7 @@ public class Compat
         if (magma_monsters && aiClassname.contains("EntityMagmaMonster")) return true;
         if (primitivemobs && (aiClassname.contains("AIFlameSpewAttack") || aiClassname.contains("AIChargeAttack"))) return true;
         if (emberroot && aiClassname.contains("EntityAIAttackOnCollideAggressive")) return true;
+        if (defiledlands && aiClassname.contains("EntityAIAttackMeleeStrafe")) return true;
 
         return false;
     }
