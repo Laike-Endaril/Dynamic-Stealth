@@ -24,5 +24,8 @@ public class EntityThreatDefaults
         passiveDefaults.add("rafradek_tf2_weapons:sentry, false");
 
         threatBypassDefaults.add("dissolution:player_corpse");
+        threatBypassDefaults.add("millenaire:genericvillager");
+        threatBypassDefaults.add("millenaire:genericsimmfemale");
+        threatBypassDefaults.add("millenaire:genericasimmfemale");
     }
 }
