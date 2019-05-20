@@ -47,7 +47,7 @@ public class Compat
         if (ai instanceof EntityAIAttackMelee && !(ai instanceof AIAttackMeleeEdit)) return true;
 
         String aiClassname = ai.getClass().getName();
-        if (lycanites && aiClassname.equals("com.lycanitesmobs.core.entity.ai.EntityAIAttackMelee")) return true;
+        if (lycanites && aiClassname.contains("com.lycanitesmobs.core.entity.ai.EntityAIAttack")) return true; //Covers 2 variants, one melee and one ranged
         if (ancientwarfare && aiClassname.equals("net.shadowmage.ancientwarfare.npc.ai.vehicle.NpcAIAimVehicle")) return true;
         if (thermalfoundation && aiClassname.contains("cofh.thermalfoundation.entity.monster")) return true; //Should cover Basalz, Blitz, and Blizz
         if (abyssalcraft && aiClassname.contains("abyssalcraft.common.entity.ai")) return true;

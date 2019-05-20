@@ -656,9 +656,8 @@ public class DynamicStealth
             else if (actionClass == EntityAIWatchClosest.class) replaceTask(tasks, task, new AIWatchClosestEdit((EntityAIWatchClosest) task.action));
             else if (actionClass == EntityAIWatchClosest2.class) replaceTask(tasks, task, new AIWatchClosestEdit((EntityAIWatchClosest) task.action, true));
 
-                //All done
+                //All done (one near end due to string comparison)
             else if (actionClass == EntityAIAttackMelee.class) replaceTask(tasks, task, new AIAttackMeleeEdit((EntityAIAttackMelee) task.action));
-            else if (actionClass.getName().equals("net.minecraft.entity.monster.AbstractSkeleton$1")) replaceTask(tasks, task, new AIAttackMeleeEdit((EntityAIAttackMelee) task.action));
             else if (actionClass == EntityRabbit.AIEvilAttack.class) replaceTask(tasks, task, new AIAttackMeleeEdit((EntityAIAttackMelee) task.action));
             else if (actionClass == EntityPolarBear.AIMeleeAttack.class) replaceTask(tasks, task, new AIBearAttackEdit((EntityAIAttackMelee) task.action));
             else if (actionClass == EntitySpider.AISpiderAttack.class) replaceTask(tasks, task, new AISpiderAttackEdit((EntityAIAttackMelee) task.action));
@@ -701,6 +700,9 @@ public class DynamicStealth
                 //Pet teleport prevention (depending on config)
             else if (actionClass == EntityAIFollowOwner.class) replaceTask(tasks, task, new AIFollowOwnerEdit((EntityTameable) living, (EntityAIFollowOwner) task.action));
             else if (actionClass == EntityAIFollowOwnerFlying.class) replaceTask(tasks, task, new AIFollowOwnerFlyingEdit((EntityTameable) living, (EntityAIFollowOwner) task.action));
+
+            else if (actionClass.getName().equals("net.minecraft.entity.monster.AbstractSkeleton$1")) replaceTask(tasks, task, new AIAttackMeleeEdit((EntityAIAttackMelee) task.action));
+            else if (actionClass.getName().equals("com.lycanitesmobs.core.entity.ai.EntityAIWatchClosest")) replaceTask(tasks, task, new AIWatchClosestEdit(living, EntityLivingBase.class, 0.02f));
         }
     }
 

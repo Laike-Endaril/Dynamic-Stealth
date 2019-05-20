@@ -17,14 +17,14 @@ import java.util.List;
 public class AIWatchClosestEdit extends EntityAIBase
 {
     public final float chance;
-    public EntityLiving entity;
+    public EntityLiving living;
     public Entity target;
     public int lookTime;
     public Class<? extends Entity> watchedClass;
 
     public AIWatchClosestEdit(EntityAIWatchClosest oldAI)
     {
-        entity = oldAI.entity;
+        living = oldAI.entity;
         watchedClass = oldAI.watchedClass;
         chance = oldAI.chance;
         setMutexBits(2);
@@ -36,31 +36,39 @@ public class AIWatchClosestEdit extends EntityAIBase
         if (isEntityAIWatchClosest2) setMutexBits(3);
     }
 
+    public AIWatchClosestEdit(EntityLiving living, Class<? extends Entity> watchedClass, float chance)
+    {
+        this.living = living;
+        this.watchedClass = watchedClass;
+        this.chance = chance;
+        setMutexBits(3);
+    }
+
     @Override
     public boolean shouldExecute()
     {
-        if (entity.getRNG().nextFloat() >= chance) return false;
+        if (living.getRNG().nextFloat() >= chance) return false;
 
-        if (entity.getAttackTarget() != null)
+        if (living.getAttackTarget() != null)
         {
-            target = entity.getAttackTarget();
-            if (AITargetEdit.isSuitableTarget(entity, (EntityLivingBase) target)) return true;
+            target = living.getAttackTarget();
+            if (AITargetEdit.isSuitableTarget(living, (EntityLivingBase) target)) return true;
 
             target = null;
-            entity.setAttackTarget(null);
+            living.setAttackTarget(null);
             return false;
         }
 
         List<Entity> list;
         ExplicitPriorityQueue<Entity> queue;
-        double range = EntitySightData.distanceFar(entity);
+        double range = EntitySightData.distanceFar(living);
         if (watchedClass == EntityPlayer.class)
         {
-            list = entity.world.getEntitiesWithinAABB(EntityPlayer.class, entity.getEntityBoundingBox().grow(range, 4D, range));
+            list = living.world.getEntitiesWithinAABB(EntityPlayer.class, living.getEntityBoundingBox().grow(range, 4D, range));
         }
         else
         {
-            list = entity.world.getEntitiesWithinAABB(watchedClass, entity.getEntityBoundingBox().grow(range, 3, range), Predicates.and(EntitySelectors.NOT_SPECTATING, EntitySelectors.notRiding(entity)));
+            list = living.world.getEntitiesWithinAABB(watchedClass, living.getEntityBoundingBox().grow(range, 3, range), Predicates.and(EntitySelectors.NOT_SPECTATING, EntitySelectors.notRiding(living)));
         }
 
         if (list.isEmpty()) return false;
@@ -68,11 +76,11 @@ public class AIWatchClosestEdit extends EntityAIBase
         queue = new ExplicitPriorityQueue<>(list.size());
         for (Entity e : list)
         {
-            if (entity != e) queue.add(e, entity.getDistanceSq(e));
+            if (living != e) queue.add(e, living.getDistanceSq(e));
         }
 
         target = queue.poll();
-        while (target != null && !Sight.canSee(entity, target, false)) //Doesn't need isSuitableTarget because it's not always used for attacking
+        while (target != null && !Sight.canSee(living, target, false)) //Doesn't need isSuitableTarget because it's not always used for attacking
         {
             target = queue.poll();
         }
@@ -83,13 +91,13 @@ public class AIWatchClosestEdit extends EntityAIBase
     @Override
     public boolean shouldContinueExecuting()
     {
-        return (target.isEntityAlive() && Sight.canSee(entity, target, false) && lookTime > 0);
+        return (target.isEntityAlive() && Sight.canSee(living, target, false) && lookTime > 0);
     }
 
     @Override
     public void startExecuting()
     {
-        lookTime = 40 + entity.getRNG().nextInt(40);
+        lookTime = 40 + living.getRNG().nextInt(40);
     }
 
     @Override
@@ -101,7 +109,7 @@ public class AIWatchClosestEdit extends EntityAIBase
     @Override
     public void updateTask()
     {
-        entity.getLookHelper().setLookPosition(target.posX, target.posY + target.getEyeHeight(), target.posZ, entity.getHorizontalFaceSpeed(), entity.getVerticalFaceSpeed());
+        living.getLookHelper().setLookPosition(target.posX, target.posY + target.getEyeHeight(), target.posZ, living.getHorizontalFaceSpeed(), living.getVerticalFaceSpeed());
         --lookTime;
     }
 }
