@@ -703,6 +703,7 @@ public class DynamicStealth
 
             else if (actionClass.getName().equals("net.minecraft.entity.monster.AbstractSkeleton$1")) replaceTask(tasks, task, new AIAttackMeleeEdit((EntityAIAttackMelee) task.action));
             else if (actionClass.getName().equals("com.lycanitesmobs.core.entity.ai.EntityAIWatchClosest")) replaceTask(tasks, task, new AIWatchClosestEdit(living, EntityLivingBase.class, 0.02f));
+            else if (actionClass.getName().equals("com.lycanitesmobs.core.entity.ai.EntityAILookIdle")) tasks.removeTask(task.action);
         }
     }
 

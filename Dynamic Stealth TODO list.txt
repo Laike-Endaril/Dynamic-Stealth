@@ -171,6 +171,4 @@ Add bright mobs from mods to EntitySightDefaults.naturallyBrightEntities
 
 Lycanite's Mobs can still attack through walls; probably using different LOS
 
-Lycanite's Mobs have their own EntityAILookIdle which needs removing/replacing
-
 Zombie Awareness (after all senses are done; even then, might need to make an API and have Corosis do the rest from his side)
