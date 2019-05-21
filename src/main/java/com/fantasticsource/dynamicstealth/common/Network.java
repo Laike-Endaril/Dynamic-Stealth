@@ -54,27 +54,28 @@ public class Network
         if (event.side == Side.SERVER && event.phase == TickEvent.Phase.END)
         {
             EntityPlayerMP player = (EntityPlayerMP) event.player;
+
+            if (EntitySightData.hasSoulSight(player))
+            {
+                if (!EntitySightData.soulSightCache.contains(player))
+                {
+                    EntitySightData.soulSightCache.add(player);
+                    WRAPPER.sendTo(new SoulSightPacket(true), player);
+                }
+            }
+            else
+            {
+                if (EntitySightData.soulSightCache.contains(player))
+                {
+                    EntitySightData.soulSightCache.remove(player);
+                    WRAPPER.sendTo(new SoulSightPacket(false), player);
+                }
+            }
+
             if (player.world.loadedEntityList.contains(player))
             {
                 if (player.isEntityAlive())
                 {
-                    if (EntitySightData.hasSoulSight(player))
-                    {
-                        if (!EntitySightData.soulSightCache.contains(player))
-                        {
-                            EntitySightData.soulSightCache.add(player);
-                            WRAPPER.sendTo(new SoulSightPacket(true), player);
-                        }
-                    }
-                    else
-                    {
-                        if (EntitySightData.soulSightCache.contains(player))
-                        {
-                            EntitySightData.soulSightCache.remove(player);
-                            WRAPPER.sendTo(new SoulSightPacket(false), player);
-                        }
-                    }
-
                     if (serverSettings.senses.usePlayerSenses) WRAPPER.sendTo(new VisibilityPacket(player), player);
 
                     boolean opHUD, targetElement, stealthGauge;
