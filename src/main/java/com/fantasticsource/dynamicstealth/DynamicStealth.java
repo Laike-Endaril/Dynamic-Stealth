@@ -283,7 +283,7 @@ public class DynamicStealth
 
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void entityDeath(LivingDeathEvent event)
+    public static void entityDeathPre(LivingDeathEvent event)
     {
         EntityLivingBase victim = event.getEntityLiving();
 
@@ -374,6 +374,12 @@ public class DynamicStealth
                 }
             }
         }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void entityDeathPost(LivingDeathEvent event)
+    {
+        event.getEntityLiving().clearActivePotions();
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
