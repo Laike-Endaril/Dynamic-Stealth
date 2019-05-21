@@ -170,3 +170,8 @@ Set Bonus integration for stealth attacks and assassinations
 Lycanite's Mobs can still attack through walls; probably using different LOS
 
 Zombie Awareness (after all senses are done; even then, might need to make an API and have Corosis do the rest from his side)
+
+Some TiC weapons don't trigger assassination for some reason...
+...maybe one of the bonus damage things is interfering?
+...the one I had this happen with had cold blooded, insatiable, a bone handle, flaming (blaze powder modifier), sharpness (quartz modifier), and diamond modifier
+
