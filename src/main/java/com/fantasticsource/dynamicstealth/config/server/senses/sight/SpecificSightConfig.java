@@ -68,25 +68,7 @@ public class SpecificSightConfig
     @Config.Name("Natural Nightvision")
     @Config.LangKey(DynamicStealth.MODID + ".config.naturalNightvision")
     @Config.Comment({"Entities in this list ALWAYS get the nightvision bonus"})
-    public String[] naturalNightvisionMobs = new String[]
-            {
-                    "squid",
-                    "guardian",
-                    "elder_guardian",
-                    "sheep",
-                    "cow",
-                    "mooshroom",
-                    "ocelot",
-                    "wolf",
-                    "polar_bear",
-                    "silverfish",
-                    "endermite",
-                    "enderman",
-                    "ender_dragon",
-                    "wither",
-                    "vex",
-                    "ghast"
-            };
+    public String[] naturalNightvisionMobs = EntitySightDefaults.naturalNightvisionDefaults.toArray(new String[EntitySightDefaults.naturalNightvisionDefaults.size()]);
 
     @Config.Name("Natural Soul Sight")
     @Config.LangKey(DynamicStealth.MODID + ".config.naturalSoulSight")
@@ -96,11 +78,5 @@ public class SpecificSightConfig
                     "",
                     "Adding the player keyword to this list makes all players see all entities as if they had glowing (visible through walls)"
             })
-    public String[] naturalSoulSightMobs = new String[]
-            {
-                    "endermite",
-                    "enderman",
-                    "ender_dragon",
-                    "vex"
-            };
+    public String[] naturalSoulSightMobs = EntitySightDefaults.naturalSoulSightDefaults.toArray(new String[EntitySightDefaults.naturalSoulSightDefaults.size()]);
 }

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 public class EntitySightDefaults
 {
     public static ArrayList<String> naturallyBrightDefaults = new ArrayList<>();
+    public static ArrayList<String> naturalNightvisionDefaults = new ArrayList<>();
+    public static ArrayList<String> naturalSoulSightDefaults = new ArrayList<>();
 
     static
     {
@@ -12,6 +14,27 @@ public class EntitySightDefaults
         naturallyBrightDefaults.add("magma_cube");
         naturallyBrightDefaults.add("ender_dragon");
         naturallyBrightDefaults.add("wither");
+
+        naturalNightvisionDefaults.add("squid");
+        naturalNightvisionDefaults.add("guardian");
+        naturalNightvisionDefaults.add("elder_guardian");
+        naturalNightvisionDefaults.add("cow");
+        naturalNightvisionDefaults.add("mooshroom");
+        naturalNightvisionDefaults.add("ocelot");
+        naturalNightvisionDefaults.add("wolf");
+        naturalNightvisionDefaults.add("polar_bear");
+        naturalNightvisionDefaults.add("silverfish");
+        naturalNightvisionDefaults.add("endermite");
+        naturalNightvisionDefaults.add("enderman");
+        naturalNightvisionDefaults.add("ender_dragon");
+        naturalNightvisionDefaults.add("wither");
+        naturalNightvisionDefaults.add("vex");
+        naturalNightvisionDefaults.add("ghast");
+
+        naturalSoulSightDefaults.add("endermite");
+        naturalSoulSightDefaults.add("enderman");
+        naturalSoulSightDefaults.add("ender_dragon");
+        naturalSoulSightDefaults.add("vex");
 
         //Compat; these should be added absolutely, not conditionally
         naturallyBrightDefaults.add("infernomobs:khalk");
