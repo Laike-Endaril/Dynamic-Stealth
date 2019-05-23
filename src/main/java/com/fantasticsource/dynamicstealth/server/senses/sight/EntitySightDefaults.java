@@ -31,8 +31,6 @@ public class EntitySightDefaults
         naturalNightvisionDefaults.add("vex");
         naturalNightvisionDefaults.add("ghast");
 
-        naturalSoulSightDefaults.add("endermite");
-        naturalSoulSightDefaults.add("enderman");
         naturalSoulSightDefaults.add("ender_dragon");
         naturalSoulSightDefaults.add("vex");
 
