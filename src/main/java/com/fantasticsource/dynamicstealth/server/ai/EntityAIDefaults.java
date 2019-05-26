@@ -24,6 +24,7 @@ public class EntityAIDefaults
         fearlessDefaults.add("wither");
         fearlessDefaults.add("skeleton_horse");
         fearlessDefaults.add("zombie_horse");
+        fearlessDefaults.add("blaze");
 
 
         //Compat; these should be added absolutely, not conditionally
@@ -67,5 +68,15 @@ public class EntityAIDefaults
         fearlessDefaults.add("nex:bone_spider");
         fearlessDefaults.add("nex:ghast_queen");
         fearlessDefaults.add("nethergoldplus:zombiepigmanwarrior");
+        fearlessDefaults.add("primitivemobs:treasure_slime");
+        fearlessDefaults.add("primitivemobs:haunted_tool");
+        fearlessDefaults.add("primitivemobs:bewitched_tome");
+        fearlessDefaults.add("primitivemobs:brain_slime");
+        fearlessDefaults.add("primitivemobs:rocket_creeper");
+        fearlessDefaults.add("primitivemobs:festive_creeper");
+        fearlessDefaults.add("primitivemobs:support_creeper");
+        fearlessDefaults.add("primitivemobs:skeleton_warrior");
+        fearlessDefaults.add("primitivemobs:blazing_juggernaut");
+        fearlessDefaults.add("primitivemobs:void_eye");
     }
 }
