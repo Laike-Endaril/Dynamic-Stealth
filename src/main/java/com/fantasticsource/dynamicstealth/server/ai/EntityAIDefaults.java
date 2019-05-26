@@ -11,6 +11,7 @@ public class EntityAIDefaults
         fearlessDefaults.add("player");
         fearlessDefaults.add("zombie");
         fearlessDefaults.add("zombie_villager");
+        fearlessDefaults.add("elder_guardian");
         fearlessDefaults.add("husk");
         fearlessDefaults.add("skeleton");
         fearlessDefaults.add("stray");
@@ -25,6 +26,8 @@ public class EntityAIDefaults
         fearlessDefaults.add("skeleton_horse");
         fearlessDefaults.add("zombie_horse");
         fearlessDefaults.add("blaze");
+        fearlessDefaults.add("snowman");
+        fearlessDefaults.add("villager_golem");
 
 
         //Compat; these should be added absolutely, not conditionally
@@ -127,5 +130,6 @@ public class EntityAIDefaults
         fearlessDefaults.add("shadowmobs:geist");
         fearlessDefaults.add("shadowmobs:phantom");
         fearlessDefaults.add("swampmobs:ghoulzombie");
+        fearlessDefaults.add("switchbow:littleirongolem");
     }
 }
