@@ -145,7 +145,7 @@ public class AIDynamicStealth extends EntityAIBase
 
     public void fleeIfYouShould(float hpOffset)
     {
-        if (fleeReason == FLEE_CANTREACH || !EntityThreatData.isFearless(searcher))
+        if (fleeReason == FLEE_CANTREACH || !EntityAIData.isFearless(searcher))
         {
             int threshold = serverSettings.ai.flee.threshold;
             if (EntityThreatData.isPassive(searcher))

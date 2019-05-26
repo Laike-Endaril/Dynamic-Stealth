@@ -1,21 +1,26 @@
 package com.fantasticsource.dynamicstealth.server.ai;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 
 public class EntityAIData
 {
-    public static LinkedHashMap<Class<? extends Entity>, Integer> entityHeadTurnSpeeds;
+    private static LinkedHashMap<Class<? extends Entity>, Integer> entityHeadTurnSpeeds;
+    private static ArrayList<Class<? extends EntityLivingBase>> isFearless;
 
     public static void update()
     {
         entityHeadTurnSpeeds = new LinkedHashMap<>();
+        isFearless = new ArrayList<>();
 
         EntityEntry entry;
         String[] tokens;
@@ -36,6 +41,23 @@ public class EntityAIData
                 }
             }
         }
+
+        for (String string : serverSettings.ai.flee.fearless)
+        {
+            if (string.equals("player")) isFearless.add(EntityPlayerMP.class);
+            else
+            {
+                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(string));
+
+                if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
+                else
+                {
+                    Class c = entry.getEntityClass();
+                    if (EntityLivingBase.class.isAssignableFrom(c)) isFearless.add(c);
+                    else System.err.println("Entity \"" + string + "\" does not extend EntityLivingBase!");
+                }
+            }
+        }
     }
 
 
@@ -43,5 +65,14 @@ public class EntityAIData
     {
         Integer headTurnSpeed = entityHeadTurnSpeeds.get(searcher.getClass());
         return headTurnSpeed == null ? serverSettings.ai.headTurnSpeed : headTurnSpeed;
+    }
+
+    public static boolean isFearless(EntityLivingBase livingBase)
+    {
+        for (Class<? extends Entity> clss : isFearless)
+        {
+            if (livingBase.getClass() == clss) return true;
+        }
+        return false;
     }
 }

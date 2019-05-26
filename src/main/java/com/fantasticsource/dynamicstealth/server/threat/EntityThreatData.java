@@ -22,7 +22,6 @@ public class EntityThreatData
     private static ArrayList<Class<? extends EntityLivingBase>> threatBypass;
     private static ArrayList<Class<? extends EntityLivingBase>> isPassive;
     private static ArrayList<Class<? extends EntityLivingBase>> isNonPassive;
-    private static ArrayList<Class<? extends EntityLivingBase>> isFearless;
 
 
     public static void update()
@@ -30,29 +29,11 @@ public class EntityThreatData
         threatBypass = new ArrayList<>();
         isPassive = new ArrayList<>();
         isNonPassive = new ArrayList<>();
-        isFearless = new ArrayList<>();
 
         EntityEntry entry;
         String[] tokens;
         String token;
         int mode;
-
-        for (String string : serverSettings.ai.flee.fearless)
-        {
-            if (string.equals("player")) isFearless.add(EntityPlayerMP.class);
-            else
-            {
-                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(string));
-
-                if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
-                else
-                {
-                    Class c = entry.getEntityClass();
-                    if (EntityLivingBase.class.isAssignableFrom(c)) isFearless.add(c);
-                    else System.err.println("Entity \"" + string + "\" does not extend EntityLivingBase!");
-                }
-            }
-        }
 
         for (String string : serverSettings.threat.y_entityOverrides.threatBypass)
         {
@@ -160,14 +141,5 @@ public class EntityThreatData
         }
 
         return MCTools.isPassive(livingBase);
-    }
-
-    public static boolean isFearless(EntityLivingBase livingBase)
-    {
-        for (Class<? extends Entity> clss : isFearless)
-        {
-            if (livingBase.getClass() == clss) return true;
-        }
-        return false;
     }
 }
