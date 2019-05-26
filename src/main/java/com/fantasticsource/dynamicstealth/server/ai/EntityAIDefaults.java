@@ -78,5 +78,21 @@ public class EntityAIDefaults
         fearlessDefaults.add("primitivemobs:skeleton_warrior");
         fearlessDefaults.add("primitivemobs:blazing_juggernaut");
         fearlessDefaults.add("primitivemobs:void_eye");
+        fearlessDefaults.add("varodd:giant_zombie");
+        fearlessDefaults.add("natura:nitrocreeper");
+        fearlessDefaults.add("betteranimalsplus:feralwolf");
+        fearlessDefaults.add("betteranimalsplus:hirschgeist");
+        fearlessDefaults.add("defiledlands:shambler");
+        fearlessDefaults.add("defiledlands:shambler_twisted");
+        fearlessDefaults.add("defiledlands:host");
+        fearlessDefaults.add("defiledlands:slime_defiled");
+        fearlessDefaults.add("defiledlands:the_destroyer");
+        fearlessDefaults.add("defiledlands:the_mourner");
+        fearlessDefaults.add("eerieentities:pumpkin_slime");
+        fearlessDefaults.add("eerieentities:nether_knight");
+        fearlessDefaults.add("eerieentities:cursed_armor");
+        fearlessDefaults.add("pvj:pvj_shade");
+        fearlessDefaults.add("pvj:pvj_skeletal_knight");
+        fearlessDefaults.add("pvj:pvj_goon");
     }
 }
