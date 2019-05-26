@@ -1,5 +1,10 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+Skull was rendering on ridden horse in modpack...
+...is that just because the horse didn't have a saddle?
+...is it mod compat?
+...or is it just broken again for some reason?
+
 Add per-dimension minimum light level override
 Set default minimum light level for nether to 8
 Set default minimum light level for end to 10
