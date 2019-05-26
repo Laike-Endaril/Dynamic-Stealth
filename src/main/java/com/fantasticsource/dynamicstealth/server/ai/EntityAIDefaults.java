@@ -131,5 +131,6 @@ public class EntityAIDefaults
         fearlessDefaults.add("shadowmobs:phantom");
         fearlessDefaults.add("swampmobs:ghoulzombie");
         fearlessDefaults.add("switchbow:littleirongolem");
+        fearlessDefaults.add("quark:wraith");
     }
 }
