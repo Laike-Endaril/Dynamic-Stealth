@@ -54,5 +54,6 @@ public class EntitySightDefaults
 
         naturalSoulSightDefaults.add("elementalmobs:banshee");
         naturalSoulSightDefaults.add("infernomobs:gorger");
+        naturalSoulSightDefaults.add("harvestersnight:harvester");
     }
 }
