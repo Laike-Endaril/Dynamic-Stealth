@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.config.server.ai;
 
 import com.fantasticsource.dynamicstealth.DynamicStealth;
+import com.fantasticsource.dynamicstealth.server.ai.EntityAIDefaults;
 import net.minecraftforge.common.config.Config;
 
 public class FleeConfig
@@ -29,21 +30,5 @@ public class FleeConfig
                     "",
                     "Entities that bypass threat are automatically fearless"
             })
-    public String[] fearless = new String[]
-            {
-                    "player",
-                    "zombie",
-                    "zombie_villager",
-                    "husk",
-                    "skeleton",
-                    "stray",
-                    "wither_skeleton",
-                    "creeper",
-                    "ghast",
-                    "slime",
-                    "magma_cube",
-                    "enderman",
-                    "ender_dragon",
-                    "wither"
-            };
+    public String[] fearless = EntityAIDefaults.fearlessDefaults.toArray(new String[EntityAIDefaults.fearlessDefaults.size()]);
 }
