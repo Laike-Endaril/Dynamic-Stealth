@@ -51,6 +51,7 @@ public class EntitySightDefaults
         naturallyBrightDefaults.add("elementalmobs:aegis");
         naturallyBrightDefaults.add("elementalmobs:sylph");
         naturallyBrightDefaults.add("elementalmobs:xaphan");
+        naturallyBrightDefaults.add("harvestersnight:harvester");
 
         naturalSoulSightDefaults.add("elementalmobs:banshee");
         naturalSoulSightDefaults.add("infernomobs:gorger");
