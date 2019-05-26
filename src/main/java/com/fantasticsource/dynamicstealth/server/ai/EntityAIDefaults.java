@@ -127,29 +127,5 @@ public class EntityAIDefaults
         fearlessDefaults.add("shadowmobs:geist");
         fearlessDefaults.add("shadowmobs:phantom");
         fearlessDefaults.add("swampmobs:ghoulzombie");
-        fearlessDefaults.add("skeleton_horse");
-        fearlessDefaults.add("skeleton_horse");
-        fearlessDefaults.add("skeleton_horse");
-        fearlessDefaults.add("skeleton_horse");
-        fearlessDefaults.add("skeleton_horse");
-        fearlessDefaults.add("skeleton_horse");
-        fearlessDefaults.add("skeleton_horse");
-        fearlessDefaults.add("skeleton_horse");
-        fearlessDefaults.add("skeleton_horse");
-        fearlessDefaults.add("skeleton_horse");
-        fearlessDefaults.add("skeleton_horse");
-        fearlessDefaults.add("skeleton_horse");
-        fearlessDefaults.add("skeleton_horse");
-        fearlessDefaults.add("skeleton_horse");
-        fearlessDefaults.add("skeleton_horse");
-        fearlessDefaults.add("skeleton_horse");
-        fearlessDefaults.add("skeleton_horse");
-        fearlessDefaults.add("skeleton_horse");
-        fearlessDefaults.add("skeleton_horse");
-        fearlessDefaults.add("skeleton_horse");
-        fearlessDefaults.add("skeleton_horse");
-        fearlessDefaults.add("skeleton_horse");
-        fearlessDefaults.add("skeleton_horse");
-        fearlessDefaults.add("skeleton_horse");
     }
 }
