@@ -38,5 +38,17 @@ public class EntityAIDefaults
         fearlessDefaults.add("ebwizardry:phoenix");
         fearlessDefaults.add("ebwizardry:storm_elemental");
         fearlessDefaults.add("ebwizardry:wither_skeleton_minion");
+        fearlessDefaults.add("emberroot:rainbowslime");
+        fearlessDefaults.add("emberroot:rainbow_golem");
+        fearlessDefaults.add("emberroot:hero");
+        fearlessDefaults.add("emberroot:creeper");
+        fearlessDefaults.add("emberroot:slime");
+        fearlessDefaults.add("emberroot:dire_wolf");
+        fearlessDefaults.add("emberroot:withercat");
+        fearlessDefaults.add("emberroot:enderminy");
+        fearlessDefaults.add("emberroot:knight_fallen");
+        fearlessDefaults.add("emberroot:fallenmount");
+        fearlessDefaults.add("emberroot:rootsonespriteboss");
+        fearlessDefaults.add("emberroot:skeleton_frozen");
     }
 }
