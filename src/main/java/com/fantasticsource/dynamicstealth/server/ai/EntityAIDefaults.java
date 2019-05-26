@@ -50,5 +50,22 @@ public class EntityAIDefaults
         fearlessDefaults.add("emberroot:fallenmount");
         fearlessDefaults.add("emberroot:rootsonespriteboss");
         fearlessDefaults.add("emberroot:skeleton_frozen");
+        fearlessDefaults.add("endreborn:endguard");
+        fearlessDefaults.add("endreborn:watcher");
+        fearlessDefaults.add("endreborn:endlord");
+        fearlessDefaults.add("endreborn:angry_enderman");
+        fearlessDefaults.add("endreborn:chronologist");
+        fearlessDefaults.add("thermalfoundation:blizz");
+        fearlessDefaults.add("thermalfoundation:blitz");
+        fearlessDefaults.add("thermalfoundation:basalz");
+        fearlessDefaults.add("goblinencounter:goblinking");
+        fearlessDefaults.add("nex:gold_golem");
+        fearlessDefaults.add("nex:wight");
+        fearlessDefaults.add("nex:spinout");
+        fearlessDefaults.add("nex:spore_creeper");
+        fearlessDefaults.add("nex:ghastling");
+        fearlessDefaults.add("nex:bone_spider");
+        fearlessDefaults.add("nex:ghast_queen");
+        fearlessDefaults.add("nethergoldplus:zombiepigmanwarrior");
     }
 }
