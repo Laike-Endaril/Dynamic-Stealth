@@ -15,6 +15,7 @@ public class EntitySightDefaults
         naturallyBrightDefaults.add("ender_dragon");
         naturallyBrightDefaults.add("wither");
 
+
         naturalNightvisionDefaults.add("squid");
         naturalNightvisionDefaults.add("guardian");
         naturalNightvisionDefaults.add("elder_guardian");
@@ -31,10 +32,16 @@ public class EntitySightDefaults
         naturalNightvisionDefaults.add("vex");
         naturalNightvisionDefaults.add("ghast");
 
+
         naturalSoulSightDefaults.add("ender_dragon");
         naturalSoulSightDefaults.add("vex");
 
+
         //Compat; these should be added absolutely, not conditionally
+
+        naturalNightvisionDefaults.add("ghast");
+
+
         naturallyBrightDefaults.add("infernomobs:khalk");
         naturallyBrightDefaults.add("infernomobs:afrit");
         naturallyBrightDefaults.add("infernomobs:lobber");
@@ -53,8 +60,11 @@ public class EntitySightDefaults
         naturallyBrightDefaults.add("elementalmobs:xaphan");
         naturallyBrightDefaults.add("harvestersnight:harvester");
 
+
+        naturalSoulSightDefaults.add("harvestersnight:harvester");
+        naturalSoulSightDefaults.add("defiledlands:the_mourner");
+
         naturalSoulSightDefaults.add("elementalmobs:banshee");
         naturalSoulSightDefaults.add("infernomobs:gorger");
-        naturalSoulSightDefaults.add("harvestersnight:harvester");
     }
 }

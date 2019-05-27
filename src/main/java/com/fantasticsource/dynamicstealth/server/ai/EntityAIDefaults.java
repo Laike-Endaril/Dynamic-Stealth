@@ -31,7 +31,11 @@ public class EntityAIDefaults
 
 
         //Compat; these should be added absolutely, not conditionally
+
         fearlessDefaults.add("harvestersnight:harvester");
+        fearlessDefaults.add("defiledlands:the_destroyer");
+        fearlessDefaults.add("defiledlands:the_mourner");
+
         fearlessDefaults.add("ebwizardry:skeleton_minion");
         fearlessDefaults.add("ebwizardry:spirit_wolf");
         fearlessDefaults.add("ebwizardry:ice_wraith");
