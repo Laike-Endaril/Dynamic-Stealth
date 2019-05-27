@@ -39,7 +39,7 @@ public class EntitySightDefaults
 
         //Compat; these should be added absolutely, not conditionally
 
-        naturalNightvisionDefaults.add("ghast");
+        naturalNightvisionDefaults.add("defiledlands:the_destroyer");
 
 
         naturallyBrightDefaults.add("infernomobs:khalk");
