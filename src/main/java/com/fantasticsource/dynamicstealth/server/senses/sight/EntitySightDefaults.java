@@ -39,9 +39,6 @@ public class EntitySightDefaults
 
         //Compat; these should be added absolutely, not conditionally
 
-        naturalNightvisionDefaults.add("defiledlands:the_destroyer");
-
-
         naturallyBrightDefaults.add("infernomobs:khalk");
         naturallyBrightDefaults.add("infernomobs:afrit");
         naturallyBrightDefaults.add("infernomobs:lobber");
@@ -62,7 +59,10 @@ public class EntitySightDefaults
 
 
         naturalSoulSightDefaults.add("harvestersnight:harvester");
+        naturalSoulSightDefaults.add("defiledlands:the_destroyer");
         naturalSoulSightDefaults.add("defiledlands:the_mourner");
+        naturalSoulSightDefaults.add("demonmobs:rahovart");
+        naturalSoulSightDefaults.add("demonmobs:asmodeus");
 
         naturalSoulSightDefaults.add("elementalmobs:banshee");
         naturalSoulSightDefaults.add("infernomobs:gorger");
