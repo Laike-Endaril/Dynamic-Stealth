@@ -13,6 +13,8 @@ Alternate sneak mode, so as not to trigger "don't step off edge", ebwizardry sta
 
 Add config filter for entities that don't trigger the stealth gauge
 
+Make Aegis only trigger their anger if they can see you
+
 
 
 BUG FIXES ===================================================================================================================================================================================================================
@@ -181,3 +183,6 @@ Some TiC weapons don't trigger assassination for some reason...
 ...the one I had this happen with had cold blooded, insatiable, a bone handle, flaming (blaze powder modifier)
 ...not from diamond or sharp (quartz)
 
+Check Grimoire of Gaia compat
+
+Check Epic Siege compat
