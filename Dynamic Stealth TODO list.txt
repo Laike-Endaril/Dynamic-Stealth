@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+Add option to remove stealth on touch
+
 Skull was rendering on ridden horse in modpack...
 ...is that just because the horse didn't have a saddle?
 ...is it mod compat?
@@ -41,11 +43,6 @@ Fix leashes not rendering sometimes (not a vanilla bug)...
 GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES =================================================================================================================================================================================
 
 Add disguise system and change mob heads so they use it instead
-
-Add "revealed" status effect which reduces the effectiveness of invisibility
-Add touch event
-Add revealed effect to touch event defaults
-Replace on-attack invis removal with revealed status?
 
 Make stealth level / visibility transitions smoother (ie. change at a rate)
 Track the stealth level of each entity against each other entity, but only while it's less than 100%
