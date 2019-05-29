@@ -44,10 +44,6 @@ GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES ====================================
 
 Add disguise system and change mob heads so they use it instead
 
-Make stealth level / visibility transitions smoother (ie. change at a rate)
-Track the stealth level of each entity against each other entity, but only while it's less than 100%
-"maybe if they see you less than a second or two, instead of being alerted they could go look first"
-
 Alter weapon tooltips to reflect settings for normal attacks and stealth attacks
 
 Make client acquire target for any entity they have LOS to, then get the data for it from the map, as late as possible, if it exists
