@@ -71,7 +71,10 @@ public class EntitySightData
             else
             {
                 entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(string));
-                if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
+                if (entry == null)
+                {
+                    if (!EntitySightDefaults.naturalNightvisionDefaults.contains(string)) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
+                }
                 else
                 {
                     Class c = entry.getEntityClass();
@@ -87,7 +90,10 @@ public class EntitySightData
             else
             {
                 entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(string));
-                if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
+                if (entry == null)
+                {
+                    if (!EntitySightDefaults.naturalSoulSightDefaults.contains(string)) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
+                }
                 else
                 {
                     Class c = entry.getEntityClass();

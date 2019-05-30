@@ -49,7 +49,10 @@ public class EntityAIData
             {
                 entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(string));
 
-                if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
+                if (entry == null)
+                {
+                    if (!EntityAIDefaults.fearlessDefaults.contains(string)) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
+                }
                 else
                 {
                     Class c = entry.getEntityClass();
