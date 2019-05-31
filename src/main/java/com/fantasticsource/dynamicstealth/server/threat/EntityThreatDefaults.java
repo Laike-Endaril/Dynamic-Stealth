@@ -29,5 +29,6 @@ public class EntityThreatDefaults
         threatBypassDefaults.add("millenaire:genericasimmfemale");
         threatBypassDefaults.add("tconstruct:blueslime");
         threatBypassDefaults.add("primitivemobs:treasure_slime");
+        threatBypassDefaults.add("pvj:pvj_icecube");
     }
 }

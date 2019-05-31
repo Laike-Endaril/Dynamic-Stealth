@@ -98,6 +98,7 @@ public class EntityAIDefaults
         fearlessDefaults.add("eerieentities:pumpkin_slime");
         fearlessDefaults.add("eerieentities:nether_knight");
         fearlessDefaults.add("eerieentities:cursed_armor");
+        fearlessDefaults.add("pvj:pvj_ghost");
         fearlessDefaults.add("pvj:pvj_shade");
         fearlessDefaults.add("pvj:pvj_skeletal_knight");
         fearlessDefaults.add("pvj:pvj_goon");
