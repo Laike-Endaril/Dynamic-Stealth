@@ -100,6 +100,7 @@ public class EntityAIDefaults
         fearlessDefaults.add("eerieentities:cursed_armor");
         fearlessDefaults.add("pvj:pvj_ghost");
         fearlessDefaults.add("pvj:pvj_shade");
+        fearlessDefaults.add("pvj:pvj_banshee");
         fearlessDefaults.add("pvj:pvj_skeletal_knight");
         fearlessDefaults.add("pvj:pvj_goon");
         fearlessDefaults.add("arcticmobs:wendigo");
