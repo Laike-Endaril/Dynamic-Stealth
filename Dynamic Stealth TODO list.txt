@@ -6,10 +6,7 @@ Make sure mobs in desperation mode can't be put into flee mode until their threa
 
 Add option to remove stealth on touch
 
-Skull was rendering on ridden horse in modpack...
-...is that just because the horse didn't have a saddle?
-...is it mod compat?
-...or is it just broken again for some reason?
+Skulls are rendering while riding horses
 
 Add per-dimension minimum light level override
 Set default minimum light level for nether to 8
