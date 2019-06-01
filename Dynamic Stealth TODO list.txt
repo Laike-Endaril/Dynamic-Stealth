@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+Add ally groups for helper system config
+
 Make sure mobs in desperation mode can't be put into flee mode until their threat has run out
 
 Add option to remove stealth on touch
