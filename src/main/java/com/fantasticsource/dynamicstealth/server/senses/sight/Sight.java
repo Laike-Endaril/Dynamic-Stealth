@@ -446,11 +446,12 @@ public class Sight
         return -777;
     }
 
-    public static double lightLevelTotal(World world, Vec3d vec)
+    private static double lightLevelTotal(World world, Vec3d vec)
     {
         BlockPos blockpos = new BlockPos(vec);
         if (!world.isAreaLoaded(blockpos, 1)) return 0;
-        return world.getLightFromNeighbors(blockpos);
+
+        return Tools.max(world.getLightFromNeighbors(blockpos), EntitySightData.minimumDimensionLight(world.provider.getDimension()));
     }
 
 

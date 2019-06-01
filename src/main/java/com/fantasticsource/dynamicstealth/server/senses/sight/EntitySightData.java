@@ -27,6 +27,9 @@ public class EntitySightData
     private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityDistances;
     private static LinkedHashMap<Class<? extends EntityLivingBase>, SpecificLighting> entityLighting;
 
+    private static LinkedHashMap<Integer, Integer> minimumDimensionLightLevels;
+
+
     public static void update()
     {
         playerMaxSightDistance = serverSettings.senses.sight.f_distances.distanceFar;
@@ -40,6 +43,8 @@ public class EntitySightData
         entityAngles = new LinkedHashMap<>();
         entityDistances = new LinkedHashMap<>();
         entityLighting = new LinkedHashMap<>();
+
+        minimumDimensionLightLevels = new LinkedHashMap<>();
 
         EntityEntry entry;
         String[] tokens;
@@ -173,6 +178,19 @@ public class EntitySightData
             }
         }
 
+        for (String string : serverSettings.senses.sight.c_lighting.z_minimumDimensionLightLevels)
+        {
+            tokens = string.split(",");
+            if (tokens.length != 2) System.err.println("Wrong number of arguments for minimum dimension light level; please check example in tooltip");
+            else
+            {
+                int dim = Integer.parseInt(tokens[0].trim());
+                int minLight = Integer.parseInt(tokens[1].trim());
+                if (minLight < 0 || minLight > 15) System.err.println("Minimum light levels for dimensions must be from 0 to 15, inclusive!");
+                else minimumDimensionLightLevels.put(dim, minLight);
+            }
+        }
+
         if (serverSettings.senses.sight.e_angles.angleSmall > serverSettings.senses.sight.e_angles.angleLarge) throw new IllegalArgumentException("angleLarge must be greater than or equal to angleSmall");
         if (serverSettings.senses.sight.f_distances.distanceNear > serverSettings.senses.sight.f_distances.distanceFar) throw new IllegalArgumentException("distanceFar must be greater than or equal to distanceNear");
         if (serverSettings.senses.sight.c_lighting.lightLevelLow > serverSettings.senses.sight.c_lighting.lightLevelHigh) throw new IllegalArgumentException("lightLevelHigh must be greater than or equal to lightLevelLow");
@@ -242,6 +260,12 @@ public class EntitySightData
     {
         SpecificLighting specificLighting = entityLighting.get(searcher.getClass());
         return specificLighting == null ? serverSettings.senses.sight.c_lighting.lightMultLow : specificLighting.multLow;
+    }
+
+
+    public static int minimumDimensionLight(int dim)
+    {
+        return minimumDimensionLightLevels.getOrDefault(dim, 0);
     }
 
 

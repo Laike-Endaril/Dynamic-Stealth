@@ -311,6 +311,8 @@ dynamicstealth.config.lightMultLow=Multiplier (Low/Dark)
 dynamicstealth.config.lightMultLow.tooltip=FILLSCREEN FIXNEWLINES The light level visibility multiplier when standing in dark areas\n\n0 means invisible, 1 means fully visible (other factors not accounted for)\n \n
 dynamicstealth.config.nightvisionBonus=Nightvision Bonus
 dynamicstealth.config.nightvisionBonus.tooltip=FILLSCREEN FIXNEWLINES When an entity has the nightvision effect, this value is added to their perceived light levels (and then set to 15 if larger than 15)\n \n
+dynamicstealth.config.minimumDimensionLightLevels=Minimum Dimension Light Levels
+dynamicstealth.config.minimumDimensionLightLevels.tooltip=FILLSCREEN FIXNEWLINES The minimum light level Dynamic Stealth will detect when in a given dimension\n\nThese are mostly for dimensions with ambient lighting (eg. the nether and the end)\n\nThe 1st number is the dimension id, the 2nd is the minimum light level for that dimension\n \n
 
 dynamicstealth.config.angleNear=Angle (Large/Wide; Near)
 dynamicstealth.config.angleNear.tooltip=FILLSCREEN FIXNEWLINES The angle inside which an entity can see another entity at close range (distance <= distanceNear), in degrees\n\nThis is otherwise similar to angleSmall\n\nIf this and angleSmall are both 0, entities (other than exceptions) are blind\n\nCannot be smaller than angleSmall\n \n

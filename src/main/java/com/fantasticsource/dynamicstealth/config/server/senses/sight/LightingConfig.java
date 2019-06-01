@@ -42,4 +42,19 @@ public class LightingConfig
     @Config.Comment("When an entity has the nightvision effect, this value is added to their perceived light levels (and then set to 15 if larger than 15)")
     @Config.RangeInt(min = 0, max = 15)
     public int nightvisionBonus = 15;
+
+    @Config.Name("Minimum Dimension Light Levels")
+    @Config.LangKey(DynamicStealth.MODID + ".config.minimumDimensionLightLevels")
+    @Config.Comment(
+            {
+                    "The minimum light level Dynamic Stealth will detect when in a given dimension",
+                    "These are mostly for dimensions with ambient lighting (eg. the nether and the end)",
+                    "The 1st number is the dimension id, the 2nd is the minimum light level for that dimension"
+            })
+    public String[] z_minimumDimensionLightLevels = new String[]
+            {
+                    "0, 0",
+                    "-1, 7",
+                    "1, 8"
+            };
 }

@@ -1,12 +1,8 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Add ally groups for helper system config
-
 Make sure mobs in desperation mode can't be put into flee mode until their threat has run out
 
-Add per-dimension minimum light level override
-Set default minimum light level for nether to 8
-Set default minimum light level for end to 10
+Add ally groups for helper system config
 
 Alternate sneak mode, so as not to trigger "don't step off edge", ebwizardry staff spell selection, hookd grapple prevention, etc
 
