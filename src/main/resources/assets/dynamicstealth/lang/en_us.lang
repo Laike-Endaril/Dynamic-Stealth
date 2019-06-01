@@ -268,6 +268,8 @@ dynamicstealth.config.hearing=Hearing
 
 dynamicstealth.config.enabletouch=Enable Touch
 dynamicstealth.config.enabletouch.tooltip=FILLSCREEN FIXNEWLINES If true, entities can feel each other if they bump into one another\n \n
+dynamicstealth.config.touchreveals=Touch Reveals
+dynamicstealth.config.touchreveals.tooltip=FILLSCREEN FIXNEWLINES If true, entities that bump into each other both have invisibility removed from them\n \n
 dynamicstealth.config.unfeeling=Unfeeling
 dynamicstealth.config.unfeeling.tooltip=FILLSCREEN FIXNEWLINES Entities in this list don't notice when something bumps them\n \n
 

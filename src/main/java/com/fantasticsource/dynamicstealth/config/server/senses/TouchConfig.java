@@ -18,4 +18,9 @@ public class TouchConfig
                     "zombie",
                     "husk"
             };
+
+    @Config.Name("Touch Reveals")
+    @Config.LangKey(DynamicStealth.MODID + ".config.touchreveals")
+    @Config.Comment({"If true, entities that bump into each other both have invisibility removed from them"})
+    public boolean touchReveals = true;
 }

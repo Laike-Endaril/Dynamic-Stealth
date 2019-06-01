@@ -232,31 +232,42 @@ public class DynamicStealth
             {
                 for (Entity felt : world.getEntitiesWithinAABBExcludingEntity(livingBase, livingBase.getEntityBoundingBox()))
                 {
-                    if (felt.isEntityAlive() && (felt instanceof EntityPlayer || (felt instanceof EntityLiving && !(felt instanceof EntityBat))) && !MCTools.isRidingOrRiddenBy(livingBase, felt))
+                    int feltType = felt instanceof EntityPlayerMP ? 1 : felt instanceof EntityLiving ? 2 : 0;
+
+                    if (feltType != 0 && felt.isEntityAlive())
                     {
-                        switch (type)
+                        if (serverSettings.senses.touch.touchReveals)
                         {
-                            case 1:
-                                //TODO add indicator for players
-                                break;
-                            case 2:
-                                EntityLiving feelerLiving = (EntityLiving) livingBase;
+                            if (type == 2 || !(livingBase instanceof FakePlayer)) livingBase.removePotionEffect(MobEffects.INVISIBILITY);
+                            if (feltType == 2 || !(felt instanceof FakePlayer)) ((EntityLivingBase) felt).removePotionEffect(MobEffects.INVISIBILITY);
+                        }
 
-                                AIDynamicStealth ai = AIDynamicStealth.getStealthAI(feelerLiving);
-                                if (ai != null)
-                                {
-                                    if (ai.isFleeing()) return;
+                        if (!(felt instanceof EntityBat) && !MCTools.isRidingOrRiddenBy(livingBase, felt))
+                        {
+                            switch (type)
+                            {
+                                case 1:
+                                    //TODO add indicator for players
+                                    break;
+                                case 2:
+                                    EntityLiving feelerLiving = (EntityLiving) livingBase;
 
-                                    makeLivingLookTowardEntity(feelerLiving, felt);
-                                    feelerLiving.getNavigator().clearPath();
-                                    if (ai.getMode() != AIDynamicStealth.MODE_NONE) ai.restart(feelerLiving.getPosition());
-                                }
-                                else
-                                {
-                                    makeLivingLookTowardEntity(feelerLiving, felt);
-                                    feelerLiving.getNavigator().clearPath();
-                                }
-                                break;
+                                    AIDynamicStealth ai = AIDynamicStealth.getStealthAI(feelerLiving);
+                                    if (ai != null)
+                                    {
+                                        if (ai.isFleeing()) return;
+
+                                        makeLivingLookTowardEntity(feelerLiving, felt);
+                                        feelerLiving.getNavigator().clearPath();
+                                        if (ai.getMode() != AIDynamicStealth.MODE_NONE) ai.restart(feelerLiving.getPosition());
+                                    }
+                                    else
+                                    {
+                                        makeLivingLookTowardEntity(feelerLiving, felt);
+                                        feelerLiving.getNavigator().clearPath();
+                                    }
+                                    break;
+                            }
                         }
                     }
                 }
