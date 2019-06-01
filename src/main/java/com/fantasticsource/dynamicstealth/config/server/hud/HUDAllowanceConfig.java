@@ -30,4 +30,9 @@ public class HUDAllowanceConfig
             })
     @Config.RangeInt(min = 0, max = 2)
     public int allowStealthGauge = 2;
+
+    @Config.Name("Stealth Gauge Blacklist")
+    @Config.LangKey(DynamicStealth.MODID + ".config.stealthgaugeblacklist")
+    @Config.Comment("Entities in this list will not trigger the stealth gauge!")
+    public String[] stealthGaugeBlacklist = new String[]{};
 }

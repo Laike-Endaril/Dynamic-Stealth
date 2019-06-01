@@ -9,10 +9,7 @@ import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatCNPC;
 import com.fantasticsource.dynamicstealth.compat.CompatDissolution;
 import com.fantasticsource.dynamicstealth.config.ConfigHandler;
-import com.fantasticsource.dynamicstealth.server.Attributes;
-import com.fantasticsource.dynamicstealth.server.CombatTracker;
-import com.fantasticsource.dynamicstealth.server.EntityLookHelperEdit;
-import com.fantasticsource.dynamicstealth.server.HelperSystem;
+import com.fantasticsource.dynamicstealth.server.*;
 import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
 import com.fantasticsource.dynamicstealth.server.ai.EntityAIData;
 import com.fantasticsource.dynamicstealth.server.ai.edited.*;
@@ -147,6 +144,7 @@ public class DynamicStealth
     public static void update()
     {
         AttackData.update();
+        HUDData.update();
         EntityAIData.update();
         EntityTouchData.update();
         EntitySightData.update();

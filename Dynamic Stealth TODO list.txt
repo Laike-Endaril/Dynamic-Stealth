@@ -10,8 +10,6 @@ Set default minimum light level for end to 10
 
 Alternate sneak mode, so as not to trigger "don't step off edge", ebwizardry staff spell selection, hookd grapple prevention, etc
 
-Add config filter for entities that don't trigger the stealth gauge
-
 
 
 BUG FIXES ===================================================================================================================================================================================================================

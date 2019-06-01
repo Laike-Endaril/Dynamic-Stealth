@@ -3,6 +3,7 @@ package com.fantasticsource.dynamicstealth.server.senses.sight;
 import com.fantasticsource.dynamicstealth.compat.CompatDissolution;
 import com.fantasticsource.dynamicstealth.config.server.senses.sight.SightConfig;
 import com.fantasticsource.dynamicstealth.server.Attributes;
+import com.fantasticsource.dynamicstealth.server.HUDData;
 import com.fantasticsource.dynamicstealth.server.senses.HidingData;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.mctools.MCTools;
@@ -146,7 +147,7 @@ public class Sight
         {
             //Save first cache
             //This is where the stealth gauge checks are done
-            if (isAggressive && target instanceof EntityPlayer)
+            if (isAggressive && target instanceof EntityPlayer && HUDData.isGauged(searcher))
             {
                 if (searcher instanceof EntityPlayer || (searcher instanceof EntityLiving && (((EntityLiving) searcher).getAttackTarget() == target || (!EntityThreatData.isPassive(searcher) && !EntityThreatData.bypassesThreat(searcher)))))
                 {
