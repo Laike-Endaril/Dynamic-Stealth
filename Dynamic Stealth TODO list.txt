@@ -6,8 +6,6 @@ Make sure mobs in desperation mode can't be put into flee mode until their threa
 
 Add option to remove stealth on touch
 
-Skulls are rendering while riding horses
-
 Add per-dimension minimum light level override
 Set default minimum light level for nether to 8
 Set default minimum light level for end to 10

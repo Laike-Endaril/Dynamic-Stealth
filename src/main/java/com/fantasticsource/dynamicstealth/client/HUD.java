@@ -113,14 +113,17 @@ public class HUD extends Gui
             EntityLivingBase livingBase = event.getEntity();
             if (livingBase != null)
             {
-                int id = livingBase.getEntityId();
-
-                OnPointData data = opMap.get(id);
-                if (data == null && targetData != null && targetData.searcherID == id) data = targetData;
-                if (data != null && onPointFilter(data.color))
+                if (!MCTools.isRidingOrRiddenBy(Minecraft.getMinecraft().player, livingBase))
                 {
-                    //Normal OPHUD
-                    drawOPHUD(event.getRenderer().getRenderManager(), event.getX(), event.getY(), event.getZ(), livingBase, data);
+                    int id = livingBase.getEntityId();
+
+                    OnPointData data = opMap.get(id);
+                    if (data == null && targetData != null && targetData.searcherID == id) data = targetData;
+                    if (data != null && onPointFilter(data.color))
+                    {
+                        //Normal OPHUD
+                        drawOPHUD(event.getRenderer().getRenderManager(), event.getX(), event.getY(), event.getZ(), livingBase, data);
+                    }
                 }
             }
         }
