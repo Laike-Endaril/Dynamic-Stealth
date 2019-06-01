@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Make sure mobs in desperation mode can't be put into flee mode until their threat has run out
-
 Add ally groups for helper system config
 
 Alternate sneak mode, so as not to trigger "don't step off edge", ebwizardry staff spell selection, hookd grapple prevention, etc
@@ -9,6 +7,9 @@ Alternate sneak mode, so as not to trigger "don't step off edge", ebwizardry sta
 
 
 BUG FIXES ===================================================================================================================================================================================================================
+
+Mobs in desperation mode can be put into flee mode by hitting them...
+...fix by adding "desperation" status effect
 
 Spiders path toward their threat target even if they can't see it (must have a threat target)...
 ...happens when all AI besides mine is removed, so either something to do with my AI or something outside AI, or both
