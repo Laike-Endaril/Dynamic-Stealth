@@ -12,8 +12,6 @@ Alternate sneak mode, so as not to trigger "don't step off edge", ebwizardry sta
 
 Add config filter for entities that don't trigger the stealth gauge
 
-Make Aegis only trigger their anger if they can see you
-
 
 
 BUG FIXES ===================================================================================================================================================================================================================
