@@ -120,7 +120,7 @@ public class HUD extends Gui
                 if (data != null && onPointFilter(data.color))
                 {
                     //Normal OPHUD
-                    drawNormalOPHUD(event.getRenderer().getRenderManager(), event.getX(), event.getY(), event.getZ(), livingBase, data);
+                    drawOPHUD(event.getRenderer().getRenderManager(), event.getX(), event.getY(), event.getZ(), livingBase, data);
                 }
             }
         }
@@ -139,7 +139,7 @@ public class HUD extends Gui
         return false;
     }
 
-    private static void drawNormalOPHUD(RenderManager renderManager, double x, double y, double z, Entity entity, OnPointData data)
+    private static void drawOPHUD(RenderManager renderManager, double x, double y, double z, Entity entity, OnPointData data)
     {
         float viewerYaw = renderManager.playerViewY; //"playerViewY" is LITERALLY the yaw...interpolated over the partialtick
         float viewerPitch = renderManager.playerViewX; //"playerViewX" is LITERALLY the pitch...interpolated over the partialtick
