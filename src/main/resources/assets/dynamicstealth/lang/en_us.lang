@@ -241,6 +241,8 @@ dynamicstealth.config.allowPassiveRecognition=Recognize Passives Automatically
 dynamicstealth.config.allowPassiveRecognition.tooltip=FILLSCREEN FIXNEWLINES If enabled, clients' threat HUDs will display green for passive mobs.  If disabled, passives appear as idle (blue).\n \n
 dynamicstealth.config.allowStealthGauge=Allow Stealth Gauge
 dynamicstealth.config.allowStealthGauge.tooltip=FILLSCREEN FIXNEWLINES If enabled, clients can see their current stealth level in their HUD\n\n0 means disabled for all players\n1 means enabled for OP players ONLY\n2 means enabled for all players\n \n
+dynamicstealth.config.stealthgaugeblacklist=Stealth Gauge Blacklist
+dynamicstealth.config.stealthgaugeblacklist.tooltip=FILLSCREEN FIXNEWLINES Entities in this list will not trigger the stealth gauge!\n \n
 
 dynamicstealth.config.allowTargetName=Allow "Name" Display
 dynamicstealth.config.allowTargetName.tooltip=FILLSCREEN FIXNEWLINES If enabled, clients can see the names of entities\n\n0 means disabled for all players\n1 means enabled for OP players ONLY\n2 means enabled for all players\n \n
