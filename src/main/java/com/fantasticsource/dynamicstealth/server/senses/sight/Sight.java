@@ -15,7 +15,6 @@ import com.fantasticsource.tools.datastructures.WrappingQueue;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.monster.*;
@@ -26,11 +25,14 @@ import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -366,7 +368,25 @@ public class Sight
 
 
         //Armor
-        double armorMultiplier = !isLivingBase ? 1 : Math.max(0, 1 + sight.b_visibilityMultipliers.armorMultiplierCumulative * MathHelper.floor(MCTools.getAttribute(targetLivingBase, SharedMonsterAttributes.ARMOR, 0)));
+        double armorMultiplier = 1;
+        if (isLivingBase)
+        {
+            double unnaturalArmor = 0;
+            for (ItemStack stack : targetLivingBase.getArmorInventoryList())
+            {
+                Item item = stack.getItem();
+                if (item instanceof ISpecialArmor) unnaturalArmor += ((ISpecialArmor) item).getProperties(targetLivingBase, stack, new DamageSource("generic"), 1, Integer.MIN_VALUE).Armor;
+                if (item instanceof ItemArmor) unnaturalArmor += ((ItemArmor) item).damageReduceAmount;
+
+                NBTTagCompound compound = stack.getTagCompound();
+                if (compound != null)
+                {
+                    for (String s : compound.getKeySet()) System.out.println(s + " = " + compound.getTag(s));
+                }
+            }
+            armorMultiplier += serverSettings.senses.sight.b_visibilityMultipliers.armorMultiplierCumulative * unnaturalArmor;
+        }
+        if (target instanceof EntityPlayer) System.out.println(armorMultiplier);
 
 
         //Combine multipliers
