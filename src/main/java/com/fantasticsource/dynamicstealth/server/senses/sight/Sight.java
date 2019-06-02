@@ -386,7 +386,6 @@ public class Sight
             }
             armorMultiplier += serverSettings.senses.sight.b_visibilityMultipliers.armorMultiplierCumulative * unnaturalArmor;
         }
-        if (target instanceof EntityPlayer) System.out.println(armorMultiplier);
 
 
         //Combine multipliers
