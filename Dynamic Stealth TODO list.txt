@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+Make the difference between "barely unseen" and "barely seen" on the stealth gauge more noticeable
+
 Light level HUD
 
 Add ally groups for helper system config
