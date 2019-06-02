@@ -16,5 +16,5 @@ public class VisibilityMultiplierConfig
                     "If set to 0.25, an entity with 20 armor (full diamond) is 5x as likely to be seen"
             })
     @Config.RangeDouble(min = 0)
-    public double armorMultiplierCumulative = 0.25;
+    public double armorMultiplierCumulative = 0.1;
 }
