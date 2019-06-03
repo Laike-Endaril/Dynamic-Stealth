@@ -64,7 +64,7 @@ public class Compat
     {
         EntityAITasks taskList = living.targetTasks;
         Set<EntityAITasks.EntityAITaskEntry> entrySet = taskList.taskEntries;
-        for (EntityAITasks.EntityAITaskEntry task : entrySet.toArray(new EntityAITasks.EntityAITaskEntry[entrySet.size()]))
+        for (EntityAITasks.EntityAITaskEntry task : entrySet.toArray(new EntityAITasks.EntityAITaskEntry[0]))
         {
             if (badNullTargetHandling(task.action))
             {
@@ -75,7 +75,7 @@ public class Compat
 
         taskList = living.tasks;
         entrySet = taskList.taskEntries;
-        for (EntityAITasks.EntityAITaskEntry task : entrySet.toArray(new EntityAITasks.EntityAITaskEntry[entrySet.size()]))
+        for (EntityAITasks.EntityAITaskEntry task : entrySet.toArray(new EntityAITasks.EntityAITaskEntry[0]))
         {
             if (badNullTargetHandling(task.action))
             {

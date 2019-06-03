@@ -63,12 +63,12 @@ public class SpecificSightConfig
     @Config.Name("Naturally Bright")
     @Config.LangKey(DynamicStealth.MODID + ".config.naturallyBright")
     @Config.Comment({"Entities in this list are always treated as if they are standing in max light level"})
-    public String[] naturallyBrightEntities = EntitySightDefaults.naturallyBrightDefaults.toArray(new String[EntitySightDefaults.naturallyBrightDefaults.size()]);
+    public String[] naturallyBrightEntities = EntitySightDefaults.naturallyBrightDefaults.toArray(new String[0]);
 
     @Config.Name("Natural Nightvision")
     @Config.LangKey(DynamicStealth.MODID + ".config.naturalNightvision")
     @Config.Comment({"Entities in this list ALWAYS get the nightvision bonus"})
-    public String[] naturalNightvisionMobs = EntitySightDefaults.naturalNightvisionDefaults.toArray(new String[EntitySightDefaults.naturalNightvisionDefaults.size()]);
+    public String[] naturalNightvisionMobs = EntitySightDefaults.naturalNightvisionDefaults.toArray(new String[0]);
 
     @Config.Name("Natural Soul Sight")
     @Config.LangKey(DynamicStealth.MODID + ".config.naturalSoulSight")
@@ -78,5 +78,5 @@ public class SpecificSightConfig
                     "",
                     "Adding the player keyword to this list makes all players see all entities as if they had glowing (visible through walls)"
             })
-    public String[] naturalSoulSightMobs = EntitySightDefaults.naturalSoulSightDefaults.toArray(new String[EntitySightDefaults.naturalSoulSightDefaults.size()]);
+    public String[] naturalSoulSightMobs = EntitySightDefaults.naturalSoulSightDefaults.toArray(new String[0]);
 }

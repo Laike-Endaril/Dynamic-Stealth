@@ -55,7 +55,7 @@ public class EntityTrackerEdit extends EntityTracker
         {
             track(entityIn, 512, 2);
             EntityPlayerMP entityplayermp = (EntityPlayerMP) entityIn;
-            for (EntityTrackerEntry trackerEntry : entries.toArray(new EntityTrackerEntry[entries.size()])) trackerEntry.updatePlayerEntity(entityplayermp);
+            for (EntityTrackerEntry trackerEntry : entries.toArray(new EntityTrackerEntry[0])) trackerEntry.updatePlayerEntity(entityplayermp);
         }
         else if (entityIn instanceof EntityFishHook) track(entityIn, 64, 5, true);
         else if (entityIn instanceof EntityArrow) track(entityIn, 64, 20, false);
@@ -137,7 +137,7 @@ public class EntityTrackerEdit extends EntityTracker
         {
             EntityPlayerMP entityplayermp = (EntityPlayerMP) entityIn;
 
-            for (EntityTrackerEntry entitytrackerentry : entries.toArray(new EntityTrackerEntry[entries.size()]))
+            for (EntityTrackerEntry entitytrackerentry : entries.toArray(new EntityTrackerEntry[0]))
             {
                 entitytrackerentry.removeFromTrackedPlayers(entityplayermp);
             }
@@ -154,7 +154,7 @@ public class EntityTrackerEdit extends EntityTracker
 
     public void tick()
     {
-        for (EntityTrackerEntry trackerEntry : entries.toArray(new EntityTrackerEntry[entries.size()]))
+        for (EntityTrackerEntry trackerEntry : entries.toArray(new EntityTrackerEntry[0]))
         {
             trackerEntry.updatePlayerList(world.playerEntities);
             for (EntityPlayer player : world.playerEntities) trackerEntry.updatePlayerEntity((EntityPlayerMP) player);
@@ -195,7 +195,7 @@ public class EntityTrackerEdit extends EntityTracker
 
     public void removePlayerFromTrackers(EntityPlayerMP player)
     {
-        for (EntityTrackerEntry entitytrackerentry : entries.toArray(new EntityTrackerEntry[entries.size()]))
+        for (EntityTrackerEntry entitytrackerentry : entries.toArray(new EntityTrackerEntry[0]))
         {
             entitytrackerentry.removeTrackedPlayerSymmetric(player);
         }
@@ -203,7 +203,7 @@ public class EntityTrackerEdit extends EntityTracker
 
     public void sendLeashedEntitiesInChunk(EntityPlayerMP player, Chunk chunkIn)
     {
-        for (EntityTrackerEntry trackerEntry : entries.toArray(new EntityTrackerEntry[entries.size()]))
+        for (EntityTrackerEntry trackerEntry : entries.toArray(new EntityTrackerEntry[0]))
         {
             Entity entity = trackerEntry.getTrackedEntity();
 
@@ -218,7 +218,7 @@ public class EntityTrackerEdit extends EntityTracker
     {
         maxDistance = Tools.min((distance - 1) * 16, EntitySightData.playerMaxSightDistance);
 
-        for (EntityTrackerEntry entitytrackerentry : entries.toArray(new EntityTrackerEntry[entries.size()]))
+        for (EntityTrackerEntry entitytrackerentry : entries.toArray(new EntityTrackerEntry[0]))
         {
             entitytrackerentry.setMaxRange(maxDistance);
         }

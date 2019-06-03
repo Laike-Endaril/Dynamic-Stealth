@@ -38,7 +38,7 @@ public class CompatDissolution
             {
                 EntityLiving living = (EntityLiving) livingBase;
                 Set taskSet = living.tasks.taskEntries;
-                for (EntityAITasks.EntityAITaskEntry entry : (EntityAITasks.EntityAITaskEntry[]) taskSet.toArray(new EntityAITasks.EntityAITaskEntry[taskSet.size()]))
+                for (EntityAITasks.EntityAITaskEntry entry : (EntityAITasks.EntityAITaskEntry[]) taskSet.toArray(new EntityAITasks.EntityAITaskEntry[0]))
                 {
                     if (entry.action instanceof AIDynamicStealth)
                     {

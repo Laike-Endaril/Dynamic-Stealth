@@ -216,7 +216,7 @@ public class Sight
     private static LinkedHashMap<EntityLivingBase, Double> seenEntitiesInternal(EntityPlayerMP player)
     {
         LinkedHashMap<EntityLivingBase, Double> result = new LinkedHashMap<>();
-        Entity[] loadedEntities = player.world.loadedEntityList.toArray(new Entity[player.world.loadedEntityList.size()]);
+        Entity[] loadedEntities = player.world.loadedEntityList.toArray(new Entity[0]);
 
         if (serverSettings.senses.usePlayerSenses)
         {

@@ -40,5 +40,5 @@ public class AssassinationConfig
                     "",
                     "tetra:duplex_tool_modular > duplex/sickle_left_material & duplex/butt_right_material, regeneration.60.3"
             })
-    public String[] weaponSpecific = AttackDefaults.assassinationDefaults.toArray(new String[AttackDefaults.assassinationDefaults.size()]);
+    public String[] weaponSpecific = AttackDefaults.assassinationDefaults.toArray(new String[0]);
 }

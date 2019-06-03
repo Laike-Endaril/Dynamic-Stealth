@@ -252,7 +252,7 @@ public class RenderAlterer
         if (render instanceof RenderLivingBase)
         {
             List<LayerRenderer> list = ((RenderLivingBase) render).layerRenderers;
-            for (LayerRenderer layer : list.toArray(new LayerRenderer[list.size()]))
+            for (LayerRenderer layer : list.toArray(new LayerRenderer[0]))
             {
                 if (layer instanceof LayerSpiderEyes)
                 {

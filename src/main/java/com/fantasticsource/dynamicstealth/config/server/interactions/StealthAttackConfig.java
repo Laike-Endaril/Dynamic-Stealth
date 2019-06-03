@@ -59,5 +59,5 @@ public class StealthAttackConfig
                     "",
                     "dye, false, 0, , blindness.20, true"
             })
-    public String[] weaponSpecific = AttackDefaults.stealthAttackDefaults.toArray(new String[AttackDefaults.stealthAttackDefaults.size()]);
+    public String[] weaponSpecific = AttackDefaults.stealthAttackDefaults.toArray(new String[0]);
 }

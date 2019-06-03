@@ -79,5 +79,5 @@ public class NormalAttackConfig
                     "",
                     "dye, false, 0, , blindness.20, true"
             })
-    public String[] weaponSpecific = AttackDefaults.normalAttackDefaults.toArray(new String[AttackDefaults.normalAttackDefaults.size()]);
+    public String[] weaponSpecific = AttackDefaults.normalAttackDefaults.toArray(new String[0]);
 }

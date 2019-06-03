@@ -36,7 +36,7 @@ public class Communication
             EntityLiving livingNotifier = (EntityLiving) notifier;
             World world = notifier.world;
 
-            for (Entity entity : world.loadedEntityList.toArray(new Entity[world.loadedEntityList.size()]))
+            for (Entity entity : world.loadedEntityList.toArray(new Entity[0]))
             {
                 if (entity instanceof EntityLivingBase)
                 {
@@ -73,7 +73,7 @@ public class Communication
         World world = warner.world;
         if (warner.isEntityAlive() && (danger == null || danger.world == world))
         {
-            for (Entity helper : world.loadedEntityList.toArray(new Entity[world.loadedEntityList.size()]))
+            for (Entity helper : world.loadedEntityList.toArray(new Entity[0]))
             {
                 tryWarn(warner, helper, danger, warnData.dangerPos, warnData.sawDanger);
             }

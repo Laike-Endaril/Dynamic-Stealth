@@ -30,5 +30,5 @@ public class FleeConfig
                     "",
                     "Entities that bypass threat are automatically fearless"
             })
-    public String[] fearless = EntityAIDefaults.fearlessDefaults.toArray(new String[EntityAIDefaults.fearlessDefaults.size()]);
+    public String[] fearless = EntityAIDefaults.fearlessDefaults.toArray(new String[0]);
 }

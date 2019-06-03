@@ -16,7 +16,7 @@ public class SpecificThreatConfig
                     "",
                     "For some entities, this option is necessary for them to work right, such as slimes.  For others, like the ender dragon and other players, it has no effect besides how they appear in the HUD"
             })
-    public String[] threatBypass = EntityThreatDefaults.threatBypassDefaults.toArray(new String[EntityThreatDefaults.threatBypassDefaults.size()]);
+    public String[] threatBypass = EntityThreatDefaults.threatBypassDefaults.toArray(new String[0]);
 
     @Config.Name("Passiveness")
     @Config.LangKey(DynamicStealth.MODID + ".config.entityPassiveness")
@@ -30,5 +30,5 @@ public class SpecificThreatConfig
                     "",
                     "minecraft:skeleton, true"
             })
-    public String[] isPassive = EntityThreatDefaults.passiveDefaults.toArray(new String[EntityThreatDefaults.passiveDefaults.size()]);
+    public String[] isPassive = EntityThreatDefaults.passiveDefaults.toArray(new String[0]);
 }
