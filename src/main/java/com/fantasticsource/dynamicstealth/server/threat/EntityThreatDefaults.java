@@ -22,6 +22,10 @@ public class EntityThreatDefaults
         passiveDefaults.add("ebwizardry:wizard, false");
         passiveDefaults.add("techguns:turret, false");
         passiveDefaults.add("rafradek_tf2_weapons:sentry, false");
+        passiveDefaults.add("ghast, false");
+        passiveDefaults.add("nex:ghastling, false");
+        passiveDefaults.add("nex:ghast_queen, false");
+        passiveDefaults.add("nex:ghastling, false");
 
         threatBypassDefaults.add("dissolution:player_corpse");
         threatBypassDefaults.add("millenaire:genericvillager");
