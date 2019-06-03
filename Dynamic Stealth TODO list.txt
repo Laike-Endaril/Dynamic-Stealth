@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+Fix "opaque flashing" of mobs on the edge of vision due to no visibility data -> defaulting to full visibility
+
 Make the difference between "barely unseen" and "barely seen" on the stealth gauge more noticeable
 
 Light level HUD
