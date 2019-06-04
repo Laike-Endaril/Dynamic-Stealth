@@ -40,6 +40,7 @@ public class EntitySightDefaults
         //Compat; these should be added absolutely, not conditionally
 
         naturallyBrightDefaults.add("infernomobs:khalk");
+        naturallyBrightDefaults.add("shadowmobs:phantom");
         naturallyBrightDefaults.add("infernomobs:afrit");
         naturallyBrightDefaults.add("infernomobs:lobber");
         naturallyBrightDefaults.add("infernomobs:gorger");
