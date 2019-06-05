@@ -18,13 +18,7 @@ public class SpecificSightConfig
                     "",
                     "minecraft:skeleton, 90, 45"
             })
-    public String[] angle = new String[]
-            {
-                    "ghast, 90, 0",
-                    "wither, 90, 0",
-                    "ender_dragon, 90, 0",
-                    "player, 70, 0"
-            };
+    public String[] angle = EntitySightDefaults.angleDefaults.toArray(new String[0]);
 
     @Config.Name("Distance")
     @Config.LangKey(DynamicStealth.MODID + ".config.entitySpecificDistance")
@@ -38,13 +32,7 @@ public class SpecificSightConfig
                     "",
                     "minecraft:skeleton, 40, 3"
             })
-    public String[] distance = new String[]
-            {
-                    "ghast, 50, 20",
-                    "wither, 100, 30",
-                    "ender_dragon, 100, 60",
-                    "player, 50, 5"
-            };
+    public String[] distance = EntitySightDefaults.distanceDefaults.toArray(new String[0]);
 
     @Config.Name("Lighting")
     @Config.LangKey(DynamicStealth.MODID + ".config.entitySpecificLighting")

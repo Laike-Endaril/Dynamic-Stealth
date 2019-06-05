@@ -119,7 +119,10 @@ public class EntitySightData
                 else
                 {
                     entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(token));
-                    if (entry == null) System.err.println("ResourceLocation for entity \"" + token + "\" not found!");
+                    if (entry == null)
+                    {
+                        if (!EntitySightDefaults.angleDefaults.contains(string)) System.err.println("ResourceLocation for entity \"" + token + "\" not found!");
+                    }
                     else
                     {
                         Class c = entry.getEntityClass();
@@ -145,7 +148,10 @@ public class EntitySightData
                 else
                 {
                     entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(token));
-                    if (entry == null) System.err.println("ResourceLocation for entity \"" + token + "\" not found!");
+                    if (entry == null)
+                    {
+                        if (!EntitySightDefaults.distanceDefaults.contains(string)) System.err.println("ResourceLocation for entity \"" + token + "\" not found!");
+                    }
                     else
                     {
                         Class c = entry.getEntityClass();

@@ -7,6 +7,8 @@ public class EntitySightDefaults
     public static ArrayList<String> naturallyBrightDefaults = new ArrayList<>();
     public static ArrayList<String> naturalNightvisionDefaults = new ArrayList<>();
     public static ArrayList<String> naturalSoulSightDefaults = new ArrayList<>();
+    public static ArrayList<String> angleDefaults = new ArrayList<>();
+    public static ArrayList<String> distanceDefaults = new ArrayList<>();
 
     static
     {
@@ -37,7 +39,19 @@ public class EntitySightDefaults
         naturalSoulSightDefaults.add("vex");
 
 
+        angleDefaults.add("player, 70, 0");
+        angleDefaults.add("ghast, 90, 0");
+        angleDefaults.add("wither, 90, 0");
+
+
+        distanceDefaults.add("player, 50, 5");
+        distanceDefaults.add("ghast, 50, 20");
+        distanceDefaults.add("ender_dragon, 100, 60");
+        distanceDefaults.add("wither, 100, 30");
+
+
         //Compat; these should be added absolutely, not conditionally
+
 
         naturallyBrightDefaults.add("infernomobs:khalk");
         naturallyBrightDefaults.add("shadowmobs:phantom");
@@ -59,13 +73,21 @@ public class EntitySightDefaults
         naturallyBrightDefaults.add("harvestersnight:harvester");
 
 
-        naturalSoulSightDefaults.add("harvestersnight:harvester");
-        naturalSoulSightDefaults.add("defiledlands:the_destroyer");
-        naturalSoulSightDefaults.add("defiledlands:the_mourner");
-        naturalSoulSightDefaults.add("demonmobs:rahovart");
-        naturalSoulSightDefaults.add("demonmobs:asmodeus");
+        naturalNightvisionDefaults.add("nex:ghast_queen");
+        naturalNightvisionDefaults.add("defiledlands:the_destroyer");
+        naturalNightvisionDefaults.add("demonmobs:rahovart");
+        naturalNightvisionDefaults.add("demonmobs:asmodeus");
+
 
         naturalSoulSightDefaults.add("elementalmobs:banshee");
         naturalSoulSightDefaults.add("infernomobs:gorger");
+        naturalSoulSightDefaults.add("harvestersnight:harvester");
+        naturalSoulSightDefaults.add("defiledlands:the_mourner");
+
+
+        angleDefaults.add("nex:ghast_queen, 90, 0");
+
+
+        distanceDefaults.add("nex:ghast_queen, 100, 30");
     }
 }

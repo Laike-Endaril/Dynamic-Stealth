@@ -27,6 +27,7 @@ public class AttackDefaults
         stealthAttackDefaults.add("chisel:chisel_hitech, true, 5");
         stealthAttackDefaults.add("tcomplement:chisel, true, 5");
         stealthAttackDefaults.add("rootsclassic:druidknife, true, 5");
+        stealthAttackDefaults.add("xreliquary:magicbane, true, 5");
 
         //Kamas
         stealthAttackDefaults.add("natura:ghostwood_kama, true, 3");
