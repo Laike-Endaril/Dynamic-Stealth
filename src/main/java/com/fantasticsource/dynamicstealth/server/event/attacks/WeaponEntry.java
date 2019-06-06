@@ -16,39 +16,63 @@ public class WeaponEntry
 
     public boolean armorPenetration = false;
     public double damageMultiplier = 1;
-    public ArrayList<PotionEffect> attackerEffects;
-    public ArrayList<PotionEffect> victimEffects;
+    public ArrayList<PotionEffect> attackerEffects = new ArrayList<>();
+    public ArrayList<PotionEffect> victimEffects = new ArrayList<>();
     public boolean consumeItem = false;
 
     public ItemFilter filter;
 
-    private WeaponEntry(int type)
+    private WeaponEntry(int type, boolean isMelee)
     {
         //Defaults
         if (type == TYPE_NORMAL)
         {
-            armorPenetration = serverSettings.interactions.attack.armorPenetration;
-            damageMultiplier = serverSettings.interactions.attack.damageMultiplier;
-            attackerEffects = AttackData.normalAttackerEffects;
-            victimEffects = AttackData.normalVictimEffects;
+            if (isMelee)
+            {
+                armorPenetration = serverSettings.interactions.attack.armorPenetration;
+                damageMultiplier = serverSettings.interactions.attack.damageMultiplier;
+                attackerEffects = AttackData.normalAttackerEffects;
+                victimEffects = AttackData.normalVictimEffects;
+            }
+            else
+            {
+                armorPenetration = serverSettings.interactions.rangedAttack.armorPenetration;
+                damageMultiplier = serverSettings.interactions.rangedAttack.damageMultiplier;
+                attackerEffects = AttackData.rangedAttackerEffects;
+                victimEffects = AttackData.rangedVictimEffects;
+            }
         }
         else if (type == TYPE_STEALTH)
         {
-            armorPenetration = serverSettings.interactions.stealthAttack.armorPenetration;
-            damageMultiplier = serverSettings.interactions.stealthAttack.damageMultiplier;
-            attackerEffects = AttackData.stealthAttackerEffects;
-            victimEffects = AttackData.stealthVictimEffects;
+            if (isMelee)
+            {
+                armorPenetration = serverSettings.interactions.stealthAttack.armorPenetration;
+                damageMultiplier = serverSettings.interactions.stealthAttack.damageMultiplier;
+                attackerEffects = AttackData.stealthAttackerEffects;
+                victimEffects = AttackData.stealthVictimEffects;
+            }
+            else
+            {
+                armorPenetration = serverSettings.interactions.rangedStealthAttack.armorPenetration;
+                damageMultiplier = serverSettings.interactions.rangedStealthAttack.damageMultiplier;
+                attackerEffects = AttackData.rangedStealthAttackerEffects;
+                victimEffects = AttackData.rangedStealthVictimEffects;
+            }
         }
         else if (type == TYPE_ASSASSINATION)
         {
-            attackerEffects = AttackData.assassinationAttackerEffects;
+            if (isMelee) attackerEffects = AttackData.assassinationAttackerEffects;
+            else attackerEffects = AttackData.rangedAssassinationAttackerEffects;
         }
     }
 
+    /**
+     * This method should only ever be called for melee attacks; ranged attacks are unreliable when it comes to detecting what item they came from (eg. if the attacker switches items before the attack hits)
+     */
     public static WeaponEntry getInstance(String configEntry, int type)
     {
         //Defaults
-        WeaponEntry result = new WeaponEntry(type);
+        WeaponEntry result = new WeaponEntry(type, true);
 
 
         String[] tokens = configEntry.split(Pattern.quote(","));
@@ -117,6 +141,8 @@ public class WeaponEntry
 
     public static WeaponEntry get(ItemStack itemStack, int type)
     {
+        if (itemStack == null) return new WeaponEntry(type, false);
+
         ArrayList<WeaponEntry> list = null;
         if (type == TYPE_NORMAL) list = AttackData.normalWeaponSpecific;
         else if (type == TYPE_STEALTH) list = AttackData.stealthWeaponSpecific;
@@ -127,6 +153,6 @@ public class WeaponEntry
             if (weaponEntry.filter.matches(itemStack)) return weaponEntry;
         }
 
-        return new WeaponEntry(type);
+        return new WeaponEntry(type, true);
     }
 }

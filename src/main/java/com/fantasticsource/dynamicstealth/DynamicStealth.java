@@ -296,8 +296,11 @@ public class DynamicStealth
     {
         EntityLivingBase victim = event.getEntityLiving();
 
-        Entity source = event.getSource().getTrueSource();
-        if (source == null) source = event.getSource().getImmediateSource();
+        DamageSource dmgSource = event.getSource();
+        Entity source = dmgSource.getTrueSource();
+        Entity immediate = dmgSource.getImmediateSource();
+        boolean isMelee = source != null && source == immediate;
+        if (source == null) source = dmgSource.getImmediateSource();
 
         Threat.set(victim, null, 0);
 
@@ -360,7 +363,7 @@ public class DynamicStealth
 
             if (!wasSeen && !EntityThreatData.isPassive(victim))
             {
-                //Target's friends didn't see
+                //Was melee and target's friends didn't see
                 if (!Sight.canSee(victim, source, true))
                 {
                     //Target cannot see us
@@ -370,8 +373,7 @@ public class DynamicStealth
                         if (!(killer instanceof FakePlayer) && !MinecraftForge.EVENT_BUS.post(new AssassinationEvent(killer, victim)))
                         {
                             //Assassinations
-                            ItemStack itemStack = killer.getHeldItemMainhand();
-                            WeaponEntry weaponEntry = WeaponEntry.get(itemStack, WeaponEntry.TYPE_ASSASSINATION);
+                            WeaponEntry weaponEntry = WeaponEntry.get(isMelee ? killer.getHeldItemMainhand() : null, WeaponEntry.TYPE_ASSASSINATION);
 
 
                             for (PotionEffect potionEffect : weaponEntry.attackerEffects)
@@ -399,27 +401,45 @@ public class DynamicStealth
 
         DamageSource dmgSource = event.getSource();
         Entity source = dmgSource.getTrueSource();
-        if (source == null) source = dmgSource.getImmediateSource();
+        Entity immediate = dmgSource.getImmediateSource();
+        boolean isMelee = source != null && source == immediate;
+        if (source == null) source = immediate;
 
         if (source instanceof EntityLivingBase)
         {
             EntityLivingBase attacker = (EntityLivingBase) source;
 
             //Remove invisibility and blindness if set to do so
-            if (serverSettings.interactions.attack.removeInvisibilityOnHit)
+            if (isMelee)
             {
-                if (!(attacker instanceof FakePlayer)) attacker.removePotionEffect(MobEffects.INVISIBILITY);
-                victim.removePotionEffect(MobEffects.INVISIBILITY);
+                if (serverSettings.interactions.attack.removeInvisibilityOnHit)
+                {
+                    if (!(attacker instanceof FakePlayer)) attacker.removePotionEffect(MobEffects.INVISIBILITY);
+                    victim.removePotionEffect(MobEffects.INVISIBILITY);
+                }
+                if (serverSettings.interactions.attack.removeBlindnessOnHit)
+                {
+                    if (!(attacker instanceof FakePlayer)) attacker.removePotionEffect(MobEffects.BLINDNESS);
+                    victim.removePotionEffect(MobEffects.BLINDNESS);
+                }
             }
-            if (serverSettings.interactions.attack.removeBlindnessOnHit)
+            else
             {
-                if (!(attacker instanceof FakePlayer)) attacker.removePotionEffect(MobEffects.BLINDNESS);
-                victim.removePotionEffect(MobEffects.BLINDNESS);
+                if (serverSettings.interactions.rangedAttack.removeInvisibilityOnHit)
+                {
+                    if (!(attacker instanceof FakePlayer)) attacker.removePotionEffect(MobEffects.INVISIBILITY);
+                    victim.removePotionEffect(MobEffects.INVISIBILITY);
+                }
+                if (serverSettings.interactions.rangedAttack.removeBlindnessOnHit)
+                {
+                    if (!(attacker instanceof FakePlayer)) attacker.removePotionEffect(MobEffects.BLINDNESS);
+                    victim.removePotionEffect(MobEffects.BLINDNESS);
+                }
             }
 
-            if (attacker.isEntityAlive() && !(attacker instanceof FakePlayer))
+            if (isMelee && attacker.isEntityAlive() && !(attacker instanceof FakePlayer))
             {
-                //Normal attacks
+                //Normal attacks (melee only)
                 ItemStack itemStack = attacker.getHeldItemMainhand();
                 WeaponEntry weaponEntry = WeaponEntry.get(itemStack, WeaponEntry.TYPE_NORMAL);
 
@@ -438,7 +458,7 @@ public class DynamicStealth
                 if (weaponEntry.consumeItem && !(attacker instanceof EntityPlayer && ((EntityPlayer) attacker).capabilities.isCreativeMode) && !itemStack.getItem().equals(Items.AIR)) itemStack.grow(-1);
 
 
-                //Stealth attacks
+                //Stealth attacks (melee only)
                 if (!Sight.canSee(victim, attacker, true))
                 {
                     if (!MinecraftForge.EVENT_BUS.post(new StealthAttackEvent(victim, dmgSource, event.getAmount())))

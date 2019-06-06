@@ -7,18 +7,33 @@ public class InteractionConfig
 {
     @Config.Name("Attack")
     @Config.LangKey(DynamicStealth.MODID + ".config.interactAttack")
-    @Config.Comment("When anything attacks anything else")
+    @Config.Comment("When anything attacks anything else (melee)")
     public NormalAttackConfig attack = new NormalAttackConfig();
+
+    @Config.Name("Ranged Attack")
+    @Config.LangKey(DynamicStealth.MODID + ".config.interactRangedAttack")
+    @Config.Comment("When anything attacks anything else (ranged)")
+    public RangedAttackConfig rangedAttack = new RangedAttackConfig();
 
     @Config.Name("Stealth Attack")
     @Config.LangKey(DynamicStealth.MODID + ".config.interactStealthAtk")
-    @Config.Comment("When something attacks an unaware victim")
+    @Config.Comment("When something attacks an unaware victim (melee)")
     public StealthAttackConfig stealthAttack = new StealthAttackConfig();
+
+    @Config.Name("Ranged Stealth Attack")
+    @Config.LangKey(DynamicStealth.MODID + ".config.interactRangedStealthAtk")
+    @Config.Comment("When something attacks an unaware victim (ranged)")
+    public RangedStealthAttackConfig rangedStealthAttack = new RangedStealthAttackConfig();
 
     @Config.Name("Assassination")
     @Config.LangKey(DynamicStealth.MODID + ".config.interactAssassination")
-    @Config.Comment("When something kills without being detected")
+    @Config.Comment("When something kills without being detected (melee)")
     public AssassinationConfig assassination = new AssassinationConfig();
+
+    @Config.Name("Ramged Assassination")
+    @Config.LangKey(DynamicStealth.MODID + ".config.interactRangedAssassination")
+    @Config.Comment("When something kills without being detected (ranged)")
+    public RangedAssassinationConfig rangedAssassination = new RangedAssassinationConfig();
 
     @Config.Name("Calm Down")
     @Config.LangKey(DynamicStealth.MODID + ".config.interactCalmDown")

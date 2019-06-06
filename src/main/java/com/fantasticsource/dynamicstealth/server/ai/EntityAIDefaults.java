@@ -93,8 +93,6 @@ public class EntityAIDefaults
         fearlessDefaults.add("defiledlands:shambler_twisted");
         fearlessDefaults.add("defiledlands:host");
         fearlessDefaults.add("defiledlands:slime_defiled");
-        fearlessDefaults.add("defiledlands:the_destroyer");
-        fearlessDefaults.add("defiledlands:the_mourner");
         fearlessDefaults.add("eerieentities:pumpkin_slime");
         fearlessDefaults.add("eerieentities:nether_knight");
         fearlessDefaults.add("eerieentities:cursed_armor");
