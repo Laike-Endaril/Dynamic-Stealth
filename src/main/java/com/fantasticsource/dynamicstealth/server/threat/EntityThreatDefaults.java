@@ -34,5 +34,6 @@ public class EntityThreatDefaults
         threatBypassDefaults.add("tconstruct:blueslime");
         threatBypassDefaults.add("primitivemobs:treasure_slime");
         threatBypassDefaults.add("pvj:pvj_icecube");
+        threatBypassDefaults.add("defiledlands:slime_defiled");
     }
 }
