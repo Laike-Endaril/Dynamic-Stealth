@@ -1,5 +1,8 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+Check compat issue with primitive mobs skeleton warrior and rough mobs...
+...they seem to attempt melee and...not succeed?
+
 Fix "opaque flashing" of mobs on the edge of vision due to no visibility data -> defaulting to full visibility
 
 Make the difference between "barely unseen" and "barely seen" on the stealth gauge more noticeable
