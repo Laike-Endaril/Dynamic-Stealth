@@ -377,12 +377,6 @@ public class Sight
                 Item item = stack.getItem();
                 if (item instanceof ISpecialArmor) unnaturalArmor += ((ISpecialArmor) item).getProperties(targetLivingBase, stack, new DamageSource("generic"), 1, Integer.MIN_VALUE).Armor;
                 if (item instanceof ItemArmor) unnaturalArmor += ((ItemArmor) item).damageReduceAmount;
-
-                NBTTagCompound compound = stack.getTagCompound();
-                if (compound != null)
-                {
-                    for (String s : compound.getKeySet()) System.out.println(s + " = " + compound.getTag(s));
-                }
             }
             armorMultiplier += serverSettings.senses.sight.b_visibilityMultipliers.armorMultiplierCumulative * unnaturalArmor;
         }
