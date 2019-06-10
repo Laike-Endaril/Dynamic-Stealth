@@ -1,5 +1,9 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+General, easy to use T/F toggles for features
+
+Look into porting targeting HUD to its own mod
+
 Check compat issue with primitive mobs skeleton warrior and rough mobs...
 ...they seem to attempt melee and...not succeed?
 
