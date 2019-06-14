@@ -1,5 +1,14 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+Move APIs outside source
+Add configurable potion effect filter for "can't reach"
+Setup maven
+Switch to HashSets for stuff that only initializes and is queried, and doesn't get changed
+Make sure contains is being used instead of eg. what's currently in EntityThreatData.isPassive (133)
+Double check logic for handling of sight attributes
+
+
+
 General, easy to use T/F toggles for features
 
 Look into porting targeting HUD to its own mod
