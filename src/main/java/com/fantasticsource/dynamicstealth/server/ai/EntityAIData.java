@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
@@ -15,12 +15,12 @@ import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.ser
 public class EntityAIData
 {
     private static LinkedHashMap<Class<? extends Entity>, Integer> entityHeadTurnSpeeds;
-    private static ArrayList<Class<? extends EntityLivingBase>> isFearless;
+    private static HashSet<Class<? extends EntityLivingBase>> isFearless;
 
     public static void update()
     {
         entityHeadTurnSpeeds = new LinkedHashMap<>();
-        isFearless = new ArrayList<>();
+        isFearless = new HashSet<>();
 
         EntityEntry entry;
         String[] tokens;
