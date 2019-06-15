@@ -6,17 +6,17 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 
 public class HUDData
 {
-    private static ArrayList<Class<? extends Entity>> ungaugedEntities;
+    private static HashSet<Class<? extends Entity>> ungaugedEntities;
 
     public static void update()
     {
-        ungaugedEntities = new ArrayList<>();
+        ungaugedEntities = new HashSet<>();
 
         EntityEntry entry;
 
