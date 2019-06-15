@@ -318,7 +318,7 @@ public class Sight
         if (sightAttrib <= 0) return 777;
 
         double visReductionAttrib = !isLivingBase ? 0 : targetLivingBase.getEntityAttribute(Attributes.VISIBILITY_REDUCTION).getAttributeValue();
-        double attributeMultipliers = visReductionAttrib <= 0 ? Double.MAX_VALUE : sightAttrib / visReductionAttrib;
+        double attributeMultipliers = visReductionAttrib <= 0 ? 777 : sightAttrib / visReductionAttrib;
 
 
         //Lighting and LOS checks (absolute, factor, after Angles, after Glowing)
