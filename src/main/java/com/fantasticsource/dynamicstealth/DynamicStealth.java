@@ -14,6 +14,7 @@ import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
 import com.fantasticsource.dynamicstealth.server.ai.EntityAIData;
 import com.fantasticsource.dynamicstealth.server.ai.edited.*;
 import com.fantasticsource.dynamicstealth.server.entitytracker.EntityTrackerEdit;
+import com.fantasticsource.dynamicstealth.server.event.EventData;
 import com.fantasticsource.dynamicstealth.server.event.attacks.AssassinationEvent;
 import com.fantasticsource.dynamicstealth.server.event.attacks.AttackData;
 import com.fantasticsource.dynamicstealth.server.event.attacks.StealthAttackEvent;
@@ -149,6 +150,7 @@ public class DynamicStealth
         EntityTouchData.update();
         EntitySightData.update();
         EntityThreatData.update();
+        EventData.update();
 
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
         if (server != null)

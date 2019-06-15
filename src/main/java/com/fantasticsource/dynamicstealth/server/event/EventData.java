@@ -9,8 +9,13 @@ import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.ser
 
 public class EventData
 {
-    public static ArrayList<PotionEffect> rallyPotions = Potions.parsePotions(serverSettings.interactions.rally.potionEffects);
-    public static ArrayList<PotionEffect> calmDownPotions = Potions.parsePotions(serverSettings.interactions.calmDown.potionEffects);
-    public static ArrayList<PotionEffect> desperationPotions = Potions.parsePotions(serverSettings.interactions.desperation.potionEffects);
-    public static ArrayList<PotionEffect> cantReachPotions = Potions.parsePotions(serverSettings.interactions.cantReach.potionEffects);
+    public static ArrayList<PotionEffect> rallyPotions, calmDownPotions, desperationPotions, cantReachPotions;
+
+    public static void update()
+    {
+        rallyPotions = Potions.parsePotions(serverSettings.interactions.rally.potionEffects);
+        calmDownPotions = Potions.parsePotions(serverSettings.interactions.calmDown.potionEffects);
+        desperationPotions = Potions.parsePotions(serverSettings.interactions.desperation.potionEffects);
+        cantReachPotions = Potions.parsePotions(serverSettings.interactions.cantReach.potionEffects);
+    }
 }
