@@ -1,9 +1,8 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Move APIs outside source
 Add configurable potion effect filter for "can't reach"
 Setup maven
-Switch to HashSets for stuff that only initializes and is queried, and doesn't get changed
+Move APIs outside source?
 
 
 
