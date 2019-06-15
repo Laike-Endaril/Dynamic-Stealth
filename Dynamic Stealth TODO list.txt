@@ -1,11 +1,7 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Add attributes for...
-...general threat multiplier
-...threat multiplier for each threat-gen/degen event
-
-Add Threat method for dealing "threat damage", ie. damage-based threat, but no actual damage...
-...maybe just make a Threat.apply() method, which accepts the entity, the target, the amount, and the type, and move all config/attribute calcs into it
+Add a Threat.apply() method, which accepts the entity, the target, the amount, and the type, and move all config calcs into it
+Add threat attribute calcs to Threat.apply() method
 
 Check Betweenlands AI tasks for null attack target handling
 
