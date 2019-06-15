@@ -27,7 +27,6 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -314,6 +313,14 @@ public class Sight
         if (sight.g_absolutes.seeGlowing && isLivingBase && targetLivingBase.getActivePotionEffect(MobEffects.GLOWING) != null) return -777;
 
 
+        //Attributes (absolute, factor, after angles and glowing)
+        double sightAttrib = searcher.getEntityAttribute(Attributes.SIGHT).getAttributeValue();
+        if (sightAttrib <= 0) return 777;
+
+        double visReductionAttrib = !isLivingBase ? 0 : targetLivingBase.getEntityAttribute(Attributes.VISIBILITY_REDUCTION).getAttributeValue();
+        double attributeMultipliers = visReductionAttrib <= 0 ? Double.MAX_VALUE : sightAttrib / visReductionAttrib;
+
+
         //Lighting and LOS checks (absolute, factor, after Angles, after Glowing)
         double lightFactor = bestLightingAtLOSHit(searcher, target, isLivingBase && isBright(targetLivingBase));
         if (lightFactor == -777) return 777;
@@ -386,9 +393,6 @@ public class Sight
         double stealthMultiplier = Tools.min(mobHeadMultiplier, blindnessMultiplier * invisibilityMultiplier * crouchingMultiplier);
         double visibilityMultiplier = armorMultiplier;
         double configMultipliers = Tools.min(Tools.max(stealthMultiplier * visibilityMultiplier, 0), 1);
-
-        double visReduction = !isLivingBase ? 0 : targetLivingBase.getEntityAttribute(Attributes.VISIBILITY_REDUCTION).getAttributeValue();
-        double attributeMultipliers = visReduction <= 0 ? Double.MAX_VALUE : searcher.getEntityAttribute(Attributes.SIGHT).getAttributeValue() / visReduction;
 
 
         //Final calculation
