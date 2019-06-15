@@ -25,6 +25,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -37,6 +38,8 @@ public class Network
     public static final SimpleNetworkWrapper WRAPPER = NetworkRegistry.INSTANCE.newSimpleChannel(DynamicStealth.MODID);
 
     private static int discriminator = 0;
+
+    private static HashSet<EntityLivingBase> soulSightCache;
 
     public static void init()
     {
@@ -57,17 +60,17 @@ public class Network
 
             if (EntitySightData.hasSoulSight(player))
             {
-                if (!EntitySightData.soulSightCache.contains(player))
+                if (!soulSightCache.contains(player))
                 {
-                    EntitySightData.soulSightCache.add(player);
+                    soulSightCache.add(player);
                     WRAPPER.sendTo(new SoulSightPacket(true), player);
                 }
             }
             else
             {
-                if (EntitySightData.soulSightCache.contains(player))
+                if (soulSightCache.contains(player))
                 {
-                    EntitySightData.soulSightCache.remove(player);
+                    soulSightCache.remove(player);
                     WRAPPER.sendTo(new SoulSightPacket(false), player);
                 }
             }
@@ -240,7 +243,7 @@ public class Network
         public ClientInitPacket(EntityPlayer player)
         {
             soulSight = EntitySightData.hasSoulSight(player);
-            if (soulSight) EntitySightData.soulSightCache.add(player);
+            if (soulSight) soulSightCache.add(player);
 
             if (isOP((EntityPlayerMP) player))
             {

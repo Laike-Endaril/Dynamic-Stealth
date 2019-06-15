@@ -8,7 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
@@ -17,12 +17,11 @@ public class EntitySightData
 {
     public static int playerMaxSightDistance;
 
-    public static ArrayList<EntityLivingBase> potionSoulSightEntities;
-    public static ArrayList<EntityLivingBase> soulSightCache;
+    public static HashSet<EntityLivingBase> potionSoulSightEntities;
 
-    private static ArrayList<Class<? extends EntityLivingBase>> naturallyBrightEntities;
-    private static ArrayList<Class<? extends EntityLivingBase>> naturalNightvisionEntities;
-    private static ArrayList<Class<? extends EntityLivingBase>> naturalSoulSightEntities;
+    private static HashSet<Class<? extends EntityLivingBase>> naturallyBrightEntities;
+    private static HashSet<Class<? extends EntityLivingBase>> naturalNightvisionEntities;
+    private static HashSet<Class<? extends EntityLivingBase>> naturalSoulSightEntities;
     private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityAngles;
     private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityDistances;
     private static LinkedHashMap<Class<? extends EntityLivingBase>, SpecificLighting> entityLighting;
@@ -34,12 +33,11 @@ public class EntitySightData
     {
         playerMaxSightDistance = serverSettings.senses.sight.f_distances.distanceFar;
 
-        potionSoulSightEntities = new ArrayList<>();
-        soulSightCache = new ArrayList<>();
+        potionSoulSightEntities = new HashSet<>();
 
-        naturallyBrightEntities = new ArrayList<>();
-        naturalNightvisionEntities = new ArrayList<>();
-        naturalSoulSightEntities = new ArrayList<>();
+        naturallyBrightEntities = new HashSet<>();
+        naturalNightvisionEntities = new HashSet<>();
+        naturalSoulSightEntities = new HashSet<>();
         entityAngles = new LinkedHashMap<>();
         entityDistances = new LinkedHashMap<>();
         entityLighting = new LinkedHashMap<>();
