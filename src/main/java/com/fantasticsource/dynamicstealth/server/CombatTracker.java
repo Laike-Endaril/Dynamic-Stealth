@@ -28,11 +28,14 @@ public class CombatTracker
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void update(TickEvent.ServerTickEvent event)
     {
-        long modTick = currentTick() % ITERATION_FREQUENCY;
-        if (event.phase == TickEvent.Phase.START && modTick == 1000) removeAllUnusedTimes(successfulAttackTimes);
-        if (event.phase == TickEvent.Phase.START && modTick == 2000) removeAllUnusedTimes(successfulPathTimes);
-        if (event.phase == TickEvent.Phase.START && modTick == 3000) removeAllUnusedTimes(idleTimes);
-        if (event.phase == TickEvent.Phase.START && modTick == 4000) removeAllUnusedTimes(noTargetTimes);
+        if (event.phase == TickEvent.Phase.START)
+        {
+            long modTick = currentTick() % ITERATION_FREQUENCY;
+            if (modTick == 1000) removeAllUnusedTimes(successfulAttackTimes);
+            else if (modTick == 2000) removeAllUnusedTimes(successfulPathTimes);
+            else if (modTick == 3000) removeAllUnusedTimes(idleTimes);
+            else if (modTick == 4000) removeAllUnusedTimes(noTargetTimes);
+        }
     }
 
     private static void removeAllUnusedTimes(LinkedHashMap<EntityLivingBase, Long> map)
