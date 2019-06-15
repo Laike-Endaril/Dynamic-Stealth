@@ -39,7 +39,7 @@ public class Network
 
     private static int discriminator = 0;
 
-    private static HashSet<EntityLivingBase> soulSightCache;
+    private static HashSet<EntityLivingBase> soulSightCache = new HashSet<>();
 
     public static void init()
     {
