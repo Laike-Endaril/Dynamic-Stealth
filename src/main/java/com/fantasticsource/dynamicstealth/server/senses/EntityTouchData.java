@@ -9,17 +9,17 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 
 public class EntityTouchData
 {
-    private static ArrayList<Class<? extends Entity>> unfeelingEntities;
+    private static HashSet<Class<? extends Entity>> unfeelingEntities;
 
     public static void update()
     {
-        unfeelingEntities = new ArrayList<>();
+        unfeelingEntities = new HashSet<>();
 
         EntityEntry entry;
 
