@@ -12,22 +12,22 @@ import noppes.npcs.api.NpcAPI;
 import noppes.npcs.api.entity.ICustomNpc;
 import noppes.npcs.api.entity.IEntity;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 
 public class EntityThreatData
 {
-    private static ArrayList<Class<? extends EntityLivingBase>> threatBypass;
-    private static ArrayList<Class<? extends EntityLivingBase>> isPassive;
-    private static ArrayList<Class<? extends EntityLivingBase>> isNonPassive;
+    private static HashSet<Class<? extends EntityLivingBase>> threatBypass;
+    private static HashSet<Class<? extends EntityLivingBase>> isPassive;
+    private static HashSet<Class<? extends EntityLivingBase>> isNonPassive;
 
 
     public static void update()
     {
-        threatBypass = new ArrayList<>();
-        isPassive = new ArrayList<>();
-        isNonPassive = new ArrayList<>();
+        threatBypass = new HashSet<>();
+        isPassive = new HashSet<>();
+        isNonPassive = new HashSet<>();
 
         EntityEntry entry;
         String[] tokens;
