@@ -29,4 +29,18 @@ public class CantReachTriggerConfig
     @Config.LangKey(DynamicStealth.MODID + ".config.cantReachFlee")
     @Config.Comment("If we can't reach the target, do what brave Sir Robin does")
     public boolean flee = false;
+
+    @Config.Name("Potion Filter")
+    @Config.LangKey(DynamicStealth.MODID + ".config.cantReachPotionFilter")
+    @Config.Comment(
+            {
+                    "An entity will not go into 'can't reach' mode if it has one of these potion effects",
+                    "",
+                    "This prevents 'can't reach' mode if the entity has slowness level 99:",
+                    "slowness.99",
+                    "",
+                    "This prevents 'can't reach' mode if the entity has any level of levitation:",
+                    "levitation.*"
+            })
+    public String[] potionFilter = new String[0];
 }

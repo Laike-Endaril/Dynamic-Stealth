@@ -234,6 +234,8 @@ dynamicstealth.config.cantReachTargetTime=Target Time
 dynamicstealth.config.cantReachTargetTime.tooltip=FILLSCREEN FIXNEWLINES Deciding we can't reach the target requires at least this many ticks with a valid target\n \n
 dynamicstealth.config.cantReachFlee=Flee If Unreachable
 dynamicstealth.config.cantReachFlee.tooltip=FILLSCREEN FIXNEWLINES If we can't reach the target, do what brave Sir Robin does\n \n
+dynamicstealth.config.cantReachPotionFilter=Potion Filter
+dynamicstealth.config.cantReachPotionFilter.tooltip=FILLSCREEN FIXNEWLINES An entity will not go into "can't reach" mode if it has one of these potion effects\n\nThis prevents 'can't reach' mode if the entity has slowness level 99:\nslowness.99"\n\nThis prevents 'can't reach' mode if the entity has any level of levitation:\nlevitation.*\n \n
 
 dynamicstealth.config.targetingAllowances=Targeting allowances
 dynamicstealth.config.OPHUDAllowances=OPHUD allowances

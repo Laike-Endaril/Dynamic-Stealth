@@ -1,8 +1,7 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Add configurable potion effect filter for "can't reach"
-Setup maven
 Move APIs outside source?
+Setup maven?
 
 
 

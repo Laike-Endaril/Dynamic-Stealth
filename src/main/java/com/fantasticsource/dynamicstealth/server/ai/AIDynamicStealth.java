@@ -253,7 +253,7 @@ public class AIDynamicStealth extends EntityAIBase
 
         //Threat > 0 and threatTarget != null...we have an existing target from before
 
-        if (!canReachTarget())
+        if (!canReachTarget() && !EventData.checkCantReachPotionFilter(searcher))
         {
             if (MCTools.isOwned(searcher))
             {
