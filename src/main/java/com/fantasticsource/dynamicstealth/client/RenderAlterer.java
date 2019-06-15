@@ -27,7 +27,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,10 +37,10 @@ import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.cli
 @SideOnly(Side.CLIENT)
 public class RenderAlterer
 {
-    private static ArrayList<ScorePlayerTeam> colorTeams = new ArrayList<>();
+    private static HashSet<ScorePlayerTeam> colorTeams = new HashSet<>();
 
     private static Scoreboard scoreboard;
-    private static ArrayList<EntityLivingBase> glowCache = new ArrayList<>();
+    private static HashSet<EntityLivingBase> glowCache = new HashSet<>();
     private static LinkedHashMap<EntityLivingBase, Team> teamCache = new LinkedHashMap<>();
 
     private static boolean ready = false;
@@ -118,7 +118,7 @@ public class RenderAlterer
     {
         if (event.side == Side.CLIENT && event.phase == TickEvent.Phase.END)
         {
-            for (EntityLivingBase livingBase : (ArrayList<EntityLivingBase>) glowCache.clone())
+            for (EntityLivingBase livingBase : (HashSet<EntityLivingBase>) glowCache.clone())
             {
                 livingBase.setGlowing(false);
                 glowCache.remove(livingBase);
