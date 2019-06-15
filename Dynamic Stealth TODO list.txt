@@ -4,6 +4,8 @@ Add attributes for...
 ...general threat multiplier
 ...threat multiplier for each threat-gen/degen event
 
+Add Threat method for dealing "threat damage", ie. damage-based threat, but no actual damage
+
 Check Betweenlands AI tasks for null attack target handling
 
 Move APIs outside source?
