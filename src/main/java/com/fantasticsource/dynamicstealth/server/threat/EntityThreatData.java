@@ -3,7 +3,6 @@ package com.fantasticsource.dynamicstealth.server.threat;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.mctools.MCTools;
 import ladysnake.dissolution.api.corporeality.IPossessable;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
@@ -118,27 +117,16 @@ public class EntityThreatData
             }
         }
 
-        for (Class<? extends Entity> clss : threatBypass)
-        {
-            if (livingBase.getClass() == clss) return true;
-        }
-
-        return false;
+        return threatBypass.contains(livingBase.getClass());
     }
 
     public static boolean isPassive(EntityLivingBase livingBase)
     {
         if (livingBase == null || bypassesThreat(livingBase)) return false;
 
-        for (Class<? extends Entity> clss : isPassive)
-        {
-            if (livingBase.getClass() == clss) return true;
-        }
-
-        for (Class<? extends Entity> clss : isNonPassive)
-        {
-            if (livingBase.getClass() == clss) return false;
-        }
+        Class cl = livingBase.getClass();
+        if (isPassive.contains(cl)) return true;
+        if (isNonPassive.contains(cl)) return false;
 
         return MCTools.isPassive(livingBase);
     }
