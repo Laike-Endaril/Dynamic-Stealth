@@ -1,5 +1,11 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+Add attributes for...
+...general threat multiplier
+...threat multiplier for each threat-gen/degen event
+
+Check Betweenlands AI tasks for null attack target handling
+
 Move APIs outside source?
 Setup maven?
 
