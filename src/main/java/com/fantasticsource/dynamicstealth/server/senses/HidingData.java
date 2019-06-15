@@ -7,8 +7,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.UUID;
 
@@ -18,7 +18,7 @@ public class HidingData
     private static boolean save = true;
 
     public EntityPlayer player;
-    public ArrayList<UUID> notHidingFrom = new ArrayList<>();
+    public HashSet<UUID> notHidingFrom = new HashSet<>();
 
     public HidingData(EntityPlayer player, UUID... notHidingFrom)
     {

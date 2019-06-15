@@ -15,10 +15,7 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import static net.minecraft.util.text.TextFormatting.AQUA;
 import static net.minecraft.util.text.TextFormatting.WHITE;
@@ -118,12 +115,12 @@ public class Commands extends CommandBase
                     EntityPlayer player = getCommandSenderAsPlayer(sender);
                     if (args.length == 1)
                     {
-                        ArrayList<UUID> list = HidingData.hidingData.computeIfAbsent(player.getPersistentID(), k -> new HidingData(player)).notHidingFrom;
-                        if (list.size() == 0) notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromEmpty");
+                        HashSet<UUID> set = HidingData.hidingData.computeIfAbsent(player.getPersistentID(), k -> new HidingData(player)).notHidingFrom;
+                        if (set.size() == 0) notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromEmpty");
                         else
                         {
                             StringBuilder textList = new StringBuilder();
-                            for (UUID id : list) textList.append("\n§e").append(PlayerData.getName(id));
+                            for (UUID id : set) textList.append("\n§e").append(PlayerData.getName(id));
                             notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefrom", textList.toString());
                         }
                     }
