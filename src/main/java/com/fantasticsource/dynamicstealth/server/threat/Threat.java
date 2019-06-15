@@ -17,6 +17,25 @@ public class Threat
 {
     private static final int ITERATION_FREQUENCY = 72000;
 
+    public enum THREAT_TYPE
+    {
+        GEN,
+        GEN_TARGET_SPOTTED,
+        GEN_ATTACKED_INITIAL,
+        GEN_ATTACKED_BY_SAME,
+        GEN_ATTACKED_BY_OTHER,
+        GEN_DAMAGE_DEALT,
+        GEN_WARNED,
+        GEN_ALLY_KILLED,
+        GEN_TARGET_VISIBLE,
+
+        DEG,
+        DEG_TARGET_NOT_VISIBLE,
+        DEG_FLEE,
+        DEG_OWNED_CANT_REACH
+    }
+
+
     //Searcher, target, threat level
     private static Map<EntityLivingBase, ThreatData> threatMap = new LinkedHashMap<>(200);
 
@@ -139,6 +158,19 @@ public class Threat
                 threatMap.put(searcher, new ThreatData(searcher, null, threat));
             }
         }
+    }
+
+
+    /**
+     * Returns true if the target argument in the method call ends up as the active threat target after calculations, false if not
+     */
+    public static boolean apply(EntityLivingBase searcher, EntityLivingBase target, int threat, THREAT_TYPE type)
+    {
+        ThreatData data = Threat.get(searcher);
+        EntityLivingBase oldTarget = data.target;
+        int oldThreat = data.threatLevel;
+
+        return oldTarget == target;
     }
 
 
