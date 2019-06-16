@@ -1,6 +1,5 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Do any wanted alterations to threat config - naming, comments, etc
 Set new defaults for threat config, based on overall behavior of old defaults
 Have config handler adjust new threat config for users, based on their old config
 
