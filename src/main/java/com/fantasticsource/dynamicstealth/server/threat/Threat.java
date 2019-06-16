@@ -3,11 +3,14 @@ package com.fantasticsource.dynamicstealth.server.threat;
 import com.fantasticsource.dynamicstealth.server.Attributes;
 import com.fantasticsource.dynamicstealth.server.CombatTracker;
 import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
+import com.fantasticsource.dynamicstealth.server.event.ApplyThreatEvent;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.Tools;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.DamageSource;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -136,12 +139,28 @@ public class Threat
 
     public static void apply(EntityLivingBase searcher, EntityLivingBase target, double threatPercentage, THREAT_TYPE type)
     {
-        apply(searcher, target, threatPercentage, type, Sight.canSee(searcher, target, true));
+        apply(searcher, target, threatPercentage, type, Sight.canSee(searcher, target, true), null);
     }
 
     public static void apply(EntityLivingBase searcher, EntityLivingBase target, double threatPercentage, THREAT_TYPE type, boolean searcherSeesTarget)
     {
+        apply(searcher, target, threatPercentage, type, searcherSeesTarget, null);
+    }
+
+    public static void apply(EntityLivingBase searcher, EntityLivingBase target, double threatPercentage, THREAT_TYPE type, boolean searcherSeesTarget, DamageSource damageSource)
+    {
         if (EntityThreatData.bypassesThreat(searcher)) return;
+
+
+        ApplyThreatEvent event = new ApplyThreatEvent(searcher, target, threatPercentage, type, searcherSeesTarget, damageSource);
+        if (MinecraftForge.EVENT_BUS.post(event)) return;
+
+        searcher = event.searcher;
+        target = event.target;
+        threatPercentage = event.threatPercentage;
+        type = event.type;
+        searcherSeesTarget = event.searcherSeesTarget;
+
 
         ThreatData data = Threat.get(searcher);
         EntityLivingBase oldTarget = data.target;

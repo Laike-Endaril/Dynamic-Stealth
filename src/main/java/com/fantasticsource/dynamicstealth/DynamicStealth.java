@@ -494,8 +494,9 @@ public class DynamicStealth
 
         EntityLivingBase targetBase = event.getEntityLiving();
 
-        Entity source = event.getSource().getTrueSource();
-        if (source == null) source = event.getSource().getImmediateSource();
+        DamageSource damageSource = event.getSource();
+        Entity source = damageSource.getTrueSource();
+        if (source == null) source = damageSource.getImmediateSource();
 
         if (targetBase instanceof EntityLiving)
         {
@@ -539,7 +540,7 @@ public class DynamicStealth
                 else
                 {
                     //Attacked while not fleeing
-                    Threat.apply(target, attacker, event.getAmount(), GEN_ATTACKED, canSee);
+                    Threat.apply(target, attacker, event.getAmount(), GEN_ATTACKED, canSee, damageSource);
                     target.setAttackTarget(threatTarget);
                     if (hasAI) stealthAI.restart(perceivedPos);
                 }
@@ -558,7 +559,7 @@ public class DynamicStealth
         if (source instanceof EntityLiving)
         {
             EntityLiving livingSource = (EntityLiving) source;
-            Threat.apply(livingSource, targetBase, event.getAmount(), GEN_DAMAGE_DEALT, livingSource.senses.canSee(targetBase));
+            Threat.apply(livingSource, targetBase, event.getAmount(), GEN_DAMAGE_DEALT, livingSource.senses.canSee(targetBase), damageSource);
         }
     }
 
