@@ -171,7 +171,7 @@ public class Threat
                 {
                     //Not in combat
                     threatPercentage *= serverSettings.threat.attackedInitialMultiplier;
-                    Threat.set(target, searcherSeesTarget ? target : null, (float) threatPercentage);
+                    Threat.set(searcher, searcherSeesTarget ? target : null, (float) threatPercentage);
                 }
                 else if (searcherSeesTarget && target != oldTarget)
                 {
