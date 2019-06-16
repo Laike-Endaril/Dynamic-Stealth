@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Have config handler adjust new threat config for users, based on their old config
-
 Check Betweenlands AI tasks for null attack target handling
 
 Move APIs outside source?

@@ -207,6 +207,9 @@ public class ConfigHandler
         log();
 
         transferAll(old, current);
+
+        current.save();
+        logWriter.close();
     }
 
     private static void update56To69() throws IOException
@@ -264,6 +267,9 @@ public class ConfigHandler
         log();
 
         transferAll(old, current);
+
+        current.save();
+        logWriter.close();
     }
 
     private static void update69To72() throws IOException
@@ -287,6 +293,9 @@ public class ConfigHandler
         log();
 
         transferAll(old, current);
+
+        current.save();
+        logWriter.close();
     }
 
     private static void update72To77() throws IOException
@@ -295,6 +304,29 @@ public class ConfigHandler
         Configuration old = new Configuration(mostRecentFile);
 
         transferAll(old, current);
+
+        log();
+        log();
+        log();
+
+        log("Setting new threat config settings based on existing ones; in theory you should see no change in gameplay");
+        int oldMax = old.get("general.server settings.threat", "005 Maximum Threat", 1000).getInt();
+        double ratio = 100d / oldMax;
+
+        current.get("general.server settings.threat system", "010 Initial 'Target Spotted' Threat", 30d).set(ratio * old.get("general.server settings.threat system", "010 Initial 'Target Spotted' Threat", 300).getInt());
+        current.get("general.server settings.threat system", "015 Initial Attack Multiplier", 400d).set(ratio * old.get("general.server settings.threat system", "015 Initial Attack Multiplier", 4000).getDouble());
+        current.get("general.server settings.threat system", "020 Dealt Damage Multiplier", 200d).set(ratio * old.get("general.server settings.threat system", "020 Dealt Damage Multiplier", 2000).getDouble());
+        current.get("general.server settings.threat system", "025 'Attacked By Same' Multiplier", 400d).set(ratio * old.get("general.server settings.threat system", "025 'Attacked By Same' Multiplier", 4000).getDouble());
+        current.get("general.server settings.threat system", "030 'Attacked By Other' Multiplier", 400d).set(ratio * old.get("general.server settings.threat system", "030 'Attacked By Other' Multiplier", 4000).getDouble());
+        current.get("general.server settings.threat system", "035 'Warned' Threat", 30d).set(ratio * old.get("general.server settings.threat system", "035 'Warned' Threat", 300).getInt());
+        current.get("general.server settings.threat system", "040 'Ally Killed' Threat", 100d).set(ratio * old.get("general.server settings.threat system", "040 'Ally Killed' Threat", 1000).getInt());
+        current.get("general.server settings.threat system", "060 Seen Target Threat Rate", 0.1d).set(ratio * old.get("general.server settings.threat system", "060 Seen Target Threat Rate", 1).getInt());
+        current.get("general.server settings.threat system", "065 Unseen Target Degredation Rate", 0.1d).set(ratio * old.get("general.server settings.threat system", "065 Unseen Target Degredation Rate", 1).getInt());
+        current.get("general.server settings.threat system", "070 Flee Degredation Rate", 0.3d).set(ratio * old.get("general.server settings.threat system", "070 Flee Degredation Rate", 3).getInt());
+        current.get("general.server settings.threat system", "075 Owned Can't Reach Degredation Rate", 0.5d).set(ratio * old.get("general.server settings.threat system", "075 Owned Can't Reach Degredation Rate", 5).getInt());
+
+        current.save();
+        logWriter.close();
     }
 
 
@@ -320,10 +352,14 @@ public class ConfigHandler
                 for (Map.Entry<String, Property> entry : current.getCategory(string).entrySet())
                 {
                     String k = entry.getKey();
-                    if (oldKeys.contains(k) && oldCat.get(k).getType() == entry.getValue().getType())
+                    if (oldKeys.contains(k))
                     {
-                        entry.setValue(oldCat.get(k));
-                        log("~ Copied values for matching entry: \"" + k + "\"");
+                        if (oldCat.get(k).getType() == entry.getValue().getType())
+                        {
+                            entry.setValue(oldCat.get(k));
+                            log("~ Copied values for matching entry: \"" + k + "\"");
+                        }
+                        else log("$ Changing type of existing entry: \"" + k + "\" from " + oldCat.get(k).getType() + " to " + entry.getValue().getType());
                     }
                     else log("+ Adding new entry: \"" + k + "\"");
                 }
@@ -390,9 +426,6 @@ public class ConfigHandler
                 }
             }
         }
-
-        current.save();
-        logWriter.close();
     }
 
 
