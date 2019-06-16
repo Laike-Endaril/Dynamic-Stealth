@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Check Betweenlands AI tasks for null attack target handling
-
 Move APIs outside source?
 Setup maven?
 
