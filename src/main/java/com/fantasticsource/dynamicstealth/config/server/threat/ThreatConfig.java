@@ -56,7 +56,7 @@ public class ThreatConfig
 
     @Config.Name("040 'Ally Killed' Threat")
     @Config.LangKey(DynamicStealth.MODID + ".config.threatAllyKilled")
-    @Config.Comment({"When an out-of-combat entity spots a valid target, its threat is set to this"})
+    @Config.Comment({"When an entity sees an ally die, increase threat"})
     @Config.RangeDouble(min = 0)
     public double allyKilledThreat = 100;
 
