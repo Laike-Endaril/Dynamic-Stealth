@@ -149,8 +149,8 @@ public class Network
 
             for (Map.Entry<EntityLivingBase, Double> entry : inputMap.entrySet())
             {
-                buf.writeFloat((float) (1d - entry.getValue()));
                 buf.writeInt(entry.getKey().getEntityId());
+                buf.writeFloat((float) (1d - entry.getValue()));
             }
         }
 
@@ -158,12 +158,9 @@ public class Network
         public void fromBytes(ByteBuf buf)
         {
             visibilityMap = new LinkedHashMap<>();
-            float visibility;
-
             for (int i = buf.readInt(); i > 0; i--)
             {
-                visibility = buf.readFloat();
-                visibilityMap.put(buf.readInt(), visibility);
+                visibilityMap.put(buf.readInt(), buf.readFloat());
             }
         }
     }
