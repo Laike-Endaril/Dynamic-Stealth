@@ -3,6 +3,7 @@ package com.fantasticsource.dynamicstealth.server.threat;
 import com.fantasticsource.dynamicstealth.server.Attributes;
 import com.fantasticsource.dynamicstealth.server.CombatTracker;
 import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
+import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.Tools;
 import net.minecraft.entity.EntityLiving;
@@ -131,6 +132,11 @@ public class Threat
                 threatMap.put(searcher, new ThreatData(searcher, null, threatPercentage));
             }
         }
+    }
+
+    public static void apply(EntityLivingBase searcher, EntityLivingBase target, double threatPercentage, THREAT_TYPE type)
+    {
+        apply(searcher, target, threatPercentage, type, Sight.canSee(searcher, target, true));
     }
 
     public static void apply(EntityLivingBase searcher, EntityLivingBase target, double threatPercentage, THREAT_TYPE type, boolean searcherSeesTarget)
