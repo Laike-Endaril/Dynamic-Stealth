@@ -1,15 +1,14 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+Fix "opaque flashing" of mobs on the edge of vision due to no visibility data -> defaulting to full visibility...
+...only happens on fade-out, not on fade-in
+
 Move APIs outside source?
 Setup maven?
 
 
 
 General, easy to use T/F toggles for features
-
-Look into porting targeting HUD to its own mod
-
-Fix "opaque flashing" of mobs on the edge of vision due to no visibility data -> defaulting to full visibility
 
 Make the difference between "barely unseen" and "barely seen" on the stealth gauge more noticeable
 
