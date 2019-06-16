@@ -22,6 +22,7 @@ import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.ser
 import static com.fantasticsource.dynamicstealth.server.HelperSystem.isAlly;
 import static com.fantasticsource.dynamicstealth.server.HelperSystem.rep;
 import static com.fantasticsource.dynamicstealth.server.senses.hearing.Hearing.canHear;
+import static com.fantasticsource.dynamicstealth.server.threat.Threat.THREAT_TYPE.GEN_WARNED;
 
 public class Communication
 {
@@ -91,22 +92,25 @@ public class Communication
             if (!EntityThreatData.bypassesThreat(livingHelper) && rep(livingHelper, warner) > rep(livingHelper, danger))
             {
                 Threat.ThreatData helperThreat = Threat.get(livingHelper);
-                if ((helperThreat.target == null || helperThreat.target == danger) && canHear(livingHelper, warner, serverSettings.senses.hearing.warningRange))
+                if (canHear(livingHelper, warner, serverSettings.senses.hearing.warningRange))
                 {
                     boolean canSee = sawDanger && Sight.canSee(livingHelper, danger, true, false, true, MCTools.getYawDeg(livingHelper.getPositionVector().add(new Vec3d(0, livingHelper.getEyeHeight(), 0)), danger.getPositionVector().add(new Vec3d(0, danger.height * 0.5, 0)), TRIG_TABLE), MCTools.getPitchDeg(livingHelper.getPositionVector(), danger.getPositionVector(), TRIG_TABLE));
-                    if (canSee) Threat.set(livingHelper, danger, Tools.max(serverSettings.threat.warnedThreat, helperThreat.threatLevel));
-                    else Threat.setThreat(livingHelper, Tools.max(serverSettings.threat.warnedThreat, helperThreat.threatLevel));
+                    Threat.apply(livingHelper, danger, serverSettings.threat.warnedThreat, GEN_WARNED, canSee);
 
-                    AIDynamicStealth helperAI = AIDynamicStealth.getStealthAI(livingHelper);
-                    if (helperAI != null)
+
+                    if ((helperThreat.target == null || helperThreat.target == danger))
                     {
-                        helperAI.fleeIfYouShould(0);
-
-                        if (canSee) helperAI.lastKnownPosition = danger.getPosition();
-                        else
+                        AIDynamicStealth helperAI = AIDynamicStealth.getStealthAI(livingHelper);
+                        if (helperAI != null)
                         {
-                            int distance = (int) helper.getDistance(dangerPos.getX(), dangerPos.getY(), dangerPos.getZ());
-                            helperAI.lastKnownPosition = MCTools.randomPos(dangerPos, Tools.min(3 + (distance >> 1), 7), Tools.min(1 + (distance >> 2), 4));
+                            helperAI.fleeIfYouShould(0);
+
+                            if (canSee) helperAI.lastKnownPosition = danger.getPosition();
+                            else
+                            {
+                                int distance = (int) helper.getDistance(dangerPos.getX(), dangerPos.getY(), dangerPos.getZ());
+                                helperAI.lastKnownPosition = MCTools.randomPos(dangerPos, Tools.min(3 + (distance >> 1), 7), Tools.min(1 + (distance >> 2), 4));
+                            }
                         }
                     }
                 }

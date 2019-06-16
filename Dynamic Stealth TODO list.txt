@@ -1,7 +1,8 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Add a Threat.apply() method, which accepts the entity, the target, the amount, and the type, and move all config calcs into it
-Add threat attribute calcs to Threat.apply() method
+Do any wanted alterations to threat config - naming, comments, etc
+Set new defaults for threat config, based on overall behavior of old defaults
+Have config handler adjust new threat config for users, based on their old config
 
 Check Betweenlands AI tasks for null attack target handling
 

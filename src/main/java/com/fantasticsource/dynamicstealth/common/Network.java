@@ -349,8 +349,6 @@ public class Network
         @Override
         public void toBytes(ByteBuf buf)
         {
-            int maxThreat = serverSettings.threat.maxThreat;
-
             buf.writeByte(stealthLevel);
 
             buf.writeBoolean(update);
@@ -376,7 +374,7 @@ public class Network
                         else
                         {
                             Threat.ThreatData data = Threat.get(searcher);
-                            byte cid = ClientData.getCID(player, searcher, data.target, data.threatLevel);
+                            byte cid = ClientData.getCID(player, searcher, data.target, data.threatPercentage);
 
                             //Color
                             buf.writeByte(cid);
@@ -386,7 +384,7 @@ public class Network
                             //Target ID
                             if (canHaveClientTarget(cid)) buf.writeInt(data.target == null ? -1 : data.target.getEntityId());
                             //Threat level
-                            if (canHaveThreat(cid)) buf.writeByte((int) (100D * data.threatLevel / maxThreat));
+                            if (canHaveThreat(cid)) buf.writeByte((int) data.threatPercentage);
                         }
                     }
                 }
@@ -404,14 +402,14 @@ public class Network
                         else
                         {
                             Threat.ThreatData data = Threat.get(searcher);
-                            byte cid = ClientData.getCID(player, searcher, data.target, data.threatLevel);
+                            byte cid = ClientData.getCID(player, searcher, data.target, data.threatPercentage);
 
                             //Color
-                            buf.writeByte(ClientData.getCID(player, searcher, data.target, data.threatLevel));
+                            buf.writeByte(ClientData.getCID(player, searcher, data.target, data.threatPercentage));
                             //Searcher ID
                             buf.writeInt(searcher.getEntityId());
                             //Threat level
-                            if (canHaveThreat(cid)) buf.writeByte((int) (100D * data.threatLevel / maxThreat));
+                            if (canHaveThreat(cid)) buf.writeByte((int) data.threatPercentage);
                         }
                     }
                 }

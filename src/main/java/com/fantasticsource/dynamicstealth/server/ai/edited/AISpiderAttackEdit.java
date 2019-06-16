@@ -16,13 +16,13 @@ public class AISpiderAttackEdit extends AIAttackMeleeEdit
     public boolean shouldContinueExecuting()
     {
         Threat.ThreatData data = Threat.get(attacker);
-        if (data.threatLevel <= 0)
+        if (data.threatPercentage <= 0)
         {
             attacker.setAttackTarget(null);
             return false;
         }
 
-        if (attacker.getBrightness() >= 0.5) Threat.setThreat(attacker, --data.threatLevel);
+        if (attacker.getBrightness() >= 0.5) Threat.setThreat(attacker, --data.threatPercentage);
         return super.shouldContinueExecuting();
     }
 

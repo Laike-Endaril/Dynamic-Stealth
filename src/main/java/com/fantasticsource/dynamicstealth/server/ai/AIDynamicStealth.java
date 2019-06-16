@@ -32,6 +32,7 @@ import static com.fantasticsource.dynamicstealth.DynamicStealth.TRIG_TABLE;
 import static com.fantasticsource.dynamicstealth.compat.Compat.cancelTasksRequiringAttackTarget;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.dynamicstealth.server.senses.hearing.Communication.warn;
+import static com.fantasticsource.dynamicstealth.server.threat.Threat.THREAT_TYPE.*;
 
 public class AIDynamicStealth extends EntityAIBase
 {
@@ -194,19 +195,18 @@ public class AIDynamicStealth extends EntityAIBase
         }
 
         Threat.ThreatData threatData = Threat.get(searcher);
-        int threat = threatData.threatLevel;
+        float threatPercentage = threatData.threatPercentage;
 
-        if (threat <= 0)
+        if (threatPercentage <= 0)
         {
             EntityLivingBase attackTarget = searcher.getAttackTarget();
             if (AITargetEdit.isSuitableTarget(searcher, attackTarget))
             {
                 //Hopefully this always only means we've just noticed a new, valid target
-                Threat.set(searcher, attackTarget, serverSettings.threat.targetSpottedThreat);
+                Threat.apply(searcher, attackTarget, serverSettings.threat.targetSpottedThreat, GEN_TARGET_SPOTTED, true);
                 lastKnownPosition = attackTarget.getPosition();
                 clearAIPath();
                 warn(searcher, attackTarget, attackTarget.getPosition(), true);
-                MinecraftForge.EVENT_BUS.post(new BasicEvent.TargetSeenEvent(searcher));
                 searcher.world.profiler.endSection();
                 return false;
             }
@@ -235,11 +235,10 @@ public class AIDynamicStealth extends EntityAIBase
             if (AITargetEdit.isSuitableTarget(searcher, attackTarget))
             {
                 //Hopefully this always only means we've just noticed a new, valid target
-                Threat.set(searcher, attackTarget, serverSettings.threat.targetSpottedThreat);
+                Threat.apply(searcher, attackTarget, serverSettings.threat.targetSpottedThreat, GEN_TARGET_SPOTTED, true);
                 lastKnownPosition = attackTarget.getPosition();
                 clearAIPath();
                 warn(searcher, attackTarget, attackTarget.getPosition(), true);
-                MinecraftForge.EVENT_BUS.post(new BasicEvent.TargetSeenEvent(searcher));
                 searcher.world.profiler.endSection();
                 return false;
             }
@@ -247,7 +246,7 @@ public class AIDynamicStealth extends EntityAIBase
             //No suitable target, old or new, but threat is > 0
             cancelTasksRequiringAttackTarget(searcher.tasks);
             searcher.world.profiler.endSection();
-            return unseenTargetDegredation(threat);
+            return unseenTargetDegredation(threatPercentage);
         }
 
 
@@ -257,9 +256,9 @@ public class AIDynamicStealth extends EntityAIBase
         {
             if (MCTools.isOwned(searcher))
             {
-                threat = Threat.getThreat(searcher) - serverSettings.threat.ownedCantReachDegredationRate;
-                Threat.setThreat(searcher, threat);
-                if (threat <= 0) clearAIPath();
+                Threat.apply(searcher, null, serverSettings.threat.ownedCantReachDegredationRate, DEG_OWNED_CANT_REACH, false);
+                clearAIPath();
+                return false;
             }
             else
             {
@@ -299,7 +298,7 @@ public class AIDynamicStealth extends EntityAIBase
             lastKnownPosition = threatTarget.getPosition();
             clearAIPath();
             searcher.setAttackTarget(threatTarget);
-            Threat.setThreat(searcher, threat + serverSettings.threat.seenTargetThreatRate);
+            Threat.apply(searcher, null, serverSettings.threat.seenTargetThreatRate, GEN_TARGET_VISIBLE, true);
             searcher.world.profiler.endSection();
             return false;
         }
@@ -307,31 +306,29 @@ public class AIDynamicStealth extends EntityAIBase
         //Target's current position is unknown
         cancelTasksRequiringAttackTarget(searcher.tasks);
         searcher.world.profiler.endSection();
-        return unseenTargetDegredation(threat);
+        return unseenTargetDegredation(threatPercentage);
     }
 
-    private boolean unseenTargetDegredation(int threat)
+    private boolean unseenTargetDegredation(float threatPercentage)
     {
-        if (fleeReason != FLEE_NONE) return threat > 0; //Flee degredation handled elsewhere
+        if (fleeReason != FLEE_NONE) return threatPercentage > 0; //Flee degredation handled elsewhere
+
+        searcher.setAttackTarget(null);
+
+        Threat.apply(searcher, null, serverSettings.threat.unseenTargetDegredationRate, DEG_TARGET_NOT_VISIBLE, false);
+        if (Threat.getThreat(searcher) <= 0)
         {
-            searcher.setAttackTarget(null);
-
-            threat = Math.max(0, threat - serverSettings.threat.unseenTargetDegredationRate);
-            if (threat <= 0)
+            clearAIPath();
+            if (serverSettings.interactions.giveUpSearch.fullHPRecovery) searcher.setHealth(searcher.getMaxHealth());
+            if (isCNPC && serverSettings.interactions.giveUpSearch.cnpcsWarpHome)
             {
-                threat = 0;
-                clearAIPath();
-                if (serverSettings.interactions.giveUpSearch.fullHPRecovery) searcher.setHealth(searcher.getMaxHealth());
-                if (isCNPC && serverSettings.interactions.giveUpSearch.cnpcsWarpHome)
-                {
-                    ICustomNpc cnpc = (ICustomNpc) NpcAPI.Instance().getIEntity(searcher);
-                    MCTools.teleport(searcher, cnpc.getHomeX() + 0.5, cnpc.getHomeY() + 1.5, cnpc.getHomeZ() + 0.5, false, 0);
-                }
+                ICustomNpc cnpc = (ICustomNpc) NpcAPI.Instance().getIEntity(searcher);
+                MCTools.teleport(searcher, cnpc.getHomeX() + 0.5, cnpc.getHomeY() + 1.5, cnpc.getHomeZ() + 0.5, false, 0);
             }
-
-            Threat.setThreat(searcher, threat);
-            return threat > 0;
+            return false;
         }
+
+        return true;
     }
 
     private void clearAIPath()
@@ -355,8 +352,6 @@ public class AIDynamicStealth extends EntityAIBase
         {
             if (lastKnownPosition == null) mode(MODE_SPIN);
             else mode(MODE_FIND_PATH);
-
-            MinecraftForge.EVENT_BUS.post(new BasicEvent.SearchEvent(searcher));
         }
         searcher.world.profiler.endSection();
     }
@@ -460,7 +455,6 @@ public class AIDynamicStealth extends EntityAIBase
             clearAIPath();
             fleeToPos = null;
             timeAtPos = 0;
-            MinecraftForge.EVENT_BUS.post(new BasicEvent.FleeEvent(searcher, fleeReason));
         }
 
 
@@ -599,14 +593,12 @@ public class AIDynamicStealth extends EntityAIBase
         if (mode == MODE_FLEE || mode == MODE_COWER)
         {
             //Threat calc
-            Threat.ThreatData data = Threat.get(searcher);
-            int threat = Math.max(0, data.threatLevel - serverSettings.threat.fleeDegredationRate);
-            Threat.setThreat(searcher, threat);
+            Threat.apply(searcher, null, serverSettings.threat.fleeDegredationRate, DEG_FLEE, false);
 
 
             //Flee interrupts
             int oldReason = fleeReason;
-            if (threat <= 0)
+            if (Threat.getThreat(searcher) <= 0)
             {
                 mode(MODE_NONE);
                 if (serverSettings.interactions.calmDown.fullHPRecovery) searcher.setHealth(searcher.getMaxHealth());
@@ -676,7 +668,7 @@ public class AIDynamicStealth extends EntityAIBase
             }
 
 
-            //Flee
+            //Flee or cower
             if (mode == MODE_FLEE)
             {
                 if (isCNPC && serverSettings.ai.flee.cnpcsRunHome)
@@ -730,9 +722,7 @@ public class AIDynamicStealth extends EntityAIBase
                 path = null;
                 navigator.clearPath();
 
-                float yaw = (float) (cornerLookYaw + 45 * TRIG_TABLE.sin(timeAtPos * 0.1));
-                searcher.rotationYawHead = yaw;
-
+                searcher.rotationYawHead = (float) (cornerLookYaw + 45 * TRIG_TABLE.sin(timeAtPos * 0.1));
                 searcher.rotationPitch = cornerLookPitch;
 
 

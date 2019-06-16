@@ -23,7 +23,6 @@ public class ConfigHandler
     private static File currentFile = new File(dsDir + DynamicStealth.CONFIG_VERSION + "+.cfg");
     public static String fullConfigFilename = currentFile.getAbsolutePath();
     private static File mostRecentFile;
-    private static File logFile;
     private static BufferedWriter logWriter;
     private static boolean currentAlreadyExists = false;
 
@@ -136,6 +135,7 @@ public class ConfigHandler
 
         int recent;
         String mostRecentVer = getVersion(mostRecentFile);
+        File logFile;
         if (mostRecentVer == null || subVer(mostRecentVer) == null)
         {
             recent = 0;
@@ -163,6 +163,10 @@ public class ConfigHandler
                 //Config versions 69-71
                 update69To72();
                 //Don't use break here; allow cases to pass to the next one, so it does each update function incrementally
+            case 72:
+                //Config versions 72-76
+                update72To77();
+                //Don't use break here; allow cases to pass to the next one, so it does each update function incrementally
         }
 
         try
@@ -180,6 +184,7 @@ public class ConfigHandler
         System.out.println();
         System.out.println();
     }
+
 
     private static void updatePre56To56() throws IOException
     {
@@ -284,6 +289,15 @@ public class ConfigHandler
         transferAll(old, current);
     }
 
+    private static void update72To77() throws IOException
+    {
+        Configuration current = new Configuration(currentFile);
+        Configuration old = new Configuration(mostRecentFile);
+
+        transferAll(old, current);
+    }
+
+
     private static void rename(Configuration old, String oldCat, String oldName, String newCat, String newName) throws IOException
     {
         log("* Renaming... " + oldCat + " -> " + oldName);
@@ -306,7 +320,7 @@ public class ConfigHandler
                 for (Map.Entry<String, Property> entry : current.getCategory(string).entrySet())
                 {
                     String k = entry.getKey();
-                    if (oldKeys.contains(k))
+                    if (oldKeys.contains(k) && oldCat.get(k).getType() == entry.getValue().getType())
                     {
                         entry.setValue(oldCat.get(k));
                         log("~ Copied values for matching entry: \"" + k + "\"");

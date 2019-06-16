@@ -88,6 +88,7 @@ import java.util.Set;
 
 import static com.fantasticsource.dynamicstealth.common.Network.WRAPPER;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
+import static com.fantasticsource.dynamicstealth.server.threat.Threat.THREAT_TYPE.*;
 
 @Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, dependencies = "required-after:fantasticlib@[1.12.2.015a,)")
 public class DynamicStealth
@@ -95,7 +96,7 @@ public class DynamicStealth
     public static final String MODID = "dynamicstealth";
     public static final String NAME = "Dynamic Stealth";
     public static final String VERSION = "1.12.2.076";
-    public static final String CONFIG_VERSION = "1.12.2.072"; //The lowest compatible config version
+    public static final String CONFIG_VERSION = "1.12.2.077"; //The lowest compatible config version
 
     public static final TrigLookupTable TRIG_TABLE = new TrigLookupTable(1024);
 
@@ -333,20 +334,20 @@ public class DynamicStealth
                         if (Sight.canSee(witness, victim, false))
                         {
                             //Witness saw victim die
+                            BlockPos threatPos;
                             if (Sight.canSee(witness, source, true))
                             {
                                 //Witness saw everything
                                 wasSeen = true;
-
-                                Threat.set(witness, killer, serverSettings.threat.allyKilledThreat);
-                                Communication.warn(witness, killer, killer.getPosition(), true);
+                                threatPos = killer.getPosition();
                             }
                             else
                             {
                                 //Witness saw ally die without seeing killer
-                                Threat.set(witness, null, serverSettings.threat.allyKilledThreat);
-                                Communication.warn(witness, killer, victim.getPosition(), false);
+                                threatPos = victim.getPosition();
                             }
+                            Threat.apply(witness, killer, serverSettings.threat.allyKilledThreat, GEN_ALLY_KILLED, wasSeen);
+                            Communication.warn(witness, killer, threatPos, wasSeen);
 
                             if (witness instanceof EntityLiving)
                             {
@@ -354,8 +355,7 @@ public class DynamicStealth
                                 if (stealthAI != null)
                                 {
                                     stealthAI.fleeIfYouShould(0);
-
-                                    if (stealthAI.isFleeing()) stealthAI.lastKnownPosition = killer.getPosition();
+                                    if (stealthAI.isFleeing()) stealthAI.lastKnownPosition = threatPos;
                                 }
                             }
                         }
@@ -528,45 +528,20 @@ public class DynamicStealth
 
                 Threat.ThreatData threatData = Threat.get(target);
                 EntityLivingBase threatTarget = threatData.target;
-                int threat = threatData.threatLevel;
 
                 if (hasAI && (stealthAI.isFleeing() || stealthAI.getMode() == AIDynamicStealth.MODE_COWER))
                 {
-                    //Be brave, Sir Robin
-                    if (serverSettings.ai.flee.increaseOnDamage) Threat.set(target, canSee ? attacker : threatTarget, threat + (int) (event.getAmount() * serverSettings.threat.attackedBySameMultiplier / target.getMaxHealth()));
+                    //Attacked while fleeing
+                    if (serverSettings.ai.flee.increaseOnDamage) Threat.apply(target, attacker, event.getAmount(), GEN_ATTACKED_DURING_FLEE, canSee);
                     target.setAttackTarget(null);
                     stealthAI.restart(perceivedPos);
                 }
-                else if (threat == 0)
-                {
-                    Threat.set(target, canSee ? attacker : null, threat + (int) (Tools.max(event.getAmount(), 1) * serverSettings.threat.attackedThreatMultiplierInitial / target.getMaxHealth()));
-                    target.setAttackTarget(canSee ? attacker : null);
-                    if (hasAI) stealthAI.restart(perceivedPos);
-                }
-                else if (threatTarget == attacker || threatTarget == null)
-                {
-                    //In combat (not fleeing), and hit by threat target or what is presumed to be threat target (if null)
-                    Threat.set(target, canSee ? attacker : null, threat + (int) (event.getAmount() * serverSettings.threat.attackedBySameMultiplier / target.getMaxHealth()));
-                    target.setAttackTarget(canSee ? attacker : threatTarget);
-                    if (hasAI) stealthAI.restart(perceivedPos);
-                }
                 else
                 {
-                    //In combat (not fleeing), and hit by an entity besides our threat target
-                    double changeFactor = event.getAmount() / target.getMaxHealth();
-                    threat -= changeFactor * serverSettings.threat.attackedByOtherMultiplier;
-                    if (threat <= 0)
-                    {
-                        //Switching targets
-                        Threat.set(target, canSee ? attacker : null, (int) (changeFactor * serverSettings.threat.attackedThreatMultiplierInitial));
-                        target.setAttackTarget(canSee ? attacker : null);
-                        if (hasAI) stealthAI.restart(perceivedPos);
-                    }
-                    else
-                    {
-                        //Just reducing threat toward current target
-                        Threat.setThreat(target, threat);
-                    }
+                    //Attacked while not fleeing
+                    Threat.apply(target, attacker, event.getAmount(), GEN_ATTACKED, canSee);
+                    target.setAttackTarget(threatTarget);
+                    if (hasAI) stealthAI.restart(perceivedPos);
                 }
 
 
@@ -583,8 +558,7 @@ public class DynamicStealth
         if (source instanceof EntityLiving)
         {
             EntityLiving livingSource = (EntityLiving) source;
-            Threat.ThreatData data = Threat.get(livingSource);
-            if (data.target == targetBase) Threat.setThreat(livingSource, data.threatLevel + (int) (event.getAmount() * serverSettings.threat.damageDealtMultiplier / targetBase.getMaxHealth()));
+            Threat.apply(livingSource, targetBase, event.getAmount(), GEN_DAMAGE_DEALT, livingSource.senses.canSee(targetBase));
         }
     }
 

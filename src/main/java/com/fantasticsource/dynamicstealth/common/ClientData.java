@@ -93,9 +93,9 @@ public class ClientData
         throw new IllegalArgumentException("Unregistered color: " + color);
     }
 
-    public static byte getCID(EntityPlayer player, EntityLivingBase searcher, EntityLivingBase target, int threatLevel)
+    public static byte getCID(EntityPlayer player, EntityLivingBase searcher, EntityLivingBase target, float threatPercentage)
     {
-        return getCID(getColor(player, searcher, target, threatLevel));
+        return getCID(getColor(player, searcher, target, threatPercentage));
     }
 
     public static int getColor(byte cid)
@@ -122,7 +122,7 @@ public class ClientData
         throw new IllegalArgumentException("Unregistered cid: " + cid);
     }
 
-    public static int getColor(EntityPlayer player, EntityLivingBase searcher, EntityLivingBase target, int threatLevel)
+    public static int getColor(EntityPlayer player, EntityLivingBase searcher, EntityLivingBase target, float threatPercentage)
     {
         if (EntityThreatData.bypassesThreat(searcher)) return COLOR_BYPASS;
         AIDynamicStealth stealthAI = searcher instanceof EntityLiving ? AIDynamicStealth.getStealthAI((EntityLiving) searcher) : null;
@@ -131,7 +131,7 @@ public class ClientData
             return (serverSettings.hud.recognizePassive && EntityThreatData.isPassive(searcher)) ? COLOR_FLEEING_PASSIVE : COLOR_FLEEING_N0N_PASSIVE;
         }
         if (serverSettings.hud.recognizePassive && EntityThreatData.isPassive(searcher)) return COLOR_IDLE_PASSIVE;
-        if (threatLevel <= 0) return COLOR_IDLE_NON_PASSIVE;
+        if (threatPercentage <= 0) return COLOR_IDLE_NON_PASSIVE;
         if (target == null || !Sight.canSee(searcher, target, true)) return COLOR_SEARCHING;
         if (target == player) return COLOR_ATTACKING_YOU;
         return COLOR_ATTACKING_OTHER;
