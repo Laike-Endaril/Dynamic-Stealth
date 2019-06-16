@@ -174,6 +174,8 @@ public class Network
             {
                 Minecraft.getMinecraft().addScheduledTask(() ->
                 {
+                    ClientData.previousVisibilityMap2 = ClientData.previousVisibilityMap1;
+                    ClientData.previousVisibilityMap1 = ClientData.visibilityMap;
                     ClientData.visibilityMap = packet.visibilityMap;
                 });
             }

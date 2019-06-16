@@ -45,7 +45,7 @@ public class ClientData
     public static OnPointData targetData = null;
     public static double targetPriority = Integer.MAX_VALUE;
 
-    public static LinkedHashMap<Integer, Float> visibilityMap = new LinkedHashMap<>();
+    public static LinkedHashMap<Integer, Float> visibilityMap = new LinkedHashMap<>(), previousVisibilityMap1 = new LinkedHashMap<>(), previousVisibilityMap2 = new LinkedHashMap<>();
 
 
     @SubscribeEvent
@@ -66,6 +66,8 @@ public class ClientData
         targetPriority = Integer.MAX_VALUE;
 
         visibilityMap.clear();
+        previousVisibilityMap1.clear();
+        previousVisibilityMap2.clear();
     }
 
 

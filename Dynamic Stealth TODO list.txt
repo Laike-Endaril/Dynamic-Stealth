@@ -1,8 +1,5 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Fix "opaque flashing" of mobs on the edge of vision due to no visibility data -> defaulting to full visibility...
-...only happens on fade-out, not on fade-in
-
 Move APIs outside source?
 Setup maven?
 
@@ -41,6 +38,10 @@ Make stuck detection account for jumping by allowing for more play along y axis
 
 Fix leashes not rendering sometimes (not a vanilla bug)...
 ...can reproduce by leashing a horse, flying into the air, and dropping into water while facing down
+
+Fix "opaque flashing" of mobs on the edge of vision due to no visibility data -> defaulting to full visibility...
+...occasionally happens on fade-in (rare)
+...don't think it ever happens on fade-out anymore
 
 
 
