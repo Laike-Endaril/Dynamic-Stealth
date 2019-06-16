@@ -185,7 +185,7 @@ public class Threat
                 {
                     //In combat (not fleeing), and hit by threat target or what is presumed to be threat target (if unseen)
                     threatPercentage *= serverSettings.threat.attackedBySameMultiplier;
-                    Threat.setThreat(searcher, (float) threatPercentage);
+                    Threat.setThreat(searcher, (float) threatPercentage + oldPercentage);
                 }
                 break;
 
