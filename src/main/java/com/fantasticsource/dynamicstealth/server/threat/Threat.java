@@ -184,7 +184,7 @@ public class Threat
                     if (ai != null && ai.isFleeing())
                     {
                         //Redirect to fleeing type
-                        apply(searcher, target, threatPercentage, GEN_ATTACKED_DURING_FLEE, searcherSeesTarget);
+                        apply(searcher, target, threatPercentage, GEN_ATTACKED_DURING_FLEE, searcherSeesTarget, damageSource);
                         return;
                     }
                 }

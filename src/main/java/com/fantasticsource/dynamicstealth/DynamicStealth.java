@@ -533,7 +533,7 @@ public class DynamicStealth
                 if (hasAI && (stealthAI.isFleeing() || stealthAI.getMode() == AIDynamicStealth.MODE_COWER))
                 {
                     //Attacked while fleeing
-                    if (serverSettings.ai.flee.increaseOnDamage) Threat.apply(target, attacker, event.getAmount(), GEN_ATTACKED_DURING_FLEE, canSee);
+                    if (serverSettings.ai.flee.increaseOnDamage) Threat.apply(target, attacker, event.getAmount(), GEN_ATTACKED_DURING_FLEE, canSee, damageSource);
                     target.setAttackTarget(null);
                     stealthAI.restart(perceivedPos);
                 }
