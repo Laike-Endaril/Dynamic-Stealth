@@ -1,5 +1,9 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+Removed betweenlands AI tasks from filter when they do a curseforge release for the more efficient fix from their end
+
+
+
 Move APIs outside source?
 Setup maven?
 
