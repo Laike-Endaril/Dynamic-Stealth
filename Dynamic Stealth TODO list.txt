@@ -9,6 +9,8 @@ Setup maven?
 
 
 
+Add keybinds for turning certain HUD elements on/off?
+
 General, easy to use T/F toggles for features
 
 Make the difference between "barely unseen" and "barely seen" on the stealth gauge more noticeable
