@@ -1,6 +1,9 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Light level HUD
+Light level HUD...
+...add lang keys for configs
+...create grayscale texture; 15 *separate* elements, each in their own grid space, so that each can be blended and drawn separately
+...write the render code
 
 Reorganize configs for...
 ...client -> HUD
