@@ -1,25 +1,14 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Remove betweenlands AI tasks from filter when they do a curseforge release for the more efficient fix from their end
+Alter weapon tooltips to reflect settings for normal attacks and stealth attacks
 
-
-
-Move APIs outside source?
-Setup maven?
-
-
-
-Add keybinds for turning certain HUD elements on/off?
-
-General, easy to use T/F toggles for features
+Add keybinds for turning certain HUD elements on/off
 
 Make the difference between "barely unseen" and "barely seen" on the stealth gauge more noticeable
 
 Light level HUD
 
-Add ally groups for helper system config
-
-Alternate sneak mode, so as not to trigger "don't step off edge", ebwizardry staff spell selection, hooked grapple prevention, etc
+General, easy to use T/F toggles for features
 
 
 
@@ -35,7 +24,8 @@ Spiders path toward their threat target even if they can't see it (must have a t
 Spider riders sometimes move really fast...is that normal?...
 ...comes from skeleton, not spider (removed all AI from spiders and it still happened)
 
-Fix entities being able to attack through glass due to same raytrace being used for attacks and vision
+Fix entities being able to attack through glass due to same raytrace being used for attacks and vision...
+...is there some method used in all melee attacks that I can inject a raytrace into?
 Fix entities attempting to path through diagonal walls; this may very well fix (or at least mostly fix) the issue below
 Fix entities being able to attack through glass diagonally (because they can see through it...)
 ...fixing pathing should also fix some cases for "can't reach" since it relies on accurate pathing
@@ -53,9 +43,11 @@ Fix "opaque flashing" of mobs on the edge of vision due to no visibility data ->
 
 GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES =================================================================================================================================================================================
 
-Add disguise system and change mob heads so they use it instead
+Maven?
 
-Alter weapon tooltips to reflect settings for normal attacks and stealth attacks
+Add ally groups for helper system config
+
+Alternate sneak mode, so as not to trigger "don't step off edge", ebwizardry staff spell selection, hooked grapple prevention, etc
 
 Make client acquire target for any entity they have LOS to, then get the data for it from the map, as late as possible, if it exists
 "Lock Target" key (press to lock/unlock current target)
@@ -78,7 +70,8 @@ Add lang keys for all println() calls (make sure to use deprecated I18n, not the
 Add wiki / guide videos
 Add guidebook, possibly using guide api or patchouli
 
-Add other mob heads from other mods to disguise multiplier
+Add disguise system and change mob heads so they use it instead
+Add other mob heads to disguise system
 
 Add a natural soul sight filter for CNPC factions
 
@@ -86,14 +79,12 @@ Add a natural soul sight filter for CNPC factions
 
 KEYBOUND ACTIONS ============================================================================================================================================================================================================
 
-Add action wheel which opens on keybind
-Add actions...
-...Attempt Stealth / Don't Attempt Stealth (if set to "Don't Attempt Stealth", you are very easy for things to notice)
-...Wave (decrease visual stealth for 1 second)
-...Whisper (make a small noise; altered villager conversation sound?)
-...Yell (make a loud noise; hurt sound?)
-...Prone/unprone - has a charge time; when prone, you are stealthier, slower, have a lower POV, have a smaller hitbox (can move through 1b high areas), and cannot jump/dodge/sneak
-...Find pebble?
+Attempt Stealth / Don't Attempt Stealth (if set to "Don't Attempt Stealth", you are very easy for things to notice)
+Wave (decrease visual stealth for 1 second)
+Whisper (make a small noise; altered villager conversation sound?)
+Yell (make a loud noise; hurt sound?)
+Prone/unprone - has a charge time; when prone, you are stealthier, slower, have a lower POV, have a smaller hitbox (can move through 1b high areas), and cannot jump/dodge/sneak
+Find pebble?
 
 
 
