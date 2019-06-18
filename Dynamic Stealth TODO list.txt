@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Make the difference between "barely unseen" and "barely seen" on the stealth gauge more noticeable
-
 Light level HUD
 
 Reorganize configs for...
@@ -16,6 +14,9 @@ Add keybinds for turning certain client config settings on/off...
 ...stealth gauge
 ...targeting HUD
 ...OPHUD
+
+Make the difference between "barely unseen" and "barely seen" on the stealth gauge more noticeable...
+...Change from using 1 color for stealth gauge to using 4 colors; 2 for a gradient from full stealth to barely unseen, and 2 for a gradient from barely seen to maximum visibility
 
 Alter weapon tooltips to reflect settings for normal attacks and stealth attacks...
 ...requires sending clients data for attacks, based on server settings
