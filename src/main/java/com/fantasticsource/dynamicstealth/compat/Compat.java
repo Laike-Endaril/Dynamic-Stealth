@@ -12,7 +12,6 @@ import java.util.Set;
 public class Compat
 {
     public static boolean
-            thebetweenlands = false,
             lycanites = false,
             ancientwarfare = false,
             customnpcs = false,
@@ -56,14 +55,6 @@ public class Compat
         if (primitivemobs && (aiClassname.contains("AIFlameSpewAttack") || aiClassname.contains("AIChargeAttack"))) return true;
         if (emberroot && aiClassname.contains("EntityAIAttackOnCollideAggressive")) return true;
         if (defiledlands && aiClassname.contains("EntityScuttler.AISpiderAttack")) return true;
-        if (thebetweenlands && aiClassname.contains("thebetweenlands.common.entity") && (
-                aiClassname.contains("EntityAIAttackOnCollide")
-                        || aiClassname.contains("AIChargeAttack")
-                        || aiClassname.contains("AIRollTowardsTarget")
-                        || aiClassname.contains("AIPyradAttack")
-                        || aiClassname.contains("AISludgeAttack")
-                        || aiClassname.contains("AITrackTarget")
-        )) return true;
 
         return false;
     }

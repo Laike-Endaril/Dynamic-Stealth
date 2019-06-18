@@ -752,7 +752,6 @@ public class DynamicStealth
     {
         //Compat init
         if (Loader.isModLoaded("lycanitesmobs")) Compat.lycanites = true;
-        if (Loader.isModLoaded("thebetweenlands")) Compat.thebetweenlands = true;
         if (Loader.isModLoaded("thermalfoundation")) Compat.thermalfoundation = true;
         if (Loader.isModLoaded("ancientwarfare")) Compat.ancientwarfare = true;
         if (Loader.isModLoaded("abyssalcraft")) Compat.abyssalcraft = true;
