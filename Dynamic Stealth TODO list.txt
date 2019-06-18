@@ -1,8 +1,7 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
 Light level HUD...
-...create grayscale texture; 15 *separate* elements, each in their own grid space, so that each can be blended and drawn separately
-...write the render code
+...write the render code (draw 15 times, at 24* increments)
 
 Reorganize configs for...
 ...client -> HUD
