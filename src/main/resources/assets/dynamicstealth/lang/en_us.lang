@@ -74,6 +74,7 @@ dynamicstealth.config.opHUDFilter=On-point HUD Filter
 dynamicstealth.config.opHUDStyle=On-point HUD Style
 dynamicstealth.config.targetingFilter=Targeting Filter
 dynamicstealth.config.targetingStyle=Targeting HUD Style
+dynamicstealth.config.lightGauge=Light Gauge
 
 dynamicstealth.config.stealthGaugeAlpha=Stealth Gauge Opacity
 dynamicstealth.config.stealthGaugeAlpha.tooltip=FILLSCREEN FIXNEWLINES How visible the stealth gauge is, transparency-wise\n\n0 means invisible, 1 means completely opaque\n \n
@@ -187,6 +188,21 @@ dynamicstealth.config.targetShowThreat=Threat
 dynamicstealth.config.targetShowThreat.tooltip=FILLSCREEN FIXNEWLINES If true, the targeted entity's threat level is shown (if available)\n \n
 dynamicstealth.config.targetShowDistance=Distance
 dynamicstealth.config.targetShowDistance.tooltip=FILLSCREEN FIXNEWLINES If true, the targeted entity's distance is shown (if available)\n \n
+
+dynamicstealth.config.lightGaugeShow=Show Light Gauge
+dynamicstealth.config.lightGaugeShow.tooltip=FILLSCREEN FIXNEWLINES Whether to show the light gauge\n \n
+dynamicstealth.config.lightGaugeAlpha=Light Gauge Opacity
+dynamicstealth.config.lightGaugeAlpha.tooltip=FILLSCREEN FIXNEWLINES How visible the light gauge is, transparency-wise\n\n0 means invisible, 1 means completely opaque\n \n
+dynamicstealth.config.lightGaugeColorEmpty=Light Gauge Color (Empty)
+dynamicstealth.config.lightGaugeColorEmpty.tooltip=FILLSCREEN FIXNEWLINES The color of an empty light gauge piece\n\nThis uses the format RRGGBB color format (if you google RRGGBB you'll find a color picker you can use)\n \n
+dynamicstealth.config.lightGaugeColorFull=Light Gauge Color (Full)
+dynamicstealth.config.lightGaugeColorFull.tooltip=FILLSCREEN FIXNEWLINES The color of a filled light gauge piece\n\nThis uses the format RRGGBB color format (if you google RRGGBB you'll find a color picker you can use)\n \n
+dynamicstealth.config.lightGaugeSize=Light Gauge Size
+dynamicstealth.config.lightGaugeSize.tooltip=FILLSCREEN FIXNEWLINES The size of the light gauge\n \n
+dynamicstealth.config.lightGaugeX=Light Gauge X Position
+dynamicstealth.config.lightGaugeX.tooltip=FILLSCREEN FIXNEWLINES The x position of the light gauge\n\n0 is far left, 0.5 is center, 1 is far right\n \n
+dynamicstealth.config.lightGaugeY=Light Gauge Y Position
+dynamicstealth.config.lightGaugeY.tooltip=FILLSCREEN FIXNEWLINES The y position of the light gauge\n\n0 is top, 0.5 is center, 1 is bottom\n \n
 
 dynamicstealth.config.fadeMinAlpha=Minimum Entity Opacity
 dynamicstealth.config.fadeMinAlpha.tooltip=FILLSCREEN FIXNEWLINES The opacity of an entity when you just barely see it\n\nIf set to 0, entities on the edge of your vision are nearly invisible\n\nIf set to 1, entities always appear at full visibility\n \n

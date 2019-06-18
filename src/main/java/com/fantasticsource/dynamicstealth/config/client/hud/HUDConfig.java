@@ -5,10 +5,6 @@ import net.minecraftforge.common.config.Config;
 
 public class HUDConfig
 {
-    @Config.Name("Light Gauge")
-    @Config.LangKey(DynamicStealth.MODID + ".config.lightGauge")
-    public LightGaugeConfig lightGauge = new LightGaugeConfig();
-
     @Config.Name("Main HUD Style")
     @Config.LangKey(DynamicStealth.MODID + ".config.mainHUDStyle")
     public MainHUDStyleConfig mainStyle = new MainHUDStyleConfig();
@@ -28,4 +24,8 @@ public class HUDConfig
     @Config.Name("Targeting HUD Style")
     @Config.LangKey(DynamicStealth.MODID + ".config.targetingStyle")
     public TargetingHUDStyleConfig targetingStyle = new TargetingHUDStyleConfig();
+
+    @Config.Name("Light Gauge")
+    @Config.LangKey(DynamicStealth.MODID + ".config.lightGauge")
+    public LightGaugeConfig lightGauge = new LightGaugeConfig();
 }

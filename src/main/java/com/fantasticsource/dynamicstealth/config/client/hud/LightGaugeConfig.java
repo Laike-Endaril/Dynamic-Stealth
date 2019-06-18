@@ -56,7 +56,7 @@ public class LightGaugeConfig
                     "0 is far left, 0.5 is center, 1 is far right"
             })
     @Config.RangeDouble(min = 0, max = 1)
-    public double lightGaugeX = 0.5;
+    public double lightGaugeX = 1;
 
     @Config.Name("055 Light Gauge Y Position")
     @Config.LangKey(DynamicStealth.MODID + ".config.lightGaugeY")
@@ -67,5 +67,5 @@ public class LightGaugeConfig
                     "0 is top, 0.5 is center, 1 is bottom"
             })
     @Config.RangeDouble(min = 0, max = 1)
-    public double lightGaugeY = 0.5;
+    public double lightGaugeY = 1;
 }
