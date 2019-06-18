@@ -1,14 +1,24 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Alter weapon tooltips to reflect settings for normal attacks and stealth attacks
-
-Add keybinds for turning certain HUD elements on/off
-
 Make the difference between "barely unseen" and "barely seen" on the stealth gauge more noticeable
 
 Light level HUD
 
-General, easy to use T/F toggles for features
+Reorganize configs for...
+...client -> HUD
+
+General, easy to use T/F toggles for features in the configs...
+...stealth gauge (client)
+...targeting HUD (client)
+...OPHUD (client)
+
+Add keybinds for turning certain client config settings on/off...
+...stealth gauge
+...targeting HUD
+...OPHUD
+
+Alter weapon tooltips to reflect settings for normal attacks and stealth attacks...
+...requires sending clients data for attacks, based on server settings
 
 
 
