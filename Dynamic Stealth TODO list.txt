@@ -1,6 +1,7 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
 Account for light levels of all points that would be used for light level checks during a stealth check
+Remove debug message from DSTools after testing
 
 Should the upper light limit and light level scaling of dimensions be changed as well?
 
