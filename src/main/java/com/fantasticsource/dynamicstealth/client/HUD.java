@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth.client;
 
 import com.fantasticsource.dynamicstealth.DynamicStealth;
 import com.fantasticsource.dynamicstealth.common.ClientData;
+import com.fantasticsource.dynamicstealth.common.DSTools;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatNeat;
 import com.fantasticsource.mctools.MCTools;
@@ -22,7 +23,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
@@ -431,7 +431,7 @@ public class HUD extends Gui
         double x = maxOffset * scale + (sr.getScaledWidth() - maxOffset * 2 * scale) * clientSettings.hudSettings.lightGauge.lightGaugeX;
         double y = maxOffset * scale + (sr.getScaledHeight() - maxOffset * 2 * scale) * clientSettings.hudSettings.lightGauge.lightGaugeY;
 
-        int light = lightLevelTotal(mc.world, mc.player.getPositionVector());
+        int light = DSTools.maxLightLevelTotal(mc.player);
 
         //Filled Crystals
         Color c = new Color(Integer.parseInt(clientSettings.hudSettings.lightGauge.lightGaugeColorFull, 16), true);
@@ -540,15 +540,6 @@ public class HUD extends Gui
         }
 
         GlStateManager.popMatrix();
-    }
-
-    private static int lightLevelTotal(World world, Vec3d vec)
-    {
-        BlockPos blockpos = new BlockPos(vec);
-        if (!world.isAreaLoaded(blockpos, 1)) return 0;
-
-        Integer result = ClientData.minimumDimensionLightLevels.get(world.provider.getDimension());
-        return Tools.max(world.getLightFromNeighbors(blockpos), result == null ? 0 : result);
     }
 
     private void drawHUD(Minecraft mc)
