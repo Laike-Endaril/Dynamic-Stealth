@@ -45,11 +45,24 @@ public class DSTools
 
     public static int lightLevelTotal(World world, Vec3d vec)
     {
-        BlockPos blockpos = new BlockPos(vec);
-        if (!world.isAreaLoaded(blockpos, 1)) return 0;
-
-        if (world.isRemote) return Tools.max(world.getLightFromNeighbors(blockpos), ClientData.minimumDimensionLightLevels.get(world.provider.getDimension()));
-        return Tools.max(world.getLightFromNeighbors(blockpos), EntitySightData.minimumDimensionLight(world.provider.getDimension()));
+        return lightLevelTotal(world, new BlockPos(vec));
     }
 
+    public static int lightLevelTotal(World world, BlockPos pos)
+    {
+        if (!world.isAreaLoaded(pos, 1)) return 0;
+
+        if (world.isRemote) return Tools.max(world.getLightFromNeighbors(pos), ClientData.minimumDimensionLightLevels.get(world.provider.getDimension()));
+        return Tools.max(world.getLightFromNeighbors(pos), EntitySightData.minimumDimensionLight(world.provider.getDimension()));
+    }
+
+    public static int maxLightLevelTotal(Entity target)
+    {
+        int result = 0;
+        for (BlockPos pos : entityCheckBlocks(target))
+        {
+            result = Tools.max(result, lightLevelTotal(target.world, pos));
+        }
+        return result;
+    }
 }
