@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.senses.sight;
 
+import com.fantasticsource.dynamicstealth.common.DSTools;
 import com.fantasticsource.dynamicstealth.compat.CompatDissolution;
 import com.fantasticsource.dynamicstealth.config.server.senses.sight.SightConfig;
 import com.fantasticsource.dynamicstealth.server.Attributes;
@@ -405,50 +406,24 @@ public class Sight
         World world = searcher.world;
         if (world != target.world) return -777;
 
-        double halfWidth = target.width / 2;
-        double halfHeight = target.height / 2;
-
-        double x = target.posX;
-        double y = target.posY + halfHeight;
-        double z = target.posZ;
-
-
         ExplicitPriorityQueue<Vec3d> queue = new ExplicitPriorityQueue<>();
-        Vec3d testVec = new Vec3d(x, y, z); //Center
 
         if (forceMaxLight)
         {
-            queue.add(testVec, 0);
-            testVec = new Vec3d(x, y + halfHeight, z); //+Y
-            queue.add(testVec, 0);
-            testVec = new Vec3d(x, y - halfHeight, z); //-Y
-            queue.add(testVec, 0);
-            testVec = new Vec3d(x + halfWidth, y, z); //+X
-            queue.add(testVec, 0);
-            testVec = new Vec3d(x - halfWidth, y, z); //-X
-            queue.add(testVec, 0);
-            testVec = new Vec3d(x, y, z + halfWidth); //+Z
-            queue.add(testVec, 0);
-            testVec = new Vec3d(x, y, z - halfWidth); //-Z
-            queue.add(testVec, 0);
+            for (Vec3d vec : DSTools.entityCheckVectors(target))
+            {
+                queue.add(vec, 0);
+            }
         }
         else
         {
-            queue.add(testVec, 15 - lightLevelTotal(world, testVec));
-            testVec = new Vec3d(x, y + halfHeight, z); //+Y
-            queue.add(testVec, 15 - lightLevelTotal(world, testVec));
-            testVec = new Vec3d(x, y - halfHeight, z); //-Y
-            queue.add(testVec, 15 - lightLevelTotal(world, testVec));
-            testVec = new Vec3d(x + halfWidth, y, z); //+X
-            queue.add(testVec, 15 - lightLevelTotal(world, testVec));
-            testVec = new Vec3d(x - halfWidth, y, z); //-X
-            queue.add(testVec, 15 - lightLevelTotal(world, testVec));
-            testVec = new Vec3d(x, y, z + halfWidth); //+Z
-            queue.add(testVec, 15 - lightLevelTotal(world, testVec));
-            testVec = new Vec3d(x, y, z - halfWidth); //-Z
-            queue.add(testVec, 15 - lightLevelTotal(world, testVec));
+            for (Vec3d vec : DSTools.entityCheckVectors(target))
+            {
+                queue.add(vec, 15 - lightLevelTotal(world, vec));
+            }
         }
 
+        Vec3d testVec;
         double result;
         while (queue.size() > 0)
         {
