@@ -29,7 +29,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
@@ -419,7 +418,7 @@ public class Sight
         {
             for (Vec3d vec : DSTools.entityCheckVectors(target))
             {
-                queue.add(vec, 15 - lightLevelTotal(world, vec));
+                queue.add(vec, 15 - DSTools.lightLevelTotal(world, vec));
             }
         }
 
@@ -436,14 +435,6 @@ public class Sight
         }
 
         return -777;
-    }
-
-    private static int lightLevelTotal(World world, Vec3d vec)
-    {
-        BlockPos blockpos = new BlockPos(vec);
-        if (!world.isAreaLoaded(blockpos, 1)) return 0;
-
-        return Tools.max(world.getLightFromNeighbors(blockpos), EntitySightData.minimumDimensionLight(world.provider.getDimension()));
     }
 
 

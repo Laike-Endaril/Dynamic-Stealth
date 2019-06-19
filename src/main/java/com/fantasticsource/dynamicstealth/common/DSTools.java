@@ -1,8 +1,11 @@
 package com.fantasticsource.dynamicstealth.common;
 
+import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
+import com.fantasticsource.tools.Tools;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 import java.util.HashSet;
 
@@ -39,4 +42,14 @@ public class DSTools
         System.out.println(result.size());
         return result;
     }
+
+    public static int lightLevelTotal(World world, Vec3d vec)
+    {
+        BlockPos blockpos = new BlockPos(vec);
+        if (!world.isAreaLoaded(blockpos, 1)) return 0;
+
+        if (world.isRemote) return Tools.max(world.getLightFromNeighbors(blockpos), ClientData.minimumDimensionLightLevels.get(world.provider.getDimension()));
+        return Tools.max(world.getLightFromNeighbors(blockpos), EntitySightData.minimumDimensionLight(world.provider.getDimension()));
+    }
+
 }
