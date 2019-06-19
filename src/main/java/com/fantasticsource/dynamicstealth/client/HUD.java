@@ -73,9 +73,9 @@ public class HUD extends Gui
     private static final float STEALTH_GAUGE_RIM_UV_HALF_PIXEL = 0.5f / STEALTH_GAUGE_RIM_SIZE;
 
     private static final ResourceLocation CRYSTAL_TEXTURE = new ResourceLocation(DynamicStealth.MODID, "image/crystal.png");
-    private static final float CRYSTAL_WIDTH = 25, CRYSTAL_HEIGHT = 64;
+    private static final float CRYSTAL_WIDTH = 63, CRYSTAL_HEIGHT = 25;
     private static final float CRYSTAL_UV_HALF_PIXEL_W = 0.5f / CRYSTAL_WIDTH, CRYSTAL_UV_HALF_PIXEL_H = 0.5f / CRYSTAL_HEIGHT;
-    private static final float CRYSTAL_ORIGIN_X = 12, CRYSTAL_ORIGIN_Y = 63;
+    private static final float CRYSTAL_ORIGIN_X = 0, CRYSTAL_ORIGIN_Y = 12;
     private static final float CRYSTAL_LEFT = CRYSTAL_ORIGIN_X, CRYSTAL_RIGHT = CRYSTAL_WIDTH - CRYSTAL_ORIGIN_X;
     private static final float CRYSTAL_ABOVE = CRYSTAL_ORIGIN_Y, CRYSTAL_BELOW = CRYSTAL_HEIGHT - CRYSTAL_ORIGIN_Y;
 
@@ -345,7 +345,7 @@ public class HUD extends Gui
 
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, 0);
-        GlStateManager.rotate(angleDeg, 0, 0, 1);
+        GlStateManager.rotate(angleDeg, 0, 0, -1);
         GlStateManager.scale(scale, scale, 1);
 
         float l, r;
@@ -385,7 +385,7 @@ public class HUD extends Gui
         for (float angleDeg : anglesDeg)
         {
             GlStateManager.pushMatrix();
-            GlStateManager.rotate(angleDeg, 0, 0, 1);
+            GlStateManager.rotate(angleDeg, 0, 0, -1);
 
             GlStateManager.glBegin(GL_QUADS);
             GlStateManager.glTexCoord2f(CRYSTAL_UV_HALF_PIXEL_W, CRYSTAL_UV_HALF_PIXEL_H);
@@ -410,10 +410,10 @@ public class HUD extends Gui
         int spacing = clientSettings.hudSettings.targetingStyle.reticleSpacing;
         float scale = clientSettings.hudSettings.targetingStyle.reticleSize / Tools.max(ARROW_WIDTH, ARROW_HEIGHT);
 
-        drawArrow(x - spacing, y + spacing, -45, scale);
-        drawArrow(x + spacing, y + spacing, -135, scale);
-        drawArrow(x - spacing, y - spacing, 45, scale);
-        drawArrow(x + spacing, y - spacing, 135, scale);
+        drawArrow(x - spacing, y + spacing, 45, scale);
+        drawArrow(x + spacing, y + spacing, 135, scale);
+        drawArrow(x - spacing, y - spacing, -45, scale);
+        drawArrow(x + spacing, y - spacing, -135, scale);
     }
 
 
@@ -436,10 +436,10 @@ public class HUD extends Gui
         //Filled Crystals
         Color c = new Color(Integer.parseInt(clientSettings.hudSettings.lightGauge.lightGaugeColorFull, 16), true);
         GlStateManager.color(c.rf(), c.gf(), c.bf(), alpha);
-        int i = 0;
-        for (; i < light * 24; i += 24)
+        int i = 0, iLight = light * 24;
+        for (; i < iLight; i += 24)
         {
-            drawCrystals((float) x, (float) y, scale, i);
+            drawCrystals((float) x, (float) y, scale, i + 90);
         }
 
         //Empty Crystals
@@ -447,7 +447,7 @@ public class HUD extends Gui
         GlStateManager.color(c.rf(), c.gf(), c.bf(), alpha);
         for (; i < 360; i += 24)
         {
-            drawCrystals((float) x, (float) y, scale, i);
+            drawCrystals((float) x, (float) y, scale, i + 90);
         }
     }
 
@@ -510,7 +510,7 @@ public class HUD extends Gui
             GlStateManager.glEnd();
 
             //Arrow
-            drawArrow(0, -halfSize, 90, 0.06f, true);
+            drawArrow(0, -halfSize, -90, 0.06f, true);
         }
         else if (mode == 2)
         {
@@ -629,7 +629,7 @@ public class HUD extends Gui
                 double originDrawX = (centerX + dist * 0.4 * TRIG_TABLE.cos(angleRad)) / sr.getScaleFactor();
                 double originDrawY = (centerY - dist * 0.4 * TRIG_TABLE.sin(angleRad)) / sr.getScaleFactor();
 
-                drawArrow((float) originDrawX, (float) originDrawY, 360f - (float) Tools.radtodeg(angleRad), clientSettings.hudSettings.targetingStyle.arrowSize / Tools.max(ARROW_WIDTH, ARROW_HEIGHT));
+                drawArrow((float) originDrawX, (float) originDrawY, (float) Tools.radtodeg(angleRad), clientSettings.hudSettings.targetingStyle.arrowSize / Tools.max(ARROW_WIDTH, ARROW_HEIGHT));
             }
             else
             {
