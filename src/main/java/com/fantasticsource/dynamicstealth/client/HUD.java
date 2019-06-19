@@ -85,7 +85,13 @@ public class HUD extends Gui
 
     public HUD(Minecraft mc)
     {
+        GlStateManager.disableDepth();
+        GlStateManager.depthMask(false);
+
         drawHUD(mc);
+
+        GlStateManager.depthMask(true);
+        GlStateManager.enableDepth();
         GlStateManager.color(1, 1, 1, 1);
     }
 
@@ -105,9 +111,9 @@ public class HUD extends Gui
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void drawHUD(RenderGameOverlayEvent.Pre event)
+    public static void drawHUD(RenderGameOverlayEvent.Post event)
     {
-        if (event.getType() == RenderGameOverlayEvent.ElementType.ALL)
+        if (event.getType() == RenderGameOverlayEvent.ElementType.VIGNETTE)
         {
             new HUD(Minecraft.getMinecraft());
         }

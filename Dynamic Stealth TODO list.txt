@@ -1,6 +1,5 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Figure out how to properly draw directly on top of the vignette and under the vanilla HUD/inventory (depth test?)
 Rotate crystal graphic 90* and rewrite render code to follow
 Account for light levels of all points that would be used for light level checks during a stealth check
 
