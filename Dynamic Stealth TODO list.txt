@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Should the upper light limit and light level scaling of dimensions be changed as well?
-
 Reorganize configs for...
 ...client -> HUD
 
@@ -55,6 +53,10 @@ Fix "opaque flashing" of mobs on the edge of vision due to no visibility data ->
 GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES =================================================================================================================================================================================
 
 Maven?
+
+Should the upper light limit and/or light level scaling of dimensions be changed as well...?
+...at max light level, do blocks look brighter/darker in nether and end, or the same as overworld?
+...at light levels between the "ambient" level and max light level, do blocks look brighter/darker in nether and end, or the same as overworld?
 
 Add ally groups for helper system config
 
