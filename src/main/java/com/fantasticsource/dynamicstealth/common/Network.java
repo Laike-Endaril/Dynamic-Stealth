@@ -234,6 +234,7 @@ public class Network
         boolean soulSight;
         boolean usePlayerSenses;
         boolean allowTargetingName, allowTargetingHP, allowTargetingThreat, allowTargetingDistance;
+        LinkedHashMap<Integer, Integer> minimumDimensionLightLevels;
 
         public ClientInitPacket() //Required; probably for when the packet is received
         {
@@ -270,6 +271,13 @@ public class Network
             buf.writeBoolean(allowTargetingHP);
             buf.writeBoolean(allowTargetingThreat);
             buf.writeBoolean(allowTargetingDistance);
+
+            buf.writeInt(EntitySightData.minimumDimensionLightLevels.size());
+            for (Map.Entry<Integer, Integer> entry : EntitySightData.minimumDimensionLightLevels.entrySet())
+            {
+                buf.writeInt(entry.getKey());
+                buf.writeInt(entry.getValue());
+            }
         }
 
         @Override
@@ -282,6 +290,13 @@ public class Network
             allowTargetingHP = buf.readBoolean();
             allowTargetingThreat = buf.readBoolean();
             allowTargetingDistance = buf.readBoolean();
+
+            int size = buf.readInt();
+            minimumDimensionLightLevels = new LinkedHashMap<>(size);
+            for (int i = 0; i < size; i++)
+            {
+                minimumDimensionLightLevels.put(buf.readInt(), buf.readInt());
+            }
         }
     }
 
@@ -301,6 +316,8 @@ public class Network
                     ClientData.allowTargetingHP = packet.allowTargetingHP;
                     ClientData.allowTargetingThreat = packet.allowTargetingThreat;
                     ClientData.allowTargetingDistance = packet.allowTargetingDistance;
+
+                    ClientData.minimumDimensionLightLevels = packet.minimumDimensionLightLevels;
                 });
             }
 

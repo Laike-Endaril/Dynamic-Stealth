@@ -29,7 +29,7 @@ public class LightGaugeConfig
                     "",
                     "This uses the format RRGGBB color format (if you google RRGGBB you'll find a color picker you can use)"
             })
-    public String lightGaugeColorEmpty = "221133";
+    public String lightGaugeColorEmpty = "442266";
 
     @Config.Name("025 Light Gauge Color (Full)")
     @Config.LangKey(DynamicStealth.MODID + ".config.lightGaugeColorFull")

@@ -463,7 +463,7 @@ public class Sight
         return -777;
     }
 
-    private static double lightLevelTotal(World world, Vec3d vec)
+    private static int lightLevelTotal(World world, Vec3d vec)
     {
         BlockPos blockpos = new BlockPos(vec);
         if (!world.isAreaLoaded(blockpos, 1)) return 0;

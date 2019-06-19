@@ -19,14 +19,14 @@ public class EntitySightData
 
     public static HashSet<EntityLivingBase> potionSoulSightEntities;
 
+    public static LinkedHashMap<Integer, Integer> minimumDimensionLightLevels;
+
     private static HashSet<Class<? extends EntityLivingBase>> naturallyBrightEntities;
     private static HashSet<Class<? extends EntityLivingBase>> naturalNightvisionEntities;
     private static HashSet<Class<? extends EntityLivingBase>> naturalSoulSightEntities;
     private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityAngles;
     private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityDistances;
     private static LinkedHashMap<Class<? extends EntityLivingBase>, SpecificLighting> entityLighting;
-
-    private static LinkedHashMap<Integer, Integer> minimumDimensionLightLevels;
 
 
     public static void update()

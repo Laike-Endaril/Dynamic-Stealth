@@ -47,6 +47,8 @@ public class ClientData
 
     public static LinkedHashMap<Integer, Float> visibilityMap = new LinkedHashMap<>(), previousVisibilityMap1 = new LinkedHashMap<>(), previousVisibilityMap2 = new LinkedHashMap<>();
 
+    public static LinkedHashMap<Integer, Integer> minimumDimensionLightLevels = new LinkedHashMap<>();
+
 
     @SubscribeEvent
     public static void clearClientData(FMLNetworkEvent.ClientDisconnectionFromServerEvent event)
@@ -68,6 +70,8 @@ public class ClientData
         visibilityMap.clear();
         previousVisibilityMap1.clear();
         previousVisibilityMap2.clear();
+
+        minimumDimensionLightLevels.clear();
     }
 
 

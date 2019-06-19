@@ -1,7 +1,6 @@
 package com.fantasticsource.dynamicstealth;
 
 import com.fantasticsource.dynamicstealth.client.HUD;
-import com.fantasticsource.dynamicstealth.client.Keys;
 import com.fantasticsource.dynamicstealth.client.RenderAlterer;
 import com.fantasticsource.dynamicstealth.common.ClientData;
 import com.fantasticsource.dynamicstealth.common.Network;

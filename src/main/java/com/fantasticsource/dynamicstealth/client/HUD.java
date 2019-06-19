@@ -22,6 +22,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
@@ -70,6 +71,13 @@ public class HUD extends Gui
     private static final ResourceLocation STEALTH_GAUGE_RIM_TEXTURE = new ResourceLocation(DynamicStealth.MODID, "image/stealthgaugerim.png");
     private static final int STEALTH_GAUGE_RIM_SIZE = 256;
     private static final float STEALTH_GAUGE_RIM_UV_HALF_PIXEL = 0.5f / STEALTH_GAUGE_RIM_SIZE;
+
+    private static final ResourceLocation CRYSTAL_TEXTURE = new ResourceLocation(DynamicStealth.MODID, "image/crystal.png");
+    private static final float CRYSTAL_WIDTH = 25, CRYSTAL_HEIGHT = 64;
+    private static final float CRYSTAL_UV_HALF_PIXEL_W = 0.5f / CRYSTAL_WIDTH, CRYSTAL_UV_HALF_PIXEL_H = 0.5f / CRYSTAL_HEIGHT;
+    private static final float CRYSTAL_ORIGIN_X = 12, CRYSTAL_ORIGIN_Y = 63;
+    private static final float CRYSTAL_LEFT = CRYSTAL_ORIGIN_X, CRYSTAL_RIGHT = CRYSTAL_WIDTH - CRYSTAL_ORIGIN_X;
+    private static final float CRYSTAL_ABOVE = CRYSTAL_ORIGIN_Y, CRYSTAL_BELOW = CRYSTAL_HEIGHT - CRYSTAL_ORIGIN_Y;
 
     private static TextureManager textureManager = Minecraft.getMinecraft().renderEngine;
 
@@ -318,6 +326,7 @@ public class HUD extends Gui
         }
     }
 
+
     private static void drawArrow(float x, float y, float angleDeg, float scale)
     {
         drawArrow(x, y, angleDeg, scale, false);
@@ -359,6 +368,37 @@ public class HUD extends Gui
         GlStateManager.popMatrix();
     }
 
+
+    private static void drawCrystals(float x, float y, float scale, float... anglesDeg)
+    {
+        textureManager.bindTexture(CRYSTAL_TEXTURE);
+
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x, y, 0);
+        GlStateManager.scale(scale, scale, 1);
+        for (float angleDeg : anglesDeg)
+        {
+            GlStateManager.pushMatrix();
+            GlStateManager.rotate(angleDeg, 0, 0, 1);
+
+            GlStateManager.glBegin(GL_QUADS);
+            GlStateManager.glTexCoord2f(CRYSTAL_UV_HALF_PIXEL_W, CRYSTAL_UV_HALF_PIXEL_H);
+            GlStateManager.glVertex3f(-CRYSTAL_LEFT, -CRYSTAL_ABOVE, 0);
+            GlStateManager.glTexCoord2f(CRYSTAL_UV_HALF_PIXEL_W, 1f - CRYSTAL_UV_HALF_PIXEL_H);
+            GlStateManager.glVertex3f(-CRYSTAL_LEFT, CRYSTAL_BELOW, 0);
+            GlStateManager.glTexCoord2f(1f - CRYSTAL_UV_HALF_PIXEL_W, 1f - CRYSTAL_UV_HALF_PIXEL_H);
+            GlStateManager.glVertex3f(CRYSTAL_RIGHT, CRYSTAL_BELOW, 0);
+            GlStateManager.glTexCoord2f(1f - CRYSTAL_UV_HALF_PIXEL_W, CRYSTAL_UV_HALF_PIXEL_H);
+            GlStateManager.glVertex3f(CRYSTAL_RIGHT, -CRYSTAL_ABOVE, 0);
+            GlStateManager.glEnd();
+
+            GlStateManager.popMatrix();
+        }
+
+        GlStateManager.popMatrix();
+    }
+
+
     private static void drawReticle(float x, float y)
     {
         int spacing = clientSettings.hudSettings.targetingStyle.reticleSpacing;
@@ -368,6 +408,41 @@ public class HUD extends Gui
         drawArrow(x + spacing, y + spacing, -135, scale);
         drawArrow(x - spacing, y - spacing, 45, scale);
         drawArrow(x + spacing, y - spacing, 135, scale);
+    }
+
+
+    private static void drawLightGauge(Minecraft mc)
+    {
+        if (!clientSettings.hudSettings.lightGauge.showLightGauge) return;
+
+        float alpha = (float) clientSettings.hudSettings.lightGauge.lightGaugeAlpha;
+        if (alpha <= 0) return;
+
+        float scale = (clientSettings.hudSettings.lightGauge.lightGaugeSize >> 1) / Tools.max(CRYSTAL_WIDTH, CRYSTAL_HEIGHT);
+
+        float maxOffset = Tools.max(CRYSTAL_LEFT, CRYSTAL_RIGHT, CRYSTAL_ABOVE, CRYSTAL_BELOW);
+        ScaledResolution sr = new ScaledResolution(mc);
+        double x = maxOffset * scale + (sr.getScaledWidth() - maxOffset * 2 * scale) * clientSettings.hudSettings.lightGauge.lightGaugeX;
+        double y = maxOffset * scale + (sr.getScaledHeight() - maxOffset * 2 * scale) * clientSettings.hudSettings.lightGauge.lightGaugeY;
+
+        int light = lightLevelTotal(mc.world, mc.player.getPositionVector());
+
+        //Filled Crystals
+        Color c = new Color(Integer.parseInt(clientSettings.hudSettings.lightGauge.lightGaugeColorFull, 16), true);
+        GlStateManager.color(c.rf(), c.gf(), c.bf(), alpha);
+        int i = 0;
+        for (; i < light * 24; i += 24)
+        {
+            drawCrystals((float) x, (float) y, scale, i);
+        }
+
+        //Empty Crystals
+        c = new Color(Integer.parseInt(clientSettings.hudSettings.lightGauge.lightGaugeColorEmpty, 16), true);
+        GlStateManager.color(c.rf(), c.gf(), c.bf(), alpha);
+        for (; i < 360; i += 24)
+        {
+            drawCrystals((float) x, (float) y, scale, i);
+        }
     }
 
     private static void drawStealthGauge(Minecraft mc, int mode)
@@ -381,9 +456,6 @@ public class HUD extends Gui
         float stealth = partialTick * (ClientData.stealthLevel - ClientData.prevStealthLevel) + ClientData.prevStealthLevel;
         if (stealth == Byte.MIN_VALUE) return;
 
-
-        GlStateManager.enableBlend();
-        GlStateManager.enableTexture2D();
 
         GlStateManager.pushMatrix();
         ScaledResolution sr = new ScaledResolution(mc);
@@ -464,6 +536,15 @@ public class HUD extends Gui
         GlStateManager.popMatrix();
     }
 
+    private static int lightLevelTotal(World world, Vec3d vec)
+    {
+        BlockPos blockpos = new BlockPos(vec);
+        if (!world.isAreaLoaded(blockpos, 1)) return 0;
+
+        Integer result = ClientData.minimumDimensionLightLevels.get(world.provider.getDimension());
+        return Tools.max(world.getLightFromNeighbors(blockpos), result == null ? 0 : result);
+    }
+
     private void drawHUD(Minecraft mc)
     {
         //Targeting HUD
@@ -477,7 +558,10 @@ public class HUD extends Gui
         //Main HUD below this point =============================================
 
 
-        //Stealth Gauge
+        GlStateManager.enableBlend();
+        GlStateManager.enableTexture2D();
+
+        drawLightGauge(mc);
         drawStealthGauge(mc, clientSettings.hudSettings.mainStyle.stealthGaugeMode);
     }
 
