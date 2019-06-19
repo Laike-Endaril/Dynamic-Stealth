@@ -13,11 +13,12 @@ public class DSTools
 {
     public static Vec3d[] entityCheckVectors(Entity target)
     {
-        double halfWidth = target.width / 2;
-        double halfHeight = target.height / 2;
+        //Not exactly half because MC doesn't bound entities correctly when colliding with solid blocks... :/
+        double halfWidth = target.width * 0.499;
+        double halfHeight = target.height * 0.499;
 
         double x = target.posX;
-        double y = target.posY + halfHeight;
+        double y = target.posY + target.height / 2;
         double z = target.posZ;
 
         return new Vec3d[]
