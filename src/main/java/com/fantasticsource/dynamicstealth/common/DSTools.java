@@ -39,7 +39,6 @@ public class DSTools
         {
             result.add(new BlockPos(vec));
         }
-        System.out.println(result.size());
         return result;
     }
 
