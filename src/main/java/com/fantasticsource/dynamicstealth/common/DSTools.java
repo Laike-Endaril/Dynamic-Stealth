@@ -52,7 +52,11 @@ public class DSTools
     {
         if (!world.isAreaLoaded(pos, 1)) return 0;
 
-        if (world.isRemote) return Tools.max(world.getLightFromNeighbors(pos), ClientData.minimumDimensionLightLevels.get(world.provider.getDimension()));
+        if (world.isRemote)
+        {
+            Integer result = ClientData.minimumDimensionLightLevels.get(world.provider.getDimension());
+            return Tools.max(world.getLightFromNeighbors(pos), result == null ? 0 : result);
+        }
         return Tools.max(world.getLightFromNeighbors(pos), EntitySightData.minimumDimensionLight(world.provider.getDimension()));
     }
 
