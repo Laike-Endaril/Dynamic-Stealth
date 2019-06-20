@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+Check whether dead neutral CNPCs can see their allies die, thereby gaining threat before respawning
+
 Reorganize configs for...
 ...client -> HUD
 
