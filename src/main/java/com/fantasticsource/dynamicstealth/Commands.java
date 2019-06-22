@@ -120,7 +120,11 @@ public class Commands extends CommandBase
                         else
                         {
                             StringBuilder textList = new StringBuilder();
-                            for (UUID id : set) textList.append("\n§e").append(PlayerData.getName(id));
+                            for (UUID id : set)
+                            {
+                                String name = PlayerData.getName(id);
+                                if (name != null) textList.append("\n§e").append(name);
+                            }
                             notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefrom", textList.toString());
                         }
                     }

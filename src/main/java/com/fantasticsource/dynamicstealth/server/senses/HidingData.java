@@ -112,7 +112,9 @@ public class HidingData
 
     public static void hideFrom(EntityPlayer player, String targetName, boolean hide)
     {
-        hideFrom(player, PlayerData.getID(targetName), hide);
+        UUID id = PlayerData.getID(targetName);
+        if (id != null) hideFrom(player, PlayerData.getID(targetName), hide);
+        else System.out.println(player.getName() + " tried to hide from " + targetName + " but " + targetName + " was not found in PlayerData!");
     }
 
     public static void hideFrom(EntityPlayer player, UUID id, boolean hide)
