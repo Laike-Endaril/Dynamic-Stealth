@@ -52,6 +52,8 @@ Fix "opaque flashing" of mobs on the edge of vision due to no visibility data ->
 ...occasionally happens on fade-in (rare)
 ...don't think it ever happens on fade-out anymore
 
+HUD elements do not display in "fast" graphics mode...not that anyone uses fast graphics mode normally
+
 
 
 GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES =================================================================================================================================================================================
