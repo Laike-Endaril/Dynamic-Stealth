@@ -102,6 +102,8 @@ public class HidingData
 
     public static boolean isHidingFrom(EntityPlayer player, UUID id)
     {
+        if (id == null) return true;
+
         if (id.equals(player.getPersistentID())) return false;
 
         HidingData data = hidingData.get(player.getPersistentID());
