@@ -92,7 +92,6 @@ public class HUD extends Gui
 
         GlStateManager.depthMask(true);
         GlStateManager.enableDepth();
-        GlStateManager.color(1, 1, 1, 1);
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -110,13 +109,14 @@ public class HUD extends Gui
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
     public static void drawHUD(RenderGameOverlayEvent.Post event)
     {
         if (event.getType() == RenderGameOverlayEvent.ElementType.VIGNETTE)
         {
             new HUD(Minecraft.getMinecraft());
         }
+        GlStateManager.color(1, 1, 1, 1);
     }
 
     @SubscribeEvent
@@ -140,6 +140,7 @@ public class HUD extends Gui
                     }
                 }
             }
+            GlStateManager.color(1, 1, 1, 1);
         }
     }
 
@@ -284,8 +285,6 @@ public class HUD extends Gui
         if (!depth) GlStateManager.enableDepth();
 
         GlStateManager.enableLighting();
-
-        GlStateManager.color(1, 1, 1, 1);
     }
 
     private static void makeTargetIfBetter(OnPointData data)
