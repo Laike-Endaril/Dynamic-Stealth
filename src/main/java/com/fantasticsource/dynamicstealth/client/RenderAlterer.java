@@ -144,12 +144,9 @@ public class RenderAlterer
         if (ready)
         {
             EntityLivingBase livingBase = event.getEntity();
+
             //Hard stops
             if (Compat.statues && livingBase.getClass().getName().contains("party.lemons.statue")) return;
-
-
-            //Don't draw seen entities as invisible, because they've been SEEN
-            livingBase.setInvisible(false);
 
 
             //Remove glow effect if cached
@@ -160,44 +157,50 @@ public class RenderAlterer
             }
 
 
-            //Focused target glow effect
-            if (clientSettings.hudSettings.targetingStyle.glow && clientSettings.hudSettings.targetingStyle.stateColoredGlow)
+            if (!event.isCanceled())
             {
-                ClientData.OnPointData data = ClientData.targetData;
-                if (data != null && data.searcherID == livingBase.getEntityId())
-                {
-                    Team team = livingBase.getTeam();
-                    if (team != null) teamCache.put(livingBase, team);
-                    scoreboard.addPlayerToTeam(livingBase.getUniqueID().toString(), getTeam(data.color));
-                }
-            }
+                //Don't draw seen entities as invisible, because they've been SEEN
+                livingBase.setInvisible(false);
 
 
-            //Entity opacity based on visibility
-            if (ClientData.usePlayerSenses && livingBase != Minecraft.getMinecraft().player)
-            {
-                int id = livingBase.getEntityId();
-                double min = clientSettings.entityFading.mobOpacityMin;
-                double visibility = ClientData.visibilityMap.containsKey(id) ? ClientData.visibilityMap.get(id)
-                        : ClientData.previousVisibilityMap1.containsKey(id) ? ClientData.previousVisibilityMap1.get(id)
-                        : ClientData.previousVisibilityMap2.containsKey(id) ? ClientData.previousVisibilityMap2.get(id) : 1;
-                double maxOpacityAt = clientSettings.entityFading.fullOpacityAt;
-                if (visibility != 0)
+                //Focused target glow effect
+                if (clientSettings.hudSettings.targetingStyle.glow && clientSettings.hudSettings.targetingStyle.stateColoredGlow)
                 {
-                    if (maxOpacityAt == 0) visibility = 1;
-                    else visibility /= maxOpacityAt;
+                    ClientData.OnPointData data = ClientData.targetData;
+                    if (data != null && data.searcherID == livingBase.getEntityId())
+                    {
+                        Team team = livingBase.getTeam();
+                        if (team != null) teamCache.put(livingBase, team);
+                        scoreboard.addPlayerToTeam(livingBase.getUniqueID().toString(), getTeam(data.color));
+                    }
                 }
 
-                GlStateManager.enableBlend();
-                GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+                //Entity opacity based on visibility
+                if (ClientData.usePlayerSenses && livingBase != Minecraft.getMinecraft().player)
+                {
+                    int id = livingBase.getEntityId();
+                    double min = clientSettings.entityFading.mobOpacityMin;
+                    double visibility = ClientData.visibilityMap.containsKey(id) ? ClientData.visibilityMap.get(id)
+                            : ClientData.previousVisibilityMap1.containsKey(id) ? ClientData.previousVisibilityMap1.get(id)
+                            : ClientData.previousVisibilityMap2.containsKey(id) ? ClientData.previousVisibilityMap2.get(id) : 1;
+                    double maxOpacityAt = clientSettings.entityFading.fullOpacityAt;
+                    if (visibility != 0)
+                    {
+                        if (maxOpacityAt == 0) visibility = 1;
+                        else visibility /= maxOpacityAt;
+                    }
 
-                GlStateManager.enableCull();
-                GlStateManager.cullFace(GlStateManager.CullFace.BACK);
+                    GlStateManager.enableBlend();
+                    GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
+                    GlStateManager.enableCull();
+                    GlStateManager.cullFace(GlStateManager.CullFace.BACK);
 
 
-                GlStateManager.Color c = GlStateManager.colorState;
-                c.alpha = (float) (min + (1d - min) * visibility);
-                GL11.glColor4f(c.red, c.green, c.blue, c.alpha);
+                    GlStateManager.Color c = GlStateManager.colorState;
+                    c.alpha = (float) (min + (1d - min) * visibility);
+                    GL11.glColor4f(c.red, c.green, c.blue, c.alpha);
+                }
             }
         }
     }
@@ -208,6 +211,7 @@ public class RenderAlterer
         if (ready)
         {
             EntityLivingBase livingBase = event.getEntity();
+
             //Hard stops
             if (Compat.statues && livingBase.getClass().getName().contains("party.lemons.statue")) return;
 
@@ -224,15 +228,18 @@ public class RenderAlterer
                 livingBase.setGlowing(false);
             }
 
-            //Focused target and soul sight glowing effects
-            ClientData.OnPointData data = ClientData.targetData;
-            if (clientSettings.hudSettings.targetingStyle.glow && data != null && data.searcherID == livingBase.getEntityId())
+            if (!event.isCanceled())
             {
-                setTempGlow(event);
-            }
-            else if (ClientData.soulSight && !livingBase.isGlowing())
-            {
-                setTempGlow(event);
+                //Focused target and soul sight glowing effects
+                ClientData.OnPointData data = ClientData.targetData;
+                if (clientSettings.hudSettings.targetingStyle.glow && data != null && data.searcherID == livingBase.getEntityId())
+                {
+                    setTempGlow(event);
+                }
+                else if (ClientData.soulSight && !livingBase.isGlowing())
+                {
+                    setTempGlow(event);
+                }
             }
 
 
