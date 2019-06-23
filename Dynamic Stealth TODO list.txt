@@ -1,6 +1,6 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Fix flee degredation rate limits
+Do more tests with large entities
 
 Check whether dead neutral CNPCs can see their allies die, thereby gaining threat before respawning
 

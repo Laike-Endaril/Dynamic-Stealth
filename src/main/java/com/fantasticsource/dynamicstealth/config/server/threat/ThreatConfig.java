@@ -75,7 +75,7 @@ public class ThreatConfig
     @Config.Name("070 Flee Degredation Rate")
     @Config.LangKey(DynamicStealth.MODID + ".config.threatFleeRate")
     @Config.Comment("How fast the threat gauge decreases while fleeing; lower number means they flee for a longer time")
-    @Config.RangeDouble(min = 1)
+    @Config.RangeDouble(min = 0)
     public double fleeDegredationRate = 0.3;
 
     @Config.Name("075 Owned Can't Reach Degredation Rate")
