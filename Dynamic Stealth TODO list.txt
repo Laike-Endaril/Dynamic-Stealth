@@ -1,8 +1,10 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Do more tests with large entities
+Check compat with Dynamic Sword Skills
 
-Check whether dead neutral CNPCs can see their allies die, thereby gaining threat before respawning
+Check whether dead neutral CNPCs can see their allies die, thereby gaining threat before respawning...
+...because I think they can
+
 
 Reorganize configs for...
 ...client -> HUD
@@ -22,6 +24,10 @@ Make the difference between "barely unseen" and "barely seen" on the stealth gau
 
 Alter weapon tooltips to reflect settings for normal attacks and stealth attacks...
 ...requires sending clients data for attacks, based on server settings
+
+
+
+Start making some of those tutorial videos
 
 
 
@@ -58,7 +64,7 @@ HUD elements do not display in "fast" graphics mode...not that anyone uses fast 
 
 GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES =================================================================================================================================================================================
 
-Maven?
+Do more tests with large entities
 
 Should the upper light limit and/or light level scaling of dimensions be changed as well...?
 ...at max light level, do blocks look brighter/darker in nether and end, or the same as overworld?
@@ -85,9 +91,6 @@ Add lang keys for all println() calls (make sure to use deprecated I18n, not the
 "Noisiness" block trait; block filter to determine how much noise walking/running/landing makes
 
 "Footprint Duration" block trait; block filter for how long visible footprints/tracks last on the block type.  Add (long to short); clay, snow, sand, mycelium, dirt, coarse dirt, podzol
-
-Add wiki / guide videos
-Add guidebook, possibly using guide api or patchouli
 
 Add disguise system and change mob heads so they use it instead
 Add other mob heads to disguise system
@@ -156,6 +159,8 @@ Pitfall: Entity which destroys the dirt block it's on if something walks on it.
 
 
 ITEMS =======================================================================================================================================================================================================================
+
+Guidebook, possibly using guide api or patchouli
 
 Water potions...yes...for applying the wetness effect (for normal one, try to make it usable faster and play water splash sound)
 Fire potions, for burning effect
