@@ -1,13 +1,6 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Check whether dead neutral CNPCs can see their allies die, thereby gaining threat before respawning...
-...because I think they can
-
 Check compat with Animania's sleeping animation, the normal death animation, and any similar
-
-Better potion handling on death (currently in LivingDropsEvent)...
-...config list for potions
-...config for whether list is blacklist or whitelist
 
 
 
@@ -68,6 +61,10 @@ HUD elements do not display in "fast" graphics mode...not that anyone uses fast 
 
 
 GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES =================================================================================================================================================================================
+
+Better potion handling on death (currently in LivingDropsEvent)...
+...config list for potions
+...config for whether list is blacklist or whitelist
 
 Do more tests with large entities
 

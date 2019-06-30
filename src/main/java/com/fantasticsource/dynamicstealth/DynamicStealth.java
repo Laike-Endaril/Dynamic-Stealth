@@ -316,43 +316,45 @@ public class DynamicStealth
                 if (entity instanceof EntityLivingBase)
                 {
                     witness = (EntityLivingBase) entity;
-
-                    if (Threat.getTarget(witness) == victim)
+                    if (witness.isEntityAlive())
                     {
-                        if (Sight.canSee(witness, victim, true))
+                        if (Threat.getTarget(witness) == victim)
                         {
-                            if (MCTools.isOwned(witness)) Threat.set(witness, null, 0);
-                            else Threat.clearTarget(witness);
-                            Communication.notifyDead(witness, victim);
+                            if (Sight.canSee(witness, victim, true))
+                            {
+                                if (MCTools.isOwned(witness)) Threat.set(witness, null, 0);
+                                else Threat.clearTarget(witness);
+                                Communication.notifyDead(witness, victim);
+                            }
                         }
-                    }
-                    else if (HelperSystem.isAlly(witness, victim))
-                    {
-                        if (Sight.canSee(witness, victim, false))
+                        else if (HelperSystem.isAlly(witness, victim))
                         {
-                            //Witness saw victim die
-                            BlockPos threatPos;
-                            if (Sight.canSee(witness, source, true))
+                            if (Sight.canSee(witness, victim, false))
                             {
-                                //Witness saw everything
-                                wasSeen = true;
-                                threatPos = killer.getPosition();
-                            }
-                            else
-                            {
-                                //Witness saw ally die without seeing killer
-                                threatPos = victim.getPosition();
-                            }
-                            Threat.apply(witness, killer, serverSettings.threat.allyKilledThreat, GEN_ALLY_KILLED, wasSeen);
-                            Communication.warn(witness, killer, threatPos, wasSeen);
-
-                            if (witness instanceof EntityLiving)
-                            {
-                                AIDynamicStealth stealthAI = AIDynamicStealth.getStealthAI((EntityLiving) witness);
-                                if (stealthAI != null)
+                                //Witness saw victim die
+                                BlockPos threatPos;
+                                if (Sight.canSee(witness, source, true))
                                 {
-                                    stealthAI.fleeIfYouShould(0);
-                                    if (stealthAI.isFleeing()) stealthAI.lastKnownPosition = threatPos;
+                                    //Witness saw everything
+                                    wasSeen = true;
+                                    threatPos = killer.getPosition();
+                                }
+                                else
+                                {
+                                    //Witness saw ally die without seeing killer
+                                    threatPos = victim.getPosition();
+                                }
+                                Threat.apply(witness, killer, serverSettings.threat.allyKilledThreat, GEN_ALLY_KILLED, wasSeen);
+                                Communication.warn(witness, killer, threatPos, wasSeen);
+
+                                if (witness instanceof EntityLiving)
+                                {
+                                    AIDynamicStealth stealthAI = AIDynamicStealth.getStealthAI((EntityLiving) witness);
+                                    if (stealthAI != null)
+                                    {
+                                        stealthAI.fleeIfYouShould(0);
+                                        if (stealthAI.isFleeing()) stealthAI.lastKnownPosition = threatPos;
+                                    }
                                 }
                             }
                         }
