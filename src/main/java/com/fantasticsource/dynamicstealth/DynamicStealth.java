@@ -61,10 +61,7 @@ import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -390,7 +387,7 @@ public class DynamicStealth
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void entityDeathPost(LivingDeathEvent event)
+    public static void entityDeathPost(LivingDropsEvent event)
     {
         event.getEntityLiving().clearActivePotions();
     }
