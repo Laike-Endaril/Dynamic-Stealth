@@ -7,6 +7,8 @@ Check compat with Dynamic Sword Skills
 
 Check compat with Animania's sleeping animation, the normal death animation, and any similar
 
+For some reason, DS (or maybe FL?) prevents soul drops from Blood Magic snares
+
 
 Reorganize configs for...
 ...client -> HUD
