@@ -7,7 +7,10 @@ Check compat with Dynamic Sword Skills
 
 Check compat with Animania's sleeping animation, the normal death animation, and any similar
 
-For some reason, DS (or maybe FL?) prevents soul drops from Blood Magic snares
+Better potion handling on death (currently in LivingDropsEvent)...
+...config list for potions
+...config for whether list is blacklist or whitelist
+
 
 
 Reorganize configs for...
