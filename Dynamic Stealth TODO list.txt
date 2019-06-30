@@ -3,8 +3,6 @@ CURRENTLY WORKING ON ===========================================================
 Check whether dead neutral CNPCs can see their allies die, thereby gaining threat before respawning...
 ...because I think they can
 
-Check compat with Dynamic Sword Skills
-
 Check compat with Animania's sleeping animation, the normal death animation, and any similar
 
 Better potion handling on death (currently in LivingDropsEvent)...
