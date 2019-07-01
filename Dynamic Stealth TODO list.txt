@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+Compat for one-way glass from SecretRoomsMod
+
 Check compat with Animania's sleeping animation, the normal death animation, and any similar
 
 
