@@ -4,6 +4,8 @@ Compat for one-way glass from SecretRoomsMod
 
 Check compat with Animania's sleeping animation, the normal death animation, and any similar
 
+Make sure hidefrom command is usable for non-op survival players
+
 
 
 Reorganize configs for...
