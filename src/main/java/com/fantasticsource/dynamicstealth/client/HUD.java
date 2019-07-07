@@ -109,10 +109,10 @@ public class HUD extends Gui
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
-    public static void drawHUD(RenderGameOverlayEvent.Post event)
+    @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
+    public static void drawHUD(RenderGameOverlayEvent.Pre event)
     {
-        if (event.getType() == RenderGameOverlayEvent.ElementType.VIGNETTE)
+        if (event.getType() == RenderGameOverlayEvent.ElementType.HOTBAR)
         {
             new HUD(Minecraft.getMinecraft());
         }
