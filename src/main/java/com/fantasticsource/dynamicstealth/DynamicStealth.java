@@ -8,6 +8,7 @@ import com.fantasticsource.dynamicstealth.common.potions.Potions;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatCNPC;
 import com.fantasticsource.dynamicstealth.compat.CompatDissolution;
+import com.fantasticsource.dynamicstealth.compat.CompatRoughMobs;
 import com.fantasticsource.dynamicstealth.config.ConfigHandler;
 import com.fantasticsource.dynamicstealth.server.*;
 import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
@@ -713,8 +714,11 @@ public class DynamicStealth
             else if (actionClass == EntityAIFollowOwnerFlying.class) replaceTask(tasks, task, new AIFollowOwnerFlyingEdit((EntityTameable) living, (EntityAIFollowOwner) task.action));
 
             else if (actionClass.getName().equals("net.minecraft.entity.monster.AbstractSkeleton$1")) replaceTask(tasks, task, new AIAttackMeleeEdit((EntityAIAttackMelee) task.action));
+
             else if (actionClass.getName().equals("com.lycanitesmobs.core.entity.ai.EntityAIWatchClosest")) replaceTask(tasks, task, new AIWatchClosestEdit(living, EntityLivingBase.class, 0.02f));
             else if (actionClass.getName().equals("com.lycanitesmobs.core.entity.ai.EntityAILookIdle")) tasks.removeTask(task.action);
+
+            else if (actionClass.getName().contains("de.lellson.roughmobs") && actionClass.getName().contains("RoughAIWeaponSwitch")) replaceTask(tasks, task, new CompatRoughMobs.RoughAIWeaponSwitchEdit(living, 12));
         }
     }
 
