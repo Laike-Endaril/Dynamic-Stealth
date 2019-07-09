@@ -1,10 +1,5 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Check strange possible compat issue with tinker armor:
-The chestplate armor makes me "invisible" to sight, I tested with mobs this time.
-When I make a Manyulin core, ardite trim, and steel plate armor, which has about 9.6 defence, I become near invisible to enemies unless they're up-close. If I add a diamond which raises defense further I become fully invisible even if I bump into enemies.
-I can also mix and match other armors, such just wearing boots and leggings, the more armor I have the more invisible I am.
-
 Add config for forcing full visibility on specified entities
 Add thut's elevators to it by default (thuttech:lift)
 

@@ -20,6 +20,7 @@ public class Compat
             dissolution = false,
             magma_monsters = false,
             abyssalcraft = false,
+            conarm = false,
             emberroot = false,
             defiledlands = false,
             testdummy = false,

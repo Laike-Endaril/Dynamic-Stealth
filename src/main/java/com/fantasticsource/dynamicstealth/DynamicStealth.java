@@ -765,6 +765,7 @@ public class DynamicStealth
         if (Loader.isModLoaded("neat")) Compat.neat = true;
         if (Loader.isModLoaded("testdummy")) Compat.testdummy = true;
         if (Loader.isModLoaded("statues")) Compat.statues = true;
+        if (Loader.isModLoaded("conarm")) Compat.conarm = true;
         if (Loader.isModLoaded("magma_monsters")) Compat.magma_monsters = true;
         if (Loader.isModLoaded("dissolution"))
         {

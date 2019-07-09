@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.server.senses.sight;
 
 import com.fantasticsource.dynamicstealth.common.DSTools;
+import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatDissolution;
 import com.fantasticsource.dynamicstealth.config.server.senses.sight.SightConfig;
 import com.fantasticsource.dynamicstealth.server.Attributes;
@@ -379,10 +380,17 @@ public class Sight
         if (isLivingBase)
         {
             double unnaturalArmor = 0;
-            for (ItemStack stack : targetLivingBase.getArmorInventoryList())
+
+            for (EntityEquipmentSlot slot : new EntityEquipmentSlot[]{EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET})
             {
+                ItemStack stack = targetLivingBase.getItemStackFromSlot(slot);
+
                 Item item = stack.getItem();
-                if (item instanceof ISpecialArmor) unnaturalArmor += ((ISpecialArmor) item).getProperties(targetLivingBase, stack, new DamageSource("generic"), 1, Integer.MIN_VALUE).Armor;
+                if (item instanceof ISpecialArmor)
+                {
+                    if (Compat.conarm && item.getClass().getName().contains("conarm.common.items.armor")) unnaturalArmor += Math.abs(((ISpecialArmor) item).getProperties(targetLivingBase, stack, new DamageSource("generic"), 1, Integer.MIN_VALUE).Armor);
+                    else unnaturalArmor += ((ISpecialArmor) item).getProperties(targetLivingBase, stack, new DamageSource("generic"), 1, Integer.MIN_VALUE).Armor;
+                }
                 if (item instanceof ItemArmor) unnaturalArmor += ((ItemArmor) item).damageReduceAmount;
             }
             armorMultiplier += serverSettings.senses.sight.b_visibilityMultipliers.armorMultiplierCumulative * unnaturalArmor;
