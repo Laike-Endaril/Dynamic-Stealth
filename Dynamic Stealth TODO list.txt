@@ -9,6 +9,8 @@ Check compat with Animania's sleeping animation, the normal death animation, and
 
 Make sure hidefrom command is usable for non-op survival players
 
+"mowzies-mobs mod, when the Ferrous Wroughtnaut find a player it'll rush up to the player in an inconceivable speed"
+
 
 
 Reorganize configs for...
