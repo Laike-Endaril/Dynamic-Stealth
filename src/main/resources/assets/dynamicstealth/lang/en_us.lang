@@ -237,6 +237,8 @@ dynamicstealth.config.fleeDamageLengthen=Damage Increases Flee Duration
 dynamicstealth.config.fleeDamageLengthen.tooltip=FILLSCREEN FIXNEWLINES If set to true, then when an entity is *already* in flee mode, damage will increase its flee duration\n \n
 dynamicstealth.config.fleeHome=CNPCs flee To Home Position
 dynamicstealth.config.fleeHome.tooltip=FILLSCREEN FIXNEWLINES If enabled, Custom NPCs flee to their home position instead of away from what hit them\n \n
+dynamicstealth.config.waterReset=CNPCs Reset in Water
+dynamicstealth.config.waterReset.tooltip=FILLSCREEN FIXNEWLINES If enabled, Custom NPCs reset when they touch water\n \n
 dynamicstealth.config.fearless=Fearless
 dynamicstealth.config.fearless.tooltip=FILLSCREEN FIXNEWLINES These entities will not use the flee mechanic when low on health\n\nEntities that bypass threat are automatically fearless\n \n
 

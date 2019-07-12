@@ -185,6 +185,7 @@ public class AIDynamicStealth extends EntityAIBase
     public boolean shouldExecute()
     {
         searcher.world.profiler.startSection("DStealth: AI");
+
         //Prevent any strangeness
         if (!searcher.isEntityAlive())
         {
@@ -192,6 +193,12 @@ public class AIDynamicStealth extends EntityAIBase
             Threat.set(searcher, null, 0);
             searcher.world.profiler.endSection();
             return false;
+        }
+
+        if (serverSettings.ai.cnpcsResetInWater && isCNPC && searcher.isInWater())
+        {
+            ((ICustomNpc) NpcAPI.Instance().getIEntity(searcher)).reset();
+            Threat.setThreat(searcher, 0);
         }
 
         Threat.ThreatData threatData = Threat.get(searcher);

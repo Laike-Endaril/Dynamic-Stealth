@@ -23,6 +23,11 @@ public class AIConfig
     @Config.LangKey(DynamicStealth.MODID + ".config.aiCantReach")
     public CantReachTriggerConfig cantReach = new CantReachTriggerConfig();
 
+    @Config.Name("CNPCs Reset in Water")
+    @Config.LangKey(DynamicStealth.MODID + ".config.waterReset")
+    @Config.Comment("If enabled, Custom NPCs reset when they touch water")
+    public boolean cnpcsResetInWater = false;
+
     @Config.Name("Prevent Pet Teleport")
     @Config.LangKey(DynamicStealth.MODID + ".config.aiNoPetTeleport")
     @Config.Comment("If set to true, wolves, cats, and parrots do not teleport while following their owners")
