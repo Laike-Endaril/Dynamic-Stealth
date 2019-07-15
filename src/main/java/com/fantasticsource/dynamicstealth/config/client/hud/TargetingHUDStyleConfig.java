@@ -54,7 +54,7 @@ public class TargetingHUDStyleConfig
     public int reticleSize = 10;
 
     @Config.Name("Text Opacity")
-    @Config.LangKey(DynamicStealth.MODID + ".config.targetingAlpha")
+    @Config.LangKey(DynamicStealth.MODID + ".config.targetingTextAlpha")
     @Config.Comment(
             {
                     "How visible the text of the targeting HUD is, transparency-wise",
