@@ -35,5 +35,6 @@ public class EntityThreatDefaults
         threatBypassDefaults.add("primitivemobs:treasure_slime");
         threatBypassDefaults.add("pvj:pvj_icecube");
         threatBypassDefaults.add("defiledlands:slime_defiled");
+        threatBypassDefaults.add("scp:killer_statue");
     }
 }
