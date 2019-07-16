@@ -1,5 +1,8 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+Light gauge shows incorrect value at night...
+...but stealth levels are using correct light value
+
 Add config for forcing full visibility on specified entities
 Add thut's elevators to it by default (thuttech:lift)
 
