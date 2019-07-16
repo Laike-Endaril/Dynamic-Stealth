@@ -26,6 +26,16 @@ public class EntityThreatDefaults
         passiveDefaults.add("nex:ghastling, false");
         passiveDefaults.add("nex:ghast_queen, false");
         passiveDefaults.add("nex:ghastling, false");
+        passiveDefaults.add("animania:mare_draft, true");
+        passiveDefaults.add("animania:stallion_draft, true");
+        passiveDefaults.add("animania:foal_draft, true");
+        passiveDefaults.add("animania:peachick_charcoal, true");
+        passiveDefaults.add("animania:peachick_opal, true");
+        passiveDefaults.add("animania:peachick_peach, true");
+        passiveDefaults.add("animania:peachick_purple, true");
+        passiveDefaults.add("animania:peachick_taupe, true");
+        passiveDefaults.add("animania:peachick_blue, true");
+        passiveDefaults.add("animania:peachick_white, true");
 
         threatBypassDefaults.add("dissolution:player_corpse");
         threatBypassDefaults.add("millenaire:genericvillager");
