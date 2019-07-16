@@ -5,8 +5,6 @@ Add thut's elevators to it by default (thuttech:lift)
 
 Compat for one-way glass from SecretRoomsMod
 
-Check compat with Animania's sleeping animation, the normal death animation, and any similar
-
 Make sure hidefrom command is usable for non-op survival players
 
 
@@ -37,6 +35,8 @@ Start making some of those tutorial videos
 
 
 BUG FIXES ===================================================================================================================================================================================================================
+
+Fix animation handling when an entity starts being tracked; Animania's sleeping animation, the normal death animation, and any similar
 
 Mobs in desperation mode can be put into flee mode by hitting them...
 ...fix by adding "desperation" status effect
