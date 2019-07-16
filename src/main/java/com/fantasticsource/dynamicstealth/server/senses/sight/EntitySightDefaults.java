@@ -71,6 +71,7 @@ public class EntitySightDefaults
         naturallyBrightDefaults.add("elementalmobs:sylph");
         naturallyBrightDefaults.add("elementalmobs:xaphan");
         naturallyBrightDefaults.add("harvestersnight:harvester");
+        naturallyBrightDefaults.add("sanity:ghost_zombie");
 
 
         naturalNightvisionDefaults.add("nex:ghast_queen");
