@@ -3,8 +3,6 @@ CURRENTLY WORKING ON ===========================================================
 Add config for forcing full visibility on specified entities
 Add thut's elevators to it by default (thuttech:lift)
 
-Compat for one-way glass from SecretRoomsMod
-
 Make sure hidefrom command is usable for non-op survival players
 
 
