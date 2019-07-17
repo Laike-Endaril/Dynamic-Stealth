@@ -55,7 +55,7 @@ public class DSTools
         if (world.isRemote)
         {
             Integer result = ClientData.minimumDimensionLightLevels.get(world.provider.getDimension());
-            return Tools.max(world.getLightFromNeighbors(pos), result == null ? 0 : result);
+            return Tools.max(world.getLightFromNeighbors(pos) - world.calculateSkylightSubtracted(1), result == null ? 0 : result);
         }
         return Tools.max(world.getLightFromNeighbors(pos), EntitySightData.minimumDimensionLight(world.provider.getDimension()));
     }
