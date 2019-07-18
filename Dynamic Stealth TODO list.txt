@@ -1,9 +1,5 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Add support for specifying CNPCs by name
-
-Add fearless potion effect
-
 Add config for forcing full visibility on specified entities
 Add thut's elevators to it by default (thuttech:lift)
 
@@ -75,6 +71,8 @@ HUD elements do not display in "fast" graphics mode...not that anyone uses fast 
 
 
 GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES =================================================================================================================================================================================
+
+Add support for players by name in entity-specific settings
 
 Better potion handling on death (currently in LivingDropsEvent)...
 ...config list for potions

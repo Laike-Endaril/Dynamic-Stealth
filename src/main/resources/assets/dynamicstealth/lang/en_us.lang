@@ -229,7 +229,7 @@ dynamicstealth.config.aiNoPetTeleport=Prevent Pet Teleport
 dynamicstealth.config.aiNoPetTeleport.tooltip=FILLSCREEN FIXNEWLINES If set to true, wolves, cats, and parrots do not teleport while following their owners\n \n
 
 dynamicstealth.config.entitySpecificHeadSpeed=Head Turn Speed
-dynamicstealth.config.entitySpecificHeadSpeed.tooltip=FILLSCREEN FIXNEWLINES How quickly entities' heads spin during eg. a search sequence\n\nentityID, headTurnSpeed\n\neg...\n\nminecraft:skeleton, 5\n \n
+dynamicstealth.config.entitySpecificHeadSpeed.tooltip=FILLSCREEN FIXNEWLINES How quickly entities' heads spin during eg. a search sequence\n\nentityID, headTurnSpeed\n\neg...\n\nminecraft:skeleton, 5\n\nYou can also specify entities with a certain name, like so:\nmodid:entity:name\n \n
 
 dynamicstealth.config.fleeThreshold=HP Threshold
 dynamicstealth.config.fleeThreshold.tooltip=FILLSCREEN FIXNEWLINES The %% of health at which entities start to flee\n \n
@@ -240,7 +240,7 @@ dynamicstealth.config.fleeHome.tooltip=FILLSCREEN FIXNEWLINES If enabled, Custom
 dynamicstealth.config.waterReset=CNPCs Reset in Water
 dynamicstealth.config.waterReset.tooltip=FILLSCREEN FIXNEWLINES If enabled, Custom NPCs reset when they touch water\n \n
 dynamicstealth.config.fearless=Fearless
-dynamicstealth.config.fearless.tooltip=FILLSCREEN FIXNEWLINES These entities will not use the flee mechanic when low on health\n\nEntities that bypass threat are automatically fearless\n \n
+dynamicstealth.config.fearless.tooltip=FILLSCREEN FIXNEWLINES These entities will not use the flee mechanic when low on health\n\nYou can also specify entities with a certain name, like so:\nmodid:entity:name\n\nEntities that bypass threat are automatically fearless\n \n
 
 dynamicstealth.config.cantReachCombatTime=Combat Time
 dynamicstealth.config.cantReachCombatTime.tooltip=FILLSCREEN FIXNEWLINES Deciding we can't reach the target requires at least this many ticks in combat\n \n
@@ -262,7 +262,7 @@ dynamicstealth.config.allowPassiveRecognition.tooltip=FILLSCREEN FIXNEWLINES If 
 dynamicstealth.config.allowStealthGauge=Allow Stealth Gauge
 dynamicstealth.config.allowStealthGauge.tooltip=FILLSCREEN FIXNEWLINES If enabled, clients can see their current stealth level in their HUD\n\n0 means disabled for all players\n1 means enabled for OP players ONLY\n2 means enabled for all players\n \n
 dynamicstealth.config.stealthgaugeblacklist=Stealth Gauge Blacklist
-dynamicstealth.config.stealthgaugeblacklist.tooltip=FILLSCREEN FIXNEWLINES Entities in this list will not trigger the stealth gauge!\n \n
+dynamicstealth.config.stealthgaugeblacklist.tooltip=FILLSCREEN FIXNEWLINES Entities in this list will not trigger the stealth gauge!\n\nYou can also specify entities with a certain name, like so:\nmodid:entity:name\n \n
 
 dynamicstealth.config.allowTargetName=Allow "Name" Display
 dynamicstealth.config.allowTargetName.tooltip=FILLSCREEN FIXNEWLINES If enabled, clients can see the names of entities\n\n0 means disabled for all players\n1 means enabled for OP players ONLY\n2 means enabled for all players\n \n
@@ -293,7 +293,7 @@ dynamicstealth.config.enabletouch.tooltip=FILLSCREEN FIXNEWLINES If true, entiti
 dynamicstealth.config.touchreveals=Touch Reveals
 dynamicstealth.config.touchreveals.tooltip=FILLSCREEN FIXNEWLINES If true, entities that bump into each other both have invisibility removed from them\n \n
 dynamicstealth.config.unfeeling=Unfeeling
-dynamicstealth.config.unfeeling.tooltip=FILLSCREEN FIXNEWLINES Entities in this list don't notice when something bumps them\n \n
+dynamicstealth.config.unfeeling.tooltip=FILLSCREEN FIXNEWLINES Entities in this list don't notice when something bumps them\n\nYou can also specify entities with a certain name, like so:\nmodid:entity:name\n \n
 
 dynamicstealth.config.stealthMultipliers=Stealth Multipliers
 dynamicstealth.config.stealthMultipliers.tooltip=FILLSCREEN FIXNEWLINES Contains multipliers that increase stealth / decrease awareness\n\nWhichever of these multipliers is currently giving the best (lowest) multiplier is used\n \n
@@ -356,11 +356,11 @@ dynamicstealth.config.entitySpecificDistance.tooltip=FILLSCREEN FIXNEWLINES How 
 dynamicstealth.config.entitySpecificLighting=Lighting
 dynamicstealth.config.entitySpecificLighting.tooltip=FILLSCREEN FIXNEWLINES How well an entity sees in the dark\n\nentityID, lightLevelHigh, lightMultHigh, lightLevelLow, lightMultLow\n\neg...\n\nminecraft:skeleton, 15, 1, 0, 0\n \n
 dynamicstealth.config.naturallyBright=Naturally Bright
-dynamicstealth.config.naturallyBright.tooltip=FILLSCREEN FIXNEWLINES Entities in this list are always treated as if they are standing in max light level\n \n
+dynamicstealth.config.naturallyBright.tooltip=FILLSCREEN FIXNEWLINES Entities in this list are always treated as if they are standing in max light level\n\nYou can also specify entities with a certain name, like so:\nmodid:entity:name\n \n
 dynamicstealth.config.naturalNightvision=Natural Nightvision
-dynamicstealth.config.naturalNightvision.tooltip=FILLSCREEN FIXNEWLINES Entities in this list ALWAYS get the nightvision bonus\n \n
+dynamicstealth.config.naturalNightvision.tooltip=FILLSCREEN FIXNEWLINES Entities in this list ALWAYS get the nightvision bonus\n\nYou can also specify entities with a certain name, like so:\nmodid:entity:name\n \n
 dynamicstealth.config.naturalSoulSight=Natural Soul Sight
-dynamicstealth.config.naturalSoulSight.tooltip=FILLSCREEN FIXNEWLINES Entities in this list pretty much see everything\n\nAdding the player keyword to this list makes all players see all entities as if they had glowing (visible through walls)\n \n
+dynamicstealth.config.naturalSoulSight.tooltip=FILLSCREEN FIXNEWLINES Entities in this list pretty much see everything\n\nAdding the player keyword to this list makes all players see all entities as if they had glowing (visible through walls)\n\nYou can also specify entities with a certain name, like so:\nmodid:entity:name\n \n
 
 dynamicstealth.config.warningRange=Warning Range
 dynamicstealth.config.warningRange.tooltip=FILLSCREEN FIXNEWLINES How far away entities can hear warnings, by default\n \n
@@ -399,9 +399,9 @@ dynamicstealth.config.threatCantReachRate=Owned Can't Reach Degredation Rate
 dynamicstealth.config.threatCantReachRate.tooltip=FILLSCREEN FIXNEWLINES Every time an owned entity updates and can't reach their target, this is subtracted from their threat\n \n
 
 dynamicstealth.config.entitySpecificBypass=Threat Bypass
-dynamicstealth.config.entitySpecificBypass.tooltip=FILLSCREEN FIXNEWLINES Entities in this bypass the threat system\n\nThis means they will not use the search AI, will appear with ???? as their target and threat level in the targeting HUD, and always appear as full alert in the on-point HUD\n\nFor some entities, this option is necessary for them to work right, such as slimes.  For others, like the ender dragon and other players, it has no effect besides how they appear in the HUD\n \n
+dynamicstealth.config.entitySpecificBypass.tooltip=FILLSCREEN FIXNEWLINES Entities in this bypass the threat system\n\nThis means they will not use the search AI, will appear with ???? as their target and threat level in the targeting HUD, and always appear as full alert in the on-point HUD\n\nFor some entities, this option is necessary for them to work right, such as slimes.  For others, like the ender dragon and other players, it has no effect besides how they appear in the HUD\n\nYou can also specify entities with a certain name, like so:\nmodid:entity:name\n \n
 dynamicstealth.config.entityPassiveness=Passiveness
-dynamicstealth.config.entityPassiveness.tooltip=FILLSCREEN FIXNEWLINES Sets whether the threat system detects and entity as passive or not\n\nentityID, passivity\n\neg...\n\nminecraft:skeleton, true\n \n
+dynamicstealth.config.entityPassiveness.tooltip=FILLSCREEN FIXNEWLINES Sets whether the threat system detects and entity as passive or not\n\nentityID, passivity\n\neg...\n\nminecraft:skeleton, true\n\nYou can also specify entities with a certain name, like so:\nmodid:entity:name\n \n
 
 dynamicstealth.config.CNPCFactionBypass=Faction Threat Bypass
 dynamicstealth.config.CNPCFactionBypass.tooltip=FILLSCREEN FIXNEWLINES All CNPCs in these factions will bypass the threat system\n \n

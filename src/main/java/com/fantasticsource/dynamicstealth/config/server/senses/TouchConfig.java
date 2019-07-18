@@ -12,7 +12,13 @@ public class TouchConfig
 
     @Config.Name("Unfeeling")
     @Config.LangKey(DynamicStealth.MODID + ".config.unfeeling")
-    @Config.Comment({"Entities in this list don't notice when something bumps them"})
+    @Config.Comment(
+            {
+                    "Entities in this list don't notice when something bumps them",
+                    "",
+                    "You can also specify entities with a certain name, like so:",
+                    "modid:entity:name"
+            })
     public String[] unfeelingEntities = new String[]
             {
                     "zombie",

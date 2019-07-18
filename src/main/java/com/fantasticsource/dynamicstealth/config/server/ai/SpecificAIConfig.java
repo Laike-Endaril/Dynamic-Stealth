@@ -15,7 +15,10 @@ public class SpecificAIConfig
                     "",
                     "eg...",
                     "",
-                    "minecraft:skeleton, 5"
+                    "minecraft:skeleton, 5",
+                    "",
+                    "You can also specify entities with a certain name, like so:",
+                    "modid:entity:name"
             })
     public String[] headTurnSpeed = new String[]{"ghast, 10"};
 }

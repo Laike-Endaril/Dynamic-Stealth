@@ -22,8 +22,11 @@ public class EntitySightData
     public static LinkedHashMap<Integer, Integer> minimumDimensionLightLevels;
 
     private static HashSet<Class<? extends EntityLivingBase>> naturallyBrightEntities;
+    private static HashSet<Pair<Class<? extends EntityLivingBase>, String>> naturallyBrightEntitiesNamed;
     private static HashSet<Class<? extends EntityLivingBase>> naturalNightvisionEntities;
+    private static HashSet<Pair<Class<? extends EntityLivingBase>, String>> naturalNightvisionEntitiesNamed;
     private static HashSet<Class<? extends EntityLivingBase>> naturalSoulSightEntities;
+    private static HashSet<Pair<Class<? extends EntityLivingBase>, String>> naturalSoulSightEntitiesNamed;
     private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityAngles;
     private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityDistances;
     private static LinkedHashMap<Class<? extends EntityLivingBase>, SpecificLighting> entityLighting;
@@ -36,8 +39,11 @@ public class EntitySightData
         potionSoulSightEntities = new HashSet<>();
 
         naturallyBrightEntities = new HashSet<>();
+        naturallyBrightEntitiesNamed = new HashSet<>();
         naturalNightvisionEntities = new HashSet<>();
+        naturalNightvisionEntitiesNamed = new HashSet<>();
         naturalSoulSightEntities = new HashSet<>();
+        naturalSoulSightEntitiesNamed = new HashSet<>();
         entityAngles = new LinkedHashMap<>();
         entityDistances = new LinkedHashMap<>();
         entityLighting = new LinkedHashMap<>();
@@ -51,6 +57,13 @@ public class EntitySightData
         for (String string : serverSettings.senses.sight.y_entityOverrides.naturallyBrightEntities)
         {
             if (string.equals("player")) naturallyBrightEntities.add(EntityPlayerMP.class);
+            else if (string.indexOf(":") != string.lastIndexOf(":"))
+            {
+                String[] tokens2 = string.split(":");
+                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(tokens2[0], tokens2[1]));
+                if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
+                else naturallyBrightEntitiesNamed.add(new Pair<>((Class<? extends EntityLivingBase>) entry.getEntityClass(), tokens2[2]));
+            }
             else
             {
                 entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(string));
@@ -71,6 +84,13 @@ public class EntitySightData
         for (String string : serverSettings.senses.sight.y_entityOverrides.naturalNightvisionMobs)
         {
             if (string.equals("player")) naturalNightvisionEntities.add(EntityPlayerMP.class);
+            else if (string.indexOf(":") != string.lastIndexOf(":"))
+            {
+                String[] tokens2 = string.split(":");
+                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(tokens2[0], tokens2[1]));
+                if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
+                else naturalNightvisionEntitiesNamed.add(new Pair<>((Class<? extends EntityLivingBase>) entry.getEntityClass(), tokens2[2]));
+            }
             else
             {
                 entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(string));
@@ -90,6 +110,13 @@ public class EntitySightData
         for (String string : serverSettings.senses.sight.y_entityOverrides.naturalSoulSightMobs)
         {
             if (string.equals("player")) naturalSoulSightEntities.add(EntityPlayerMP.class);
+            else if (string.indexOf(":") != string.lastIndexOf(":"))
+            {
+                String[] tokens2 = string.split(":");
+                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(tokens2[0], tokens2[1]));
+                if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
+                else naturalSoulSightEntitiesNamed.add(new Pair<>((Class<? extends EntityLivingBase>) entry.getEntityClass(), tokens2[2]));
+            }
             else
             {
                 entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(string));
@@ -203,16 +230,31 @@ public class EntitySightData
 
     public static boolean isBright(EntityLivingBase target)
     {
+        for (Pair pair : naturallyBrightEntitiesNamed)
+        {
+            if (pair.getKey().equals(target.getClass()) && pair.getValue().equals(target.getName())) return true;
+        }
+
         return (serverSettings.senses.sight.g_absolutes.seeBurning && target.isBurning()) || naturallyBrightEntities.contains(target.getClass());
     }
 
     public static boolean hasNightvision(EntityLivingBase searcher)
     {
+        for (Pair pair : naturalNightvisionEntitiesNamed)
+        {
+            if (pair.getKey().equals(searcher.getClass()) && pair.getValue().equals(searcher.getName())) return true;
+        }
+
         return naturalNightvisionEntities.contains(searcher.getClass()) || searcher.getActivePotionEffect(MobEffects.NIGHT_VISION) != null;
     }
 
     public static boolean hasSoulSight(EntityLivingBase searcher)
     {
+        for (Pair pair : naturalSoulSightEntitiesNamed)
+        {
+            if (pair.getKey().equals(searcher.getClass()) && pair.getValue().equals(searcher.getName())) return true;
+        }
+
         return naturalSoulSightEntities.contains(searcher.getClass()) || potionSoulSightEntities.contains(searcher);
     }
 

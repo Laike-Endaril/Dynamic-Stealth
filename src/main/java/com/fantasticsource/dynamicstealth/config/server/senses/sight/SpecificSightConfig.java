@@ -50,12 +50,24 @@ public class SpecificSightConfig
 
     @Config.Name("Naturally Bright")
     @Config.LangKey(DynamicStealth.MODID + ".config.naturallyBright")
-    @Config.Comment({"Entities in this list are always treated as if they are standing in max light level"})
+    @Config.Comment(
+            {
+                    "Entities in this list are always treated as if they are standing in max light level",
+                    "",
+                    "You can also specify entities with a certain name, like so:",
+                    "modid:entity:name"
+            })
     public String[] naturallyBrightEntities = EntitySightDefaults.naturallyBrightDefaults.toArray(new String[0]);
 
     @Config.Name("Natural Nightvision")
     @Config.LangKey(DynamicStealth.MODID + ".config.naturalNightvision")
-    @Config.Comment({"Entities in this list ALWAYS get the nightvision bonus"})
+    @Config.Comment(
+            {
+                    "Entities in this list ALWAYS get the nightvision bonus",
+                    "",
+                    "You can also specify entities with a certain name, like so:",
+                    "modid:entity:name"
+            })
     public String[] naturalNightvisionMobs = EntitySightDefaults.naturalNightvisionDefaults.toArray(new String[0]);
 
     @Config.Name("Natural Soul Sight")
@@ -64,7 +76,10 @@ public class SpecificSightConfig
             {
                     "Entities in this list pretty much see everything",
                     "",
-                    "Adding the player keyword to this list makes all players see all entities as if they had glowing (visible through walls)"
+                    "Adding the player keyword to this list makes all players see all entities as if they had glowing (visible through walls)",
+                    "",
+                    "You can also specify entities with a certain name, like so:",
+                    "modid:entity:name"
             })
     public String[] naturalSoulSightMobs = EntitySightDefaults.naturalSoulSightDefaults.toArray(new String[0]);
 }

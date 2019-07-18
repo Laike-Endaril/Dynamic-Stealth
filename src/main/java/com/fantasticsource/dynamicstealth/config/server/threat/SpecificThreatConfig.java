@@ -14,7 +14,10 @@ public class SpecificThreatConfig
                     "",
                     "This means they will not use the search AI, will appear with ???? as their target and threat level in the targeting HUD, and always appear as full alert in the on-point HUD",
                     "",
-                    "For some entities, this option is necessary for them to work right, such as slimes.  For others, like the ender dragon and other players, it has no effect besides how they appear in the HUD"
+                    "For some entities, this option is necessary for them to work right, such as slimes.  For others, like the ender dragon and other players, it has no effect besides how they appear in the HUD",
+                    "",
+                    "You can also specify entities with a certain name, like so:",
+                    "modid:entity:name"
             })
     public String[] threatBypass = EntityThreatDefaults.threatBypassDefaults.toArray(new String[0]);
 
@@ -28,7 +31,10 @@ public class SpecificThreatConfig
                     "",
                     "eg...",
                     "",
-                    "minecraft:skeleton, true"
+                    "minecraft:skeleton, true",
+                    "",
+                    "You can also specify entities with a certain name, like so:",
+                    "modid:entity:name"
             })
     public String[] isPassive = EntityThreatDefaults.passiveDefaults.toArray(new String[0]);
 }

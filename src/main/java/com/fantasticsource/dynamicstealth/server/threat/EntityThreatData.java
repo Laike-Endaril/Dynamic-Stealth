@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth.server.threat;
 
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.mctools.MCTools;
+import com.fantasticsource.tools.datastructures.Pair;
 import ladysnake.dissolution.api.corporeality.IPossessable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -19,15 +20,21 @@ import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.ser
 public class EntityThreatData
 {
     private static HashSet<Class<? extends EntityLivingBase>> threatBypass;
+    private static HashSet<Pair<Class<? extends EntityLivingBase>, String>> threatBypassNamed;
     private static HashSet<Class<? extends EntityLivingBase>> isPassive;
+    private static HashSet<Pair<Class<? extends EntityLivingBase>, String>> isPassiveNamed;
     private static HashSet<Class<? extends EntityLivingBase>> isNonPassive;
+    private static HashSet<Pair<Class<? extends EntityLivingBase>, String>> isNonPassiveNamed;
 
 
     public static void update()
     {
         threatBypass = new HashSet<>();
+        threatBypassNamed = new HashSet<>();
         isPassive = new HashSet<>();
+        isPassiveNamed = new HashSet<>();
         isNonPassive = new HashSet<>();
+        isNonPassiveNamed = new HashSet<>();
 
         EntityEntry entry;
         String[] tokens;
@@ -37,6 +44,13 @@ public class EntityThreatData
         for (String string : serverSettings.threat.y_entityOverrides.threatBypass)
         {
             if (string.equals("player")) threatBypass.add(EntityPlayerMP.class);
+            else if (string.indexOf(":") != string.lastIndexOf(":"))
+            {
+                String[] tokens2 = string.split(":");
+                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(tokens2[0], tokens2[1]));
+                if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
+                else threatBypassNamed.add(new Pair<>((Class<? extends EntityLivingBase>) entry.getEntityClass(), tokens2[2]));
+            }
             else
             {
                 entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(string));
@@ -73,6 +87,17 @@ public class EntityThreatData
                         if (mode == 1) isPassive.add(EntityPlayerMP.class);
                         else isNonPassive.add(EntityPlayerMP.class);
                     }
+                    else if (token.indexOf(":") != token.lastIndexOf(":"))
+                    {
+                        String[] tokens2 = token.split(":");
+                        entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(tokens2[0], tokens2[1]));
+                        if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
+                        else
+                        {
+                            if (mode == 1) isPassiveNamed.add(new Pair<>((Class<? extends EntityLivingBase>) entry.getEntityClass(), tokens2[2]));
+                            else isNonPassiveNamed.add(new Pair<>((Class<? extends EntityLivingBase>) entry.getEntityClass(), tokens2[2]));
+                        }
+                    }
                     else
                     {
                         entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(token));
@@ -103,6 +128,11 @@ public class EntityThreatData
 
         if (Compat.dissolution && livingBase instanceof IPossessable && ((IPossessable) livingBase).getPossessingEntity() != null) return true;
 
+        for (Pair pair : threatBypassNamed)
+        {
+            if (pair.getKey().equals(livingBase.getClass()) && pair.getValue().equals(livingBase.getName())) return true;
+        }
+
         if (Compat.customnpcs)
         {
             IEntity iEntity = NpcAPI.Instance().getIEntity(livingBase);
@@ -125,8 +155,18 @@ public class EntityThreatData
         if (livingBase == null || bypassesThreat(livingBase)) return false;
 
         Class cl = livingBase.getClass();
-        if (isPassive.contains(cl)) return true;
+
+        for (Pair pair : isNonPassiveNamed)
+        {
+            if (pair.getKey().equals(livingBase.getClass()) && pair.getValue().equals(livingBase.getName())) return false;
+        }
+        for (Pair pair : isPassiveNamed)
+        {
+            if (pair.getKey().equals(livingBase.getClass()) && pair.getValue().equals(livingBase.getName())) return true;
+        }
+
         if (isNonPassive.contains(cl)) return false;
+        if (isPassive.contains(cl)) return true;
 
         return MCTools.isPassive(livingBase);
     }

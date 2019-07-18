@@ -28,6 +28,9 @@ public class FleeConfig
             {
                     "These entities will not use the flee mechanic when low on health",
                     "",
+                    "You can also specify entities with a certain name, like so:",
+                    "modid:entity:name",
+                    "",
                     "Entities that bypass threat are automatically fearless"
             })
     public String[] fearless = EntityAIDefaults.fearlessDefaults.toArray(new String[0]);

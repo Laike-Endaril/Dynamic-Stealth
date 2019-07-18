@@ -33,6 +33,12 @@ public class HUDAllowanceConfig
 
     @Config.Name("Stealth Gauge Blacklist")
     @Config.LangKey(DynamicStealth.MODID + ".config.stealthgaugeblacklist")
-    @Config.Comment("Entities in this list will not trigger the stealth gauge!")
+    @Config.Comment(
+            {
+                    "Entities in this list will not trigger the stealth gauge!",
+                    "",
+                    "You can also specify entities with a certain name, like so:",
+                    "modid:entity:name"
+            })
     public String[] stealthGaugeBlacklist = new String[]{};
 }
