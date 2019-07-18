@@ -15,7 +15,7 @@ public class HUDAllowanceConfig
 
     @Config.Name("Recognize Passives Automatically")
     @Config.LangKey(DynamicStealth.MODID + ".config.allowPassiveRecognition")
-    @Config.Comment("If enabled, clients' threat HUDs will display green for passive mobs.  If disabled, passives appear as idle (blue).")
+    @Config.Comment("If enabled, clients' threat HUDs will display green for passive mobs.  If disabled, passives appear as non-passives (blue).")
     public boolean recognizePassive = true;
 
     @Config.Name("Allow Stealth Gauge For Clients")
