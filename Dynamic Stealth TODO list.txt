@@ -1,5 +1,11 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+Add configs for HP element...
+...whether current is shown
+...whether max is shown (requires current)
+...whether % is shown
+...whether bar is shown (add bar render)
+
 Add config for forcing full visibility on specified entities
 Add thut's elevators to it by default (thuttech:lift)
 
