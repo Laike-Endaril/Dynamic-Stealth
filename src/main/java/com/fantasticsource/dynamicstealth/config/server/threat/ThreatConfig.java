@@ -28,12 +28,6 @@ public class ThreatConfig
     @Config.RangeDouble(min = 0)
     public double combatStart = 30;
 
-    @Config.Name("015 Initial Attack Multiplier")
-    @Config.LangKey(DynamicStealth.MODID + ".config.threatInitialAttack")
-    @Config.Comment({"When an out-of-combat entity is attacked, its threat is set to the damage taken times this, divided by its max HP"})
-    @Config.RangeDouble(min = 0)
-    public double attackedInitialMultiplier = 400;
-
     @Config.Name("020 Dealt Damage Multiplier")
     @Config.LangKey(DynamicStealth.MODID + ".config.threatDealtDamage")
     @Config.Comment({"When an in-combat entity damages its current target, its threat is increased by the damage dealt times this, divided by its target's max HP"})

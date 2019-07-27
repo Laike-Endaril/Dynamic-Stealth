@@ -195,8 +195,8 @@ public class Threat
                 if (oldPercentage <= 0)
                 {
                     //Not in combat
-                    threatPercentage *= serverSettings.threat.attackedInitialMultiplier;
-                    Threat.set(searcher, searcherSeesTarget ? target : null, (float) threatPercentage);
+                    threatPercentage *= serverSettings.threat.attackedBySameMultiplier;
+                    Threat.set(searcher, searcherSeesTarget ? target : null, (float) (serverSettings.threat.combatStart + threatPercentage));
                 }
                 else if (searcherSeesTarget && target != oldTarget)
                 {
@@ -204,7 +204,7 @@ public class Threat
                     //Subtract from existing threat level; if it would be <= 0, then instead set new target and use initial attack multiplier as opposed to attacked by other multiplier
                     double threatTest = threatPercentage * serverSettings.threat.attackedByOtherMultiplier;
                     if (threatTest < oldPercentage) Threat.setThreat(searcher, (float) (oldPercentage - threatTest));
-                    else Threat.set(searcher, target, (float) (threatPercentage * serverSettings.threat.attackedInitialMultiplier));
+                    else Threat.set(searcher, target, (float) (serverSettings.threat.combatStart + threatTest));
                 }
                 else
                 {
