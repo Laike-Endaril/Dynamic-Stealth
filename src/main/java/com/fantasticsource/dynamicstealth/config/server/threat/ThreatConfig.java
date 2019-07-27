@@ -18,11 +18,15 @@ public class ThreatConfig
     @Config.Comment({"If enabled, all entities should bypass the threat system"})
     public boolean bypassThreatSystem = false;
 
-    @Config.Name("010 Initial 'Target Spotted' Threat")
-    @Config.LangKey(DynamicStealth.MODID + ".config.threatInitialSpotted")
-    @Config.Comment({"When an out-of-combat entity spots a valid target, its threat is set to this"})
+    @Config.Name("010 'Start of Combat' Threat")
+    @Config.LangKey(DynamicStealth.MODID + ".config.threatCombatStart")
+    @Config.Comment(
+            {
+                    "When an out-of-combat entity first enters combat, its threat is set to this",
+                    "This can happen from an entity seeing a valid target to attack or from an entity taking damage while out of combat"
+            })
     @Config.RangeDouble(min = 0)
-    public double targetSpottedThreat = 30;
+    public double combatStart = 30;
 
     @Config.Name("015 Initial Attack Multiplier")
     @Config.LangKey(DynamicStealth.MODID + ".config.threatInitialAttack")

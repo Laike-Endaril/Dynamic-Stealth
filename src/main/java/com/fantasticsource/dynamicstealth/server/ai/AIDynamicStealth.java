@@ -210,7 +210,7 @@ public class AIDynamicStealth extends EntityAIBase
             if (AITargetEdit.isSuitableTarget(searcher, attackTarget))
             {
                 //Hopefully this always only means we've just noticed a new, valid target
-                Threat.apply(searcher, attackTarget, serverSettings.threat.targetSpottedThreat, GEN_TARGET_SPOTTED, true);
+                Threat.apply(searcher, attackTarget, serverSettings.threat.combatStart, GEN_TARGET_SPOTTED, true);
                 lastKnownPosition = attackTarget.getPosition();
                 clearAIPath();
                 warn(searcher, attackTarget, attackTarget.getPosition(), true);
@@ -242,7 +242,7 @@ public class AIDynamicStealth extends EntityAIBase
             if (AITargetEdit.isSuitableTarget(searcher, attackTarget))
             {
                 //Hopefully this always only means we've just noticed a new, valid target
-                Threat.apply(searcher, attackTarget, serverSettings.threat.targetSpottedThreat, GEN_TARGET_SPOTTED, true);
+                Threat.apply(searcher, attackTarget, serverSettings.threat.combatStart, GEN_TARGET_SPOTTED, true);
                 lastKnownPosition = attackTarget.getPosition();
                 clearAIPath();
                 warn(searcher, attackTarget, attackTarget.getPosition(), true);

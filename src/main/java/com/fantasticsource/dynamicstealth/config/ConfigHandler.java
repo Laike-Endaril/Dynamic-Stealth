@@ -167,6 +167,10 @@ public class ConfigHandler
                 //Config versions 72-76
                 update72To77();
                 //Don't use break here; allow cases to pass to the next one, so it does each update function incrementally
+            case 77:
+                //Config versions 77-84
+                update77To85();
+                //Don't use break here; allow cases to pass to the next one, so it does each update function incrementally
         }
 
         try
@@ -324,6 +328,23 @@ public class ConfigHandler
         current.get("general.server settings.threat system", "065 Unseen Target Degredation Rate", 0.1d).set(ratio * old.get("general.server settings.threat system", "065 Unseen Target Degredation Rate", 1).getInt());
         current.get("general.server settings.threat system", "070 Flee Degredation Rate", 0.3d).set(ratio * old.get("general.server settings.threat system", "070 Flee Degredation Rate", 3).getInt());
         current.get("general.server settings.threat system", "075 Owned Can't Reach Degredation Rate", 0.5d).set(ratio * old.get("general.server settings.threat system", "075 Owned Can't Reach Degredation Rate", 5).getInt());
+
+        current.save();
+        logWriter.close();
+    }
+
+    private static void update77To85() throws IOException
+    {
+        Configuration current = new Configuration(currentFile);
+        Configuration old = new Configuration(mostRecentFile);
+
+        rename(old, "general.server settings.threat system", "010 Initial 'Target Spotted' Threat", "general.server settings.threat system", "010 'Start of Combat' Threat");
+
+        log();
+        log();
+        log();
+
+        transferAll(old, current);
 
         current.save();
         logWriter.close();
