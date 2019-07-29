@@ -13,14 +13,17 @@ dynamicstealth.soulsight=Soul Sight
 potion.effect.dynamicstealth.soulsight=Potion of Soul Sight
 splash_potion.effect.dynamicstealth.soulsight=Splash Potion of Soul Sight
 lingering_potion.effect.dynamicstealth.soulsight=Lingering Potion of Soul Sight
+tipped_arrow.effect.dynamicstealth.soulsight=Arrow of Soul Sight
 
 potion.effect.dynamicstealth.blindness=Potion of Blindness
 splash_potion.effect.dynamicstealth.blindness=Splash Potion of Blindness
 lingering_potion.effect.dynamicstealth.blindness=Lingering Potion of Blindness
+tipped_arrow.effect.dynamicstealth.blindness=Arrow of Blindness
 
 potion.effect.dynamicstealth.glowing=Potion of Glowing
 splash_potion.effect.dynamicstealth.glowing=Splash Potion of Glowing
 lingering_potion.effect.dynamicstealth.glowing=Lingering Potion of Glowing
+tipped_arrow.effect.dynamicstealth.glowing=Arrow of Glowing
 
 
 
