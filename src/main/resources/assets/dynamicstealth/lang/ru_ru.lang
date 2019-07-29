@@ -1,0 +1,518 @@
+attribute.name.dynamicstealth.visibilityReduction=% Подавление видимости
+attribute.name.dynamicstealth.sight=% Орлиный глаз
+
+attribute.name.dynamicstealth.noiseReduction=% Подавление шума
+attribute.name.dynamicstealth.hearing=% Острый слух
+
+attribute.name.dynamicstealth.scentReduction=% Подавление запахов
+attribute.name.dynamicstealth.smelling=% Чуткое обоняние
+
+
+
+dynamicstealth.soulsight=Восприятие Душ
+potion.effect.dynamicstealth.soulsight=Зелье Восприятия Душ
+splash_potion.effect.dynamicstealth.soulsight=Взрывное зелье Восприятия Душ
+lingering_potion.effect.dynamicstealth.soulsight=Туманное зелье Восприятия Душ
+tipped_arrow.effect.dynamicstealth.soulsight=Стрела Восприятия Душ
+
+potion.effect.dynamicstealth.blindness=Зелье слепоты
+splash_potion.effect.dynamicstealth.blindness=Взрывное зелье слепоты
+lingering_potion.effect.dynamicstealth.blindness=Туманное зелье слепоты
+tipped_arrow.effect.dynamicstealth.blindness=Ослепляющая стрела
+
+potion.effect.dynamicstealth.glowing=Зелье Сияния Души
+splash_potion.effect.dynamicstealth.glowing=Взрывное зелье Сияния Души
+lingering_potion.effect.dynamicstealth.glowing=Туманное зелье Сияния Души
+tipped_arrow.effect.dynamicstealth.glowing=Стрела Сияния Души
+
+dynamicstealth.cmd.reload.comment=§dПерезагрузка конфигурации мода
+
+dynamicstealth.cmd.reloaded1=§aЗаставляет сервер перезагрузить конфигурацию из файла
+dynamicstealth.cmd.reloaded2=§eЗаметка: Кнопка "Восстановить значения по умолчанию" может вызвать сбои до тех пор, пока игра не будет перезапущена
+dynamicstealth.cmd.reloaded3=§eЗаметка: Некоторые параметры могут обновиться только после перезагрузки сервера ( но большинство параметров обновляются без проблем )
+
+dynamicstealth.cmd.hidefromPlayerTF.comment=§dFalse означает, что данный игрок видит вас всегда, True - значение по умолчанию
+dynamicstealth.cmd.hidefromPlayer.comment=§dПоказывает, скрываетесь ли вы от этого игрока
+dynamicstealth.cmd.hidefrom.comment=§dПоказать список игроков, от которых вы НЕ пытаетесь скрыться
+
+dynamicstealth.cmd.hidefromEmpty=§aВы пытаетесь скрыться от всех игроков
+dynamicstealth.cmd.hidefrom=§eВы НЕ пытаетесь скрыться от...%s
+dynamicstealth.cmd.hidefromPlayerTrue=§aВы пытаетесь скрыться от %s
+dynamicstealth.cmd.hidefromPlayerFalse=§eВы НЕ пытаетесь скрыться от %s
+dynamicstealth.cmd.hidefromPlayerSetTrue=§aТеперь вы пытаетесь скрыться от %s
+dynamicstealth.cmd.hidefromPlayerSetFalse=§eВы больше не пытаетесь скрыться от %s
+dynamicstealth.cmd.hidefromPlayerTFError=§cТретий аргумент должен быть одним из следующих: §dt, true, f, false
+
+dynamicstealth.hud.hp=ОЗ: %s / %s (%s%%)
+
+dynamicstealth.hud.unknown=???
+
+dynamicstealth.hud.action=Действие: %s
+dynamicstealth.hud.fleeFrom=Убегает от %s
+dynamicstealth.hud.search=Разведка...
+dynamicstealth.hud.idlePassive=Ожидание (Пассив)
+dynamicstealth.hud.idleNonPassive=Ожидание (Не пассив)
+dynamicstealth.hud.targeting=Преследование %s
+
+dynamicstealth.hud.threat=Угроза: %s%%
+dynamicstealth.hud.threatNotApplicable=Угроза: N/A
+dynamicstealth.hud.distance=Расстояние: %s
+
+dynamicstealth.config.clientSettings=Клиентские настройки
+dynamicstealth.config.serverSettings=Серверные настройки
+
+dynamicstealth.config.hud=Интерфейс
+dynamicstealth.config.hud.tooltip=FILLSCREEN Какую информацию вы хотите отобразить на экране
+dynamicstealth.config.entityFading=Прозрачность существ
+dynamicstealth.config.entityFading.tooltip=FILLSCREEN Параметры отображения существ
+
+dynamicstealth.config.mainHUDStyle=Индикатор скрытности
+dynamicstealth.config.opHUDFilter=Фильтр индикатора действий
+dynamicstealth.config.opHUDStyle=Стиль индикатора действий
+dynamicstealth.config.targetingFilter=Фильтры таргетинга
+dynamicstealth.config.targetingStyle=Стиль таргетинга
+dynamicstealth.config.lightGauge=Индикатор освещённости
+
+dynamicstealth.config.stealthGaugeAlpha=Прозрачность
+dynamicstealth.config.stealthGaugeAlpha.tooltip=FILLSCREEN Степень прозрачности индикатора скрытности\n\n0 - невидимый, 1 - полностью непрозрачный\n \n
+dynamicstealth.config.stealthGaugeColor=Цвет
+dynamicstealth.config.stealthGaugeColor.tooltip=FILLSCREEN Цвет индикатора скрытности\n\nИспользует цветной формат вида RRGGBB\n \n
+dynamicstealth.config.stealthGaugeRimColor=Цвет обводки
+dynamicstealth.config.stealthGaugeRimColor.tooltip=FILLSCREEN Цвет обводки и стрелы индикатора скрытности ( при режиме = 1 )\n\nИспользует цветной формат вида RRGGBB\n \n
+dynamicstealth.config.stealthGaugeSize=Размер
+dynamicstealth.config.stealthGaugeSize.tooltip=FILLSCREEN Размер индикатора скрытности\n \n
+dynamicstealth.config.stealthGaugeMode=Режим
+dynamicstealth.config.stealthGaugeMode.tooltip=FILLSCREEN Режим отображения индикатора скрытности\n\n0 = Отключен\n1 = Вращающийся\n2 = Анимированный\n \n
+dynamicstealth.config.stealthGaugeX=Позиция X
+dynamicstealth.config.stealthGaugeX.tooltip=FILLSCREEN Позиция индикатора скрытности по X\n\n0 - слева, 0.5 - по центру, 1 - справа\n \n
+dynamicstealth.config.stealthGaugeY=Позиция Y
+dynamicstealth.config.stealthGaugeY.tooltip=FILLSCREEN Позиция индикатора скрытности по Y\n\n0 - сверху, 0.5 - по центру, 1 - снизу\n \n
+
+dynamicstealth.config.opHUDShowBypass=Непредсказуемый
+dynamicstealth.config.opHUDShowBypass.tooltip=FILLSCREEN Отображение индикатора на существах, игнорирующих систему угроз\n \n
+dynamicstealth.config.opHUDShowIdlePassive=Ожидание (Пассив)
+dynamicstealth.config.opHUDShowIdlePassive.tooltip=FILLSCREEN Отображение индикатора на пассивных существах\n \n
+dynamicstealth.config.opHUDShowIdleNonPassive=Ожидание (Не пассив)
+dynamicstealth.config.opHUDShowIdleNonPassive.tooltip=FILLSCREEN Отображение индикатора на НЕ пассивных существах. Это также относится к пассивным существам, если на сервере отключено распознавание пассивных существ\n \n
+dynamicstealth.config.opHUDShowAtkYou=Атакует вас
+dynamicstealth.config.opHUDShowAtkYou.tooltip=FILLSCREEN Отображение индикатора на существах, атакующих вас\n \n
+dynamicstealth.config.opHUDShowAtkOther=Атакует других
+dynamicstealth.config.opHUDShowAtkOther.tooltip=FILLSCREEN Отображение индикатора на существах, атакующих других\n \n
+dynamicstealth.config.opHUDShowSearching=Разведка
+dynamicstealth.config.opHUDShowSearching.tooltip=FILLSCREEN Отображение индикатора на существах, которые ищут цель\n \n
+dynamicstealth.config.opHUDShowFleePassive=Бегство (Пассив)
+dynamicstealth.config.opHUDShowFleePassive.tooltip=FILLSCREEN Отображение индикатора на убегающих в панике пассивных существах\n \n
+dynamicstealth.config.opHUDShowFlee=Бегство (Не пассив)
+dynamicstealth.config.opHUDShowFlee.tooltip=FILLSCREEN Отображение индикатора на убегающих в панике НЕ пассивных существах\n \n
+
+dynamicstealth.config.opHUDDepth=Использовать глубину
+dynamicstealth.config.opHUDDepth.tooltip=FILLSCREEN При значении false индикатор будет отображаться поверх блоков и моделей, но под тенями (немного глючит при перекрытии теней)\n\nПри значении true индикатор будет отображаться поверх теней правильно, но в зависимости от мира, т.е. индикатор будет скрыт за блоками / моделями\n \n
+dynamicstealth.config.opHUD3DVPercent=3D вертикальный процент
+dynamicstealth.config.opHUD3DVPercent.tooltip=FILLSCREEN Высота 3D-положения <эта настройка * высота объекта + вертикальное смещение>\n\nЕсли вы хотите использовать верх головы в качестве базовой позиции (а затем добавить смещения) - установите для этого параметра значение 1\n\n0 - позиция будет на ногах, 0.5 - в центре суещства.\n \n
+dynamicstealth.config.opHUDSneakOffset=Учитывать подкрадывание
+dynamicstealth.config.opHUDSneakOffset.tooltip=FILLSCREEN При значении true вертикальная позиция немного смещается вниз, когда объект крадется, аналогично поведению таблички по умолчанию\n \n
+dynamicstealth.config.opHUD3DVOffset=3D вертикальное смещение
+dynamicstealth.config.opHUD3DVOffset.tooltip=FILLSCREEN Высота 3D-положения - <вертикальный процент * высота существа + этот параметр>\n\nЕсли вы хотите, чтобы трехмерное положение находилось на полблока над головой (синхронизировано с табличкой с именем) - установите вертикальный процент в 1, а этот параметр - в 0,5.\n \n
+dynamicstealth.config.opHUD3DHPercent=3D горизонтальный процент
+dynamicstealth.config.opHUD3DHPercent.tooltip=FILLSCREEN Этот параметр изменяет горизонтальное 3D-положение *после* вращения\n\nПри 0,5 центровка будет с левой стороны существа, а при -0,5 - справа\n \n
+dynamicstealth.config.opHUD2DHOffset=2D горизонтальное смещение
+dynamicstealth.config.opHUD2DHOffset.tooltip=FILLSCREEN Сдвиг индикатора влево и вправо относительно экрана\n \n
+dynamicstealth.config.opHUD2DVOffset=2D вертикальное смещение
+dynamicstealth.config.opHUD2DVOffset.tooltip=FILLSCREEN Сдвиг индикатора вверх и вниз относительно экрана\n \n
+dynamicstealth.config.opHUDScale=Масштаб
+dynamicstealth.config.opHUDScale.tooltip=FILLSCREEN Размер индикатора действий\n \n
+
+dynamicstealth.config.targetingMaxDist=Максимальная дистанция
+dynamicstealth.config.targetingMaxDist.tooltip=FILLSCREEN Максимальная дистанция системы таргетинга
+dynamicstealth.config.targetingMaxAngle=Максимальный угол
+dynamicstealth.config.targetingMaxAngle.tooltip=FILLSCREEN Максимальный угол, под которым система таргетинга получит цель \nПри значении -1 таргетинг отключен\n \n
+dynamicstealth.config.targetingBypass=Непредсказуемый
+dynamicstealth.config.targetingBypass.tooltip=FILLSCREEN Таргетинг существ, игнорирующих систему угроз\n \n
+dynamicstealth.config.targetingIdlePassive=Ожидание (Пассив)
+dynamicstealth.config.targetingIdlePassive.tooltip=FILLSCREEN Таргетинг пассивных существ\n \n
+dynamicstealth.config.targetingIdleNonPassive=Ожидание (Не пассив)
+dynamicstealth.config.targetingIdleNonPassive.tooltip=FILLSCREEN Таргетинг НЕ пассивных существ. Это также относится к пассивным существам, если на сервере отключено распознавание пассивных существ\n \n
+dynamicstealth.config.targetingAtkYou=Атакует вас
+dynamicstealth.config.targetingAtkYou.tooltip=FILLSCREEN Таргетинг существ, которые атакуют вас\n \n
+dynamicstealth.config.targetingAtkOther=Атакует других
+dynamicstealth.config.targetingAtkOther.tooltip=FILLSCREEN Таргетинг существ, которые атакуют кого-либо\n \n
+dynamicstealth.config.targetingSearching=Разведка
+dynamicstealth.config.targetingSearching.tooltip=FILLSCREEN Таргетинг существ, которые ищут цель\n \n
+dynamicstealth.config.targetingFleePassive=Бегство (Пассив)
+dynamicstealth.config.targetingFleePassive.tooltip=FILLSCREEN Таргетинг убегающих в панике пассивных существ \n \n
+dynamicstealth.config.targetingFlee=Бегство (Не пассив)
+dynamicstealth.config.targetingFlee.tooltip=FILLSCREEN Таргетинг убегающих в панике НЕ пассивных существ \n \n
+
+dynamicstealth.config.targetingGlow=Свечение
+dynamicstealth.config.targetingGlow.tooltip=FILLSCREEN Выделение текущей цели эффектом свечения\n \n
+dynamicstealth.config.targetingGlowStateColor=Динамический цвет свечения
+dynamicstealth.config.targetingGlowStateColor.tooltip=FILLSCREEN Изменение цвета свечения в зависимости от состояния цели\n \n
+dynamicstealth.config.targetingAlpha=Непрозрачность таргетного прицела
+dynamicstealth.config.targetingAlpha.tooltip=FILLSCREEN Степень непрозрачности таргетного прицела\n\n0 - невидимый, 1 - полностью непрозрачный\n \n
+dynamicstealth.config.targetingColor=Цвет таргетного прицела по умолчанию
+dynamicstealth.config.targetingColor.tooltip=FILLSCREEN Цвет таргетного прицела, если функция динамического цвета отключена\n\nИспользует цветной формат вида RRGGBB\n \n
+dynamicstealth.config.targetingStateColor=Динамический цвет таргетного прицела
+dynamicstealth.config.targetingStateColor.tooltip=FILLSCREEN Изменение цвета таргетного прицела в зависимости от состояния цели\n \n
+dynamicstealth.config.targetingSpacing=Расстояние таргетного прицела
+dynamicstealth.config.targetingSpacing.tooltip=FILLSCREEN Насколько далеко от центра расположены части таргетного прицела\n \n
+dynamicstealth.config.targetingSize=Размер таргетного прицела
+dynamicstealth.config.targetingSize.tooltip=FILLSCREEN Размер частей таргетного прицела\n \n
+dynamicstealth.config.targetingTextAlpha=Непрозрачность текста
+dynamicstealth.config.targetingTextAlpha.tooltip=FILLSCREEN Степень непрозрачности текста\n\n0 - невидимый, 1 - полностью непрозрачный\n \n
+dynamicstealth.config.targetingTextColor=Цвет текста по умолчанию
+dynamicstealth.config.targetingTextColor.tooltip=FILLSCREEN Цвет текста, если функция динамического цвета отключена\n\nИспользует цветной формат вида RRGGBB\n \n
+dynamicstealth.config.targetingTextStateColor=Динамический цвет текста
+dynamicstealth.config.targetingTextStateColor.tooltip=FILLSCREEN Изменение цвета текста в зависимости от состояния цели\n \n
+dynamicstealth.config.targetingTextScale=Масштаб текста
+dynamicstealth.config.targetingTextScale.tooltip=FILLSCREEN Масштаб текста интерфейса таргетинга\n \n
+dynamicstealth.config.targetingArrowAlpha=Непрозрачность индикатора текущей цели
+dynamicstealth.config.targetingArrowAlpha.tooltip=FILLSCREEN Степень непрозрачности индикатора текущей цели\nДанный индикатор виден только когда текущая цель находится вне экрана\n\n0 - невидимый, 1 - полностью непрозрачный\n \n
+dynamicstealth.config.targetingArrowColor=Цвет индикатора текущей цели по умолчанию
+dynamicstealth.config.targetingArrowColor.tooltip=FILLSCREEN Цвет индикатора текущей цели, если функция динамического цвета отключена\nДанный индикатор виден только когда текущая цель находится вне экрана\n\nИспользует цветной формат вида RRGGBB\n \n
+dynamicstealth.config.targetingArrowStateColor=Динамический цвет индикатора текущей цели
+dynamicstealth.config.targetingArrowStateColor.tooltip=FILLSCREEN Изменение цвета индикатора текущей цели в зависимости от состояния цели\nДанный индикатор виден только когда текущая цель находится вне экрана\n \n
+dynamicstealth.config.targetingArrowSize=Размер индикатора текущей цели
+dynamicstealth.config.targetingArrowSize.tooltip=FILLSCREEN Размер индикатора текущей цели\nДанный индикатор виден только когда текущая цель находится вне экрана\n \n
+dynamicstealth.config.targetingComponents=Компоненты
+
+dynamicstealth.config.targetShowName=Имя
+dynamicstealth.config.targetShowName.tooltip=FILLSCREEN Отображение имени существа (если доступно)\n \n
+dynamicstealth.config.targetShowHP=Здоровье
+dynamicstealth.config.targetShowHP.tooltip=FILLSCREEN Отображение здоровья существа (если доступно)\n \n
+dynamicstealth.config.targetShowAction=Действие
+dynamicstealth.config.targetShowAction.tooltip=FILLSCREEN Отображение текущего действия существа (если доступно)\n \n
+dynamicstealth.config.targetShowThreat=Угроза
+dynamicstealth.config.targetShowThreat.tooltip=FILLSCREEN Отображение уровня угрозы существа (если доступно)\n \n
+dynamicstealth.config.targetShowDistance=Расстояние
+dynamicstealth.config.targetShowDistance.tooltip=FILLSCREEN Отображение расстояние до существа (если доступно)\n \n
+
+dynamicstealth.config.lightGaugeShow=Отображение
+dynamicstealth.config.lightGaugeShow.tooltip=FILLSCREEN Отображение индикатора освещённости в виде звезды\n \n
+dynamicstealth.config.lightGaugeAlpha=Прозрачность
+dynamicstealth.config.lightGaugeAlpha.tooltip=FILLSCREEN Степень прозрачности индикатора освещённости\n\n0 - невидимый, 1 - полностью непрозрачный\n \n
+dynamicstealth.config.lightGaugeColorEmpty=Цвет (пустой)
+dynamicstealth.config.lightGaugeColorEmpty.tooltip=FILLSCREEN Цвет пустого индикатора освещённости\n\nИспользует цветной формат вида RRGGBB\n \n
+dynamicstealth.config.lightGaugeColorFull=Цвет (заполненный)
+dynamicstealth.config.lightGaugeColorFull.tooltip=FILLSCREEN Цвет заполненного индикатора освещённости\n\nИспользует цветной формат вида RRGGBB\n \n
+dynamicstealth.config.lightGaugeSize=Размер
+dynamicstealth.config.lightGaugeSize.tooltip=FILLSCREEN Размер индикатора освещённости\n \n
+dynamicstealth.config.lightGaugeX=Позиция X
+dynamicstealth.config.lightGaugeX.tooltip=FILLSCREEN Позиция индикатора освещённости по X\n\n0 - слева, 0.5 - по центру, 1 - справа\n \n
+dynamicstealth.config.lightGaugeY=Позиция Y
+dynamicstealth.config.lightGaugeY.tooltip=FILLSCREEN Позиция индикатора освещённости по Y\n\n0 - сверху, 0.5 - по центру, 1 - снизу\n \n
+
+dynamicstealth.config.fadeMinAlpha=Минимальная непрозрачность существа
+dynamicstealth.config.fadeMinAlpha.tooltip=FILLSCREEN Непрозрачность существа, когда вы просто видите её\n\nЕсли установлено значение 0, то существа на краю вашего зрения почти невидимы\n\nЕсли установлено значение 1, то существа всегда отображаются в полностью\n \n
+dynamicstealth.config.fadeMaxAt=Полная непрозрачность при ...
+dynamicstealth.config.fadeMaxAt.tooltip=FILLSCREEN Уровень скрытности, на уровне или выше которого существо отображается полностью непрозрачным\n\nЕсли установлено значение 1, то существа отображаются полностью непрозрачными только в самых лучших условиях видимости.\n\nУменьшение значения делает объекты непрозрачными на дальней дистанции, при слабом освещении и т.д.\n \n
+
+dynamicstealth.config.ai=ИИ
+dynamicstealth.config.HUDAllowances=Разрешение клиентских интерфейсов
+dynamicstealth.config.senses=Чувства
+dynamicstealth.config.threat=Система угроз
+dynamicstealth.config.threat.tooltip=FILLSCREEN Система угроз решает, когда существо переключается с одной цели атаки на другую\n\nЭто похоже на системы угроз в некоторых MMORPG ( агро ).\n \n
+dynamicstealth.config.helperSys=Система помощи
+dynamicstealth.config.helperSys.tooltip=FILLSCREEN Какие существа приходят на помощь другим существам
+dynamicstealth.config.interact=Взаимодействия
+dynamicstealth.config.interact.tooltip=FILLSCREEN Вещи, которые происходят в особых обстоятельствах, например - стелс-атаки
+dynamicstealth.config.items=Предметы
+
+dynamicstealth.config.aiHeadSpeed=Скорость поворота головы
+dynamicstealth.config.aiHeadSpeed.tooltip=FILLSCREEN Как быстро вращаются головы сущностей, например - частота поиска\n \n
+dynamicstealth.config.aiEntitySpecific=Расширенные настройки существ
+dynamicstealth.config.aiFlee=Бегство
+dynamicstealth.config.aiCantReach=Невозможно достичь
+dynamicstealth.config.aiNoPetTeleport=Предотвращение телепорта питомцами
+dynamicstealth.config.aiNoPetTeleport.tooltip=FILLSCREEN Запрет телепорта волкам, кошкам и попугаям при следовании за своими владельцами.\n \n
+
+dynamicstealth.config.entitySpecificHeadSpeed=Скорость поворота головы
+dynamicstealth.config.entitySpecificHeadSpeed.tooltip=FILLSCREEN Как быстро вращаются головы сущностей, например - частота поиска\n\nid_существа, скорость поворота головы\n\nнапример...\n\nminecraft:skeleton, 5\n\nВы также можете указать существ с определенным именем:\nmodid:entity:name\n \n
+
+dynamicstealth.config.fleeThreshold=Процент срабатывания
+dynamicstealth.config.fleeThreshold.tooltip=FILLSCREEN %% здоровья, при котором существа начинают бежать\n \n
+dynamicstealth.config.fleeDamageLengthen=Урон увеличивает длительность бегства
+dynamicstealth.config.fleeDamageLengthen.tooltip=FILLSCREEN Если существо *уже* находится в режиме бегства, то урон увеличит продолжительность его бегства.\n \n
+dynamicstealth.config.fleeHome=Существа из Custom NPC при бегстве бегут домой
+dynamicstealth.config.fleeHome.tooltip=FILLSCREEN Существа из Custom NPC бегут в свой дом, а не от атакующего существа.\n \n
+dynamicstealth.config.waterReset=Сброс существ из Custom NPC в воде
+dynamicstealth.config.waterReset.tooltip=FILLSCREEN Сброс существ из Custom NPC при взаимодействии с водой\n \n
+dynamicstealth.config.fearless=Бесстрашный
+dynamicstealth.config.fearless.tooltip=FILLSCREEN Эти существа не будут использовать механику бегства, когда у них мало здоровья\n\nВы также можете указать существ с определенным именем:\nmodid:entity:name\n\nСущества, которые обходят угрозу, автоматически бесстрашны\n \n
+
+dynamicstealth.config.cantReachCombatTime=Время боя
+dynamicstealth.config.cantReachCombatTime.tooltip=FILLSCREEN Решение о недостижимости цели требует в бою как минимум столько тиков\n \n
+dynamicstealth.config.cantReachNoAttackTime=Безуспешные атаки
+dynamicstealth.config.cantReachNoAttackTime.tooltip=FILLSCREEN Решение о недостижимости цели требует как минимум столько тиков с момента последней успешной атаки\n \n
+dynamicstealth.config.cantReachNoPathTime=Нет прохода
+dynamicstealth.config.cantReachNoPathTime.tooltip=FILLSCREEN Решение о недостижимости цели требует по крайней мере столько тиков без доступных путей к цели.\n \n
+dynamicstealth.config.cantReachTargetTime=Смена цели
+dynamicstealth.config.cantReachTargetTime.tooltip=FILLSCREEN Решение о недостижимости цели требует как минимум столько тиков с "доступной" целью\n \n
+dynamicstealth.config.cantReachFlee=Бегство при недостижимости цели
+dynamicstealth.config.cantReachFlee.tooltip=FILLSCREEN Если невозможно достичь цели, то делайте как смелый сэр Робин\n \n
+dynamicstealth.config.cantReachPotionFilter=Фильтр эффектов зелий
+dynamicstealth.config.cantReachPotionFilter.tooltip=FILLSCREEN Существо не перейдет в режим ««невозможно достичь», если у него есть один из этих эффектов зелья.\n\nЭто предотвращает режим «невозможно достичь», если объект имеет уровень замедления 99: \ nslowness.99 "\n\nили если у объекта есть какой-либо уровень левитации: \ nlevitation. *\n \n
+
+dynamicstealth.config.targetingAllowances=Разрешения таргетинговой системы
+dynamicstealth.config.OPHUDAllowances=Разрешения индикатора действий
+dynamicstealth.config.allowPassiveRecognition=Распознавать пассивных существ автоматически
+dynamicstealth.config.allowPassiveRecognition.tooltip=FILLSCREEN Если включено, то пассивные существа будут отображаться зелёным цветом, иначе - синим цветом, как непассивные.\n \n
+dynamicstealth.config.allowStealthGauge=Разрешить индикатор скрытности
+dynamicstealth.config.allowStealthGauge.tooltip=FILLSCREEN Если включено, то игроки могут видеть свой индикатор уровня скрытности\n\n0 - отключено для всех игроков\n1 - включено только для администраторов\n2 - включено для всех игроков\n \n
+dynamicstealth.config.stealthgaugeblacklist=Чёрный список индикатора скрытности
+dynamicstealth.config.stealthgaugeblacklist.tooltip=FILLSCREEN Существа в этом списке не будут активировать индикатор скрытности!\n\nВы также можете указать существ с определенным именем:\nmodid:entity:name\n \n
+
+dynamicstealth.config.allowTargetName=Разрешить отображение имени
+dynamicstealth.config.allowTargetName.tooltip=FILLSCREEN Отображение имени цели\n\n0 - отключено для всех игроков\n1 - включено только для администраторов\n2 - включено для всех игроков\n \n
+dynamicstealth.config.allowTargetHP=Разрешить отображение здоровья
+dynamicstealth.config.allowTargetHP.tooltip=FILLSCREEN Отображение здоровья цели\n\n0 - отключено для всех игроков\n1 - включено только для администраторов\n2 - включено для всех игроков\n \n
+dynamicstealth.config.allowTargeting=Разрешить отображение "цели цели"
+dynamicstealth.config.allowTargeting.tooltip=FILLSCREEN Отображение текущей цели просматриваемой цели\n\n0 - отключено для всех игроков\n1 - включено только для администраторов\n2 - включено для всех игроков\n \n
+dynamicstealth.config.allowTargetThreat=Разрешить отображение угрозы
+dynamicstealth.config.allowTargetThreat.tooltip=FILLSCREEN Отображение уровня угрозы в %\n\n0 - отключено для всех игроков\n1 - включено только для администраторов\n2 - включено для всех игроков\n \n
+dynamicstealth.config.allowTargetDistance=Разрешить отображение расстояния
+dynamicstealth.config.allowTargetDistance.tooltip=FILLSCREEN Отображение расстояния до цели\n\n0 - отключено для всех игроков\n1 - включено только для администраторов\n2 - включено для всех игроков\n \n
+
+dynamicstealth.config.allowOPHUD=Разрешить отображение индикатора действий
+dynamicstealth.config.allowOPHUD.tooltip=FILLSCREEN Если включено, то игроки могут включать / выключать индикатор\n\n0 - отключено для всех игроков\n1 - включено только для администраторов\n2 - включено для всех игроков\n \n
+dynamicstealth.config.OPHUDRange=Расстояние видимости
+dynamicstealth.config.OPHUDRange.tooltip=FILLSCREEN Максимальное расстояние, на котором виден индикатор действий\n \n Влияет на производительность при больших значениях\n \n
+dynamicstealth.config.OPHUDDelay=Интервал обновления
+dynamicstealth.config.OPHUDDelay.tooltip=FILLSCREEN Сколько тиков между обновлениями индикатора\n \n Увеличение этого параметра уменьшает нагрузку на сервер\n \n
+
+dynamicstealth.config.playerSenses=Система чувств для игроков
+dynamicstealth.config.playerSenses.tooltip=FILLSCREEN Если эта опция включена, то механика невидимости работает на игроках\n\nНапример, если она включена и скелет находится темноте - вы не сможете увидеть его, пока не приблизитесь\n \n
+dynamicstealth.config.touch=Осязание
+dynamicstealth.config.sight=Зрение
+dynamicstealth.config.hearing=Слух
+
+dynamicstealth.config.enabletouch=Осязание
+dynamicstealth.config.enabletouch.tooltip=FILLSCREEN Возможность существам чувствовать друг друга при столкновении\n \n
+dynamicstealth.config.touchreveals=Разоблачающие столкновения
+dynamicstealth.config.touchreveals.tooltip=FILLSCREEN Отмена эффекта невидимости столкнувшимся существам\n \n
+dynamicstealth.config.unfeeling=Бесчувственность
+dynamicstealth.config.unfeeling.tooltip=FILLSCREEN Существа, которые не чувствуют столкновений\n\nВы также можете указать существ с определенным именем:\nmodid:entity:name\n \n
+
+dynamicstealth.config.stealthMultipliers=Множители скрытности
+dynamicstealth.config.stealthMultipliers.tooltip=FILLSCREEN Множители увеличивающие скрытность / уменьшающие восприятие\n\nИз всех используется самый лучший ( низший ) множитель\n \n
+dynamicstealth.config.visibilityMultipliers=Множители видимости
+dynamicstealth.config.visibilityMultipliers.tooltip=FILLSCREEN Множители уменьшающие скрытность / увеличивающие восприятие\n\nИз всех используется самый худший ( высший ) множитель\n \n
+dynamicstealth.config.lighting=Освещение
+dynamicstealth.config.lighting.tooltip=FILLSCREEN Какое влияние освещение оказывает на скрытность
+dynamicstealth.config.angle=Угол
+dynamicstealth.config.angle.tooltip=FILLSCREEN Углы обзора
+dynamicstealth.config.distance=Расстояние
+dynamicstealth.config.distance.tooltip=FILLSCREEN Расстояние обзора
+dynamicstealth.config.absolutes=Особые случаи
+dynamicstealth.config.absolutes.tooltip=FILLSCREEN Особые случаи, например - горение
+dynamicstealth.config.entitySpecificSight=Расширенная настройка существ
+
+dynamicstealth.config.crouchMultiplier=Множитель скрытности
+dynamicstealth.config.crouchMultiplier.tooltip=FILLSCREEN Умножает видимость существа на это значение, если существо крадётся\n\nЭффекта нет при значении 1\n\nПри значении 0 крадущиеся сущности невидимы (кроме особых случаев)\n \n
+dynamicstealth.config.mobHeadMultiplier=Множитель головы существа
+dynamicstealth.config.mobHeadMultiplier.tooltip=FILLSCREEN Когда существо (включая игрока) носит голову моба, у мобов этого типа меньше шансов понять, что это другое существо\n\nЭффекта нет при значении 1\n\nПри значении 0 мобы не могут отличить существ, носящих их головы\n \n
+dynamicstealth.config.invisibilityMultiplier=Множитель невидимости
+dynamicstealth.config.invisibilityMultiplier.tooltip=FILLSCREEN Видимость невидимых объектов умножается на это значение\n\nЭффекта нет при значении 1\n\nПри значении 0 невидимые сущности, эм... невидимые\n \n
+dynamicstealth.config.blindnessMultiplier=Множитель слепоты
+dynamicstealth.config.blindnessMultiplier.tooltip=FILLSCREEN Дальность обранужения ослеплённых существ умножается на это значение\n\nЭффекта нет при значении 1\n\nПри значении 0 слепые существа не могут видеть\n \n
+
+dynamicstealth.config.armorMultiplier=Множитель брони (накопительный)
+dynamicstealth.config.armorMultiplier.tooltip=FILLSCREEN Видимость существа умножается на 1 + (эта настройка * броня)\n\nЭффекта нет при значении 0\n\nПри 0,25 вероятность того, что персонаж будет замечен с броней 20 (полный алмазный сет), будет в 5 раз больше\n \n
+
+dynamicstealth.config.lightLevelHigh=Уровень освещенности (высокий / яркий)
+dynamicstealth.config.lightLevelHigh.tooltip=FILLSCREEN При этом уровне освещенности или выше существа получают максимальный множитель уровня освещенности\n \n
+dynamicstealth.config.lightLevelLow=Уровень освещенности (низкий / темный)
+dynamicstealth.config.lightLevelLow.tooltip=FILLSCREEN При этом уровне освещенности или ниже существа получают минимальный множитель уровня освещенности\n \n
+dynamicstealth.config.lightMultHigh=Множитель освещенности (высокий / яркий)
+dynamicstealth.config.lightMultHigh.tooltip=FILLSCREEN Множитель видимости уровня освещенности при ярком освещении\n\n0 означает невидимый, 1 означает полностью видимый (другие факторы не учитываются)\n \n
+dynamicstealth.config.lightMultLow=Множитель освещенности (низкий / темный)
+dynamicstealth.config.lightMultLow.tooltip=FILLSCREEN Множитель видимости уровня освещенности при нахождении в темных местах\n\n0 означает невидимый, 1 означает полностью видимый (другие факторы не учитываются)\n \n
+dynamicstealth.config.nightvisionBonus=Бонус ночного видения
+dynamicstealth.config.nightvisionBonus.tooltip=FILLSCREEN Когда у существа есть эффект ночного видения, это значение добавляется к их воспринимаемым уровням освещенности (и затем устанавливается на 15, если больше 15)\n \n
+dynamicstealth.config.minimumDimensionLightLevels=Минимальный уровень света измерений
+dynamicstealth.config.minimumDimensionLightLevels.tooltip=FILLSCREEN Минимальный уровень освещения, при котором будет происходить обнаружение в требуемом измерении\n\nВ основном для измерений с окружающим освещением (например, Ад и обычный мир)\n\nПервое число - это идентификатор измерения, второе - минимальный уровень освещенности для этого измерения.\n \n
+
+dynamicstealth.config.angleNear=Угол (большой / широкий; близь)
+dynamicstealth.config.angleNear.tooltip=FILLSCREEN Угол, под которым существо может видеть другое существо с близкого расстояния (distance <= distanceNear) в градусах\n\nПохож на малый угол\n\nЕсли этот параметр и малый угол равны 0, то все сущности (кроме исключений) слепые \n\nНе может быть меньше, чем малый угол\n \n
+dynamicstealth.config.angleFar=Угол (маленький / узкий; даль)
+dynamicstealth.config.angleFar.tooltip=FILLSCREEN Угол, под которым существо может видеть другое существо на большом расстоянии (distance> = distanceFar) в градусах\n\nУгол в форме конуса, а настройка - это угол между центральной осью конуса и внешней поверхностью конуса.\n\nЕсли вы выставите градус > 90, то слепая зона будет только позади сущности\n\nВообще, технически это не конусообразная форма с учетом других настроек, но давайте не будем углубляться в это\n\nЕсли этот параметр и большой угол равны 0, то все сущности ( кроме исключений ) слепые\n\nНе может быть больше, чем большой угол\n \n
+
+dynamicstealth.config.distanceFar=Расстояние (даль)
+dynamicstealth.config.distanceFar.tooltip=FILLSCREEN Абсолютное максимальное расстояние, с которого существо может видеть другое существо в блоках\n\nПоэтому, если установлено 0 - существа НИКОГДА не увидят ничего, за некоторыми исключениями, например...\n\nЗомби все ещё будут атаковать жителей деревни как обычно; это использует совершенно другую логику, поэтому я не собираюсь это исправлять на данный момент\n\nНа некоторых мобов это никак не влияет по той же причине, что и выше, например - Эндермены и Дракон Эндера\n \n
+dynamicstealth.config.distanceNear=Расстояние (близь)
+dynamicstealth.config.distanceNear.tooltip=FILLSCREEN Расстояние до того, как зрение существа начинает ухудшаться естественным образом (даже в хороших условиях) в блоках\n\nПоэтому, если установлено 0 - существа НИКОГДА не увидят ничего, за некоторыми исключениями, например...\n\nЗомби все ещё будут атаковать жителей деревни как обычно; это использует совершенно другую логику, поэтому я не собираюсь это исправлять на данный момент\n\nНа некоторых мобов это никак не влияет по той же причине, что и выше, например - Эндермены и Дракон Эндера\n \n
+
+dynamicstealth.config.seeGlowing=Видеть светящихся
+dynamicstealth.config.seeGlowing.tooltip=FILLSCREEN При значении true сияющие существа будут видны в поле зрения другого существа, игнорируя все остальные факторы\n\nПозволяет существам видеть невидимых игроков, которые светятся, но не убирает невидимость; если сияние наступает до невидимости, то обнаружение будет трудным\n \n
+dynamicstealth.config.seeBurning=Видеть горящих
+dynamicstealth.config.seeBurning.tooltip=FILLSCREEN При значении true горящие существа всегда считаются стоящими в полном освещении\n \n
+
+dynamicstealth.config.entitySpecificAngle=Угол
+dynamicstealth.config.entitySpecificAngle.tooltip=FILLSCREEN Насколько широк угол обзора существа\n\nid_существа, angleLarge, angleSmall\n\nнапример...\n\nminecraft:skeleton, 90, 45\n \n
+dynamicstealth.config.entitySpecificDistance=Дистанция
+dynamicstealth.config.entitySpecificDistance.tooltip=FILLSCREEN Насколько далеко видит существо\n\nid_существа, distanceFar, distanceNear\n\nнапример...\n\nminecraft:skeleton, 40, 3\n \n
+dynamicstealth.config.entitySpecificLighting=Освещение
+dynamicstealth.config.entitySpecificLighting.tooltip=FILLSCREEN Насколько хорошо существо видит в темноте\n\nid_существа, lightLevelHigh, lightMultHigh, lightLevelLow, lightMultLow\n\nнапример...\n\nminecraft:skeleton, 15, 1, 0, 0\n \n
+dynamicstealth.config.naturallyBright=Естественный свет
+dynamicstealth.config.naturallyBright.tooltip=FILLSCREEN Объекты в этом списке всегда обрабатываются так, как будто они находятся в максимальном уровне освещенности\n\nВы также можете указать существ с определенным именем:\nmodid:entity:name\n \n
+dynamicstealth.config.naturalNightvision=Естественное ночное видение
+dynamicstealth.config.naturalNightvision.tooltip=FILLSCREEN Существа, имеющие постоянный бонус ночного видения\n\nВы также можете указать существ с определенным именем:\nmodid:entity:name\n \n
+dynamicstealth.config.naturalSoulSight=Естественное Восприятие Душ
+dynamicstealth.config.naturalSoulSight.tooltip=FILLSCREEN Существа в этом списке видят почти всё\n\nДобавление игроков в этот список позволяет всем игрокам видеть всех существ даже сквозь стены\n\nВы также можете указать существ с определенным именем:\nmodid:entity:name\n \n
+
+dynamicstealth.config.warningRange=Дальность предупреждения
+dynamicstealth.config.warningRange.tooltip=FILLSCREEN Как далеко существа могут слышать предупреждения\n \n
+dynamicstealth.config.notificationRange=Дальность уведомлений о смерти
+dynamicstealth.config.notificationRange.tooltip=FILLSCREEN Как далеко существа можгут слышать смерть существ\n\nУслышав смерть своей цели от существа, которому они доверяют - они прекращают преследовать цель\n \n
+dynamicstealth.config.noLOSMultiplier=Без пределов чувствительности
+dynamicstealth.config.noLOSMultiplier.tooltip=FILLSCREEN Если наблюдатель не имеет пределов чувствительности для источников звука, его слуховой диапазон умножается на этот параметр\n \n LOS - Limit of Sensetivity - Предел чувствительности\n \n
+
+dynamicstealth.config.threatEntitySpecific=Расширенные настройки существ
+dynamicstealth.config.threatCNPC=Настройки угроз Custom NPC
+dynamicstealth.config.threatDealtDamage=Множитель наносимого урона
+dynamicstealth.config.threatDealtDamage.tooltip=FILLSCREEN Когда существо в бою наносит урон своей текущей цели, его угроза увеличивается на количество нанесенного урона, умноженная на данный параметр и поделённая на максимальное ОЗ цели.\n \n
+dynamicstealth.config.threatAttackedBySame=Множитель "Атакован тем же"
+dynamicstealth.config.threatAttackedBySame.tooltip=FILLSCREEN Когда на существо в бою нападает его текущая цель, его угроза увеличивается на получаемый урон, умноженная на его максимальное ОЗ\n \n
+dynamicstealth.config.threatAttackedByOther=Множитель "атакован другим"
+dynamicstealth.config.threatAttackedByOther.tooltip=FILLSCREEN Когда существо подвергается нападению кем-то, кто *НЕ* является его текущей целью, его угроза уменьшается на получаемый урон, умноженная на его максимальное ОЗ\n \n
+dynamicstealth.config.threatBypassGlobal=Обход системы угроз (глобальный)
+dynamicstealth.config.threatBypassGlobal.tooltip=FILLSCREEN Игнорирование системы угроз всеми существами\n \n
+dynamicstealth.config.threatCombatStart=Угроза "начало боя"
+dynamicstealth.config.threatCombatStart.tooltip=FILLSCREEN Когда существо вне боя впервые вступает в бой, то его угроза устанавливается на это значение\n\nЭто может случиться от существа, которое видит действующую цель для атаки или от существа, получающего урон вне боя.\n \n
+dynamicstealth.config.threatAllyKilled=Угроза "союзник убит"
+dynamicstealth.config.threatAllyKilled.tooltip=FILLSCREEN Когда существо видит, как умирает его союзник - угроза увеличивается на это значение\n \n
+dynamicstealth.config.threatWarned=Угроза "предостережён"
+dynamicstealth.config.threatWarned.tooltip=FILLSCREEN Когда существо прислушивается к предупреждению от другого существа, его угроза устанавливается на это значение (если меньше)\n \n
+dynamicstealth.config.threatUnseenMinThreshold=Unseen Target Minimum Threat Level
+dynamicstealth.config.threatUnseenMinThreshold.tooltip=FILLSCREEN Если уровень угрозы существа падает ниже этого уровня и оно не видит свою цель - оно выходит из боя / прекращает поиск\n \n
+dynamicstealth.config.threatUnseenRate=Скорость спада угрозы невидимой цели
+dynamicstealth.config.threatUnseenRate.tooltip=FILLSCREEN Каждый раз, когда существо "обновляется" и позиция его цели неизвестна - данное значение вычитается из их угрозы\n \n
+dynamicstealth.config.threatFleeRate=Скорость спада бегства
+dynamicstealth.config.threatFleeRate.tooltip=FILLSCREEN Как быстро уменьшается уровень угрозы при бегстве\n \n Маленькие значения увеличивают длительность бегства\n \n
+dynamicstealth.config.threatSeenRate=Скорость поднятия уровня угрозы видимой цели
+dynamicstealth.config.threatSeenRate.tooltip=FILLSCREEN Каждый раз, когда существо "обновляется" и его цель видима и достижима - данное значение добавляется к их угрозе\n \n
+dynamicstealth.config.threatCantReachRate=Скорость спада угрозы недостижимой цели
+dynamicstealth.config.threatCantReachRate.tooltip=FILLSCREEN Каждый раз, когда ПРИРУЧЕННОЕ существо обновляется и не может достичь своей цели - данное значение вычитается из его угрозы\n \n
+
+dynamicstealth.config.entitySpecificBypass=Непредсказуемый
+dynamicstealth.config.entitySpecificBypass.tooltip=FILLSCREEN Существа, игнорирующие систему угроз\n\nЭто означает, что они не будут использовать поиск AI, текущее действие будет всегда ????, уровень угрозы N/A и всегда отображаются в виде полной тревоги\n\nДля некоторых существ эта опция необходима для правильной работы, например, для слизи.  Для других, таких как Дракон Эндера и других игроков, это не имеет никакого эффекта, кроме их отображения в HUD\n\nВы также можете указать существ с определенным именем:\nmodid:entity:name\n \n
+dynamicstealth.config.entityPassiveness=Пассивность
+dynamicstealth.config.entityPassiveness.tooltip=FILLSCREEN Устанавливает, используется ли система угроз и пассивность существа\n\nid_существа, пассивность\n\nнапример...\n\nminecraft:skeleton, true\n\nВы также можете указать существ с определенным именем:\nmodid:entity:name\n \n
+
+dynamicstealth.config.CNPCFactionBypass=Непредсказуемость существ фракций
+dynamicstealth.config.CNPCFactionBypass.tooltip=FILLSCREEN Все существа из Cunstom NPC игнорируют систему угроз\n \n
+
+dynamicstealth.config.helperOwnership=Владелец
+dynamicstealth.config.helperTeams=Команды
+dynamicstealth.config.helperCNPCFactions=Фракции Custom NPC
+dynamicstealth.config.helperCNPCFactions.tooltip=FILLSCREEN При наличии мода Custom NPC
+dynamicstealth.config.helperType=Помощь тому же типу существа
+dynamicstealth.config.helperType.tooltip=FILLSCREEN Помогать ли существам из того же типа\n\nПрим.: если установлено значение true, то скелеты помогут другим скелетам (но не зомби)\n \n
+
+dynamicstealth.config.helpOwner=Помощь владельцу
+dynamicstealth.config.helpOwner.tooltip=FILLSCREEN Помощь своему владельцу ( если он есть )\n \n
+dynamicstealth.config.helpSameOwner=Помощь при одинаковом владельце
+dynamicstealth.config.helpSameOwner.tooltip=FILLSCREEN Помощь кому-либо при принадлежности к одному владельцу ( если он есть )\n \n
+dynamicstealth.config.helpDedicated=Преданность
+dynamicstealth.config.helpDedicated.tooltip=FILLSCREEN Отказ в помощи кому-либо, если не один и тот же владелец ( если он есть )\n \n
+dynamicstealth.config.helpOwned=Помощь подданным
+dynamicstealth.config.helpOwned.tooltip=FILLSCREEN Помощь своим подданным\n \n
+
+dynamicstealth.config.helpTeam=Помощь напарникам из той же команды
+dynamicstealth.config.helpTeam.tooltip=FILLSCREEN Помощь другим существам из вашей команды\n \n
+dynamicstealth.config.dontHelpOtherTeam=Отказ в помощи другим командам
+dynamicstealth.config.dontHelpOtherTeam.tooltip=FILLSCREEN Отказ в помощи существам из других команд\n \n
+
+dynamicstealth.config.helpGoodRep=Помощь при хорошей репутации
+dynamicstealth.config.helpGoodRep.tooltip=FILLSCREEN Помощь существам из той же фракции и игрокам с хорошей репутацией\n \n
+dynamicstealth.config.dontHelpBadRep=Отказ в помощи при плохой репутации
+dynamicstealth.config.dontHelpBadRep.tooltip=FILLSCREEN Отказ в помощи враждебным существам\n \n
+
+dynamicstealth.config.interactAttack=Атака (Ближний бой)
+dynamicstealth.config.interactAttack.tooltip=FILLSCREEN Когда кто-либо нападает на кого-либо\n \n
+dynamicstealth.config.interactRangedAttack=Атака (Дальний бой)
+dynamicstealth.config.interactRangedAttack.tooltip=FILLSCREEN Когда кто-либо нападает на кого-либо\n \n
+dynamicstealth.config.interactStealthAtk=Стелс-атака (Ближний бой)
+dynamicstealth.config.interactStealthAtk.tooltip=FILLSCREEN Когда кто-либо нападает на ничего не подозревающую жертву в режиме скрытности\n \n
+dynamicstealth.config.interactRangedStealthAtk=Стелс-атака (Дальний бой)
+dynamicstealth.config.interactRangedStealthAtk.tooltip=FILLSCREEN Когда кто-либо нападает на ничего не подозревающую жертву в режиме скрытности\n \n
+dynamicstealth.config.interactAssassination=Убийство (Ближний бой)
+dynamicstealth.config.interactAssassination.tooltip=FILLSCREEN Когда кто-либо убивает не будучи обнаруженным\n \n
+dynamicstealth.config.interactRangedAssassination=Убийство (Дальний бой)
+dynamicstealth.config.interactRangedAssassination.tooltip=FILLSCREEN Когда кто-либо убивает не будучи обнаруженным\n \n
+dynamicstealth.config.interactCalmDown=Успокаивание
+dynamicstealth.config.interactCalmDown.tooltip=FILLSCREEN Когда кто-либо спасался бегством, но угроза пропала\n \n
+dynamicstealth.config.interactGiveUpSearch=Остановка разведки
+dynamicstealth.config.interactGiveUpSearch.tooltip=FILLSCREEN Когда кто-либо искал цель, но угроза пропала\n \n
+dynamicstealth.config.interactRally=Восстановление
+dynamicstealth.config.interactRally.tooltip=FILLSCREEN Когда кто-либо спасался бегством, но здоровье восстанавилось\n \n
+dynamicstealth.config.interactDesperation=Отчаяние
+dynamicstealth.config.interactDesperation.tooltip=FILLSCREEN Когда кто-либо отчаивается во время бегства\n \n
+dynamicstealth.config.interactCantReach=Вне зоны действия
+dynamicstealth.config.interactCantReach.tooltip=FILLSCREEN Когда кто-либо не может добраться до своей цели\n \n
+
+dynamicstealth.config.removeInvis=Отмена невидимости при попадании
+dynamicstealth.config.removeInvis.tooltip=FILLSCREEN Если установлено значение true, то когда одно существо ударяет другое - они оба теряют невидимость\n\nЭто происходит до того, как применяются новые эффекты\n \n
+dynamicstealth.config.removeBlind=Отмена слепоты при попадании
+dynamicstealth.config.removeBlind.tooltip=FILLSCREEN Если установлено значение true, то когда одно существо ударяет другое - они оба теряют эффект слепоты\n\nЭто происходит до того, как применяются новые эффекты\n \n
+dynamicstealth.config.attackArmorPenetration=Пробивание брони
+dynamicstealth.config.attackArmorPenetration.tooltip=FILLSCREEN Пробивают ли атаки броню\n \n
+dynamicstealth.config.attackDamageMult=Множитель урона
+dynamicstealth.config.attackDamageMult.tooltip=FILLSCREEN Множитель урона при атаке\n \n
+dynamicstealth.config.attackAEffects=Эффекты атакующего
+dynamicstealth.config.attackAEffects.tooltip=FILLSCREEN Эффекты зелья, применяющиеся к атакующему во время атаки\n\nЭффект Сила II на 200 тиков (10 секунд):\nstrength.200.2"\n\nЭффект Восприятие Душ на 100 тиков (5 секунд):\ndynamicstealth:soulsight.100\n \n
+dynamicstealth.config.attackVEffects=Эффекты жертвы
+dynamicstealth.config.attackVEffects.tooltip=FILLSCREEN Эффекты зелья, применяющиеся к жертве при получении атаки\n\nЭффект Слепота на 100 тиков (5 секунд):\nblindness.100\n \n
+dynamicstealth.config.attackWeaponSpecific=Расширенные настройки оружия
+dynamicstealth.config.attackWeaponSpecific.tooltip=FILLSCREEN Синтаксис:\n\ndomain:item:meta > NBT-ключ1 = NBT-значение1 & NBT-ключ2 = NBT-значение2, armorpenetration, multiplier, зелье1 & зелье2, victimpotion1 & victimpotion2, consumeitem\n\nнапример...\n\nbackstab:diamond_dagger, true, 3\n\ntetra:duplex_tool_modular > duplex/sickle_left_material & duplex/butt_right_material, true, 3, regeneration.60.3, wither.60.3\n\ndye, false, 0, , blindness.20, true\n \n
+
+dynamicstealth.config.stealthAtkArmorPenetration=Пробивание брони
+dynamicstealth.config.stealthAtkArmorPenetration.tooltip=FILLSCREEN Пробивают ли атаки из скрытности броню\n \n
+dynamicstealth.config.stealthAtkDamageMult=Множитель урона
+dynamicstealth.config.stealthAtkDamageMult.tooltip=FILLSCREEN Множитель урона при атаке из скрытности\n \n
+dynamicstealth.config.stealthAtkAEffects=Эффекты атакующего
+dynamicstealth.config.stealthAtkAEffects.tooltip=FILLSCREEN Эффекты зелья, применяющиеся к атакующему во время атаки из скрытности\n\nЭффект Сила II на 200 тиков (10 секунд):\nstrength.200.2\n\nЭффект Восприятие Душ на 100 тиков (5 секунд):\ndynamicstealth:soulsight.100\n \n
+dynamicstealth.config.stealthAtkVEffects=Эффекты жертвы
+dynamicstealth.config.stealthAtkVEffects.tooltip=FILLSCREEN Эффекты зелья, применяющиеся к жертве при получении атаки из скрытности\n\nЭффект Слепота на 100 тиков (5 секунд):\nblindness.100\n \n
+dynamicstealth.config.stealthAtkWeaponSpecific=Расширенные настройки оружия
+dynamicstealth.config.stealthAtkWeaponSpecific.tooltip=FILLSCREEN Синтаксис:\n\ndomain:item:meta > NBT-ключ1 = NBT-значение1 & NBT-ключ2 = NBT-значение2, armorpenetration, multiplier, зелье1 & зелье2, victimpotion1 & victimpotion2, consumeitem\n\nнапример...\n\nbackstab:diamond_dagger, true, 3\n\ntetra:duplex_tool_modular > duplex/sickle_left_material & duplex/butt_right_material, true, 3, regeneration.60.3, wither.60.3\n\ndye, false, 0, , blindness.20, true\n \n
+
+dynamicstealth.config.assassinationAEffects=Эффекты атакующего
+dynamicstealth.config.assassinationAEffects.tooltip=FILLSCREEN Эффекты зелья, применяющиеся к атакующему при убийстве\n\nЭффект Сила II на 200 тиков (10 секунд):\nstrength.200.2\n\nЭффект Восприятие Душ на 100 тиков (5 секунд):\ndynamicstealth:soulsight.100\n \n
+dynamicstealth.config.assassinationWeaponSpecific=Расширенные настройки оружия
+dynamicstealth.config.assassinationWeaponSpecific.tooltip=FILLSCREEN Синтаксис:\n\ndomain:item:meta > NBT-ключ1 = NBT-значение1 & NBT-ключ2 = NBT-значение2, зелье1 & зелье2\n\nнапример...\n\nbackstab:diamond_dagger, invisibility.200\n\ntetra:duplex_tool_modular > duplex/sickle_left_material & duplex/butt_right_material, regeneration.60.3\n \n
+
+dynamicstealth.config.calmDownFullHP=Полное восстановления здоровья
+dynamicstealth.config.calmDownFullHP.tooltip=FILLSCREEN Полное восстановление здоровья существа при успокоении\n \n
+dynamicstealth.config.calmDownCNPCWarp=Возвращение домой существ из Custom NPC
+dynamicstealth.config.calmDownCNPCWarp.tooltip=FILLSCREEN Существа из Custom NPC возвращаются домой при успокоении\n \n
+dynamicstealth.config.calmDownPotions=Эффекты зелий
+dynamicstealth.config.calmDownPotions.tooltip=FILLSCREEN Эффекты зелья, применяемые к существу, когда оно успокаивается после паники\n\nЭффект Сила II на 200 тиков (10 секунд):\nstrength.200.2\n\nЭффект Восприятие Душ на 100 тиков (5 секунд):\ndynamicstealth:soulsight.100\n \n
+
+dynamicstealth.config.giveUpSearchFullHP=Полное восстановления здоровья
+dynamicstealth.config.giveUpSearchFullHP.tooltip=FILLSCREEN Полное восстановление здоровья существа при остановке разведки\n \n
+dynamicstealth.config.giveUpSearchCNPCWarp=Возвращение домой существ из Custom NPC
+dynamicstealth.config.giveUpSearchCNPCWarp.tooltip=FILLSCREEN Существа из Custom NPC возвращаются домой при остановке разведки\n \n
+
+dynamicstealth.config.rallyPotions=Эффекты зелий
+dynamicstealth.config.rallyPotions.tooltip=FILLSCREEN Эффекты зелья, применяемые к существу, когда оно восстановливается\n\nЭффект Сила II на 200 тиков (10 секунд):\nstrength.200.2\n\nЭффект Восприятие Душ на 100 тиков (5 секунд):\ndynamicstealth:soulsight.100\n \n
+
+dynamicstealth.config.desperationPotions=Эффекты зелий
+dynamicstealth.config.desperationPotions.tooltip=FILLSCREEN Эффекты зелья, применяемые к существу, когда оно загнано в угол\n\nЭффект Сила II на 200 тиков (10 секунд):\nstrength.200.2\n\nЭффект Восприятие Душ на 100 тиков (5 секунд):\ndynamicstealth:soulsight.100\n \n
+
+dynamicstealth.config.cantReachPotions=Эффекты зелий
+dynamicstealth.config.cantReachPotions.tooltip=FILLSCREEN Эффекты зелья, применяемые к существу, когда оно не может достичь цели\n\nЭффект Сила II на 200 тиков (10 секунд):\nstrength.200.2\n\nЭффект Восприятие Душ на 100 тиков (5 секунд):\ndynamicstealth:soulsight.100\n \n
+
+dynamicstealth.config.potions=Зелья
+
+dynamicstealth.config.potionSoulSight=Зелье Восприятия Душ
+dynamicstealth.config.potionSoulSight.tooltip=FILLSCREEN Включено ли зелье (доступ во вкладке "Зельеварение" в творческом режиме)\n \n
+dynamicstealth.config.potionSoulSightRecipe=Крафт зелья Восприятия Душ
+dynamicstealth.config.potionSoulSightRecipe.tooltip=FILLSCREEN Нужно ли Включен ли рецепт (густое зелье + око Эндера)\n \n
+dynamicstealth.config.potionBlindness=Зелье слепоты
+dynamicstealth.config.potionBlindness.tooltip=FILLSCREEN Включено ли зелье (доступ во вкладке "Зельеварение" в творческом режиме)\n \n
+dynamicstealth.config.potionBlindnessRecipe=Крафт зелья слепоты
+dynamicstealth.config.potionBlindnessRecipe.tooltip=FILLSCREEN Включен ли рецепт (густое зелье + чернильный мешок)\n \n
+dynamicstealth.config.potionGlowing=Зелье Сияния Души
+dynamicstealth.config.potionGlowing.tooltip=FILLSCREEN Включено ли зелье (доступ во вкладке "Зельеварение" в творческом режиме)\n \n
+dynamicstealth.config.potionGlowingRecipe=Крафт зелья Сияния Души
+dynamicstealth.config.potionGlowingRecipe.tooltip=FILLSCREEN Включен ли рецепт (густое зелье + светокаменная пыль)\n \n
