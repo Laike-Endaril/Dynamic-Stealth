@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+Find a better way to calculate mob flee speeds (access mob's internal speed setting somewhere?)
+
 Add configs for HP element...
 ...whether current is shown
 ...whether max is shown (requires current)
