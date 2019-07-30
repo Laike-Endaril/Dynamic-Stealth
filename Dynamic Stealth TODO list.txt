@@ -1,6 +1,11 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Find a better way to calculate mob flee speeds (access mob's internal speed setting somewhere?)
+Add ally groups for helper system config
+
+Mob flee speeds...
+...fine-tune
+...add config for general multiplier
+...add config for entity-specific flee speeds
 
 Add configs for HP element...
 ...whether current is shown
@@ -92,8 +97,6 @@ Should the upper light limit and/or light level scaling of dimensions be changed
 ...at max light level, do blocks look brighter/darker in nether and end, or the same as overworld?
 ...at light levels between the "ambient" level and max light level, do blocks look brighter/darker in nether and end, or the same as overworld?
 
-Add ally groups for helper system config
-
 Alternate sneak mode, so as not to trigger "don't step off edge", ebwizardry staff spell selection, hooked grapple prevention, etc
 
 Make client acquire target for any entity they have LOS to, then get the data for it from the map, as late as possible, if it exists
@@ -136,8 +139,6 @@ CONFIG =========================================================================
 
 Add config option for "Can See Through" Materials
 Add config option for "Can See Through" Blocks
-
-Add entity-specific configs for helper system
 
 Add entity-specific filter for OPHUD
 Add entity-specific filter for targeting HUD
