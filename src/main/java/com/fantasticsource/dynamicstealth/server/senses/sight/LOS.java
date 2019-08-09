@@ -174,6 +174,7 @@ public class LOS
         //Special blocks that don't follow the rules
         if (block == Blocks.ACACIA_DOOR) return true;
         if (block == Blocks.JUNGLE_DOOR) return true;
+        if (block == Blocks.IRON_BARS) return true;
 
         //Honeybadger blocks :/
         if (block == Blocks.OAK_DOOR || block == Blocks.IRON_DOOR)
