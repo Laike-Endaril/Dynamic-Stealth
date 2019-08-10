@@ -199,7 +199,7 @@ public class DynamicStealth
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void worldLoad(WorldEvent.Load event)
     {
         World world = event.getWorld();
@@ -763,6 +763,7 @@ public class DynamicStealth
         if (Loader.isModLoaded("primitivemobs")) Compat.primitivemobs = true;
         if (Loader.isModLoaded("defiledlands")) Compat.defiledlands = true;
         if (Loader.isModLoaded("neat")) Compat.neat = true;
+        if (Loader.isModLoaded("betterportals")) Compat.betterportals = true;
         if (Loader.isModLoaded("testdummy")) Compat.testdummy = true;
         if (Loader.isModLoaded("statues")) Compat.statues = true;
         if (Loader.isModLoaded("conarm")) Compat.conarm = true;

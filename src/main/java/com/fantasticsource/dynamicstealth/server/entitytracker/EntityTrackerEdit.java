@@ -15,7 +15,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.*;
 import net.minecraft.network.Packet;
-import net.minecraft.util.IntHashMap;
 import net.minecraft.util.ReportedException;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -23,28 +22,17 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.HashSet;
 import java.util.Set;
 
 public class EntityTrackerEdit extends EntityTracker
 {
-    private static final Logger LOGGER = LogManager.getLogger();
-
-
-    private final Set<EntityTrackerEntry> entries = new HashSet<>();
-    private final IntHashMap<EntityTrackerEntry> trackedEntityMap = new IntHashMap<>();
-    private final WorldServer world;
-
-
-    private int maxDistance;
+    public static final Logger LOGGER = LogManager.getLogger();
 
 
     public EntityTrackerEdit(WorldServer worldIn)
     {
         super(worldIn);
-
-        world = worldIn;
-        maxDistance = Tools.min(worldIn.getMinecraftServer().getPlayerList().getEntityViewDistance(), EntitySightData.playerMaxSightDistance);
+        maxTrackingDistanceThreshold = Tools.min(worldIn.getMinecraftServer().getPlayerList().getEntityViewDistance(), EntitySightData.playerMaxSightDistance);
     }
 
     public void track(Entity entityIn)
@@ -97,14 +85,14 @@ public class EntityTrackerEdit extends EntityTracker
     {
         try
         {
-            if (trackedEntityMap.containsItem(entityIn.getEntityId()))
+            if (trackedEntityHashTable.containsItem(entityIn.getEntityId()))
             {
                 throw new IllegalStateException("Entity is already tracked!");
             }
 
-            EntityTrackerEntry entityEntry = entityIn instanceof EntityLivingBase ? new LivingBaseEntityTrackerEntry(entityIn, trackingRange, maxDistance, updateFrequency, sendVelocityUpdates) : new EntityTrackerEntry(entityIn, trackingRange, maxDistance, updateFrequency, sendVelocityUpdates);
+            EntityTrackerEntry entityEntry = entityIn instanceof EntityLivingBase ? new LivingBaseEntityTrackerEntry(entityIn, trackingRange, maxTrackingDistanceThreshold, updateFrequency, sendVelocityUpdates) : new EntityTrackerEntry(entityIn, trackingRange, maxTrackingDistanceThreshold, updateFrequency, sendVelocityUpdates);
             entries.add(entityEntry);
-            trackedEntityMap.addKey(entityIn.getEntityId(), entityEntry);
+            trackedEntityHashTable.addKey(entityIn.getEntityId(), entityEntry);
             entityEntry.updatePlayerEntities(world.playerEntities);
         }
         catch (Throwable throwable)
@@ -125,7 +113,7 @@ public class EntityTrackerEdit extends EntityTracker
             });
 
             entityIn.addEntityCrashInfo(crashreportcategory);
-            trackedEntityMap.lookup(entityIn.getEntityId()).getTrackedEntity().addEntityCrashInfo(crashreport.makeCategory("Entity That Is Already Tracked"));
+            trackedEntityHashTable.lookup(entityIn.getEntityId()).getTrackedEntity().addEntityCrashInfo(crashreport.makeCategory("Entity That Is Already Tracked"));
 
             LOGGER.error("\"Silently\" catching entity tracking error.", new ReportedException(crashreport));
         }
@@ -143,7 +131,7 @@ public class EntityTrackerEdit extends EntityTracker
             }
         }
 
-        EntityTrackerEntry entitytrackerentry = trackedEntityMap.removeObject(entityIn.getEntityId());
+        EntityTrackerEntry entitytrackerentry = trackedEntityHashTable.removeObject(entityIn.getEntityId());
 
         if (entitytrackerentry != null)
         {
@@ -168,7 +156,7 @@ public class EntityTrackerEdit extends EntityTracker
 
     public void sendToTracking(Entity entityIn, Packet<?> packetIn)
     {
-        EntityTrackerEntry entitytrackerentry = trackedEntityMap.lookup(entityIn.getEntityId());
+        EntityTrackerEntry entitytrackerentry = trackedEntityHashTable.lookup(entityIn.getEntityId());
 
         if (entitytrackerentry != null)
         {
@@ -178,14 +166,14 @@ public class EntityTrackerEdit extends EntityTracker
 
     public Set<? extends EntityPlayer> getTrackingPlayers(Entity entity)
     {
-        EntityTrackerEntry entry = trackedEntityMap.lookup(entity.getEntityId());
+        EntityTrackerEntry entry = trackedEntityHashTable.lookup(entity.getEntityId());
         if (entry == null) return java.util.Collections.emptySet();
         else return java.util.Collections.unmodifiableSet(entry.trackingPlayers);
     }
 
     public void sendToTrackingAndSelf(Entity entityIn, Packet<?> packetIn)
     {
-        EntityTrackerEntry entitytrackerentry = trackedEntityMap.lookup(entityIn.getEntityId());
+        EntityTrackerEntry entitytrackerentry = trackedEntityHashTable.lookup(entityIn.getEntityId());
 
         if (entitytrackerentry != null)
         {
@@ -216,11 +204,11 @@ public class EntityTrackerEdit extends EntityTracker
 
     public void setViewDistance(int distance)
     {
-        maxDistance = Tools.min((distance - 1) * 16, EntitySightData.playerMaxSightDistance);
+        maxTrackingDistanceThreshold = Tools.min((distance - 1) * 16, EntitySightData.playerMaxSightDistance);
 
         for (EntityTrackerEntry entitytrackerentry : entries.toArray(new EntityTrackerEntry[0]))
         {
-            entitytrackerentry.setMaxRange(maxDistance);
+            entitytrackerentry.setMaxRange(maxTrackingDistanceThreshold);
         }
     }
 }

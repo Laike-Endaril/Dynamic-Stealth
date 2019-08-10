@@ -16,6 +16,7 @@ public class Compat
             ancientwarfare = false,
             customnpcs = false,
             neat = false,
+            betterportals = false,
             statues = false,
             dissolution = false,
             magma_monsters = false,

@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.senses.sight;
 
+import com.fantasticsource.dynamicstealth.compat.Compat;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -156,7 +157,7 @@ public class LOS
         if (material == Material.AIR) return true;
         if (material == Material.WATER) return true;
         if (material == Material.FIRE) return true;
-        if (material == Material.PORTAL) return true;
+        if (material == Material.PORTAL) return !Compat.betterportals;
         if (material == Material.BARRIER) return true;
         if (material == Material.PLANTS) return true;
         if (material == Material.WEB) return true;
