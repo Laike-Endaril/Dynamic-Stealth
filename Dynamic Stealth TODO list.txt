@@ -214,6 +214,10 @@ Gray Men...
 
 MOD COMPATIBILITY ===========================================================================================================================================================================================================
 
+Better Portals angle is not synced when looking through portals
+Non-players cannot seem to see through portals with Better Portals installed (this happens with or without DS installed though)
+What would happen if I were to alter the raytrace to go through portals when Better Portals is installed?  (would also need to bypass world equality checks elsewhere)
+
 Set Bonus integration for stealth attacks and assassinations
 
 Lycanite's Mobs can still attack through walls; probably using different LOS
