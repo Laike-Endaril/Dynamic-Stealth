@@ -12,7 +12,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayList;
@@ -61,7 +60,6 @@ public class Communication
         warners.add(new WarnData(warner, danger, dangerPos, sawDanger));
     }
 
-    @SubscribeEvent
     public static void update(TickEvent.ServerTickEvent event)
     {
         warners.removeIf(Communication::processAndRemove);

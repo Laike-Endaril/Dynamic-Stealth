@@ -47,6 +47,7 @@ import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.profiler.Profiler;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.DamageSource;
@@ -78,6 +79,7 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import noppes.npcs.api.NpcAPI;
 import noppes.npcs.api.entity.ICustomNpc;
@@ -111,13 +113,9 @@ public class DynamicStealth
         Attributes.init();
 
         MinecraftForge.EVENT_BUS.register(ServerTickTimer.class);
-        MinecraftForge.EVENT_BUS.register(CombatTracker.class);
         MinecraftForge.EVENT_BUS.register(EntitySightData.class);
         MinecraftForge.EVENT_BUS.register(DynamicStealth.class);
         MinecraftForge.EVENT_BUS.register(Network.class);
-        MinecraftForge.EVENT_BUS.register(Threat.class);
-        MinecraftForge.EVENT_BUS.register(Sight.class);
-        MinecraftForge.EVENT_BUS.register(Communication.class);
         MinecraftForge.EVENT_BUS.register(Potions.class);
 
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
@@ -215,6 +213,45 @@ public class DynamicStealth
     public static void playerLogon(PlayerEvent.PlayerLoggedInEvent event)
     {
         HidingData.load(event.player);
+    }
+
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void serverTickHighest(TickEvent.ServerTickEvent event)
+    {
+        Profiler profiler = FMLCommonHandler.instance().getMinecraftServerInstance().profiler;
+        profiler.startSection("DStealth - ServerTick");
+
+
+        profiler.startSection("CombatTracker.update()");
+        CombatTracker.update(event);
+
+        profiler.endStartSection("Threat.update()");
+        Threat.update(event);
+
+        profiler.endSection();
+
+
+        profiler.endSection();
+    }
+
+    @SubscribeEvent
+    public static void serverTick(TickEvent.ServerTickEvent event)
+    {
+        Profiler profiler = FMLCommonHandler.instance().getMinecraftServerInstance().profiler;
+        profiler.startSection("DStealth - ServerTick");
+
+
+        profiler.startSection("Sight.update()");
+        Sight.update(event);
+
+        profiler.endStartSection("Communication.update()");
+        Communication.update(event);
+
+        profiler.endSection();
+
+
+        profiler.endSection();
     }
 
 

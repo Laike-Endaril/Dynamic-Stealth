@@ -34,7 +34,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.LinkedHashMap;
@@ -55,7 +54,6 @@ public class Sight
     private static Map<Pair<EntityPlayerMP, Boolean>, LinkedHashMap<EntityLivingBase, Double>> playerSeenThisTickMap = new LinkedHashMap<>();
 
 
-    @SubscribeEvent
     public static void update(TickEvent.ServerTickEvent event)
     {
         if (event.phase == TickEvent.Phase.END)

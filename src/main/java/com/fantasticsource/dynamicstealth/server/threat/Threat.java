@@ -11,8 +11,6 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import javax.annotation.Nonnull;
@@ -29,7 +27,6 @@ public class Threat
     //Searcher, target, threat level
     private static Map<EntityLivingBase, ThreatData> threatMap = new LinkedHashMap<>(200);
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void update(TickEvent.ServerTickEvent event)
     {
         if (event.phase == TickEvent.Phase.START && currentTick() % ITERATION_FREQUENCY == 0) removeAllUnused();

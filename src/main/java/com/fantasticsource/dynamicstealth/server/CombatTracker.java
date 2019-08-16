@@ -6,8 +6,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.LinkedHashMap;
@@ -25,7 +23,6 @@ public class CombatTracker
     private static LinkedHashMap<EntityLivingBase, Long> noTargetTimes = new LinkedHashMap<>();
 
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void update(TickEvent.ServerTickEvent event)
     {
         if (event.phase == TickEvent.Phase.START)
