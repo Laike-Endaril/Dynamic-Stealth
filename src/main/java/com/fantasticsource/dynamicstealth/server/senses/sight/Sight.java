@@ -66,7 +66,8 @@ public class Sight
 
     private static boolean updateStealthHistory(Map.Entry<EntityPlayer, Pair<WrappingQueue<Double>, Long>> entry)
     {
-        if (!entry.getKey().isEntityAlive()) return true;
+        EntityPlayer player = entry.getKey();
+        if (!player.isEntityAlive() || !player.world.playerEntities.contains(player)) return true;
 
         Pair<WrappingQueue<Double>, Long> pair = entry.getValue();
         long tick = currentTick();
@@ -80,9 +81,14 @@ public class Sight
 
     private static boolean updateRecentlySeen(Map.Entry<EntityLivingBase, Map<Entity, SeenData>> entry)
     {
-        if (!entry.getKey().isEntityAlive()) return true;
+        EntityLivingBase livingBase = entry.getKey();
+        if (!livingBase.isEntityAlive() || !livingBase.world.loadedEntityList.contains(livingBase)) return true;
 
-        entry.getValue().entrySet().removeIf(e -> !e.getKey().isEntityAlive());
+        entry.getValue().entrySet().removeIf(e ->
+        {
+            Entity entity = e.getKey();
+            return !entity.isEntityAlive() || !entity.world.loadedEntityList.contains(entity);
+        });
         return false;
     }
 
