@@ -46,6 +46,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
+import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.server.MinecraftServer;
@@ -283,26 +284,34 @@ public class DynamicStealth
                             switch (type)
                             {
                                 case 1:
+                                    //Player
                                     //TODO add indicator for players
                                     break;
+
                                 case 2:
+                                    //EntityLiving
                                     EntityLiving feelerLiving = (EntityLiving) livingBase;
-
-                                    AIDynamicStealth ai = AIDynamicStealth.getStealthAI(feelerLiving);
-                                    if (ai != null)
+                                    EntityLivingBase target = feelerLiving.getAttackTarget();
+                                    if (target == null || !feelerLiving.senses.canSee(target))
                                     {
-                                        if (ai.isFleeing()) return;
-
-                                        makeLivingLookTowardEntity(feelerLiving, felt);
-                                        feelerLiving.getNavigator().clearPath();
-                                        if (ai.getMode() != AIDynamicStealth.MODE_NONE) ai.restart(feelerLiving.getPosition());
+                                        AIDynamicStealth ai = AIDynamicStealth.getStealthAI(feelerLiving);
+                                        if (ai != null)
+                                        {
+                                            if (!ai.isFleeing())
+                                            {
+                                                makeLivingLookTowardEntity(feelerLiving, felt);
+                                                PathNavigate navigate = feelerLiving.getNavigator();
+                                                if (navigate.getPath() == ai.path) navigate.clearPath();
+                                                if (ai.getMode() != AIDynamicStealth.MODE_NONE) ai.restart(feelerLiving.getPosition());
+                                            }
+                                        }
+                                        else
+                                        {
+                                            makeLivingLookTowardEntity(feelerLiving, felt);
+                                            feelerLiving.getNavigator().clearPath();
+                                        }
+                                        break;
                                     }
-                                    else
-                                    {
-                                        makeLivingLookTowardEntity(feelerLiving, felt);
-                                        feelerLiving.getNavigator().clearPath();
-                                    }
-                                    break;
                             }
                         }
                     }
