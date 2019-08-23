@@ -7,6 +7,7 @@ import net.minecraftforge.common.config.Config;
 public class SensesConfig
 {
     @Config.Name("Use player senses")
+    @Config.RequiresMcRestart
     @Config.LangKey(DynamicStealth.MODID + ".config.playerSenses")
     @Config.Comment(
             {
