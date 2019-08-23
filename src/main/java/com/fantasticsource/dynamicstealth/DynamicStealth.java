@@ -807,6 +807,7 @@ public class DynamicStealth
         if (Loader.isModLoaded("abyssalcraft")) Compat.abyssalcraft = true;
         if (Loader.isModLoaded("emberroot")) Compat.emberroot = true;
         if (Loader.isModLoaded("primitivemobs")) Compat.primitivemobs = true;
+        if (Loader.isModLoaded("rwbym")) Compat.rwbym = true;
         if (Loader.isModLoaded("defiledlands")) Compat.defiledlands = true;
         if (Loader.isModLoaded("neat")) Compat.neat = true;
         if (Loader.isModLoaded("betterportals")) Compat.betterportals = true;

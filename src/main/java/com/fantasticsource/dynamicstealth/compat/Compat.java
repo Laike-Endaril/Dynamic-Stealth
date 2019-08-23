@@ -26,6 +26,7 @@ public class Compat
             defiledlands = false,
             testdummy = false,
             primitivemobs = false,
+            rwbym = false,
             thermalfoundation = false;
 
 
@@ -57,6 +58,7 @@ public class Compat
         if (primitivemobs && (aiClassname.contains("AIFlameSpewAttack") || aiClassname.contains("AIChargeAttack"))) return true;
         if (emberroot && aiClassname.contains("EntityAIAttackOnCollideAggressive")) return true;
         if (defiledlands && aiClassname.contains("EntityScuttler.AISpiderAttack")) return true;
+        if (rwbym && aiClassname.contains("be.bluexin.rwbym") && (aiClassname.contains("AIChargeAttack") || aiClassname.contains("AIPickAttack") || aiClassname.contains("AISweepAttack") || aiClassname.contains("EntityAIAttackRange"))) return true;
 
         return false;
     }
