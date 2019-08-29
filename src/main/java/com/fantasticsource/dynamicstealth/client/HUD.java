@@ -326,8 +326,6 @@ public class HUD extends Gui
 
         if (priority < targetPriority)
         {
-            opMap.put(targetData.searcherID, targetData);
-
             targetData = data;
             targetPriority = priority;
         }
