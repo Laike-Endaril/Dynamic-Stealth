@@ -29,8 +29,8 @@ public class ClientData
             COLOR_ATTACKING_YOU = 0xFF0000,         //Target: yes, Threat: yes
             COLOR_ATTACKING_OTHER = 0xFFFF00,       //Target: yes, Threat: yes
             COLOR_SEARCHING = 0xFF8800,             //Target: only on server, Threat: yes
-            COLOR_IDLE_NON_PASSIVE = 0x4444FF,                  //Target: no, Threat: no
-            COLOR_IDLE_PASSIVE = 0x00CC00,               //Target: no, Threat: no
+            COLOR_IDLE_NON_PASSIVE = 0x4444FF,      //Target: no, Threat: no
+            COLOR_IDLE_PASSIVE = 0x00CC00,          //Target: no, Threat: no
             COLOR_FLEEING_N0N_PASSIVE = 0xFF55FF,   //Target: maybe, Threat: yes
             COLOR_FLEEING_PASSIVE = 0xAA00AA,       //Target: maybe, Threat: yes
             COLOR_BYPASS = 0x555555;                //Target: maybe, Threat: no
@@ -173,6 +173,11 @@ public class ClientData
             this.searcherID = searcherID;
             this.targetID = targetID;
             this.percent = percent;
+        }
+
+        public OnPointData clone()
+        {
+            return new OnPointData(color, searcherID, targetID, percent);
         }
     }
 }
