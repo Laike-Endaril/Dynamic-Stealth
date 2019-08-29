@@ -1,6 +1,10 @@
 package com.fantasticsource.dynamicstealth.client;
 
 import com.fantasticsource.dynamicstealth.DynamicStealth;
+import com.fantasticsource.dynamicstealth.client.event.RenderLightGaugeEvent;
+import com.fantasticsource.dynamicstealth.client.event.RenderOPHUDEvent;
+import com.fantasticsource.dynamicstealth.client.event.RenderStealthGaugeEvent;
+import com.fantasticsource.dynamicstealth.client.event.RenderTargetingHUDEvent;
 import com.fantasticsource.dynamicstealth.common.ClientData;
 import com.fantasticsource.dynamicstealth.common.DSTools;
 import com.fantasticsource.dynamicstealth.compat.Compat;
@@ -28,6 +32,7 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -83,12 +88,12 @@ public class HUD extends Gui
 
     private DecimalFormat oneDecimal = new DecimalFormat("0.0");
 
-    public HUD(Minecraft mc)
+    public HUD(RenderGameOverlayEvent.Pre event, Minecraft mc)
     {
         GlStateManager.disableDepth();
         GlStateManager.depthMask(false);
 
-        drawHUD(mc);
+        drawHUD(event, mc);
 
         GlStateManager.depthMask(true);
         GlStateManager.enableDepth();
@@ -114,7 +119,7 @@ public class HUD extends Gui
     {
         if (event.getType() == RenderGameOverlayEvent.ElementType.HOTBAR)
         {
-            new HUD(Minecraft.getMinecraft());
+            new HUD(event, Minecraft.getMinecraft());
         }
         GlStateManager.color(1, 1, 1, 1);
     }
@@ -136,7 +141,7 @@ public class HUD extends Gui
                     if (data != null && onPointFilter(data.color))
                     {
                         //Normal OPHUD
-                        drawOPHUD(event.getRenderer().getRenderManager(), event.getX(), event.getY(), event.getZ(), livingBase, data);
+                        drawOPHUD(event, livingBase, data);
                     }
                 }
             }
@@ -157,8 +162,11 @@ public class HUD extends Gui
         return false;
     }
 
-    private static void drawOPHUD(RenderManager renderManager, double x, double y, double z, Entity entity, OnPointData data)
+    private static void drawOPHUD(RenderLivingEvent.Post event, Entity entity, OnPointData data)
     {
+        RenderManager renderManager = event.getRenderer().getRenderManager();
+        double x = event.getX(), y = event.getY(), z = event.getZ();
+
         float viewerYaw = renderManager.playerViewY; //"playerViewY" is LITERALLY the yaw...interpolated over the partialtick
         float viewerPitch = renderManager.playerViewX; //"playerViewX" is LITERALLY the pitch...interpolated over the partialtick
         int color = data.color;
@@ -189,6 +197,10 @@ public class HUD extends Gui
 
         GlStateManager.enableTexture2D();
         textureManager.bindTexture(BASIC_GAUGE_TEXTURE);
+
+
+        MinecraftForge.EVENT_BUS.post(new RenderOPHUDEvent.Untransformed(event, data));
+
 
         GlStateManager.pushMatrix();
 
@@ -222,61 +234,66 @@ public class HUD extends Gui
             GlStateManager.scale(-scale, -scale, scale);
         }
 
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
-        bufferbuilder.begin(GL_QUADS, POSITION_TEX_LMAP_COLOR);
 
-        //Fill
-        double left = -halfSize2D + hOff2D;
-        double right = halfSize2D + hOff2D;
-        double top = -halfSize2D + vOff2D;
-        double bottom = halfSize2D + vOff2D;
-        if (!canHaveThreat(color))
+        if (!MinecraftForge.EVENT_BUS.post(new RenderOPHUDEvent.Transformed(event, data)))
         {
-            //Fill for states that are always 100%
-            bufferbuilder.pos(left, top, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(left, bottom, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, 0.5 - BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(right, bottom, 0).tex(0.5 - BASIC_GAUGE_UV_HALF_PIXEL, 0.5 - BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(right, top, 0).tex(0.5 - BASIC_GAUGE_UV_HALF_PIXEL, BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-        }
-        else
-        {
-            double amount = (double) data.percent / 100;
-            double level = bottom - halfSize2D * 2 * amount;
-            double uvLevel = 0.5 - BASIC_GAUGE_UV_HALF_PIXEL - BASIC_GAUGE_UV_SUBTEX_SIZE * amount;
+            Tessellator tessellator = Tessellator.getInstance();
+            BufferBuilder bufferbuilder = tessellator.getBuffer();
+            bufferbuilder.begin(GL_QUADS, POSITION_TEX_LMAP_COLOR);
 
-            //Background fill
-            bufferbuilder.pos(left, top, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
-            bufferbuilder.pos(left, level, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
-            bufferbuilder.pos(right, level, 0).tex(0.5 - BASIC_GAUGE_UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
-            bufferbuilder.pos(right, top, 0).tex(0.5 - BASIC_GAUGE_UV_HALF_PIXEL, BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
+            //Fill
+            double left = -halfSize2D + hOff2D;
+            double right = halfSize2D + hOff2D;
+            double top = -halfSize2D + vOff2D;
+            double bottom = halfSize2D + vOff2D;
+            if (!canHaveThreat(color))
+            {
+                //Fill for states that are always 100%
+                bufferbuilder.pos(left, top, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+                bufferbuilder.pos(left, bottom, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, 0.5 - BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+                bufferbuilder.pos(right, bottom, 0).tex(0.5 - BASIC_GAUGE_UV_HALF_PIXEL, 0.5 - BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+                bufferbuilder.pos(right, top, 0).tex(0.5 - BASIC_GAUGE_UV_HALF_PIXEL, BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            }
+            else
+            {
+                double amount = (double) data.percent / 100;
+                double level = bottom - halfSize2D * 2 * amount;
+                double uvLevel = 0.5 - BASIC_GAUGE_UV_HALF_PIXEL - BASIC_GAUGE_UV_SUBTEX_SIZE * amount;
 
-            //Threat level fill
-            bufferbuilder.pos(left, level, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(left, bottom, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, 0.5 - BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(right, bottom, 0).tex(0.5 - BASIC_GAUGE_UV_HALF_PIXEL, 0.5 - BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(right, level, 0).tex(0.5 - BASIC_GAUGE_UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+                //Background fill
+                bufferbuilder.pos(left, top, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
+                bufferbuilder.pos(left, level, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
+                bufferbuilder.pos(right, level, 0).tex(0.5 - BASIC_GAUGE_UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
+                bufferbuilder.pos(right, top, 0).tex(0.5 - BASIC_GAUGE_UV_HALF_PIXEL, BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
+
+                //Threat level fill
+                bufferbuilder.pos(left, level, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+                bufferbuilder.pos(left, bottom, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, 0.5 - BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+                bufferbuilder.pos(right, bottom, 0).tex(0.5 - BASIC_GAUGE_UV_HALF_PIXEL, 0.5 - BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+                bufferbuilder.pos(right, level, 0).tex(0.5 - BASIC_GAUGE_UV_HALF_PIXEL, uvLevel).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            }
+
+            //Outline and eyes
+            if (color == COLOR_ATTACKING_YOU || color == COLOR_SEARCHING || color == COLOR_BYPASS)
+            {
+                //Angry, lit up eyes
+                bufferbuilder.pos(left, top, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, 0.5 + BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+                bufferbuilder.pos(left, bottom, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, 1 - BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+                bufferbuilder.pos(right, bottom, 0).tex(0.5 - BASIC_GAUGE_UV_HALF_PIXEL, 1 - BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+                bufferbuilder.pos(right, top, 0).tex(0.5 - BASIC_GAUGE_UV_HALF_PIXEL, 0.5 + BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            }
+            else
+            {
+                //Normal, empty eyes
+                bufferbuilder.pos(left, top, 0).tex(0.5 + BASIC_GAUGE_UV_HALF_PIXEL, BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+                bufferbuilder.pos(left, bottom, 0).tex(0.5 + BASIC_GAUGE_UV_HALF_PIXEL, 0.5 - BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+                bufferbuilder.pos(right, bottom, 0).tex(1 - BASIC_GAUGE_UV_HALF_PIXEL, 0.5 - BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+                bufferbuilder.pos(right, top, 0).tex(1 - BASIC_GAUGE_UV_HALF_PIXEL, BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+            }
+
+            tessellator.draw();
         }
 
-        //Outline and eyes
-        if (color == COLOR_ATTACKING_YOU || color == COLOR_SEARCHING || color == COLOR_BYPASS)
-        {
-            //Angry, lit up eyes
-            bufferbuilder.pos(left, top, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, 0.5 + BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(left, bottom, 0).tex(BASIC_GAUGE_UV_HALF_PIXEL, 1 - BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(right, bottom, 0).tex(0.5 - BASIC_GAUGE_UV_HALF_PIXEL, 1 - BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(right, top, 0).tex(0.5 - BASIC_GAUGE_UV_HALF_PIXEL, 0.5 + BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-        }
-        else
-        {
-            //Normal, empty eyes
-            bufferbuilder.pos(left, top, 0).tex(0.5 + BASIC_GAUGE_UV_HALF_PIXEL, BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(left, bottom, 0).tex(0.5 + BASIC_GAUGE_UV_HALF_PIXEL, 0.5 - BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(right, bottom, 0).tex(1 - BASIC_GAUGE_UV_HALF_PIXEL, 0.5 - BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-            bufferbuilder.pos(right, top, 0).tex(1 - BASIC_GAUGE_UV_HALF_PIXEL, BASIC_GAUGE_UV_HALF_PIXEL).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
-        }
-
-        tessellator.draw();
 
         GlStateManager.popMatrix();
 
@@ -542,13 +559,13 @@ public class HUD extends Gui
         GlStateManager.popMatrix();
     }
 
-    private void drawHUD(Minecraft mc)
+    private void drawHUD(RenderGameOverlayEvent.Pre event, Minecraft mc)
     {
         //Targeting HUD
         if (targetData != null)
         {
             Entity entity = mc.player.world.getEntityByID(targetData.searcherID);
-            if (entity != null) drawTargetingHUD(entity, mc.fontRenderer);
+            if (entity != null) drawTargetingHUD(event, entity, mc.fontRenderer);
         }
 
 
@@ -558,11 +575,12 @@ public class HUD extends Gui
         GlStateManager.enableBlend();
         GlStateManager.enableTexture2D();
 
-        drawLightGauge(mc);
-        drawStealthGauge(mc, clientSettings.hudSettings.mainStyle.stealthGaugeMode);
+
+        if (!MinecraftForge.EVENT_BUS.post(new RenderLightGaugeEvent(event))) drawLightGauge(mc);
+        if (!MinecraftForge.EVENT_BUS.post(new RenderStealthGaugeEvent(event))) drawStealthGauge(mc, clientSettings.hudSettings.mainStyle.stealthGaugeMode);
     }
 
-    public void drawTargetingHUD(Entity entity, FontRenderer fontRenderer)
+    public void drawTargetingHUD(RenderGameOverlayEvent.Pre event, Entity entity, FontRenderer fontRenderer)
     {
         try
         {
@@ -606,21 +624,27 @@ public class HUD extends Gui
             if (offScreen)
             {
                 //Offscreen indicator
-                Color c;
-                if (clientSettings.hudSettings.targetingStyle.stateColoredArrow)
+                int viewW = Render.getViewportWidth(), viewH = Render.getViewportHeight();
+                double halfViewW = viewW * 0.5, halfViewH = viewH * 0.5;
+                double angleRad = TRIG_TABLE.arctanFullcircle(halfViewW, halfViewH, originX, originY);
+
+                double dist = Tools.min(viewW, viewH);
+                double originDrawX = (halfViewW + dist * 0.4 * TRIG_TABLE.cos(angleRad)) / sr.getScaleFactor();
+                double originDrawY = (halfViewH - dist * 0.4 * TRIG_TABLE.sin(angleRad)) / sr.getScaleFactor();
+
+                //TODO test full-edge coords to pass into Offscreen event
+                if (!MinecraftForge.EVENT_BUS.post(new RenderTargetingHUDEvent.Offscreen(event, boundX / sr.getScaleFactor(), boundY / sr.getScaleFactor(), originDrawX, originDrawY, angleRad, targetData)))
                 {
-                    c = new Color(targetData.color, true);
+                    Color c;
+                    if (clientSettings.hudSettings.targetingStyle.stateColoredArrow)
+                    {
+                        c = new Color(targetData.color, true);
+                    }
+                    else c = new Color(Integer.parseInt(clientSettings.hudSettings.targetingStyle.defaultArrowColor, 16), true);
+                    GlStateManager.color(c.rf(), c.gf(), c.bf(), (float) clientSettings.hudSettings.targetingStyle.arrowAlpha);
+
+                    drawArrow((float) originDrawX, (float) originDrawY, (float) Tools.radtodeg(angleRad), clientSettings.hudSettings.targetingStyle.arrowSize / Tools.max(ARROW_WIDTH, ARROW_HEIGHT));
                 }
-                else c = new Color(Integer.parseInt(clientSettings.hudSettings.targetingStyle.defaultArrowColor, 16), true);
-                GlStateManager.color(c.rf(), c.gf(), c.bf(), (float) clientSettings.hudSettings.targetingStyle.arrowAlpha);
-
-                double centerX = Render.getViewportWidth() * 0.5, centerY = Render.getViewportHeight() * 0.5;
-                double angleRad = TRIG_TABLE.arctanFullcircle(centerX, centerY, originX, originY);
-                double dist = Tools.min(Render.getViewportWidth(), Render.getViewportHeight());
-                double originDrawX = (centerX + dist * 0.4 * TRIG_TABLE.cos(angleRad)) / sr.getScaleFactor();
-                double originDrawY = (centerY - dist * 0.4 * TRIG_TABLE.sin(angleRad)) / sr.getScaleFactor();
-
-                drawArrow((float) originDrawX, (float) originDrawY, (float) Tools.radtodeg(angleRad), clientSettings.hudSettings.targetingStyle.arrowSize / Tools.max(ARROW_WIDTH, ARROW_HEIGHT));
             }
             else
             {
@@ -628,138 +652,142 @@ public class HUD extends Gui
                 float originDrawX = boundX / sr.getScaleFactor();
                 float originDrawY = boundY / sr.getScaleFactor();
 
-                int color = targetData.color;
-                Color c;
-                if (clientSettings.hudSettings.targetingStyle.stateColoredReticle)
+                if (!MinecraftForge.EVENT_BUS.post(new RenderTargetingHUDEvent.Onscreen(event, originDrawX, originDrawY, targetData)))
                 {
-                    c = new Color(color, true);
-                }
-                else c = new Color(Integer.parseInt(clientSettings.hudSettings.targetingStyle.defaultReticleColor, 16), true);
-                GlStateManager.color(c.rf(), c.gf(), c.bf(), (float) clientSettings.hudSettings.targetingStyle.reticleAlpha);
-
-                drawReticle(originDrawX, originDrawY);
-
-
-                //Text setup
-                int targetID = targetData.targetID;
-                Entity target = (targetID == -1 || targetID == -2) ? null : entity.world.getEntityByID(targetID);
-
-                float padding = 1;
-                ArrayList<String> elements = new ArrayList<>();
-
-                if (ClientData.allowTargetingName && clientSettings.hudSettings.targetingStyle.components.name) elements.add(entity.getName());
-
-                if (ClientData.allowTargetingHP && clientSettings.hudSettings.targetingStyle.components.hp && entity instanceof EntityLivingBase)
-                {
-                    EntityLivingBase livingBase = (EntityLivingBase) entity;
-                    float hp = livingBase.getHealth();
-                    float max = livingBase.getMaxHealth();
-                    elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.hp", hp, max, (int) (hp / max * 100)));
-                }
-
-                if (clientSettings.hudSettings.targetingStyle.components.action)
-                {
-                    String action;
-                    switch (color)
+                    int color = targetData.color;
+                    Color c;
+                    if (clientSettings.hudSettings.targetingStyle.stateColoredReticle)
                     {
-                        case COLOR_FLEEING_N0N_PASSIVE:
-                        case COLOR_FLEEING_PASSIVE:
-                            action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.fleeFrom", target == null ? I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.unknown") : target.getName());
-                            break;
-                        case COLOR_SEARCHING:
-                            action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.search");
-                            break;
-                        case COLOR_IDLE_PASSIVE:
-                            action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.idlePassive");
-                            break;
-                        case COLOR_IDLE_NON_PASSIVE:
-                            action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.idleNonPassive");
-                            break;
-                        case COLOR_BYPASS:
-                            if (target != null) action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.targeting", target.getName());
-                            else action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.unknown");
-                            break;
-                        default: //COLOR_ATTACKING_YOU and COLOR_ATTACKING_OTHER
-                            action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.targeting", target == null ? I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.unknown") : target.getName());
+                        c = new Color(color, true);
                     }
-                    elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.action", action));
-                }
-
-                if (ClientData.allowTargetingThreat && clientSettings.hudSettings.targetingStyle.components.threat)
-                {
-                    if (color == COLOR_BYPASS) elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.threatNotApplicable"));
-                    else if (targetData.percent > 0) elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.threat", targetData.percent));
-                }
-
-                if (ClientData.allowTargetingDistance && clientSettings.hudSettings.targetingStyle.components.distance)
-                {
-                    elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.distance", oneDecimal.format(entity.getDistance(Minecraft.getMinecraft().player))));
-                }
-
-                float width = 0;
-                for (String string : elements)
-                {
-                    width = Tools.max(width, fontRenderer.getStringWidth(string));
-                }
-                float height = fontRenderer.FONT_HEIGHT * elements.size() + padding * (elements.size() - 1);
+                    else c = new Color(Integer.parseInt(clientSettings.hudSettings.targetingStyle.defaultReticleColor, 16), true);
+                    GlStateManager.color(c.rf(), c.gf(), c.bf(), (float) clientSettings.hudSettings.targetingStyle.reticleAlpha);
 
 
-                //Targeting HUD text
-                float textScale = (float) clientSettings.hudSettings.targetingStyle.textScale;
+                    drawReticle(originDrawX, originDrawY);
 
-                float offX = 20;
-                float alpha = (float) clientSettings.hudSettings.targetingStyle.textAlpha;
-                if (!clientSettings.hudSettings.targetingStyle.stateColoredText) color = Integer.parseInt(clientSettings.hudSettings.targetingStyle.defaultTextColor, 16);
-                color |= ((int) (0xFF * alpha) << 24);
-                GlStateManager.disableTexture2D();
 
-                boolean toRight = originX < portW >> 1;
-                if (!toRight) offX = -offX;
+                    //Text setup
+                    int targetID = targetData.targetID;
+                    Entity target = (targetID == -1 || targetID == -2) ? null : entity.world.getEntityByID(targetID);
 
-                pos = Render.getEntityXYInWindow(entity, 0, entity.height * 0.5, 0);
-                float drawX = pos.getKey() / sr.getScaleFactor() + offX, drawY = pos.getValue() / sr.getScaleFactor();
+                    float padding = 1;
+                    ArrayList<String> elements = new ArrayList<>();
 
-                GlStateManager.pushMatrix();
-                GlStateManager.translate(drawX, drawY, 0);
-                GlStateManager.scale(textScale, textScale, 1);
-                GlStateManager.color(0, 0, 0, alpha);
+                    if (ClientData.allowTargetingName && clientSettings.hudSettings.targetingStyle.components.name) elements.add(entity.getName());
 
-                if (toRight)
-                {
-                    //Text background
-                    GlStateManager.glBegin(GL_QUADS);
-                    GlStateManager.glVertex3f(-padding, -height / 2 - padding, 0);
-                    GlStateManager.glVertex3f(-padding, height / 2 + padding - 1, 0);
-                    GlStateManager.glVertex3f(width + padding - 1, height / 2 + padding - 1, 0);
-                    GlStateManager.glVertex3f(width + padding - 1, -height / 2 - padding, 0);
-                    GlStateManager.glEnd();
-
-                    //Text elements
-                    GlStateManager.enableTexture2D();
-                    for (int i = 0; i < elements.size(); i++)
+                    if (ClientData.allowTargetingHP && clientSettings.hudSettings.targetingStyle.components.hp && entity instanceof EntityLivingBase)
                     {
-                        fontRenderer.drawString(elements.get(i), 0, -height / 2 + height * i / elements.size(), color, false);
+                        EntityLivingBase livingBase = (EntityLivingBase) entity;
+                        float hp = livingBase.getHealth();
+                        float max = livingBase.getMaxHealth();
+                        elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.hp", hp, max, (int) (hp / max * 100)));
                     }
-                }
-                else
-                {
-                    //Text background
-                    GlStateManager.glBegin(GL_QUADS);
-                    GlStateManager.glVertex3f(-width - padding, -height / 2 - padding, 0);
-                    GlStateManager.glVertex3f(-width - padding, height / 2 + padding - 1, 0);
-                    GlStateManager.glVertex3f(padding - 1, height / 2 + padding - 1, 0);
-                    GlStateManager.glVertex3f(padding - 1, -height / 2 - padding, 0);
-                    GlStateManager.glEnd();
 
-                    //Text elements
-                    GlStateManager.enableTexture2D();
-                    for (int i = 0; i < elements.size(); i++)
+                    if (clientSettings.hudSettings.targetingStyle.components.action)
                     {
-                        fontRenderer.drawString(elements.get(i), -width, -height / 2 + height * i / elements.size(), color, false);
+                        String action;
+                        switch (color)
+                        {
+                            case COLOR_FLEEING_N0N_PASSIVE:
+                            case COLOR_FLEEING_PASSIVE:
+                                action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.fleeFrom", target == null ? I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.unknown") : target.getName());
+                                break;
+                            case COLOR_SEARCHING:
+                                action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.search");
+                                break;
+                            case COLOR_IDLE_PASSIVE:
+                                action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.idlePassive");
+                                break;
+                            case COLOR_IDLE_NON_PASSIVE:
+                                action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.idleNonPassive");
+                                break;
+                            case COLOR_BYPASS:
+                                if (target != null) action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.targeting", target.getName());
+                                else action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.unknown");
+                                break;
+                            default: //COLOR_ATTACKING_YOU and COLOR_ATTACKING_OTHER
+                                action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.targeting", target == null ? I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.unknown") : target.getName());
+                        }
+                        elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.action", action));
                     }
-                }
 
-                GlStateManager.popMatrix();
+                    if (ClientData.allowTargetingThreat && clientSettings.hudSettings.targetingStyle.components.threat)
+                    {
+                        if (color == COLOR_BYPASS) elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.threatNotApplicable"));
+                        else if (targetData.percent > 0) elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.threat", targetData.percent));
+                    }
+
+                    if (ClientData.allowTargetingDistance && clientSettings.hudSettings.targetingStyle.components.distance)
+                    {
+                        elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.distance", oneDecimal.format(entity.getDistance(Minecraft.getMinecraft().player))));
+                    }
+
+                    float width = 0;
+                    for (String string : elements)
+                    {
+                        width = Tools.max(width, fontRenderer.getStringWidth(string));
+                    }
+                    float height = fontRenderer.FONT_HEIGHT * elements.size() + padding * (elements.size() - 1);
+
+
+                    //Targeting HUD text
+                    float textScale = (float) clientSettings.hudSettings.targetingStyle.textScale;
+
+                    float offX = 20;
+                    float alpha = (float) clientSettings.hudSettings.targetingStyle.textAlpha;
+                    if (!clientSettings.hudSettings.targetingStyle.stateColoredText) color = Integer.parseInt(clientSettings.hudSettings.targetingStyle.defaultTextColor, 16);
+                    color |= ((int) (0xFF * alpha) << 24);
+                    GlStateManager.disableTexture2D();
+
+                    boolean toRight = originX < portW >> 1;
+                    if (!toRight) offX = -offX;
+
+                    pos = Render.getEntityXYInWindow(entity, 0, entity.height * 0.5, 0);
+                    float drawX = pos.getKey() / sr.getScaleFactor() + offX, drawY = pos.getValue() / sr.getScaleFactor();
+
+                    GlStateManager.pushMatrix();
+                    GlStateManager.translate(drawX, drawY, 0);
+                    GlStateManager.scale(textScale, textScale, 1);
+                    GlStateManager.color(0, 0, 0, alpha);
+
+                    if (toRight)
+                    {
+                        //Text background
+                        GlStateManager.glBegin(GL_QUADS);
+                        GlStateManager.glVertex3f(-padding, -height / 2 - padding, 0);
+                        GlStateManager.glVertex3f(-padding, height / 2 + padding - 1, 0);
+                        GlStateManager.glVertex3f(width + padding - 1, height / 2 + padding - 1, 0);
+                        GlStateManager.glVertex3f(width + padding - 1, -height / 2 - padding, 0);
+                        GlStateManager.glEnd();
+
+                        //Text elements
+                        GlStateManager.enableTexture2D();
+                        for (int i = 0; i < elements.size(); i++)
+                        {
+                            fontRenderer.drawString(elements.get(i), 0, -height / 2 + height * i / elements.size(), color, false);
+                        }
+                    }
+                    else
+                    {
+                        //Text background
+                        GlStateManager.glBegin(GL_QUADS);
+                        GlStateManager.glVertex3f(-width - padding, -height / 2 - padding, 0);
+                        GlStateManager.glVertex3f(-width - padding, height / 2 + padding - 1, 0);
+                        GlStateManager.glVertex3f(padding - 1, height / 2 + padding - 1, 0);
+                        GlStateManager.glVertex3f(padding - 1, -height / 2 - padding, 0);
+                        GlStateManager.glEnd();
+
+                        //Text elements
+                        GlStateManager.enableTexture2D();
+                        for (int i = 0; i < elements.size(); i++)
+                        {
+                            fontRenderer.drawString(elements.get(i), -width, -height / 2 + height * i / elements.size(), color, false);
+                        }
+                    }
+
+                    GlStateManager.popMatrix();
+                }
             }
         }
         catch (IllegalAccessException e)
