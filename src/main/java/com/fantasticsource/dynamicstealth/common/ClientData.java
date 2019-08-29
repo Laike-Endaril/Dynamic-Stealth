@@ -3,6 +3,8 @@ package com.fantasticsource.dynamicstealth.common;
 import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -178,6 +180,16 @@ public class ClientData
         public OnPointData clone()
         {
             return new OnPointData(color, searcherID, targetID, percent);
+        }
+
+        public Entity getEntity()
+        {
+            return Minecraft.getMinecraft().world.getEntityByID(searcherID);
+        }
+
+        public Entity getTarget()
+        {
+            return Minecraft.getMinecraft().world.getEntityByID(targetID);
         }
     }
 }
