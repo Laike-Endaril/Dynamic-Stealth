@@ -457,9 +457,10 @@ public class HUD extends Gui
         float alpha = (float) clientSettings.hudSettings.mainStyle.stealthGaugeAlpha;
         if (alpha <= 0) return;
 
+        if (ClientData.stealthLevel == Byte.MIN_VALUE) return;
+
         float partialTick = mc.getRenderPartialTicks();
         float stealth = partialTick * (ClientData.stealthLevel - ClientData.prevStealthLevel) + ClientData.prevStealthLevel;
-        if (stealth == Byte.MIN_VALUE) return;
 
 
         GlStateManager.pushMatrix();
