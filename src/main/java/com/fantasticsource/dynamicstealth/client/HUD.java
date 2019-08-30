@@ -632,7 +632,6 @@ public class HUD extends Gui
                 double originDrawX = (halfViewW + dist * 0.4 * TRIG_TABLE.cos(angleRad)) / sr.getScaleFactor();
                 double originDrawY = (halfViewH - dist * 0.4 * TRIG_TABLE.sin(angleRad)) / sr.getScaleFactor();
 
-                //TODO test full-edge coords to pass into Offscreen event
                 if (!MinecraftForge.EVENT_BUS.post(new RenderTargetingHUDEvent.Offscreen(event, boundX / sr.getScaleFactor(), boundY / sr.getScaleFactor(), originDrawX, originDrawY, angleRad, targetData)))
                 {
                     Color c;
