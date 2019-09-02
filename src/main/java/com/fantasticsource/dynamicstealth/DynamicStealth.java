@@ -91,12 +91,12 @@ import static com.fantasticsource.dynamicstealth.common.Network.WRAPPER;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.dynamicstealth.server.threat.Threat.THREAT_TYPE.*;
 
-@Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, dependencies = "required-after:fantasticlib@[1.12.2.019,)")
+@Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, dependencies = "required-after:fantasticlib@[1.12.2.019,)", acceptableRemoteVersions = "[1.12.2.090a,1.12.2.090b]")
 public class DynamicStealth
 {
     public static final String MODID = "dynamicstealth";
     public static final String NAME = "Dynamic Stealth";
-    public static final String VERSION = "1.12.2.090a";
+    public static final String VERSION = "1.12.2.090b";
     public static final String CONFIG_VERSION = "1.12.2.085"; //The lowest compatible config version
 
     public static final TrigLookupTable TRIG_TABLE = new TrigLookupTable(1024);
@@ -305,13 +305,9 @@ public class DynamicStealth
                                                 if (ai.getMode() != AIDynamicStealth.MODE_NONE) ai.restart(feelerLiving.getPosition());
                                             }
                                         }
-                                        else
-                                        {
-                                            makeLivingLookTowardEntity(feelerLiving, felt);
-                                            feelerLiving.getNavigator().clearPath();
-                                        }
-                                        break;
+                                        else makeLivingLookTowardEntity(feelerLiving, felt);
                                     }
+                                    break;
                             }
                         }
                     }
