@@ -114,13 +114,9 @@ public class HUD
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
-    public static void drawHUD(RenderGameOverlayEvent.Pre event)
+    public static void drawHUD(Render.RenderHUDEvent event)
     {
-        if (event.getType() == RenderGameOverlayEvent.ElementType.HOTBAR)
-        {
-            draw(event, Minecraft.getMinecraft());
-        }
-        GlStateManager.color(1, 1, 1, 1);
+        draw(event.getParentEvent(), Minecraft.getMinecraft());
     }
 
     @SubscribeEvent
