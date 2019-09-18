@@ -16,7 +16,6 @@ import com.fantasticsource.tools.datastructures.Color;
 import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -49,7 +48,7 @@ import static net.minecraft.client.renderer.vertex.DefaultVertexFormats.POSITION
 import static org.lwjgl.opengl.GL11.*;
 
 @SideOnly(Side.CLIENT)
-public class HUD extends Gui
+public class HUD
 {
     private static final ResourceLocation BASIC_GAUGE_TEXTURE = new ResourceLocation(DynamicStealth.MODID, "image/basicgauge.png");
     private static final int BASIC_GAUGE_SIZE = 32;
@@ -86,9 +85,9 @@ public class HUD extends Gui
 
     private static TextureManager textureManager = Minecraft.getMinecraft().renderEngine;
 
-    private DecimalFormat oneDecimal = new DecimalFormat("0.0");
+    private static DecimalFormat oneDecimal = new DecimalFormat("0.0");
 
-    public HUD(RenderGameOverlayEvent.Pre event, Minecraft mc)
+    public static void draw(RenderGameOverlayEvent.Pre event, Minecraft mc)
     {
         GlStateManager.disableDepth();
         GlStateManager.depthMask(false);
@@ -119,7 +118,7 @@ public class HUD extends Gui
     {
         if (event.getType() == RenderGameOverlayEvent.ElementType.HOTBAR)
         {
-            new HUD(event, Minecraft.getMinecraft());
+            draw(event, Minecraft.getMinecraft());
         }
         GlStateManager.color(1, 1, 1, 1);
     }
@@ -559,7 +558,7 @@ public class HUD extends Gui
         GlStateManager.popMatrix();
     }
 
-    private void drawHUD(RenderGameOverlayEvent.Pre event, Minecraft mc)
+    private static void drawHUD(RenderGameOverlayEvent.Pre event, Minecraft mc)
     {
         //Targeting HUD
         if (targetData != null)
@@ -580,7 +579,7 @@ public class HUD extends Gui
         if (!MinecraftForge.EVENT_BUS.post(new RenderStealthGaugeEvent(event))) drawStealthGauge(mc, clientSettings.hudSettings.mainStyle.stealthGaugeMode);
     }
 
-    public void drawTargetingHUD(RenderGameOverlayEvent.Pre event, Entity entity, FontRenderer fontRenderer)
+    public static void drawTargetingHUD(RenderGameOverlayEvent.Pre event, Entity entity, FontRenderer fontRenderer)
     {
         try
         {
