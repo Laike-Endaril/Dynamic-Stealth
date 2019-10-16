@@ -653,7 +653,7 @@ public class DynamicStealth
     public static void entityJoin(EntityJoinWorldEvent event)
     {
         Entity entity = event.getEntity();
-        if (entity instanceof EntityLiving)
+        if (entity instanceof EntityLiving && !GlobalDefaultsAndData.isFullBypass((EntityLivingBase) entity))
         {
             if (!Compat.customnpcs || !(NpcAPI.Instance().getIEntity(entity) instanceof ICustomNpc)) livingJoinWorld((EntityLiving) entity);
         }
@@ -664,30 +664,26 @@ public class DynamicStealth
         //Set the new senses handler for all living entities (not including players)
         try
         {
-            if (!GlobalDefaultsAndData.isFullBypass(living))
             living.lookHelper = new EntityLookHelperEdit(living);
 
             if (!living.world.isRemote) //Server-side
             {
-                if (!GlobalDefaultsAndData.isFullBypass(living))
+                living.senses = new EntitySensesEdit(living);
+
+                if (living instanceof AbstractSkeleton)
                 {
-                    living.senses = new EntitySensesEdit(living);
-
-                    if (living instanceof AbstractSkeleton)
-                    {
-                        AbstractSkeleton abstractSkeleton = (AbstractSkeleton) living;
-                        abstractSkeleton.aiArrowAttack = new AIAttackRangedBowEdit<AbstractSkeleton>(abstractSkeleton.aiArrowAttack);
-                        abstractSkeleton.aiAttackOnCollide = new AIAttackMeleeEdit(abstractSkeleton.aiAttackOnCollide);
-                    }
-
-                    //Entity AI task replacements
-                    replaceTasks(living.tasks, living);
-                    replaceTasks(living.targetTasks, living);
-                    Compat.replaceNPEAttackTargetTasks(living);
-
-                    //Entity AI task additions
-                    addTasks(living.targetTasks, living.tasks, living);
+                    AbstractSkeleton abstractSkeleton = (AbstractSkeleton) living;
+                    abstractSkeleton.aiArrowAttack = new AIAttackRangedBowEdit<AbstractSkeleton>(abstractSkeleton.aiArrowAttack);
+                    abstractSkeleton.aiAttackOnCollide = new AIAttackMeleeEdit(abstractSkeleton.aiAttackOnCollide);
                 }
+
+                //Entity AI task replacements
+                replaceTasks(living.tasks, living);
+                replaceTasks(living.targetTasks, living);
+                Compat.replaceNPEAttackTargetTasks(living);
+
+                //Entity AI task additions
+                addTasks(living.targetTasks, living.tasks, living);
             }
             else //Client-side
             {

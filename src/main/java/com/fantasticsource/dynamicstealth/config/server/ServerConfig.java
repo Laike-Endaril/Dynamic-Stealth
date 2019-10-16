@@ -52,5 +52,6 @@ public class ServerConfig
     @Config.Name("Entity-Specific Full Bypass")
     @Config.LangKey(DynamicStealth.MODID + ".config.fullBypass")
     @Config.Comment("Entities in this list will completely bypass all DS systems!")
+    @Config.RequiresMcRestart
     public String[] fullBypassEntities = GlobalDefaultsAndData.fullBypassDefaults.toArray(new String[0]);
 }
