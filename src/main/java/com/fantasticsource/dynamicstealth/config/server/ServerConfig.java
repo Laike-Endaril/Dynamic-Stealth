@@ -8,6 +8,7 @@ import com.fantasticsource.dynamicstealth.config.server.interactions.Interaction
 import com.fantasticsource.dynamicstealth.config.server.items.ItemConfig;
 import com.fantasticsource.dynamicstealth.config.server.senses.SensesConfig;
 import com.fantasticsource.dynamicstealth.config.server.threat.ThreatConfig;
+import com.fantasticsource.dynamicstealth.server.GlobalDefaultsAndData;
 import net.minecraftforge.common.config.Config;
 
 public class ServerConfig
@@ -47,4 +48,9 @@ public class ServerConfig
     @Config.Name("Items")
     @Config.LangKey(DynamicStealth.MODID + ".config.items")
     public ItemConfig itemSettings = new ItemConfig();
+
+    @Config.Name("Entity-Specific Full Bypass")
+    @Config.LangKey(DynamicStealth.MODID + ".config.fullBypass")
+    @Config.Comment("Entities in this list will completely bypass all DS systems!")
+    public String[] fullBypassEntities = GlobalDefaultsAndData.fullBypassDefaults.toArray(new String[0]);
 }

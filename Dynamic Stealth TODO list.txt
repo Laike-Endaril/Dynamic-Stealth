@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+Check helicopter from techguns
+
 Add ally groups for helper system config
 
 Mob flee speeds...
@@ -15,11 +17,6 @@ Add configs for HP element...
 
 Add config for forcing full visibility on specified entities
 Add thut's elevators to it by default (thuttech:lift)
-
-Add config for full DS bypass
-Try full DS bypass for...
-...Wroughtnaut from Mowzie's Mobs
-...Barbarians and pirates from Minecolonies
 
 Make sure hidefrom command is usable for non-op survival players
 

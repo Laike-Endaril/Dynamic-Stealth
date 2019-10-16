@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.entitytracker;
 
+import com.fantasticsource.dynamicstealth.server.GlobalDefaultsAndData;
 import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
 import com.fantasticsource.tools.Tools;
 import net.minecraft.crash.CrashReport;
@@ -90,7 +91,7 @@ public class EntityTrackerEdit extends EntityTracker
                 throw new IllegalStateException("Entity is already tracked!");
             }
 
-            EntityTrackerEntry entityEntry = entityIn instanceof EntityLivingBase ? new LivingBaseEntityTrackerEntry(entityIn, trackingRange, maxTrackingDistanceThreshold, updateFrequency, sendVelocityUpdates) : new EntityTrackerEntry(entityIn, trackingRange, maxTrackingDistanceThreshold, updateFrequency, sendVelocityUpdates);
+            EntityTrackerEntry entityEntry = entityIn instanceof EntityLivingBase && !GlobalDefaultsAndData.isFullBypass((EntityLivingBase) entityIn) ? new LivingBaseEntityTrackerEntry(entityIn, trackingRange, maxTrackingDistanceThreshold, updateFrequency, sendVelocityUpdates) : new EntityTrackerEntry(entityIn, trackingRange, maxTrackingDistanceThreshold, updateFrequency, sendVelocityUpdates);
             entries.add(entityEntry);
             trackedEntityHashTable.addKey(entityIn.getEntityId(), entityEntry);
             entityEntry.updatePlayerEntities(world.playerEntities);

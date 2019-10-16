@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.server.threat;
 
 import com.fantasticsource.dynamicstealth.compat.Compat;
+import com.fantasticsource.dynamicstealth.server.GlobalDefaultsAndData;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.datastructures.Pair;
 import ladysnake.dissolution.api.corporeality.IPossessable;
@@ -125,6 +126,8 @@ public class EntityThreatData
     public static boolean bypassesThreat(EntityLivingBase livingBase)
     {
         if (serverSettings.threat.bypassThreatSystem || livingBase == null) return true;
+
+        if (GlobalDefaultsAndData.isFullBypass(livingBase)) return true;
 
         if (Compat.dissolution && livingBase instanceof IPossessable && ((IPossessable) livingBase).getPossessingEntity() != null) return true;
 

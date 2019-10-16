@@ -91,7 +91,7 @@ import static com.fantasticsource.dynamicstealth.common.Network.WRAPPER;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.dynamicstealth.server.threat.Threat.THREAT_TYPE.*;
 
-@Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, dependencies = "required-after:fantasticlib@[1.12.2.021j,)", acceptableRemoteVersions = "[1.12.2.090a,1.12.2.090c]")
+@Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, dependencies = "required-after:fantasticlib@[1.12.2.023,)")
 public class DynamicStealth
 {
     public static final String MODID = "dynamicstealth";
@@ -142,6 +142,7 @@ public class DynamicStealth
 
     public static void update()
     {
+        GlobalDefaultsAndData.update();
         AttackData.update();
         HUDData.update();
         EntityAIData.update();
@@ -663,26 +664,30 @@ public class DynamicStealth
         //Set the new senses handler for all living entities (not including players)
         try
         {
+            if (!GlobalDefaultsAndData.isFullBypass(living))
             living.lookHelper = new EntityLookHelperEdit(living);
 
             if (!living.world.isRemote) //Server-side
             {
-                living.senses = new EntitySensesEdit(living);
-
-                if (living instanceof AbstractSkeleton)
+                if (!GlobalDefaultsAndData.isFullBypass(living))
                 {
-                    AbstractSkeleton abstractSkeleton = (AbstractSkeleton) living;
-                    abstractSkeleton.aiArrowAttack = new AIAttackRangedBowEdit<AbstractSkeleton>(abstractSkeleton.aiArrowAttack);
-                    abstractSkeleton.aiAttackOnCollide = new AIAttackMeleeEdit(abstractSkeleton.aiAttackOnCollide);
+                    living.senses = new EntitySensesEdit(living);
+
+                    if (living instanceof AbstractSkeleton)
+                    {
+                        AbstractSkeleton abstractSkeleton = (AbstractSkeleton) living;
+                        abstractSkeleton.aiArrowAttack = new AIAttackRangedBowEdit<AbstractSkeleton>(abstractSkeleton.aiArrowAttack);
+                        abstractSkeleton.aiAttackOnCollide = new AIAttackMeleeEdit(abstractSkeleton.aiAttackOnCollide);
+                    }
+
+                    //Entity AI task replacements
+                    replaceTasks(living.tasks, living);
+                    replaceTasks(living.targetTasks, living);
+                    Compat.replaceNPEAttackTargetTasks(living);
+
+                    //Entity AI task additions
+                    addTasks(living.targetTasks, living.tasks, living);
                 }
-
-                //Entity AI task replacements
-                replaceTasks(living.tasks, living);
-                replaceTasks(living.targetTasks, living);
-                Compat.replaceNPEAttackTargetTasks(living);
-
-                //Entity AI task additions
-                addTasks(living.targetTasks, living.tasks, living);
             }
             else //Client-side
             {

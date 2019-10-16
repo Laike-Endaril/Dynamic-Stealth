@@ -222,6 +222,8 @@ dynamicstealth.config.helperSys.tooltip=FILLSCREEN Which entities come to the ai
 dynamicstealth.config.interact=Interactions
 dynamicstealth.config.interact.tooltip=FILLSCREEN Things that happen under special circumstances, eg. stealth attacks
 dynamicstealth.config.items=Items
+dynamicstealth.config.fullBypass=Entity-Specific Full Bypass
+dynamicstealth.config.fullBypass.tooltip=FILLSCREEN Entities in this list will completely bypass all DS systems!
 
 dynamicstealth.config.aiHeadSpeed=Head Turn Speed
 dynamicstealth.config.aiHeadSpeed.tooltip=FILLSCREEN FIXNEWLINES How quickly entities' heads spin during eg. a search sequence\n \n
