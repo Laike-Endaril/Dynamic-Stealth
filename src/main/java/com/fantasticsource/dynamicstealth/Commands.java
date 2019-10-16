@@ -28,18 +28,34 @@ public class Commands extends CommandBase
         return "dstealth";
     }
 
+    @Override
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender)
+    {
+        return true;
+    }
+
     public int getRequiredPermissionLevel()
     {
-        return 2;
+        return 0;
     }
 
     @Override
     public String getUsage(ICommandSender sender)
     {
-        return AQUA + "/dstealth reload" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.reload.comment") + "\n" +
-                AQUA + "/dstealth hidefrom <playername> <t/f/true/false>" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.hidefromPlayerTF.comment") + "\n" +
-                AQUA + "/dstealth hidefrom <playername>" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.hidefromPlayer.comment") + "\n" +
-                AQUA + "/dstealth hidefrom" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.hidefrom.comment");
+        if (sender.canUseCommand(2, getName()))
+        {
+            return AQUA + "/dstealth reload" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.reload.comment") + "\n" +
+
+                    AQUA + "/dstealth hidefrom <playername> <t/f/true/false>" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.hidefromPlayerTF.comment") + "\n" +
+                    AQUA + "/dstealth hidefrom <playername>" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.hidefromPlayer.comment") + "\n" +
+                    AQUA + "/dstealth hidefrom" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.hidefrom.comment");
+        }
+        else
+        {
+            return AQUA + "/dstealth hidefrom <playername> <t/f/true/false>" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.hidefromPlayerTF.comment") + "\n" +
+                    AQUA + "/dstealth hidefrom <playername>" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.hidefromPlayer.comment") + "\n" +
+                    AQUA + "/dstealth hidefrom" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.hidefrom.comment");
+        }
     }
 
     public void execute(MinecraftServer server, ICommandSender sender, String[] args)
@@ -58,7 +74,7 @@ public class Commands extends CommandBase
         String partial = args[args.length - 1];
         if (args.length == 1)
         {
-            result.add("reload");
+            if (sender.canUseCommand(2, getName())) result.add("reload");
             result.add("hidefrom");
 
             if (partial.length() != 0) result.removeIf(k -> partial.length() > k.length() || !k.substring(0, partial.length()).equalsIgnoreCase(partial));
@@ -96,7 +112,8 @@ public class Commands extends CommandBase
         switch (cmd)
         {
             case "reload":
-                try
+                if (!sender.canUseCommand(2, getName())) notifyCommandListener(sender, this, "commands.generic.permission");
+                else try
                 {
                     MCTools.reloadConfig(ConfigHandler.fullConfigFilename, DynamicStealth.MODID);
                     DynamicStealth.update();
@@ -109,6 +126,7 @@ public class Commands extends CommandBase
                     e.printStackTrace();
                 }
                 break;
+
             case "hidefrom":
                 try
                 {
@@ -164,6 +182,7 @@ public class Commands extends CommandBase
                     e.printStackTrace();
                 }
                 break;
+
             default:
                 notifyCommandListener(sender, this, getUsage(sender));
                 break;

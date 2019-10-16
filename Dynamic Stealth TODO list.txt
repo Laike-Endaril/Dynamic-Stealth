@@ -18,8 +18,6 @@ Add configs for HP element...
 Add config for forcing full visibility on specified entities
 Add thut's elevators to it by default (thuttech:lift)
 
-Make sure hidefrom command is usable for non-op survival players
-
 
 
 Reorganize configs for...
