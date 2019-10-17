@@ -25,8 +25,8 @@ public class GlobalDefaultsAndData
     {
         //Compat; these should be added absolutely, not conditionally
 
-
         fullBypassDefaults.add("mowziesmobs:ferrous_wroughtnaut");
+        fullBypassDefaults.add("thuttech:lift");
     }
 
 
