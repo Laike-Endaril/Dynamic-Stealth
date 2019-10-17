@@ -37,7 +37,7 @@ public class ClientData
             COLOR_FLEEING_PASSIVE = 0xAA00AA,       //Target: maybe, Threat: yes
             COLOR_BYPASS = 0x555555;                //Target: maybe, Threat: no
 
-    public static int stealthLevel = Byte.MIN_VALUE, prevStealthLevel = Byte.MIN_VALUE;
+    public static int stealthLevel = Byte.MIN_VALUE, prevStealthLevel = Byte.MIN_VALUE, lightLevel = 0;
 
     public static boolean soulSight = false;
     public static boolean usePlayerSenses = false;
@@ -48,8 +48,6 @@ public class ClientData
     public static double targetPriority = Integer.MAX_VALUE;
 
     public static LinkedHashMap<Integer, Float> visibilityMap = new LinkedHashMap<>(), previousVisibilityMap1 = new LinkedHashMap<>(), previousVisibilityMap2 = new LinkedHashMap<>();
-
-    public static LinkedHashMap<Integer, Integer> minimumDimensionLightLevels = new LinkedHashMap<>();
 
 
     @SubscribeEvent
@@ -72,8 +70,6 @@ public class ClientData
         visibilityMap.clear();
         previousVisibilityMap1.clear();
         previousVisibilityMap2.clear();
-
-        minimumDimensionLightLevels.clear();
     }
 
 

@@ -6,7 +6,6 @@ import com.fantasticsource.dynamicstealth.client.event.RenderOPHUDEvent;
 import com.fantasticsource.dynamicstealth.client.event.RenderStealthGaugeEvent;
 import com.fantasticsource.dynamicstealth.client.event.RenderTargetingHUDEvent;
 import com.fantasticsource.dynamicstealth.common.ClientData;
-import com.fantasticsource.dynamicstealth.common.DSTools;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatNeat;
 import com.fantasticsource.mctools.MCTools;
@@ -442,7 +441,7 @@ public class HUD
         double x = maxOffset * scale + (sr.getScaledWidth() - maxOffset * 2 * scale) * clientSettings.hudSettings.lightGauge.lightGaugeX;
         double y = maxOffset * scale + (sr.getScaledHeight() - maxOffset * 2 * scale) * clientSettings.hudSettings.lightGauge.lightGaugeY;
 
-        int light = DSTools.maxLightLevelTotal(mc.player);
+        int light = ClientData.lightLevel;
 
         //Filled Crystals
         Color c = new Color(Integer.parseInt(clientSettings.hudSettings.lightGauge.lightGaugeColorFull, 16), true);

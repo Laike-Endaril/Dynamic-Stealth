@@ -50,13 +50,10 @@ public class DSTools
 
     public static int lightLevelTotal(World world, BlockPos pos)
     {
+        if (world.isRemote) throw new IllegalStateException("Light levels should only be accessed from server-side!");
+
         if (!world.isAreaLoaded(pos, 1)) return 0;
 
-        if (world.isRemote)
-        {
-            Integer result = ClientData.minimumDimensionLightLevels.get(world.provider.getDimension());
-            return Tools.max(world.getLightFromNeighbors(pos) - world.calculateSkylightSubtracted(1), result == null ? 0 : result);
-        }
         return Tools.max(world.getLightFromNeighbors(pos), EntitySightData.minimumDimensionLight(world.provider.getDimension()));
     }
 

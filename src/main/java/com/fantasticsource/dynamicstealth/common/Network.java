@@ -234,7 +234,6 @@ public class Network
         boolean soulSight;
         boolean usePlayerSenses;
         boolean allowTargetingName, allowTargetingHP, allowTargetingThreat, allowTargetingDistance;
-        LinkedHashMap<Integer, Integer> minimumDimensionLightLevels;
 
         public ClientInitPacket() //Required; probably for when the packet is received
         {
@@ -271,13 +270,6 @@ public class Network
             buf.writeBoolean(allowTargetingHP);
             buf.writeBoolean(allowTargetingThreat);
             buf.writeBoolean(allowTargetingDistance);
-
-            buf.writeInt(EntitySightData.minimumDimensionLightLevels.size());
-            for (Map.Entry<Integer, Integer> entry : EntitySightData.minimumDimensionLightLevels.entrySet())
-            {
-                buf.writeInt(entry.getKey());
-                buf.writeInt(entry.getValue());
-            }
         }
 
         @Override
@@ -290,13 +282,6 @@ public class Network
             allowTargetingHP = buf.readBoolean();
             allowTargetingThreat = buf.readBoolean();
             allowTargetingDistance = buf.readBoolean();
-
-            int size = buf.readInt();
-            minimumDimensionLightLevels = new LinkedHashMap<>(size);
-            for (int i = 0; i < size; i++)
-            {
-                minimumDimensionLightLevels.put(buf.readInt(), buf.readInt());
-            }
         }
     }
 
@@ -316,8 +301,6 @@ public class Network
                     ClientData.allowTargetingHP = packet.allowTargetingHP;
                     ClientData.allowTargetingThreat = packet.allowTargetingThreat;
                     ClientData.allowTargetingDistance = packet.allowTargetingDistance;
-
-                    ClientData.minimumDimensionLightLevels = packet.minimumDimensionLightLevels;
                 });
             }
 
@@ -330,7 +313,7 @@ public class Network
     {
         EntityPlayerMP player;
         boolean targetElement, update;
-        int stealthLevel;
+        int stealthLevel, lightLevel;
         ArrayList<EntityLivingBase> inputList = new ArrayList<>();
 
         ArrayList<ClientData.OnPointData> outputList = new ArrayList<>();
@@ -344,6 +327,8 @@ public class Network
         {
             this.player = player;
             this.targetElement = targetElement;
+
+            this.lightLevel = DSTools.maxLightLevelTotal(player);
 
             this.stealthLevel = stealthLevel;
 
@@ -366,6 +351,7 @@ public class Network
         public void toBytes(ByteBuf buf)
         {
             buf.writeByte(stealthLevel);
+            buf.writeByte(lightLevel);
 
             buf.writeBoolean(update);
             if (update)
@@ -436,6 +422,8 @@ public class Network
         public void fromBytes(ByteBuf buf)
         {
             stealthLevel = buf.readByte();
+            lightLevel = buf.readByte();
+
             update = buf.readBoolean();
             if (update)
             {
@@ -477,6 +465,8 @@ public class Network
                     }
                     else ClientData.prevStealthLevel = ClientData.stealthLevel;
                     ClientData.stealthLevel = packet.stealthLevel;
+
+                    ClientData.lightLevel = packet.lightLevel;
 
                     if (packet.update)
                     {
