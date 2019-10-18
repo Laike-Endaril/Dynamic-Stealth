@@ -1,6 +1,6 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Check helicopter from techguns
+Add partial match support for entity configs
 
 Add ally groups for helper system config
 
