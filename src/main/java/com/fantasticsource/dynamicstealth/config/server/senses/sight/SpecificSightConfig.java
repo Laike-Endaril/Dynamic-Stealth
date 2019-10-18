@@ -68,7 +68,7 @@ public class SpecificSightConfig
                     "You can also specify entities with a certain name, like so:",
                     "modid:entity:name"
             })
-    public String[] naturalNightvisionMobs = EntitySightDefaults.naturalNightvisionDefaults.toArray(new String[0]);
+    public String[] naturalNightvisionEntities = EntitySightDefaults.naturalNightvisionDefaults.toArray(new String[0]);
 
     @Config.Name("Natural Soul Sight")
     @Config.LangKey(DynamicStealth.MODID + ".config.naturalSoulSight")
@@ -81,5 +81,5 @@ public class SpecificSightConfig
                     "You can also specify entities with a certain name, like so:",
                     "modid:entity:name"
             })
-    public String[] naturalSoulSightMobs = EntitySightDefaults.naturalSoulSightDefaults.toArray(new String[0]);
+    public String[] naturalSoulSightEntities = EntitySightDefaults.naturalSoulSightDefaults.toArray(new String[0]);
 }

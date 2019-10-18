@@ -1,9 +1,9 @@
 package com.fantasticsource.dynamicstealth.server.senses.sight;
 
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.MobEffects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -21,12 +21,10 @@ public class EntitySightData
 
     public static LinkedHashMap<Integer, Integer> minimumDimensionLightLevels;
 
-    private static HashSet<Class<? extends EntityLivingBase>> naturallyBrightEntities;
-    private static HashSet<Pair<Class<? extends EntityLivingBase>, String>> naturallyBrightEntitiesNamed;
-    private static HashSet<Class<? extends EntityLivingBase>> naturalNightvisionEntities;
-    private static HashSet<Pair<Class<? extends EntityLivingBase>, String>> naturalNightvisionEntitiesNamed;
-    private static HashSet<Class<? extends EntityLivingBase>> naturalSoulSightEntities;
-    private static HashSet<Pair<Class<? extends EntityLivingBase>, String>> naturalSoulSightEntitiesNamed;
+    private static LinkedHashMap<Class<? extends EntityLivingBase>, HashSet<String>> naturallyBrightEntities;
+    private static LinkedHashMap<Class<? extends EntityLivingBase>, HashSet<String>> naturalNightvisionEntities;
+    private static LinkedHashMap<Class<? extends EntityLivingBase>, HashSet<String>> naturalSoulSightEntities;
+
     private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityAngles;
     private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityDistances;
     private static LinkedHashMap<Class<? extends EntityLivingBase>, SpecificLighting> entityLighting;
@@ -38,12 +36,9 @@ public class EntitySightData
 
         potionSoulSightEntities = new HashSet<>();
 
-        naturallyBrightEntities = new HashSet<>();
-        naturallyBrightEntitiesNamed = new HashSet<>();
-        naturalNightvisionEntities = new HashSet<>();
-        naturalNightvisionEntitiesNamed = new HashSet<>();
-        naturalSoulSightEntities = new HashSet<>();
-        naturalSoulSightEntitiesNamed = new HashSet<>();
+        naturallyBrightEntities = new LinkedHashMap<>();
+        naturalNightvisionEntities = new LinkedHashMap<>();
+        naturalSoulSightEntities = new LinkedHashMap<>();
         entityAngles = new LinkedHashMap<>();
         entityDistances = new LinkedHashMap<>();
         entityLighting = new LinkedHashMap<>();
@@ -54,84 +49,9 @@ public class EntitySightData
         String[] tokens;
         String token;
 
-        for (String string : serverSettings.senses.sight.y_entityOverrides.naturallyBrightEntities)
-        {
-            if (string.equals("player")) naturallyBrightEntities.add(EntityPlayerMP.class);
-            else if (string.indexOf(":") != string.lastIndexOf(":"))
-            {
-                String[] tokens2 = string.split(":");
-                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(tokens2[0], tokens2[1]));
-                if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
-                else naturallyBrightEntitiesNamed.add(new Pair<>((Class<? extends EntityLivingBase>) entry.getEntityClass(), tokens2[2]));
-            }
-            else
-            {
-                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(string));
-
-                if (entry == null)
-                {
-                    if (!EntitySightDefaults.naturallyBrightDefaults.contains(string)) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
-                }
-                else
-                {
-                    Class c = entry.getEntityClass();
-                    if (EntityLivingBase.class.isAssignableFrom(c)) naturallyBrightEntities.add(c);
-                    else System.err.println("Entity \"" + string + "\" does not extend EntityLivingBase!");
-                }
-            }
-        }
-
-        for (String string : serverSettings.senses.sight.y_entityOverrides.naturalNightvisionMobs)
-        {
-            if (string.equals("player")) naturalNightvisionEntities.add(EntityPlayerMP.class);
-            else if (string.indexOf(":") != string.lastIndexOf(":"))
-            {
-                String[] tokens2 = string.split(":");
-                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(tokens2[0], tokens2[1]));
-                if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
-                else naturalNightvisionEntitiesNamed.add(new Pair<>((Class<? extends EntityLivingBase>) entry.getEntityClass(), tokens2[2]));
-            }
-            else
-            {
-                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(string));
-                if (entry == null)
-                {
-                    if (!EntitySightDefaults.naturalNightvisionDefaults.contains(string)) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
-                }
-                else
-                {
-                    Class c = entry.getEntityClass();
-                    if (EntityLivingBase.class.isAssignableFrom(c)) naturalNightvisionEntities.add(c);
-                    else System.err.println("Entity \"" + string + "\" does not extend EntityLivingBase!");
-                }
-            }
-        }
-
-        for (String string : serverSettings.senses.sight.y_entityOverrides.naturalSoulSightMobs)
-        {
-            if (string.equals("player")) naturalSoulSightEntities.add(EntityPlayerMP.class);
-            else if (string.indexOf(":") != string.lastIndexOf(":"))
-            {
-                String[] tokens2 = string.split(":");
-                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(tokens2[0], tokens2[1]));
-                if (entry == null) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
-                else naturalSoulSightEntitiesNamed.add(new Pair<>((Class<? extends EntityLivingBase>) entry.getEntityClass(), tokens2[2]));
-            }
-            else
-            {
-                entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(string));
-                if (entry == null)
-                {
-                    if (!EntitySightDefaults.naturalSoulSightDefaults.contains(string)) System.err.println("ResourceLocation for entity \"" + string + "\" not found!");
-                }
-                else
-                {
-                    Class c = entry.getEntityClass();
-                    if (EntityLivingBase.class.isAssignableFrom(c)) naturalSoulSightEntities.add(c);
-                    else System.err.println("Entity \"" + string + "\" does not extend EntityLivingBase!");
-                }
-            }
-        }
+        MCTools.populateEntityMap(serverSettings.senses.sight.y_entityOverrides.naturallyBrightEntities, naturallyBrightEntities);
+        MCTools.populateEntityMap(serverSettings.senses.sight.y_entityOverrides.naturalNightvisionEntities, naturalNightvisionEntities);
+        MCTools.populateEntityMap(serverSettings.senses.sight.y_entityOverrides.naturalSoulSightEntities, naturalSoulSightEntities);
 
         for (String string : serverSettings.senses.sight.y_entityOverrides.angle)
         {
@@ -230,32 +150,17 @@ public class EntitySightData
 
     public static boolean isBright(EntityLivingBase target)
     {
-        for (Pair pair : naturallyBrightEntitiesNamed)
-        {
-            if (pair.getKey().equals(target.getClass()) && pair.getValue().equals(target.getName())) return true;
-        }
-
-        return (serverSettings.senses.sight.g_absolutes.seeBurning && target.isBurning()) || naturallyBrightEntities.contains(target.getClass());
+        return MCTools.entityMatchesMap(target, naturallyBrightEntities);
     }
 
     public static boolean hasNightvision(EntityLivingBase searcher)
     {
-        for (Pair pair : naturalNightvisionEntitiesNamed)
-        {
-            if (pair.getKey().equals(searcher.getClass()) && pair.getValue().equals(searcher.getName())) return true;
-        }
-
-        return naturalNightvisionEntities.contains(searcher.getClass()) || searcher.getActivePotionEffect(MobEffects.NIGHT_VISION) != null;
+        return MCTools.entityMatchesMap(searcher, naturalNightvisionEntities);
     }
 
     public static boolean hasSoulSight(EntityLivingBase searcher)
     {
-        for (Pair pair : naturalSoulSightEntitiesNamed)
-        {
-            if (pair.getKey().equals(searcher.getClass()) && pair.getValue().equals(searcher.getName())) return true;
-        }
-
-        return naturalSoulSightEntities.contains(searcher.getClass()) || potionSoulSightEntities.contains(searcher);
+        return MCTools.entityMatchesMap(searcher, naturalSoulSightEntities);
     }
 
     public static int angleLarge(EntityLivingBase searcher)
