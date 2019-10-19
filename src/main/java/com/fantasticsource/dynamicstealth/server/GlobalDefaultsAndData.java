@@ -20,7 +20,22 @@ public class GlobalDefaultsAndData
     {
         //Compat; these should be added absolutely, not conditionally
 
+        fullBypassDefaults.add("artifact:mimic");
+        fullBypassDefaults.add("dimdoors:mob_monolith");
+        fullBypassDefaults.add("iceandfire:deathworm");
+        fullBypassDefaults.add("iceandfire:firedragon");
+        fullBypassDefaults.add("iceandfire:gorgon");
+        fullBypassDefaults.add("iceandfire:icedragon");
+        fullBypassDefaults.add("iceandfire:troll");
         fullBypassDefaults.add("mowziesmobs:ferrous_wroughtnaut");
+        fullBypassDefaults.add("thaumcraft:cultistportalgreater");
+        fullBypassDefaults.add("thaumcraft:cultistportallesser");
+        fullBypassDefaults.add("thaumcraft:taintacle");
+        fullBypassDefaults.add("thaumcraft:taintaclegaint");
+        fullBypassDefaults.add("thaumcraft:taintacletiny");
+        fullBypassDefaults.add("thaumcraft:taintseed");
+        fullBypassDefaults.add("thaumcraft:taintseedprime");
+        fullBypassDefaults.add("thaumcraft:taintswarm");
         fullBypassDefaults.add("thuttech:lift");
     }
 
