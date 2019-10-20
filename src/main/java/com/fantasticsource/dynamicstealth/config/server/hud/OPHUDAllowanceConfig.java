@@ -21,7 +21,7 @@ public class OPHUDAllowanceConfig
     @Config.Name("010 OPHUD Range")
     @Config.LangKey(DynamicStealth.MODID + ".config.OPHUDRange")
     @Config.Comment("The maximum distance at which on-point HUDs will appear on clients; impacts server performance if too high")
-    @Config.RangeInt(min = 0, max = Integer.MAX_VALUE >> 1)
+    @Config.RangeInt(min = 0, max = 46340)
     public int opHUDRange = 100;
 
     @Config.Name("020 OPHUD Update Delay")

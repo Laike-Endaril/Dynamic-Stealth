@@ -333,7 +333,7 @@ public class Network
             this.stealthLevel = stealthLevel;
 
             BlockPos playerPos = player.getPosition();
-            int rangeSq = serverSettings.hud.ophud.opHUDRange << 1;
+            int rangeSq = serverSettings.hud.ophud.opHUDRange * serverSettings.hud.ophud.opHUDRange;
             int delay = serverSettings.hud.ophud.opHUDDelay;
 
             update = opHUD && ServerTickTimer.currentTick() % delay == player.getEntityId() % delay;
