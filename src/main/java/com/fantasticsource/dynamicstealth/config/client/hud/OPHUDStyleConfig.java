@@ -66,4 +66,19 @@ public class OPHUDStyleConfig
     @Config.LangKey(DynamicStealth.MODID + ".config.opHUDScale")
     @Config.Comment({"The scale of the indicator itself; how big the indicator is"})
     public double scale = 0.5;
+
+    @Config.Name("8d: Health Gauge")
+    @Config.LangKey(DynamicStealth.MODID + ".config.opHUDHealthGauge")
+    @Config.Comment("If true, a health gauge will be displayed over entities' heads")
+    public boolean hpGauge = true;
+
+    @Config.Name("8e: Show HP Percentage")
+    @Config.LangKey(DynamicStealth.MODID + ".config.opHUDHealthGaugePercent")
+    @Config.Comment("If true (and the health gauge is displayed), the health gauge will display a number for the health percentage")
+    public boolean hpGaugePercent = true;
+
+    @Config.Name("8e: Show Current and Max HP")
+    @Config.LangKey(DynamicStealth.MODID + ".config.opHUDHealthGaugeCurrentAndMax")
+    @Config.Comment("If true (and the health gauge is displayed), the health gauge will display numbers for the current and max HP")
+    public boolean hpGaugeCurrentAndMax = true;
 }

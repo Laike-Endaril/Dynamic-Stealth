@@ -301,7 +301,7 @@ public class HUD
 
 
             //HP gauge
-            if (!Compat.neat)
+            if (!Compat.neat && clientSettings.hudSettings.ophudStyle.hpGauge)
             {
                 //Background
                 top = bottom + 4;
@@ -350,21 +350,32 @@ public class HUD
 
                 textureManager.bindTexture(HP_FILL_TEXTURE);
                 bufferbuilder.begin(GL_QUADS, POSITION_TEX_LMAP_COLOR);
-                bufferbuilder.pos(left2, top2, 0).tex(0, 0).lightmap(15728880, 15728880).color(r, g, b, 100).endVertex();
-                bufferbuilder.pos(left2, bottom2, 0).tex(0, 1).lightmap(15728880, 15728880).color(r, g, b, 100).endVertex();
-                bufferbuilder.pos(separation, bottom2, 0).tex(ratio, 1).lightmap(15728880, 15728880).color(r, g, b, 100).endVertex();
-                bufferbuilder.pos(separation, top2, 0).tex(ratio, 0).lightmap(15728880, 15728880).color(r, g, b, 100).endVertex();
+                bufferbuilder.pos(left2, top2, 0).tex(0, 0).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+                bufferbuilder.pos(left2, bottom2, 0).tex(0, 1).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+                bufferbuilder.pos(separation, bottom2, 0).tex(ratio, 1).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
+                bufferbuilder.pos(separation, top2, 0).tex(ratio, 0).lightmap(15728880, 15728880).color(r, g, b, 255).endVertex();
                 tessellator.draw();
 
 
                 //Text
-                float spacing = (float) ((bottom - top) / 2 - OutlinedFontRenderer.LINE_HEIGHT / 2 + 0.5);
-                String text = ONE_DECIMAL.format(livingBase.getMaxHealth());
-                OutlinedFontRenderer.draw(text, (float) (left + 3 + spacing), (float) (top + spacing), Color.WHITE, Color.BLACK);
-                text = ONE_DECIMAL.format(livingBase.getMaxHealth());
-                OutlinedFontRenderer.draw(text, (float) (right - 3 - spacing - OutlinedFontRenderer.getStringWidth(text)), (float) (top + spacing), Color.WHITE, Color.BLACK);
-                text = NO_DECIMAL.format(100 * livingBase.getHealth() / livingBase.getMaxHealth()) + "%";
-                OutlinedFontRenderer.draw(text, (float) (left + (right - left) / 2 - OutlinedFontRenderer.getStringWidth(text)) / 2, (float) (top + spacing), Color.WHITE, Color.BLACK);
+                if (clientSettings.hudSettings.ophudStyle.hpGaugePercent || clientSettings.hudSettings.ophudStyle.hpGaugeCurrentAndMax)
+                {
+                    float spacing = (float) ((bottom - top) / 2 - OutlinedFontRenderer.LINE_HEIGHT / 2 + 0.5);
+
+                    if (clientSettings.hudSettings.ophudStyle.hpGaugeCurrentAndMax)
+                    {
+                        String text = ONE_DECIMAL.format(livingBase.getMaxHealth());
+                        OutlinedFontRenderer.draw(text, (float) (left + 3 + spacing), (float) (top + spacing), Color.WHITE, Color.BLACK);
+                        text = ONE_DECIMAL.format(livingBase.getMaxHealth());
+                        OutlinedFontRenderer.draw(text, (float) (right - 3 - spacing - OutlinedFontRenderer.getStringWidth(text)), (float) (top + spacing), Color.WHITE, Color.BLACK);
+                    }
+
+                    if (clientSettings.hudSettings.ophudStyle.hpGaugePercent)
+                    {
+                        String text = NO_DECIMAL.format(100 * livingBase.getHealth() / livingBase.getMaxHealth()) + "%";
+                        OutlinedFontRenderer.draw(text, (float) (left + (right - left) / 2 - OutlinedFontRenderer.getStringWidth(text)) / 2, (float) (top + spacing), Color.WHITE, Color.BLACK);
+                    }
+                }
 
 
                 GlStateManager.depthMask(true);
