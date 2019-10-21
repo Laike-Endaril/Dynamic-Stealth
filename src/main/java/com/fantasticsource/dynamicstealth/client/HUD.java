@@ -229,7 +229,7 @@ public class HUD
             scale *= cnpcScale;
             GlStateManager.scale(-scale, -scale, scale);
 
-            vOff2D -= 45;
+            vOff2D -= 56;
         }
         else
         {
