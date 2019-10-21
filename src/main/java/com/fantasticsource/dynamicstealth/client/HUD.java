@@ -43,7 +43,7 @@ import java.util.ArrayList;
 import static com.fantasticsource.dynamicstealth.DynamicStealth.TRIG_TABLE;
 import static com.fantasticsource.dynamicstealth.common.ClientData.*;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.clientSettings;
-import static net.minecraft.client.renderer.vertex.DefaultVertexFormats.POSITION_TEX_LMAP_COLOR;
+import static net.minecraft.client.renderer.vertex.DefaultVertexFormats.*;
 import static org.lwjgl.opengl.GL11.*;
 
 @SideOnly(Side.CLIENT)
@@ -156,7 +156,7 @@ public class HUD
         return false;
     }
 
-    private static void drawOPHUD(RenderLivingEvent.Post event, Entity entity, OnPointData data)
+    private static void drawOPHUD(RenderLivingEvent.Post event, EntityLivingBase livingBase, OnPointData data)
     {
         RenderManager renderManager = event.getRenderer().getRenderManager();
         double x = event.getX(), y = event.getY(), z = event.getZ();
@@ -171,7 +171,7 @@ public class HUD
         double scale = clientSettings.hudSettings.ophudStyle.scale * 0.025;
         double halfSize2D = BASIC_GAUGE_SIZE / 4D;
         double hOff2D = clientSettings.hudSettings.ophudStyle.horizontalOffset2D;
-        double vOff2D = Compat.neat ? clientSettings.hudSettings.ophudStyle.verticalOffset2D - 11 : clientSettings.hudSettings.ophudStyle.verticalOffset2D;
+        double vOff2D = Compat.neat ? clientSettings.hudSettings.ophudStyle.verticalOffset2D - 11 : clientSettings.hudSettings.ophudStyle.verticalOffset2D - 22;
 
 
         GlStateManager.disableLighting();
@@ -200,19 +200,19 @@ public class HUD
 
         if (Compat.neat)
         {
-            GlStateManager.translate(x, y + entity.height * clientSettings.hudSettings.ophudStyle.verticalPercent + clientSettings.hudSettings.ophudStyle.verticalOffset - 0.5 + CompatNeat.heightAboveMob, z);
+            GlStateManager.translate(x, y + livingBase.height * clientSettings.hudSettings.ophudStyle.verticalPercent + clientSettings.hudSettings.ophudStyle.verticalOffset - 0.5 + CompatNeat.heightAboveMob, z);
             GlStateManager.rotate(-viewerYaw, 0, 1, 0);
             GlStateManager.rotate(renderManager.options.thirdPersonView == 2 ? -viewerPitch : viewerPitch, 1, 0, 0);
-            GlStateManager.translate(entity.width * clientSettings.hudSettings.ophudStyle.horizontalPercent, 0, 0);
+            GlStateManager.translate(livingBase.width * clientSettings.hudSettings.ophudStyle.horizontalPercent, 0, 0);
             GlStateManager.scale(-scale, -scale, scale);
         }
-        else if (Compat.customnpcs && entity.getClass().getName().equals("noppes.npcs.entity.EntityCustomNpc"))
+        else if (Compat.customnpcs && livingBase.getClass().getName().equals("noppes.npcs.entity.EntityCustomNpc"))
         {
-            double cnpcScale = entity.height / 1.8;
-            GlStateManager.translate(x, y + entity.height * clientSettings.hudSettings.ophudStyle.verticalPercent + clientSettings.hudSettings.ophudStyle.verticalOffset - 0.5 - 0.108 * cnpcScale, z);
+            double cnpcScale = livingBase.height / 1.8;
+            GlStateManager.translate(x, y + livingBase.height * clientSettings.hudSettings.ophudStyle.verticalPercent + clientSettings.hudSettings.ophudStyle.verticalOffset - 0.5 - 0.108 * cnpcScale, z);
             GlStateManager.rotate(-viewerYaw, 0, 1, 0);
             GlStateManager.rotate(renderManager.options.thirdPersonView == 2 ? -viewerPitch : viewerPitch, 1, 0, 0);
-            GlStateManager.translate(entity.width * clientSettings.hudSettings.ophudStyle.horizontalPercent, 0, 0);
+            GlStateManager.translate(livingBase.width * clientSettings.hudSettings.ophudStyle.horizontalPercent, 0, 0);
 
             scale *= cnpcScale;
             GlStateManager.scale(-scale, -scale, scale);
@@ -221,21 +221,21 @@ public class HUD
         }
         else
         {
-            GlStateManager.translate(x, y + entity.height * clientSettings.hudSettings.ophudStyle.verticalPercent - (clientSettings.hudSettings.ophudStyle.accountForSneak && entity.isSneaking() ? 0.25 : 0) + clientSettings.hudSettings.ophudStyle.verticalOffset, z);
+            GlStateManager.translate(x, y + livingBase.height * clientSettings.hudSettings.ophudStyle.verticalPercent - (clientSettings.hudSettings.ophudStyle.accountForSneak && livingBase.isSneaking() ? 0.25 : 0) + clientSettings.hudSettings.ophudStyle.verticalOffset, z);
             GlStateManager.rotate(-viewerYaw, 0, 1, 0);
             GlStateManager.rotate(renderManager.options.thirdPersonView == 2 ? -viewerPitch : viewerPitch, 1, 0, 0);
-            GlStateManager.translate(entity.width * clientSettings.hudSettings.ophudStyle.horizontalPercent, 0, 0);
+            GlStateManager.translate(livingBase.width * clientSettings.hudSettings.ophudStyle.horizontalPercent, 0, 0);
             GlStateManager.scale(-scale, -scale, scale);
         }
 
 
         if (!MinecraftForge.EVENT_BUS.post(new RenderOPHUDEvent.Transformed(event, data)))
         {
+            //Threat gauge
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferbuilder = tessellator.getBuffer();
             bufferbuilder.begin(GL_QUADS, POSITION_TEX_LMAP_COLOR);
 
-            //Fill
             double left = -halfSize2D + hOff2D;
             double right = halfSize2D + hOff2D;
             double top = -halfSize2D + vOff2D;
@@ -286,6 +286,80 @@ public class HUD
             }
 
             tessellator.draw();
+
+
+            //HP gauge
+            if (!Compat.neat)
+            {
+                top = bottom + 4;
+                bottom = top + 16;
+                left = -70;
+                right = 70;
+                double separation = left + (right - left) * (livingBase.getHealth() / livingBase.getMaxHealth());
+
+                if (livingBase.getIsInvulnerable())
+                {
+                    r = 255;
+                    g = 0;
+                    b = 255;
+                }
+                else
+                {
+                    g = (int) (255 * (livingBase.getHealth() / livingBase.getMaxHealth()));
+                    r = 255 - g;
+                    b = 0;
+                }
+
+                GlStateManager.disableTexture2D();
+                GlStateManager.depthMask(false);
+
+                bufferbuilder.begin(GL_QUADS, POSITION_COLOR);
+
+                //Outline
+                bufferbuilder.pos(left - 1, top - 1, 0).color(255, 255, 255, 255).endVertex();
+                bufferbuilder.pos(left - 1, bottom + 1, 0).color(255, 255, 255, 255).endVertex();
+                bufferbuilder.pos(right + 1, bottom + 1, 0).color(255, 255, 255, 255).endVertex();
+                bufferbuilder.pos(right + 1, top - 1, 0).color(255, 255, 255, 255).endVertex();
+
+                //Background
+                bufferbuilder.pos(left, top, 0).color(0, 0, 0, 255).endVertex();
+                bufferbuilder.pos(left, bottom, 0).color(0, 0, 0, 255).endVertex();
+                bufferbuilder.pos(right, bottom, 0).color(0, 0, 0, 255).endVertex();
+                bufferbuilder.pos(right, top, 0).color(0, 0, 0, 255).endVertex();
+
+                //Fill
+                bufferbuilder.pos(left, top, 0).color(r, g, b, 255).endVertex();
+                bufferbuilder.pos(left, bottom, 0).color(r, g, b, 255).endVertex();
+                bufferbuilder.pos(separation, bottom, 0).color(r, g, b, 255).endVertex();
+                bufferbuilder.pos(separation, top, 0).color(r, g, b, 255).endVertex();
+
+                tessellator.draw();
+
+                GlStateManager.enableTexture2D();
+                GlStateManager.depthFunc(GL_LEQUAL);
+
+                FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
+                fr.drawString("" + livingBase.getHealth(), (float) left, (float) top, 0xFFFFFFFF, false);
+
+                GlStateManager.depthFunc(GL_LESS);
+
+                GlStateManager.depthMask(true);
+
+                //Set depth of drawn area
+                GlStateManager.pushAttrib();
+                GlStateManager.disableTexture2D();
+                GlStateManager.colorMask(false, false, false, false);
+
+                bufferbuilder.begin(GL_QUADS, POSITION);
+                bufferbuilder.pos(left - 1, top - 1, 0).endVertex();
+                bufferbuilder.pos(left - 1, bottom + 1, 0).endVertex();
+                bufferbuilder.pos(right + 1, bottom + 1, 0).endVertex();
+                bufferbuilder.pos(right + 1, top - 1, 0).endVertex();
+                tessellator.draw();
+
+                GlStateManager.popAttrib();
+                GlStateManager.enableTexture2D();
+            }
         }
 
 
