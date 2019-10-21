@@ -43,7 +43,8 @@ import java.util.ArrayList;
 import static com.fantasticsource.dynamicstealth.DynamicStealth.TRIG_TABLE;
 import static com.fantasticsource.dynamicstealth.common.ClientData.*;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.clientSettings;
-import static net.minecraft.client.renderer.vertex.DefaultVertexFormats.*;
+import static net.minecraft.client.renderer.vertex.DefaultVertexFormats.POSITION_TEX;
+import static net.minecraft.client.renderer.vertex.DefaultVertexFormats.POSITION_TEX_LMAP_COLOR;
 import static org.lwjgl.opengl.GL11.*;
 
 @SideOnly(Side.CLIENT)
@@ -82,9 +83,19 @@ public class HUD
     private static final float CRYSTAL_LEFT = CRYSTAL_ORIGIN_X, CRYSTAL_RIGHT = CRYSTAL_WIDTH - CRYSTAL_ORIGIN_X;
     private static final float CRYSTAL_ABOVE = CRYSTAL_ORIGIN_Y, CRYSTAL_BELOW = CRYSTAL_HEIGHT - CRYSTAL_ORIGIN_Y;
 
+    private static final ResourceLocation HP_BACKGROUND_TEXTURE = new ResourceLocation(DynamicStealth.MODID, "image/hpbackground.png");
+    private static final float HP_BACKGROUND_WIDTH = 142, HP_BACKGROUND_HEIGHT = 18;
+    private static final float HP_BACKGROUND_UV_HALF_PIXEL_W = 0.5f / HP_BACKGROUND_WIDTH, HP_BACKGROUND_UV_HALF_PIXEL_H = 0.5f / HP_BACKGROUND_HEIGHT;
+
+    private static final ResourceLocation HP_FILL_TEXTURE = new ResourceLocation(DynamicStealth.MODID, "image/hpfill.png");
+    private static final float HP_FILL_WIDTH = 140, HP_FILL_HEIGHT = 16;
+    private static final float HP_FILL_UV_HALF_PIXEL_W = 0.5f / HP_FILL_WIDTH, HP_FILL_UV_HALF_PIXEL_H = 0.5f / HP_FILL_HEIGHT;
+
     private static TextureManager textureManager = Minecraft.getMinecraft().renderEngine;
 
-    private static DecimalFormat oneDecimal = new DecimalFormat("0.0");
+    private static final DecimalFormat
+            ONE_DECIMAL = new DecimalFormat("0.0"),
+            NO_DECIMAL = new DecimalFormat("0");
 
     public static void draw(RenderGameOverlayEvent.Pre event, Minecraft mc)
     {
@@ -291,74 +302,83 @@ public class HUD
             //HP gauge
             if (!Compat.neat)
             {
+                //Background
                 top = bottom + 4;
-                bottom = top + 16;
-                left = -70;
-                right = 70;
-                double separation = left + (right - left) * (livingBase.getHealth() / livingBase.getMaxHealth());
+                bottom = top + HP_BACKGROUND_HEIGHT;
+                right = HP_BACKGROUND_WIDTH / 2;
+                left = -right;
 
+                GlStateManager.depthMask(false);
+
+                textureManager.bindTexture(HP_BACKGROUND_TEXTURE);
+                bufferbuilder.begin(GL_QUADS, POSITION_TEX_LMAP_COLOR);
+                bufferbuilder.pos(left, top, 0).tex(0, 0).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
+                bufferbuilder.pos(left, bottom, 0).tex(0, 1).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
+                bufferbuilder.pos(right, bottom, 0).tex(1, 1).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
+                bufferbuilder.pos(right, top, 0).tex(1, 0).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
+                tessellator.draw();
+
+                //Fill
+                double ratio = livingBase.getHealth() / livingBase.getMaxHealth();
+
+                Color color2;
                 if (livingBase.getIsInvulnerable())
                 {
-                    r = 255;
-                    g = 0;
-                    b = 255;
+                    color2 = Color.PURPLE.copy().setVF(0.7f);
                 }
                 else
                 {
-                    g = (int) (255 * (livingBase.getHealth() / livingBase.getMaxHealth()));
+                    g = (int) (255 * ratio);
                     r = 255 - g;
                     b = 0;
+                    color2 = new Color(r, g, b).setVF((float) (0.3 + 0.5 * (0.5 - Math.abs(0.5 - ratio))));
                 }
 
-                GlStateManager.disableTexture2D();
-                GlStateManager.depthMask(false);
+                r = color2.r();
+                g = color2.g();
+                b = color2.b();
 
-                bufferbuilder.begin(GL_QUADS, POSITION_COLOR);
+                double halfWDif = (HP_FILL_WIDTH - HP_BACKGROUND_WIDTH) / 2;
+                double halfHDif = (HP_FILL_HEIGHT - HP_BACKGROUND_HEIGHT) / 2;
+                double left2 = left - halfWDif;
+                double right2 = right + halfWDif;
+                double top2 = top - halfHDif;
+                double bottom2 = bottom + halfHDif;
+                double separation = left2 + (right2 - left2) * ratio;
 
-                //Outline
-                bufferbuilder.pos(left - 1, top - 1, 0).color(255, 255, 255, 255).endVertex();
-                bufferbuilder.pos(left - 1, bottom + 1, 0).color(255, 255, 255, 255).endVertex();
-                bufferbuilder.pos(right + 1, bottom + 1, 0).color(255, 255, 255, 255).endVertex();
-                bufferbuilder.pos(right + 1, top - 1, 0).color(255, 255, 255, 255).endVertex();
-
-                //Background
-                bufferbuilder.pos(left, top, 0).color(0, 0, 0, 255).endVertex();
-                bufferbuilder.pos(left, bottom, 0).color(0, 0, 0, 255).endVertex();
-                bufferbuilder.pos(right, bottom, 0).color(0, 0, 0, 255).endVertex();
-                bufferbuilder.pos(right, top, 0).color(0, 0, 0, 255).endVertex();
-
-                //Fill
-                bufferbuilder.pos(left, top, 0).color(r, g, b, 255).endVertex();
-                bufferbuilder.pos(left, bottom, 0).color(r, g, b, 255).endVertex();
-                bufferbuilder.pos(separation, bottom, 0).color(r, g, b, 255).endVertex();
-                bufferbuilder.pos(separation, top, 0).color(r, g, b, 255).endVertex();
-
+                textureManager.bindTexture(HP_FILL_TEXTURE);
+                bufferbuilder.begin(GL_QUADS, POSITION_TEX_LMAP_COLOR);
+                bufferbuilder.pos(left2, top2, 0).tex(0, 0).lightmap(15728880, 15728880).color(r, g, b, 100).endVertex();
+                bufferbuilder.pos(left2, bottom2, 0).tex(0, 1).lightmap(15728880, 15728880).color(r, g, b, 100).endVertex();
+                bufferbuilder.pos(separation, bottom2, 0).tex(ratio, 1).lightmap(15728880, 15728880).color(r, g, b, 100).endVertex();
+                bufferbuilder.pos(separation, top2, 0).tex(ratio, 0).lightmap(15728880, 15728880).color(r, g, b, 100).endVertex();
                 tessellator.draw();
-
-                GlStateManager.enableTexture2D();
-                GlStateManager.depthFunc(GL_LEQUAL);
-
-                FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
-                fr.drawString("" + livingBase.getHealth(), (float) left, (float) top, 0xFFFFFFFF, false);
-
-                GlStateManager.depthFunc(GL_LESS);
 
                 GlStateManager.depthMask(true);
 
-                //Set depth of drawn area
-                GlStateManager.pushAttrib();
-                GlStateManager.disableTexture2D();
+
+//                FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
+//                float spacing = (float) ((bottom - top) / 2 - fr.FONT_HEIGHT / 2 + 0.5);
+//                String text = ONE_DECIMAL.format(livingBase.getMaxHealth());
+//                fr.drawString(text, (float) (left + spacing), (float) (top + spacing), 0xFFFFFFFF, false);
+//                text = ONE_DECIMAL.format(livingBase.getMaxHealth());
+//                fr.drawString(text, (float) (right - spacing - fr.getStringWidth(text)), (float) (top + spacing), 0xFFFFFFFF, false);
+//                text = NO_DECIMAL.format(100 * livingBase.getHealth() / livingBase.getMaxHealth()) + "%";
+//                fr.drawString(text, (float) (left + (right - left) / 2 - fr.getStringWidth(text)) / 2, (float) (top + spacing), 0xFFFFFFFF, false);
+
+
+                //Set depth of drawn area (redraw background with in depth buffer only)
                 GlStateManager.colorMask(false, false, false, false);
 
-                bufferbuilder.begin(GL_QUADS, POSITION);
-                bufferbuilder.pos(left - 1, top - 1, 0).endVertex();
-                bufferbuilder.pos(left - 1, bottom + 1, 0).endVertex();
-                bufferbuilder.pos(right + 1, bottom + 1, 0).endVertex();
-                bufferbuilder.pos(right + 1, top - 1, 0).endVertex();
+                textureManager.bindTexture(HP_BACKGROUND_TEXTURE);
+                bufferbuilder.begin(GL_QUADS, POSITION_TEX);
+                bufferbuilder.pos(left, top, 0).tex(0, 0).endVertex();
+                bufferbuilder.pos(left, bottom, 0).tex(0, 1).endVertex();
+                bufferbuilder.pos(right, bottom, 0).tex(1, 1).endVertex();
+                bufferbuilder.pos(right, top, 0).tex(1, 0).endVertex();
                 tessellator.draw();
 
-                GlStateManager.popAttrib();
-                GlStateManager.enableTexture2D();
+                GlStateManager.colorMask(true, true, true, true);
             }
         }
 
@@ -787,7 +807,7 @@ public class HUD
 
                     if (ClientData.allowTargetingDistance && clientSettings.hudSettings.targetingStyle.components.distance)
                     {
-                        elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.distance", oneDecimal.format(entity.getDistance(Minecraft.getMinecraft().player))));
+                        elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.distance", ONE_DECIMAL.format(entity.getDistance(Minecraft.getMinecraft().player))));
                     }
 
                     float width = 0;
