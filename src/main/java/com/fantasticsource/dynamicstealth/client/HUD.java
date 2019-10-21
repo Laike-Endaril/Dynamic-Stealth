@@ -9,6 +9,7 @@ import com.fantasticsource.dynamicstealth.common.ClientData;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatNeat;
 import com.fantasticsource.mctools.MCTools;
+import com.fantasticsource.mctools.OutlinedFontRenderer;
 import com.fantasticsource.mctools.Render;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.datastructures.Color;
@@ -318,6 +319,7 @@ public class HUD
                 bufferbuilder.pos(right, top, 0).tex(1, 0).lightmap(15728880, 15728880).color(255, 255, 255, 255).endVertex();
                 tessellator.draw();
 
+
                 //Fill
                 double ratio = livingBase.getHealth() / livingBase.getMaxHealth();
 
@@ -354,17 +356,18 @@ public class HUD
                 bufferbuilder.pos(separation, top2, 0).tex(ratio, 0).lightmap(15728880, 15728880).color(r, g, b, 100).endVertex();
                 tessellator.draw();
 
+
+                //Text
+                float spacing = (float) ((bottom - top) / 2 - OutlinedFontRenderer.LINE_HEIGHT / 2 + 0.5);
+                String text = ONE_DECIMAL.format(livingBase.getMaxHealth());
+                OutlinedFontRenderer.draw(text, (float) (left + 3 + spacing), (float) (top + spacing), Color.WHITE, Color.BLACK);
+                text = ONE_DECIMAL.format(livingBase.getMaxHealth());
+                OutlinedFontRenderer.draw(text, (float) (right - 3 - spacing - OutlinedFontRenderer.getStringWidth(text)), (float) (top + spacing), Color.WHITE, Color.BLACK);
+                text = NO_DECIMAL.format(100 * livingBase.getHealth() / livingBase.getMaxHealth()) + "%";
+                OutlinedFontRenderer.draw(text, (float) (left + (right - left) / 2 - OutlinedFontRenderer.getStringWidth(text)) / 2, (float) (top + spacing), Color.WHITE, Color.BLACK);
+
+
                 GlStateManager.depthMask(true);
-
-
-//                FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
-//                float spacing = (float) ((bottom - top) / 2 - fr.FONT_HEIGHT / 2 + 0.5);
-//                String text = ONE_DECIMAL.format(livingBase.getMaxHealth());
-//                fr.drawString(text, (float) (left + spacing), (float) (top + spacing), 0xFFFFFFFF, false);
-//                text = ONE_DECIMAL.format(livingBase.getMaxHealth());
-//                fr.drawString(text, (float) (right - spacing - fr.getStringWidth(text)), (float) (top + spacing), 0xFFFFFFFF, false);
-//                text = NO_DECIMAL.format(100 * livingBase.getHealth() / livingBase.getMaxHealth()) + "%";
-//                fr.drawString(text, (float) (left + (right - left) / 2 - fr.getStringWidth(text)) / 2, (float) (top + spacing), 0xFFFFFFFF, false);
 
 
                 //Set depth of drawn area (redraw background with in depth buffer only)
