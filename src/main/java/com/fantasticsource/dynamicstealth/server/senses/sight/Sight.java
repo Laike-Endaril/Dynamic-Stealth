@@ -40,7 +40,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static com.fantasticsource.dynamicstealth.DynamicStealth.TRIG_TABLE;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData.*;
 import static com.fantasticsource.mctools.ServerTickTimer.currentTick;
@@ -292,14 +291,7 @@ public class Sight
         if (angleSmall == 180) distanceThreshold = distanceFar;
         else
         {
-            //Using previous values here to give the player a chance, because client-side rendering always runs behind what's actually happening
-            double angleDif = Vec3d.fromPitchYaw((float) pitch, (float) yaw).normalize().dotProduct(new Vec3d(target.posX - searcher.posX, (target.posY + target.height / 2) - (searcher.posY + searcher.getEyeHeight()), target.posZ - searcher.posZ).normalize());
-
-            //And because Vec3d.fromPitchYaw occasionally returns values barely out of the range of (-1, 1)...
-            if (angleDif < -1) angleDif = -1;
-            else if (angleDif > 1) angleDif = 1;
-
-            angleDif = Tools.radtodeg(TRIG_TABLE.arccos(angleDif)); //0 in front, 180 in back
+            double angleDif = MCTools.lookAngleDifDeg(searcher, target);
             if (angleDif > angleLarge) return 777;
             if (angleDif < angleSmall) distanceThreshold = distanceFar;
             else
