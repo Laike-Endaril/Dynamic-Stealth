@@ -235,6 +235,8 @@ dynamicstealth.config.aiNoPetTeleport.tooltip=FILLSCREEN FIXNEWLINES If set to t
 
 dynamicstealth.config.entitySpecificHeadSpeed=Head Turn Speed
 dynamicstealth.config.entitySpecificHeadSpeed.tooltip=FILLSCREEN FIXNEWLINES How quickly entities' heads spin during eg. a search sequence\n\nentityID, headTurnSpeed\n\neg...\n\nminecraft:skeleton, 5\n\nYou can also specify entities with a certain name, like so:\nmodid:entity:name\n \n
+dynamicstealth.config.entitySpecificFleeThreshold=Entity-Specific Flee Thresholds
+dynamicstealth.config.entitySpecificFleeThreshold.tooltip=FILLSCREEN FIXNEWLINES The % of health at which entities start to flee\n\nentityID, fleeThreshold\n\neg...\n\nminecraft:skeleton, 70\n\nYou can also specify entities with a certain name, like so:\nmodid:entity:name\n \n
 
 dynamicstealth.config.fleeThreshold=HP Threshold
 dynamicstealth.config.fleeThreshold.tooltip=FILLSCREEN FIXNEWLINES The %% of health at which entities start to flee\n \n
@@ -244,8 +246,6 @@ dynamicstealth.config.fleeHome=CNPCs flee To Home Position
 dynamicstealth.config.fleeHome.tooltip=FILLSCREEN FIXNEWLINES If enabled, Custom NPCs flee to their home position instead of away from what hit them\n \n
 dynamicstealth.config.waterReset=CNPCs Reset in Water
 dynamicstealth.config.waterReset.tooltip=FILLSCREEN FIXNEWLINES If enabled, Custom NPCs reset when they touch water\n \n
-dynamicstealth.config.fearless=Fearless
-dynamicstealth.config.fearless.tooltip=FILLSCREEN FIXNEWLINES These entities will not use the flee mechanic when low on health\n\nYou can also specify entities with a certain name, like so:\nmodid:entity:name\n\nEntities that bypass threat are automatically fearless\n \n
 
 dynamicstealth.config.cantReachCombatTime=Combat Time
 dynamicstealth.config.cantReachCombatTime.tooltip=FILLSCREEN FIXNEWLINES Deciding we can't reach the target requires at least this many ticks in combat\n \n
