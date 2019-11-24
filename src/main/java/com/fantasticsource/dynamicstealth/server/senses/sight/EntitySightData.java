@@ -1,9 +1,11 @@
 package com.fantasticsource.dynamicstealth.server.senses.sight;
 
+import com.fantasticsource.dynamicstealth.common.potions.Potions;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.datastructures.Pair;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.MobEffects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -155,12 +157,12 @@ public class EntitySightData
 
     public static boolean hasNightvision(EntityLivingBase searcher)
     {
-        return MCTools.entityMatchesMap(searcher, naturalNightvisionEntities);
+        return searcher.getActivePotionEffect(MobEffects.NIGHT_VISION) != null || MCTools.entityMatchesMap(searcher, naturalNightvisionEntities);
     }
 
     public static boolean hasSoulSight(EntityLivingBase searcher)
     {
-        return MCTools.entityMatchesMap(searcher, naturalSoulSightEntities);
+        return searcher.getActivePotionEffect(Potions.POTION_SOULSIGHT) != null || MCTools.entityMatchesMap(searcher, naturalSoulSightEntities);
     }
 
     public static int angleLarge(EntityLivingBase searcher)
