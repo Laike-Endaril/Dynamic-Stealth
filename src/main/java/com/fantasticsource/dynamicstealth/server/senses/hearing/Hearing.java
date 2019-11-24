@@ -1,7 +1,7 @@
 package com.fantasticsource.dynamicstealth.server.senses.hearing;
 
 import com.fantasticsource.dynamicstealth.server.Attributes;
-import com.fantasticsource.mctools.LOS;
+import com.fantasticsource.mctools.ImprovedRayTracing;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.Vec3d;
 
@@ -13,15 +13,16 @@ public class Hearing
     {
         if (troubledOne == null || helper == null) return false;
         if (troubledOne.world == null || troubledOne.world != helper.world) return false;
-        if (troubledOne.getDistanceSq(helper) > Math.pow(baseRange * hearingRange(helper, troubledOne.getPositionVector().add(new Vec3d(0, troubledOne.getEyeHeight(), 0))), 2)) return false;
+        if (troubledOne.getDistanceSq(helper) > Math.pow(baseRange * hearingRangePercentage(helper, troubledOne.getPositionVector().add(new Vec3d(0, troubledOne.getEyeHeight(), 0))), 2)) return false;
 
         return true;
     }
 
-    public static double hearingRange(EntityLivingBase entity, Vec3d soundPos)
+    public static double hearingRangePercentage(EntityLivingBase entity, Vec3d soundPos)
     {
-        double range = entity.getEntityAttribute(Attributes.HEARING).getAttributeValue() / 100;
-        if (LOS.rayTraceBlocks(entity.world, new Vec3d(entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ), soundPos, true)) return range;
-        return range * serverSettings.senses.hearing.noLOSMultiplier;
+        double range = entity.getEntityAttribute(Attributes.HEARING).getAttributeValue();
+        double percent = range * 0.01;
+        if (ImprovedRayTracing.isUnobstructed(entity.world, new Vec3d(entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ), soundPos, range, true)) return percent;
+        return percent * serverSettings.senses.hearing.noLOSMultiplier;
     }
 }

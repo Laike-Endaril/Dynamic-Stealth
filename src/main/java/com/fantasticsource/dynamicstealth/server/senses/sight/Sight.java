@@ -8,7 +8,7 @@ import com.fantasticsource.dynamicstealth.server.Attributes;
 import com.fantasticsource.dynamicstealth.server.HUDData;
 import com.fantasticsource.dynamicstealth.server.senses.HidingData;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
-import com.fantasticsource.mctools.LOS;
+import com.fantasticsource.mctools.ImprovedRayTracing;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.ServerTickTimer;
 import com.fantasticsource.tools.Tools;
@@ -433,7 +433,7 @@ public class Sight
         {
             result = queue.peekPriority();
             testVec = queue.poll();
-            if (LOS.rayTraceBlocks(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), testVec, false))
+            if (ImprovedRayTracing.isUnobstructed(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), testVec, false))
             {
                 return 15 - result;
             }
