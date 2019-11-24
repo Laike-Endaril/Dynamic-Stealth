@@ -11,6 +11,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 
@@ -152,24 +153,28 @@ public class ConfigHandler
         switch (recent)
         {
             case 0:
-                //Config versions 55-
+                //Mod versions 55-
                 updatePre56To56();
                 //Don't use break here; allow cases to pass to the next one, so it does each update function incrementally
             case 56:
-                //Config versions 56-68
+                //Mod versions 56-68
                 update56To69();
                 //Don't use break here; allow cases to pass to the next one, so it does each update function incrementally
             case 69:
-                //Config versions 69-71
+                //Mod versions 69-71
                 update69To72();
                 //Don't use break here; allow cases to pass to the next one, so it does each update function incrementally
             case 72:
-                //Config versions 72-76
+                //Mod versions 72-76
                 update72To77();
                 //Don't use break here; allow cases to pass to the next one, so it does each update function incrementally
             case 77:
-                //Config versions 77-84
+                //Mod versions 77-84
                 update77To85();
+                //Don't use break here; allow cases to pass to the next one, so it does each update function incrementally
+            case 85:
+                //Mod versions 85-94
+                update85To95();
                 //Don't use break here; allow cases to pass to the next one, so it does each update function incrementally
         }
 
@@ -345,6 +350,31 @@ public class ConfigHandler
         log();
 
         transferAll(old, current);
+
+        current.save();
+        logWriter.close();
+    }
+
+    private static void update85To95() throws IOException
+    {
+        Configuration current = new Configuration(currentFile);
+        Configuration old = new Configuration(mostRecentFile);
+
+        transferAll(old, current);
+
+        log();
+        log();
+        log();
+
+        log("Setting entity-specific flee thresholds based on old fearless configs; in theory you should see no change in gameplay");
+
+        ArrayList<String> newData = new ArrayList<>();
+        for (String name : old.get("general.server settings.ai.flee", "Fearless", new String[0]).getStringList())
+        {
+            log(name + " -> " + name + ", 0");
+            newData.add(name + ", 0");
+        }
+        current.get("general.server settings.ai.entity-specific settings (advanced)", "Entity-Specific Flee Threshold", new String[0]).set(newData.toArray(new String[0]));
 
         current.save();
         logWriter.close();

@@ -1,7 +1,6 @@
 package com.fantasticsource.dynamicstealth.config.server.ai;
 
 import com.fantasticsource.dynamicstealth.DynamicStealth;
-import com.fantasticsource.dynamicstealth.server.ai.EntityAIDefaults;
 import net.minecraftforge.common.config.Config;
 
 public class FleeConfig
@@ -21,17 +20,4 @@ public class FleeConfig
     @Config.LangKey(DynamicStealth.MODID + ".config.fleeHome")
     @Config.Comment("If enabled, Custom NPCs flee to their home position instead of away from what hit them")
     public boolean cnpcsRunHome = false;
-
-    @Config.Name("Fearless")
-    @Config.LangKey(DynamicStealth.MODID + ".config.fearless")
-    @Config.Comment(
-            {
-                    "These entities will not use the flee mechanic when low on health",
-                    "",
-                    "You can also specify entities with a certain name, like so:",
-                    "modid:entity:name",
-                    "",
-                    "Entities that bypass threat are automatically fearless"
-            })
-    public String[] fearless = EntityAIDefaults.fearlessDefaults.toArray(new String[0]);
 }
