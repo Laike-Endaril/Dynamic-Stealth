@@ -91,7 +91,7 @@ import static com.fantasticsource.dynamicstealth.common.Network.WRAPPER;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.dynamicstealth.server.threat.Threat.THREAT_TYPE.*;
 
-@Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, dependencies = "required-after:fantasticlib@[1.12.2.027,)")
+@Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, dependencies = "required-after:fantasticlib@[1.12.2.028,)")
 public class DynamicStealth
 {
     public static final String MODID = "dynamicstealth";
