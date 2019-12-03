@@ -381,7 +381,7 @@ public class HUD
                 GlStateManager.depthMask(true);
 
 
-                //Set depth of drawn area (redraw background with in depth buffer only)
+                //Set depth of drawn area (redraw background in depth buffer only)
                 GlStateManager.colorMask(false, false, false, false);
 
                 textureManager.bindTexture(HP_BACKGROUND_TEXTURE);
