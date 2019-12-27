@@ -32,25 +32,25 @@ public class HelperSystem
             Entity helperOwner = ((IEntityOwnable) helper).getOwner();
             if (helperOwner != null)
             {
-                //Owner needs help
+                //Owner
                 if (troubledOne == helperOwner)
                 {
                     if (serverSettings.helperSystemSettings.ownership.helpOwner) return 100;
                 }
 
-                //Something with same owner needs help
+                //Something with same owner
                 else if (troubledOne instanceof IEntityOwnable && ((IEntityOwnable) troubledOne).getOwner() == helperOwner)
                 {
                     if (serverSettings.helperSystemSettings.ownership.helpOtherWithSameOwner) return 90;
                 }
 
-                //Something unrelated needs help.  If we're only dedicated to our owner, don't help them
+                //Something unrelated.  If we're only dedicated to our owner, we don't care about them
                 else if (serverSettings.helperSystemSettings.ownership.dedicated) return 0;
             }
         }
         if (troubledOne instanceof IEntityOwnable)
         {
-            //Something we own needs help
+            //Something we own
             if (((IEntityOwnable) troubledOne).getOwner() == helper)
             {
                 if (serverSettings.helperSystemSettings.ownership.helpOwned) return 80;
