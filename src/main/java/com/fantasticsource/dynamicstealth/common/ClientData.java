@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.common;
 
+import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
@@ -8,11 +9,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.potion.Potion;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import java.util.LinkedHashMap;
 
@@ -29,7 +27,7 @@ public class ClientData
             CID_FLEEING_NON_PASSIVE = 5,
             CID_FLEEING_PASSIVE = 6,
             CID_BYPASS = 7,
-            CID_CONFUSED = 8;
+            CID_DAZED = 8;
 
     public static final int
             COLOR_ATTACKING_YOU = 0xFF0000,         //Target: yes, Threat: yes, Color: Red
@@ -99,7 +97,7 @@ public class ClientData
             case COLOR_BYPASS:
                 return CID_BYPASS;
             case COLOR_DAZED:
-                return CID_CONFUSED;
+                return CID_DAZED;
         }
         throw new IllegalArgumentException("Unregistered color: " + color);
     }
@@ -129,7 +127,7 @@ public class ClientData
                 return COLOR_FLEEING_PASSIVE;
             case CID_BYPASS:
                 return COLOR_BYPASS;
-            case CID_CONFUSED:
+            case CID_DAZED:
                 return COLOR_DAZED;
         }
         throw new IllegalArgumentException("Unregistered cid: " + cid);
@@ -139,8 +137,7 @@ public class ClientData
     {
         if (EntityThreatData.bypassesThreat(searcher)) return COLOR_BYPASS;
 
-        Potion mindTrickPotion = ForgeRegistries.POTIONS.getValue(new ResourceLocation("ebwizardry", "mind_trick"));
-        if (mindTrickPotion != null && searcher.getActivePotionEffect(mindTrickPotion) != null) return COLOR_DAZED;
+        if (Compat.mindTrickPotion != null && searcher.getActivePotionEffect(Compat.mindTrickPotion) != null) return COLOR_DAZED;
 
         AIDynamicStealth stealthAI = searcher instanceof EntityLiving ? AIDynamicStealth.getStealthAI((EntityLiving) searcher) : null;
         if (stealthAI != null && stealthAI.isFleeing())
@@ -156,22 +153,22 @@ public class ClientData
 
     public static boolean canHaveClientTarget(byte cid)
     {
-        return cid != CID_IDLE_PASSIVE && cid != CID_IDLE_NON_PASSIVE && cid != CID_SEARCHING;
+        return cid != CID_IDLE_PASSIVE && cid != CID_IDLE_NON_PASSIVE && cid != CID_SEARCHING && cid != CID_DAZED;
     }
 
     public static boolean canHaveClientTarget(int color)
     {
-        return color != COLOR_IDLE_PASSIVE && color != COLOR_IDLE_NON_PASSIVE && color != COLOR_SEARCHING;
+        return color != COLOR_IDLE_PASSIVE && color != COLOR_IDLE_NON_PASSIVE && color != COLOR_SEARCHING && color != COLOR_DAZED;
     }
 
     public static boolean canHaveThreat(byte cid)
     {
-        return cid != CID_IDLE_PASSIVE && cid != CID_IDLE_NON_PASSIVE && cid != CID_BYPASS;
+        return cid != CID_IDLE_PASSIVE && cid != CID_IDLE_NON_PASSIVE && cid != CID_BYPASS && cid != CID_DAZED;
     }
 
     public static boolean canHaveThreat(int color)
     {
-        return color != COLOR_IDLE_PASSIVE && color != COLOR_IDLE_NON_PASSIVE && color != COLOR_BYPASS;
+        return color != COLOR_IDLE_PASSIVE && color != COLOR_IDLE_NON_PASSIVE && color != COLOR_BYPASS && color != COLOR_DAZED;
     }
 
     public static class OnPointData

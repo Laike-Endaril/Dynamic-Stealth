@@ -195,6 +195,14 @@ public class AIDynamicStealth extends EntityAIBase
             return false;
         }
 
+        if (Compat.mindTrickPotion != null && searcher.getActivePotionEffect(Compat.mindTrickPotion) != null)
+        {
+            mode(MODE_NONE);
+            Threat.set(searcher, null, 0);
+            searcher.world.profiler.endSection();
+            return false;
+        }
+
         if (serverSettings.ai.cnpcsResetInWater && isCNPC && searcher.isInWater())
         {
             ((ICustomNpc) NpcAPI.Instance().getIEntity(searcher)).reset();

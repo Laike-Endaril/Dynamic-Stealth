@@ -6,6 +6,9 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITasks;
+import net.minecraft.potion.Potion;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import java.util.Set;
 
@@ -28,6 +31,11 @@ public class Compat
             primitivemobs = false,
             rwbym = false,
             thermalfoundation = false;
+
+
+    public static Potion
+            mindTrickPotion,
+            mindControlPotion;
 
 
     public static void cancelTasksRequiringAttackTarget(EntityAITasks tasks)

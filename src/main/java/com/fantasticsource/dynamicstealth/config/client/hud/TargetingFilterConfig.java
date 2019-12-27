@@ -63,5 +63,5 @@ public class TargetingFilterConfig
     @Config.Name("090 Dazed")
     @Config.LangKey(DynamicStealth.MODID + ".config.targetingDazed")
     @Config.Comment({"If true, the targeting HUD shows when focused on a dazed entity"})
-    public boolean dazed = false;
+    public boolean dazed = true;
 }
