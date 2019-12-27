@@ -53,7 +53,10 @@ public class RenderAlterer
         {
             scoreboard = Minecraft.getMinecraft().world.getScoreboard();
 
-            ScorePlayerTeam team = scoreboard.createTeam("green");
+            ScorePlayerTeam team = scoreboard.createTeam("dark green");
+            team.setPrefix(TextFormatting.DARK_GREEN.toString());
+            colorTeams.add(team);
+            team = scoreboard.createTeam("green");
             team.setPrefix(TextFormatting.GREEN.toString());
             colorTeams.add(team);
             team = scoreboard.createTeam("blue");
@@ -93,8 +96,10 @@ public class RenderAlterer
     {
         switch (color)
         {
-            case ClientData.COLOR_IDLE_PASSIVE:
+            case ClientData.COLOR_DAZED:
                 return "green";
+            case ClientData.COLOR_IDLE_PASSIVE:
+                return "dark green";
             case ClientData.COLOR_IDLE_NON_PASSIVE:
                 return "blue";
             case ClientData.COLOR_ATTACKING_OTHER:

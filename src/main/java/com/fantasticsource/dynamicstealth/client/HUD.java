@@ -165,6 +165,7 @@ public class HUD
         else if (color == COLOR_ATTACKING_OTHER) return clientSettings.hudSettings.ophudFilter.attackingOther;
         else if (color == COLOR_FLEEING_N0N_PASSIVE) return clientSettings.hudSettings.ophudFilter.fleeingNonPassive;
         else if (color == COLOR_FLEEING_PASSIVE) return clientSettings.hudSettings.ophudFilter.fleeingPassive;
+        else if (color == COLOR_DAZED) return clientSettings.hudSettings.ophudFilter.dazed;
         return false;
     }
 
@@ -417,6 +418,7 @@ public class HUD
         if (color == COLOR_ATTACKING_OTHER && !clientSettings.hudSettings.targetingFilter.attackingOther) return;
         if (color == COLOR_FLEEING_N0N_PASSIVE && !clientSettings.hudSettings.targetingFilter.fleeingNonPassive) return;
         if (color == COLOR_FLEEING_PASSIVE && !clientSettings.hudSettings.targetingFilter.fleeingPassive) return;
+        if (color == COLOR_DAZED && !clientSettings.hudSettings.targetingFilter.dazed) return;
 
         int maxDist = clientSettings.hudSettings.targetingFilter.maxDist;
         int maxAngle = clientSettings.hudSettings.targetingFilter.maxAngle;
@@ -699,8 +701,8 @@ public class HUD
             //General Setup
             float originX = pos.getKey(), originY = pos.getValue();
 
-            int portW = Render.getViewportWidth();
-            int portH = Render.getViewportHeight();
+            int portW = Render.getStoredViewportWidth();
+            int portH = Render.getStoredViewportHeight();
 
             boolean offScreen = false;
             float boundX = originX, boundY = originY;
@@ -731,7 +733,7 @@ public class HUD
             if (offScreen)
             {
                 //Offscreen indicator
-                int viewW = Render.getViewportWidth(), viewH = Render.getViewportHeight();
+                int viewW = Render.getStoredViewportWidth(), viewH = Render.getStoredViewportHeight();
                 double halfViewW = viewW * 0.5, halfViewH = viewH * 0.5;
                 double angleRad = TRIG_TABLE.arctanFullcircle(halfViewW, halfViewH, originX, originY);
 
@@ -795,6 +797,9 @@ public class HUD
                         String action;
                         switch (color)
                         {
+                            case COLOR_DAZED:
+                                action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.dazed");
+                                break;
                             case COLOR_FLEEING_N0N_PASSIVE:
                             case COLOR_FLEEING_PASSIVE:
                                 action = I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.fleeFrom", target == null ? I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.unknown") : target.getName());

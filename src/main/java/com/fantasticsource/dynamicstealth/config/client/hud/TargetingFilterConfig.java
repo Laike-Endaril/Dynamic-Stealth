@@ -59,4 +59,9 @@ public class TargetingFilterConfig
     @Config.LangKey(DynamicStealth.MODID + ".config.targetingFlee")
     @Config.Comment({"If true, the targeting HUD shows when focused on a non-passive entity that is fleeing"})
     public boolean fleeingNonPassive = true;
+
+    @Config.Name("090 Dazed")
+    @Config.LangKey(DynamicStealth.MODID + ".config.targetingDazed")
+    @Config.Comment({"If true, the targeting HUD shows when focused on a dazed entity"})
+    public boolean dazed = false;
 }

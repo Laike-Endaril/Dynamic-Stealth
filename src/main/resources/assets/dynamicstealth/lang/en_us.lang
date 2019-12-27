@@ -57,6 +57,7 @@ dynamicstealth.hud.search=Searching...
 dynamicstealth.hud.idlePassive=Idle (Passive)
 dynamicstealth.hud.idleNonPassive=Idle (Non-Passive)
 dynamicstealth.hud.targeting=Targeting %s
+dynamicstealth.hud.dazed=Dazed
 
 dynamicstealth.hud.threat=Threat: %s%%
 dynamicstealth.hud.threatNotApplicable=Threat: N/A
@@ -110,6 +111,8 @@ dynamicstealth.config.opHUDShowFleePassive=Fleeing (Passive)
 dynamicstealth.config.opHUDShowFleePassive.tooltip=FILLSCREEN FIXNEWLINES If true, on-point indicators appear for passive entities that are fleeing\n \n
 dynamicstealth.config.opHUDShowFlee=Fleeing (Non-Passive)
 dynamicstealth.config.opHUDShowFlee.tooltip=FILLSCREEN FIXNEWLINES If true, on-point indicators appear for non-passive entities that are fleeing\n \n
+dynamicstealth.config.opHUDShowDazed=Dazed
+dynamicstealth.config.opHUDShowDazed.tooltip=FILLSCREEN FIXNEWLINES If true, on-point indicators appear for dazed entities\n \n
 
 dynamicstealth.config.opHUDDepth=Use Depth
 dynamicstealth.config.opHUDDepth.tooltip=FILLSCREEN FIXNEWLINES If false, on-point HUDs will display on top of blocks and models, but below shadows (bit glitchy when overlapping shadows)\n\nIf true, on-point HUDs will display on top of shadows correctly, but at their position in-world, ie. they can be hidden behind blocks/models\n \n
@@ -148,6 +151,8 @@ dynamicstealth.config.targetingFleePassive=Fleeing (Passive)
 dynamicstealth.config.targetingFleePassive.tooltip=FILLSCREEN FIXNEWLINES If true, the targeting HUD shows when focused on a passive entity that is fleeing\n \n
 dynamicstealth.config.targetingFlee=Fleeing (Non-Passive)
 dynamicstealth.config.targetingFlee.tooltip=FILLSCREEN FIXNEWLINES If true, the targeting HUD shows when focused on a non-passive entity that is fleeing\n \n
+dynamicstealth.config.targetingDazed=Dazed
+dynamicstealth.config.targetingDazed.tooltip=FILLSCREEN FIXNEWLINES If true, the targeting HUD shows when focused on a dazed entity\n \n
 
 dynamicstealth.config.targetingGlow=Glow
 dynamicstealth.config.targetingGlow.tooltip=FILLSCREEN FIXNEWLINES If true, the currently targeted entity is highlighted with a glow effect\n \n

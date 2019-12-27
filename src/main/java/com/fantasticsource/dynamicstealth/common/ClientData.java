@@ -8,8 +8,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.potion.Potion;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import java.util.LinkedHashMap;
 
@@ -25,17 +28,19 @@ public class ClientData
             CID_IDLE_PASSIVE = 4,
             CID_FLEEING_NON_PASSIVE = 5,
             CID_FLEEING_PASSIVE = 6,
-            CID_BYPASS = 7;
+            CID_BYPASS = 7,
+            CID_CONFUSED = 8;
 
     public static final int
-            COLOR_ATTACKING_YOU = 0xFF0000,         //Target: yes, Threat: yes
-            COLOR_ATTACKING_OTHER = 0xFFFF00,       //Target: yes, Threat: yes
-            COLOR_SEARCHING = 0xFF8800,             //Target: only on server, Threat: yes
-            COLOR_IDLE_NON_PASSIVE = 0x4444FF,      //Target: no, Threat: no
-            COLOR_IDLE_PASSIVE = 0x00CC00,          //Target: no, Threat: no
-            COLOR_FLEEING_N0N_PASSIVE = 0xFF55FF,   //Target: maybe, Threat: yes
-            COLOR_FLEEING_PASSIVE = 0xAA00AA,       //Target: maybe, Threat: yes
-            COLOR_BYPASS = 0x555555;                //Target: maybe, Threat: no
+            COLOR_ATTACKING_YOU = 0xFF0000,         //Target: yes, Threat: yes, Color: Red
+            COLOR_ATTACKING_OTHER = 0xFFFF00,       //Target: yes, Threat: yes, Color: Yellow
+            COLOR_SEARCHING = 0xFF8800,             //Target: only on server, Threat: yes, Color: Orange
+            COLOR_IDLE_NON_PASSIVE = 0x4444FF,      //Target: no, Threat: no, Color: Blue
+            COLOR_IDLE_PASSIVE = 0x00CC00,          //Target: no, Threat: no, Color: Dark Green
+            COLOR_FLEEING_N0N_PASSIVE = 0xFF55FF,   //Target: maybe, Threat: yes, Color: Light Purple
+            COLOR_FLEEING_PASSIVE = 0xAA00AA,       //Target: maybe, Threat: yes, Color: Dark Purple
+            COLOR_BYPASS = 0x555555,                //Target: maybe, Threat: no, Color: Dark Gray
+            COLOR_DAZED = 0x55FF55;                 //Target: maybe, Threat: maybe, Color: Light Green
 
     public static int stealthLevel = Byte.MIN_VALUE, prevStealthLevel = Byte.MIN_VALUE, lightLevel = 0;
 
@@ -93,6 +98,8 @@ public class ClientData
                 return CID_FLEEING_PASSIVE;
             case COLOR_BYPASS:
                 return CID_BYPASS;
+            case COLOR_DAZED:
+                return CID_CONFUSED;
         }
         throw new IllegalArgumentException("Unregistered color: " + color);
     }
@@ -122,6 +129,8 @@ public class ClientData
                 return COLOR_FLEEING_PASSIVE;
             case CID_BYPASS:
                 return COLOR_BYPASS;
+            case CID_CONFUSED:
+                return COLOR_DAZED;
         }
         throw new IllegalArgumentException("Unregistered cid: " + cid);
     }
@@ -129,6 +138,10 @@ public class ClientData
     public static int getColor(EntityPlayer player, EntityLivingBase searcher, EntityLivingBase target, float threatPercentage)
     {
         if (EntityThreatData.bypassesThreat(searcher)) return COLOR_BYPASS;
+
+        Potion mindTrickPotion = ForgeRegistries.POTIONS.getValue(new ResourceLocation("ebwizardry", "mind_trick"));
+        if (mindTrickPotion != null && searcher.getActivePotionEffect(mindTrickPotion) != null) return COLOR_DAZED;
+
         AIDynamicStealth stealthAI = searcher instanceof EntityLiving ? AIDynamicStealth.getStealthAI((EntityLiving) searcher) : null;
         if (stealthAI != null && stealthAI.isFleeing())
         {
