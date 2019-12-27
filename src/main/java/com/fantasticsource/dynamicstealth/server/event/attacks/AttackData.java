@@ -3,7 +3,6 @@ package com.fantasticsource.dynamicstealth.server.event.attacks;
 import com.fantasticsource.dynamicstealth.config.server.interactions.*;
 import com.fantasticsource.mctools.potions.FantasticPotionEffect;
 import com.fantasticsource.mctools.potions.Potions;
-import net.minecraft.potion.PotionEffect;
 
 import java.util.ArrayList;
 

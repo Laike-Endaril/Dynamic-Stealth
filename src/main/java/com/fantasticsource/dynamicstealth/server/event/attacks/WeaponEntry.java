@@ -4,7 +4,6 @@ import com.fantasticsource.mctools.items.ItemFilter;
 import com.fantasticsource.mctools.potions.FantasticPotionEffect;
 import com.fantasticsource.mctools.potions.Potions;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;

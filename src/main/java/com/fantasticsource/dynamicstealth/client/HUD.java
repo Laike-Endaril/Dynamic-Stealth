@@ -91,12 +91,10 @@ public class HUD
     private static final ResourceLocation HP_FILL_TEXTURE = new ResourceLocation(DynamicStealth.MODID, "image/hpfill.png");
     private static final float HP_FILL_WIDTH = 140, HP_FILL_HEIGHT = 16;
     private static final float HP_FILL_UV_HALF_PIXEL_W = 0.5f / HP_FILL_WIDTH, HP_FILL_UV_HALF_PIXEL_H = 0.5f / HP_FILL_HEIGHT;
-
-    private static TextureManager textureManager = Minecraft.getMinecraft().renderEngine;
-
     private static final DecimalFormat
             ONE_DECIMAL = new DecimalFormat("0.0"),
             NO_DECIMAL = new DecimalFormat("0");
+    private static TextureManager textureManager = Minecraft.getMinecraft().renderEngine;
 
     public static void draw(RenderGameOverlayEvent.Pre event, Minecraft mc)
     {
