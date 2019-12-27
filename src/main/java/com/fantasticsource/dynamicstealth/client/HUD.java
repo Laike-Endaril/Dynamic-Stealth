@@ -686,12 +686,17 @@ public class HUD
     {
         try
         {
+            //Early cancel in rare case that Render.getEntityXYInWindow returns null
+            //TODO can remove this if the method is changed to never return null
+            Pair<Float, Float> pos = Render.getEntityXYInWindow(entity, 0, entity.height * 0.5, 0);
+            if (pos == null) return;
+
+
             GlStateManager.disableTexture2D();
             GlStateManager.enableBlend();
 
 
             //General Setup
-            Pair<Float, Float> pos = Render.getEntityXYInWindow(entity, 0, entity.height * 0.5, 0);
             float originX = pos.getKey(), originY = pos.getValue();
 
             int portW = Render.getViewportWidth();
@@ -844,7 +849,6 @@ public class HUD
                     boolean toRight = originX < portW >> 1;
                     if (!toRight) offX = -offX;
 
-                    pos = Render.getEntityXYInWindow(entity, 0, entity.height * 0.5, 0);
                     float drawX = pos.getKey() / sr.getScaleFactor() + offX, drawY = pos.getValue() / sr.getScaleFactor();
 
                     GlStateManager.pushMatrix();
