@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.server.event.attacks;
 
 import com.fantasticsource.mctools.items.ItemFilter;
+import com.fantasticsource.mctools.potions.FantasticPotionEffect;
 import com.fantasticsource.mctools.potions.Potions;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
@@ -16,8 +17,8 @@ public class WeaponEntry
 
     public boolean armorPenetration = false;
     public double damageMultiplier = 1;
-    public ArrayList<PotionEffect> attackerEffects = new ArrayList<>();
-    public ArrayList<PotionEffect> victimEffects = new ArrayList<>();
+    public ArrayList<FantasticPotionEffect> attackerEffects = new ArrayList<>();
+    public ArrayList<FantasticPotionEffect> victimEffects = new ArrayList<>();
     public boolean consumeItem = false;
 
     public ItemFilter filter;

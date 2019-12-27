@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.event;
 
+import com.fantasticsource.mctools.potions.FantasticPotionEffect;
 import com.fantasticsource.mctools.potions.Potions;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.PotionEffect;
@@ -10,7 +11,7 @@ import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.ser
 
 public class EventData
 {
-    public static ArrayList<PotionEffect> cantReachPotionFilter, rallyPotions, calmDownPotions, desperationPotions, cantReachPotions;
+    public static ArrayList<FantasticPotionEffect> cantReachPotionFilter, rallyPotions, calmDownPotions, desperationPotions, cantReachPotions;
 
     public static void update()
     {

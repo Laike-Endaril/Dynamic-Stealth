@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.server.event.attacks;
 
 import com.fantasticsource.dynamicstealth.config.server.interactions.*;
+import com.fantasticsource.mctools.potions.FantasticPotionEffect;
 import com.fantasticsource.mctools.potions.Potions;
 import net.minecraft.potion.PotionEffect;
 
@@ -10,24 +11,24 @@ import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.ser
 
 public class AttackData
 {
-    public static ArrayList<PotionEffect> normalAttackerEffects;
-    public static ArrayList<PotionEffect> normalVictimEffects;
+    public static ArrayList<FantasticPotionEffect> normalAttackerEffects;
+    public static ArrayList<FantasticPotionEffect> normalVictimEffects;
     public static ArrayList<WeaponEntry> normalWeaponSpecific;
 
-    public static ArrayList<PotionEffect> rangedAttackerEffects;
-    public static ArrayList<PotionEffect> rangedVictimEffects;
+    public static ArrayList<FantasticPotionEffect> rangedAttackerEffects;
+    public static ArrayList<FantasticPotionEffect> rangedVictimEffects;
 
-    public static ArrayList<PotionEffect> stealthAttackerEffects;
-    public static ArrayList<PotionEffect> stealthVictimEffects;
+    public static ArrayList<FantasticPotionEffect> stealthAttackerEffects;
+    public static ArrayList<FantasticPotionEffect> stealthVictimEffects;
     public static ArrayList<WeaponEntry> stealthWeaponSpecific;
 
-    public static ArrayList<PotionEffect> rangedStealthAttackerEffects;
-    public static ArrayList<PotionEffect> rangedStealthVictimEffects;
+    public static ArrayList<FantasticPotionEffect> rangedStealthAttackerEffects;
+    public static ArrayList<FantasticPotionEffect> rangedStealthVictimEffects;
 
-    public static ArrayList<PotionEffect> assassinationAttackerEffects;
+    public static ArrayList<FantasticPotionEffect> assassinationAttackerEffects;
     public static ArrayList<WeaponEntry> assassinationWeaponSpecific;
 
-    public static ArrayList<PotionEffect> rangedAssassinationAttackerEffects;
+    public static ArrayList<FantasticPotionEffect> rangedAssassinationAttackerEffects;
 
 
     public static void update()
