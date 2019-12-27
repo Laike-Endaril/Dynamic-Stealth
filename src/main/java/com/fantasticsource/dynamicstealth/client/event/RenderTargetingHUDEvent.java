@@ -64,12 +64,12 @@ public class RenderTargetingHUDEvent extends Event
 
     public int getViewportWidth() throws IllegalAccessException
     {
-        return Render.getViewportWidth();
+        return Render.getStoredViewportWidth();
     }
 
     public int getViewportHeight() throws IllegalAccessException
     {
-        return Render.getViewportHeight();
+        return Render.getStoredViewportHeight();
     }
 
 
