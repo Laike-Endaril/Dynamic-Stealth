@@ -5,10 +5,7 @@ import com.fantasticsource.dynamicstealth.client.RenderAlterer;
 import com.fantasticsource.dynamicstealth.common.ClientData;
 import com.fantasticsource.dynamicstealth.common.Network;
 import com.fantasticsource.dynamicstealth.common.potions.Potions;
-import com.fantasticsource.dynamicstealth.compat.Compat;
-import com.fantasticsource.dynamicstealth.compat.CompatCNPC;
-import com.fantasticsource.dynamicstealth.compat.CompatDissolution;
-import com.fantasticsource.dynamicstealth.compat.CompatRoughMobs;
+import com.fantasticsource.dynamicstealth.compat.*;
 import com.fantasticsource.dynamicstealth.config.ConfigHandler;
 import com.fantasticsource.dynamicstealth.server.*;
 import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
@@ -416,16 +413,20 @@ public class DynamicStealth
                     //Target cannot see us
                     if (victimThreatTarget != source)
                     {
-                        //Target is not searching for / fleeing from *us specifically*
-                        if (!(killer instanceof FakePlayer) && !MinecraftForge.EVENT_BUS.post(new AssassinationEvent(killer, victim)))
+                        //Target is not searching for / fleeing from us
+                        if (!CompatEBWizardry.mindControllerIs(victim, killer))
                         {
-                            //Assassinations
-                            WeaponEntry weaponEntry = WeaponEntry.get(isMelee ? killer.getHeldItemMainhand() : null, WeaponEntry.TYPE_ASSASSINATION);
-
-
-                            for (PotionEffect potionEffect : weaponEntry.attackerEffects)
+                            //Target is not mind controlled by us
+                            if (!(killer instanceof FakePlayer) && !MinecraftForge.EVENT_BUS.post(new AssassinationEvent(killer, victim)))
                             {
-                                killer.addPotionEffect(new PotionEffect(potionEffect));
+                                //Assassinations
+                                WeaponEntry weaponEntry = WeaponEntry.get(isMelee ? killer.getHeldItemMainhand() : null, WeaponEntry.TYPE_ASSASSINATION);
+
+
+                                for (PotionEffect potionEffect : weaponEntry.attackerEffects)
+                                {
+                                    killer.addPotionEffect(new PotionEffect(potionEffect));
+                                }
                             }
                         }
                     }
@@ -826,8 +827,8 @@ public class DynamicStealth
             MinecraftForge.EVENT_BUS.register(CompatCNPC.class);
         }
 
-        Compat.mindTrickPotion = ForgeRegistries.POTIONS.getValue(new ResourceLocation("ebwizardry", "mind_trick"));
-        Compat.mindControlPotion = ForgeRegistries.POTIONS.getValue(new ResourceLocation("ebwizardry", "mind_control"));
+        CompatEBWizardry.mindTrickPotion = ForgeRegistries.POTIONS.getValue(new ResourceLocation("ebwizardry", "mind_trick"));
+        CompatEBWizardry.mindControlPotion = ForgeRegistries.POTIONS.getValue(new ResourceLocation("ebwizardry", "mind_control"));
 
         update();
     }

@@ -33,11 +33,6 @@ public class Compat
             thermalfoundation = false;
 
 
-    public static Potion
-            mindTrickPotion,
-            mindControlPotion;
-
-
     public static void cancelTasksRequiringAttackTarget(EntityAITasks tasks)
     {
         for (EntityAITasks.EntityAITaskEntry task : tasks.taskEntries)

@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.server.ai;
 
 import com.fantasticsource.dynamicstealth.compat.Compat;
+import com.fantasticsource.dynamicstealth.compat.CompatEBWizardry;
 import com.fantasticsource.dynamicstealth.server.CombatTracker;
 import com.fantasticsource.dynamicstealth.server.ai.edited.AITargetEdit;
 import com.fantasticsource.dynamicstealth.server.event.BasicEvent;
@@ -195,12 +196,18 @@ public class AIDynamicStealth extends EntityAIBase
             return false;
         }
 
-        if (Compat.mindTrickPotion != null && searcher.getActivePotionEffect(Compat.mindTrickPotion) != null)
+        if (CompatEBWizardry.mindTrickPotion != null && searcher.getActivePotionEffect(CompatEBWizardry.mindTrickPotion) != null)
         {
             mode(MODE_NONE);
             Threat.set(searcher, null, 0);
             searcher.world.profiler.endSection();
             return false;
+        }
+
+        EntityLivingBase target = Threat.getTarget(searcher);
+        if (target != null && CompatEBWizardry.mindControllerIs(searcher, target))
+        {
+            Threat.set(searcher, null, 0);
         }
 
         if (serverSettings.ai.cnpcsResetInWater && isCNPC && searcher.isInWater())
