@@ -45,6 +45,10 @@ dynamicstealth.cmd.hidefromPlayerSetTrue=§aYou are now attempting to hide from 
 dynamicstealth.cmd.hidefromPlayerSetFalse=§eYou are now NOT attempting to hide from %s
 dynamicstealth.cmd.hidefromPlayerTFError=§cThird argument must be one of these: §dt, true, f, false
 
+dynamicstealth.cmd.threatEntityMissing=§cEntity not found for UUID: %s
+dynamicstealth.cmd.threatEntityNotLivingBase=§cEntity for UUID is not an EntityLivingBase: %s
+dynamicstealth.cmd.threatInvalidAmount=§cThreat amount must be from 0 to 100 (inclusive)
+
 
 
 dynamicstealth.hud.hp=HP: %s / %s (%s%%)

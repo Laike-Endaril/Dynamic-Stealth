@@ -2,11 +2,14 @@ package com.fantasticsource.dynamicstealth;
 
 import com.fantasticsource.dynamicstealth.config.ConfigHandler;
 import com.fantasticsource.dynamicstealth.server.senses.HidingData;
+import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.PlayerData;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
@@ -46,6 +49,8 @@ public class Commands extends CommandBase
         {
             return AQUA + "/dstealth reload" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.reload.comment") + "\n" +
 
+                    AQUA + "/dstealth threat <entity UUID> <target entity UUID> <amount>" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.threat.comment") + "\n" +
+
                     AQUA + "/dstealth hidefrom <playername> <t/f/true/false>" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.hidefromPlayerTF.comment") + "\n" +
                     AQUA + "/dstealth hidefrom <playername>" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.hidefromPlayer.comment") + "\n" +
                     AQUA + "/dstealth hidefrom" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.hidefrom.comment");
@@ -61,10 +66,7 @@ public class Commands extends CommandBase
     public void execute(MinecraftServer server, ICommandSender sender, String[] args)
     {
         if (args.length == 0) sender.getCommandSenderEntity().sendMessage(new TextComponentString(getUsage(sender)));
-        else
-        {
-            subCommand(sender, args);
-        }
+        else subCommand(sender, args);
     }
 
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos)
@@ -74,7 +76,11 @@ public class Commands extends CommandBase
         String partial = args[args.length - 1];
         if (args.length == 1)
         {
-            if (sender.canUseCommand(2, getName())) result.add("reload");
+            if (sender.canUseCommand(2, getName()))
+            {
+                result.add("reload");
+                result.add("threat");
+            }
             result.add("hidefrom");
 
             if (partial.length() != 0) result.removeIf(k -> partial.length() > k.length() || !k.substring(0, partial.length()).equalsIgnoreCase(partial));
@@ -181,6 +187,52 @@ public class Commands extends CommandBase
                 {
                     e.printStackTrace();
                 }
+                break;
+
+            case "threat":
+                if (args.length != 4)
+                {
+                    notifyCommandListener(sender, this, getUsage(sender));
+                    break;
+                }
+                Entity entity = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityFromUuid(UUID.fromString(args[1]));
+                if (entity == null)
+                {
+                    notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.threatEntityMissing", args[1]);
+                    break;
+                }
+                if (!(entity instanceof EntityLivingBase))
+                {
+                    notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.threatEntityNotLivingBase", args[1]);
+                    break;
+                }
+                Entity target = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityFromUuid(UUID.fromString(args[2]));
+                if (target == null)
+                {
+                    notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.threatEntityMissing", args[2]);
+                    break;
+                }
+                if (!(target instanceof EntityLivingBase))
+                {
+                    notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.threatEntityNotLivingBase", args[2]);
+                    break;
+                }
+                float amount;
+                try
+                {
+                    amount = Float.parseFloat(args[3]);
+                }
+                catch (NumberFormatException e)
+                {
+                    notifyCommandListener(sender, this, getUsage(sender));
+                    break;
+                }
+                if (amount < 0 || amount > 100)
+                {
+                    notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.threatInvalidAmount", args[2]);
+                    break;
+                }
+                Threat.set((EntityLivingBase) entity, (EntityLivingBase) target, amount);
                 break;
 
             default:
