@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.common;
 
-import com.fantasticsource.dynamicstealth.compat.Compat;
+import com.fantasticsource.dynamicstealth.compat.CompatEBWizardry;
 import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
@@ -137,7 +137,7 @@ public class ClientData
     {
         if (EntityThreatData.bypassesThreat(searcher)) return COLOR_BYPASS;
 
-        if (Compat.mindTrickPotion != null && searcher.getActivePotionEffect(Compat.mindTrickPotion) != null) return COLOR_DAZED;
+        if (CompatEBWizardry.mindTrickPotion != null && searcher.getActivePotionEffect(CompatEBWizardry.mindTrickPotion) != null) return COLOR_DAZED;
 
         AIDynamicStealth stealthAI = searcher instanceof EntityLiving ? AIDynamicStealth.getStealthAI((EntityLiving) searcher) : null;
         if (stealthAI != null && stealthAI.isFleeing())
