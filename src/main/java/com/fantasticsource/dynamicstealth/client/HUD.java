@@ -363,7 +363,7 @@ public class HUD
 
                     if (clientSettings.hudSettings.ophudStyle.hpGaugeCurrentAndMax)
                     {
-                        String text = ONE_DECIMAL.format(livingBase.getMaxHealth());
+                        String text = ONE_DECIMAL.format(livingBase.getHealth());
                         OutlinedFontRenderer.draw(text, (float) (left + 3 + spacing), (float) (top + spacing), Color.WHITE, Color.BLACK);
                         text = ONE_DECIMAL.format(livingBase.getMaxHealth());
                         OutlinedFontRenderer.draw(text, (float) (right - 3 - spacing - OutlinedFontRenderer.getStringWidth(text)), (float) (top + spacing), Color.WHITE, Color.BLACK);
