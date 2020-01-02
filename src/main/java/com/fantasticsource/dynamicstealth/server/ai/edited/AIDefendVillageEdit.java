@@ -16,19 +16,7 @@ import java.util.UUID;
 
 public class AIDefendVillageEdit extends AITargetEdit
 {
-    private static Field villageReputationsField;
-
-    static
-    {
-        try
-        {
-            villageReputationsField = ReflectionTool.getField(Village.class, "field_82693_j", "playerReputation");
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            MCTools.crash(e, 135, false);
-        }
-    }
+    private static Field villageReputationsField = ReflectionTool.getField(Village.class, "field_82693_j", "playerReputation");
 
 
     EntityIronGolem irongolem;
