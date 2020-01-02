@@ -95,7 +95,7 @@ public class DynamicStealth
 {
     public static final String MODID = "dynamicstealth";
     public static final String NAME = "Dynamic Stealth";
-    public static final String VERSION = "1.12.2.100a";
+    public static final String VERSION = "1.12.2.101";
     public static final String CONFIG_VERSION = "1.12.2.095"; //The lowest compatible config version
 
     public static final TrigLookupTable TRIG_TABLE = new TrigLookupTable(1024);
