@@ -133,6 +133,8 @@ public class HUD
     {
         if (!event.getRenderer().getRenderManager().renderOutlines)
         {
+            GlStateManager.color(1, 1, 1, 1);
+
             EntityLivingBase livingBase = event.getEntity();
             if (livingBase != null)
             {
@@ -149,7 +151,6 @@ public class HUD
                     }
                 }
             }
-            GlStateManager.color(1, 1, 1, 1);
         }
     }
 
