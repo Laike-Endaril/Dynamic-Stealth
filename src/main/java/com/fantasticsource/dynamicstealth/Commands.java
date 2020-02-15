@@ -118,8 +118,13 @@ public class Commands extends CommandBase
         switch (cmd)
         {
             case "reload":
-                if (!sender.canUseCommand(2, getName())) notifyCommandListener(sender, this, "commands.generic.permission");
-                else try
+                if (!sender.canUseCommand(2, getName()))
+                {
+                    notifyCommandListener(sender, this, "commands.generic.permission");
+                    return;
+                }
+
+                try
                 {
                     MCTools.reloadConfig(ConfigHandler.fullConfigFilename, DynamicStealth.MODID);
                     DynamicStealth.update();
@@ -132,6 +137,7 @@ public class Commands extends CommandBase
                     e.printStackTrace();
                 }
                 break;
+
 
             case "hidefrom":
                 try
@@ -189,7 +195,14 @@ public class Commands extends CommandBase
                 }
                 break;
 
+
             case "threat":
+                if (!sender.canUseCommand(2, getName()))
+                {
+                    notifyCommandListener(sender, this, "commands.generic.permission");
+                    return;
+                }
+
                 if (args.length != 4)
                 {
                     notifyCommandListener(sender, this, getUsage(sender));
@@ -234,6 +247,7 @@ public class Commands extends CommandBase
                 }
                 Threat.set((EntityLivingBase) entity, (EntityLivingBase) target, amount);
                 break;
+
 
             default:
                 notifyCommandListener(sender, this, getUsage(sender));
