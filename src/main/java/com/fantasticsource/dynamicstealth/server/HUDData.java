@@ -21,6 +21,6 @@ public class HUDData
 
     public static boolean isGauged(EntityLivingBase searcher)
     {
-        return MCTools.entityMatchesMap(searcher, ungaugedEntities);
+        return !MCTools.entityMatchesMap(searcher, ungaugedEntities);
     }
 }
