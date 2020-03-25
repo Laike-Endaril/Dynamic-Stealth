@@ -13,6 +13,8 @@ Add configs for HP element...
 ...whether % is shown
 ...whether bar is shown (add bar render)
 
+Per-entity config for whether the entity's attacks should be prevented if the victim is not within their FOV (request from gua12ab on curseforge)
+
 
 
 Reorganize configs for...
