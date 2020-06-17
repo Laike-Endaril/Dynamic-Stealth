@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.dynamicstealth.compat.Compat;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIOwnerHurtByTarget;
 import net.minecraft.entity.passive.EntityTameable;
@@ -32,7 +33,8 @@ public class AIOwnerHurtByTargetEdit extends AITargetEdit
     @Override
     public void startExecuting()
     {
-        attacker.setAttackTarget(ownerEnemy);
+        if (ownerEnemy == null) Compat.clearAttackTargetAndReplaceAITasks(attacker);
+        else attacker.setAttackTarget(ownerEnemy);
 
         EntityLivingBase owner = tameable.getOwner();
         if (owner != null) timestamp = owner.getRevengeTimer();

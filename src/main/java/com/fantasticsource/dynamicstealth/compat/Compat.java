@@ -1,33 +1,26 @@
 package com.fantasticsource.dynamicstealth.compat;
 
+import com.fantasticsource.dynamicstealth.config.DynamicStealthConfig;
 import com.fantasticsource.dynamicstealth.server.ai.edited.AIAttackMeleeEdit;
 import com.fantasticsource.mctools.NPEAttackTargetTaskHolder;
+import com.fantasticsource.tools.Tools;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITasks;
+import net.minecraftforge.fml.common.Loader;
 
 import java.util.Set;
 
 public class Compat
 {
     public static boolean
-            lycanites = false,
-            ancientwarfare = false,
             customnpcs = false,
             neat = false,
-            betterportals = false,
             statues = false,
             dissolution = false,
-            magma_monsters = false,
-            abyssalcraft = false,
             conarm = false,
-            emberroot = false,
-            defiledlands = false,
-            testdummy = false,
-            primitivemobs = false,
-            rwbym = false,
-            thermalfoundation = false;
+            testdummy = false;
 
 
     public static void cancelTasksRequiringAttackTarget(EntityAITasks tasks)
@@ -50,15 +43,14 @@ public class Compat
         if (ai instanceof EntityAIAttackMelee && !(ai instanceof AIAttackMeleeEdit)) return true;
 
         String aiClassname = ai.getClass().getName();
-        if (lycanites && aiClassname.contains("com.lycanitesmobs.core.entity.ai.EntityAIAttack")) return true; //Covers 2 variants, one melee and one ranged
-        if (ancientwarfare && aiClassname.equals("net.shadowmage.ancientwarfare.npc.ai.vehicle.NpcAIAimVehicle")) return true;
-        if (thermalfoundation && aiClassname.contains("cofh.thermalfoundation.entity.monster")) return true; //Should cover Basalz, Blitz, and Blizz
-        if (abyssalcraft && aiClassname.contains("abyssalcraft.common.entity.ai")) return true;
-        if (magma_monsters && aiClassname.contains("EntityMagmaMonster")) return true;
-        if (primitivemobs && (aiClassname.contains("AIFlameSpewAttack") || aiClassname.contains("AIChargeAttack"))) return true;
-        if (emberroot && aiClassname.contains("EntityAIAttackOnCollideAggressive")) return true;
-        if (defiledlands && aiClassname.contains("EntityScuttler.AISpiderAttack")) return true;
-        if (rwbym && aiClassname.contains("be.bluexin.rwbym") && (aiClassname.contains("AIChargeAttack") || aiClassname.contains("AIPickAttack") || aiClassname.contains("AISweepAttack") || aiClassname.contains("EntityAIAttackRange"))) return true;
+        for (String entry : DynamicStealthConfig.serverSettings.ai.addNullChecksToAI)
+        {
+            String[] tokens = Tools.fixedSplit(entry, ",");
+            if (tokens.length != 2) continue;
+            if (!Loader.isModLoaded(tokens[0].trim())) continue;
+
+            if (aiClassname.contains(tokens[1].trim())) return true;
+        }
 
         return false;
     }
@@ -87,5 +79,11 @@ public class Compat
                 taskList.removeTask(task.action);
             }
         }
+    }
+
+    public static void clearAttackTargetAndReplaceAITasks(EntityLiving living)
+    {
+        living.setAttackTarget(null);
+        replaceNPEAttackTargetTasks(living);
     }
 }

@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import net.minecraft.entity.EntityCreature;
@@ -56,14 +57,15 @@ public class AIFindEntityNearestEdit extends EntityAIBase
     @Override
     public void startExecuting()
     {
-        searcher.setAttackTarget(target);
+        if (target == null) Compat.clearAttackTargetAndReplaceAITasks(searcher);
+        else searcher.setAttackTarget(target);
         super.startExecuting();
     }
 
     @Override
     public void resetTask()
     {
-        searcher.setAttackTarget(null);
+        Compat.clearAttackTargetAndReplaceAITasks(searcher);
         super.startExecuting();
     }
 }

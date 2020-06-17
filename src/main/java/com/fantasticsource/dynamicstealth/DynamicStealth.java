@@ -117,6 +117,7 @@ public class DynamicStealth
         MinecraftForge.EVENT_BUS.register(DynamicStealth.class);
         MinecraftForge.EVENT_BUS.register(Network.class);
         MinecraftForge.EVENT_BUS.register(Potions.class);
+        MinecraftForge.EVENT_BUS.register(Compat.class);
 
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
         {
@@ -580,14 +581,15 @@ public class DynamicStealth
                 {
                     //Attacked while fleeing
                     if (serverSettings.ai.flee.increaseOnDamage) Threat.apply(target, attacker, event.getAmount(), GEN_ATTACKED_DURING_FLEE, canSee, damageSource);
-                    target.setAttackTarget(null);
+                    Compat.clearAttackTargetAndReplaceAITasks(target);
                     stealthAI.restart(perceivedPos);
                 }
                 else
                 {
                     //Attacked while not fleeing
                     Threat.apply(target, attacker, event.getAmount(), GEN_ATTACKED, canSee, damageSource);
-                    target.setAttackTarget(threatTarget);
+                    if (threatTarget == null) Compat.clearAttackTargetAndReplaceAITasks(target);
+                    else target.setAttackTarget(threatTarget);
                     if (hasAI) stealthAI.restart(perceivedPos);
                 }
 
@@ -802,20 +804,10 @@ public class DynamicStealth
     public void postInit(FMLPostInitializationEvent event)
     {
         //Compat init
-        if (Loader.isModLoaded("lycanitesmobs")) Compat.lycanites = true;
-        if (Loader.isModLoaded("thermalfoundation")) Compat.thermalfoundation = true;
-        if (Loader.isModLoaded("ancientwarfare")) Compat.ancientwarfare = true;
-        if (Loader.isModLoaded("abyssalcraft")) Compat.abyssalcraft = true;
-        if (Loader.isModLoaded("emberroot")) Compat.emberroot = true;
-        if (Loader.isModLoaded("primitivemobs")) Compat.primitivemobs = true;
-        if (Loader.isModLoaded("rwbym")) Compat.rwbym = true;
-        if (Loader.isModLoaded("defiledlands")) Compat.defiledlands = true;
         if (Loader.isModLoaded("neat")) Compat.neat = true;
-        if (Loader.isModLoaded("betterportals")) Compat.betterportals = true;
         if (Loader.isModLoaded("testdummy")) Compat.testdummy = true;
         if (Loader.isModLoaded("statues")) Compat.statues = true;
         if (Loader.isModLoaded("conarm")) Compat.conarm = true;
-        if (Loader.isModLoaded("magma_monsters")) Compat.magma_monsters = true;
         if (Loader.isModLoaded("dissolution"))
         {
             Compat.dissolution = true;

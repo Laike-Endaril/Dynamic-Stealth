@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.mctools.MCTools;
@@ -96,7 +97,7 @@ public abstract class AITargetEdit extends EntityAIBase
     @Override
     public void resetTask()
     {
-        attacker.setAttackTarget(null);
+        Compat.clearAttackTargetAndReplaceAITasks(attacker);
         target = null;
     }
 

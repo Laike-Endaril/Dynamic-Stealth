@@ -241,6 +241,8 @@ dynamicstealth.config.aiFlee=Flee
 dynamicstealth.config.aiCantReach=Can't Reach
 dynamicstealth.config.aiNoPetTeleport=Prevent Pet Teleport
 dynamicstealth.config.aiNoPetTeleport.tooltip=FILLSCREEN FIXNEWLINES If set to true, wolves, cats, and parrots do not teleport while following their owners\n \n
+dynamicstealth.config.addNullChecksToAI=Add Null Checks to AI
+dynamicstealth.config.addNullChecksToAI.tooltip=FILLSCREEN FIXNEWLINES AI classes to add null checks to (to prevent DS compat-related crashes with AI tasks that don't do null checks)\n\nSyntax is...\nmodid, PartialClassName\n\nmodid is the exact modid of the mod which contains the crashing AI task class\n\nPartialClassName is at least part of the name of the crashing AI task class.  This is a 'contains' check, so any AI task class containing this string as part of its name will have null checks added to it\n \n
 
 dynamicstealth.config.entitySpecificHeadSpeed=Head Turn Speed
 dynamicstealth.config.entitySpecificHeadSpeed.tooltip=FILLSCREEN FIXNEWLINES How quickly entities' heads spin during eg. a search sequence\n\nentityID, headTurnSpeed\n\neg...\n\nminecraft:skeleton, 5\n\nYou can also specify entities with a certain name, like so:\nmodid:entity:name\n \n

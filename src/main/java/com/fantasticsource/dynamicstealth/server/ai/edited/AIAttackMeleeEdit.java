@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.dynamicstealth.compat.Compat;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.pathfinding.Path;
@@ -62,7 +63,7 @@ public class AIAttackMeleeEdit extends EntityAIAttackMelee
     @Override
     public void resetTask()
     {
-        if (!AITargetEdit.isSuitableTarget(attacker, attacker.getAttackTarget())) attacker.setAttackTarget(null);
+        if (!AITargetEdit.isSuitableTarget(attacker, attacker.getAttackTarget())) Compat.clearAttackTargetAndReplaceAITasks(attacker);
         if (path != null && path.equals(attacker.getNavigator().getPath())) attacker.getNavigator().clearPath();
         path = null;
     }

@@ -234,7 +234,7 @@ public class AIDynamicStealth extends EntityAIBase
             }
 
             //No suitable target, old or new, and threat is <= 0
-            searcher.setAttackTarget(null);
+            Compat.clearAttackTargetAndReplaceAITasks(searcher);
             cancelTasksRequiringAttackTarget(searcher.tasks);
             searcher.world.profiler.endSection();
             return false;
@@ -335,7 +335,7 @@ public class AIDynamicStealth extends EntityAIBase
     {
         if (fleeReason != FLEE_NONE) return threatPercentage > 0; //Flee degredation handled elsewhere
 
-        searcher.setAttackTarget(null);
+        Compat.clearAttackTargetAndReplaceAITasks(searcher);
 
         Threat.apply(searcher, null, serverSettings.threat.unseenTargetDegredationRate, DEG_TARGET_NOT_VISIBLE, false);
         if (Threat.getThreat(searcher) <= 0)

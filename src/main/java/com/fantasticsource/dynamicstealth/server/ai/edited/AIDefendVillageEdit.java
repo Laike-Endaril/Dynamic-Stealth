@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
@@ -81,7 +82,8 @@ public class AIDefendVillageEdit extends AITargetEdit
     @Override
     public void startExecuting()
     {
-        irongolem.setAttackTarget(villageAgressorTarget);
+        if (villageAgressorTarget == null) Compat.clearAttackTargetAndReplaceAITasks(irongolem);
+        else irongolem.setAttackTarget(villageAgressorTarget);
         super.startExecuting();
     }
 }

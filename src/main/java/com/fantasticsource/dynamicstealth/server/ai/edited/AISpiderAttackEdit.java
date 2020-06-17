@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
@@ -18,7 +19,7 @@ public class AISpiderAttackEdit extends AIAttackMeleeEdit
         Threat.ThreatData data = Threat.get(attacker);
         if (data.threatPercentage <= 0)
         {
-            attacker.setAttackTarget(null);
+            Compat.clearAttackTargetAndReplaceAITasks(attacker);
             return false;
         }
 

@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.dynamicstealth.compat.Compat;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -31,8 +32,9 @@ public class AIHurtByTargetEdit extends AITargetEdit
     @Override
     public void startExecuting()
     {
-        attacker.setAttackTarget(attacker.getRevengeTarget());
-        target = attacker.getAttackTarget();
+        target = attacker.getRevengeTarget();
+        if (target == null) Compat.clearAttackTargetAndReplaceAITasks(attacker);
+        else attacker.setAttackTarget(target);
         revengeTimerOld = attacker.getRevengeTimer();
 
         if (entityCallsForHelp) alertOthers();
@@ -66,7 +68,8 @@ public class AIHurtByTargetEdit extends AITargetEdit
 
     protected void setEntityAttackTarget(EntityCreature attacker, EntityLivingBase target)
     {
-        attacker.setAttackTarget(target);
+        if (target == null) Compat.clearAttackTargetAndReplaceAITasks(attacker);
+        else attacker.setAttackTarget(target);
         attacker.getMoveHelper().setMoveTo(target.posX, target.posY, target.posZ, attacker.getMoveHelper().getSpeed());
         attacker.getLookHelper().setLookPositionWithEntity(target, 180, 180);
     }

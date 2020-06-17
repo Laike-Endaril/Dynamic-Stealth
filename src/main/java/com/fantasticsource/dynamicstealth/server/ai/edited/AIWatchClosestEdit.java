@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
@@ -55,7 +56,7 @@ public class AIWatchClosestEdit extends EntityAIBase
             if (AITargetEdit.isSuitableTarget(living, (EntityLivingBase) target)) return true;
 
             target = null;
-            living.setAttackTarget(null);
+            Compat.clearAttackTargetAndReplaceAITasks(living);
             return false;
         }
 

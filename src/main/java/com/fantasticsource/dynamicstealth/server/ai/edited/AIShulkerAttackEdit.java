@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.dynamicstealth.compat.Compat;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.monster.EntityShulker;
@@ -63,7 +64,7 @@ public class AIShulkerAttackEdit extends EntityAIBase
                     shulker.playSound(SoundEvents.ENTITY_SHULKER_SHOOT, 2, (rand.nextFloat() - rand.nextFloat()) * 0.2F + 1);
                 }
             }
-            else shulker.setAttackTarget(null);
+            else Compat.clearAttackTargetAndReplaceAITasks(shulker);
 
             super.updateTask();
         }

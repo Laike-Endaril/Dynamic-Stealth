@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.mctools.MCTools;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -46,7 +47,7 @@ public class AIGuardianAttackEdit extends EntityAIBase
     public void resetTask()
     {
         setTargetedEntity(0);
-        guardian.setAttackTarget(null);
+        Compat.clearAttackTargetAndReplaceAITasks(guardian);
         guardian.wander.makeUpdate();
     }
 
@@ -60,7 +61,7 @@ public class AIGuardianAttackEdit extends EntityAIBase
         guardian.getNavigator().clearPath();
         guardian.getLookHelper().setLookPositionWithEntity(target, 90.0F, 90.0F);
 
-        if (!guardian.canEntityBeSeen(target)) guardian.setAttackTarget(null);
+        if (!guardian.canEntityBeSeen(target)) Compat.clearAttackTargetAndReplaceAITasks(guardian);
 
         ++tickCounter;
 
@@ -77,7 +78,7 @@ public class AIGuardianAttackEdit extends EntityAIBase
 
             target.attackEntityFrom(DamageSource.causeIndirectMagicDamage(guardian, guardian), f);
             target.attackEntityFrom(DamageSource.causeMobDamage(guardian), (float) MCTools.getAttribute(guardian, SharedMonsterAttributes.ATTACK_DAMAGE, 0));
-            guardian.setAttackTarget(null);
+            Compat.clearAttackTargetAndReplaceAITasks(guardian);
         }
     }
 }

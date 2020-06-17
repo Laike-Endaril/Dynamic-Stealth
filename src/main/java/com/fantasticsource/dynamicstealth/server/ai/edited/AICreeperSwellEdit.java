@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.dynamicstealth.compat.Compat;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -57,7 +58,8 @@ public class AICreeperSwellEdit extends EntityAIBase
     @Override
     public void resetTask()
     {
-        if (!AITargetEdit.isSuitableTarget(creeper, target)) creeper.setAttackTarget(null);
+        if (!AITargetEdit.isSuitableTarget(creeper, target)) Compat.clearAttackTargetAndReplaceAITasks(creeper);
+
 
         target = null;
         creeper.setCreeperState(-1);

@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import com.google.common.base.Predicate;
 import net.minecraft.entity.EntityLivingBase;
@@ -57,7 +58,8 @@ public class AINearestAttackableTargetEdit<T extends EntityLivingBase> extends A
     @Override
     public void startExecuting()
     {
-        attacker.setAttackTarget(targetEntity);
+        if (targetEntity == null) Compat.clearAttackTargetAndReplaceAITasks(attacker);
+        else attacker.setAttackTarget(targetEntity);
         super.startExecuting();
     }
 }
