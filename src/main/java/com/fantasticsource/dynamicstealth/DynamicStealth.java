@@ -131,7 +131,11 @@ public class DynamicStealth
     @SubscribeEvent
     public static void saveConfig(ConfigChangedEvent.OnConfigChangedEvent event)
     {
-        if (event.getModID().equals(MODID)) ConfigManager.sync(MODID, Config.Type.INSTANCE);
+        if (event.getModID().equals(MODID))
+        {
+            ConfigManager.sync(MODID, Config.Type.INSTANCE);
+            Compat.init();
+        }
     }
 
     @SubscribeEvent
@@ -804,6 +808,7 @@ public class DynamicStealth
     public void postInit(FMLPostInitializationEvent event)
     {
         //Compat init
+        Compat.init();
         if (Loader.isModLoaded("neat")) Compat.neat = true;
         if (Loader.isModLoaded("testdummy")) Compat.testdummy = true;
         if (Loader.isModLoaded("statues")) Compat.statues = true;
