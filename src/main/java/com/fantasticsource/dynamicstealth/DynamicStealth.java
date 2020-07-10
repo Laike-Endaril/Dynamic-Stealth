@@ -52,6 +52,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -86,8 +87,6 @@ import noppes.npcs.api.entity.ICustomNpc;
 
 import java.util.Set;
 
-import org.apache.logging.log4j.Logger;
-
 import static com.fantasticsource.dynamicstealth.common.Network.WRAPPER;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.dynamicstealth.server.threat.Threat.THREAT_TYPE.*;
@@ -101,8 +100,6 @@ public class DynamicStealth
     public static final String CONFIG_VERSION = "1.12.2.095"; //The lowest compatible config version
 
     public static final TrigLookupTable TRIG_TABLE = new TrigLookupTable(1024);
-
-    public static Logger logger;
 
     private static EntityLivingBase victimThreatTarget = null;
 
@@ -798,7 +795,6 @@ public class DynamicStealth
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) throws Exception
     {
-        logger = event.getModLog();
         ConfigHandler.update();
 
         Network.init();
@@ -828,9 +824,10 @@ public class DynamicStealth
             try
             {
                 Compat.bibliocraftArmorStandEntity = Class.forName("jds.bibliocraft.entity.AbtractSteve");
-            } catch (ClassNotFoundException e)
+            }
+            catch (ClassNotFoundException e)
             {
-                logger.warn("Bibliocraft compat enabled but could not find AbtractSteve!");
+                System.err.println(TextFormatting.RED + "Bibliocraft is loaded, but could not find jds.bibliocraft.entity.AbtractSteve");
             }
         }
 

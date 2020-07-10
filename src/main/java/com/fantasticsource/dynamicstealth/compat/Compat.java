@@ -14,6 +14,8 @@ import java.util.Set;
 
 public class Compat
 {
+    public static Class bibliocraftArmorStandEntity;
+
     public static boolean
             customnpcs = false,
             neat = false,
@@ -22,7 +24,6 @@ public class Compat
             conarm = false,
             testdummy = false;
 
-    public static Class<?> bibliocraftArmorStandEntity;
 
     public static void cancelTasksRequiringAttackTarget(EntityAITasks tasks)
     {
