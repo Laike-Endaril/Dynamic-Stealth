@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class Compat
 {
-    public static Class bibliocraftArmorStandEntity;
+    public static Class bibliocraftArmorStandEntity = null;
 
     public static boolean
             customnpcs = false,
