@@ -22,6 +22,7 @@ public class Compat
             conarm = false,
             testdummy = false;
 
+    public static Class<?> bibliocraftArmorStandEntity;
 
     public static void cancelTasksRequiringAttackTarget(EntityAITasks tasks)
     {

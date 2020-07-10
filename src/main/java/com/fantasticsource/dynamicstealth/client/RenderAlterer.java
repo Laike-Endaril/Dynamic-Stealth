@@ -152,7 +152,7 @@ public class RenderAlterer
 
             //Hard stops
             if (Compat.statues && livingBase.getClass().getName().contains("party.lemons.statue")) return;
-
+            if (livingBase.getClass() == Compat.bibliocraftArmorStandEntity) return;
 
             //Remove glow effect if cached
             if (glowCache.contains(livingBase))
