@@ -33,7 +33,7 @@ public class AIOwnerHurtTargetEdit extends AITargetEdit
     @Override
     public void startExecuting()
     {
-        if (ownerEnemy == null) Compat.clearAttackTargetAndReplaceAITasks(attacker);
+        if (ownerEnemy == null) Compat.clearAttackTargetAndCancelBadTasks(attacker);
         else attacker.setAttackTarget(ownerEnemy);
 
         EntityLivingBase entitylivingbase = tameable.getOwner();

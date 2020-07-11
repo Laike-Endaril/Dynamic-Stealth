@@ -30,7 +30,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import static com.fantasticsource.dynamicstealth.DynamicStealth.TRIG_TABLE;
-import static com.fantasticsource.dynamicstealth.compat.Compat.cancelTasksRequiringAttackTarget;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.dynamicstealth.server.senses.hearing.Communication.warn;
 import static com.fantasticsource.dynamicstealth.server.threat.Threat.THREAT_TYPE.*;
@@ -234,8 +233,7 @@ public class AIDynamicStealth extends EntityAIBase
             }
 
             //No suitable target, old or new, and threat is <= 0
-            Compat.clearAttackTargetAndReplaceAITasks(searcher);
-            cancelTasksRequiringAttackTarget(searcher.tasks);
+            Compat.clearAttackTargetAndCancelBadTasks(searcher);
             searcher.world.profiler.endSection();
             return false;
         }
@@ -266,7 +264,7 @@ public class AIDynamicStealth extends EntityAIBase
             }
 
             //No suitable target, old or new, but threat is > 0
-            cancelTasksRequiringAttackTarget(searcher.tasks);
+            Compat.clearAttackTargetAndCancelBadTasks(searcher);
             searcher.world.profiler.endSection();
             return unseenTargetDegredation(threatPercentage);
         }
@@ -326,7 +324,7 @@ public class AIDynamicStealth extends EntityAIBase
         }
 
         //Target's current position is unknown
-        cancelTasksRequiringAttackTarget(searcher.tasks);
+        Compat.clearAttackTargetAndCancelBadTasks(searcher);
         searcher.world.profiler.endSection();
         return unseenTargetDegredation(threatPercentage);
     }
@@ -335,7 +333,7 @@ public class AIDynamicStealth extends EntityAIBase
     {
         if (fleeReason != FLEE_NONE) return threatPercentage > 0; //Flee degredation handled elsewhere
 
-        Compat.clearAttackTargetAndReplaceAITasks(searcher);
+        Compat.clearAttackTargetAndCancelBadTasks(searcher);
 
         Threat.apply(searcher, null, serverSettings.threat.unseenTargetDegredationRate, DEG_TARGET_NOT_VISIBLE, false);
         if (Threat.getThreat(searcher) <= 0)

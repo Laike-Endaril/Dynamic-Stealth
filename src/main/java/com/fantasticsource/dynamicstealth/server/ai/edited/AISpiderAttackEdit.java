@@ -19,7 +19,7 @@ public class AISpiderAttackEdit extends AIAttackMeleeEdit
         Threat.ThreatData data = Threat.get(attacker);
         if (data.threatPercentage <= 0)
         {
-            Compat.clearAttackTargetAndReplaceAITasks(attacker);
+            Compat.clearAttackTargetAndCancelBadTasks(attacker);
             return false;
         }
 

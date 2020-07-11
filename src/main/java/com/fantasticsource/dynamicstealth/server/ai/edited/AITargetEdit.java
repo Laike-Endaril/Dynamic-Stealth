@@ -97,7 +97,7 @@ public abstract class AITargetEdit extends EntityAIBase
     @Override
     public void resetTask()
     {
-        Compat.clearAttackTargetAndReplaceAITasks(attacker);
+        Compat.clearAttackTargetAndCancelBadTasks(attacker);
         target = null;
     }
 

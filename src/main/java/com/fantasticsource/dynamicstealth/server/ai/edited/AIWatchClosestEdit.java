@@ -56,7 +56,7 @@ public class AIWatchClosestEdit extends EntityAIBase
             if (AITargetEdit.isSuitableTarget(living, (EntityLivingBase) target)) return true;
 
             target = null;
-            Compat.clearAttackTargetAndReplaceAITasks(living);
+            Compat.clearAttackTargetAndCancelBadTasks(living);
             return false;
         }
 

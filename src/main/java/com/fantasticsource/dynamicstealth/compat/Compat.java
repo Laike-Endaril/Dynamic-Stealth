@@ -2,7 +2,6 @@ package com.fantasticsource.dynamicstealth.compat;
 
 import com.fantasticsource.dynamicstealth.config.DynamicStealthConfig;
 import com.fantasticsource.dynamicstealth.server.ai.edited.AIAttackMeleeEdit;
-import com.fantasticsource.mctools.NPEAttackTargetTaskHolder;
 import com.fantasticsource.tools.Tools;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
@@ -11,7 +10,6 @@ import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraftforge.fml.common.Loader;
 
 import java.util.HashSet;
-import java.util.Set;
 
 public class Compat
 {
@@ -28,7 +26,7 @@ public class Compat
             testdummy = false;
 
 
-    public static void cancelTasksRequiringAttackTarget(EntityAITasks tasks)
+    protected static void cancelTasksRequiringAttackTarget(EntityAITasks tasks)
     {
         for (EntityAITasks.EntityAITaskEntry task : tasks.taskEntries)
         {
@@ -43,7 +41,7 @@ public class Compat
     }
 
 
-    private static boolean badNullTargetHandling(EntityAIBase ai)
+    protected static boolean badNullTargetHandling(EntityAIBase ai)
     {
         if (ai instanceof EntityAIAttackMelee && !(ai instanceof AIAttackMeleeEdit)) return true;
 
@@ -71,34 +69,10 @@ public class Compat
     }
 
 
-    public static void replaceNPEAttackTargetTasks(EntityLiving living)
-    {
-        EntityAITasks taskList = living.targetTasks;
-        Set<EntityAITasks.EntityAITaskEntry> entrySet = taskList.taskEntries;
-        for (EntityAITasks.EntityAITaskEntry task : entrySet.toArray(new EntityAITasks.EntityAITaskEntry[0]))
-        {
-            if (badNullTargetHandling(task.action))
-            {
-                taskList.addTask(task.priority, new NPEAttackTargetTaskHolder(living, task.action));
-                taskList.removeTask(task.action);
-            }
-        }
-
-        taskList = living.tasks;
-        entrySet = taskList.taskEntries;
-        for (EntityAITasks.EntityAITaskEntry task : entrySet.toArray(new EntityAITasks.EntityAITaskEntry[0]))
-        {
-            if (badNullTargetHandling(task.action))
-            {
-                taskList.addTask(task.priority, new NPEAttackTargetTaskHolder(living, task.action));
-                taskList.removeTask(task.action);
-            }
-        }
-    }
-
-    public static void clearAttackTargetAndReplaceAITasks(EntityLiving living)
+    public static void clearAttackTargetAndCancelBadTasks(EntityLiving living)
     {
         living.setAttackTarget(null);
-        replaceNPEAttackTargetTasks(living);
+        cancelTasksRequiringAttackTarget(living.targetTasks);
+        cancelTasksRequiringAttackTarget(living.tasks);
     }
 }

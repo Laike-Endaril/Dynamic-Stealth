@@ -47,7 +47,7 @@ public class AIGuardianAttackEdit extends EntityAIBase
     public void resetTask()
     {
         setTargetedEntity(0);
-        Compat.clearAttackTargetAndReplaceAITasks(guardian);
+        Compat.clearAttackTargetAndCancelBadTasks(guardian);
         guardian.wander.makeUpdate();
     }
 
@@ -61,7 +61,7 @@ public class AIGuardianAttackEdit extends EntityAIBase
         guardian.getNavigator().clearPath();
         guardian.getLookHelper().setLookPositionWithEntity(target, 90.0F, 90.0F);
 
-        if (!guardian.canEntityBeSeen(target)) Compat.clearAttackTargetAndReplaceAITasks(guardian);
+        if (!guardian.canEntityBeSeen(target)) Compat.clearAttackTargetAndCancelBadTasks(guardian);
 
         ++tickCounter;
 
@@ -78,7 +78,7 @@ public class AIGuardianAttackEdit extends EntityAIBase
 
             target.attackEntityFrom(DamageSource.causeIndirectMagicDamage(guardian, guardian), f);
             target.attackEntityFrom(DamageSource.causeMobDamage(guardian), (float) MCTools.getAttribute(guardian, SharedMonsterAttributes.ATTACK_DAMAGE, 0));
-            Compat.clearAttackTargetAndReplaceAITasks(guardian);
+            Compat.clearAttackTargetAndCancelBadTasks(guardian);
         }
     }
 }

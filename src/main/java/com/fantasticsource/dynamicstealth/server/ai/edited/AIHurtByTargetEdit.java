@@ -33,7 +33,7 @@ public class AIHurtByTargetEdit extends AITargetEdit
     public void startExecuting()
     {
         target = attacker.getRevengeTarget();
-        if (target == null) Compat.clearAttackTargetAndReplaceAITasks(attacker);
+        if (target == null) Compat.clearAttackTargetAndCancelBadTasks(attacker);
         else attacker.setAttackTarget(target);
         revengeTimerOld = attacker.getRevengeTimer();
 
@@ -68,7 +68,7 @@ public class AIHurtByTargetEdit extends AITargetEdit
 
     protected void setEntityAttackTarget(EntityCreature attacker, EntityLivingBase target)
     {
-        if (target == null) Compat.clearAttackTargetAndReplaceAITasks(attacker);
+        if (target == null) Compat.clearAttackTargetAndCancelBadTasks(attacker);
         else attacker.setAttackTarget(target);
         attacker.getMoveHelper().setMoveTo(target.posX, target.posY, target.posZ, attacker.getMoveHelper().getSpeed());
         attacker.getLookHelper().setLookPositionWithEntity(target, 180, 180);

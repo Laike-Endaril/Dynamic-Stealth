@@ -585,14 +585,14 @@ public class DynamicStealth
                 {
                     //Attacked while fleeing
                     if (serverSettings.ai.flee.increaseOnDamage) Threat.apply(target, attacker, event.getAmount(), GEN_ATTACKED_DURING_FLEE, canSee, damageSource);
-                    Compat.clearAttackTargetAndReplaceAITasks(target);
+                    Compat.clearAttackTargetAndCancelBadTasks(target);
                     stealthAI.restart(perceivedPos);
                 }
                 else
                 {
                     //Attacked while not fleeing
                     Threat.apply(target, attacker, event.getAmount(), GEN_ATTACKED, canSee, damageSource);
-                    if (threatTarget == null) Compat.clearAttackTargetAndReplaceAITasks(target);
+                    if (threatTarget == null) Compat.clearAttackTargetAndCancelBadTasks(target);
                     else target.setAttackTarget(threatTarget);
                     if (hasAI) stealthAI.restart(perceivedPos);
                 }
@@ -689,7 +689,6 @@ public class DynamicStealth
                 //Entity AI task replacements
                 replaceTasks(living.tasks, living);
                 replaceTasks(living.targetTasks, living);
-                Compat.replaceNPEAttackTargetTasks(living);
 
                 //Entity AI task additions
                 addTasks(living.targetTasks, living.tasks, living);

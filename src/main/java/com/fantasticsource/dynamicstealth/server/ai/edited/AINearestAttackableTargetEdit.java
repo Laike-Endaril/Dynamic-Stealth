@@ -58,7 +58,7 @@ public class AINearestAttackableTargetEdit<T extends EntityLivingBase> extends A
     @Override
     public void startExecuting()
     {
-        if (targetEntity == null) Compat.clearAttackTargetAndReplaceAITasks(attacker);
+        if (targetEntity == null) Compat.clearAttackTargetAndCancelBadTasks(attacker);
         else attacker.setAttackTarget(targetEntity);
         super.startExecuting();
     }

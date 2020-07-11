@@ -63,7 +63,7 @@ public class AIAttackMeleeEdit extends EntityAIAttackMelee
     @Override
     public void resetTask()
     {
-        if (!AITargetEdit.isSuitableTarget(attacker, attacker.getAttackTarget())) Compat.clearAttackTargetAndReplaceAITasks(attacker);
+        if (!AITargetEdit.isSuitableTarget(attacker, attacker.getAttackTarget())) Compat.clearAttackTargetAndCancelBadTasks(attacker);
         if (path != null && path.equals(attacker.getNavigator().getPath())) attacker.getNavigator().clearPath();
         path = null;
     }

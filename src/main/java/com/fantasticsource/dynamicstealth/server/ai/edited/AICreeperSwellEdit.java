@@ -58,7 +58,7 @@ public class AICreeperSwellEdit extends EntityAIBase
     @Override
     public void resetTask()
     {
-        if (!AITargetEdit.isSuitableTarget(creeper, target)) Compat.clearAttackTargetAndReplaceAITasks(creeper);
+        if (!AITargetEdit.isSuitableTarget(creeper, target)) Compat.clearAttackTargetAndCancelBadTasks(creeper);
 
 
         target = null;

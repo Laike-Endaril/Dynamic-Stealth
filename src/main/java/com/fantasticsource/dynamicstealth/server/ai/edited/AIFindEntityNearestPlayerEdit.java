@@ -54,7 +54,7 @@ public class AIFindEntityNearestPlayerEdit extends EntityAIBase
     @Override
     public void startExecuting()
     {
-        if (target == null) Compat.clearAttackTargetAndReplaceAITasks(searcher);
+        if (target == null) Compat.clearAttackTargetAndCancelBadTasks(searcher);
         else searcher.setAttackTarget(target);
         super.startExecuting();
     }
@@ -62,7 +62,7 @@ public class AIFindEntityNearestPlayerEdit extends EntityAIBase
     @Override
     public void resetTask()
     {
-        Compat.clearAttackTargetAndReplaceAITasks(searcher);
+        Compat.clearAttackTargetAndCancelBadTasks(searcher);
         super.startExecuting();
     }
 }

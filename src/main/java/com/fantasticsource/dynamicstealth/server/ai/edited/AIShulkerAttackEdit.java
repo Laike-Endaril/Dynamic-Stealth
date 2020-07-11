@@ -64,7 +64,7 @@ public class AIShulkerAttackEdit extends EntityAIBase
                     shulker.playSound(SoundEvents.ENTITY_SHULKER_SHOOT, 2, (rand.nextFloat() - rand.nextFloat()) * 0.2F + 1);
                 }
             }
-            else Compat.clearAttackTargetAndReplaceAITasks(shulker);
+            else Compat.clearAttackTargetAndCancelBadTasks(shulker);
 
             super.updateTask();
         }

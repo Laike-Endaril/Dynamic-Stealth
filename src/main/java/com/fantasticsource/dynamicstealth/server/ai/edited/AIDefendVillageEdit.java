@@ -82,7 +82,7 @@ public class AIDefendVillageEdit extends AITargetEdit
     @Override
     public void startExecuting()
     {
-        if (villageAgressorTarget == null) Compat.clearAttackTargetAndReplaceAITasks(irongolem);
+        if (villageAgressorTarget == null) Compat.clearAttackTargetAndCancelBadTasks(irongolem);
         else irongolem.setAttackTarget(villageAgressorTarget);
         super.startExecuting();
     }
