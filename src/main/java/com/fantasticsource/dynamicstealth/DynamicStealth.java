@@ -143,6 +143,9 @@ public class DynamicStealth
 
     public static void update()
     {
+        Compat.NAUGHTY.clear();
+        Compat.NICE.clear();
+
         GlobalDefaultsAndData.update();
         AttackData.update();
         HUDData.update();

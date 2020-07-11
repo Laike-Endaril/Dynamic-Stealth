@@ -10,10 +10,13 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraftforge.fml.common.Loader;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class Compat
 {
+    public static HashSet<Class> NAUGHTY = new HashSet<>(), NICE = new HashSet<>();
+
     public static Class bibliocraftArmorStandEntity = null;
 
     public static boolean
@@ -44,6 +47,11 @@ public class Compat
     {
         if (ai instanceof EntityAIAttackMelee && !(ai instanceof AIAttackMeleeEdit)) return true;
 
+        Class aiClass = ai.getClass();
+        if (NICE.contains(aiClass)) return false;
+        if (NAUGHTY.contains(aiClass)) return true;
+
+
         String aiClassname = ai.getClass().getName();
         for (String entry : DynamicStealthConfig.serverSettings.ai.addNullChecksToAI)
         {
@@ -51,9 +59,14 @@ public class Compat
             if (tokens.length != 2) continue;
             if (!Loader.isModLoaded(tokens[0].trim())) continue;
 
-            if (aiClassname.contains(tokens[1].trim())) return true;
+            if (aiClassname.contains(tokens[1].trim()))
+            {
+                NAUGHTY.add(aiClass);
+                return true;
+            }
         }
 
+        NICE.add(aiClass);
         return false;
     }
 
