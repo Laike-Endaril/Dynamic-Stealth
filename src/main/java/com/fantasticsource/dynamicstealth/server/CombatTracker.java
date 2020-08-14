@@ -54,17 +54,20 @@ public class CombatTracker
 
     public static void setSuccessfulAttackTime(EntityLivingBase livingBase, long time)
     {
+        if (GlobalDefaultsAndData.isFullBypass(livingBase)) return;
         successfulAttackTimes.put(livingBase, time);
     }
 
     public static long lastSuccessfulAttackTime(EntityLivingBase livingBase)
     {
-        if (!successfulAttackTimes.containsKey(livingBase)) return -1;
+        if (GlobalDefaultsAndData.isFullBypass(livingBase) || !successfulAttackTimes.containsKey(livingBase)) return -1;
         return successfulAttackTimes.get(livingBase);
     }
 
     public static long timeSinceLastSuccessfulAttack(EntityLivingBase livingBase)
     {
+        if (GlobalDefaultsAndData.isFullBypass(livingBase)) return Long.MAX_VALUE;
+
         long result = lastSuccessfulAttackTime(livingBase);
         return result == -1 ? Long.MAX_VALUE : currentTick() - result;
     }
@@ -77,6 +80,8 @@ public class CombatTracker
 
     public static boolean pathReachesThreatTarget(EntityLiving living, Path path)
     {
+        if (GlobalDefaultsAndData.isFullBypass(living)) return false;
+
         if (path == null) path = living.getNavigator().getPath();
         if (path == null) return false;
 
@@ -97,17 +102,20 @@ public class CombatTracker
 
     public static void setSuccessfulPathTime(EntityLivingBase livingBase, long time)
     {
+        if (GlobalDefaultsAndData.isFullBypass(livingBase)) return;
         successfulPathTimes.put(livingBase, time);
     }
 
     public static long lastSuccessfulPathTime(EntityLivingBase livingBase)
     {
-        if (!successfulPathTimes.containsKey(livingBase)) return -1;
+        if (GlobalDefaultsAndData.isFullBypass(livingBase) || !successfulPathTimes.containsKey(livingBase)) return -1;
         return successfulPathTimes.get(livingBase);
     }
 
     public static long timeSinceLastSuccessfulPath(EntityLivingBase livingBase)
     {
+        if (GlobalDefaultsAndData.isFullBypass(livingBase)) return Long.MAX_VALUE;
+
         long result = lastSuccessfulPathTime(livingBase);
         return result == -1 ? Long.MAX_VALUE : currentTick() - result;
     }
@@ -115,23 +123,31 @@ public class CombatTracker
 
     public static void setIdleTime(EntityLivingBase livingBase)
     {
+        if (GlobalDefaultsAndData.isFullBypass(livingBase)) return;
+
         idleTimes.remove(livingBase);
     }
 
     public static void setIdleTime(EntityLivingBase livingBase, long time)
     {
+        if (GlobalDefaultsAndData.isFullBypass(livingBase)) return;
+
         if (time == currentTick()) idleTimes.remove(livingBase);
         else idleTimes.put(livingBase, time);
     }
 
     public static long lastIdleTime(EntityLivingBase livingBase)
     {
+        if (GlobalDefaultsAndData.isFullBypass(livingBase)) return -1;
+
         if (!idleTimes.containsKey(livingBase)) return -1;
         return idleTimes.get(livingBase);
     }
 
     public static long timeSinceLastIdle(EntityLivingBase livingBase)
     {
+        if (GlobalDefaultsAndData.isFullBypass(livingBase)) return 0;
+
         long result = lastIdleTime(livingBase);
         return result == -1 ? 0 : currentTick() - result;
     }
@@ -139,23 +155,29 @@ public class CombatTracker
 
     public static void setNoTargetTime(EntityLivingBase livingBase)
     {
+        if (GlobalDefaultsAndData.isFullBypass(livingBase)) return;
+
         noTargetTimes.remove(livingBase);
     }
 
     public static void setNoTargetTime(EntityLivingBase livingBase, long time)
     {
+        if (GlobalDefaultsAndData.isFullBypass(livingBase)) return;
+
         if (time == currentTick()) noTargetTimes.remove(livingBase);
         else noTargetTimes.put(livingBase, time);
     }
 
     public static long lastNoTargetTime(EntityLivingBase livingBase)
     {
-        if (!noTargetTimes.containsKey(livingBase)) return -1;
+        if (GlobalDefaultsAndData.isFullBypass(livingBase) || !noTargetTimes.containsKey(livingBase)) return -1;
         return noTargetTimes.get(livingBase);
     }
 
     public static long timeSinceLastNoTarget(EntityLivingBase livingBase)
     {
+        if (GlobalDefaultsAndData.isFullBypass(livingBase)) return 0;
+
         long result = lastNoTargetTime(livingBase);
         return result == -1 ? 0 : currentTick() - result;
     }

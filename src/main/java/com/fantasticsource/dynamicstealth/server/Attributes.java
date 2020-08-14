@@ -37,6 +37,8 @@ public class Attributes
 
     public static void addAttributes(EntityLivingBase livingBase)
     {
+        if (GlobalDefaultsAndData.isFullBypass(livingBase)) return;
+
         //Add new attributes
         livingBase.getAttributeMap().registerAttribute(Attributes.THREATGEN);
         livingBase.getAttributeMap().registerAttribute(Attributes.THREATGEN_SPOTTED);

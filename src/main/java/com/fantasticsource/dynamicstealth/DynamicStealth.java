@@ -114,7 +114,6 @@ public class DynamicStealth
         Attributes.init();
 
         MinecraftForge.EVENT_BUS.register(ServerTickTimer.class);
-        MinecraftForge.EVENT_BUS.register(EntitySightData.class);
         MinecraftForge.EVENT_BUS.register(DynamicStealth.class);
         MinecraftForge.EVENT_BUS.register(Network.class);
         MinecraftForge.EVENT_BUS.register(Potions.class);
@@ -364,45 +363,44 @@ public class DynamicStealth
                 if (entity instanceof EntityLivingBase)
                 {
                     witness = (EntityLivingBase) entity;
-                    if (witness.isEntityAlive())
-                    {
-                        if (Threat.getTarget(witness) == victim)
-                        {
-                            if (Sight.canSee(witness, victim, true))
-                            {
-                                if (MCTools.isOwned(witness)) Threat.set(witness, null, 0);
-                                else Threat.clearTarget(witness);
-                                Communication.notifyDead(witness, victim);
-                            }
-                        }
-                        else if (HelperSystem.isAlly(witness, victim))
-                        {
-                            if (Sight.canSee(witness, victim, false))
-                            {
-                                //Witness saw victim die
-                                BlockPos threatPos;
-                                if (Sight.canSee(witness, source, true))
-                                {
-                                    //Witness saw everything
-                                    wasSeen = true;
-                                    threatPos = killer.getPosition();
-                                }
-                                else
-                                {
-                                    //Witness saw ally die without seeing killer
-                                    threatPos = victim.getPosition();
-                                }
-                                Threat.apply(witness, killer, serverSettings.threat.allyKilledThreat, GEN_ALLY_KILLED, wasSeen);
-                                Communication.warn(witness, killer, threatPos, wasSeen);
+                    if (GlobalDefaultsAndData.isFullBypass(witness) || !witness.isEntityAlive()) continue;
 
-                                if (witness instanceof EntityLiving)
+                    if (Threat.getTarget(witness) == victim)
+                    {
+                        if (Sight.canSee(witness, victim, true))
+                        {
+                            if (MCTools.isOwned(witness)) Threat.set(witness, null, 0);
+                            else Threat.clearTarget(witness);
+                            Communication.notifyDead(witness, victim);
+                        }
+                    }
+                    else if (HelperSystem.isAlly(witness, victim))
+                    {
+                        if (Sight.canSee(witness, victim, false))
+                        {
+                            //Witness saw victim die
+                            BlockPos threatPos;
+                            if (Sight.canSee(witness, source, true))
+                            {
+                                //Witness saw everything
+                                wasSeen = true;
+                                threatPos = killer.getPosition();
+                            }
+                            else
+                            {
+                                //Witness saw ally die without seeing killer
+                                threatPos = victim.getPosition();
+                            }
+                            Threat.apply(witness, killer, serverSettings.threat.allyKilledThreat, GEN_ALLY_KILLED, wasSeen);
+                            Communication.warn(witness, killer, threatPos, wasSeen);
+
+                            if (witness instanceof EntityLiving)
+                            {
+                                AIDynamicStealth stealthAI = AIDynamicStealth.getStealthAI((EntityLiving) witness);
+                                if (stealthAI != null)
                                 {
-                                    AIDynamicStealth stealthAI = AIDynamicStealth.getStealthAI((EntityLiving) witness);
-                                    if (stealthAI != null)
-                                    {
-                                        stealthAI.fleeIfYouShould(0);
-                                        if (stealthAI.isFleeing()) stealthAI.lastKnownPosition = threatPos;
-                                    }
+                                    stealthAI.fleeIfYouShould(0);
+                                    if (stealthAI.isFleeing()) stealthAI.lastKnownPosition = threatPos;
                                 }
                             }
                         }
@@ -410,7 +408,7 @@ public class DynamicStealth
                 }
             }
 
-            if (!wasSeen && !EntityThreatData.isPassive(victim))
+            if (!wasSeen && !EntityThreatData.isPassive(victim) && !GlobalDefaultsAndData.isFullBypass(killer))
             {
                 //Was melee and target's friends didn't see
                 if (!Sight.canSee(victim, source, true))
@@ -443,6 +441,7 @@ public class DynamicStealth
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void entityDeathPost(LivingDropsEvent event)
     {
+        if (GlobalDefaultsAndData.isFullBypass(event.getEntityLiving())) return;
         event.getEntityLiving().clearActivePotions();
     }
 
@@ -467,30 +466,30 @@ public class DynamicStealth
             {
                 if (serverSettings.interactions.attack.removeInvisibilityOnHit)
                 {
-                    if (!(attacker instanceof FakePlayer)) attacker.removePotionEffect(MobEffects.INVISIBILITY);
-                    victim.removePotionEffect(MobEffects.INVISIBILITY);
+                    if (!(attacker instanceof FakePlayer) && !GlobalDefaultsAndData.isFullBypass(attacker)) attacker.removePotionEffect(MobEffects.INVISIBILITY);
+                    if (!GlobalDefaultsAndData.isFullBypass(victim)) victim.removePotionEffect(MobEffects.INVISIBILITY);
                 }
                 if (serverSettings.interactions.attack.removeBlindnessOnHit)
                 {
-                    if (!(attacker instanceof FakePlayer)) attacker.removePotionEffect(MobEffects.BLINDNESS);
-                    victim.removePotionEffect(MobEffects.BLINDNESS);
+                    if (!(attacker instanceof FakePlayer) && !GlobalDefaultsAndData.isFullBypass(attacker)) attacker.removePotionEffect(MobEffects.BLINDNESS);
+                    if (!GlobalDefaultsAndData.isFullBypass(victim)) victim.removePotionEffect(MobEffects.BLINDNESS);
                 }
             }
             else
             {
                 if (serverSettings.interactions.rangedAttack.removeInvisibilityOnHit)
                 {
-                    if (!(attacker instanceof FakePlayer)) attacker.removePotionEffect(MobEffects.INVISIBILITY);
-                    victim.removePotionEffect(MobEffects.INVISIBILITY);
+                    if (!(attacker instanceof FakePlayer) && !GlobalDefaultsAndData.isFullBypass(attacker)) attacker.removePotionEffect(MobEffects.INVISIBILITY);
+                    if (!GlobalDefaultsAndData.isFullBypass(victim)) victim.removePotionEffect(MobEffects.INVISIBILITY);
                 }
                 if (serverSettings.interactions.rangedAttack.removeBlindnessOnHit)
                 {
-                    if (!(attacker instanceof FakePlayer)) attacker.removePotionEffect(MobEffects.BLINDNESS);
-                    victim.removePotionEffect(MobEffects.BLINDNESS);
+                    if (!(attacker instanceof FakePlayer) && !GlobalDefaultsAndData.isFullBypass(attacker)) attacker.removePotionEffect(MobEffects.BLINDNESS);
+                    if (!GlobalDefaultsAndData.isFullBypass(victim)) victim.removePotionEffect(MobEffects.BLINDNESS);
                 }
             }
 
-            if (isMelee && attacker.isEntityAlive() && !(attacker instanceof FakePlayer))
+            if (isMelee && attacker.isEntityAlive() && !(attacker instanceof FakePlayer) && !GlobalDefaultsAndData.isFullBypass(attacker))
             {
                 //Normal attacks (melee only)
                 ItemStack itemStack = attacker.getHeldItemMainhand();
@@ -503,9 +502,12 @@ public class DynamicStealth
                 {
                     attacker.addPotionEffect(new PotionEffect(potionEffect));
                 }
-                for (PotionEffect potionEffect : weaponEntry.victimEffects)
+                if (!GlobalDefaultsAndData.isFullBypass(victim))
                 {
-                    victim.addPotionEffect(new PotionEffect(potionEffect));
+                    for (PotionEffect potionEffect : weaponEntry.victimEffects)
+                    {
+                        victim.addPotionEffect(new PotionEffect(potionEffect));
+                    }
                 }
 
                 if (weaponEntry.consumeItem && !(attacker instanceof EntityPlayer && ((EntityPlayer) attacker).capabilities.isCreativeMode) && !itemStack.getItem().equals(Items.AIR)) itemStack.grow(-1);
@@ -526,9 +528,12 @@ public class DynamicStealth
                         {
                             attacker.addPotionEffect(new PotionEffect(potionEffect));
                         }
-                        for (PotionEffect potionEffect : weaponEntry.victimEffects)
+                        if (!GlobalDefaultsAndData.isFullBypass(victim))
                         {
-                            victim.addPotionEffect(new PotionEffect(potionEffect));
+                            for (PotionEffect potionEffect : weaponEntry.victimEffects)
+                            {
+                                victim.addPotionEffect(new PotionEffect(potionEffect));
+                            }
                         }
 
                         if (weaponEntry.consumeItem && !(attacker instanceof EntityPlayer && ((EntityPlayer) attacker).capabilities.isCreativeMode) && !itemStack.getItem().equals(Items.AIR)) itemStack.grow(-1);
@@ -549,9 +554,9 @@ public class DynamicStealth
         Entity source = damageSource.getTrueSource();
         if (source == null) source = damageSource.getImmediateSource();
 
-        if (targetBase instanceof EntityLiving)
+        if (targetBase instanceof EntityLiving && !GlobalDefaultsAndData.isFullBypass(targetBase))
         {
-            EntityLiving target = (EntityLiving) targetBase;
+            EntityLiving victim = (EntityLiving) targetBase;
 
             if (source instanceof EntityLivingBase)
             {
@@ -559,41 +564,41 @@ public class DynamicStealth
 
 
                 //Look toward damage, check sight, and set perceived position
-                makeLivingLookTowardEntity(target, attacker);
-                boolean canSee = Sight.canSee(target, attacker, true, false, false);
+                makeLivingLookTowardEntity(victim, attacker);
+                boolean canSee = Sight.canSee(victim, attacker, true, false, false);
                 BlockPos perceivedPos = attacker.getPosition();
                 if (!canSee)
                 {
-                    int distance = (int) target.getDistance(attacker);
+                    int distance = (int) victim.getDistance(attacker);
                     MCTools.randomPos(perceivedPos, Tools.min(distance >> 1, 7), Tools.min(distance >> 2, 4));
                 }
 
 
                 //Warn others (for both attacker and target)
-                Communication.warn(target, attacker, perceivedPos, canSee);
-                Communication.warn(attacker, target, target.getPosition(), true);
+                Communication.warn(victim, attacker, perceivedPos, canSee);
+                Communication.warn(attacker, victim, victim.getPosition(), true);
 
 
                 //Threat, AI, and vanilla attack target
-                AIDynamicStealth stealthAI = AIDynamicStealth.getStealthAI(target);
+                AIDynamicStealth stealthAI = AIDynamicStealth.getStealthAI(victim);
                 boolean hasAI = stealthAI != null;
 
-                Threat.ThreatData threatData = Threat.get(target);
+                Threat.ThreatData threatData = Threat.get(victim);
                 EntityLivingBase threatTarget = threatData.target;
 
                 if (hasAI && (stealthAI.isFleeing() || stealthAI.getMode() == AIDynamicStealth.MODE_COWER))
                 {
                     //Attacked while fleeing
-                    if (serverSettings.ai.flee.increaseOnDamage) Threat.apply(target, attacker, event.getAmount(), GEN_ATTACKED_DURING_FLEE, canSee, damageSource);
-                    Compat.clearAttackTargetAndCancelBadTasks(target);
+                    if (serverSettings.ai.flee.increaseOnDamage) Threat.apply(victim, attacker, event.getAmount(), GEN_ATTACKED_DURING_FLEE, canSee, damageSource);
+                    Compat.clearAttackTargetAndCancelBadTasks(victim);
                     stealthAI.restart(perceivedPos);
                 }
                 else
                 {
                     //Attacked while not fleeing
-                    Threat.apply(target, attacker, event.getAmount(), GEN_ATTACKED, canSee, damageSource);
-                    if (threatTarget == null) Compat.clearAttackTargetAndCancelBadTasks(target);
-                    else target.setAttackTarget(threatTarget);
+                    Threat.apply(victim, attacker, event.getAmount(), GEN_ATTACKED, canSee, damageSource);
+                    if (threatTarget == null) Compat.clearAttackTargetAndCancelBadTasks(victim);
+                    else victim.setAttackTarget(threatTarget);
                     if (hasAI) stealthAI.restart(perceivedPos);
                 }
 
@@ -618,6 +623,7 @@ public class DynamicStealth
 
     public static void makeLivingLookTowardEntity(EntityLiving living, Entity target)
     {
+        if (GlobalDefaultsAndData.isFullBypass(living)) return;
         if (Compat.testdummy && living.getClass().getName().equals("boni.dummy.EntityDummy")) return;
 
         Vec3d pos1 = living.getPositionVector().add(new Vec3d(0, living.getEyeHeight(), 0));
@@ -651,7 +657,7 @@ public class DynamicStealth
     public static void entityConstructing(EntityEvent.EntityConstructing event)
     {
         Entity entity = event.getEntity();
-        if (entity instanceof EntityLivingBase)
+        if (entity instanceof EntityLivingBase && !GlobalDefaultsAndData.isFullBypass((EntityLivingBase) entity))
         {
             //Add new stealth-related attributes
             Attributes.addAttributes((EntityLivingBase) entity);
@@ -670,6 +676,8 @@ public class DynamicStealth
 
     public static void livingJoinWorld(EntityLiving living)
     {
+        if (GlobalDefaultsAndData.isFullBypass(living)) return;
+
         //Set the new senses handler for all living entities (not including players)
         try
         {
@@ -706,6 +714,8 @@ public class DynamicStealth
 
     private static void replaceTasks(EntityAITasks tasks, EntityLiving living)
     {
+        if (GlobalDefaultsAndData.isFullBypass(living)) return;
+
         Set<EntityAITasks.EntityAITaskEntry> taskSet = tasks.taskEntries;
         EntityAITasks.EntityAITaskEntry[] taskArray = new EntityAITasks.EntityAITaskEntry[taskSet.size()];
         taskSet.toArray(taskArray);
@@ -782,6 +792,8 @@ public class DynamicStealth
 
     private static void addTasks(EntityAITasks targetTasks, EntityAITasks tasks, EntityLiving living)
     {
+        if (GlobalDefaultsAndData.isFullBypass(living)) return;
+
         if (!EntityThreatData.bypassesThreat(living))
         {
             tasks.addTask(-7777777, AIDynamicStealth.getInstance(living));
@@ -800,7 +812,10 @@ public class DynamicStealth
         ConfigHandler.update();
 
         Network.init();
+        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+        {
 //        Keys.init(event); TODO
+        }
     }
 
     @EventHandler

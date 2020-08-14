@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.senses.hearing;
 
+import com.fantasticsource.dynamicstealth.server.GlobalDefaultsAndData;
 import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
@@ -57,6 +58,7 @@ public class Communication
     //Warn others of threat
     public static void warn(EntityLivingBase warner, EntityLivingBase danger, BlockPos dangerPos, boolean sawDanger)
     {
+        if (GlobalDefaultsAndData.isFullBypass(warner)) return;
         warners.add(new WarnData(warner, danger, dangerPos, sawDanger));
     }
 

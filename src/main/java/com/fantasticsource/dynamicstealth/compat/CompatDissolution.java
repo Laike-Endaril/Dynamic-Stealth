@@ -33,7 +33,7 @@ public class CompatDissolution
             //Clear threat
             Threat.setThreat(livingBase, 0);
 
-            //Completely wipe ai by recreating it
+            //Completely wipe DS AI by recreating it
             if (livingBase instanceof EntityLiving)
             {
                 EntityLiving living = (EntityLiving) livingBase;

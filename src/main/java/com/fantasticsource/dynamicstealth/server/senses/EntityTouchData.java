@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.senses;
 
+import com.fantasticsource.dynamicstealth.server.GlobalDefaultsAndData;
 import com.fantasticsource.mctools.MCTools;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityArmorStand;
@@ -24,6 +25,7 @@ public class EntityTouchData
 
     public static boolean canFeelTouch(EntityLivingBase feeler)
     {
+        if (GlobalDefaultsAndData.isFullBypass(feeler)) return false;
         if (feeler instanceof EntityArmorStand || feeler instanceof EntityBat || feeler instanceof FakePlayer) return false;
 
         return MCTools.entityMatchesMap(feeler, unfeelingEntities);
