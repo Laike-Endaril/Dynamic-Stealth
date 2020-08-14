@@ -21,6 +21,7 @@ public class Compat
             customnpcs = false,
             neat = false,
             statues = false,
+            iceandfire = false,
             dissolution = false,
             conarm = false,
             testdummy = false;

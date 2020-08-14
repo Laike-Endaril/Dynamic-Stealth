@@ -152,6 +152,18 @@ public class RenderAlterer
 
             //Hard stops
             if (Compat.statues && livingBase.getClass().getName().contains("party.lemons.statue")) return;
+            if (Compat.iceandfire)
+            {
+                Render render = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(livingBase);
+                if (render instanceof RenderLivingBase)
+                {
+                    List<LayerRenderer> list = ((RenderLivingBase) render).layerRenderers;
+                    for (LayerRenderer layer : list.toArray(new LayerRenderer[0]))
+                    {
+                        if (layer.getClass().getSimpleName().equals("LayerStoneEntity")) return;
+                    }
+                }
+            }
             if (livingBase.getClass() == Compat.bibliocraftArmorStandEntity) return;
 
 
@@ -219,6 +231,19 @@ public class RenderAlterer
             EntityLivingBase livingBase = event.getEntity();
 
             //Hard stops
+            if (Compat.iceandfire && livingBase.getClass().getName().contains("iceandfire"))
+            {
+                Render render = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(livingBase);
+                if (render instanceof RenderLivingBase)
+                {
+                    List<LayerRenderer> list = ((RenderLivingBase) render).layerRenderers;
+                    for (LayerRenderer layer : list.toArray(new LayerRenderer[0]))
+                    {
+                        if (layer.getClass().getSimpleName().equals("LayerStoneEntity")) return;
+                    }
+                }
+            }
+
             if (Compat.statues && livingBase.getClass().getName().contains("party.lemons.statue")) return;
 
 
