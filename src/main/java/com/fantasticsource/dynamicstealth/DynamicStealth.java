@@ -657,7 +657,7 @@ public class DynamicStealth
     public static void entityConstructing(EntityEvent.EntityConstructing event)
     {
         Entity entity = event.getEntity();
-        if (entity instanceof EntityLivingBase && !GlobalDefaultsAndData.isFullBypass((EntityLivingBase) entity))
+        if (entity instanceof EntityLivingBase)
         {
             //Add new stealth-related attributes
             Attributes.addAttributes((EntityLivingBase) entity);

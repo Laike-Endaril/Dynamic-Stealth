@@ -1,11 +1,12 @@
 package com.fantasticsource.dynamicstealth.server.senses.hearing;
 
-import com.fantasticsource.dynamicstealth.server.Attributes;
 import com.fantasticsource.mctools.ImprovedRayTracing;
+import com.fantasticsource.mctools.MCTools;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.Vec3d;
 
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
+import static com.fantasticsource.dynamicstealth.server.Attributes.HEARING;
 
 public class Hearing
 {
@@ -20,7 +21,7 @@ public class Hearing
 
     public static double hearingRangePercentage(EntityLivingBase entity, Vec3d soundPos)
     {
-        double range = entity.getEntityAttribute(Attributes.HEARING).getAttributeValue();
+        double range = MCTools.getAttribute(entity, HEARING);
         double percent = range * 0.01;
         if (ImprovedRayTracing.isUnobstructed(entity.world, new Vec3d(entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ), soundPos, range, true)) return percent;
         return percent * serverSettings.senses.hearing.noLOSMultiplier;
