@@ -261,7 +261,7 @@ public class Sight
             }
             else if (searcher instanceof EntityLiving)
             {
-                if (isAggressive && ((EntityPlayer) target).capabilities.isCreativeMode) return 777;
+                if (isAggressive && (((EntityPlayer) target).capabilities.isCreativeMode || ((EntityPlayer) target).isSpectator())) return 777;
             }
         }
         if (target instanceof EntityDragon || target instanceof EntityWither) return -777;
