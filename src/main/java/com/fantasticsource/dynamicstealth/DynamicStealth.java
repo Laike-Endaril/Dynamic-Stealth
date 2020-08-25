@@ -630,6 +630,7 @@ public class DynamicStealth
         Vec3d pos2 = target.getPositionVector().add(new Vec3d(0, target.height * 0.5, 0));
 
         float fYaw = (float) MCTools.getYawDeg(pos1, pos2, TRIG_TABLE);
+        living.rotationYaw = fYaw;
         living.rotationYawHead = fYaw;
 
         living.rotationPitch = (float) MCTools.getPitchDeg(pos1, pos2, TRIG_TABLE);

@@ -28,6 +28,6 @@ public class EntityTouchData
         if (GlobalDefaultsAndData.isFullBypass(feeler)) return false;
         if (feeler instanceof EntityArmorStand || feeler instanceof EntityBat || feeler instanceof FakePlayer) return false;
 
-        return MCTools.entityMatchesMap(feeler, unfeelingEntities);
+        return !MCTools.entityMatchesMap(feeler, unfeelingEntities);
     }
 }
