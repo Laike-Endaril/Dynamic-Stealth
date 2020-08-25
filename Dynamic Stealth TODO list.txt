@@ -1,17 +1,15 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+Can probably combine the two below into a single AI task...
+...Replace EntityAILookIdle with a new version that has gradual head rotation, instead of just removing it
+...Change "wandering" AI so that it can't instantly flip a 180 (force it to turn gradually before moving in the chosen direction)
+
 Add ally groups for helper system config
 
 Mob flee speeds...
 ...fine-tune
 ...add config for general multiplier
 ...add config for entity-specific flee speeds
-
-Add configs for HP element...
-...whether current is shown
-...whether max is shown (requires current)
-...whether % is shown
-...whether bar is shown (add bar render)
 
 Per-entity config for whether the entity's attacks should be prevented if the victim is not within their FOV (request from gua12ab on curseforge)
 
@@ -35,10 +33,6 @@ Make the difference between "barely unseen" and "barely seen" on the stealth gau
 
 Alter weapon tooltips to reflect settings for normal attacks and stealth attacks...
 ...requires sending clients data for attacks, based on server settings
-
-
-
-Start making some of those tutorial videos
 
 
 
@@ -70,8 +64,6 @@ Fix leashes not rendering sometimes (not a vanilla bug)...
 Fix "opaque flashing" of mobs on the edge of vision due to no visibility data -> defaulting to full visibility...
 ...occasionally happens on fade-in (rare)
 ...don't think it ever happens on fade-out anymore
-
-HUD elements do not display in "fast" graphics mode...not that anyone uses fast graphics mode normally
 
 
 
@@ -112,8 +104,6 @@ Add lang keys for all println() calls (make sure to use deprecated I18n, not the
 Add disguise system and change mob heads so they use it instead
 Add other mob heads to disguise system
 
-Add a natural soul sight filter for CNPC factions
-
 
 
 KEYBOUND ACTIONS ============================================================================================================================================================================================================
@@ -134,14 +124,6 @@ Add config option for "Can See Through" Blocks
 
 Add entity-specific filter for OPHUD
 Add entity-specific filter for targeting HUD
-
-
-
-AI ==========================================================================================================================================================================================================================
-
-Can probably combine the two below into a single AI task...
-...Replace EntityAILookIdle with a new version that has gradual head rotation, instead of just removing it
-...Change "wandering" AI so that it can't instantly flip a 180 (force it to turn gradually before moving in the chosen direction)
 
 
 
