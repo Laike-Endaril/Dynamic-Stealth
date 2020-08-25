@@ -134,6 +134,12 @@ dynamicstealth.config.opHUD2DVOffset=2D Vertical Offset
 dynamicstealth.config.opHUD2DVOffset.tooltip=FILLSCREEN FIXNEWLINES Slides the indicator up and down in relation to your screen\n \n
 dynamicstealth.config.opHUDScale=Scale
 dynamicstealth.config.opHUDScale.tooltip=FILLSCREEN FIXNEWLINES The scale of the indicator itself; how big the indicator is\n \n
+dynamicstealth.config.opHUDHealthGauge=Health Gauge
+dynamicstealth.config.opHUDHealthGauge.tooltip=FILLSCREEN FIXNEWLINES If true, a health gauge will be displayed over entities' heads\n \n
+dynamicstealth.config.opHUDHealthGaugePercent=Show HP Percentage
+dynamicstealth.config.opHUDHealthGaugePercent.tooltip=FILLSCREEN FIXNEWLINES If true (and the health gauge is displayed), the health gauge will display a number for the health percentage\n \n
+dynamicstealth.config.opHUDHealthGaugeCurrentAndMax=Show Current and Max HP
+dynamicstealth.config.opHUDHealthGaugeCurrentAndMax.tooltip=FILLSCREEN FIXNEWLINES If true (and the health gauge is displayed), the health gauge will display numbers for the current and max HP\n \n
 
 dynamicstealth.config.targetingMaxDist=Max Distance
 dynamicstealth.config.targetingMaxDist.tooltip=FILLSCREEN FIXNEWLINES The maximum distance at which the targeting system will acquire a target\n \n

@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Check any errored/missing config translation keys
-
 Add ally groups for helper system config
 
 Mob flee speeds...
