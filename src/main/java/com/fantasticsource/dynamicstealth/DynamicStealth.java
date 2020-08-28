@@ -724,7 +724,7 @@ public class DynamicStealth
         {
             Class actionClass = task.action.getClass();
 
-            if (actionClass == EntityAILookIdle.class) tasks.removeTask(task.action);
+            if (actionClass == EntityAILookIdle.class) replaceTask(tasks, task, new AIEntityLookIdleEdit(living));
 
                 //All done (excluded EntityAIVillagerInteract)
                 //EntityAIVillagerInteract is fine as-is, because "they can talk to each other to find each other when not visible"
@@ -776,10 +776,12 @@ public class DynamicStealth
             else if (actionClass == EntityAIFollowOwner.class) replaceTask(tasks, task, new AIFollowOwnerEdit((EntityTameable) living, (EntityAIFollowOwner) task.action));
             else if (actionClass == EntityAIFollowOwnerFlying.class) replaceTask(tasks, task, new AIFollowOwnerFlyingEdit((EntityTameable) living, (EntityAIFollowOwner) task.action));
 
+                //Skeletons are special
             else if (actionClass.getName().equals("net.minecraft.entity.monster.AbstractSkeleton$1")) replaceTask(tasks, task, new AIAttackMeleeEdit((EntityAIAttackMelee) task.action));
 
+                //Mod compat
             else if (actionClass.getName().equals("com.lycanitesmobs.core.entity.ai.EntityAIWatchClosest")) replaceTask(tasks, task, new AIWatchClosestEdit(living, EntityLivingBase.class, 0.02f));
-            else if (actionClass.getName().equals("com.lycanitesmobs.core.entity.ai.EntityAILookIdle")) tasks.removeTask(task.action);
+            else if (actionClass.getName().equals("com.lycanitesmobs.core.entity.ai.EntityAILookIdle")) replaceTask(tasks, task, new AIEntityLookIdleEdit(living));
 
             else if (actionClass.getName().contains("de.lellson.roughmobs") && actionClass.getName().contains("RoughAIWeaponSwitch")) replaceTask(tasks, task, new CompatRoughMobs.RoughAIWeaponSwitchEdit(living, 12));
         }
