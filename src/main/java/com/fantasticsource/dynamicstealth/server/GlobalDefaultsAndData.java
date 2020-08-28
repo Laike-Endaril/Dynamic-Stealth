@@ -27,7 +27,6 @@ public class GlobalDefaultsAndData
         fullBypassDefaults.add("iceandfire:gorgon");
         fullBypassDefaults.add("iceandfire:icedragon");
         fullBypassDefaults.add("iceandfire:troll");
-        fullBypassDefaults.add("mowziesmobs:ferrous_wroughtnaut");
         fullBypassDefaults.add("thaumcraft:cultistportalgreater");
         fullBypassDefaults.add("thaumcraft:cultistportallesser");
         fullBypassDefaults.add("thaumcraft:taintacle");
@@ -37,6 +36,30 @@ public class GlobalDefaultsAndData
         fullBypassDefaults.add("thaumcraft:taintseedprime");
         fullBypassDefaults.add("thaumcraft:taintswarm");
         fullBypassDefaults.add("thuttech:lift");
+        fullBypassDefaults.add("mowziesmobs:foliaath");
+        fullBypassDefaults.add("mowziesmobs:baby_foliaath");
+        fullBypassDefaults.add("mowziesmobs:ferrous_wroughtnaut");
+        fullBypassDefaults.add("mowziesmobs:barakoan_barakoana");
+        fullBypassDefaults.add("mowziesmobs:barakoana");
+        fullBypassDefaults.add("mowziesmobs:barakoaya");
+        fullBypassDefaults.add("mowziesmobs:barakoan_player");
+        fullBypassDefaults.add("mowziesmobs:barako");
+        fullBypassDefaults.add("mowziesmobs:frostmaw");
+        fullBypassDefaults.add("mowziesmobs:grottol");
+        fullBypassDefaults.add("mowziesmobs:lantern");
+        fullBypassDefaults.add("mowziesmobs:naga");
+        fullBypassDefaults.add("mowziesmobs:sunstrike");
+        fullBypassDefaults.add("mowziesmobs:solar_beam");
+        fullBypassDefaults.add("mowziesmobs:boulder");
+        fullBypassDefaults.add("mowziesmobs:axe_attack");
+        fullBypassDefaults.add("mowziesmobs:icebreath");
+        fullBypassDefaults.add("mowziesmobs:ice_ball");
+        fullBypassDefaults.add("mowziesmobs:frozen_controller");
+        fullBypassDefaults.add("mowziesmobs:ring");
+        fullBypassDefaults.add("mowziesmobs:dart");
+        fullBypassDefaults.add("mowziesmobs:poison_ball");
+        fullBypassDefaults.add("mowziesmobs:super_nova");
+        fullBypassDefaults.add("mowziesmobs:block_swapper");
     }
 
 
