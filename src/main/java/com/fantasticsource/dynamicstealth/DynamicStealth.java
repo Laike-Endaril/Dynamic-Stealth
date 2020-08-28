@@ -726,19 +726,19 @@ public class DynamicStealth
 
             if (actionClass == EntityAILookIdle.class) replaceTask(tasks, task, new AIEntityLookIdleEdit(living));
 
-                //All done (excluded EntityAIVillagerInteract)
+                //EntityAIWatchClosest and subclasses
                 //EntityAIVillagerInteract is fine as-is, because "they can talk to each other to find each other when not visible"
             else if (actionClass == EntityAIWatchClosest.class) replaceTask(tasks, task, new AIWatchClosestEdit((EntityAIWatchClosest) task.action));
             else if (actionClass == EntityAIWatchClosest2.class) replaceTask(tasks, task, new AIWatchClosestEdit((EntityAIWatchClosest) task.action, true));
 
-                //All done (one near end due to string comparison)
+                //EntityAIAttackMelee and subclasses
             else if (actionClass == EntityAIAttackMelee.class) replaceTask(tasks, task, new AIAttackMeleeEdit((EntityAIAttackMelee) task.action));
             else if (actionClass == EntityRabbit.AIEvilAttack.class) replaceTask(tasks, task, new AIAttackMeleeEdit((EntityAIAttackMelee) task.action));
             else if (actionClass == EntityPolarBear.AIMeleeAttack.class) replaceTask(tasks, task, new AIBearAttackEdit((EntityAIAttackMelee) task.action));
             else if (actionClass == EntitySpider.AISpiderAttack.class) replaceTask(tasks, task, new AISpiderAttackEdit((EntityAIAttackMelee) task.action));
             else if (actionClass == EntityAIZombieAttack.class) replaceTask(tasks, task, new AIZombieAttackEdit((EntityAIZombieAttack) task.action));
 
-                //All done (except enderman stuff)
+                //EntityAINearestAttackableTarget and subclasses
             else if (actionClass == EntityAINearestAttackableTarget.class) replaceTask(tasks, task, new AINearestAttackableTargetEdit((EntityAINearestAttackableTarget) task.action));
             else if (actionClass == EntityPolarBear.AIAttackPlayer.class) replaceTask(tasks, task, new AIBearAttackPlayerEdit((EntityAINearestAttackableTarget) task.action));
             else if (actionClass == EntitySpider.AISpiderTarget.class) replaceTask(tasks, task, new AISpiderTargetEdit((EntityAINearestAttackableTarget) task.action));
@@ -748,7 +748,7 @@ public class DynamicStealth
             else if (actionClass == EntityShulker.AIAttackNearest.class) replaceTask(tasks, task, new AIShulkerAttackNearestEdit((EntityAINearestAttackableTarget) task.action));
             else if (actionClass == EntityShulker.AIDefenseAttack.class) replaceTask(tasks, task, new AIShulkerDefenseAttackEdit((EntityAINearestAttackableTarget) task.action));
 
-                //All done
+                //EntityAIHurtByTarget and subclasses
             else if (actionClass == EntityAIHurtByTarget.class) replaceTask(tasks, task, new AIHurtByTargetEdit((EntityAIHurtByTarget) task.action));
             else if (actionClass == EntityPigZombie.AIHurtByAggressor.class) replaceTask(tasks, task, new AIPigmanHurtByAggressorEdit((EntityAIHurtByTarget) task.action));
             else if (actionClass == EntityLlama.AIHurtByTarget.class) replaceTask(tasks, task, new AILlamaHurtByTargetEdit((EntityAIHurtByTarget) task.action));
