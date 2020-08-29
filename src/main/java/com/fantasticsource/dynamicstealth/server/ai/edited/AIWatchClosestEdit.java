@@ -11,6 +11,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EntitySelectors;
 
 import java.util.List;
@@ -81,7 +82,8 @@ public class AIWatchClosestEdit extends EntityAIBase
         }
 
         target = queue.poll();
-        while (target != null && !Sight.canSee(living, target, false)) //Doesn't need isSuitableTarget because it's not always used for attacking
+        //Doesn't need isSuitableTarget because it's not always used for attacking
+        while (target != null && (!Sight.canSee(living, target, false) || (target instanceof EntityPlayerMP && (((EntityPlayerMP) target).isCreative() || ((EntityPlayerMP) target).isSpectator()))))
         {
             target = queue.poll();
         }
