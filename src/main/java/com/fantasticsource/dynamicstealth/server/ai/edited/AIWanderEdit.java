@@ -59,7 +59,6 @@ public class AIWanderEdit extends EntityAIWander
         if (!mustUpdate)
         {
             if (entity.getIdleTime() >= 100 || entity.getRNG().nextInt(executionChance) != 0) return false;
-            executionChance = 1; //TODO remove this
         }
 
         Vec3d vec3d = RandomPositionGenerator.findRandomTarget(entity, 10, 7);
