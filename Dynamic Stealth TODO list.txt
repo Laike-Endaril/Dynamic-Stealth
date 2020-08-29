@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Prevent entities idly looking at things they shouldn't see (eg. zombies idly look at creative mode players)
-
 Add ally groups for helper system config
 
 Mob flee speeds...
