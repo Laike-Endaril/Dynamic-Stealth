@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.dynamicstealth.DynamicStealth;
 import com.fantasticsource.dynamicstealth.server.ai.EntityAIData;
 import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.entity.EntityCreature;
@@ -68,6 +69,7 @@ public class AIWanderEdit extends EntityAIWander
         mustUpdate = false;
 
         path = entity.getNavigator().getPathToXYZ(vec3d.x, vec3d.y, vec3d.z);
+        lookIndex = -1;
         lookVec = null;
         looked = false;
         prevYaw = Float.MAX_VALUE;
@@ -123,41 +125,57 @@ public class AIWanderEdit extends EntityAIWander
 
     protected void updateLookVec()
     {
+        if (path != null)
+        {
+            int pathLength = path.getCurrentPathLength();
+
+            if (!looked)
+            {
+                for (int i = pathLength - 1; i >= 0; i--)
+                {
+                    Vec3d vec = path.getVectorFromIndex(entity, i);
+                    if (isDirect(vec))
+                    {
+                        lookIndex = i;
+                        lookVec = vec;
+                        break;
+                    }
+                }
+
+                if (lookVec == null)
+                {
+                    lookIndex = 0;
+                    lookVec = path.getVectorFromIndex(entity, 0);
+                }
+            }
+            else //Walking
+            {
+                lookIndex = path.getCurrentPathIndex();
+                if (lookIndex + 1 < pathLength) lookIndex++;
+                if (lookIndex + 1 < pathLength) lookIndex++;
+                lookVec = path.getVectorFromIndex(entity, lookIndex);
+            }
+
+            while (lookVec.squareDistanceTo(entity.getPositionVector()) < 1 && lookIndex + 1 < pathLength)
+            {
+                lookVec = path.getVectorFromIndex(entity, ++lookIndex);
+            }
+        }
+    }
+
+    protected boolean isDirect(Vec3d vec)
+    {
         int w = MathHelper.ceil(entity.width);
         int h = MathHelper.ceil(entity.height);
 
-        if (path != null)
+        try
         {
-            for (int i = path.getCurrentPathIndex() + 1; i < path.getCurrentPathLength(); i++)
-            {
-                Vec3d vec = path.getVectorFromIndex(entity, i);
-                if (vec.squareDistanceTo(entity.getPositionVector()) < 1)
-                {
-                    lookIndex = i;
-                    lookVec = vec;
-
-                    if (i + 1 < path.getCurrentPathLength())
-                    {
-                        lookIndex = i + 1;
-                        lookVec = path.getVectorFromIndex(entity, i + 1);
-                    }
-                }
-                else
-                {
-                    try
-                    {
-                        if ((boolean) PATH_NAVIGATE_IS_DIRECT_PATH_BETWEEN_POINTS_METHOD.invoke(entity.getNavigator(), entity.getPositionVector(), vec, w, h, w))
-                        {
-                            lookIndex = i;
-                            lookVec = vec;
-                        }
-                    }
-                    catch (IllegalAccessException | InvocationTargetException e)
-                    {
-                        e.printStackTrace();
-                    }
-                }
-            }
+            return (boolean) PATH_NAVIGATE_IS_DIRECT_PATH_BETWEEN_POINTS_METHOD.invoke(entity.getNavigator(), entity.getPositionVector(), vec, w, h, w);
+        }
+        catch (IllegalAccessException | InvocationTargetException e)
+        {
+            e.printStackTrace();
+            return false;
         }
     }
 }

@@ -725,12 +725,6 @@ public class DynamicStealth
         {
             Class actionClass = task.action.getClass();
 
-            if (living instanceof EntityZombie && actionClass != EntityAIWanderAvoidWater.class)
-            {
-                tasks.removeTask(task.action);
-                continue;
-            }
-
             if (actionClass == EntityAILookIdle.class) replaceTask(tasks, task, new AIEntityLookIdleEdit(living));
 
                 //EntityAIWander and subclasses
