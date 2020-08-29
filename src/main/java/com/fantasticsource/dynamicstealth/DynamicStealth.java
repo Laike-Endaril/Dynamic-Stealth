@@ -30,6 +30,7 @@ import com.fantasticsource.mctools.ServerTickTimer;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.TrigLookupTable;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.*;
@@ -725,6 +726,21 @@ public class DynamicStealth
             Class actionClass = task.action.getClass();
 
             if (actionClass == EntityAILookIdle.class) replaceTask(tasks, task, new AIEntityLookIdleEdit(living));
+
+                //EntityAIWander and subclasses
+                //Leaving EntitySilverfish.AIHideInStone because a silverfish turning pretty much instantly actually makes sense, it's a pain to deal with, and it doesn't matter enough in normal gameplay
+                //But if I ever want to replace it, probably make a hacky subclass of EntitySilverfish in the same package as EntitySilverfish
+            else if (actionClass == EntityAIWander.class)
+            {
+                AIWanderEdit wanderEdit = new AIWanderEdit((EntityCreature) living, (EntityAIWander) task.action);
+                replaceTask(tasks, task, wanderEdit);
+                if (living instanceof EntityGuardian)
+                {
+                    ((EntityGuardian) living).wander = wanderEdit;
+                }
+            }
+            else if (actionClass == EntityAIWanderAvoidWater.class) replaceTask(tasks, task, new AIWanderAvoidWaterEdit((EntityCreature) living, (EntityAIWanderAvoidWater) task.action));
+            else if (actionClass == EntityAIWanderAvoidWaterFlying.class) replaceTask(tasks, task, new AIWanderAvoidWaterFlyingEdit((EntityCreature) living, (EntityAIWanderAvoidWaterFlying) task.action));
 
                 //EntityAIWatchClosest and subclasses
                 //EntityAIVillagerInteract is fine as-is, because "they can talk to each other to find each other when not visible"

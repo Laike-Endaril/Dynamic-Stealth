@@ -1,6 +1,6 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Change "wandering" AI so that it can't instantly flip a 180 (force it to turn gradually before moving in the chosen direction)
+Prevent entities idly looking at things they shouldn't see (eg. zombies idly look at creative mode players)
 
 Add ally groups for helper system config
 
