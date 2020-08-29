@@ -7,26 +7,28 @@ import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.monster.EntityElderGuardian;
 import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathPoint;
+import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class AIWanderEdit extends EntityAIWander
 {
     protected static final Field ENTITY_AI_WANDER_EXECUTION_CHANCE_FIELD = ReflectionTool.getField(EntityAIWander.class, "field_179481_f", "executionChance");
+    protected static final Method PATH_NAVIGATE_IS_DIRECT_PATH_BETWEEN_POINTS_METHOD = ReflectionTool.getMethod(PathNavigate.class, "func_75493_a", "isDirectPathBetweenPoints");
 
     protected final EntityCreature entity;
-    protected double x;
-    protected double y;
-    protected double z;
     public double speed;
     protected int executionChance;
     protected boolean mustUpdate;
 
     protected Path path;
     protected boolean looked;
-    protected Vec3d targetVec;
+    protected int lookIndex = -1;
+    protected Vec3d lookVec = null;
     protected float prevYaw;
 
     public AIWanderEdit(EntityCreature entity, EntityAIWander oldAI)
@@ -56,19 +58,23 @@ public class AIWanderEdit extends EntityAIWander
         if (!mustUpdate)
         {
             if (entity.getIdleTime() >= 100 || entity.getRNG().nextInt(executionChance) != 0) return false;
+            executionChance = 1; //TODO remove this
         }
 
         Vec3d vec3d = RandomPositionGenerator.findRandomTarget(entity, 10, 7);
 
         if (vec3d == null) return false;
-        else
-        {
-            x = vec3d.x;
-            y = vec3d.y;
-            z = vec3d.z;
-            mustUpdate = false;
-            return true;
-        }
+
+        mustUpdate = false;
+
+        path = entity.getNavigator().getPathToXYZ(vec3d.x, vec3d.y, vec3d.z);
+        lookVec = null;
+        looked = false;
+        prevYaw = Float.MAX_VALUE;
+
+        updateLookVec();
+
+        return lookVec != null;
     }
 
     public boolean shouldContinueExecuting()
@@ -81,34 +87,14 @@ public class AIWanderEdit extends EntityAIWander
     public void startExecuting()
     {
         entity.getNavigator().clearPath();
-
-        path = entity.getNavigator().getPathToXYZ(x, y, z);
-        targetVec = null;
-        looked = false;
-        prevYaw = Float.MAX_VALUE;
-
-        if (path != null)
-        {
-            for (int i = 0; i < path.getCurrentPathLength(); i++)
-            {
-                PathPoint pathPoint = path.getPathPointFromIndex(i);
-                Vec3d tempVec = new Vec3d(pathPoint.x + 0.5, pathPoint.y, pathPoint.z + 0.5);
-                if (entity.getPositionVector().squareDistanceTo(tempVec) >= 1)
-                {
-                    path.setCurrentPathIndex(i);
-                    targetVec = tempVec;
-                    break;
-                }
-            }
-        }
-
-        if (targetVec == null) path = null;
     }
 
     @Override
     public void updateTask()
     {
-        //TODO edit this so that intermediate turns are smooth?
+        updateLookVec();
+        entity.getLookHelper().setLookPosition(lookVec.x, lookVec.y, lookVec.z, EntityAIData.headTurnSpeed(entity), EntityAIData.headTurnSpeed(entity));
+
         if (!looked)
         {
             if (entity.getRotationYawHead() == prevYaw)
@@ -118,8 +104,59 @@ public class AIWanderEdit extends EntityAIWander
             }
             else
             {
-                entity.getLookHelper().setLookPosition(targetVec.x, entity.posY + entity.getEyeHeight(), targetVec.z, EntityAIData.headTurnSpeed(entity), EntityAIData.headTurnSpeed(entity));
                 prevYaw = entity.getRotationYawHead();
+            }
+        }
+    }
+
+    @Override
+    public void resetTask()
+    {
+        super.resetTask();
+
+        path = null;
+        lookIndex = -1;
+        lookVec = null;
+        looked = false;
+        prevYaw = Float.MAX_VALUE;
+    }
+
+    protected void updateLookVec()
+    {
+        int w = MathHelper.ceil(entity.width);
+        int h = MathHelper.ceil(entity.height);
+
+        if (path != null)
+        {
+            for (int i = path.getCurrentPathIndex() + 1; i < path.getCurrentPathLength(); i++)
+            {
+                Vec3d vec = path.getVectorFromIndex(entity, i);
+                if (vec.squareDistanceTo(entity.getPositionVector()) < 1)
+                {
+                    lookIndex = i;
+                    lookVec = vec;
+
+                    if (i + 1 < path.getCurrentPathLength())
+                    {
+                        lookIndex = i + 1;
+                        lookVec = path.getVectorFromIndex(entity, i + 1);
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        if ((boolean) PATH_NAVIGATE_IS_DIRECT_PATH_BETWEEN_POINTS_METHOD.invoke(entity.getNavigator(), entity.getPositionVector(), vec, w, h, w))
+                        {
+                            lookIndex = i;
+                            lookVec = vec;
+                        }
+                    }
+                    catch (IllegalAccessException | InvocationTargetException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     }
