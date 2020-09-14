@@ -252,7 +252,7 @@ public class Sight
     {
         //Hard checks (absolute)
         if (searcher.world != target.world || target.isDead || target instanceof FakePlayer) return 777;
-
+        if (searcher instanceof EntityPlayerMP && target == ((EntityPlayerMP) searcher).getSpectatingEntity()) return -777;
 
         if (target instanceof EntityPlayer)
         {
