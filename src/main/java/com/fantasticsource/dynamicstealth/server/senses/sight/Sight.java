@@ -253,6 +253,7 @@ public class Sight
         //Hard checks (absolute)
         if (searcher.world != target.world || target.isDead || target instanceof FakePlayer) return 777;
 
+
         if (target instanceof EntityPlayer)
         {
             if (searcher instanceof EntityPlayer)
@@ -291,7 +292,7 @@ public class Sight
         if (angleSmall == 180) distanceThreshold = distanceFar;
         else
         {
-            double angleDif = MCTools.lookAngleDifDeg(searcher, target);
+            double angleDif = MCTools.angleDifDeg(searcher.getPositionVector(), (float) yaw, (float) pitch, target.getPositionVector());
             if (angleDif > angleLarge) return 777;
             if (angleDif < angleSmall) distanceThreshold = distanceFar;
             else
