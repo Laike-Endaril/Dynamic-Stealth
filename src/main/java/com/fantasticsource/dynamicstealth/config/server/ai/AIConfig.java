@@ -50,6 +50,7 @@ public class AIConfig
     @Config.RequiresMcRestart
     public String[] addNullChecksToAI = new String[]
             {
+                    "dmonsters, com.dmonsters.ai.EntityAITopielecFollowPlayer",
                     "lycanitesmobs, com.lycanitesmobs.core.entity.ai.EntityAIAttack",
                     "ancientwarfare, net.shadowmage.ancientwarfare.npc.ai.vehicle.NpcAIAimVehicle",
                     "thermalfoundation, cofh.thermalfoundation.entity.monster",
