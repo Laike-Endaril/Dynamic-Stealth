@@ -452,14 +452,22 @@ dynamicstealth.config.helpGoodRep.tooltip=FILLSCREEN FIXNEWLINES Help npcs in th
 dynamicstealth.config.dontHelpBadRep=Don't Help If Bad Rep
 dynamicstealth.config.dontHelpBadRep.tooltip=FILLSCREEN FIXNEWLINES Make sure NOT to help those we're hostile to\n \n
 
-dynamicstealth.config.interactAttack=Attack (Melee)
-dynamicstealth.config.interactAttack.tooltip=FILLSCREEN When anything attacks anything else (melee)
-dynamicstealth.config.interactRangedAttack=Attack (Ranged)
-dynamicstealth.config.interactRangedAttack.tooltip=FILLSCREEN When anything attacks anything else (ranged)
-dynamicstealth.config.interactStealthAtk=Stealth Attack (Melee)
-dynamicstealth.config.interactStealthAtk.tooltip=FILLSCREEN When something attacks an unaware victim (melee)
-dynamicstealth.config.interactRangedStealthAtk=Stealth Attack (Ranged)
-dynamicstealth.config.interactRangedStealthAtk.tooltip=FILLSCREEN When something attacks an unaware victim (ranged)
+dynamicstealth.config.interactAttack=Attack (Melee, Unblocked)
+dynamicstealth.config.interactAttack.tooltip=FILLSCREEN When anything attacks anything else (melee, unblocked)
+dynamicstealth.config.interactRangedAttack=Attack (Ranged, Unblocked)
+dynamicstealth.config.interactRangedAttack.tooltip=FILLSCREEN When anything attacks anything else (ranged, unblocked)
+dynamicstealth.config.interactStealthAtk=Stealth Attack (Melee, Unblocked)
+dynamicstealth.config.interactStealthAtk.tooltip=FILLSCREEN When something attacks an unaware victim (melee, unblocked)
+dynamicstealth.config.interactRangedStealthAtk=Stealth Attack (Ranged, Unblocked)
+dynamicstealth.config.interactRangedStealthAtk.tooltip=FILLSCREEN When something attacks an unaware victim (ranged, unblocked)
+dynamicstealth.config.interactAttackBlocked=Attack (Melee, Blocked)
+dynamicstealth.config.interactAttackBlocked.tooltip=FILLSCREEN When anything attacks anything else (melee, blocked)
+dynamicstealth.config.interactRangedAttackBlocked=Attack (Ranged, Blocked)
+dynamicstealth.config.interactRangedAttackBlocked.tooltip=FILLSCREEN When anything attacks anything else (ranged, blocked)
+dynamicstealth.config.interactStealthAtkBlocked=Stealth Attack (Melee, Blocked)
+dynamicstealth.config.interactStealthAtkBlocked.tooltip=FILLSCREEN When something attacks an unaware victim (melee, blocked)
+dynamicstealth.config.interactRangedStealthAtkBlocked=Stealth Attack (Ranged, Blocked)
+dynamicstealth.config.interactRangedStealthAtkBlocked.tooltip=FILLSCREEN When something attacks an unaware victim (ranged, blocked)
 dynamicstealth.config.interactAssassination=Assassination (Melee)
 dynamicstealth.config.interactAssassination.tooltip=FILLSCREEN When something kills without being detected (melee)
 dynamicstealth.config.interactRangedAssassination=Assassination (Ranged)
@@ -479,8 +487,8 @@ dynamicstealth.config.removeInvis=Remove Invisibility On Hit
 dynamicstealth.config.removeInvis.tooltip=FILLSCREEN FIXNEWLINES If set to true, when one living entity hits another living entity, they both lose invisibility\n\nThis happens before any new effects are applied\n \n
 dynamicstealth.config.removeBlind=Remove Blindness On Hit
 dynamicstealth.config.removeBlind.tooltip=FILLSCREEN FIXNEWLINES If set to true, when one living entity hits another living entity, they both lose blindness\n\nThis happens before any new effects are applied\n \n
-dynamicstealth.config.attackArmorPenetration=Armor Penetration
-dynamicstealth.config.attackArmorPenetration.tooltip=FILLSCREEN FIXNEWLINES Whether stealth attacks bypass armor or not\n \n
+dynamicstealth.config.attackArmorPenetration=Armor and Shield Penetration
+dynamicstealth.config.attackArmorPenetration.tooltip=FILLSCREEN FIXNEWLINES Whether stealth attacks bypass armor and shields or not\n \n
 dynamicstealth.config.attackDamageMult=Damage Multiplier
 dynamicstealth.config.attackDamageMult.tooltip=FILLSCREEN FIXNEWLINES Damage is multiplied by this when attacking from stealth\n \n
 dynamicstealth.config.attackAEffects=Attacker Effects
@@ -488,10 +496,10 @@ dynamicstealth.config.attackAEffects.tooltip=FILLSCREEN FIXNEWLINES Potion effec
 dynamicstealth.config.attackVEffects=Victim Effects
 dynamicstealth.config.attackVEffects.tooltip=FILLSCREEN FIXNEWLINES Potion effects that are applied to the victim when an attack happens\n\nThis applies blindness for 100 ticks (5 seconds):\nblindness.100\n \n
 dynamicstealth.config.attackWeaponSpecific=Weapon-Specific Settings
-dynamicstealth.config.attackWeaponSpecific.tooltip=FILLSCREEN FIXNEWLINES Weapon-specific overrides\nSyntax is...\n\ndomain:item:meta > nbtkey1 = nbtvalue1 & nbtkey2 = nbtvalue2, armorpenetration, multiplier, attackerpotion1 & attackerpotion2, victimpotion1 & victimpotion2, consumeitem\n\neg...\n\nbackstab:diamond_dagger, true, 3\n\ntetra:duplex_tool_modular > duplex/sickle_left_material & duplex/butt_right_material, true, 3, regeneration.60.3, wither.60.3\n\ndye, false, 0, , blindness.20, true\n \n
+dynamicstealth.config.attackWeaponSpecific.tooltip=FILLSCREEN FIXNEWLINES Weapon-specific overrides\nSyntax is...\n\ndomain:item:meta > nbtkey1 = nbtvalue1 & nbtkey2 = nbtvalue2, armorandshieldpenetration, multiplier, attackerpotion1 & attackerpotion2, victimpotion1 & victimpotion2, consumeitem\n\neg...\n\nbackstab:diamond_dagger, true, 3\n\ntetra:duplex_tool_modular > duplex/sickle_left_material & duplex/butt_right_material, true, 3, regeneration.60.3, wither.60.3\n\ndye, false, 0, , blindness.20, true\n \n
 
-dynamicstealth.config.stealthAtkArmorPenetration=Armor Penetration
-dynamicstealth.config.stealthAtkArmorPenetration.tooltip=FILLSCREEN FIXNEWLINES Whether stealth attacks bypass armor or not\n \n
+dynamicstealth.config.stealthAtkArmorPenetration=Armor and Shield Penetration
+dynamicstealth.config.stealthAtkArmorPenetration.tooltip=FILLSCREEN FIXNEWLINES Whether stealth attacks bypass armor and shields or not\n \n
 dynamicstealth.config.stealthAtkDamageMult=Damage Multiplier
 dynamicstealth.config.stealthAtkDamageMult.tooltip=FILLSCREEN FIXNEWLINES Damage is multiplied by this when attacking from stealth\n \n
 dynamicstealth.config.stealthAtkAEffects=Attacker Effects
@@ -499,7 +507,7 @@ dynamicstealth.config.stealthAtkAEffects.tooltip=FILLSCREEN FIXNEWLINES Potion e
 dynamicstealth.config.stealthAtkVEffects=Victim Effects
 dynamicstealth.config.stealthAtkVEffects.tooltip=FILLSCREEN FIXNEWLINES Potion effects that are applied to the victim when a stealth attack happens\n\nThis applies blindness for 100 ticks (5 seconds):\nblindness.100\n \n
 dynamicstealth.config.stealthAtkWeaponSpecific=Weapon-Specific Settings
-dynamicstealth.config.stealthAtkWeaponSpecific.tooltip=FILLSCREEN FIXNEWLINES Weapon-specific overrides\nSyntax is...\n\ndomain:item:meta > nbtkey1 = nbtvalue1 & nbtkey2 = nbtvalue2, armorpenetration, multiplier, attackerpotion1 & attackerpotion2, victimpotion1 & victimpotion2, consumeitem\n\neg...\n\nbackstab:diamond_dagger, true, 3\n\ntetra:duplex_tool_modular > duplex/sickle_left_material & duplex/butt_right_material, true, 3, regeneration.60.3, wither.60.3\n\ndye, false, 0, , blindness.20, true\n \n
+dynamicstealth.config.stealthAtkWeaponSpecific.tooltip=FILLSCREEN FIXNEWLINES Weapon-specific overrides\nSyntax is...\n\ndomain:item:meta > nbtkey1 = nbtvalue1 & nbtkey2 = nbtvalue2, armorandshieldpenetration, multiplier, attackerpotion1 & attackerpotion2, victimpotion1 & victimpotion2, consumeitem\n\neg...\n\nbackstab:diamond_dagger, true, 3\n\ntetra:duplex_tool_modular > duplex/sickle_left_material & duplex/butt_right_material, true, 3, regeneration.60.3, wither.60.3\n\ndye, false, 0, , blindness.20, true\n \n
 
 dynamicstealth.config.assassinationAEffects=Attacker Effects
 dynamicstealth.config.assassinationAEffects.tooltip=FILLSCREEN FIXNEWLINES Potion effects that are applied to the attacker when an assassination happens\n\nThis applies strength 2 for 200 ticks (10 seconds):\nstrength.200.2\n\nThis applies soul sight for 100 ticks (5 seconds):\ndynamicstealth:soulsight.100\n \n

@@ -4,7 +4,7 @@ import com.fantasticsource.dynamicstealth.DynamicStealth;
 import com.fantasticsource.dynamicstealth.server.event.attacks.AttackDefaults;
 import net.minecraftforge.common.config.Config;
 
-public class NormalAttackConfig
+public class NormalAttackBlockedConfig
 {
     @Config.Name("Remove Invisibility On Hit")
     @Config.LangKey(DynamicStealth.MODID + ".config.removeInvis")
@@ -79,5 +79,5 @@ public class NormalAttackConfig
                     "",
                     "dye, false, 0, , blindness.20, true"
             })
-    public String[] weaponSpecific = AttackDefaults.normalAttackDefaults.toArray(new String[0]);
+    public String[] weaponSpecific = AttackDefaults.normalAttackBlockedDefaults.toArray(new String[0]);
 }

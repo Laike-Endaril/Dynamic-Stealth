@@ -22,41 +22,81 @@ public class WeaponEntry
 
     public ItemFilter filter;
 
-    private WeaponEntry(int type, boolean isMelee)
+    private WeaponEntry(int type, boolean isMelee, boolean isBlocked)
     {
         //Defaults
         if (type == TYPE_NORMAL)
         {
             if (isMelee)
             {
-                armorPenetration = serverSettings.interactions.attack.armorPenetration;
-                damageMultiplier = serverSettings.interactions.attack.damageMultiplier;
-                attackerEffects = AttackData.normalAttackerEffects;
-                victimEffects = AttackData.normalVictimEffects;
+                if (isBlocked)
+                {
+                    armorPenetration = serverSettings.interactions.attackBlocked.armorPenetration;
+                    damageMultiplier = serverSettings.interactions.attackBlocked.damageMultiplier;
+                    attackerEffects = AttackData.normalBlockedAttackerEffects;
+                    victimEffects = AttackData.normalBlockedVictimEffects;
+                }
+                else
+                {
+                    armorPenetration = serverSettings.interactions.attack.armorPenetration;
+                    damageMultiplier = serverSettings.interactions.attack.damageMultiplier;
+                    attackerEffects = AttackData.normalAttackerEffects;
+                    victimEffects = AttackData.normalVictimEffects;
+                }
             }
             else
             {
-                armorPenetration = serverSettings.interactions.rangedAttack.armorPenetration;
-                damageMultiplier = serverSettings.interactions.rangedAttack.damageMultiplier;
-                attackerEffects = AttackData.rangedAttackerEffects;
-                victimEffects = AttackData.rangedVictimEffects;
+                if (isBlocked)
+                {
+                    armorPenetration = serverSettings.interactions.rangedAttackBlocked.armorPenetration;
+                    damageMultiplier = serverSettings.interactions.rangedAttackBlocked.damageMultiplier;
+                    attackerEffects = AttackData.rangedBlockedAttackerEffects;
+                    victimEffects = AttackData.rangedBlockedVictimEffects;
+                }
+                else
+                {
+                    armorPenetration = serverSettings.interactions.rangedAttack.armorPenetration;
+                    damageMultiplier = serverSettings.interactions.rangedAttack.damageMultiplier;
+                    attackerEffects = AttackData.rangedAttackerEffects;
+                    victimEffects = AttackData.rangedVictimEffects;
+                }
             }
         }
         else if (type == TYPE_STEALTH)
         {
             if (isMelee)
             {
-                armorPenetration = serverSettings.interactions.stealthAttack.armorPenetration;
-                damageMultiplier = serverSettings.interactions.stealthAttack.damageMultiplier;
-                attackerEffects = AttackData.stealthAttackerEffects;
-                victimEffects = AttackData.stealthVictimEffects;
+                if (isBlocked)
+                {
+                    armorPenetration = serverSettings.interactions.stealthAttackBlocked.armorPenetration;
+                    damageMultiplier = serverSettings.interactions.stealthAttackBlocked.damageMultiplier;
+                    attackerEffects = AttackData.stealthBlockedAttackerEffects;
+                    victimEffects = AttackData.stealthBlockedVictimEffects;
+                }
+                else
+                {
+                    armorPenetration = serverSettings.interactions.stealthAttack.armorPenetration;
+                    damageMultiplier = serverSettings.interactions.stealthAttack.damageMultiplier;
+                    attackerEffects = AttackData.stealthAttackerEffects;
+                    victimEffects = AttackData.stealthVictimEffects;
+                }
             }
             else
             {
-                armorPenetration = serverSettings.interactions.rangedStealthAttack.armorPenetration;
-                damageMultiplier = serverSettings.interactions.rangedStealthAttack.damageMultiplier;
-                attackerEffects = AttackData.rangedStealthAttackerEffects;
-                victimEffects = AttackData.rangedStealthVictimEffects;
+                if (isBlocked)
+                {
+                    armorPenetration = serverSettings.interactions.rangedStealthAttackBlocked.armorPenetration;
+                    damageMultiplier = serverSettings.interactions.rangedStealthAttackBlocked.damageMultiplier;
+                    attackerEffects = AttackData.rangedStealthBlockedAttackerEffects;
+                    victimEffects = AttackData.rangedStealthBlockedVictimEffects;
+                }
+                else
+                {
+                    armorPenetration = serverSettings.interactions.rangedStealthAttack.armorPenetration;
+                    damageMultiplier = serverSettings.interactions.rangedStealthAttack.damageMultiplier;
+                    attackerEffects = AttackData.rangedStealthAttackerEffects;
+                    victimEffects = AttackData.rangedStealthVictimEffects;
+                }
             }
         }
         else if (type == TYPE_ASSASSINATION)
@@ -69,10 +109,10 @@ public class WeaponEntry
     /**
      * This method should only ever be called for melee attacks; ranged attacks are unreliable when it comes to detecting what item they came from (eg. if the attacker switches items before the attack hits)
      */
-    public static WeaponEntry getInstance(String configEntry, int type)
+    public static WeaponEntry getInstance(String configEntry, int type, boolean isBlocked)
     {
         //Defaults
-        WeaponEntry result = new WeaponEntry(type, true);
+        WeaponEntry result = new WeaponEntry(type, true, isBlocked);
 
 
         String[] tokens = configEntry.split(Pattern.quote(","));
@@ -93,8 +133,8 @@ public class WeaponEntry
         String nameAndNBT = tokens[0].trim();
         boolean suppressMissingItemError = false;
         ArrayList<String> list = null;
-        if (type == TYPE_NORMAL) list = AttackDefaults.normalAttackDefaults;
-        else if (type == TYPE_STEALTH) list = AttackDefaults.stealthAttackDefaults;
+        if (type == TYPE_NORMAL) list = isBlocked ? AttackDefaults.normalAttackBlockedDefaults : AttackDefaults.normalAttackDefaults;
+        else if (type == TYPE_STEALTH) list = isBlocked ? AttackDefaults.stealthAttackBlockedDefaults : AttackDefaults.stealthAttackDefaults;
         else if (type == TYPE_ASSASSINATION) list = AttackDefaults.assassinationDefaults;
         for (String entry : list)
         {
@@ -139,13 +179,13 @@ public class WeaponEntry
         return result;
     }
 
-    public static WeaponEntry get(ItemStack itemStack, int type)
+    public static WeaponEntry get(ItemStack itemStack, int type, boolean isBlocked)
     {
-        if (itemStack == null) return new WeaponEntry(type, false);
+        if (itemStack == null) return new WeaponEntry(type, false, isBlocked);
 
         ArrayList<WeaponEntry> list = null;
-        if (type == TYPE_NORMAL) list = AttackData.normalWeaponSpecific;
-        else if (type == TYPE_STEALTH) list = AttackData.stealthWeaponSpecific;
+        if (type == TYPE_NORMAL) list = isBlocked ? AttackData.normalBlockedWeaponSpecific : AttackData.normalWeaponSpecific;
+        else if (type == TYPE_STEALTH) list = isBlocked ? AttackData.stealthBlockedWeaponSpecific : AttackData.stealthWeaponSpecific;
         else if (type == TYPE_ASSASSINATION) list = AttackData.assassinationWeaponSpecific;
 
         for (WeaponEntry weaponEntry : list)
@@ -153,6 +193,6 @@ public class WeaponEntry
             if (weaponEntry.filter.matches(itemStack)) return weaponEntry;
         }
 
-        return new WeaponEntry(type, true);
+        return new WeaponEntry(type, true, isBlocked);
     }
 }

@@ -4,44 +4,24 @@ import com.fantasticsource.dynamicstealth.DynamicStealth;
 import com.fantasticsource.dynamicstealth.server.event.attacks.AttackDefaults;
 import net.minecraftforge.common.config.Config;
 
-public class NormalAttackConfig
+public class StealthAttackBlockedConfig
 {
-    @Config.Name("Remove Invisibility On Hit")
-    @Config.LangKey(DynamicStealth.MODID + ".config.removeInvis")
-    @Config.Comment(
-            {
-                    "If set to true, when one living entity hits another living entity, they both lose invisibility",
-                    "",
-                    "This happens before any new effects are applied"
-            })
-    public boolean removeInvisibilityOnHit = true;
-
-    @Config.Name("Remove Blindness On Hit")
-    @Config.LangKey(DynamicStealth.MODID + ".config.removeBlind")
-    @Config.Comment(
-            {
-                    "If set to true, when one living entity hits another living entity, they both lose blindness",
-                    "",
-                    "This happens before any new effects are applied"
-            })
-    public boolean removeBlindnessOnHit = true;
-
     @Config.Name("Armor Penetration")
-    @Config.LangKey(DynamicStealth.MODID + ".config.attackArmorPenetration")
+    @Config.LangKey(DynamicStealth.MODID + ".config.stealthAtkArmorPenetration")
     @Config.Comment({"Whether stealth attacks bypass armor and shields or not"})
     public boolean armorPenetration = false;
 
     @Config.Name("Damage Multiplier")
-    @Config.LangKey(DynamicStealth.MODID + ".config.attackDamageMult")
+    @Config.LangKey(DynamicStealth.MODID + ".config.stealthAtkDamageMult")
     @Config.Comment("Damage is multiplied by this when attacking from stealth")
     @Config.RangeDouble(min = 1)
-    public double damageMultiplier = 1;
+    public double damageMultiplier = 1.25;
 
     @Config.Name("Attacker Effects")
-    @Config.LangKey(DynamicStealth.MODID + ".config.attackAEffects")
+    @Config.LangKey(DynamicStealth.MODID + ".config.stealthAtkAEffects")
     @Config.Comment(
             {
-                    "Potion effects that are applied to the attacker when an attack happens",
+                    "Potion effects that are applied to the attacker when a stealth attack happens",
                     "",
                     "This applies strength 2 for 200 ticks (10 seconds):",
                     "strength.200.2",
@@ -52,10 +32,10 @@ public class NormalAttackConfig
     public String[] attackerEffects = {};
 
     @Config.Name("Victim Effects")
-    @Config.LangKey(DynamicStealth.MODID + ".config.attackVEffects")
+    @Config.LangKey(DynamicStealth.MODID + ".config.stealthAtkVEffects")
     @Config.Comment(
             {
-                    "Potion effects that are applied to the victim when an attack happens",
+                    "Potion effects that are applied to the victim when a stealth attack happens",
                     "",
                     "This applies blindness for 100 ticks (5 seconds):",
                     "blindness.100"
@@ -63,7 +43,7 @@ public class NormalAttackConfig
     public String[] victimEffects = {};
 
     @Config.Name("Weapon-Specific Settings")
-    @Config.LangKey(DynamicStealth.MODID + ".config.attackWeaponSpecific")
+    @Config.LangKey(DynamicStealth.MODID + ".config.stealthAtkWeaponSpecific")
     @Config.Comment(
             {
                     "Weapon-specific overrides",
@@ -79,5 +59,5 @@ public class NormalAttackConfig
                     "",
                     "dye, false, 0, , blindness.20, true"
             })
-    public String[] weaponSpecific = AttackDefaults.normalAttackDefaults.toArray(new String[0]);
+    public String[] weaponSpecific = AttackDefaults.stealthAttackBlockedDefaults.toArray(new String[0]);
 }

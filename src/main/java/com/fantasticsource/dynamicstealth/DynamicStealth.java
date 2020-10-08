@@ -424,7 +424,7 @@ public class DynamicStealth
                             if (!(killer instanceof FakePlayer) && !MinecraftForge.EVENT_BUS.post(new AssassinationEvent(killer, victim)))
                             {
                                 //Assassinations
-                                WeaponEntry weaponEntry = WeaponEntry.get(isMelee ? killer.getHeldItemMainhand() : null, WeaponEntry.TYPE_ASSASSINATION);
+                                WeaponEntry weaponEntry = WeaponEntry.get(isMelee ? killer.getHeldItemMainhand() : null, WeaponEntry.TYPE_ASSASSINATION, false);
 
 
                                 for (PotionEffect potionEffect : weaponEntry.attackerEffects)
@@ -458,6 +458,8 @@ public class DynamicStealth
         boolean isMelee = source != null && source == immediate;
         if (source == null) source = immediate;
 
+        boolean isBlocked = AttackData.isBlocked(victim, dmgSource);
+
         if (source instanceof EntityLivingBase)
         {
             EntityLivingBase attacker = (EntityLivingBase) source;
@@ -465,62 +467,95 @@ public class DynamicStealth
             //Remove invisibility and blindness if set to do so
             if (isMelee)
             {
-                if (serverSettings.interactions.attack.removeInvisibilityOnHit)
+                if (isBlocked)
                 {
-                    if (!(attacker instanceof FakePlayer) && !GlobalDefaultsAndData.isFullBypass(attacker)) attacker.removePotionEffect(MobEffects.INVISIBILITY);
-                    if (!GlobalDefaultsAndData.isFullBypass(victim)) victim.removePotionEffect(MobEffects.INVISIBILITY);
+                    if (serverSettings.interactions.attackBlocked.removeInvisibilityOnHit)
+                    {
+                        if (!(attacker instanceof FakePlayer) && !GlobalDefaultsAndData.isFullBypass(attacker)) attacker.removePotionEffect(MobEffects.INVISIBILITY);
+                        if (!GlobalDefaultsAndData.isFullBypass(victim)) victim.removePotionEffect(MobEffects.INVISIBILITY);
+                    }
+                    if (serverSettings.interactions.attackBlocked.removeBlindnessOnHit)
+                    {
+                        if (!(attacker instanceof FakePlayer) && !GlobalDefaultsAndData.isFullBypass(attacker)) attacker.removePotionEffect(MobEffects.BLINDNESS);
+                        if (!GlobalDefaultsAndData.isFullBypass(victim)) victim.removePotionEffect(MobEffects.BLINDNESS);
+                    }
                 }
-                if (serverSettings.interactions.attack.removeBlindnessOnHit)
+                else
                 {
-                    if (!(attacker instanceof FakePlayer) && !GlobalDefaultsAndData.isFullBypass(attacker)) attacker.removePotionEffect(MobEffects.BLINDNESS);
-                    if (!GlobalDefaultsAndData.isFullBypass(victim)) victim.removePotionEffect(MobEffects.BLINDNESS);
+                    if (serverSettings.interactions.attack.removeInvisibilityOnHit)
+                    {
+                        if (!(attacker instanceof FakePlayer) && !GlobalDefaultsAndData.isFullBypass(attacker)) attacker.removePotionEffect(MobEffects.INVISIBILITY);
+                        if (!GlobalDefaultsAndData.isFullBypass(victim)) victim.removePotionEffect(MobEffects.INVISIBILITY);
+                    }
+                    if (serverSettings.interactions.attack.removeBlindnessOnHit)
+                    {
+                        if (!(attacker instanceof FakePlayer) && !GlobalDefaultsAndData.isFullBypass(attacker)) attacker.removePotionEffect(MobEffects.BLINDNESS);
+                        if (!GlobalDefaultsAndData.isFullBypass(victim)) victim.removePotionEffect(MobEffects.BLINDNESS);
+                    }
                 }
             }
             else
             {
-                if (serverSettings.interactions.rangedAttack.removeInvisibilityOnHit)
+                if (isBlocked)
                 {
-                    if (!(attacker instanceof FakePlayer) && !GlobalDefaultsAndData.isFullBypass(attacker)) attacker.removePotionEffect(MobEffects.INVISIBILITY);
-                    if (!GlobalDefaultsAndData.isFullBypass(victim)) victim.removePotionEffect(MobEffects.INVISIBILITY);
+                    if (serverSettings.interactions.rangedAttackBlocked.removeInvisibilityOnHit)
+                    {
+                        if (!(attacker instanceof FakePlayer) && !GlobalDefaultsAndData.isFullBypass(attacker)) attacker.removePotionEffect(MobEffects.INVISIBILITY);
+                        if (!GlobalDefaultsAndData.isFullBypass(victim)) victim.removePotionEffect(MobEffects.INVISIBILITY);
+                    }
+                    if (serverSettings.interactions.rangedAttackBlocked.removeBlindnessOnHit)
+                    {
+                        if (!(attacker instanceof FakePlayer) && !GlobalDefaultsAndData.isFullBypass(attacker)) attacker.removePotionEffect(MobEffects.BLINDNESS);
+                        if (!GlobalDefaultsAndData.isFullBypass(victim)) victim.removePotionEffect(MobEffects.BLINDNESS);
+                    }
                 }
-                if (serverSettings.interactions.rangedAttack.removeBlindnessOnHit)
+                else
                 {
-                    if (!(attacker instanceof FakePlayer) && !GlobalDefaultsAndData.isFullBypass(attacker)) attacker.removePotionEffect(MobEffects.BLINDNESS);
-                    if (!GlobalDefaultsAndData.isFullBypass(victim)) victim.removePotionEffect(MobEffects.BLINDNESS);
+                    if (serverSettings.interactions.rangedAttack.removeInvisibilityOnHit)
+                    {
+                        if (!(attacker instanceof FakePlayer) && !GlobalDefaultsAndData.isFullBypass(attacker)) attacker.removePotionEffect(MobEffects.INVISIBILITY);
+                        if (!GlobalDefaultsAndData.isFullBypass(victim)) victim.removePotionEffect(MobEffects.INVISIBILITY);
+                    }
+                    if (serverSettings.interactions.rangedAttack.removeBlindnessOnHit)
+                    {
+                        if (!(attacker instanceof FakePlayer) && !GlobalDefaultsAndData.isFullBypass(attacker)) attacker.removePotionEffect(MobEffects.BLINDNESS);
+                        if (!GlobalDefaultsAndData.isFullBypass(victim)) victim.removePotionEffect(MobEffects.BLINDNESS);
+                    }
                 }
             }
 
             if (isMelee && attacker.isEntityAlive() && !(attacker instanceof FakePlayer) && !GlobalDefaultsAndData.isFullBypass(attacker))
             {
-                //Normal attacks (melee only)
-                ItemStack itemStack = attacker.getHeldItemMainhand();
-                WeaponEntry weaponEntry = WeaponEntry.get(itemStack, WeaponEntry.TYPE_NORMAL);
-
-                if (weaponEntry.armorPenetration) dmgSource.setDamageBypassesArmor();
-                event.setAmount((float) (event.getAmount() * weaponEntry.damageMultiplier));
-
-                for (PotionEffect potionEffect : weaponEntry.attackerEffects)
+                if (Sight.canSee(victim, attacker, true))
                 {
-                    attacker.addPotionEffect(new PotionEffect(potionEffect));
-                }
-                if (!GlobalDefaultsAndData.isFullBypass(victim))
-                {
-                    for (PotionEffect potionEffect : weaponEntry.victimEffects)
+                    //Normal attacks (melee only)
+                    ItemStack itemStack = attacker.getHeldItemMainhand();
+                    WeaponEntry weaponEntry = WeaponEntry.get(itemStack, WeaponEntry.TYPE_NORMAL, isBlocked);
+
+                    if (weaponEntry.armorPenetration) dmgSource.setDamageBypassesArmor();
+                    event.setAmount((float) (event.getAmount() * weaponEntry.damageMultiplier));
+
+                    for (PotionEffect potionEffect : weaponEntry.attackerEffects)
                     {
-                        victim.addPotionEffect(new PotionEffect(potionEffect));
+                        attacker.addPotionEffect(new PotionEffect(potionEffect));
                     }
+                    if (!GlobalDefaultsAndData.isFullBypass(victim))
+                    {
+                        for (PotionEffect potionEffect : weaponEntry.victimEffects)
+                        {
+                            victim.addPotionEffect(new PotionEffect(potionEffect));
+                        }
+                    }
+
+                    if (weaponEntry.consumeItem && !(attacker instanceof EntityPlayer && ((EntityPlayer) attacker).capabilities.isCreativeMode) && !itemStack.getItem().equals(Items.AIR)) itemStack.grow(-1);
                 }
-
-                if (weaponEntry.consumeItem && !(attacker instanceof EntityPlayer && ((EntityPlayer) attacker).capabilities.isCreativeMode) && !itemStack.getItem().equals(Items.AIR)) itemStack.grow(-1);
-
-
-                //Stealth attacks (melee only)
-                if (!Sight.canSee(victim, attacker, true))
+                else
                 {
+                    //Stealth attacks (melee only)
                     if (!MinecraftForge.EVENT_BUS.post(new StealthAttackEvent(victim, dmgSource, event.getAmount())))
                     {
-                        itemStack = attacker.getHeldItemMainhand();
-                        weaponEntry = WeaponEntry.get(itemStack, WeaponEntry.TYPE_STEALTH);
+                        ItemStack itemStack = attacker.getHeldItemMainhand();
+                        WeaponEntry weaponEntry = WeaponEntry.get(itemStack, WeaponEntry.TYPE_STEALTH, isBlocked);
 
                         if (weaponEntry.armorPenetration) dmgSource.setDamageBypassesArmor();
                         event.setAmount((float) (event.getAmount() * weaponEntry.damageMultiplier));

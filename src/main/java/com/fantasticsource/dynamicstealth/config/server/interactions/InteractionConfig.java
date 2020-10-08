@@ -7,23 +7,43 @@ public class InteractionConfig
 {
     @Config.Name("Attack")
     @Config.LangKey(DynamicStealth.MODID + ".config.interactAttack")
-    @Config.Comment("When anything attacks anything else (melee)")
+    @Config.Comment("When anything attacks anything else (melee, unblocked)")
     public NormalAttackConfig attack = new NormalAttackConfig();
 
     @Config.Name("Ranged Attack")
     @Config.LangKey(DynamicStealth.MODID + ".config.interactRangedAttack")
-    @Config.Comment("When anything attacks anything else (ranged)")
+    @Config.Comment("When anything attacks anything else (ranged, unblocked)")
     public RangedAttackConfig rangedAttack = new RangedAttackConfig();
 
     @Config.Name("Stealth Attack")
     @Config.LangKey(DynamicStealth.MODID + ".config.interactStealthAtk")
-    @Config.Comment("When something attacks an unaware victim (melee)")
+    @Config.Comment("When something attacks an unaware victim (melee, unblocked)")
     public StealthAttackConfig stealthAttack = new StealthAttackConfig();
 
     @Config.Name("Ranged Stealth Attack")
     @Config.LangKey(DynamicStealth.MODID + ".config.interactRangedStealthAtk")
-    @Config.Comment("When something attacks an unaware victim (ranged)")
+    @Config.Comment("When something attacks an unaware victim (ranged, unblocked)")
     public RangedStealthAttackConfig rangedStealthAttack = new RangedStealthAttackConfig();
+
+    @Config.Name("Attack (Blocked)")
+    @Config.LangKey(DynamicStealth.MODID + ".config.interactAttackBlocked")
+    @Config.Comment("When anything attacks anything else (melee, blocked)")
+    public NormalAttackBlockedConfig attackBlocked = new NormalAttackBlockedConfig();
+
+    @Config.Name("Ranged Attack (Blocked)")
+    @Config.LangKey(DynamicStealth.MODID + ".config.interactRangedAttackBlocked")
+    @Config.Comment("When anything attacks anything else (ranged, blocked)")
+    public RangedAttackConfig rangedAttackBlocked = new RangedAttackConfig();
+
+    @Config.Name("Stealth Attack (Blocked)")
+    @Config.LangKey(DynamicStealth.MODID + ".config.interactStealthAtkBlocked")
+    @Config.Comment("When something attacks an unaware victim (melee, blocked)")
+    public StealthAttackBlockedConfig stealthAttackBlocked = new StealthAttackBlockedConfig();
+
+    @Config.Name("Ranged Stealth Attack (Blocked)")
+    @Config.LangKey(DynamicStealth.MODID + ".config.interactRangedStealthAtkBlocked")
+    @Config.Comment("When something attacks an unaware victim (ranged, blocked)")
+    public RangedStealthAttackConfig rangedStealthAttackBlocked = new RangedStealthAttackConfig();
 
     @Config.Name("Assassination")
     @Config.LangKey(DynamicStealth.MODID + ".config.interactAssassination")

@@ -8,7 +8,7 @@ public class StealthAttackConfig
 {
     @Config.Name("Armor Penetration")
     @Config.LangKey(DynamicStealth.MODID + ".config.stealthAtkArmorPenetration")
-    @Config.Comment({"Whether stealth attacks bypass armor or not"})
+    @Config.Comment({"Whether stealth attacks bypass armor and shields or not"})
     public boolean armorPenetration = false;
 
     @Config.Name("Damage Multiplier")
