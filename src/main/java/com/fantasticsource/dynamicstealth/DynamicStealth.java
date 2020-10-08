@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth;
 
 import com.fantasticsource.dynamicstealth.client.HUD;
 import com.fantasticsource.dynamicstealth.client.RenderAlterer;
+import com.fantasticsource.dynamicstealth.common.BlocksAndItems;
 import com.fantasticsource.dynamicstealth.common.ClientData;
 import com.fantasticsource.dynamicstealth.common.Network;
 import com.fantasticsource.dynamicstealth.common.potions.Potions;
@@ -829,6 +830,7 @@ public class DynamicStealth
     public void preInit(FMLPreInitializationEvent event) throws Exception
     {
         ConfigHandler.update();
+        MinecraftForge.EVENT_BUS.register(BlocksAndItems.class);
 
         Network.init();
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)

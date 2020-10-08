@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+Hand mirror - Allows you to peek around corners (changes camera position while in use, based on which hand it is in)
+
 Add ally groups for helper system config
 
 Mob flee speeds...
@@ -153,24 +155,23 @@ Pitfall: Entity which destroys the dirt block it's on if something walks on it.
 
 ITEMS =======================================================================================================================================================================================================================
 
-Guidebook, possibly using guide api or patchouli
+Edit normal, splash, and lingering water potions so that they remove burning
 
-Water potions...yes...for applying the wetness effect (for normal one, try to make it usable faster and play water splash sound)
 Fire potions, for burning effect
 
-Water arrows (create a thin flowing water block on impact; for breaking torches and giving Wet status effect)
-Fire arrows (set entities on fire or create fire on impact)
-Torch arrows (yes I know some other mods already do, but I want them in mine)
+Trap ENTITIES...
+...Pitfall
+...Dispenser Trap (holds a single item)
 
 Make sticks throwable (act like snowballs; 0 damage projectile, but if they hit a block, then instead create small sound.  Either way, drop as stick item again)
-
-Hand mirror - Allows you to peek around corners (changes camera position while in use, based on which hand it is in)
 
 Pebbles - Can be thrown as a 0 damage projectile like a snowball, but drops as an item again on impact.  Crafted from cobblestone
 
 Make firework stars throwable; they go off after a short delay, or if in water, drop as an item again
 
 Slingshot - Can fire pebbles, smoke bombs, splash/lingering potions, or firework stars as low-damage projectiles
+
+Guidebook, possibly using guide api or patchouli
 
 
 
