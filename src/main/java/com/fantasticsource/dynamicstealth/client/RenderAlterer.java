@@ -216,7 +216,7 @@ public class RenderAlterer
 
 
                     GlStateManager.Color c = GlStateManager.colorState;
-                    c.alpha = (float) (min + (1d - min) * visibility);
+                    c.alpha *= (float) (min + (1d - min) * visibility);
                     GL11.glColor4f(c.red, c.green, c.blue, c.alpha);
                 }
             }
