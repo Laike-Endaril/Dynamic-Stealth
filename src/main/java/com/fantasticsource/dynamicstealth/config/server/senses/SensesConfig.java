@@ -17,6 +17,12 @@ public class SensesConfig
             })
     public boolean usePlayerSenses = true;
 
+    @Config.Name("PvP Stealth (Requires Player Senses)")
+    @Config.RequiresMcRestart
+    @Config.LangKey(DynamicStealth.MODID + ".config.pvpStealth")
+    @Config.Comment("If enabled (and player senses are enabled), stealth mechanics work for PvP")
+    public boolean pvpStealth = true;
+
     @Config.Name("Touch")
     @Config.LangKey(DynamicStealth.MODID + ".config.touch")
     public TouchConfig touch = new TouchConfig();

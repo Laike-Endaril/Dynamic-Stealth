@@ -3,6 +3,7 @@ package com.fantasticsource.dynamicstealth.server.senses.sight;
 import com.fantasticsource.dynamicstealth.common.DSTools;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatDissolution;
+import com.fantasticsource.dynamicstealth.config.DynamicStealthConfig;
 import com.fantasticsource.dynamicstealth.config.server.senses.sight.SightConfig;
 import com.fantasticsource.dynamicstealth.server.Attributes;
 import com.fantasticsource.dynamicstealth.server.HUDData;
@@ -258,7 +259,7 @@ public class Sight
         {
             if (searcher instanceof EntityPlayer)
             {
-                if (!HidingData.isHidingFrom((EntityPlayer) target, searcher.getName())) return -777;
+                if (!DynamicStealthConfig.serverSettings.senses.pvpStealth || !HidingData.isHidingFrom((EntityPlayer) target, searcher.getName())) return -777;
             }
             else if (searcher instanceof EntityLiving)
             {

@@ -306,6 +306,8 @@ dynamicstealth.config.OPHUDDelay.tooltip=FILLSCREEN FIXNEWLINES How many ticks t
 
 dynamicstealth.config.playerSenses=Use player senses
 dynamicstealth.config.playerSenses.tooltip=FILLSCREEN FIXNEWLINES If enabled, stealth mechanics work on players\n\nBasically if this is turned on and that skeleton is holding still in the dark, you might not be able to see him until you get close\n \n
+dynamicstealth.config.pvpStealth=PvP Stealth (Requires Player Senses)
+dynamicstealth.config.pvpStealth.tooltip=FILLSCREEN FIXNEWLINES If enabled (and player senses are enabled), stealth mechanics work for PvP\n \n
 dynamicstealth.config.touch=Touch
 dynamicstealth.config.sight=Sight
 dynamicstealth.config.hearing=Hearing
