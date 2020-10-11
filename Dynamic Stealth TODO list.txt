@@ -1,5 +1,10 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+Add creativeinvis command
+True by default (creative mode players are completely invisible except to other creative mode players)
+
+
+
 Add ally groups for helper system config
 
 Mob flee speeds...
@@ -87,9 +92,6 @@ Make client acquire target for any entity they have LOS to, then get the data fo
 Directional indicators...
 ...add optional "damaged from" indicator, which draws an indicator pointing the direction damage was recently received from
 ...add optional touch detection indicator for players (see to do in DynamicStealth.java)
-
-Add creativeinvis command
-True by default (creative mode players are completely invisible except to other creative mode players)
 
 Add lang keys for all println() calls (make sure to use deprecated I18n, not the non-deprecated one)
 
