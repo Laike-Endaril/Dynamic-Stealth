@@ -1,7 +1,5 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Hand mirror - Allows you to peek around corners (changes camera position while in use, based on which hand it is in)
-
 Add ally groups for helper system config
 
 Mob flee speeds...

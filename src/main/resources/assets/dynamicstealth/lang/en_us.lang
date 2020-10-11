@@ -9,6 +9,10 @@ attribute.name.dynamicstealth.smelling=% Smelling
 
 
 
+itemGroup.dynamicstealth=Dynamic Stealth
+
+item.dynamicstealth:handmirror.name=Hand Mirror
+
 dynamicstealth.soulsight=Soul Sight
 potion.effect.dynamicstealth.soulsight=Potion of Soul Sight
 splash_potion.effect.dynamicstealth.soulsight=Splash Potion of Soul Sight
