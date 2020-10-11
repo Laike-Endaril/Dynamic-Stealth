@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.senses.sight;
 
+import com.fantasticsource.dynamicstealth.common.BlocksAndItems;
 import com.fantasticsource.dynamicstealth.common.DSTools;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatDissolution;
@@ -13,6 +14,7 @@ import com.fantasticsource.mctools.ImprovedRayTracing;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.ServerTickTimer;
 import com.fantasticsource.tools.Tools;
+import com.fantasticsource.tools.TrigLookupTable;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import com.fantasticsource.tools.datastructures.Pair;
 import com.fantasticsource.tools.datastructures.WrappingQueue;
@@ -32,6 +34,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
@@ -47,6 +51,8 @@ import static com.fantasticsource.mctools.ServerTickTimer.currentTick;
 
 public class Sight
 {
+    protected static final double OFFSET_COLLISION_BUFFER_DIRECT = 0.1, OFFSET_COLLISION_BUFFER_FORWARD = 0.1; //These should match the ones in the Camera class from FLib
+
     private static final int SEEN_RECENT_TIMER = 60, GLOBAL_STEALTH_SMOOTHING = 3;
 
     private static Map<EntityPlayer, Pair<WrappingQueue<Double>, Long>> globalPlayerStealthHistory = new LinkedHashMap<>();
@@ -148,7 +154,14 @@ public class Sight
         }
 
         //Calculate
-        double result = visualStealthLevelInternal(searcher, target, isAggressive, yaw, pitch);
+        double offsetLR = 0;
+        ItemStack stack = searcher.getActiveItemStack();
+        if (stack.getItem() == BlocksAndItems.itemHandMirror)
+        {
+            offsetLR = Tools.min((double) searcher.getItemInUseMaxCount() / 20, 1);
+            if (searcher.getActiveHand() == EnumHand.OFF_HAND) offsetLR = -offsetLR;
+        }
+        double result = visualStealthLevelInternal(searcher, target, isAggressive, yaw, pitch, offsetLR);
 
         if (saveCache)
         {
@@ -249,7 +262,7 @@ public class Sight
     }
 
 
-    private static double visualStealthLevelInternal(EntityLivingBase searcher, Entity target, boolean isAggressive, double yaw, double pitch)
+    private static double visualStealthLevelInternal(EntityLivingBase searcher, Entity target, boolean isAggressive, double yaw, double pitch, double offsetLR)
     {
         //Hard checks (absolute)
         if (searcher.world != target.world || target.isDead || target instanceof FakePlayer) return 777;
@@ -271,8 +284,39 @@ public class Sight
         if (MCTools.isRidingOrRiddenBy(searcher, target)) return -777;
 
 
+        //Compute eye position
+        Vec3d eyeVec = searcher.getPositionEyes(1);
+        if (offsetLR != 0)
+        {
+            World world = searcher.world;
+            double testOffsetLR = offsetLR > 0 ? offsetLR + OFFSET_COLLISION_BUFFER_DIRECT : offsetLR - OFFSET_COLLISION_BUFFER_DIRECT;
+            Vec3d testStart = eyeVec.addVector(-OFFSET_COLLISION_BUFFER_FORWARD * TrigLookupTable.TRIG_TABLE_1024.sin(Tools.degtorad(yaw)), 0, OFFSET_COLLISION_BUFFER_FORWARD * TrigLookupTable.TRIG_TABLE_1024.cos(Tools.degtorad(yaw)));
+            Vec3d testEnd = testStart.subtract(testOffsetLR * TrigLookupTable.TRIG_TABLE_1024.cos(Tools.degtorad(yaw)), 0, testOffsetLR * TrigLookupTable.TRIG_TABLE_1024.sin(Tools.degtorad(yaw)));
+            RayTraceResult testResult = ImprovedRayTracing.rayTraceBlocks(world, testStart, testEnd, testOffsetLR, true);
+            Vec3d testHitVec = testResult.hitVec != null ? testResult.hitVec : testEnd;
+            Vec3d testDif = testHitVec.subtract(testStart);
+            double testDist = testDif.lengthVector() - OFFSET_COLLISION_BUFFER_DIRECT;
+
+            if (testDist > 0)
+            {
+                Vec3d end = eyeVec.subtract(testOffsetLR * TrigLookupTable.TRIG_TABLE_1024.cos(Tools.degtorad(yaw)), 0, testOffsetLR * TrigLookupTable.TRIG_TABLE_1024.sin(Tools.degtorad(yaw)));
+                RayTraceResult result = ImprovedRayTracing.rayTraceBlocks(world, eyeVec, end, testDist + OFFSET_COLLISION_BUFFER_DIRECT, true);
+                Vec3d hitVec = result.hitVec != null ? result.hitVec : end;
+                Vec3d dif = hitVec.subtract(eyeVec);
+                double dist = dif.lengthVector() - OFFSET_COLLISION_BUFFER_DIRECT;
+
+                if (dist > 0)
+                {
+                    eyeVec = dif.normalize().scale(Tools.min(testDist, dist)).add(eyeVec);
+                    world.removeEntity(MCTools.spawnDebugSnowball(world, eyeVec));
+                }
+            }
+        }
+
+
         //Distance, soul sight, and angle (absolute, base FOV)
-        double distSquared = searcher.getDistanceSq(target);
+        Vec3d targetVec = target.getPositionVector().addVector(0, target.height * 0.5, 0);
+        double distSquared = eyeVec.squareDistanceTo(targetVec);
         int distanceFar = distanceFar(searcher);
 
         if (hasSoulSight(searcher))
@@ -293,7 +337,7 @@ public class Sight
         if (angleSmall == 180) distanceThreshold = distanceFar;
         else
         {
-            double angleDif = MCTools.angleDifDeg(searcher.getPositionVector(), (float) yaw, (float) pitch, target.getPositionVector());
+            double angleDif = MCTools.angleDifDeg(eyeVec, (float) yaw, (float) pitch, targetVec);
             if (angleDif > angleLarge) return 777;
             if (angleDif < angleSmall) distanceThreshold = distanceFar;
             else
@@ -322,7 +366,7 @@ public class Sight
 
 
         //Lighting and LOS checks (absolute, factor, after Angles, after Glowing)
-        double lightFactor = bestLightingAtLOSHit(searcher, target, isLivingBase && isBright(targetLivingBase));
+        double lightFactor = bestLightingAtLOSHit(searcher, target, isLivingBase && isBright(targetLivingBase), eyeVec);
         if (lightFactor == -777) return 777;
 
         if (hasNightvision(searcher))
@@ -407,7 +451,7 @@ public class Sight
     }
 
 
-    private static double bestLightingAtLOSHit(Entity searcher, Entity target, boolean forceMaxLight)
+    private static double bestLightingAtLOSHit(Entity searcher, Entity target, boolean forceMaxLight, Vec3d eyeVec)
     {
         World world = searcher.world;
         if (world != target.world) return -777;
@@ -435,7 +479,7 @@ public class Sight
         {
             result = queue.peekPriority();
             testVec = queue.poll();
-            if (ImprovedRayTracing.isUnobstructed(searcher.world, new Vec3d(searcher.posX, searcher.posY + searcher.getEyeHeight(), searcher.posZ), testVec, false))
+            if (ImprovedRayTracing.isUnobstructed(searcher.world, eyeVec, testVec, false))
             {
                 return 15 - result;
             }

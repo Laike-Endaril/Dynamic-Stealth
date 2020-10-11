@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth;
 
 import com.fantasticsource.dynamicstealth.client.HUD;
 import com.fantasticsource.dynamicstealth.client.RenderAlterer;
+import com.fantasticsource.dynamicstealth.common.BlocksAndItems;
 import com.fantasticsource.dynamicstealth.common.ClientData;
 import com.fantasticsource.dynamicstealth.common.Network;
 import com.fantasticsource.dynamicstealth.common.potions.Potions;
@@ -92,7 +93,7 @@ import static com.fantasticsource.dynamicstealth.common.Network.WRAPPER;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.dynamicstealth.server.threat.Threat.THREAT_TYPE.*;
 
-@Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, dependencies = "required-after:fantasticlib@[1.12.2.036,)")
+@Mod(modid = DynamicStealth.MODID, name = DynamicStealth.NAME, version = DynamicStealth.VERSION, dependencies = "required-after:fantasticlib@[1.12.2.038,)")
 public class DynamicStealth
 {
     public static final String MODID = "dynamicstealth";
@@ -864,6 +865,7 @@ public class DynamicStealth
     public void preInit(FMLPreInitializationEvent event) throws Exception
     {
         ConfigHandler.update();
+        MinecraftForge.EVENT_BUS.register(BlocksAndItems.class);
 
         Network.init();
         if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
