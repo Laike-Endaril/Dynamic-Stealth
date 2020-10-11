@@ -46,10 +46,6 @@ public class ItemHandMirror extends Item
         ItemStack itemstack = player.getHeldItem(hand);
 
 
-        //Success / failure conditions (execute both sides)
-//        return new ActionResult<>(EnumActionResult.FAIL, itemstack);
-
-
         //Sided execution
         if (world.isRemote)
         {
@@ -57,10 +53,6 @@ public class ItemHandMirror extends Item
             Camera.playerRenderMode = Camera.PLAYER_RENDER_IF_THIRD_PERSON;
             Camera.followOffsetLR = 0;
             Camera.getCamera().activate(player, -1);
-        }
-        else
-        {
-            //TODO handle server-side sight sense position offset
         }
 
 
@@ -79,23 +71,12 @@ public class ItemHandMirror extends Item
             Camera.followOffsetLR = Tools.min((double) (getMaxItemUseDuration(stack) - count) / 20, 1);
             if (player.getActiveHand() == EnumHand.OFF_HAND) Camera.followOffsetLR = -Camera.followOffsetLR;
         }
-        else
-        {
-            //TODO handle sight sense
-        }
     }
 
     public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase entityLiving, int timeLeft)
     {
         //Sided execution
-        if (world.isRemote)
-        {
-            Camera.getCamera().deactivate();
-        }
-        else
-        {
-            //TODO handle sight sense
-        }
+        if (world.isRemote) Camera.getCamera().deactivate();
     }
 
     @Override
