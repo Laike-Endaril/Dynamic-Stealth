@@ -1,6 +1,8 @@
 package com.fantasticsource.dynamicstealth.common.items;
 
 import com.fantasticsource.dynamicstealth.common.BlocksAndItems;
+import com.fantasticsource.mctools.cliententity.Camera;
+import com.fantasticsource.tools.Tools;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,6 +35,12 @@ public class ItemHandMirror extends Item
     }
 
     @Override
+    public int getMaxItemUseDuration(ItemStack stack)
+    {
+        return 72000;
+    }
+
+    @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand)
     {
         ItemStack itemstack = player.getHeldItem(hand);
@@ -45,7 +53,10 @@ public class ItemHandMirror extends Item
         //Sided execution
         if (world.isRemote)
         {
-            //TODO handle client-side camera position offset (don't use server-side spectate; it moves the player entity)
+            Camera.allowControl = true;
+            Camera.playerRenderMode = Camera.PLAYER_RENDER_IF_THIRD_PERSON;
+            Camera.followOffsetLR = 0;
+            Camera.getCamera().activate(player, -1);
         }
         else
         {
@@ -62,11 +73,11 @@ public class ItemHandMirror extends Item
     {
         World world = player.world;
 
-        //TODO smooth transition?
         //Sided execution
         if (world.isRemote)
         {
-            //TODO handle camera
+            Camera.followOffsetLR = Tools.min((double) (getMaxItemUseDuration(stack) - count) / 20, 1);
+            if (player.getActiveHand() == EnumHand.OFF_HAND) Camera.followOffsetLR = -Camera.followOffsetLR;
         }
         else
         {
@@ -74,8 +85,17 @@ public class ItemHandMirror extends Item
         }
     }
 
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft)
+    public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase entityLiving, int timeLeft)
     {
+        //Sided execution
+        if (world.isRemote)
+        {
+            Camera.getCamera().deactivate();
+        }
+        else
+        {
+            //TODO handle sight sense
+        }
     }
 
     @Override
