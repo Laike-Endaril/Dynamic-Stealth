@@ -877,6 +877,10 @@ public class DynamicStealth
     @EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
+        //Recipes
+        BlocksAndItems.registerRecipes(event);
+
+
         //Compat init
         if (Loader.isModLoaded("neat")) Compat.neat = true;
         if (Loader.isModLoaded("testdummy")) Compat.testdummy = true;

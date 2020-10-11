@@ -27,6 +27,8 @@ public class ItemHandMirror extends Item
 
         setUnlocalizedName(MODID + ":handmirror");
         setRegistryName("handmirror");
+
+        maxStackSize = 1;
     }
 
     public EnumAction getItemUseAction(ItemStack stack)
