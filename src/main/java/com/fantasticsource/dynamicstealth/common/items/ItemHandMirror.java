@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumHandSide;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -71,7 +72,7 @@ public class ItemHandMirror extends Item
         if (world.isRemote)
         {
             Camera.followOffsetLR = Tools.min((double) (getMaxItemUseDuration(stack) - count) / 20, 1);
-            if (player.getActiveHand() == EnumHand.OFF_HAND) Camera.followOffsetLR = -Camera.followOffsetLR;
+            if ((player.getActiveHand() == EnumHand.OFF_HAND) == (player.getPrimaryHand() == EnumHandSide.RIGHT)) Camera.followOffsetLR = -Camera.followOffsetLR;
         }
     }
 

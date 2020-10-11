@@ -35,6 +35,7 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -153,14 +154,16 @@ public class Sight
             }
         }
 
-        //Calculate
+        //Calculate eye offset
         double offsetLR = 0;
         ItemStack stack = searcher.getActiveItemStack();
         if (stack.getItem() == BlocksAndItems.itemHandMirror)
         {
             offsetLR = Tools.min((double) searcher.getItemInUseMaxCount() / 20, 1);
-            if (searcher.getActiveHand() == EnumHand.OFF_HAND) offsetLR = -offsetLR;
+            if ((searcher.getActiveHand() == EnumHand.OFF_HAND) == (searcher.getPrimaryHand() == EnumHandSide.RIGHT)) offsetLR = -offsetLR;
         }
+
+        //Calculate result
         double result = visualStealthLevelInternal(searcher, target, isAggressive, yaw, pitch, offsetLR);
 
         if (saveCache)
