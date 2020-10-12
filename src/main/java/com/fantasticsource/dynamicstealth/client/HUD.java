@@ -788,7 +788,7 @@ public class HUD
                         EntityLivingBase livingBase = (EntityLivingBase) entity;
                         float hp = livingBase.getHealth();
                         float max = livingBase.getMaxHealth();
-                        elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.hp", hp, max, (int) (hp / max * 100)));
+                        elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.hp", ONE_DECIMAL.format(hp), ONE_DECIMAL.format(max), (int) (hp / max * 100)));
                     }
 
                     if (clientSettings.hudSettings.targetingStyle.components.action)
