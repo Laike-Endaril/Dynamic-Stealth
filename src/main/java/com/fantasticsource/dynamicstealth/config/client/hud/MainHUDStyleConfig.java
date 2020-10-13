@@ -14,7 +14,7 @@ public class MainHUDStyleConfig
                     "0 means invisible, 1 means completely opaque"
             })
     @Config.RangeDouble(min = 0, max = 1)
-    public double stealthGaugeAlpha = 0.4;
+    public double stealthGaugeAlpha = 0.6;
 
     @Config.Name("Stealth Gauge Color")
     @Config.LangKey(DynamicStealth.MODID + ".config.stealthGaugeColor")
