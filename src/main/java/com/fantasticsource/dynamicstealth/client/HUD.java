@@ -321,7 +321,7 @@ public class HUD
 
 
                 //Fill
-                double ratio = livingBase.getHealth() / livingBase.getMaxHealth();
+                double ratio = Tools.min(Tools.max(livingBase.getHealth() / livingBase.getMaxHealth(), 0), 1);
 
                 Color color2;
                 if (livingBase.getIsInvulnerable())
