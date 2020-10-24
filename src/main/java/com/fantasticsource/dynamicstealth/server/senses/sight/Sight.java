@@ -308,11 +308,7 @@ public class Sight
                 Vec3d dif = hitVec.subtract(eyeVec);
                 double dist = dif.lengthVector() - OFFSET_COLLISION_BUFFER_DIRECT;
 
-                if (dist > 0)
-                {
-                    eyeVec = dif.normalize().scale(Tools.min(testDist, dist)).add(eyeVec);
-                    world.removeEntity(MCTools.spawnDebugSnowball(world, eyeVec));
-                }
+                if (dist > 0) eyeVec = dif.normalize().scale(Tools.min(testDist, dist)).add(eyeVec);
             }
         }
 
