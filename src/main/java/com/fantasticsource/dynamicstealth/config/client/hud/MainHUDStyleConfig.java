@@ -40,7 +40,7 @@ public class MainHUDStyleConfig
     @Config.LangKey(DynamicStealth.MODID + ".config.stealthGaugeSize")
     @Config.Comment("The size of the stealth gauge")
     @Config.RangeInt(min = 1)
-    public int stealthGaugeSize = 50;
+    public int stealthGaugeSize = 32;
 
     @Config.Name("Stealth Gauge Mode")
     @Config.LangKey(DynamicStealth.MODID + ".config.stealthGaugeMode")
