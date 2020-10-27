@@ -7,6 +7,8 @@ Add new stealth gauge mode...
 Add creativeinvis command
 True by default (creative mode players are completely invisible except to other creative mode players)
 
+Add peek keybinds to replace current hand mirror behavior?
+
 
 
 Add ally groups for helper system config
