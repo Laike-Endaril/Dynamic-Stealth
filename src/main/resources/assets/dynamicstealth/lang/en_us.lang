@@ -102,8 +102,8 @@ dynamicstealth.config.stealthGaugeX=Stealth Gauge X Position
 dynamicstealth.config.stealthGaugeX.tooltip=FILLSCREEN FIXNEWLINES The x position of the stealth gauge\n\n0 is far left, 0.5 is center, 1 is far right\n \n
 dynamicstealth.config.stealthGaugeY=Stealth Gauge Y Position
 dynamicstealth.config.stealthGaugeY.tooltip=FILLSCREEN FIXNEWLINES The y position of the stealth gauge\n\n0 is top, 0.5 is center, 1 is bottom\n \n
-dynamicstealth.config.stealthGaugeAlphaSmoothing=Stealth Gauge Alpha Smoothing
-dynamicstealth.config.stealthGaugeAlphaSmoothing.tooltip=FILLSCREEN FIXNEWLINES Whether to use alpha smoothing on the stealth gauge during quick transitions\n \n
+dynamicstealth.config.stealthGaugeSpeed=Stealth Gauge Speed
+dynamicstealth.config.stealthGaugeSpeed.tooltip=FILLSCREEN FIXNEWLINES Lower numbers make the stealth gauge animate smoother, higher numbers make the stealth gauge more accurate\n \n
 
 dynamicstealth.config.opHUDShowBypass=Bypass
 dynamicstealth.config.opHUDShowBypass.tooltip=FILLSCREEN FIXNEWLINES If true, on-point indicators appear for entities that bypass the threat system\n \n

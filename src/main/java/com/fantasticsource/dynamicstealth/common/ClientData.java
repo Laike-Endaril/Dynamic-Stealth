@@ -41,6 +41,7 @@ public class ClientData
             COLOR_DAZED = 0x55FF55;                 //Target: maybe, Threat: maybe, Color: Light Green
 
     public static int stealthLevel = Byte.MIN_VALUE, prevStealthLevel = Byte.MIN_VALUE, lightLevel = 0, prevStealthFrameIndex = 0;
+    public static float prevStealthDisplayed = 0;
 
     public static boolean soulSight = false;
     public static boolean usePlayerSenses = false;
@@ -58,6 +59,7 @@ public class ClientData
     {
         stealthLevel = Byte.MIN_VALUE;
         prevStealthLevel = Byte.MIN_VALUE;
+        prevStealthDisplayed = 0;
         prevStealthFrameIndex = 0;
 
         soulSight = false;

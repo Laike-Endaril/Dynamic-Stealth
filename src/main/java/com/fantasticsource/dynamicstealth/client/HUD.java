@@ -8,10 +8,10 @@ import com.fantasticsource.dynamicstealth.client.event.RenderTargetingHUDEvent;
 import com.fantasticsource.dynamicstealth.common.ClientData;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatNeat;
+import com.fantasticsource.mctools.ClientTickTimer;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.OutlinedFontRenderer;
 import com.fantasticsource.mctools.Render;
-import com.fantasticsource.tools.Smoothing;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.datastructures.Color;
 import com.fantasticsource.tools.datastructures.Pair;
@@ -87,15 +87,16 @@ public class HUD
 
     private static final ResourceLocation HP_BACKGROUND_TEXTURE = new ResourceLocation(DynamicStealth.MODID, "image/hpbackground.png");
     private static final float HP_BACKGROUND_WIDTH = 142, HP_BACKGROUND_HEIGHT = 18;
-    private static final float HP_BACKGROUND_UV_HALF_PIXEL_W = 0.5f / HP_BACKGROUND_WIDTH, HP_BACKGROUND_UV_HALF_PIXEL_H = 0.5f / HP_BACKGROUND_HEIGHT;
 
     private static final ResourceLocation HP_FILL_TEXTURE = new ResourceLocation(DynamicStealth.MODID, "image/hpfill.png");
     private static final float HP_FILL_WIDTH = 140, HP_FILL_HEIGHT = 16;
-    private static final float HP_FILL_UV_HALF_PIXEL_W = 0.5f / HP_FILL_WIDTH, HP_FILL_UV_HALF_PIXEL_H = 0.5f / HP_FILL_HEIGHT;
+
     private static final DecimalFormat
             ONE_DECIMAL = new DecimalFormat("0.0"),
             NO_DECIMAL = new DecimalFormat("0");
+
     private static TextureManager textureManager = Minecraft.getMinecraft().renderEngine;
+    private static float prevPartialTickExtended = 0;
 
     public static void draw(RenderGameOverlayEvent.Pre event, Minecraft mc)
     {
@@ -580,8 +581,8 @@ public class HUD
 
         if (ClientData.stealthLevel == Byte.MIN_VALUE) return;
 
-        float partialTick = mc.getRenderPartialTicks();
-        float stealth = partialTick * (ClientData.stealthLevel - ClientData.prevStealthLevel) + ClientData.prevStealthLevel;
+        float partialTick = mc.getRenderPartialTicks(), partialTickExtended = (float) ClientTickTimer.currentTick() + partialTick, partialTickDelta = partialTickExtended - prevPartialTickExtended;
+        prevPartialTickExtended = partialTickExtended;
 
 
         GlStateManager.pushMatrix();
@@ -593,6 +594,7 @@ public class HUD
 
         if (mode == 1)
         {
+            float stealth = partialTick * (ClientData.stealthLevel - ClientData.prevStealthLevel) + ClientData.prevStealthLevel;
             float theta = 0.9f * stealth;
             GlStateManager.rotate(theta, 0, 0, 1);
 
@@ -637,60 +639,39 @@ public class HUD
         {
             textureManager.bindTexture(STEALTH_GAUGE_TEXTURE_2);
             Color c = new Color(Integer.parseInt(clientSettings.hudSettings.mainStyle.stealthGaugeColor, 16), true);
-            int index = Tools.min((100 - (int) stealth) >> 2, 49);
 
-            if (clientSettings.hudSettings.mainStyle.stealthGaugeAlphaSmoothing)
-            {
-                GlStateManager.color(c.rf(), c.gf(), c.bf(), (float) Smoothing.balanceAlpha(Math.abs(index - ClientData.prevStealthFrameIndex), alpha));
-                int direction = index - ClientData.prevStealthFrameIndex > 0 ? 1 : -1;
 
-                for (int i = ClientData.prevStealthFrameIndex; direction > 0 ? i <= index : i >= index; i += direction)
-                {
-                    int gridX = i % 10;
-                    int gridY = i / 10;
+            float dif = (float) ClientData.stealthLevel - ClientData.prevStealthDisplayed;
+            int direction = dif > 0 ? 1 : -1;
+            float absLimitedDif = Math.min(partialTickDelta * clientSettings.hudSettings.mainStyle.stealthGaugeSpeed, Math.abs(dif));
+            float displayedStealth = ClientData.prevStealthDisplayed + absLimitedDif * direction;
+            int index = Tools.min((int) (100 - displayedStealth) >> 2, 49);
 
-                    float uvleft = gridX * STEALTH_GAUGE_2_UV_W + STEALTH_GAUGE_2_UV_HALF_PIXEL_W;
-                    float uvright = (gridX + 1) * STEALTH_GAUGE_2_UV_W - STEALTH_GAUGE_2_UV_HALF_PIXEL_W;
-                    float uvtop = gridY * STEALTH_GAUGE_2_UV_H + STEALTH_GAUGE_2_UV_HALF_PIXEL_H;
-                    float uvbottom = (gridY + 1) * STEALTH_GAUGE_2_UV_H - STEALTH_GAUGE_2_UV_HALF_PIXEL_H;
 
-                    GlStateManager.glBegin(GL_QUADS);
-                    GlStateManager.glTexCoord2f(uvleft, uvtop);
-                    GlStateManager.glVertex3f(-halfSize, -halfSize, 0);
-                    GlStateManager.glTexCoord2f(uvleft, uvbottom);
-                    GlStateManager.glVertex3f(-halfSize, halfSize, 0);
-                    GlStateManager.glTexCoord2f(uvright, uvbottom);
-                    GlStateManager.glVertex3f(halfSize, halfSize, 0);
-                    GlStateManager.glTexCoord2f(uvright, uvtop);
-                    GlStateManager.glVertex3f(halfSize, -halfSize, 0);
-                    GlStateManager.glEnd();
-                }
-            }
-            else
-            {
-                GlStateManager.color(c.rf(), c.gf(), c.bf(), alpha);
+            GlStateManager.color(c.rf(), c.gf(), c.bf(), alpha);
 
-                int gridX = index % 10;
-                int gridY = index / 10;
+            int gridX = index % 10;
+            int gridY = index / 10;
 
-                float uvleft = gridX * STEALTH_GAUGE_2_UV_W + STEALTH_GAUGE_2_UV_HALF_PIXEL_W;
-                float uvright = (gridX + 1) * STEALTH_GAUGE_2_UV_W - STEALTH_GAUGE_2_UV_HALF_PIXEL_W;
-                float uvtop = gridY * STEALTH_GAUGE_2_UV_H + STEALTH_GAUGE_2_UV_HALF_PIXEL_H;
-                float uvbottom = (gridY + 1) * STEALTH_GAUGE_2_UV_H - STEALTH_GAUGE_2_UV_HALF_PIXEL_H;
+            float uvleft = gridX * STEALTH_GAUGE_2_UV_W + STEALTH_GAUGE_2_UV_HALF_PIXEL_W;
+            float uvright = (gridX + 1) * STEALTH_GAUGE_2_UV_W - STEALTH_GAUGE_2_UV_HALF_PIXEL_W;
+            float uvtop = gridY * STEALTH_GAUGE_2_UV_H + STEALTH_GAUGE_2_UV_HALF_PIXEL_H;
+            float uvbottom = (gridY + 1) * STEALTH_GAUGE_2_UV_H - STEALTH_GAUGE_2_UV_HALF_PIXEL_H;
 
-                GlStateManager.glBegin(GL_QUADS);
-                GlStateManager.glTexCoord2f(uvleft, uvtop);
-                GlStateManager.glVertex3f(-halfSize, -halfSize, 0);
-                GlStateManager.glTexCoord2f(uvleft, uvbottom);
-                GlStateManager.glVertex3f(-halfSize, halfSize, 0);
-                GlStateManager.glTexCoord2f(uvright, uvbottom);
-                GlStateManager.glVertex3f(halfSize, halfSize, 0);
-                GlStateManager.glTexCoord2f(uvright, uvtop);
-                GlStateManager.glVertex3f(halfSize, -halfSize, 0);
-                GlStateManager.glEnd();
-            }
+            GlStateManager.glBegin(GL_QUADS);
+            GlStateManager.glTexCoord2f(uvleft, uvtop);
+            GlStateManager.glVertex3f(-halfSize, -halfSize, 0);
+            GlStateManager.glTexCoord2f(uvleft, uvbottom);
+            GlStateManager.glVertex3f(-halfSize, halfSize, 0);
+            GlStateManager.glTexCoord2f(uvright, uvbottom);
+            GlStateManager.glVertex3f(halfSize, halfSize, 0);
+            GlStateManager.glTexCoord2f(uvright, uvtop);
+            GlStateManager.glVertex3f(halfSize, -halfSize, 0);
+            GlStateManager.glEnd();
+
 
             ClientData.prevStealthFrameIndex = index;
+            ClientData.prevStealthDisplayed = displayedStealth;
         }
 
         GlStateManager.popMatrix();
