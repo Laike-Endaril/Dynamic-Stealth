@@ -76,4 +76,12 @@ public class MainHUDStyleConfig
             })
     @Config.RangeDouble(min = 0, max = 1)
     public double stealthGaugeY = 0.5;
+
+    @Config.Name("Stealth Gauge Alpha Smoothing")
+    @Config.LangKey(DynamicStealth.MODID + ".config.stealthGaugeAlphaSmoothing")
+    @Config.Comment(
+            {
+                    "Whether to use alpha smoothing on the stealth gauge during quick transitions"
+            })
+    public boolean stealthGaugeAlphaSmoothing = true;
 }

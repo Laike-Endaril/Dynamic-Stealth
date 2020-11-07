@@ -11,6 +11,7 @@ import com.fantasticsource.dynamicstealth.compat.CompatNeat;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.OutlinedFontRenderer;
 import com.fantasticsource.mctools.Render;
+import com.fantasticsource.tools.Smoothing;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.datastructures.Color;
 import com.fantasticsource.tools.datastructures.Pair;
@@ -636,27 +637,60 @@ public class HUD
         {
             textureManager.bindTexture(STEALTH_GAUGE_TEXTURE_2);
             Color c = new Color(Integer.parseInt(clientSettings.hudSettings.mainStyle.stealthGaugeColor, 16), true);
-            GlStateManager.color(c.rf(), c.gf(), c.bf(), alpha);
-
             int index = Tools.min((100 - (int) stealth) >> 2, 49);
-            int gridX = index % 10;
-            int gridY = index / 10;
 
-            float uvleft = gridX * STEALTH_GAUGE_2_UV_W + STEALTH_GAUGE_2_UV_HALF_PIXEL_W;
-            float uvright = (gridX + 1) * STEALTH_GAUGE_2_UV_W - STEALTH_GAUGE_2_UV_HALF_PIXEL_W;
-            float uvtop = gridY * STEALTH_GAUGE_2_UV_H + STEALTH_GAUGE_2_UV_HALF_PIXEL_H;
-            float uvbottom = (gridY + 1) * STEALTH_GAUGE_2_UV_H - STEALTH_GAUGE_2_UV_HALF_PIXEL_H;
+            if (clientSettings.hudSettings.mainStyle.stealthGaugeAlphaSmoothing)
+            {
+                GlStateManager.color(c.rf(), c.gf(), c.bf(), (float) Smoothing.balanceAlpha(Math.abs(index - ClientData.prevStealthFrameIndex), alpha));
+                int direction = index - ClientData.prevStealthFrameIndex > 0 ? 1 : -1;
 
-            GlStateManager.glBegin(GL_QUADS);
-            GlStateManager.glTexCoord2f(uvleft, uvtop);
-            GlStateManager.glVertex3f(-halfSize, -halfSize, 0);
-            GlStateManager.glTexCoord2f(uvleft, uvbottom);
-            GlStateManager.glVertex3f(-halfSize, halfSize, 0);
-            GlStateManager.glTexCoord2f(uvright, uvbottom);
-            GlStateManager.glVertex3f(halfSize, halfSize, 0);
-            GlStateManager.glTexCoord2f(uvright, uvtop);
-            GlStateManager.glVertex3f(halfSize, -halfSize, 0);
-            GlStateManager.glEnd();
+                for (int i = ClientData.prevStealthFrameIndex; direction > 0 ? i <= index : i >= index; i += direction)
+                {
+                    int gridX = i % 10;
+                    int gridY = i / 10;
+
+                    float uvleft = gridX * STEALTH_GAUGE_2_UV_W + STEALTH_GAUGE_2_UV_HALF_PIXEL_W;
+                    float uvright = (gridX + 1) * STEALTH_GAUGE_2_UV_W - STEALTH_GAUGE_2_UV_HALF_PIXEL_W;
+                    float uvtop = gridY * STEALTH_GAUGE_2_UV_H + STEALTH_GAUGE_2_UV_HALF_PIXEL_H;
+                    float uvbottom = (gridY + 1) * STEALTH_GAUGE_2_UV_H - STEALTH_GAUGE_2_UV_HALF_PIXEL_H;
+
+                    GlStateManager.glBegin(GL_QUADS);
+                    GlStateManager.glTexCoord2f(uvleft, uvtop);
+                    GlStateManager.glVertex3f(-halfSize, -halfSize, 0);
+                    GlStateManager.glTexCoord2f(uvleft, uvbottom);
+                    GlStateManager.glVertex3f(-halfSize, halfSize, 0);
+                    GlStateManager.glTexCoord2f(uvright, uvbottom);
+                    GlStateManager.glVertex3f(halfSize, halfSize, 0);
+                    GlStateManager.glTexCoord2f(uvright, uvtop);
+                    GlStateManager.glVertex3f(halfSize, -halfSize, 0);
+                    GlStateManager.glEnd();
+                }
+            }
+            else
+            {
+                GlStateManager.color(c.rf(), c.gf(), c.bf(), alpha);
+
+                int gridX = index % 10;
+                int gridY = index / 10;
+
+                float uvleft = gridX * STEALTH_GAUGE_2_UV_W + STEALTH_GAUGE_2_UV_HALF_PIXEL_W;
+                float uvright = (gridX + 1) * STEALTH_GAUGE_2_UV_W - STEALTH_GAUGE_2_UV_HALF_PIXEL_W;
+                float uvtop = gridY * STEALTH_GAUGE_2_UV_H + STEALTH_GAUGE_2_UV_HALF_PIXEL_H;
+                float uvbottom = (gridY + 1) * STEALTH_GAUGE_2_UV_H - STEALTH_GAUGE_2_UV_HALF_PIXEL_H;
+
+                GlStateManager.glBegin(GL_QUADS);
+                GlStateManager.glTexCoord2f(uvleft, uvtop);
+                GlStateManager.glVertex3f(-halfSize, -halfSize, 0);
+                GlStateManager.glTexCoord2f(uvleft, uvbottom);
+                GlStateManager.glVertex3f(-halfSize, halfSize, 0);
+                GlStateManager.glTexCoord2f(uvright, uvbottom);
+                GlStateManager.glVertex3f(halfSize, halfSize, 0);
+                GlStateManager.glTexCoord2f(uvright, uvtop);
+                GlStateManager.glVertex3f(halfSize, -halfSize, 0);
+                GlStateManager.glEnd();
+            }
+
+            ClientData.prevStealthFrameIndex = index;
         }
 
         GlStateManager.popMatrix();
