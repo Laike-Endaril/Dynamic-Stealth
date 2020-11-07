@@ -134,6 +134,7 @@ public class Threat
         }
     }
 
+
     public static void apply(EntityLivingBase searcher, EntityLivingBase target, double threatPercentage, THREAT_TYPE type)
     {
         apply(searcher, target, threatPercentage, type, Sight.canSee(searcher, target, true), null);

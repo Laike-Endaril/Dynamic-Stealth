@@ -72,7 +72,7 @@ public class Communication
         EntityLivingBase warner = warnData.warner;
         EntityLivingBase danger = warnData.danger;
         World world = warner.world;
-        if (warner.isEntityAlive() && (danger == null || danger.world == world))
+        if (warner.isEntityAlive() && (danger == null || !warnData.sawDanger || (danger.world == world && danger.isEntityAlive())))
         {
             for (Entity helper : world.loadedEntityList.toArray(new Entity[0]))
             {
@@ -103,14 +103,15 @@ public class Communication
                         AIDynamicStealth helperAI = AIDynamicStealth.getStealthAI(livingHelper);
                         if (helperAI != null)
                         {
-                            helperAI.fleeIfYouShould(0);
-
                             if (canSee) helperAI.lastKnownPosition = danger.getPosition();
                             else
                             {
                                 int distance = (int) helper.getDistance(dangerPos.getX(), dangerPos.getY(), dangerPos.getZ());
                                 helperAI.lastKnownPosition = MCTools.randomPos(dangerPos, Tools.min(3 + (distance >> 1), 7), Tools.min(1 + (distance >> 2), 4));
                             }
+
+                            helperAI.restart(helperAI.lastKnownPosition);
+                            helperAI.fleeIfYouShould(0);
                         }
                     }
                 }
