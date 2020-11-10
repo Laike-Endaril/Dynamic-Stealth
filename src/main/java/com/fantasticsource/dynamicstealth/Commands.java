@@ -1,9 +1,7 @@
 package com.fantasticsource.dynamicstealth;
 
-import com.fantasticsource.dynamicstealth.config.ConfigHandler;
 import com.fantasticsource.dynamicstealth.server.senses.HidingData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
-import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.PlayerData;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -49,13 +47,17 @@ public class Commands extends CommandBase
         {
             return AQUA + "/dstealth threat <entity UUID> <target entity UUID> <amount>" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.threat.comment") + "\n" +
 
+                    AQUA + "/dstealth creativeinvis <t/f/true/false>" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.creativeinvis.comment") + "\n" +
+
                     AQUA + "/dstealth hidefrom <playername> <t/f/true/false>" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.hidefromPlayerTF.comment") + "\n" +
                     AQUA + "/dstealth hidefrom <playername>" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.hidefromPlayer.comment") + "\n" +
                     AQUA + "/dstealth hidefrom" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.hidefrom.comment");
         }
         else
         {
-            return AQUA + "/dstealth hidefrom <playername> <t/f/true/false>" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.hidefromPlayerTF.comment") + "\n" +
+            return AQUA + "/dstealth creativeinvis <t/f/true/false>" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.creativeinvis.comment") + "\n" +
+
+                    AQUA + "/dstealth hidefrom <playername> <t/f/true/false>" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.hidefromPlayerTF.comment") + "\n" +
                     AQUA + "/dstealth hidefrom <playername>" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.hidefromPlayer.comment") + "\n" +
                     AQUA + "/dstealth hidefrom" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.hidefrom.comment");
         }
@@ -78,6 +80,7 @@ public class Commands extends CommandBase
             {
                 result.add("threat");
             }
+            result.add("creativeinvis");
             result.add("hidefrom");
 
             if (partial.length() != 0) result.removeIf(k -> partial.length() > k.length() || !k.substring(0, partial.length()).equalsIgnoreCase(partial));
@@ -92,6 +95,13 @@ public class Commands extends CommandBase
                 {
                     if (!result.contains(data.name)) result.add(data.name);
                 }
+
+                if (partial.length() != 0) result.removeIf(k -> partial.length() > k.length() || !k.substring(0, partial.length()).equalsIgnoreCase(partial));
+            }
+            else if (args[0].equals("creativeinvis"))
+            {
+                result.add("true");
+                result.add("false");
 
                 if (partial.length() != 0) result.removeIf(k -> partial.length() > k.length() || !k.substring(0, partial.length()).equalsIgnoreCase(partial));
             }
@@ -114,13 +124,56 @@ public class Commands extends CommandBase
         String cmd = args[0];
         switch (cmd)
         {
+            case "creativeinvis":
+                try
+                {
+                    EntityPlayer player = getCommandSenderAsPlayer(sender);
+                    if (args.length == 1)
+                    {
+                        if (HidingData.isCreativeInvis(player)) notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.creativeinvisIsTrue");
+                        else notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.creativeinvisIsFalse");
+                    }
+                    else
+                    {
+                        String s = args[1].toLowerCase();
+                        if (s.equals("t") || s.equals("true"))
+                        {
+                            if (HidingData.isCreativeInvis(player)) notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.creativeinvisTrue");
+                            else
+                            {
+                                HidingData.setCreativeInvis(player, true);
+                                notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.creativeinvisSetTrue");
+                            }
+                        }
+                        else if (s.equals("f") || s.equals("false"))
+                        {
+                            if (!HidingData.isCreativeInvis(player)) notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.creativeinvisFalse");
+                            else
+                            {
+                                HidingData.setCreativeInvis(player, false);
+                                notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.creativeinvisSetFalse");
+                            }
+                        }
+                        else
+                        {
+                            notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.creativeinvisTFError");
+                        }
+                    }
+                }
+                catch (PlayerNotFoundException e)
+                {
+                    e.printStackTrace();
+                }
+                break;
+
+
             case "hidefrom":
                 try
                 {
                     EntityPlayer player = getCommandSenderAsPlayer(sender);
                     if (args.length == 1)
                     {
-                        HashSet<UUID> set = HidingData.hidingData.computeIfAbsent(player.getPersistentID(), k -> new HidingData(player)).notHidingFrom;
+                        HashSet<UUID> set = HidingData.hidingData.computeIfAbsent(player.getPersistentID(), k -> new HidingData(player, true)).notHidingFrom;
                         if (set.size() == 0) notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromEmpty");
                         else
                         {
@@ -140,7 +193,8 @@ public class Commands extends CommandBase
                     }
                     else
                     {
-                        if (args[2].equalsIgnoreCase("t") || args[2].equalsIgnoreCase("true"))
+                        String s = args[2].toLowerCase();
+                        if (s.equals("t") || s.equals("true"))
                         {
                             if (HidingData.isHidingFrom(player, args[1])) notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerTrue", args[1]);
                             else
@@ -149,7 +203,7 @@ public class Commands extends CommandBase
                                 notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerSetTrue", args[1]);
                             }
                         }
-                        else if (args[2].equalsIgnoreCase("f") || args[2].equalsIgnoreCase("false"))
+                        else if (s.equals("f") || s.equals("false"))
                         {
                             if (!HidingData.isHidingFrom(player, args[1])) notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.hidefromPlayerFalse", args[1]);
                             else

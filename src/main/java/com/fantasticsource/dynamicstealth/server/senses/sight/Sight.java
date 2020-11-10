@@ -164,7 +164,7 @@ public class Sight
         }
 
         //Calculate result
-        double result = visualStealthLevelInternal(searcher, target, isAggressive, yaw, pitch, offsetLR);
+        double result = visualStealthLevelInternal(searcher, target, yaw, pitch, offsetLR);
 
         if (saveCache)
         {
@@ -265,23 +265,22 @@ public class Sight
     }
 
 
-    private static double visualStealthLevelInternal(EntityLivingBase searcher, Entity target, boolean isAggressive, double yaw, double pitch, double offsetLR)
+    private static double visualStealthLevelInternal(EntityLivingBase searcher, Entity target, double yaw, double pitch, double offsetLR)
     {
         //Hard checks (absolute)
         if (searcher.world != target.world || target.isDead || target instanceof FakePlayer) return 777;
-        if (searcher instanceof EntityPlayerMP && target == ((EntityPlayerMP) searcher).getSpectatingEntity()) return -777;
-
         if (target instanceof EntityPlayer)
         {
+            EntityPlayer player = (EntityPlayer) target;
+            if (player.isSpectator()) return 777;
+            if (player.isCreative() && HidingData.isCreativeInvis(player)) return 777;
+
             if (searcher instanceof EntityPlayer)
             {
-                if (!DynamicStealthConfig.serverSettings.senses.pvpStealth || !HidingData.isHidingFrom((EntityPlayer) target, searcher.getName())) return -777;
-            }
-            else if (searcher instanceof EntityLiving)
-            {
-                if (isAggressive && (((EntityPlayer) target).capabilities.isCreativeMode || ((EntityPlayer) target).isSpectator())) return 777;
+                if (!DynamicStealthConfig.serverSettings.senses.pvpStealth || !HidingData.isHidingFrom((EntityPlayer) target, searcher.getPersistentID())) return -777;
             }
         }
+        if (searcher instanceof EntityPlayerMP && target == ((EntityPlayerMP) searcher).getSpectatingEntity()) return -777;
         if (target instanceof EntityDragon || target instanceof EntityWither) return -777;
         if (searcher instanceof EntityPlayer && CompatDissolution.isPossessing((EntityPlayer) searcher, target)) return -777;
         if (MCTools.isRidingOrRiddenBy(searcher, target)) return -777;

@@ -31,6 +31,16 @@ tipped_arrow.effect.dynamicstealth.glowing=Arrow of Glowing
 
 
 
+dynamicstealth.cmd.creativeinvis.comment=§dSet whether you are visible or not when in creative mode
+
+dynamicstealth.cmd.creativeinvisIsTrue=§aYou are hidden when in creative mode
+dynamicstealth.cmd.creativeinvisIsFalse=§eYou are visible when in creative mode
+dynamicstealth.cmd.creativeinvisSetTrue=§aYou are now hidden when in creative mode
+dynamicstealth.cmd.creativeinvisSetFalse=§eYou are now visible when in creative mode
+dynamicstealth.cmd.creativeinvisTrue=§aAlready hidden when in creative mode
+dynamicstealth.cmd.creativeinvisFalse=§eAlready visible when in creative mode
+dynamicstealth.cmd.creativeinvisTFError=§cSecond argument must be one of these: §dt, true, f, false
+
 dynamicstealth.cmd.hidefromPlayerTF.comment=§dTrue is normal/default, false means the player can always see you
 dynamicstealth.cmd.hidefromPlayer.comment=§dShow whether or not you're attempting to hide from the player
 dynamicstealth.cmd.hidefrom.comment=§dShow a list of players you are NOT attempting to hide from

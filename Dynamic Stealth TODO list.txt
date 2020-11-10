@@ -4,9 +4,6 @@ Add new stealth gauge mode...
 ...replaces the cursor and animates between cursor and stealth gauge when you go from fully stealthed to not fully stealthed
 ...not the default, as it may conflict with other custom cursors
 
-Add creativeinvis command
-True by default (creative mode players are completely invisible except to other creative mode players)
-
 
 
 Add ally groups for helper system config
