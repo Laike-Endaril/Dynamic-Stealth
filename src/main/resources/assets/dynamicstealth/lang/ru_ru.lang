@@ -25,12 +25,6 @@ splash_potion.effect.dynamicstealth.glowing=Взрывное зелье Сиян
 lingering_potion.effect.dynamicstealth.glowing=Туманное зелье Сияния Души
 tipped_arrow.effect.dynamicstealth.glowing=Стрела Сияния Души
 
-dynamicstealth.cmd.reload.comment=§dПерезагрузка конфигурации мода
-
-dynamicstealth.cmd.reloaded1=§aЗаставляет сервер перезагрузить конфигурацию из файла
-dynamicstealth.cmd.reloaded2=§eЗаметка: Кнопка "Восстановить значения по умолчанию" может вызвать сбои до тех пор, пока игра не будет перезапущена
-dynamicstealth.cmd.reloaded3=§eЗаметка: Некоторые параметры могут обновиться только после перезагрузки сервера ( но большинство параметров обновляются без проблем )
-
 dynamicstealth.cmd.hidefromPlayerTF.comment=§dFalse означает, что данный игрок видит вас всегда, True - значение по умолчанию
 dynamicstealth.cmd.hidefromPlayer.comment=§dПоказывает, скрываетесь ли вы от этого игрока
 dynamicstealth.cmd.hidefrom.comment=§dПоказать список игроков, от которых вы НЕ пытаетесь скрыться

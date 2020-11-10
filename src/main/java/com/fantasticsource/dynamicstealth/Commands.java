@@ -47,9 +47,7 @@ public class Commands extends CommandBase
     {
         if (sender.canUseCommand(2, getName()))
         {
-            return AQUA + "/dstealth reload" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.reload.comment") + "\n" +
-
-                    AQUA + "/dstealth threat <entity UUID> <target entity UUID> <amount>" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.threat.comment") + "\n" +
+            return AQUA + "/dstealth threat <entity UUID> <target entity UUID> <amount>" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.threat.comment") + "\n" +
 
                     AQUA + "/dstealth hidefrom <playername> <t/f/true/false>" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.hidefromPlayerTF.comment") + "\n" +
                     AQUA + "/dstealth hidefrom <playername>" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.hidefromPlayer.comment") + "\n" +
@@ -78,7 +76,6 @@ public class Commands extends CommandBase
         {
             if (sender.canUseCommand(2, getName()))
             {
-                result.add("reload");
                 result.add("threat");
             }
             result.add("hidefrom");
@@ -117,28 +114,6 @@ public class Commands extends CommandBase
         String cmd = args[0];
         switch (cmd)
         {
-            case "reload":
-                if (!sender.canUseCommand(2, getName()))
-                {
-                    notifyCommandListener(sender, this, "commands.generic.permission");
-                    return;
-                }
-
-                try
-                {
-                    MCTools.reloadConfig(ConfigHandler.fullConfigFilename, DynamicStealth.MODID);
-                    DynamicStealth.update();
-                    notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.reloaded1");
-                    notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.reloaded2");
-                    notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.reloaded3");
-                }
-                catch (IllegalAccessException e)
-                {
-                    e.printStackTrace();
-                }
-                break;
-
-
             case "hidefrom":
                 try
                 {
