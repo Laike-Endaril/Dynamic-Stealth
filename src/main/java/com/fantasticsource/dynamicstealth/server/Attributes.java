@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth.server;
 
 import com.fantasticsource.dynamicstealth.DynamicStealth;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 
 public class Attributes
@@ -38,26 +39,28 @@ public class Attributes
     public static void addAttributes(EntityLivingBase livingBase)
     {
         //Add new attributes
-        livingBase.getAttributeMap().registerAttribute(Attributes.THREATGEN);
-        livingBase.getAttributeMap().registerAttribute(Attributes.THREATGEN_SPOTTED);
-        livingBase.getAttributeMap().registerAttribute(Attributes.THREATGEN_ATTACK);
-        livingBase.getAttributeMap().registerAttribute(Attributes.THREATGEN_DAMAGE_TAKEN);
-        livingBase.getAttributeMap().registerAttribute(Attributes.THREATGEN_WARNED_AGAINST);
-        livingBase.getAttributeMap().registerAttribute(Attributes.THREATGEN_KILL);
-        livingBase.getAttributeMap().registerAttribute(Attributes.THREATGEN_VISIBLE);
+        AbstractAttributeMap attributeMap = livingBase.getAttributeMap();
 
-        livingBase.getAttributeMap().registerAttribute(Attributes.THREATDEG);
-        livingBase.getAttributeMap().registerAttribute(Attributes.THREATDEG_NOT_VISIBLE);
-        livingBase.getAttributeMap().registerAttribute(Attributes.THREATDEG_FLEE_FROM);
+        attributeMap.registerAttribute(THREATGEN);
+        attributeMap.registerAttribute(THREATGEN_SPOTTED);
+        attributeMap.registerAttribute(THREATGEN_ATTACK);
+        attributeMap.registerAttribute(THREATGEN_DAMAGE_TAKEN);
+        attributeMap.registerAttribute(THREATGEN_WARNED_AGAINST);
+        attributeMap.registerAttribute(THREATGEN_KILL);
+        attributeMap.registerAttribute(THREATGEN_VISIBLE);
+
+        attributeMap.registerAttribute(THREATDEG);
+        attributeMap.registerAttribute(THREATDEG_NOT_VISIBLE);
+        attributeMap.registerAttribute(THREATDEG_FLEE_FROM);
 
 
-        livingBase.getAttributeMap().registerAttribute(Attributes.VISIBILITY_REDUCTION);
-        livingBase.getAttributeMap().registerAttribute(Attributes.SIGHT);
+        attributeMap.registerAttribute(VISIBILITY_REDUCTION);
+        attributeMap.registerAttribute(SIGHT);
 
-        livingBase.getAttributeMap().registerAttribute(Attributes.NOISE_REDUCTION);
-        livingBase.getAttributeMap().registerAttribute(Attributes.HEARING);
+        attributeMap.registerAttribute(NOISE_REDUCTION);
+        attributeMap.registerAttribute(HEARING);
 
-        livingBase.getAttributeMap().registerAttribute(Attributes.SCENT_REDUCTION);
-        livingBase.getAttributeMap().registerAttribute(Attributes.SMELLING);
+        attributeMap.registerAttribute(SCENT_REDUCTION);
+        attributeMap.registerAttribute(SMELLING);
     }
 }
