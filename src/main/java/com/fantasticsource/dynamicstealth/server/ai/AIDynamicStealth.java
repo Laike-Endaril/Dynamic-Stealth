@@ -14,11 +14,13 @@ import com.fantasticsource.mctools.NPEAttackTargetTaskHolder;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.TrigLookupTable;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.*;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -26,6 +28,7 @@ import net.minecraftforge.common.MinecraftForge;
 import noppes.npcs.api.NpcAPI;
 import noppes.npcs.api.entity.ICustomNpc;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -36,6 +39,8 @@ import static com.fantasticsource.dynamicstealth.server.threat.Threat.THREAT_TYP
 
 public class AIDynamicStealth extends EntityAIBase
 {
+    public static final Field PATH_POINTS_FIELD = ReflectionTool.getField(Path.class, "field_75884_a", "points");
+
     public static final int
             MODE_NONE = 0,
             MODE_FIND_PATH = 1,
@@ -824,23 +829,36 @@ public class AIDynamicStealth extends EntityAIBase
 
     private boolean findPathAngle()
     {
-        int length = path.getCurrentPathLength();
-        if (length < 2) return false;
+        PathPoint[] points = (PathPoint[]) ReflectionTool.get(PATH_POINTS_FIELD, path);
+        if (points.length < 2) return false;
 
         int i = 1;
         Vec3d pos = searcher.getPositionVector();
-        nextPos = path.getVectorFromIndex(searcher, i);
+        nextPos = getPathVectorFromIndex(points, searcher, i);
 
         while ((new BlockPos(pos)).distanceSq(new BlockPos(nextPos)) < 2)
         {
-            if (length < i + 2) return false;
+            if (points.length < i + 2) return false;
 
             i++;
-            nextPos = path.getVectorFromIndex(searcher, i);
+            nextPos = getPathVectorFromIndex(points, searcher, i);
         }
 
         pathAngle = 360 - Tools.radtodeg(TRIG_TABLE.arctanFullcircle(pos.z, -pos.x, nextPos.z, -nextPos.x));
 
         return true;
+    }
+
+    public static Vec3d getPathVectorFromIndex(Path path, Entity entity, int index)
+    {
+        return getPathVectorFromIndex((PathPoint[]) ReflectionTool.get(PATH_POINTS_FIELD, path), entity, index);
+    }
+
+    public static Vec3d getPathVectorFromIndex(PathPoint[] points, Entity entity, int index)
+    {
+        double x = (double) points[index].x + (double) (((int) entity.width + 1) >>> 1);
+        double y = (double) points[index].y;
+        double z = (double) points[index].z + (double) (((int) entity.width + 1) >>> 1);
+        return new Vec3d(x, y, z);
     }
 }

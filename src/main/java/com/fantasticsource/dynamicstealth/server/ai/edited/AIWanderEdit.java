@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
-import com.fantasticsource.dynamicstealth.DynamicStealth;
+import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
 import com.fantasticsource.dynamicstealth.server.ai.EntityAIData;
 import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.entity.EntityCreature;
@@ -9,6 +9,7 @@ import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.monster.EntityElderGuardian;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
@@ -126,13 +127,13 @@ public class AIWanderEdit extends EntityAIWander
     {
         if (path != null)
         {
-            int pathLength = path.getCurrentPathLength();
+            PathPoint[] points = (PathPoint[]) ReflectionTool.get(AIDynamicStealth.PATH_POINTS_FIELD, path);
 
             if (!looked)
             {
-                for (int i = pathLength - 1; i >= 0; i--)
+                for (int i = points.length - 1; i >= 0; i--)
                 {
-                    Vec3d vec = path.getVectorFromIndex(entity, i);
+                    Vec3d vec = AIDynamicStealth.getPathVectorFromIndex(points, entity, i);
                     if (isDirect(vec))
                     {
                         lookIndex = i;
@@ -144,20 +145,20 @@ public class AIWanderEdit extends EntityAIWander
                 if (lookVec == null)
                 {
                     lookIndex = 0;
-                    lookVec = path.getVectorFromIndex(entity, 0);
+                    lookVec = AIDynamicStealth.getPathVectorFromIndex(points, entity, 0);
                 }
             }
             else //Walking
             {
                 lookIndex = path.getCurrentPathIndex();
-                if (lookIndex + 1 < pathLength) lookIndex++;
-                if (lookIndex + 1 < pathLength) lookIndex++;
-                lookVec = path.getVectorFromIndex(entity, lookIndex);
+                if (lookIndex + 1 < points.length) lookIndex++;
+                if (lookIndex + 1 < points.length) lookIndex++;
+                lookVec = AIDynamicStealth.getPathVectorFromIndex(points, entity, lookIndex);
             }
 
-            while (lookVec.squareDistanceTo(entity.getPositionVector()) < 1 && lookIndex + 1 < pathLength)
+            while (lookVec.squareDistanceTo(entity.getPositionVector()) < 1 && lookIndex + 1 < points.length)
             {
-                lookVec = path.getVectorFromIndex(entity, ++lookIndex);
+                lookVec = AIDynamicStealth.getPathVectorFromIndex(points, entity, ++lookIndex);
             }
         }
     }
