@@ -4,6 +4,7 @@ import com.fantasticsource.dynamicstealth.client.layeredits.LayerEndermanEyesEdi
 import com.fantasticsource.dynamicstealth.client.layeredits.LayerSpiderEyesEdit;
 import com.fantasticsource.dynamicstealth.common.ClientData;
 import com.fantasticsource.dynamicstealth.compat.Compat;
+import com.fantasticsource.dynamicstealth.compat.CompatIceAndFire;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
@@ -149,22 +150,8 @@ public class RenderAlterer
         if (ready)
         {
             EntityLivingBase livingBase = event.getEntity();
-
-            //Hard stops
-            if (Compat.statues && livingBase.getClass().getName().contains("party.lemons.statue")) return;
-            if (Compat.iceandfire)
-            {
-                Render render = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(livingBase);
-                if (render instanceof RenderLivingBase)
-                {
-                    List<LayerRenderer> list = ((RenderLivingBase) render).layerRenderers;
-                    for (LayerRenderer layer : list.toArray(new LayerRenderer[0]))
-                    {
-                        if (layer.getClass().getSimpleName().equals("LayerStoneEntity")) return;
-                    }
-                }
-            }
             if (livingBase.getClass() == Compat.bibliocraftArmorStandEntity) return;
+            if (Compat.statues && livingBase.getClass().getName().contains("party.lemons.statue")) return;
 
 
             //Remove glow effect if cached
@@ -177,11 +164,14 @@ public class RenderAlterer
 
             if (!event.isCanceled())
             {
+                if (Compat.iceandfire && CompatIceAndFire.isPetrified(livingBase)) return;
+
+
                 //Don't draw seen entities as invisible, because they've been SEEN
                 livingBase.setInvisible(false);
 
 
-                //Focused target glow effect
+                //Add focused target glow effect
                 if (clientSettings.hudSettings.targetingStyle.glow && clientSettings.hudSettings.targetingStyle.stateColoredGlow)
                 {
                     ClientData.OnPointData data = ClientData.targetData;
@@ -193,7 +183,7 @@ public class RenderAlterer
                     }
                 }
 
-                //Entity opacity based on visibility
+                //Set entity opacity based on visibility
                 if (ClientData.usePlayerSenses && livingBase != Minecraft.getMinecraft().player)
                 {
                     int id = livingBase.getEntityId();
@@ -229,25 +219,10 @@ public class RenderAlterer
         if (ready)
         {
             EntityLivingBase livingBase = event.getEntity();
-
-            //Hard stops
-            if (Compat.iceandfire && livingBase.getClass().getName().contains("iceandfire"))
-            {
-                Render render = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(livingBase);
-                if (render instanceof RenderLivingBase)
-                {
-                    List<LayerRenderer> list = ((RenderLivingBase) render).layerRenderers;
-                    for (LayerRenderer layer : list.toArray(new LayerRenderer[0]))
-                    {
-                        if (layer.getClass().getSimpleName().equals("LayerStoneEntity")) return;
-                    }
-                }
-            }
-
             if (Compat.statues && livingBase.getClass().getName().contains("party.lemons.statue")) return;
 
 
-            //Focused target glowing effect
+            //Remove focused target glow effect
             Team team = livingBase.getTeam();
             if (colorTeams.contains(team))
             {
@@ -259,9 +234,13 @@ public class RenderAlterer
                 livingBase.setGlowing(false);
             }
 
+
+            if (Compat.iceandfire && CompatIceAndFire.isPetrified(livingBase)) return;
+
+
             if (!event.isCanceled())
             {
-                //Focused target and soul sight glowing effects
+                //Add focused target and soul sight glow effects
                 ClientData.OnPointData data = ClientData.targetData;
                 if (clientSettings.hudSettings.targetingStyle.glow && data != null && data.searcherID == livingBase.getEntityId())
                 {
