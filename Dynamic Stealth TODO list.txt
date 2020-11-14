@@ -1,10 +1,7 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Add new stealth gauge mode...
-...replaces the cursor and animates between cursor and stealth gauge when you go from fully stealthed to not fully stealthed
-...not the default, as it may conflict with other custom cursors
-
-
+Add config option for "Can See Through" Materials
+Add config option for "Can See Through" Blocks
 
 Add ally groups for helper system config
 
@@ -118,9 +115,6 @@ Add peek keybinds to replace current hand mirror behavior?
 
 
 CONFIG ======================================================================================================================================================================================================================
-
-Add config option for "Can See Through" Materials
-Add config option for "Can See Through" Blocks
 
 Add entity-specific filter for OPHUD
 Add entity-specific filter for targeting HUD

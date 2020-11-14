@@ -101,7 +101,7 @@ dynamicstealth.config.stealthGaugeRimColor.tooltip=FILLSCREEN FIXNEWLINES The co
 dynamicstealth.config.stealthGaugeSize=Stealth Gauge Size
 dynamicstealth.config.stealthGaugeSize.tooltip=FILLSCREEN FIXNEWLINES The size of the stealth gauge\n \n
 dynamicstealth.config.stealthGaugeMode=Stealth Gauge Mode
-dynamicstealth.config.stealthGaugeMode.tooltip=FILLSCREEN FIXNEWLINES The general display mode of the stealth gauge\n\n0 = None\n1 = Rotational\n2 = Animated\n \n
+dynamicstealth.config.stealthGaugeMode.tooltip=FILLSCREEN FIXNEWLINES The general display mode of the stealth gauge\n\n0 = None\n1 = Rotational\n2 = Animated\n3 = Animated, replaces vanilla cursor\n \n
 dynamicstealth.config.stealthGaugeX=Stealth Gauge X Position
 dynamicstealth.config.stealthGaugeX.tooltip=FILLSCREEN FIXNEWLINES The x position of the stealth gauge\n\n0 is far left, 0.5 is center, 1 is far right\n \n
 dynamicstealth.config.stealthGaugeY=Stealth Gauge Y Position

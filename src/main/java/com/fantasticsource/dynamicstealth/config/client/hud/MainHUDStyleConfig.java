@@ -51,8 +51,9 @@ public class MainHUDStyleConfig
                     "0 = None",
                     "1 = Rotational",
                     "2 = Animated",
+                    "3 = Animated, replaces vanilla cursor",
             })
-    @Config.RangeInt(min = 0, max = 2)
+    @Config.RangeInt(min = 0, max = 3)
     public int stealthGaugeMode = 2;
 
     @Config.Name("Stealth Gauge X Position")

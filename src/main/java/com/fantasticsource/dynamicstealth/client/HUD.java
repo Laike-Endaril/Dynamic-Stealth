@@ -8,6 +8,7 @@ import com.fantasticsource.dynamicstealth.client.event.RenderTargetingHUDEvent;
 import com.fantasticsource.dynamicstealth.common.ClientData;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatNeat;
+import com.fantasticsource.dynamicstealth.config.DynamicStealthConfig;
 import com.fantasticsource.mctools.ClientTickTimer;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.OutlinedFontRenderer;
@@ -71,8 +72,13 @@ public class HUD
     private static final ResourceLocation STEALTH_GAUGE_TEXTURE_2 = new ResourceLocation(DynamicStealth.MODID, "image/stealthgauge2.png");
     private static final float STEALTH_GAUGE_2_UV_HALF_PIXEL_W = 0.5f / (STEALTH_GAUGE_SIZE * 10);
     private static final float STEALTH_GAUGE_2_UV_HALF_PIXEL_H = 0.5f / (STEALTH_GAUGE_SIZE * 5);
-    private static final float STEALTH_GAUGE_2_UV_W = 0.1f;
-    private static final float STEALTH_GAUGE_2_UV_H = 0.2f;
+    private static final float STEALTH_GAUGE_2_UV_W = 1f / 10;
+    private static final float STEALTH_GAUGE_2_UV_H = 1f / 5;
+    private static final ResourceLocation STEALTH_GAUGE_TEXTURE_3 = new ResourceLocation(DynamicStealth.MODID, "image/stealthgauge3.png");
+    private static final float STEALTH_GAUGE_3_UV_HALF_PIXEL_W = 0.5f / (STEALTH_GAUGE_SIZE * 10);
+    private static final float STEALTH_GAUGE_3_UV_HALF_PIXEL_H = 0.5f / (STEALTH_GAUGE_SIZE * 7);
+    private static final float STEALTH_GAUGE_3_UV_W = 1f / 10;
+    private static final float STEALTH_GAUGE_3_UV_H = 1f / 7;
 
     private static final ResourceLocation STEALTH_GAUGE_RIM_TEXTURE = new ResourceLocation(DynamicStealth.MODID, "image/stealthgaugerim.png");
     private static final int STEALTH_GAUGE_RIM_SIZE = 256;
@@ -128,6 +134,14 @@ public class HUD
     public static void drawHUD(Render.RenderHUDEvent event)
     {
         draw(event.getParentEvent(), Minecraft.getMinecraft());
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
+    public static void replaceCursor(RenderGameOverlayEvent.Pre event)
+    {
+        if (event.getType() != RenderGameOverlayEvent.ElementType.CROSSHAIRS || DynamicStealthConfig.clientSettings.hudSettings.mainStyle.stealthGaugeMode != 3) return;
+
+        if (!MinecraftForge.EVENT_BUS.post(new RenderStealthGaugeEvent(event))) drawStealthGauge(Minecraft.getMinecraft(), 3, event);
     }
 
     @SubscribeEvent
@@ -572,7 +586,7 @@ public class HUD
         }
     }
 
-    private static void drawStealthGauge(Minecraft mc, int mode)
+    private static void drawStealthGauge(Minecraft mc, int mode, RenderGameOverlayEvent.Pre event)
     {
         if (mode == 0) return;
 
@@ -592,6 +606,7 @@ public class HUD
         double y = halfSize + (sr.getScaledHeight() - halfSize * 2) * clientSettings.hudSettings.mainStyle.stealthGaugeY;
         GlStateManager.translate(x, y, 0);
 
+        Color c = new Color(Integer.parseInt(clientSettings.hudSettings.mainStyle.stealthGaugeColor, 16), true);
         if (mode == 1)
         {
             float stealth = partialTick * (ClientData.stealthLevel - ClientData.prevStealthLevel) + ClientData.prevStealthLevel;
@@ -600,7 +615,6 @@ public class HUD
 
             //Fill
             textureManager.bindTexture(STEALTH_GAUGE_TEXTURE);
-            Color c = new Color(Integer.parseInt(clientSettings.hudSettings.mainStyle.stealthGaugeColor, 16), true);
             GlStateManager.color(c.rf(), c.gf(), c.bf(), alpha);
 
             GlStateManager.glBegin(GL_QUADS);
@@ -638,9 +652,8 @@ public class HUD
         else if (mode == 2)
         {
             textureManager.bindTexture(STEALTH_GAUGE_TEXTURE_2);
-            Color c = new Color(Integer.parseInt(clientSettings.hudSettings.mainStyle.stealthGaugeColor, 16), true);
 
-
+            //Intentionally interpolated by stealth level and not frame, for a smoother and more consistent animation
             float dif = (float) ClientData.stealthLevel - ClientData.prevStealthDisplayed;
             int direction = dif > 0 ? 1 : -1;
             float absLimitedDif = Math.min(partialTickDelta * clientSettings.hudSettings.mainStyle.stealthGaugeSpeed, Math.abs(dif));
@@ -657,6 +670,48 @@ public class HUD
             float uvright = (gridX + 1) * STEALTH_GAUGE_2_UV_W - STEALTH_GAUGE_2_UV_HALF_PIXEL_W;
             float uvtop = gridY * STEALTH_GAUGE_2_UV_H + STEALTH_GAUGE_2_UV_HALF_PIXEL_H;
             float uvbottom = (gridY + 1) * STEALTH_GAUGE_2_UV_H - STEALTH_GAUGE_2_UV_HALF_PIXEL_H;
+
+            GlStateManager.glBegin(GL_QUADS);
+            GlStateManager.glTexCoord2f(uvleft, uvtop);
+            GlStateManager.glVertex3f(-halfSize, -halfSize, 0);
+            GlStateManager.glTexCoord2f(uvleft, uvbottom);
+            GlStateManager.glVertex3f(-halfSize, halfSize, 0);
+            GlStateManager.glTexCoord2f(uvright, uvbottom);
+            GlStateManager.glVertex3f(halfSize, halfSize, 0);
+            GlStateManager.glTexCoord2f(uvright, uvtop);
+            GlStateManager.glVertex3f(halfSize, -halfSize, 0);
+            GlStateManager.glEnd();
+
+
+            ClientData.prevStealthFrameIndex = index;
+            ClientData.prevStealthDisplayed = displayedStealth;
+        }
+        else if (mode == 3)
+        {
+            event.setCanceled(true);
+
+            textureManager.bindTexture(STEALTH_GAUGE_TEXTURE_3);
+
+            //Intentionally interpolated by stealth level and not frame, for a smoother and more consistent animation
+            float dif = (float) ClientData.stealthLevel - ClientData.prevStealthDisplayed;
+            if (ClientData.stealthLevel == 100) dif += 80; //When fully stealthed, target stealth display stealth level becomes 140 to account for cursor transition frames (2/7 of frames)
+            int direction = dif > 0 ? 1 : -1;
+            float absLimitedDif = Math.min(partialTickDelta * clientSettings.hudSettings.mainStyle.stealthGaugeSpeed, Math.abs(dif));
+            float displayedStealth = ClientData.prevStealthDisplayed + absLimitedDif * direction;
+            int index = Tools.min((int) (180 - displayedStealth) >> 2, 69);
+
+
+            GlStateManager.color(c.rf(), c.gf(), c.bf(), alpha);
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            GlStateManager.enableBlend();
+
+            int gridX = index % 10;
+            int gridY = index / 10;
+
+            float uvleft = gridX * STEALTH_GAUGE_3_UV_W + STEALTH_GAUGE_3_UV_HALF_PIXEL_W;
+            float uvright = (gridX + 1) * STEALTH_GAUGE_3_UV_W - STEALTH_GAUGE_3_UV_HALF_PIXEL_W;
+            float uvtop = gridY * STEALTH_GAUGE_3_UV_H + STEALTH_GAUGE_3_UV_HALF_PIXEL_H;
+            float uvbottom = (gridY + 1) * STEALTH_GAUGE_3_UV_H - STEALTH_GAUGE_3_UV_HALF_PIXEL_H;
 
             GlStateManager.glBegin(GL_QUADS);
             GlStateManager.glTexCoord2f(uvleft, uvtop);
@@ -695,7 +750,7 @@ public class HUD
 
 
         if (!MinecraftForge.EVENT_BUS.post(new RenderLightGaugeEvent(event))) drawLightGauge(mc);
-        if (!MinecraftForge.EVENT_BUS.post(new RenderStealthGaugeEvent(event))) drawStealthGauge(mc, clientSettings.hudSettings.mainStyle.stealthGaugeMode);
+        if (DynamicStealthConfig.clientSettings.hudSettings.mainStyle.stealthGaugeMode != 3 && !MinecraftForge.EVENT_BUS.post(new RenderStealthGaugeEvent(event))) drawStealthGauge(mc, clientSettings.hudSettings.mainStyle.stealthGaugeMode, null);
     }
 
     public static void drawTargetingHUD(RenderGameOverlayEvent.Pre event, Entity entity, FontRenderer fontRenderer)

@@ -8,6 +8,7 @@ import com.fantasticsource.dynamicstealth.common.Network;
 import com.fantasticsource.dynamicstealth.common.potions.Potions;
 import com.fantasticsource.dynamicstealth.compat.*;
 import com.fantasticsource.dynamicstealth.config.ConfigHandler;
+import com.fantasticsource.dynamicstealth.config.DynamicStealthConfig;
 import com.fantasticsource.dynamicstealth.server.*;
 import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
 import com.fantasticsource.dynamicstealth.server.ai.EntityAIData;
@@ -144,6 +145,12 @@ public class DynamicStealth
 
     public static void update()
     {
+        if (DynamicStealthConfig.clientSettings.hudSettings.mainStyle.stealthGaugeMode != 3)
+        {
+            ClientData.prevStealthDisplayed = Tools.min(ClientData.prevStealthDisplayed, 100);
+            ClientData.prevStealthFrameIndex = Tools.min(ClientData.prevStealthFrameIndex, 49);
+        }
+
         Compat.NAUGHTY.clear();
         Compat.NICE.clear();
 
