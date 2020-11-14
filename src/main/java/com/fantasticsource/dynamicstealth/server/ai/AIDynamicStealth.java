@@ -835,13 +835,12 @@ public class AIDynamicStealth extends EntityAIBase
         int i = 1;
         Vec3d pos = searcher.getPositionVector();
         nextPos = getPathVectorFromIndex(points, searcher, i);
+        if (nextPos == null) return false;
 
         while ((new BlockPos(pos)).distanceSq(new BlockPos(nextPos)) < 2)
         {
-            if (points.length < i + 2) return false;
-
-            i++;
-            nextPos = getPathVectorFromIndex(points, searcher, i);
+            nextPos = getPathVectorFromIndex(points, searcher, i++);
+            if (nextPos == null) return false;
         }
 
         pathAngle = 360 - Tools.radtodeg(TRIG_TABLE.arctanFullcircle(pos.z, -pos.x, nextPos.z, -nextPos.x));
@@ -849,13 +848,10 @@ public class AIDynamicStealth extends EntityAIBase
         return true;
     }
 
-    public static Vec3d getPathVectorFromIndex(Path path, Entity entity, int index)
-    {
-        return getPathVectorFromIndex((PathPoint[]) ReflectionTool.get(PATH_POINTS_FIELD, path), entity, index);
-    }
-
     public static Vec3d getPathVectorFromIndex(PathPoint[] points, Entity entity, int index)
     {
+        if (index < 0 || index >= points.length) return null;
+
         double x = (double) points[index].x + (double) (((int) entity.width + 1) >>> 1);
         double y = (double) points[index].y;
         double z = (double) points[index].z + (double) (((int) entity.width + 1) >>> 1);

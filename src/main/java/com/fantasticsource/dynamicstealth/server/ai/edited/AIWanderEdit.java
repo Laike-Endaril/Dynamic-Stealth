@@ -156,9 +156,12 @@ public class AIWanderEdit extends EntityAIWander
                 lookVec = AIDynamicStealth.getPathVectorFromIndex(points, entity, lookIndex);
             }
 
-            while (lookVec.squareDistanceTo(entity.getPositionVector()) < 1 && lookIndex + 1 < points.length)
+            if (lookVec != null)
             {
-                lookVec = AIDynamicStealth.getPathVectorFromIndex(points, entity, ++lookIndex);
+                while (lookVec.squareDistanceTo(entity.getPositionVector()) < 1 && lookIndex + 1 < points.length)
+                {
+                    lookVec = AIDynamicStealth.getPathVectorFromIndex(points, entity, ++lookIndex);
+                }
             }
         }
     }
