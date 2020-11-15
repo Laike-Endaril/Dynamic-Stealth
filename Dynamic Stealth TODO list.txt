@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+Fix bug with mirror when in 3rd person and you have a corner of a solid block behind your head
+
 Add config option for "Can See Through" Materials
 Add config option for "Can See Through" Blocks
 
