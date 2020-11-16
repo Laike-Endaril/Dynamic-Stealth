@@ -107,7 +107,9 @@ dynamicstealth.config.stealthGaugeX.tooltip=FILLSCREEN FIXNEWLINES The x positio
 dynamicstealth.config.stealthGaugeY=Stealth Gauge Y Position
 dynamicstealth.config.stealthGaugeY.tooltip=FILLSCREEN FIXNEWLINES The y position of the stealth gauge\n\n0 is top, 0.5 is center, 1 is bottom\n \n
 dynamicstealth.config.stealthGaugeSpeed=Stealth Gauge Speed
-dynamicstealth.config.stealthGaugeSpeed.tooltip=FILLSCREEN FIXNEWLINES Lower numbers make the stealth gauge animate smoother, higher numbers make the stealth gauge more accurate\n \n
+dynamicstealth.config.stealthGaugeSpeed.tooltip=FILLSCREEN FIXNEWLINES For modes 2 and 3, lower numbers make the stealth gauge animate smoother, higher numbers make the stealth gauge more accurate\n \n
+dynamicstealth.config.cursorReversionDelay=Cursor Reversion Delay
+dynamicstealth.config.cursorReversionDelay.tooltip=FILLSCREEN FIXNEWLINES For mode 3, how many ticks to wait before reverting from eye to cursor once you are fully stealthed\n \n
 
 dynamicstealth.config.opHUDShowBypass=Bypass
 dynamicstealth.config.opHUDShowBypass.tooltip=FILLSCREEN FIXNEWLINES If true, on-point indicators appear for entities that bypass the threat system\n \n

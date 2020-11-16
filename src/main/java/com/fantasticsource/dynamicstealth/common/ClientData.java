@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.common;
 
 import com.fantasticsource.dynamicstealth.compat.CompatEBWizardry;
+import com.fantasticsource.dynamicstealth.config.DynamicStealthConfig;
 import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
@@ -42,6 +43,7 @@ public class ClientData
 
     public static int stealthLevel = Byte.MIN_VALUE, prevStealthLevel = Byte.MIN_VALUE, lightLevel = 0, prevStealthFrameIndex = 0;
     public static float prevStealthDisplayed = 0;
+    public static int fullStealthTime = 0;
 
     public static boolean soulSight = false;
     public static boolean usePlayerSenses = false;

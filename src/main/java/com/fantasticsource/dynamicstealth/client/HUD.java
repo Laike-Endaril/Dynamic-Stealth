@@ -694,7 +694,15 @@ public class HUD
 
             //Intentionally interpolated by stealth level and not frame, for a smoother and more consistent animation
             float dif = (float) ClientData.stealthLevel - ClientData.prevStealthDisplayed;
-            if (ClientData.stealthLevel == 100) dif += 80; //When fully stealthed, target stealth display stealth level becomes 140 to account for cursor transition frames (2/7 of frames)
+            if (ClientData.stealthLevel == 100)
+            {
+                if (ClientData.fullStealthTime >= DynamicStealthConfig.clientSettings.hudSettings.mainStyle.cursorReversionDelay)
+                {
+                    dif += 80; //When fully stealthed (and after delay if set), target stealth display stealth level becomes 140 to account for cursor transition frames (2/7 of frames)
+                }
+                else fullStealthTime++;
+            }
+            else fullStealthTime = 0;
             int direction = dif > 0 ? 1 : -1;
             float absLimitedDif = Math.min(partialTickDelta * clientSettings.hudSettings.mainStyle.stealthGaugeSpeed, Math.abs(dif));
             float displayedStealth = ClientData.prevStealthDisplayed + absLimitedDif * direction;

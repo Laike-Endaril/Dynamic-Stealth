@@ -83,7 +83,16 @@ public class MainHUDStyleConfig
     @Config.RangeInt(min = 1)
     @Config.Comment(
             {
-                    "Lower numbers make the stealth gauge animate smoother, higher numbers make the stealth gauge more accurate"
+                    "For modes 2 and 3, lower numbers make the stealth gauge animate smoother, higher numbers make the stealth gauge more accurate"
             })
     public int stealthGaugeSpeed = 30;
+
+    @Config.Name("Cursor Reversion Delay")
+    @Config.LangKey(DynamicStealth.MODID + ".config.cursorReversionDelay")
+    @Config.RangeInt(min = 0)
+    @Config.Comment(
+            {
+                    "For mode 3, how many ticks to wait before reverting from eye to cursor once you are fully stealthed"
+            })
+    public int cursorReversionDelay = 40;
 }
