@@ -5,12 +5,7 @@
   "description": "You can now *actually sneak around* (accounts for FOV, distance, lighting...)",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "",
-  "updateUrl": "",
   "authorList": ["Laike_Endaril"],
-  "credits": "\nLordPhrozen (art)\nelon_maxs (art)\nPhorcis (Russian translation)\nTommsy64 (Various Improvements)",
-  "logoFile": "",
-  "screenshots": [],
-  "dependencies": []
+  "credits": "\nLordPhrozen (art)\nelon_maxs (art)\nPhorcis (Russian translation)\nTommsy64 (Various Improvements)"
 }
 ]
