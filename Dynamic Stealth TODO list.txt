@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+Add alternate entries for lycanite's mobs (all with lycanitesmobs prefix) to DS defaults (copy from modpack DS config to get entries for new mobs)
+
 Fix bug with mirror when in 3rd person and you have a corner of a solid block behind your head
 
 Add config option for "Can See Through" Materials
