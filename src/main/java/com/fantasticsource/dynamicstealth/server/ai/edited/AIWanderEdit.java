@@ -95,7 +95,12 @@ public class AIWanderEdit extends EntityAIWander
     public void updateTask()
     {
         updateLookVec();
-        entity.getLookHelper().setLookPosition(lookVec.x, lookVec.y, lookVec.z, EntityAIData.headTurnSpeed(entity), EntityAIData.headTurnSpeed(entity));
+        if (lookVec == null)
+        {
+            looked = true;
+            entity.getNavigator().setPath(path, speed);
+        }
+        else entity.getLookHelper().setLookPosition(lookVec.x, lookVec.y, lookVec.z, EntityAIData.headTurnSpeed(entity), EntityAIData.headTurnSpeed(entity));
 
         if (!looked)
         {
