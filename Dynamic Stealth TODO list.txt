@@ -1,9 +1,10 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Add config option for "Can See Through" Materials
-Add config option for "Can See Through" Blocks
-
 Add ally groups for helper system config
+
+Add peek keybinds to replace current hand mirror behavior?
+...block item actions
+...translate/rotate head
 
 Mob flee speeds...
 ...fine-tune
@@ -11,6 +12,9 @@ Mob flee speeds...
 ...add config for entity-specific flee speeds
 
 Per-entity config for whether the entity's attacks should be prevented if the victim is not within their FOV (request from gua12ab on curseforge)
+
+Alter weapon tooltips to reflect settings for normal attacks and stealth attacks...
+...requires sending clients data for attacks, based on server settings
 
 
 
@@ -29,9 +33,6 @@ Add keybinds for turning certain client config settings on/off...
 
 Make the difference between "barely unseen" and "barely seen" on the stealth gauge more noticeable...
 ...Change from using 1 color for stealth gauge to using 4 colors; 2 for a gradient from full stealth to barely unseen, and 2 for a gradient from barely seen to maximum visibility
-
-Alter weapon tooltips to reflect settings for normal attacks and stealth attacks...
-...requires sending clients data for attacks, based on server settings
 
 
 
@@ -110,7 +111,6 @@ Whisper (make a small noise; altered villager conversation sound?)
 Yell (make a loud noise; hurt sound?)
 Prone/unprone - has a charge time; when prone, you are stealthier, slower, have a lower POV, have a smaller hitbox (can move through 1b high areas), and cannot jump/dodge/sneak
 Find pebble?
-Add peek keybinds to replace current hand mirror behavior?
 
 
 

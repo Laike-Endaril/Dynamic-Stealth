@@ -140,6 +140,7 @@ public class DynamicStealth
     @SubscribeEvent
     public static void postConfigChanged(ConfigChangedEvent.PostConfigChangedEvent event)
     {
+        //TODO I might have made this without a MODID check since I think I reference Neat's config from DS?  Check sometime
         update();
     }
 
