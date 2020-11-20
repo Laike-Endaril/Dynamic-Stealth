@@ -54,22 +54,40 @@ public class EntitySightDefaults
 
 
         naturallyBrightDefaults.add("infernomobs:khalk");
+        naturallyBrightDefaults.add("lycanitesmobsmobs:khalk");
         naturallyBrightDefaults.add("shadowmobs:phantom");
+        naturallyBrightDefaults.add("lycanitesmobsmobs:phantom");
         naturallyBrightDefaults.add("infernomobs:afrit");
+        naturallyBrightDefaults.add("lycanitesmobsmobs:afrit");
         naturallyBrightDefaults.add("infernomobs:lobber");
+        naturallyBrightDefaults.add("lycanitesmobsmobs:lobber");
         naturallyBrightDefaults.add("infernomobs:gorger");
+        naturallyBrightDefaults.add("lycanitesmobsmobs:gorger");
         naturallyBrightDefaults.add("infernomobs:salamander");
+        naturallyBrightDefaults.add("lycanitesmobsmobs:salamander");
         naturallyBrightDefaults.add("infernomobs:cephignis");
+        naturallyBrightDefaults.add("lycanitesmobsmobs:cephignis");
         naturallyBrightDefaults.add("infernomobs:ignibus");
+        naturallyBrightDefaults.add("lycanitesmobsmobs:ignibus");
         naturallyBrightDefaults.add("demonmobs:rahovart");
+        naturallyBrightDefaults.add("lycanitesmobsmobs:rahovart");
         naturallyBrightDefaults.add("elementalmobs:nymph");
+        naturallyBrightDefaults.add("lycanitesmobsmobs:nymph");
         naturallyBrightDefaults.add("elementalmobs:zephyr");
+        naturallyBrightDefaults.add("lycanitesmobsmobs:zephyr");
         naturallyBrightDefaults.add("elementalmobs:wisp");
+        naturallyBrightDefaults.add("lycanitesmobsmobs:wisp");
         naturallyBrightDefaults.add("elementalmobs:cinder");
+        naturallyBrightDefaults.add("lycanitesmobsmobs:cinder");
         naturallyBrightDefaults.add("elementalmobs:banshee");
+        naturallyBrightDefaults.add("lycanitesmobsmobs:banshee");
         naturallyBrightDefaults.add("elementalmobs:aegis");
+        naturallyBrightDefaults.add("lycanitesmobsmobs:aegis");
         naturallyBrightDefaults.add("elementalmobs:sylph");
+        naturallyBrightDefaults.add("lycanitesmobsmobs:sylph");
         naturallyBrightDefaults.add("elementalmobs:xaphan");
+        naturallyBrightDefaults.add("lycanitesmobsmobs:xaphan");
+        naturallyBrightDefaults.add("lycanitesmobsmobs:volcan");
         naturallyBrightDefaults.add("harvestersnight:harvester");
         naturallyBrightDefaults.add("sanity:ghost_zombie");
 
@@ -77,11 +95,15 @@ public class EntitySightDefaults
         naturalNightvisionDefaults.add("nex:ghast_queen");
         naturalNightvisionDefaults.add("defiledlands:the_destroyer");
         naturalNightvisionDefaults.add("demonmobs:rahovart");
+        naturalNightvisionDefaults.add("lycanitesmobsmobs:rahovart");
         naturalNightvisionDefaults.add("demonmobs:asmodeus");
+        naturalNightvisionDefaults.add("lycanitesmobsmobs:asmodeus");
 
 
         naturalSoulSightDefaults.add("elementalmobs:banshee");
+        naturalSoulSightDefaults.add("lycanitesmobsmobs:banshee");
         naturalSoulSightDefaults.add("infernomobs:gorger");
+        naturalSoulSightDefaults.add("lycanitesmobsmobs:gorger");
         naturalSoulSightDefaults.add("harvestersnight:harvester");
         naturalSoulSightDefaults.add("defiledlands:the_mourner");
 
