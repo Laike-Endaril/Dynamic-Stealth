@@ -1,10 +1,10 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Add ally groups for helper system config
-
 Add peek keybinds to replace current hand mirror behavior?
 ...block item actions
 ...translate/rotate head
+
+Add ally groups for helper system config
 
 Mob flee speeds...
 ...fine-tune
