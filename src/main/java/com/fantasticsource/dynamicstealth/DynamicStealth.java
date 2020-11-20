@@ -63,6 +63,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -88,6 +89,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import noppes.npcs.api.NpcAPI;
 import noppes.npcs.api.entity.ICustomNpc;
 
+import java.io.File;
 import java.util.Set;
 
 import static com.fantasticsource.dynamicstealth.common.Network.WRAPPER;
@@ -140,8 +142,12 @@ public class DynamicStealth
     @SubscribeEvent
     public static void postConfigChanged(ConfigChangedEvent.PostConfigChangedEvent event)
     {
-        //TODO I might have made this without a MODID check since I think I reference Neat's config from DS?  Check sometime
-        update();
+        if (event.getModID().equals(MODID)) update();
+        else if (event.getModID().equals("neat"))
+        {
+            CompatNeat.config = new Configuration(new File(Loader.instance().getConfigDir(), "neat.cfg"));
+            CompatNeat.heightAboveMob = CompatNeat.config.get("general", "Height Above Mob", 0.6).getDouble();
+        }
     }
 
     public static void update()
