@@ -38,6 +38,7 @@ public class TooltipAlterer
                 try
                 {
                     double vanillaDamage = Double.parseDouble(line.replace(attackDamageString, "").trim());
+                    System.out.println(vanillaDamage);
 
                     //TODO [Consume item for ]mulDamage[ (penetrating)]
 //                    tooltip.set(i, line.replaceFirst("[0-9.]+", "" + damage));

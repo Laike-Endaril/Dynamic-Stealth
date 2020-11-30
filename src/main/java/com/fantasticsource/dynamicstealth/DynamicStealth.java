@@ -131,7 +131,6 @@ public class DynamicStealth
             MinecraftForge.EVENT_BUS.register(HUD.class);
             MinecraftForge.EVENT_BUS.register(ClientData.class);
             MinecraftForge.EVENT_BUS.register(RenderAlterer.class);
-            MinecraftForge.EVENT_BUS.register(TooltipAlterer.class);
         }
     }
 
@@ -929,5 +928,11 @@ public class DynamicStealth
         CompatEBWizardry.mindControlPotion = ForgeRegistries.POTIONS.getValue(new ResourceLocation("ebwizardry", "mind_control"));
 
         update();
+
+        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
+        {
+            //Physical client
+            MinecraftForge.EVENT_BUS.register(TooltipAlterer.class);
+        }
     }
 }
