@@ -162,7 +162,7 @@ public class EntitySightData
 
     public static boolean hasSoulSight(EntityLivingBase searcher)
     {
-        return searcher.getActivePotionEffect(Potions.POTION_SOULSIGHT) != null || MCTools.entityMatchesMap(searcher, naturalSoulSightEntities);
+        return searcher.getActivePotionEffect(Potions.POTION_SOULSIGHT) != null || searcher.getEntityData().getBoolean("ai_omniscience") || MCTools.entityMatchesMap(searcher, naturalSoulSightEntities);
     }
 
     public static int angleLarge(EntityLivingBase searcher)
