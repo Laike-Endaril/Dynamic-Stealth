@@ -4,6 +4,7 @@ import com.fantasticsource.dynamicstealth.common.BlocksAndItems;
 import com.fantasticsource.dynamicstealth.common.DSTools;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatDissolution;
+import com.fantasticsource.dynamicstealth.compat.CompatLevelUp2;
 import com.fantasticsource.dynamicstealth.config.DynamicStealthConfig;
 import com.fantasticsource.dynamicstealth.config.server.senses.sight.SightConfig;
 import com.fantasticsource.dynamicstealth.server.Attributes;
@@ -399,6 +400,10 @@ public class Sight
         double crouchingMultiplier = target.isSneaking() ? sight.a_stealthMultipliers.crouchingMultiplier : 1;
 
 
+        //Level Up Reloaded stealth level (multiplier)
+        double levelUp2StealthMultiplier = target instanceof EntityPlayer ? CompatLevelUp2.stealthLevelVisMultiplier((EntityPlayer) target) : 1;
+
+
         //Mob Heads (multiplier)
         double mobHeadMultiplier = 1;
         if (isLivingBase)
@@ -439,7 +444,7 @@ public class Sight
 
 
         //Combine multipliers
-        double stealthMultiplier = Tools.min(mobHeadMultiplier, blindnessMultiplier * invisibilityMultiplier * crouchingMultiplier);
+        double stealthMultiplier = Tools.min(mobHeadMultiplier, blindnessMultiplier * invisibilityMultiplier * crouchingMultiplier * levelUp2StealthMultiplier);
         double visibilityMultiplier = armorMultiplier;
         double configMultipliers = Tools.min(Tools.max(stealthMultiplier * visibilityMultiplier, 0), 1);
 

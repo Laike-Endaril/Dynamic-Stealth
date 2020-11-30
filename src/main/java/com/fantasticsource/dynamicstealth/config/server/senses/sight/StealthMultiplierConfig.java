@@ -56,4 +56,19 @@ public class StealthMultiplierConfig
             })
     @Config.RangeDouble(min = 0, max = 1)
     public double blindnessMultiplier = 0.5;
+
+    @Config.Name("Level Up Stealth Skill Multiplier")
+    @Config.LangKey(DynamicStealth.MODID + ".config.levelUp2StealthMultiplier")
+    @Config.Comment(
+            {
+                    "Multiplies a player's visibility by 1 - (levelUpStealthLevel * this)",
+                    "",
+                    "If set to 0, there is no effect",
+                    "",
+                    "If set to 1, a player with just 1 level of stealth in Level Up Reloaded would be impossible to see",
+                    "If set to 0.1, a player with level 10 stealth in Level Up Reloaded would be impossible to see",
+                    "If set to 0.05, a player with level 10 stealth in Level Up Reloaded would be twice as hard to see"
+            })
+    @Config.RangeDouble(min = 0, max = 1)
+    public double levelUp2StealthMultiplier = 0;
 }

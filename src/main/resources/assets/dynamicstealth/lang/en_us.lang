@@ -353,6 +353,8 @@ dynamicstealth.config.invisibilityMultiplier=Invisibility Multiplier
 dynamicstealth.config.invisibilityMultiplier.tooltip=FILLSCREEN FIXNEWLINES Invisible entities' visibility is multiplied by this\n\nIf set to 1, there is no effect\n\nIf set to 0, invisible entities are, uh...invisible\n \n
 dynamicstealth.config.blindnessMultiplier=Blindness Multiplier
 dynamicstealth.config.blindnessMultiplier.tooltip=FILLSCREEN FIXNEWLINES Blinded entities' detection range is multiplied by this\n\nIf set to 1, there is no effect\n\nIf set to 0, blind entities can't see\n \n
+dynamicstealth.config.levelUp2StealthMultiplier=Level Up Stealth Skill Multiplier
+dynamicstealth.config.levelUp2StealthMultiplier.tooltip=FILLSCREEN FIXNEWLINES Multiplies a player's visibility by 1 - (levelUpStealthLevel * this)\n\nIf set to 0, there is no effect\n\nIf set to 1, a player with just 1 level of stealth in Level Up Reloaded would be impossible to see\nIf set to 0.1, a player with level 10 stealth in Level Up Reloaded would be impossible to see\nIf set to 0.05, a player with level 10 stealth in Level Up Reloaded would be twice as hard to see\n \n
 
 dynamicstealth.config.armorMultiplier=Armor Multiplier (Cumulative)
 dynamicstealth.config.armorMultiplier.tooltip=FILLSCREEN FIXNEWLINES An entity's visibility is multiplied by 1 + (this setting * armor)\n\nIf set to 0, there is no effect\n\nIf set to 0.25, an entity with 20 armor (full diamond) is 5x as likely to be seen\n \n
