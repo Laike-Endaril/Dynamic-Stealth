@@ -328,7 +328,7 @@ public class Network
             this.player = player;
             this.targetElement = targetElement;
 
-            this.lightLevel = DSTools.maxLightLevelTotal(player);
+            this.lightLevel = DSTools.entityLightLevel(player);
 
             this.stealthLevel = stealthLevel;
 

@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.client.event;
 
+import com.fantasticsource.dynamicstealth.common.ClientData;
 import com.fantasticsource.dynamicstealth.common.DSTools;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -34,6 +35,6 @@ public class RenderLightGaugeEvent extends Event
      */
     public int getPlayerLightLevel()
     {
-        return DSTools.maxLightLevelTotal(Minecraft.getMinecraft().player);
+        return ClientData.lightLevel;
     }
 }

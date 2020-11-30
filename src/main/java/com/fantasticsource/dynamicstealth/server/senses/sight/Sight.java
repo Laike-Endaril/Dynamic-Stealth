@@ -365,7 +365,7 @@ public class Sight
 
 
         //Lighting and LOS checks (absolute, factor, after Angles, after Glowing)
-        double lightFactor = bestLightingAtLOSHit(searcher, target, isLivingBase && isBright(targetLivingBase), eyeVec);
+        double lightFactor = bestLightingAtLOSHit(searcher, target, (sight.g_absolutes.seeBurning && target.isBurning()) || (isLivingBase && isBright(targetLivingBase)), eyeVec);
         if (lightFactor == -777) return 777;
 
         if (hasNightvision(searcher))

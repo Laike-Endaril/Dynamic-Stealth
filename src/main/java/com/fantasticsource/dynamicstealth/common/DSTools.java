@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.common;
 
+import com.fantasticsource.dynamicstealth.config.DynamicStealthConfig;
 import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
 import com.fantasticsource.tools.Tools;
 import net.minecraft.entity.Entity;
@@ -48,6 +49,21 @@ public class DSTools
         return lightLevelTotal(world, new BlockPos(vec));
     }
 
+    public static int entityLightLevel(Entity target)
+    {
+        if (target.world.isRemote) throw new IllegalStateException("Light levels should only be accessed from server-side!");
+
+        if (target.isBurning() && DynamicStealthConfig.serverSettings.senses.sight.g_absolutes.seeBurning) return 15;
+
+        int result = 0;
+        for (BlockPos pos : entityCheckBlocks(target))
+        {
+            result = Tools.max(result, lightLevelTotal(target.world, pos));
+            if (result == 15) return result;
+        }
+        return result;
+    }
+
     public static int lightLevelTotal(World world, BlockPos pos)
     {
         if (world.isRemote) throw new IllegalStateException("Light levels should only be accessed from server-side!");
@@ -55,15 +71,5 @@ public class DSTools
         if (!world.isAreaLoaded(pos, 1)) return 0;
 
         return Tools.max(world.getLightFromNeighbors(pos), EntitySightData.minimumDimensionLight(world.provider.getDimension()));
-    }
-
-    public static int maxLightLevelTotal(Entity target)
-    {
-        int result = 0;
-        for (BlockPos pos : entityCheckBlocks(target))
-        {
-            result = Tools.max(result, lightLevelTotal(target.world, pos));
-        }
-        return result;
     }
 }
