@@ -1,9 +1,9 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
 Alter weapon tooltips to reflect settings for normal attacks and stealth attacks...
-...requires sending clients data for attacks, based on server settings
-...CPotionEffect
-...CFantasticPotionEffect
+Requires sending clients data for attacks, based on server settings...
+X..CPotionEffect
+X..CFantasticPotionEffect
 X..CItemFilter
 ...CWeaponEntry
 
