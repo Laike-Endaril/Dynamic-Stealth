@@ -144,7 +144,7 @@ public class HUD
         if (!MinecraftForge.EVENT_BUS.post(new RenderStealthGaugeEvent(event))) drawStealthGauge(Minecraft.getMinecraft(), 3, event);
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void entityRender(RenderLivingEvent.Post event)
     {
         if (!event.getRenderer().getRenderManager().renderOutlines)
