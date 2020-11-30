@@ -4,6 +4,7 @@ import com.fantasticsource.dynamicstealth.config.DynamicStealthConfig;
 import com.fantasticsource.tools.ReflectionTool;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Loader;
 
 import java.lang.reflect.Method;
 
@@ -14,8 +15,14 @@ public class CompatLevelUp2
 
     static
     {
-        Class cls = ReflectionTool.getClassByName("levelup2.skills.SkillRegistry");
-        SKILL_REGISTRY_GET_SKILL_LEVEL_METHOD = cls == null ? null : ReflectionTool.getMethod(cls, "getSkillLevel");
+        if (Loader.isModLoaded("levelup2"))
+        {
+            SKILL_REGISTRY_GET_SKILL_LEVEL_METHOD = ReflectionTool.getMethod(ReflectionTool.getClassByName("levelup2.skills.SkillRegistry"), "getSkillLevel");
+        }
+        else
+        {
+            SKILL_REGISTRY_GET_SKILL_LEVEL_METHOD = null;
+        }
     }
 
     public static double stealthLevelVisMultiplier(EntityPlayer player)
