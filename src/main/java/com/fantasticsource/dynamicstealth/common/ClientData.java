@@ -1,10 +1,11 @@
 package com.fantasticsource.dynamicstealth.common;
 
 import com.fantasticsource.dynamicstealth.compat.CompatEBWizardry;
-import com.fantasticsource.dynamicstealth.config.DynamicStealthConfig;
 import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
+import com.fantasticsource.dynamicstealth.server.event.attacks.WeaponEntry;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
+import com.fantasticsource.mctools.potions.FantasticPotionEffect;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -13,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
@@ -54,6 +56,40 @@ public class ClientData
     public static double targetPriority = Integer.MAX_VALUE;
 
     public static LinkedHashMap<Integer, Float> visibilityMap = new LinkedHashMap<>(), previousVisibilityMap1 = new LinkedHashMap<>(), previousVisibilityMap2 = new LinkedHashMap<>();
+
+
+    public static ArrayList<FantasticPotionEffect> normalAttackerEffects = new ArrayList<>();
+    public static ArrayList<FantasticPotionEffect> normalVictimEffects = new ArrayList<>();
+    public static ArrayList<WeaponEntry> normalWeaponSpecific = new ArrayList<>();
+
+    public static ArrayList<FantasticPotionEffect> rangedAttackerEffects = new ArrayList<>();
+    public static ArrayList<FantasticPotionEffect> rangedVictimEffects = new ArrayList<>();
+
+    public static ArrayList<FantasticPotionEffect> stealthAttackerEffects = new ArrayList<>();
+    public static ArrayList<FantasticPotionEffect> stealthVictimEffects = new ArrayList<>();
+    public static ArrayList<WeaponEntry> stealthWeaponSpecific = new ArrayList<>();
+
+    public static ArrayList<FantasticPotionEffect> rangedStealthAttackerEffects = new ArrayList<>();
+    public static ArrayList<FantasticPotionEffect> rangedStealthVictimEffects = new ArrayList<>();
+
+    public static ArrayList<FantasticPotionEffect> normalBlockedAttackerEffects = new ArrayList<>();
+    public static ArrayList<FantasticPotionEffect> normalBlockedVictimEffects = new ArrayList<>();
+    public static ArrayList<WeaponEntry> normalBlockedWeaponSpecific = new ArrayList<>();
+
+    public static ArrayList<FantasticPotionEffect> rangedBlockedAttackerEffects = new ArrayList<>();
+    public static ArrayList<FantasticPotionEffect> rangedBlockedVictimEffects = new ArrayList<>();
+
+    public static ArrayList<FantasticPotionEffect> stealthBlockedAttackerEffects = new ArrayList<>();
+    public static ArrayList<FantasticPotionEffect> stealthBlockedVictimEffects = new ArrayList<>();
+    public static ArrayList<WeaponEntry> stealthBlockedWeaponSpecific = new ArrayList<>();
+
+    public static ArrayList<FantasticPotionEffect> rangedStealthBlockedAttackerEffects = new ArrayList<>();
+    public static ArrayList<FantasticPotionEffect> rangedStealthBlockedVictimEffects = new ArrayList<>();
+
+    public static ArrayList<FantasticPotionEffect> assassinationAttackerEffects = new ArrayList<>();
+    public static ArrayList<WeaponEntry> assassinationWeaponSpecific = new ArrayList<>();
+
+    public static ArrayList<FantasticPotionEffect> rangedAssassinationAttackerEffects = new ArrayList<>();
 
 
     @SubscribeEvent

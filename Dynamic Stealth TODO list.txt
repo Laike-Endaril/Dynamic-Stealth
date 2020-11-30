@@ -1,12 +1,7 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
 Alter weapon tooltips to reflect settings for normal attacks and stealth attacks...
-Requires sending clients data for attacks, based on server settings...
-X..CPotionEffect
-X..CFantasticPotionEffect
-X..CItemFilter
-X..CWeaponEntry
-...See AttackData
+...in theory, the data for it is now synced and available in ClientData...except the defaults for non-potion-effect parts
 
 Add peek keybinds to replace current hand mirror behavior?
 ...block item actions

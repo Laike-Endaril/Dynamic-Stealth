@@ -1,11 +1,16 @@
 package com.fantasticsource.dynamicstealth.common;
 
 import com.fantasticsource.dynamicstealth.DynamicStealth;
+import com.fantasticsource.dynamicstealth.component.CWeaponEntry;
+import com.fantasticsource.dynamicstealth.server.event.attacks.AttackData;
+import com.fantasticsource.dynamicstealth.server.event.attacks.WeaponEntry;
 import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.ServerTickTimer;
+import com.fantasticsource.mctools.component.CFantasticPotionEffect;
+import com.fantasticsource.mctools.potions.FantasticPotionEffect;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -231,9 +236,44 @@ public class Network
 
     public static class ClientInitPacket implements IMessage
     {
-        boolean soulSight;
-        boolean usePlayerSenses;
-        boolean allowTargetingName, allowTargetingHP, allowTargetingThreat, allowTargetingDistance;
+        public boolean soulSight;
+        public boolean usePlayerSenses;
+        public boolean allowTargetingName, allowTargetingHP, allowTargetingThreat, allowTargetingDistance;
+
+        public ArrayList<FantasticPotionEffect> normalAttackerEffects;
+        public ArrayList<FantasticPotionEffect> normalVictimEffects;
+
+        public ArrayList<FantasticPotionEffect> rangedAttackerEffects;
+        public ArrayList<FantasticPotionEffect> rangedVictimEffects;
+
+        public ArrayList<FantasticPotionEffect> stealthAttackerEffects;
+        public ArrayList<FantasticPotionEffect> stealthVictimEffects;
+
+        public ArrayList<FantasticPotionEffect> rangedStealthAttackerEffects;
+        public ArrayList<FantasticPotionEffect> rangedStealthVictimEffects;
+
+        public ArrayList<FantasticPotionEffect> normalBlockedAttackerEffects;
+        public ArrayList<FantasticPotionEffect> normalBlockedVictimEffects;
+
+        public ArrayList<FantasticPotionEffect> rangedBlockedAttackerEffects;
+        public ArrayList<FantasticPotionEffect> rangedBlockedVictimEffects;
+
+        public ArrayList<FantasticPotionEffect> stealthBlockedAttackerEffects;
+        public ArrayList<FantasticPotionEffect> stealthBlockedVictimEffects;
+
+        public ArrayList<FantasticPotionEffect> rangedStealthBlockedAttackerEffects;
+        public ArrayList<FantasticPotionEffect> rangedStealthBlockedVictimEffects;
+
+        public ArrayList<FantasticPotionEffect> assassinationAttackerEffects;
+
+        public ArrayList<FantasticPotionEffect> rangedAssassinationAttackerEffects;
+
+        public ArrayList<WeaponEntry> normalWeaponSpecific;
+        public ArrayList<WeaponEntry> stealthWeaponSpecific;
+        public ArrayList<WeaponEntry> normalBlockedWeaponSpecific;
+        public ArrayList<WeaponEntry> stealthBlockedWeaponSpecific;
+        public ArrayList<WeaponEntry> assassinationWeaponSpecific;
+
 
         public ClientInitPacket() //Required; probably for when the packet is received
         {
@@ -270,6 +310,49 @@ public class Network
             buf.writeBoolean(allowTargetingHP);
             buf.writeBoolean(allowTargetingThreat);
             buf.writeBoolean(allowTargetingDistance);
+
+
+            CFantasticPotionEffect ceffect = new CFantasticPotionEffect();
+            for (ArrayList<FantasticPotionEffect> list : new ArrayList[]
+                    {
+                            AttackData.normalAttackerEffects,
+                            AttackData.normalVictimEffects,
+                            AttackData.rangedAttackerEffects,
+                            AttackData.rangedVictimEffects,
+                            AttackData.stealthAttackerEffects,
+                            AttackData.stealthVictimEffects,
+                            AttackData.rangedStealthAttackerEffects,
+                            AttackData.rangedStealthVictimEffects,
+                            AttackData.normalBlockedAttackerEffects,
+                            AttackData.normalBlockedVictimEffects,
+                            AttackData.rangedBlockedAttackerEffects,
+                            AttackData.rangedBlockedVictimEffects,
+                            AttackData.stealthBlockedAttackerEffects,
+                            AttackData.stealthBlockedVictimEffects,
+                            AttackData.rangedStealthBlockedAttackerEffects,
+                            AttackData.rangedStealthBlockedVictimEffects,
+                            AttackData.assassinationAttackerEffects,
+                            AttackData.rangedAssassinationAttackerEffects
+                    })
+            {
+                buf.writeInt(list.size());
+                for (FantasticPotionEffect effect : list) ceffect.set(effect).write(buf);
+            }
+
+
+            CWeaponEntry cWeaponEntry = new CWeaponEntry();
+            for (ArrayList<WeaponEntry> list : new ArrayList[]
+                    {
+                            AttackData.normalWeaponSpecific,
+                            AttackData.stealthWeaponSpecific,
+                            AttackData.normalBlockedWeaponSpecific,
+                            AttackData.stealthBlockedWeaponSpecific,
+                            AttackData.assassinationWeaponSpecific
+                    })
+            {
+                buf.writeInt(list.size());
+                for (WeaponEntry weaponEntry : list) cWeaponEntry.set(weaponEntry).write(buf);
+            }
         }
 
         @Override
@@ -282,6 +365,49 @@ public class Network
             allowTargetingHP = buf.readBoolean();
             allowTargetingThreat = buf.readBoolean();
             allowTargetingDistance = buf.readBoolean();
+
+
+            CFantasticPotionEffect ceffect = new CFantasticPotionEffect();
+            for (ArrayList<FantasticPotionEffect> list : new ArrayList[]
+                    {
+                            ClientData.normalAttackerEffects,
+                            ClientData.normalVictimEffects,
+                            ClientData.rangedAttackerEffects,
+                            ClientData.rangedVictimEffects,
+                            ClientData.stealthAttackerEffects,
+                            ClientData.stealthVictimEffects,
+                            ClientData.rangedStealthAttackerEffects,
+                            ClientData.rangedStealthVictimEffects,
+                            ClientData.normalBlockedAttackerEffects,
+                            ClientData.normalBlockedVictimEffects,
+                            ClientData.rangedBlockedAttackerEffects,
+                            ClientData.rangedBlockedVictimEffects,
+                            ClientData.stealthBlockedAttackerEffects,
+                            ClientData.stealthBlockedVictimEffects,
+                            ClientData.rangedStealthBlockedAttackerEffects,
+                            ClientData.rangedStealthBlockedVictimEffects,
+                            ClientData.assassinationAttackerEffects,
+                            ClientData.rangedAssassinationAttackerEffects
+                    })
+            {
+                list.clear();
+                for (int i = buf.readInt(); i > 0; i--) list.add(ceffect.read(buf).value);
+            }
+
+
+            CWeaponEntry cWeaponEntry = new CWeaponEntry();
+            for (ArrayList<WeaponEntry> list : new ArrayList[]
+                    {
+                            ClientData.normalWeaponSpecific,
+                            ClientData.stealthWeaponSpecific,
+                            ClientData.normalBlockedWeaponSpecific,
+                            ClientData.stealthBlockedWeaponSpecific,
+                            ClientData.assassinationWeaponSpecific
+                    })
+            {
+                list.clear();
+                for (int i = buf.readInt(); i > 0; i--) list.add(cWeaponEntry.read(buf).value);
+            }
         }
     }
 
