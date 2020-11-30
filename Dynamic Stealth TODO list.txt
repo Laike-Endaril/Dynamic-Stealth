@@ -1,5 +1,12 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+Alter weapon tooltips to reflect settings for normal attacks and stealth attacks...
+...requires sending clients data for attacks, based on server settings
+...CPotionEffect
+...CFantasticPotionEffect
+X..CItemFilter
+...CWeaponEntry
+
 Add peek keybinds to replace current hand mirror behavior?
 ...block item actions
 ...translate/rotate head
@@ -13,30 +20,11 @@ Mob flee speeds...
 
 Per-entity config for whether the entity's attacks should be prevented if the victim is not within their FOV (request from gua12ab on curseforge)
 
-Alter weapon tooltips to reflect settings for normal attacks and stealth attacks...
-...requires sending clients data for attacks, based on server settings
-
-
-
-Reorganize configs for...
-...client -> HUD
-
-General, easy to use T/F toggles for features in the configs...
-...stealth gauge (client)
-...targeting HUD (client)
-...OPHUD (client)
-
-Add keybinds for turning certain client config settings on/off...
-...stealth gauge
-...targeting HUD
-...OPHUD
-
-Make the difference between "barely unseen" and "barely seen" on the stealth gauge more noticeable...
-...Change from using 1 color for stealth gauge to using 4 colors; 2 for a gradient from full stealth to barely unseen, and 2 for a gradient from barely seen to maximum visibility
-
 
 
 BUG FIXES ===================================================================================================================================================================================================================
+
+Entities seem to be failing at pathfinding fairly often when at a certain distance
 
 Fix animation handling when an entity starts being tracked; Animania's sleeping animation, the normal death animation, and any similar
 
@@ -118,6 +106,26 @@ CONFIG =========================================================================
 
 Add entity-specific filter for OPHUD
 Add entity-specific filter for targeting HUD
+
+
+
+Create better config handling system
+
+Reorganize configs for...
+...client -> HUD
+
+General, easy to use T/F toggles for features in the configs...
+...stealth gauge (client)
+...targeting HUD (client)
+...OPHUD (client)
+
+Add keybinds for turning certain client config settings on/off...
+...stealth gauge
+...targeting HUD
+...OPHUD
+
+Make the difference between "barely unseen" and "barely seen" on the stealth gauge more noticeable...
+...Change from using 1 color for stealth gauge to using 4 colors; 2 for a gradient from full stealth to barely unseen, and 2 for a gradient from barely seen to maximum visibility
 
 
 
