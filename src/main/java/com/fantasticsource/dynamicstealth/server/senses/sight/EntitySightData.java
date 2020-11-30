@@ -3,6 +3,7 @@ package com.fantasticsource.dynamicstealth.server.senses.sight;
 import com.fantasticsource.dynamicstealth.common.potions.Potions;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.datastructures.Pair;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
@@ -150,9 +151,13 @@ public class EntitySightData
     }
 
 
-    public static boolean isBright(EntityLivingBase target)
+    public static boolean isBright(Entity target)
     {
-        return MCTools.entityMatchesMap(target, naturallyBrightEntities);
+        if (target.isBurning() && serverSettings.senses.sight.g_absolutes.seeBurning) return true;
+
+        if (target instanceof EntityLivingBase) return MCTools.entityMatchesMap((EntityLivingBase) target, naturallyBrightEntities);
+
+        return false;
     }
 
     public static boolean hasNightvision(EntityLivingBase searcher)

@@ -1,6 +1,5 @@
 package com.fantasticsource.dynamicstealth.common;
 
-import com.fantasticsource.dynamicstealth.config.DynamicStealthConfig;
 import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
 import com.fantasticsource.tools.Tools;
 import net.minecraft.entity.Entity;
@@ -53,7 +52,7 @@ public class DSTools
     {
         if (target.world.isRemote) throw new IllegalStateException("Light levels should only be accessed from server-side!");
 
-        if (target.isBurning() && DynamicStealthConfig.serverSettings.senses.sight.g_absolutes.seeBurning) return 15;
+        if (EntitySightData.isBright(target)) return 15;
 
         int result = 0;
         for (BlockPos pos : entityCheckBlocks(target))
