@@ -5,7 +5,8 @@ Requires sending clients data for attacks, based on server settings...
 X..CPotionEffect
 X..CFantasticPotionEffect
 X..CItemFilter
-...CWeaponEntry
+X..CWeaponEntry
+...See AttackData
 
 Add peek keybinds to replace current hand mirror behavior?
 ...block item actions

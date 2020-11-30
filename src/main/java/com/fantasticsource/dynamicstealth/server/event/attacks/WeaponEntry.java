@@ -14,13 +14,18 @@ public class WeaponEntry
 {
     public static final int TYPE_NORMAL = 0, TYPE_STEALTH = 1, TYPE_ASSASSINATION = 2;
 
+    public ItemFilter filter;
+
+    public boolean consumeItem = false;
     public boolean armorPenetration = false;
     public double damageMultiplier = 1;
     public ArrayList<FantasticPotionEffect> attackerEffects = new ArrayList<>();
     public ArrayList<FantasticPotionEffect> victimEffects = new ArrayList<>();
-    public boolean consumeItem = false;
 
-    public ItemFilter filter;
+    public WeaponEntry(ItemFilter filter)
+    {
+        this.filter = filter;
+    }
 
     private WeaponEntry(int type, boolean isMelee, boolean isBlocked)
     {
