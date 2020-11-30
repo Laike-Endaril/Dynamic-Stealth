@@ -439,7 +439,7 @@ public class DynamicStealth
                             if (!(killer instanceof FakePlayer) && !MinecraftForge.EVENT_BUS.post(new AssassinationEvent(killer, victim)))
                             {
                                 //Assassinations
-                                WeaponEntry weaponEntry = WeaponEntry.get(isMelee ? killer.getHeldItemMainhand() : null, WeaponEntry.TYPE_ASSASSINATION, false);
+                                WeaponEntry weaponEntry = AttackData.getWeaponEntry(isMelee ? killer.getHeldItemMainhand() : null, WeaponEntry.TYPE_ASSASSINATION, false);
 
 
                                 for (PotionEffect potionEffect : weaponEntry.attackerEffects)
@@ -545,7 +545,7 @@ public class DynamicStealth
                 {
                     //Normal attacks (melee only)
                     ItemStack itemStack = attacker.getHeldItemMainhand();
-                    WeaponEntry weaponEntry = WeaponEntry.get(itemStack, WeaponEntry.TYPE_NORMAL, isBlocked);
+                    WeaponEntry weaponEntry = AttackData.getWeaponEntry(itemStack, WeaponEntry.TYPE_NORMAL, isBlocked);
 
                     if (weaponEntry.armorPenetration) dmgSource.setDamageBypassesArmor();
                     event.setAmount((float) (event.getAmount() * weaponEntry.damageMultiplier));
@@ -570,7 +570,7 @@ public class DynamicStealth
                     if (!MinecraftForge.EVENT_BUS.post(new StealthAttackEvent(victim, dmgSource, event.getAmount())))
                     {
                         ItemStack itemStack = attacker.getHeldItemMainhand();
-                        WeaponEntry weaponEntry = WeaponEntry.get(itemStack, WeaponEntry.TYPE_STEALTH, isBlocked);
+                        WeaponEntry weaponEntry = AttackData.getWeaponEntry(itemStack, WeaponEntry.TYPE_STEALTH, isBlocked);
 
                         if (weaponEntry.armorPenetration) dmgSource.setDamageBypassesArmor();
                         event.setAmount((float) (event.getAmount() * weaponEntry.damageMultiplier));

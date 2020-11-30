@@ -9,8 +9,6 @@ import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.ServerTickTimer;
-import com.fantasticsource.mctools.component.CFantasticPotionEffect;
-import com.fantasticsource.mctools.potions.FantasticPotionEffect;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -240,39 +238,8 @@ public class Network
         public boolean usePlayerSenses;
         public boolean allowTargetingName, allowTargetingHP, allowTargetingThreat, allowTargetingDistance;
 
-        public ArrayList<FantasticPotionEffect> normalAttackerEffects;
-        public ArrayList<FantasticPotionEffect> normalVictimEffects;
-
-        public ArrayList<FantasticPotionEffect> rangedAttackerEffects;
-        public ArrayList<FantasticPotionEffect> rangedVictimEffects;
-
-        public ArrayList<FantasticPotionEffect> stealthAttackerEffects;
-        public ArrayList<FantasticPotionEffect> stealthVictimEffects;
-
-        public ArrayList<FantasticPotionEffect> rangedStealthAttackerEffects;
-        public ArrayList<FantasticPotionEffect> rangedStealthVictimEffects;
-
-        public ArrayList<FantasticPotionEffect> normalBlockedAttackerEffects;
-        public ArrayList<FantasticPotionEffect> normalBlockedVictimEffects;
-
-        public ArrayList<FantasticPotionEffect> rangedBlockedAttackerEffects;
-        public ArrayList<FantasticPotionEffect> rangedBlockedVictimEffects;
-
-        public ArrayList<FantasticPotionEffect> stealthBlockedAttackerEffects;
-        public ArrayList<FantasticPotionEffect> stealthBlockedVictimEffects;
-
-        public ArrayList<FantasticPotionEffect> rangedStealthBlockedAttackerEffects;
-        public ArrayList<FantasticPotionEffect> rangedStealthBlockedVictimEffects;
-
-        public ArrayList<FantasticPotionEffect> assassinationAttackerEffects;
-
-        public ArrayList<FantasticPotionEffect> rangedAssassinationAttackerEffects;
-
-        public ArrayList<WeaponEntry> normalWeaponSpecific;
-        public ArrayList<WeaponEntry> stealthWeaponSpecific;
-        public ArrayList<WeaponEntry> normalBlockedWeaponSpecific;
-        public ArrayList<WeaponEntry> stealthBlockedWeaponSpecific;
-        public ArrayList<WeaponEntry> assassinationWeaponSpecific;
+        public WeaponEntry normalDefault, rangedDefault, stealthDefault, rangedStealthDefault, normalBlockedDefault, rangedBlockedDefault, stealthBlockedDefault, rangedStealthBlockedDefault, assassinationDefault, rangedAssassinationDefault;
+        public ArrayList<WeaponEntry> normalWeaponSpecific = new ArrayList<>(), stealthWeaponSpecific = new ArrayList<>(), normalBlockedWeaponSpecific = new ArrayList<>(), stealthBlockedWeaponSpecific = new ArrayList<>(), assassinationWeaponSpecific = new ArrayList<>();
 
 
         public ClientInitPacket() //Required; probably for when the packet is received
@@ -312,35 +279,25 @@ public class Network
             buf.writeBoolean(allowTargetingDistance);
 
 
-            CFantasticPotionEffect ceffect = new CFantasticPotionEffect();
-            for (ArrayList<FantasticPotionEffect> list : new ArrayList[]
+            CWeaponEntry cWeaponEntry = new CWeaponEntry();
+            for (WeaponEntry weaponEntry : new WeaponEntry[]
                     {
-                            AttackData.normalAttackerEffects,
-                            AttackData.normalVictimEffects,
-                            AttackData.rangedAttackerEffects,
-                            AttackData.rangedVictimEffects,
-                            AttackData.stealthAttackerEffects,
-                            AttackData.stealthVictimEffects,
-                            AttackData.rangedStealthAttackerEffects,
-                            AttackData.rangedStealthVictimEffects,
-                            AttackData.normalBlockedAttackerEffects,
-                            AttackData.normalBlockedVictimEffects,
-                            AttackData.rangedBlockedAttackerEffects,
-                            AttackData.rangedBlockedVictimEffects,
-                            AttackData.stealthBlockedAttackerEffects,
-                            AttackData.stealthBlockedVictimEffects,
-                            AttackData.rangedStealthBlockedAttackerEffects,
-                            AttackData.rangedStealthBlockedVictimEffects,
-                            AttackData.assassinationAttackerEffects,
-                            AttackData.rangedAssassinationAttackerEffects
+                            AttackData.normalDefault,
+                            AttackData.rangedDefault,
+                            AttackData.stealthDefault,
+                            AttackData.rangedStealthDefault,
+                            AttackData.normalBlockedDefault,
+                            AttackData.rangedBlockedDefault,
+                            AttackData.stealthBlockedDefault,
+                            AttackData.rangedStealthBlockedDefault,
+                            AttackData.assassinationDefault,
+                            AttackData.rangedAssassinationDefault
                     })
             {
-                buf.writeInt(list.size());
-                for (FantasticPotionEffect effect : list) ceffect.set(effect).write(buf);
+                cWeaponEntry.set(weaponEntry).write(buf);
             }
 
 
-            CWeaponEntry cWeaponEntry = new CWeaponEntry();
             for (ArrayList<WeaponEntry> list : new ArrayList[]
                     {
                             AttackData.normalWeaponSpecific,
@@ -367,42 +324,26 @@ public class Network
             allowTargetingDistance = buf.readBoolean();
 
 
-            CFantasticPotionEffect ceffect = new CFantasticPotionEffect();
-            for (ArrayList<FantasticPotionEffect> list : new ArrayList[]
-                    {
-                            ClientData.normalAttackerEffects,
-                            ClientData.normalVictimEffects,
-                            ClientData.rangedAttackerEffects,
-                            ClientData.rangedVictimEffects,
-                            ClientData.stealthAttackerEffects,
-                            ClientData.stealthVictimEffects,
-                            ClientData.rangedStealthAttackerEffects,
-                            ClientData.rangedStealthVictimEffects,
-                            ClientData.normalBlockedAttackerEffects,
-                            ClientData.normalBlockedVictimEffects,
-                            ClientData.rangedBlockedAttackerEffects,
-                            ClientData.rangedBlockedVictimEffects,
-                            ClientData.stealthBlockedAttackerEffects,
-                            ClientData.stealthBlockedVictimEffects,
-                            ClientData.rangedStealthBlockedAttackerEffects,
-                            ClientData.rangedStealthBlockedVictimEffects,
-                            ClientData.assassinationAttackerEffects,
-                            ClientData.rangedAssassinationAttackerEffects
-                    })
-            {
-                list.clear();
-                for (int i = buf.readInt(); i > 0; i--) list.add(ceffect.read(buf).value);
-            }
-
-
             CWeaponEntry cWeaponEntry = new CWeaponEntry();
+            normalDefault = cWeaponEntry.read(buf).value;
+            rangedDefault = cWeaponEntry.read(buf).value;
+            stealthDefault = cWeaponEntry.read(buf).value;
+            rangedStealthDefault = cWeaponEntry.read(buf).value;
+            normalBlockedDefault = cWeaponEntry.read(buf).value;
+            rangedBlockedDefault = cWeaponEntry.read(buf).value;
+            stealthBlockedDefault = cWeaponEntry.read(buf).value;
+            rangedStealthBlockedDefault = cWeaponEntry.read(buf).value;
+            assassinationDefault = cWeaponEntry.read(buf).value;
+            rangedAssassinationDefault = cWeaponEntry.read(buf).value;
+
+
             for (ArrayList<WeaponEntry> list : new ArrayList[]
                     {
-                            ClientData.normalWeaponSpecific,
-                            ClientData.stealthWeaponSpecific,
-                            ClientData.normalBlockedWeaponSpecific,
-                            ClientData.stealthBlockedWeaponSpecific,
-                            ClientData.assassinationWeaponSpecific
+                            normalWeaponSpecific,
+                            stealthWeaponSpecific,
+                            normalBlockedWeaponSpecific,
+                            stealthBlockedWeaponSpecific,
+                            assassinationWeaponSpecific
                     })
             {
                 list.clear();
@@ -427,6 +368,24 @@ public class Network
                     ClientData.allowTargetingHP = packet.allowTargetingHP;
                     ClientData.allowTargetingThreat = packet.allowTargetingThreat;
                     ClientData.allowTargetingDistance = packet.allowTargetingDistance;
+
+
+                    ClientData.normalDefault = packet.normalDefault;
+                    ClientData.rangedDefault = packet.rangedDefault;
+                    ClientData.stealthDefault = packet.stealthDefault;
+                    ClientData.rangedStealthDefault = packet.rangedStealthDefault;
+                    ClientData.normalBlockedDefault = packet.normalBlockedDefault;
+                    ClientData.rangedBlockedDefault = packet.rangedBlockedDefault;
+                    ClientData.stealthBlockedDefault = packet.stealthBlockedDefault;
+                    ClientData.rangedStealthBlockedDefault = packet.rangedStealthBlockedDefault;
+                    ClientData.assassinationDefault = packet.assassinationDefault;
+                    ClientData.rangedAssassinationDefault = packet.rangedAssassinationDefault;
+
+                    ClientData.normalWeaponSpecific = packet.normalWeaponSpecific;
+                    ClientData.stealthWeaponSpecific = packet.stealthWeaponSpecific;
+                    ClientData.normalBlockedWeaponSpecific = packet.normalBlockedWeaponSpecific;
+                    ClientData.stealthBlockedWeaponSpecific = packet.stealthBlockedWeaponSpecific;
+                    ClientData.assassinationWeaponSpecific = packet.assassinationWeaponSpecific;
                 });
             }
 

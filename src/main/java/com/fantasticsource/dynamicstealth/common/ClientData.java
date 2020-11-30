@@ -5,12 +5,12 @@ import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
 import com.fantasticsource.dynamicstealth.server.event.attacks.WeaponEntry;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
-import com.fantasticsource.mctools.potions.FantasticPotionEffect;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
+import static com.fantasticsource.dynamicstealth.server.event.attacks.WeaponEntry.*;
 
 public class ClientData
 {
@@ -58,38 +59,8 @@ public class ClientData
     public static LinkedHashMap<Integer, Float> visibilityMap = new LinkedHashMap<>(), previousVisibilityMap1 = new LinkedHashMap<>(), previousVisibilityMap2 = new LinkedHashMap<>();
 
 
-    public static ArrayList<FantasticPotionEffect> normalAttackerEffects = new ArrayList<>();
-    public static ArrayList<FantasticPotionEffect> normalVictimEffects = new ArrayList<>();
-    public static ArrayList<WeaponEntry> normalWeaponSpecific = new ArrayList<>();
-
-    public static ArrayList<FantasticPotionEffect> rangedAttackerEffects = new ArrayList<>();
-    public static ArrayList<FantasticPotionEffect> rangedVictimEffects = new ArrayList<>();
-
-    public static ArrayList<FantasticPotionEffect> stealthAttackerEffects = new ArrayList<>();
-    public static ArrayList<FantasticPotionEffect> stealthVictimEffects = new ArrayList<>();
-    public static ArrayList<WeaponEntry> stealthWeaponSpecific = new ArrayList<>();
-
-    public static ArrayList<FantasticPotionEffect> rangedStealthAttackerEffects = new ArrayList<>();
-    public static ArrayList<FantasticPotionEffect> rangedStealthVictimEffects = new ArrayList<>();
-
-    public static ArrayList<FantasticPotionEffect> normalBlockedAttackerEffects = new ArrayList<>();
-    public static ArrayList<FantasticPotionEffect> normalBlockedVictimEffects = new ArrayList<>();
-    public static ArrayList<WeaponEntry> normalBlockedWeaponSpecific = new ArrayList<>();
-
-    public static ArrayList<FantasticPotionEffect> rangedBlockedAttackerEffects = new ArrayList<>();
-    public static ArrayList<FantasticPotionEffect> rangedBlockedVictimEffects = new ArrayList<>();
-
-    public static ArrayList<FantasticPotionEffect> stealthBlockedAttackerEffects = new ArrayList<>();
-    public static ArrayList<FantasticPotionEffect> stealthBlockedVictimEffects = new ArrayList<>();
-    public static ArrayList<WeaponEntry> stealthBlockedWeaponSpecific = new ArrayList<>();
-
-    public static ArrayList<FantasticPotionEffect> rangedStealthBlockedAttackerEffects = new ArrayList<>();
-    public static ArrayList<FantasticPotionEffect> rangedStealthBlockedVictimEffects = new ArrayList<>();
-
-    public static ArrayList<FantasticPotionEffect> assassinationAttackerEffects = new ArrayList<>();
-    public static ArrayList<WeaponEntry> assassinationWeaponSpecific = new ArrayList<>();
-
-    public static ArrayList<FantasticPotionEffect> rangedAssassinationAttackerEffects = new ArrayList<>();
+    public static WeaponEntry normalDefault = new WeaponEntry(null), rangedDefault = new WeaponEntry(null), stealthDefault = new WeaponEntry(null), rangedStealthDefault = new WeaponEntry(null), normalBlockedDefault = new WeaponEntry(null), rangedBlockedDefault = new WeaponEntry(null), stealthBlockedDefault = new WeaponEntry(null), rangedStealthBlockedDefault = new WeaponEntry(null), assassinationDefault = new WeaponEntry(null), rangedAssassinationDefault = new WeaponEntry(null);
+    public static ArrayList<WeaponEntry> normalWeaponSpecific = new ArrayList<>(), stealthWeaponSpecific = new ArrayList<>(), normalBlockedWeaponSpecific = new ArrayList<>(), stealthBlockedWeaponSpecific = new ArrayList<>(), assassinationWeaponSpecific = new ArrayList<>();
 
 
     @SubscribeEvent
@@ -238,5 +209,59 @@ public class ClientData
         {
             return Minecraft.getMinecraft().world.getEntityByID(targetID);
         }
+    }
+
+
+    public static WeaponEntry getDefault(int type, boolean isMelee, boolean isBlocked)
+    {
+        //Defaults
+        if (type == TYPE_NORMAL)
+        {
+            if (isMelee)
+            {
+                if (isBlocked) return normalBlockedDefault;
+                return normalDefault;
+            }
+
+            if (isBlocked) return rangedBlockedDefault;
+            return rangedDefault;
+        }
+
+        if (type == TYPE_STEALTH)
+        {
+            if (isMelee)
+            {
+                if (isBlocked) return stealthBlockedDefault;
+                return stealthDefault;
+            }
+
+            if (isBlocked) return rangedStealthBlockedDefault;
+            return rangedStealthDefault;
+        }
+
+        if (type == TYPE_ASSASSINATION)
+        {
+            if (isMelee) return assassinationDefault;
+            return rangedAssassinationDefault;
+        }
+
+        return null;
+    }
+
+    public static WeaponEntry getWeaponEntry(ItemStack itemStack, int type, boolean isBlocked)
+    {
+        if (itemStack == null) return getDefault(type, false, isBlocked);
+
+        ArrayList<WeaponEntry> list = null;
+        if (type == TYPE_NORMAL) list = isBlocked ? normalBlockedWeaponSpecific : normalWeaponSpecific;
+        else if (type == TYPE_STEALTH) list = isBlocked ? stealthBlockedWeaponSpecific : stealthWeaponSpecific;
+        else if (type == TYPE_ASSASSINATION) list = assassinationWeaponSpecific;
+
+        for (WeaponEntry weaponEntry : list)
+        {
+            if (weaponEntry.filter.matches(itemStack)) return weaponEntry;
+        }
+
+        return getDefault(type, true, isBlocked);
     }
 }
