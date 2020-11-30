@@ -55,8 +55,8 @@ public class CWeaponEntry extends Component
         value.armorPenetration = buf.readBoolean();
         value.damageMultiplier = buf.readDouble();
 
-        for (int i = buf.readInt(); i > 0; i++) value.attackerEffects.add(ceffect.read(buf).value);
-        for (int i = buf.readInt(); i > 0; i++) value.victimEffects.add(ceffect.read(buf).value);
+        for (int i = buf.readInt(); i > 0; i--) value.attackerEffects.add(ceffect.read(buf).value);
+        for (int i = buf.readInt(); i > 0; i--) value.victimEffects.add(ceffect.read(buf).value);
 
         return this;
     }

@@ -2,11 +2,6 @@ CURRENTLY WORKING ON ===========================================================
 
 Alter weapon tooltips to reflect settings for normal attacks and stealth attacks...
 ...in theory, the data for it is now synced and available in ClientData
-Have crash in sync...need to check involved components and packet for proper data handler mirroring...
-...CItemStack
-...CFantasticPotionEffect
-...CWeaponEntry
-...ClientInitPacket
 
 Add peek keybinds to replace current hand mirror behavior?
 ...block item actions
