@@ -18,7 +18,7 @@ public class AttackData
     protected static final Method ENTITY_LIVING_BASE_CAN_BLOCK_DAMAGE_SOURCE_METHOD = ReflectionTool.getMethod(EntityLivingBase.class, "func_184583_d", "canBlockDamageSource");
 
 
-    public static WeaponEntry normalDefault, rangedDefault, stealthDefault, rangedStealthDefault, normalBlockedDefault, rangedBlockedDefault, stealthBlockedDefault, rangedStealthBlockedDefault, assassinationDefault, rangedAssassinationDefault;
+    public static WeaponEntry normalDefault = new WeaponEntry(null), rangedDefault = new WeaponEntry(null), stealthDefault = new WeaponEntry(null), rangedStealthDefault = new WeaponEntry(null), normalBlockedDefault = new WeaponEntry(null), rangedBlockedDefault = new WeaponEntry(null), stealthBlockedDefault = new WeaponEntry(null), rangedStealthBlockedDefault = new WeaponEntry(null), assassinationDefault = new WeaponEntry(null), rangedAssassinationDefault = new WeaponEntry(null);
     public static ArrayList<WeaponEntry> normalWeaponSpecific, stealthWeaponSpecific, normalBlockedWeaponSpecific, stealthBlockedWeaponSpecific, assassinationWeaponSpecific;
 
 
@@ -127,7 +127,7 @@ public class AttackData
     }
 
 
-    public static WeaponEntry getDefault(int type, boolean isMelee, boolean isBlocked)
+    protected static WeaponEntry getDefault(int type, boolean isMelee, boolean isBlocked)
     {
         //Defaults
         if (type == TYPE_NORMAL)

@@ -212,7 +212,7 @@ public class ClientData
     }
 
 
-    public static WeaponEntry getDefault(int type, boolean isMelee, boolean isBlocked)
+    protected static WeaponEntry getDefault(int type, boolean isMelee, boolean isBlocked)
     {
         //Defaults
         if (type == TYPE_NORMAL)

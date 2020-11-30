@@ -28,7 +28,8 @@ public class CWeaponEntry extends Component
     {
         CFantasticPotionEffect ceffect = new CFantasticPotionEffect();
 
-        new CItemFilter().set(value.filter).write(buf);
+        buf.writeBoolean(value.filter != null);
+        if (value.filter != null) new CItemFilter().set(value.filter).write(buf);
 
         buf.writeBoolean(value.consumeItem);
         buf.writeBoolean(value.armorPenetration);
@@ -48,7 +49,7 @@ public class CWeaponEntry extends Component
     {
         CFantasticPotionEffect ceffect = new CFantasticPotionEffect();
 
-        value = new WeaponEntry(new CItemFilter().read(buf).value);
+        value = new WeaponEntry(buf.readBoolean() ? new CItemFilter().read(buf).value : null);
 
         value.consumeItem = buf.readBoolean();
         value.armorPenetration = buf.readBoolean();
@@ -63,12 +64,14 @@ public class CWeaponEntry extends Component
     @Override
     public CWeaponEntry save(OutputStream stream)
     {
+        CBoolean cb = new CBoolean();
         CInt ci = new CInt();
         CFantasticPotionEffect ceffect = new CFantasticPotionEffect();
 
-        new CItemFilter().set(value.filter).save(stream);
+        cb.set(value.filter != null).save(stream);
+        if (value.filter != null) new CItemFilter().set(value.filter).save(stream);
 
-        new CBoolean().set(value.consumeItem).save(stream).set(value.armorPenetration).save(stream);
+        cb.set(value.consumeItem).save(stream).set(value.armorPenetration).save(stream);
         new CDouble().set(value.damageMultiplier).save(stream);
 
         ci.set(value.attackerEffects.size()).save(stream);
@@ -87,7 +90,7 @@ public class CWeaponEntry extends Component
         CInt ci = new CInt();
         CFantasticPotionEffect ceffect = new CFantasticPotionEffect();
 
-        value.filter = new CItemFilter().load(stream).value;
+        value = new WeaponEntry(cb.load(stream).value ? new CItemFilter().load(stream).value : null);
 
         value.consumeItem = cb.load(stream).value;
         value.armorPenetration = cb.load(stream).value;

@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth;
 
 import com.fantasticsource.dynamicstealth.client.HUD;
 import com.fantasticsource.dynamicstealth.client.RenderAlterer;
+import com.fantasticsource.dynamicstealth.client.TooltipAlterer;
 import com.fantasticsource.dynamicstealth.common.BlocksAndItems;
 import com.fantasticsource.dynamicstealth.common.ClientData;
 import com.fantasticsource.dynamicstealth.common.Network;
@@ -130,6 +131,7 @@ public class DynamicStealth
             MinecraftForge.EVENT_BUS.register(HUD.class);
             MinecraftForge.EVENT_BUS.register(ClientData.class);
             MinecraftForge.EVENT_BUS.register(RenderAlterer.class);
+            MinecraftForge.EVENT_BUS.register(TooltipAlterer.class);
         }
     }
 
