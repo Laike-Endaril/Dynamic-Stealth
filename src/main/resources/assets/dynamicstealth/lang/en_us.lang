@@ -567,3 +567,17 @@ dynamicstealth.config.potionGlowing=Glowing Potions
 dynamicstealth.config.potionGlowing.tooltip=FILLSCREEN FIXNEWLINES Whether to load glowing potions (accessible from the brewing tab of the creative menu)\n \n
 dynamicstealth.config.potionGlowingRecipe=Glowing Potion Recipes
 dynamicstealth.config.potionGlowingRecipe.tooltip=FILLSCREEN FIXNEWLINES Whether to load the glowing potion recipe (thick potion + glowstone dust)\n \n
+
+
+
+dynamicstealth.tooltip.normalAttacks=§7Normal attacks...
+dynamicstealth.tooltip.stealthAttacks=§dStealth attacks...
+dynamicstealth.tooltip.blockedNormalAttacks=§8Blocked normal attacks...
+dynamicstealth.tooltip.blockedStealthAttacks=§5Blocked stealth attacks...
+dynamicstealth.tooltip.assassinations=§4Assassinations...
+
+dynamicstealth.tooltip.consumeItem=§7* §cCONSUME THE ITEM!
+dynamicstealth.tooltip.normalDamage=§7* Deal §6%s damage
+dynamicstealth.tooltip.penetratingDamage=§7* §eDeal %s penetrating damage
+dynamicstealth.tooltip.giveYouPotion=§7* Give you %s %s (%s)
+dynamicstealth.tooltip.giveVictimPotion=§7* Give your victim %s %s (%s)

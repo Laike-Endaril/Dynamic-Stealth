@@ -107,10 +107,29 @@ public class WeaponEntry
 
         if (attackerEffects.size() != other.attackerEffects.size()) return false;
         if (victimEffects.size() != other.victimEffects.size()) return false;
-        for (int i = 0; i < attackerEffects.size(); i++) if (!attackerEffects.get(i).equals(other.attackerEffects.get(i))) return false;
-        for (int i = 0; i < victimEffects.size(); i++) if (!victimEffects.get(i).equals(other.victimEffects.get(i))) return false;
+
+        ArrayList<FantasticPotionEffect> effects = new ArrayList<>(attackerEffects);
+        for (FantasticPotionEffect effect : other.attackerEffects) if (!effects.remove(effect)) return false;
+
+        effects = new ArrayList<>(victimEffects);
+        for (FantasticPotionEffect effect : other.victimEffects) if (!effects.remove(effect)) return false;
 
         if (filter == null) return other.filter == null;
         return filter.equals(other.filter);
+    }
+
+    public static boolean resultMatches(double vanillaDamage, WeaponEntry unblocked, WeaponEntry blocked)
+    {
+        if (unblocked.consumeItem != blocked.consumeItem) return false;
+        if (unblocked.armorPenetration != blocked.armorPenetration) return false;
+        if (unblocked.armorPenetration && unblocked.damageMultiplier != blocked.damageMultiplier) return false;
+
+        ArrayList<FantasticPotionEffect> effects = new ArrayList<>(unblocked.attackerEffects);
+        for (FantasticPotionEffect effect : blocked.attackerEffects) if (!effects.remove(effect)) return false;
+
+        effects = new ArrayList<>(unblocked.victimEffects);
+        for (FantasticPotionEffect effect : blocked.victimEffects) if (!effects.remove(effect)) return false;
+
+        return true;
     }
 }

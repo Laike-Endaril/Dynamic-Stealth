@@ -550,6 +550,7 @@ public class DynamicStealth
 
                     if (weaponEntry.armorPenetration) dmgSource.setDamageBypassesArmor();
                     event.setAmount((float) (event.getAmount() * weaponEntry.damageMultiplier));
+                    System.out.println(event.getAmount() + ", " + dmgSource.isUnblockable());
 
                     for (PotionEffect potionEffect : weaponEntry.attackerEffects)
                     {
