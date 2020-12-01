@@ -164,18 +164,31 @@ public class AttackData
     }
 
 
+    //Needs to match the one in ClientData
     public static WeaponEntry getWeaponEntry(ItemStack itemStack, int type, boolean isBlocked)
     {
         if (itemStack == null) return getDefault(type, false, isBlocked);
 
-        ArrayList<WeaponEntry> list = null;
-        if (type == TYPE_NORMAL) list = isBlocked ? normalBlockedWeaponSpecific : normalWeaponSpecific;
-        else if (type == TYPE_STEALTH) list = isBlocked ? stealthBlockedWeaponSpecific : stealthWeaponSpecific;
-        else if (type == TYPE_ASSASSINATION) list = assassinationWeaponSpecific;
-
-        for (WeaponEntry weaponEntry : list)
+        ArrayList<ArrayList<WeaponEntry>> priorityOrderedLists = new ArrayList<>();
+        if (type == TYPE_ASSASSINATION) priorityOrderedLists.add(assassinationWeaponSpecific);
+        else
         {
-            if (weaponEntry.filter.matches(itemStack)) return weaponEntry;
+            if (type == TYPE_STEALTH)
+            {
+                if (isBlocked) priorityOrderedLists.add(stealthBlockedWeaponSpecific);
+                priorityOrderedLists.add(stealthWeaponSpecific);
+            }
+
+            if (isBlocked) priorityOrderedLists.add(normalBlockedWeaponSpecific);
+            priorityOrderedLists.add(normalWeaponSpecific);
+        }
+
+        for (ArrayList<WeaponEntry> list : priorityOrderedLists)
+        {
+            for (WeaponEntry weaponEntry : list)
+            {
+                if (weaponEntry.filter.matches(itemStack)) return weaponEntry;
+            }
         }
 
         return getDefault(type, true, isBlocked);

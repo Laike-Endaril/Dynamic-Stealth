@@ -49,16 +49,29 @@ public class WeaponEntry
         //Item, meta, and NBT
         String nameAndNBT = tokens[0].trim();
         boolean suppressMissingItemError = false;
-        ArrayList<String> list = null;
-        if (type == TYPE_NORMAL) list = isBlocked ? AttackDefaults.normalAttackBlockedDefaults : AttackDefaults.normalAttackDefaults;
-        else if (type == TYPE_STEALTH) list = isBlocked ? AttackDefaults.stealthAttackBlockedDefaults : AttackDefaults.stealthAttackDefaults;
-        else if (type == TYPE_ASSASSINATION) list = AttackDefaults.assassinationDefaults;
-        for (String entry : list)
+        ArrayList<ArrayList<String>> priorityOrderedLists = new ArrayList<>();
+        if (type == TYPE_ASSASSINATION) priorityOrderedLists.add(AttackDefaults.assassinationDefaults);
+        else
         {
-            if (entry.split(",")[0].trim().equals(nameAndNBT))
+            if (type == TYPE_STEALTH)
             {
-                suppressMissingItemError = true;
-                break;
+                if (isBlocked) priorityOrderedLists.add(AttackDefaults.stealthAttackBlockedDefaults);
+                priorityOrderedLists.add(AttackDefaults.stealthAttackDefaults);
+            }
+
+            if (isBlocked) priorityOrderedLists.add(AttackDefaults.normalAttackBlockedDefaults);
+            priorityOrderedLists.add(AttackDefaults.normalAttackDefaults);
+        }
+
+        for (ArrayList<String> list : priorityOrderedLists)
+        {
+            for (String entry : list)
+            {
+                if (entry.split(",")[0].trim().equals(nameAndNBT))
+                {
+                    suppressMissingItemError = true;
+                    break;
+                }
             }
         }
 
