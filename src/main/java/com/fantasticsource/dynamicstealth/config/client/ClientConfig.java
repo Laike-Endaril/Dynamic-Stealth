@@ -15,4 +15,9 @@ public class ClientConfig
     @Config.LangKey(DynamicStealth.MODID + ".config.entityFading")
     @Config.Comment("How entities fade in and out, if at all")
     public EntityFadeConfig entityFading = new EntityFadeConfig();
+
+    @Config.Name("Tooltips")
+    @Config.LangKey(DynamicStealth.MODID + ".config.tooltips")
+    @Config.Comment("How item tooltips are altered")
+    public TooltipConfig tooltips = new TooltipConfig();
 }

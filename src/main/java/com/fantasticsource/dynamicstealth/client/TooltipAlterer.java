@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.client;
 
 import com.fantasticsource.dynamicstealth.common.ClientData;
+import com.fantasticsource.dynamicstealth.config.DynamicStealthConfig;
 import com.fantasticsource.dynamicstealth.server.event.attacks.WeaponEntry;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.potions.FantasticPotionEffect;
@@ -23,7 +24,7 @@ public class TooltipAlterer
     public static void tooltips(ItemTooltipEvent event)
     {
         EntityPlayer player = event.getEntityPlayer();
-        if (player == null) return;
+        if (player == null || !DynamicStealthConfig.clientSettings.tooltips.alterTooltips) return;
 
         String attackDamageString = I18n.translateToLocalFormatted("attribute.name.generic.attackDamage");
 
@@ -126,7 +127,7 @@ public class TooltipAlterer
         }
 
 
-        if (assassination.attackerEffects.size() > 0)
+        if (assassination.attackerEffects.size() > 0 && (DynamicStealthConfig.clientSettings.tooltips.alwaysShowAssassinationInfo || !assassination.equals(ClientData.assassinationDefault)))
         {
             tooltip.add("");
             tooltip.add(I18n.translateToLocal(MODID + ".tooltip.assassinations"));

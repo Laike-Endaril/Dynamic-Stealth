@@ -84,6 +84,8 @@ dynamicstealth.config.hud=HUD
 dynamicstealth.config.hud.tooltip=FILLSCREEN What information you want to have displayed on the screen
 dynamicstealth.config.entityFading=Entity Fading
 dynamicstealth.config.entityFading.tooltip=FILLSCREEN How entities fade in and out, if at all
+dynamicstealth.config.tooltips=Tooltips
+dynamicstealth.config.tooltips.tooltip=FILLSCREEN How item tooltips are altered
 
 dynamicstealth.config.mainHUDStyle=Main HUD Style
 dynamicstealth.config.opHUDFilter=On-point HUD Filter
@@ -238,6 +240,11 @@ dynamicstealth.config.fadeMinAlpha=Minimum Entity Opacity
 dynamicstealth.config.fadeMinAlpha.tooltip=FILLSCREEN FIXNEWLINES The opacity of an entity when you just barely see it\n\nIf set to 0, entities on the edge of your vision are nearly invisible\n\nIf set to 1, entities always appear at full visibility\n \n
 dynamicstealth.config.fadeMaxAt=Full Opacity At...
 dynamicstealth.config.fadeMaxAt.tooltip=FILLSCREEN FIXNEWLINES The stealth rating at or above which an entity is drawn at full opacity\n\nIf set to 1, entities are only drawn at full opacity in the very best of visibility conditions\n\nDecreasing the value makes entities appear opaque at further distances and in lower lighting, etc\n \n
+
+dynamicstealth.config.alterTooltips=Alter Tooltips
+dynamicstealth.config.alterTooltips.tooltip=FILLSCREEN FIXNEWLINES If false, Dynamic Stealth will not touch item tooltips\n \n
+dynamicstealth.config.alwaysShowAssassinationInfo=Always Show Assassination Info
+dynamicstealth.config.alwaysShowAssassinationInfo.tooltip=FILLSCREEN FIXNEWLINES If true, tooltips always show assassination info, even if it's just the defaults\nIf false, tooltips only show assassination info if it's different from the defaults\n \n
 
 dynamicstealth.config.ai=AI
 dynamicstealth.config.HUDAllowances=Client HUD allowances
