@@ -58,8 +58,8 @@ public class TooltipAlterer
         tooltip.add("");
         tooltip.add(I18n.translateToLocal(MODID + ".tooltip.normalAttacks"));
         if (normal.consumeItem) tooltip.add(I18n.translateToLocal(MODID + ".tooltip.consumeItem"));
-        if (normal.armorPenetration) tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.penetratingDamage", vanillaDamage * normal.damageMultiplier));
-        else tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.normalDamage", vanillaDamage * normal.damageMultiplier));
+        if (normal.armorPenetration) tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.penetratingDamage", String.format("%.2f", vanillaDamage * normal.damageMultiplier)));
+        else tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.normalDamage", String.format("%.2f", vanillaDamage * normal.damageMultiplier)));
         for (FantasticPotionEffect potionEffect : normal.attackerEffects)
         {
             tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.giveYouPotion", I18n.translateToLocalFormatted(potionEffect.getPotion().getName()), potionEffect.getAmplifier() + 1, Potion.getPotionDurationString(potionEffect, 1)));
@@ -75,8 +75,8 @@ public class TooltipAlterer
             tooltip.add("");
             tooltip.add(I18n.translateToLocal(MODID + ".tooltip.stealthAttacks"));
             if (stealth.consumeItem) tooltip.add(I18n.translateToLocal(MODID + ".tooltip.consumeItem"));
-            if (stealth.armorPenetration) tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.penetratingDamage", vanillaDamage * stealth.damageMultiplier));
-            else tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.normalDamage", vanillaDamage * stealth.damageMultiplier));
+            if (stealth.armorPenetration) tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.penetratingDamage", String.format("%.2f", vanillaDamage * stealth.damageMultiplier)));
+            else tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.normalDamage", String.format("%.2f", vanillaDamage * stealth.damageMultiplier)));
             for (FantasticPotionEffect potionEffect : stealth.attackerEffects)
             {
                 tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.giveYouPotion", I18n.translateToLocalFormatted(potionEffect.getPotion().getName()), potionEffect.getAmplifier() + 1, Potion.getPotionDurationString(potionEffect, 1)));
@@ -93,8 +93,8 @@ public class TooltipAlterer
             tooltip.add("");
             tooltip.add(I18n.translateToLocal(MODID + ".tooltip.blockedNormalAttacks"));
             if (blockedNormal.consumeItem) tooltip.add(I18n.translateToLocal(MODID + ".tooltip.consumeItem"));
-            if (blockedNormal.armorPenetration) tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.penetratingDamage", vanillaDamage * blockedNormal.damageMultiplier));
-            else tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.normalDamage", vanillaDamage * blockedNormal.damageMultiplier));
+            if (blockedNormal.armorPenetration) tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.penetratingDamage", String.format("%.2f", vanillaDamage * blockedNormal.damageMultiplier)));
+            else tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.normalDamage", String.format("%.2f", vanillaDamage * blockedNormal.damageMultiplier)));
             for (FantasticPotionEffect potionEffect : blockedNormal.attackerEffects)
             {
                 tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.giveYouPotion", I18n.translateToLocalFormatted(potionEffect.getPotion().getName()), potionEffect.getAmplifier() + 1, Potion.getPotionDurationString(potionEffect, 1)));
@@ -111,8 +111,8 @@ public class TooltipAlterer
             tooltip.add("");
             tooltip.add(I18n.translateToLocal(MODID + ".tooltip.blockedStealthAttacks"));
             if (blockedStealth.consumeItem) tooltip.add(I18n.translateToLocal(MODID + ".tooltip.consumeItem"));
-            if (blockedStealth.armorPenetration) tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.penetratingDamage", vanillaDamage * blockedStealth.damageMultiplier));
-            else tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.normalDamage", vanillaDamage * blockedStealth.damageMultiplier));
+            if (blockedStealth.armorPenetration) tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.penetratingDamage", String.format("%.2f", vanillaDamage * blockedStealth.damageMultiplier)));
+            else tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.normalDamage", String.format("%.2f", vanillaDamage * blockedStealth.damageMultiplier)));
             for (FantasticPotionEffect potionEffect : blockedStealth.attackerEffects)
             {
                 tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.giveYouPotion", I18n.translateToLocalFormatted(potionEffect.getPotion().getName()), potionEffect.getAmplifier() + 1, Potion.getPotionDurationString(potionEffect, 1)));

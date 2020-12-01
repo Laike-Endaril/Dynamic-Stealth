@@ -1,8 +1,5 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Alter weapon tooltips to reflect settings for normal attacks and stealth attacks...
-...in theory, the data for it is now synced and available in ClientData
-
 Add peek keybinds to replace current hand mirror behavior?
 ...block item actions
 ...translate/rotate head
