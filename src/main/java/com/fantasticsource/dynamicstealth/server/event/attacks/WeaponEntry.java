@@ -92,4 +92,25 @@ public class WeaponEntry
 
         return result;
     }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj == this) return true;
+        if (!(obj instanceof WeaponEntry)) return false;
+        if (obj.getClass() != getClass()) return obj.equals(this);
+
+        WeaponEntry other = (WeaponEntry) obj;
+        if (consumeItem != other.consumeItem) return false;
+        if (armorPenetration != other.armorPenetration) return false;
+        if (damageMultiplier != other.damageMultiplier) return false;
+
+        if (attackerEffects.size() != other.attackerEffects.size()) return false;
+        if (victimEffects.size() != other.victimEffects.size()) return false;
+        for (int i = 0; i < attackerEffects.size(); i++) if (!attackerEffects.get(i).equals(other.attackerEffects.get(i))) return false;
+        for (int i = 0; i < victimEffects.size(); i++) if (!victimEffects.get(i).equals(other.victimEffects.get(i))) return false;
+
+        if (filter == null) return other.filter == null;
+        return filter.equals(other.filter);
+    }
 }
