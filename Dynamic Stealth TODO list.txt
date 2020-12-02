@@ -50,6 +50,10 @@ Fix "opaque flashing" of mobs on the edge of vision due to no visibility data ->
 
 GENERAL IMPROVEMENTS, SYSTEMS, AND FEATURES =================================================================================================================================================================================
 
+Add pickpocketing (and related alert systems)
+...config to enable/disable entire system
+...item filter config for difficulty to pickpocket items
+
 Add support for players by name in entity-specific settings
 
 Better potion handling on death (currently in LivingDropsEvent)...
