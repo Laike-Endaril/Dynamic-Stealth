@@ -810,13 +810,12 @@ public class HUD
             if (offScreen)
             {
                 //Offscreen indicator
-                int viewW = Render.getStoredViewportWidth(), viewH = Render.getStoredViewportHeight();
-                double halfViewW = viewW * 0.5, halfViewH = viewH * 0.5;
-                double angleRad = TRIG_TABLE.arctanFullcircle(halfViewW, halfViewH, originX, originY);
+                double halfPortW = portW * 0.5, halfPortH = portH * 0.5;
+                double angleRad = TRIG_TABLE.arctanFullcircle(halfPortW, halfPortH, originX, originY);
 
-                double dist = Tools.min(viewW, viewH);
-                double originDrawX = (halfViewW + dist * 0.4 * TRIG_TABLE.cos(angleRad)) / sr.getScaleFactor();
-                double originDrawY = (halfViewH - dist * 0.4 * TRIG_TABLE.sin(angleRad)) / sr.getScaleFactor();
+                double dist = Tools.min(portW, portH) * 0.4;
+                double originDrawX = (halfPortW + dist * TRIG_TABLE.cos(angleRad)) / sr.getScaleFactor();
+                double originDrawY = (halfPortH - dist * TRIG_TABLE.sin(angleRad)) / sr.getScaleFactor();
 
                 if (!MinecraftForge.EVENT_BUS.post(new RenderTargetingHUDEvent.Offscreen(event, boundX / sr.getScaleFactor(), boundY / sr.getScaleFactor(), originDrawX, originDrawY, angleRad, targetData)))
                 {
