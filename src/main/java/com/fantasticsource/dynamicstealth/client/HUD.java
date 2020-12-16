@@ -13,6 +13,7 @@ import com.fantasticsource.mctools.ClientTickTimer;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.OutlinedFontRenderer;
 import com.fantasticsource.mctools.Render;
+import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.datastructures.Color;
 import com.fantasticsource.tools.datastructures.Pair;
@@ -40,6 +41,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -103,6 +105,11 @@ public class HUD
 
     private static TextureManager textureManager = Minecraft.getMinecraft().renderEngine;
     private static float prevPartialTickExtended = 0;
+
+
+    private static final Class OPTIFINE_SHADERS_CLASS = ReflectionTool.getClassByName("net.optifine.shaders.Shaders");
+    private static final Field SHADERS_CONFIG_RENDER_RES_MUL_FIELD = OPTIFINE_SHADERS_CLASS == null ? null : ReflectionTool.getField(OPTIFINE_SHADERS_CLASS, "configRenderResMul");
+
 
     public static void draw(RenderGameOverlayEvent.Pre event, Minecraft mc)
     {
@@ -777,9 +784,17 @@ public class HUD
 
             //General Setup
             float originX = pos.getKey(), originY = pos.getValue();
-
             int portW = Render.getStoredViewportWidth();
             int portH = Render.getStoredViewportHeight();
+            if (SHADERS_CONFIG_RENDER_RES_MUL_FIELD != null)
+            {
+                float optifineScalar = (float) ReflectionTool.get(SHADERS_CONFIG_RENDER_RES_MUL_FIELD, null);
+                originX /= optifineScalar;
+                originY /= optifineScalar;
+                portW /= optifineScalar;
+                portH /= optifineScalar;
+            }
+
 
             boolean offScreen = false;
             float boundX = originX, boundY = originY;
@@ -930,7 +945,7 @@ public class HUD
                     boolean toRight = originX < portW >> 1;
                     if (!toRight) offX = -offX;
 
-                    float drawX = pos.getKey() / sr.getScaleFactor() + offX, drawY = pos.getValue() / sr.getScaleFactor();
+                    float drawX = originX / sr.getScaleFactor() + offX, drawY = originY / sr.getScaleFactor();
 
                     GlStateManager.pushMatrix();
                     GlStateManager.translate(drawX, drawY, 0);
