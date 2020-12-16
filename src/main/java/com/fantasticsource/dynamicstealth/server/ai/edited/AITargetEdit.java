@@ -91,7 +91,7 @@ public abstract class AITargetEdit extends EntityAIBase
 
     protected double getFollowDistance()
     {
-        return MCTools.getAttribute(attacker, SharedMonsterAttributes.FOLLOW_RANGE, 0);
+        return MCTools.getAttribute(attacker, SharedMonsterAttributes.FOLLOW_RANGE, 0); //TODO To emulate vanilla, the default should be 16.  Unsure why I set this to 0 (possibly efficiency, mod compat, or who knows)
     }
 
     @Override
