@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+Rewrite attributes (while re-using attribute registry names where possible)
+
 Add peek keybinds to replace current hand mirror behavior?
 ...block item actions
 ...translate/rotate head
