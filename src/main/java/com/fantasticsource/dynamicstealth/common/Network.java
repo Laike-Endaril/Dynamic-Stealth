@@ -14,9 +14,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.profiler.Profiler;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -42,7 +44,7 @@ public class Network
 
     private static int discriminator = 0;
 
-    private static HashSet<EntityLivingBase> soulSightCache = new HashSet<>();
+    private static HashSet<EntityPlayerMP> oldSoulSightClients = new HashSet<>();
 
     public static void init()
     {
@@ -54,28 +56,26 @@ public class Network
 
 
     @SubscribeEvent
-    public static void sendClientData(TickEvent.PlayerTickEvent event)
+    public static void sendClientData(TickEvent.ServerTickEvent event)
     {
-        event.player.world.profiler.startSection("DStealth: Send client data");
-        if (event.side == Side.SERVER && event.phase == TickEvent.Phase.END)
-        {
-            EntityPlayerMP player = (EntityPlayerMP) event.player;
+        if (event.phase != TickEvent.Phase.END) return;
 
+        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        Profiler profiler = server.profiler;
+        profiler.startSection("DStealth: Send client data");
+
+        HashSet<EntityPlayerMP> newSoulSightClients = new HashSet<>();
+
+        for (EntityPlayerMP player : server.getPlayerList().getPlayers())
+        {
             if (EntitySightData.hasSoulSight(player))
             {
-                if (!soulSightCache.contains(player))
-                {
-                    soulSightCache.add(player);
-                    WRAPPER.sendTo(new SoulSightPacket(true), player);
-                }
+                if (!oldSoulSightClients.contains(player)) WRAPPER.sendTo(new SoulSightPacket(true), player);
+                newSoulSightClients.add(player);
             }
             else
             {
-                if (soulSightCache.contains(player))
-                {
-                    soulSightCache.remove(player);
-                    WRAPPER.sendTo(new SoulSightPacket(false), player);
-                }
+                if (oldSoulSightClients.contains(player)) WRAPPER.sendTo(new SoulSightPacket(false), player);
             }
 
             if (player.world.loadedEntityList.contains(player))
@@ -83,6 +83,7 @@ public class Network
                 if (player.isEntityAlive())
                 {
                     if (serverSettings.senses.usePlayerSenses) WRAPPER.sendTo(new VisibilityPacket(player), player);
+
 
                     boolean opHUD, targetElement, stealthGauge;
                     if (isOP(player))
@@ -118,14 +119,18 @@ public class Network
                 }
             }
         }
-        event.player.world.profiler.endSection();
+
+        oldSoulSightClients = newSoulSightClients;
+
+        profiler.endSection();
     }
 
 
     @SubscribeEvent
     public static void playerLogon(PlayerEvent.PlayerLoggedInEvent event)
     {
-        WRAPPER.sendTo(new ClientInitPacket(event.player), (EntityPlayerMP) event.player);
+        EntityPlayerMP player = (EntityPlayerMP) event.player;
+        WRAPPER.sendTo(new ClientInitPacket(player), player);
     }
 
 
@@ -242,16 +247,16 @@ public class Network
         public ArrayList<WeaponEntry> normalWeaponSpecific = new ArrayList<>(), stealthWeaponSpecific = new ArrayList<>(), normalBlockedWeaponSpecific = new ArrayList<>(), stealthBlockedWeaponSpecific = new ArrayList<>(), assassinationWeaponSpecific = new ArrayList<>();
 
 
-        public ClientInitPacket() //Required; probably for when the packet is received
+        public ClientInitPacket() //Required for when the packet is received
         {
         }
 
-        public ClientInitPacket(EntityPlayer player)
+        public ClientInitPacket(EntityPlayerMP player)
         {
             soulSight = EntitySightData.hasSoulSight(player);
-            if (soulSight) soulSightCache.add(player);
+            if (soulSight) oldSoulSightClients.add(player);
 
-            if (isOP((EntityPlayerMP) player))
+            if (isOP(player))
             {
                 allowTargetingName = serverSettings.hud.targeting.allowNameElement > 0;
                 allowTargetingHP = serverSettings.hud.targeting.allowHPElement > 0;
