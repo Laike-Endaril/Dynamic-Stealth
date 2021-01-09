@@ -43,6 +43,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import noppes.npcs.api.NpcAPI;
+import noppes.npcs.api.entity.ICustomNpc;
+import noppes.npcs.api.entity.IEntity;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -269,7 +272,7 @@ public class Sight
     private static double visualStealthLevelInternal(EntityLivingBase searcher, Entity target, double yaw, double pitch, double offsetLR)
     {
         //Hard checks (absolute)
-        if (searcher.world != target.world || target.isDead || target instanceof FakePlayer) return 777;
+        if (searcher.world != target.world || target.isDead || target instanceof FakePlayer || !searcher.isEntityAlive()) return 777;
         if (target instanceof EntityPlayer)
         {
             EntityPlayer player = (EntityPlayer) target;
@@ -281,6 +284,12 @@ public class Sight
                 if (!DynamicStealthConfig.serverSettings.senses.pvpStealth || !HidingData.isHidingFrom((EntityPlayer) target, searcher.getPersistentID())) return -777;
             }
         }
+        if (Compat.customnpcs)
+        {
+            IEntity cnpc = NpcAPI.Instance().getIEntity(target);
+            if (cnpc instanceof ICustomNpc && !cnpc.isAlive() && ((ICustomNpc) cnpc).getStats().getHideDeadBody() && ((EntityLivingBase) cnpc.getMCEntity()).deathTime == 0) return 777;
+        }
+
         if (searcher instanceof EntityPlayerMP && target == ((EntityPlayerMP) searcher).getSpectatingEntity()) return -777;
         if (target instanceof EntityDragon || target instanceof EntityWither) return -777;
         if (searcher instanceof EntityPlayer && CompatDissolution.isPossessing((EntityPlayer) searcher, target)) return -777;
