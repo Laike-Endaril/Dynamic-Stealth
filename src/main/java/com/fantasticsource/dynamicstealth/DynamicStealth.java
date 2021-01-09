@@ -30,6 +30,7 @@ import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.ServerTickTimer;
+import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.TrigLookupTable;
 import net.minecraft.entity.Entity;
@@ -775,6 +776,7 @@ public class DynamicStealth
         for (EntityAITasks.EntityAITaskEntry task : taskArray)
         {
             Class actionClass = task.action.getClass();
+            String actionClassName = actionClass.getName();
 
             if (actionClass == EntityAILookIdle.class) replaceTask(tasks, task, new AIEntityLookIdleEdit(living));
 
@@ -844,13 +846,18 @@ public class DynamicStealth
             else if (actionClass == EntityAIFollowOwnerFlying.class) replaceTask(tasks, task, new AIFollowOwnerFlyingEdit((EntityTameable) living, (EntityAIFollowOwner) task.action));
 
                 //Skeletons are special
-            else if (actionClass.getName().equals("net.minecraft.entity.monster.AbstractSkeleton$1")) replaceTask(tasks, task, new AIAttackMeleeEdit((EntityAIAttackMelee) task.action));
+            else if (actionClassName.equals("net.minecraft.entity.monster.AbstractSkeleton$1")) replaceTask(tasks, task, new AIAttackMeleeEdit((EntityAIAttackMelee) task.action));
 
                 //Mod compat
-            else if (actionClass.getName().equals("com.lycanitesmobs.core.entity.ai.EntityAIWatchClosest")) replaceTask(tasks, task, new AIWatchClosestEdit(living, EntityLivingBase.class, 0.02f));
-            else if (actionClass.getName().equals("com.lycanitesmobs.core.entity.ai.EntityAILookIdle")) replaceTask(tasks, task, new AIEntityLookIdleEdit(living));
+            else if (actionClassName.equals("com.lycanitesmobs.core.entity.ai.EntityAIWatchClosest")) replaceTask(tasks, task, new AIWatchClosestEdit(living, EntityLivingBase.class, 0.02f));
+            else if (actionClassName.equals("com.lycanitesmobs.core.entity.ai.EntityAILookIdle")) replaceTask(tasks, task, new AIEntityLookIdleEdit(living));
 
-            else if (actionClass.getName().contains("de.lellson.roughmobs") && actionClass.getName().contains("RoughAIWeaponSwitch")) replaceTask(tasks, task, new CompatRoughMobs.RoughAIWeaponSwitchEdit(living, 12));
+            else if (actionClassName.contains("de.lellson.roughmobs") && actionClassName.contains("RoughAIWeaponSwitch")) replaceTask(tasks, task, new CompatRoughMobs.RoughAIWeaponSwitchEdit(living, 12));
+            else if (Compat.customnpcs)
+            {
+                if (actionClassName.equals("noppes.npcs.ai.target.EntityAIClearTarget")) tasks.removeTask(task.action); //This AI task wouldn't do anything with DS active anyway
+                else if (actionClassName.equals("noppes.npcs.ai.EntityAIWatchClosest")) replaceTask(tasks, task, new AIWatchClosestEdit(living, (Class<? extends Entity>) ReflectionTool.get(ReflectionTool.getClassByName("noppes.npcs.ai.EntityAIWatchClosest"), "watchedClass", task.action), 0.002f));
+            }
         }
     }
 
