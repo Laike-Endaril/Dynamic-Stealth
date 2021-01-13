@@ -3,8 +3,6 @@ package com.fantasticsource.dynamicstealth.server.entitytracker;
 import com.fantasticsource.dynamicstealth.server.GlobalDefaultsAndData;
 import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
 import com.fantasticsource.tools.Tools;
-import net.minecraft.crash.CrashReport;
-import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.*;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
@@ -16,20 +14,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.*;
 import net.minecraft.network.Packet;
-import net.minecraft.util.ReportedException;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.Set;
 
 public class EntityTrackerEdit extends EntityTracker
 {
-    public static final Logger LOGGER = LogManager.getLogger();
-
-
     public EntityTrackerEdit(WorldServer worldIn)
     {
         super(worldIn);
@@ -84,39 +76,17 @@ public class EntityTrackerEdit extends EntityTracker
 
     public void track(Entity entityIn, int trackingRange, final int updateFrequency, boolean sendVelocityUpdates)
     {
-        try
+        if (trackedEntityHashTable.containsItem(entityIn.getEntityId()))
         {
-            if (trackedEntityHashTable.containsItem(entityIn.getEntityId()))
-            {
-                throw new IllegalStateException("Entity is already tracked!");
-            }
-
+            System.err.println("Entity is already tracked: " + entityIn);
+            Tools.printStackTrace();
+        }
+        else
+        {
             EntityTrackerEntry entityEntry = entityIn instanceof EntityLivingBase && !GlobalDefaultsAndData.isFullBypass((EntityLivingBase) entityIn) ? new LivingBaseEntityTrackerEntry(entityIn, trackingRange, maxTrackingDistanceThreshold, updateFrequency, sendVelocityUpdates) : new EntityTrackerEntry(entityIn, trackingRange, maxTrackingDistanceThreshold, updateFrequency, sendVelocityUpdates);
             entries.add(entityEntry);
             trackedEntityHashTable.addKey(entityIn.getEntityId(), entityEntry);
             entityEntry.updatePlayerEntities(world.playerEntities);
-        }
-        catch (Throwable throwable)
-        {
-            CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Adding entity to track");
-            CrashReportCategory crashreportcategory = crashreport.makeCategory("Entity To Track");
-            crashreportcategory.addCrashSection("Tracking range", trackingRange + " blocks");
-            crashreportcategory.addDetail("Update interval", () ->
-            {
-                String s = "Once per " + updateFrequency + " ticks";
-
-                if (updateFrequency == Integer.MAX_VALUE)
-                {
-                    s = "Maximum (" + s + ")";
-                }
-
-                return s;
-            });
-
-            entityIn.addEntityCrashInfo(crashreportcategory);
-            trackedEntityHashTable.lookup(entityIn.getEntityId()).getTrackedEntity().addEntityCrashInfo(crashreport.makeCategory("Entity That Is Already Tracked"));
-
-            LOGGER.error("\"Silently\" catching entity tracking error.", new ReportedException(crashreport));
         }
     }
 
