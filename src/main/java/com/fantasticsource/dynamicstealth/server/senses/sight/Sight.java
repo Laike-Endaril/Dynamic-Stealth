@@ -94,13 +94,9 @@ public class Sight
     private static boolean updateRecentlySeen(Map.Entry<EntityLivingBase, Map<Entity, SeenData>> entry)
     {
         EntityLivingBase livingBase = entry.getKey();
-        if (!livingBase.isEntityAlive() || !livingBase.world.loadedEntityList.contains(livingBase)) return true;
+        if (!MCTools.entityIsValid(livingBase)) return true;
 
-        entry.getValue().entrySet().removeIf(e ->
-        {
-            Entity entity = e.getKey();
-            return !entity.isEntityAlive() || !entity.world.loadedEntityList.contains(entity);
-        });
+        entry.getValue().entrySet().removeIf(e -> !MCTools.entityIsValid(e.getKey()));
         return false;
     }
 

@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.server;
 
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
+import com.fantasticsource.mctools.MCTools;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.pathfinding.Path;
@@ -9,7 +10,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 import static com.fantasticsource.mctools.ServerTickTimer.currentTick;
 
@@ -37,13 +37,7 @@ public class CombatTracker
 
     private static void removeAllUnusedTimes(LinkedHashMap<EntityLivingBase, Long> map)
     {
-        map.entrySet().removeIf(CombatTracker::checkRemove);
-    }
-
-    private static boolean checkRemove(Map.Entry<EntityLivingBase, Long> entry)
-    {
-        EntityLivingBase livingBase = entry.getKey();
-        return !livingBase.world.loadedEntityList.contains(livingBase);
+        map.entrySet().removeIf(entry -> !MCTools.entityIsValid(entry.getKey()));
     }
 
 

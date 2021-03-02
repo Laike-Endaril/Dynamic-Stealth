@@ -8,6 +8,7 @@ import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.ServerTickTimer;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -78,7 +79,7 @@ public class Network
                 if (oldSoulSightClients.contains(player)) WRAPPER.sendTo(new SoulSightPacket(false), player);
             }
 
-            if (player.world.loadedEntityList.contains(player))
+            if (MCTools.entityIsValid(player))
             {
                 if (player.isEntityAlive())
                 {
