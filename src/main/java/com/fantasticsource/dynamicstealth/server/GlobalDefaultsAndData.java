@@ -1,7 +1,7 @@
 package com.fantasticsource.dynamicstealth.server;
 
 import com.fantasticsource.mctools.MCTools;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -13,7 +13,7 @@ public class GlobalDefaultsAndData
 {
     public static ArrayList<String> fullBypassDefaults = new ArrayList<>();
 
-    private static LinkedHashMap<Class<? extends EntityLivingBase>, HashSet<String>> fullBypassEntities;
+    private static LinkedHashMap<Class<? extends Entity>, HashSet<String>> fullBypassEntities;
 
 
     static
@@ -71,8 +71,8 @@ public class GlobalDefaultsAndData
     }
 
 
-    public static boolean isFullBypass(EntityLivingBase livingBase)
+    public static boolean isFullBypass(Entity entity)
     {
-        return MCTools.entityMatchesMap(livingBase, fullBypassEntities);
+        return MCTools.entityMatchesMap(entity, fullBypassEntities);
     }
 }

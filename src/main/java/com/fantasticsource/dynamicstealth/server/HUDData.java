@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.server;
 
 import com.fantasticsource.mctools.MCTools;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 
 import java.util.HashSet;
@@ -10,7 +11,7 @@ import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.ser
 
 public class HUDData
 {
-    private static LinkedHashMap<Class<? extends EntityLivingBase>, HashSet<String>> ungaugedEntities;
+    private static LinkedHashMap<Class<? extends Entity>, HashSet<String>> ungaugedEntities;
 
     public static void update()
     {
@@ -19,8 +20,10 @@ public class HUDData
         MCTools.populateEntityMap(serverSettings.hud.stealthGaugeBlacklist, ungaugedEntities);
     }
 
-    public static boolean isGauged(EntityLivingBase searcher)
+    public static boolean isGauged(Entity searcher)
     {
+        if (!(searcher instanceof EntityLivingBase)) return false;
+
         return !MCTools.entityMatchesMap(searcher, ungaugedEntities);
     }
 }

@@ -24,6 +24,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -33,6 +34,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemSplashPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
@@ -63,7 +65,7 @@ public class Sight
     private static Map<EntityPlayer, Pair<WrappingQueue<Double>, Long>> globalPlayerStealthHistory = new LinkedHashMap<>();
 
     private static Map<EntityLivingBase, Map<Entity, SeenData>> recentlySeenMap = new LinkedHashMap<>();
-    private static Map<Pair<EntityPlayerMP, Boolean>, LinkedHashMap<EntityLivingBase, Double>> playerSeenThisTickMap = new LinkedHashMap<>();
+    private static Map<Pair<EntityPlayerMP, Boolean>, LinkedHashMap<Entity, Double>> playerSeenThisTickMap = new LinkedHashMap<>();
 
 
     public static void update(TickEvent.ServerTickEvent event)
@@ -218,35 +220,35 @@ public class Sight
     }
 
 
-    public static LinkedHashMap<EntityLivingBase, Double> seenEntities(EntityPlayerMP player)
+    public static LinkedHashMap<Entity, Double> seenEntities(EntityPlayerMP player)
     {
         player.world.profiler.startSection("DStealth: Seen Entities");
-        LinkedHashMap<EntityLivingBase, Double> map = playerSeenThisTickMap.get(new Pair<>(player, false));
+        LinkedHashMap<Entity, Double> map = playerSeenThisTickMap.get(new Pair<>(player, false));
         if (map != null)
         {
             player.world.profiler.endSection();
-            return (LinkedHashMap<EntityLivingBase, Double>) map.clone();
+            return (LinkedHashMap<Entity, Double>) map.clone();
         }
 
         map = seenEntitiesInternal(player);
-        playerSeenThisTickMap.put(new Pair<>(player, false), (LinkedHashMap<EntityLivingBase, Double>) map.clone());
+        playerSeenThisTickMap.put(new Pair<>(player, false), (LinkedHashMap<Entity, Double>) map.clone());
         player.world.profiler.endSection();
         return map;
     }
 
-    private static LinkedHashMap<EntityLivingBase, Double> seenEntitiesInternal(EntityPlayerMP player)
+    private static LinkedHashMap<Entity, Double> seenEntitiesInternal(EntityPlayerMP player)
     {
-        LinkedHashMap<EntityLivingBase, Double> result = new LinkedHashMap<>();
+        LinkedHashMap<Entity, Double> result = new LinkedHashMap<>();
         Entity[] loadedEntities = player.world.loadedEntityList.toArray(new Entity[0]);
 
         if (serverSettings.senses.usePlayerSenses)
         {
             for (Entity entity : loadedEntities)
             {
-                if (entity instanceof EntityLivingBase && entity != player)
+                if (entity != player)
                 {
                     double stealthLevel = visualStealthLevel(player, entity, true);
-                    if (stealthLevel <= 1) result.put((EntityLivingBase) entity, stealthLevel);
+                    if (stealthLevel <= 1) result.put(entity, stealthLevel);
                 }
             }
         }
@@ -254,10 +256,7 @@ public class Sight
         {
             for (Entity entity : loadedEntities)
             {
-                if (entity instanceof EntityLivingBase && entity != player)
-                {
-                    result.put((EntityLivingBase) entity, -888d);
-                }
+                if (entity != player) result.put(entity, -888d);
             }
         }
 
@@ -267,6 +266,11 @@ public class Sight
 
     private static double visualStealthLevelInternal(EntityLivingBase searcher, Entity target, double yaw, double pitch, double offsetLR)
     {
+        if (target instanceof EntityItem && ((EntityItem) target).getItem().getItem() instanceof ItemSplashPotion)
+        {
+            int k = 0;
+        }
+
         //Hard checks (absolute)
         if (searcher.world != target.world || target.isDead || target instanceof FakePlayer || !searcher.isEntityAlive()) return 777;
         if (target instanceof EntityPlayer)
@@ -365,7 +369,7 @@ public class Sight
         double sightAttrib = searcher.getEntityAttribute(Attributes.SIGHT).getAttributeValue();
         if (sightAttrib <= 0) return 777;
 
-        double visReductionAttrib = !isLivingBase ? 0 : targetLivingBase.getEntityAttribute(Attributes.VISIBILITY_REDUCTION).getAttributeValue();
+        double visReductionAttrib = !isLivingBase ? Attributes.VISIBILITY_REDUCTION.getDefaultValue() : targetLivingBase.getEntityAttribute(Attributes.VISIBILITY_REDUCTION).getAttributeValue();
         double attributeMultipliers = visReductionAttrib <= 0 ? 777 : sightAttrib / visReductionAttrib;
 
 

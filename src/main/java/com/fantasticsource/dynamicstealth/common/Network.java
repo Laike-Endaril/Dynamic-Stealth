@@ -137,7 +137,7 @@ public class Network
 
     public static class VisibilityPacket implements IMessage
     {
-        LinkedHashMap<EntityLivingBase, Double> inputMap;
+        LinkedHashMap<Entity, Double> inputMap;
         LinkedHashMap<Integer, Float> visibilityMap;
 
         public VisibilityPacket() //Required; probably for when the packet is received
@@ -156,7 +156,7 @@ public class Network
             int i = inputMap.size();
             buf.writeInt(i);
 
-            for (Map.Entry<EntityLivingBase, Double> entry : inputMap.entrySet())
+            for (Map.Entry<Entity, Double> entry : inputMap.entrySet())
             {
                 buf.writeInt(entry.getKey().getEntityId());
                 buf.writeFloat((float) (1d - entry.getValue()));
@@ -405,7 +405,7 @@ public class Network
         EntityPlayerMP player;
         boolean targetElement, update;
         int stealthLevel, lightLevel;
-        ArrayList<EntityLivingBase> inputList = new ArrayList<>();
+        ArrayList<Entity> inputList = new ArrayList<>();
 
         ArrayList<ClientData.OnPointData> outputList = new ArrayList<>();
 
@@ -431,9 +431,9 @@ public class Network
 
             if (update)
             {
-                for (EntityLivingBase searcher : Sight.seenEntities(player).keySet())
+                for (Entity seen : Sight.seenEntities(player).keySet())
                 {
-                    if (searcher.isEntityAlive() && searcher.getDistanceSq(playerPos) <= rangeSq) inputList.add(searcher);
+                    if (seen.isEntityAlive() && seen.getDistanceSq(playerPos) <= rangeSq) inputList.add(seen);
                 }
             }
         }
@@ -452,27 +452,27 @@ public class Network
 
                 if (targetElement)
                 {
-                    for (EntityLivingBase searcher : inputList)
+                    for (Entity seen : inputList)
                     {
-                        if (EntityThreatData.bypassesThreat(searcher))
+                        if (EntityThreatData.bypassesThreat(seen))
                         {
                             //Color
                             buf.writeByte(ClientData.CID_BYPASS);
                             //Searcher ID
-                            buf.writeInt(searcher.getEntityId());
+                            buf.writeInt(seen.getEntityId());
                             //Target ID
-                            Entity target = (searcher instanceof EntityLiving) ? ((EntityLiving) searcher).getAttackTarget() : null;
+                            Entity target = (seen instanceof EntityLiving) ? ((EntityLiving) seen).getAttackTarget() : null;
                             buf.writeInt(target == null ? -1 : target.getEntityId());
                         }
                         else
                         {
-                            Threat.ThreatData data = Threat.get(searcher);
-                            byte cid = ClientData.getCID(player, searcher, data.target, data.threatPercentage);
+                            Threat.ThreatData data = Threat.get((EntityLivingBase) seen);
+                            byte cid = ClientData.getCID(player, seen, data.target, data.threatPercentage);
 
                             //Color
                             buf.writeByte(cid);
                             //Searcher ID
-                            buf.writeInt(searcher.getEntityId());
+                            buf.writeInt(seen.getEntityId());
 
                             //Target ID
                             if (canHaveClientTarget(cid)) buf.writeInt(data.target == null ? -1 : data.target.getEntityId());
@@ -483,24 +483,24 @@ public class Network
                 }
                 else
                 {
-                    for (EntityLivingBase searcher : inputList)
+                    for (Entity seen : inputList)
                     {
-                        if (EntityThreatData.bypassesThreat(searcher))
+                        if (EntityThreatData.bypassesThreat(seen))
                         {
                             //Color
                             buf.writeByte(ClientData.CID_BYPASS);
                             //Searcher ID
-                            buf.writeInt(searcher.getEntityId());
+                            buf.writeInt(seen.getEntityId());
                         }
                         else
                         {
-                            Threat.ThreatData data = Threat.get(searcher);
-                            byte cid = ClientData.getCID(player, searcher, data.target, data.threatPercentage);
+                            Threat.ThreatData data = Threat.get((EntityLivingBase) seen);
+                            byte cid = ClientData.getCID(player, seen, data.target, data.threatPercentage);
 
                             //Color
-                            buf.writeByte(ClientData.getCID(player, searcher, data.target, data.threatPercentage));
+                            buf.writeByte(ClientData.getCID(player, seen, data.target, data.threatPercentage));
                             //Searcher ID
-                            buf.writeInt(searcher.getEntityId());
+                            buf.writeInt(seen.getEntityId());
                             //Threat level
                             if (canHaveThreat(cid)) buf.writeByte((int) data.threatPercentage);
                         }

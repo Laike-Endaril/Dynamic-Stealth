@@ -20,17 +20,13 @@ public class EntitySightData
 {
     public static int playerMaxSightDistance;
 
-    public static HashSet<EntityLivingBase> potionSoulSightEntities;
+    public static HashSet<Entity> potionSoulSightEntities;
 
     public static LinkedHashMap<Integer, Integer> minimumDimensionLightLevels;
 
-    private static LinkedHashMap<Class<? extends EntityLivingBase>, HashSet<String>> naturallyBrightEntities;
-    private static LinkedHashMap<Class<? extends EntityLivingBase>, HashSet<String>> naturalNightvisionEntities;
-    private static LinkedHashMap<Class<? extends EntityLivingBase>, HashSet<String>> naturalSoulSightEntities;
-
-    private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityAngles;
-    private static LinkedHashMap<Class<? extends EntityLivingBase>, Pair<Integer, Integer>> entityDistances;
-    private static LinkedHashMap<Class<? extends EntityLivingBase>, SpecificLighting> entityLighting;
+    private static LinkedHashMap<Class<? extends Entity>, HashSet<String>> naturallyBrightEntities, naturalNightvisionEntities, naturalSoulSightEntities;
+    private static LinkedHashMap<Class<? extends Entity>, Pair<Integer, Integer>> entityAngles, entityDistances;
+    private static LinkedHashMap<Class<? extends Entity>, SpecificLighting> entityLighting;
 
 
     public static void update()
@@ -155,67 +151,85 @@ public class EntitySightData
     {
         if (target.isBurning() && serverSettings.senses.sight.g_absolutes.seeBurning) return true;
 
-        if (target instanceof EntityLivingBase) return MCTools.entityMatchesMap((EntityLivingBase) target, naturallyBrightEntities);
-
-        return false;
+        return MCTools.entityMatchesMap(target, naturallyBrightEntities);
     }
 
-    public static boolean hasNightvision(EntityLivingBase searcher)
+    public static boolean hasNightvision(Entity searcher)
     {
-        return searcher.getActivePotionEffect(MobEffects.NIGHT_VISION) != null || MCTools.entityMatchesMap(searcher, naturalNightvisionEntities);
+        if (!(searcher instanceof EntityLivingBase)) return false;
+
+        return ((EntityLivingBase) searcher).getActivePotionEffect(MobEffects.NIGHT_VISION) != null || MCTools.entityMatchesMap(searcher, naturalNightvisionEntities);
     }
 
-    public static boolean hasSoulSight(EntityLivingBase searcher)
+    public static boolean hasSoulSight(Entity searcher)
     {
-        return searcher.getActivePotionEffect(Potions.POTION_SOULSIGHT) != null || searcher.getEntityData().getBoolean("ai_omniscience") || MCTools.entityMatchesMap(searcher, naturalSoulSightEntities);
+        if (!(searcher instanceof EntityLivingBase)) return false;
+
+        return ((EntityLivingBase) searcher).getActivePotionEffect(Potions.POTION_SOULSIGHT) != null || searcher.getEntityData().getBoolean("ai_omniscience") || MCTools.entityMatchesMap(searcher, naturalSoulSightEntities);
     }
 
-    public static int angleLarge(EntityLivingBase searcher)
+    public static int angleLarge(Entity searcher)
     {
+        if (!(searcher instanceof EntityLivingBase)) return 0;
+
         Pair<Integer, Integer> pair = entityAngles.get(searcher.getClass());
         return pair == null ? serverSettings.senses.sight.e_angles.angleLarge : pair.getKey();
     }
 
-    public static int angleSmall(EntityLivingBase searcher)
+    public static int angleSmall(Entity searcher)
     {
+        if (!(searcher instanceof EntityLivingBase)) return 0;
+
         Pair<Integer, Integer> pair = entityAngles.get(searcher.getClass());
         return pair == null ? serverSettings.senses.sight.e_angles.angleSmall : pair.getValue();
     }
 
 
-    public static int distanceFar(EntityLivingBase searcher)
+    public static int distanceFar(Entity searcher)
     {
+        if (!(searcher instanceof EntityLivingBase)) return 0;
+
         Pair<Integer, Integer> pair = entityDistances.get(searcher.getClass());
         return pair == null ? serverSettings.senses.sight.f_distances.distanceFar : pair.getKey();
     }
 
-    public static int distanceNear(EntityLivingBase searcher)
+    public static int distanceNear(Entity searcher)
     {
+        if (!(searcher instanceof EntityLivingBase)) return 0;
+
         Pair<Integer, Integer> pair = entityDistances.get(searcher.getClass());
         return pair == null ? serverSettings.senses.sight.f_distances.distanceNear : pair.getValue();
     }
 
 
-    public static int lightLevelHigh(EntityLivingBase searcher)
+    public static int lightLevelHigh(Entity searcher)
     {
+        if (!(searcher instanceof EntityLivingBase)) return 0;
+
         SpecificLighting specificLighting = entityLighting.get(searcher.getClass());
         return specificLighting == null ? serverSettings.senses.sight.c_lighting.lightLevelHigh : specificLighting.levelHigh;
     }
 
-    public static double lightMultHigh(EntityLivingBase searcher)
+    public static double lightMultHigh(Entity searcher)
     {
+        if (!(searcher instanceof EntityLivingBase)) return 0;
+
         SpecificLighting specificLighting = entityLighting.get(searcher.getClass());
         return specificLighting == null ? serverSettings.senses.sight.c_lighting.lightMultHigh : specificLighting.multHigh;
     }
 
-    public static int lightLevelLow(EntityLivingBase searcher)
+    public static int lightLevelLow(Entity searcher)
     {
+        if (!(searcher instanceof EntityLivingBase)) return 0;
+
         SpecificLighting specificLighting = entityLighting.get(searcher.getClass());
         return specificLighting == null ? serverSettings.senses.sight.c_lighting.lightLevelLow : specificLighting.levelLow;
     }
 
-    public static double lightMultLow(EntityLivingBase searcher)
+    public static double lightMultLow(Entity searcher)
     {
+        if (!(searcher instanceof EntityLivingBase)) return 0;
+
         SpecificLighting specificLighting = entityLighting.get(searcher.getClass());
         return specificLighting == null ? serverSettings.senses.sight.c_lighting.lightMultLow : specificLighting.multLow;
     }

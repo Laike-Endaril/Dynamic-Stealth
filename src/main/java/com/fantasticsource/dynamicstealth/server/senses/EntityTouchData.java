@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth.server.senses;
 
 import com.fantasticsource.dynamicstealth.server.GlobalDefaultsAndData;
 import com.fantasticsource.mctools.MCTools;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.passive.EntityBat;
@@ -14,7 +15,7 @@ import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.ser
 
 public class EntityTouchData
 {
-    private static LinkedHashMap<Class<? extends EntityLivingBase>, HashSet<String>> unfeelingEntities;
+    private static LinkedHashMap<Class<? extends Entity>, HashSet<String>> unfeelingEntities;
 
     public static void update()
     {
@@ -23,11 +24,13 @@ public class EntityTouchData
         MCTools.populateEntityMap(serverSettings.senses.touch.unfeelingEntities, unfeelingEntities);
     }
 
-    public static boolean canFeelTouch(EntityLivingBase feeler)
+    public static boolean canFeelTouch(Entity entity)
     {
-        if (GlobalDefaultsAndData.isFullBypass(feeler)) return false;
-        if (feeler instanceof EntityArmorStand || feeler instanceof EntityBat || feeler instanceof FakePlayer) return false;
+        if (!(entity instanceof EntityLivingBase)) return false;
 
-        return !MCTools.entityMatchesMap(feeler, unfeelingEntities);
+        if (GlobalDefaultsAndData.isFullBypass(entity)) return false;
+        if (entity instanceof EntityArmorStand || entity instanceof EntityBat || entity instanceof FakePlayer) return false;
+
+        return !MCTools.entityMatchesMap(entity, unfeelingEntities);
     }
 }

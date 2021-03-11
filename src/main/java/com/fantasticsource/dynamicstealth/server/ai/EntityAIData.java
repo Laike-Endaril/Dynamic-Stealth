@@ -1,6 +1,7 @@
 package com.fantasticsource.dynamicstealth.server.ai;
 
 import com.fantasticsource.mctools.MCTools;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 
 import java.util.LinkedHashMap;
@@ -9,8 +10,7 @@ import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.ser
 
 public class EntityAIData
 {
-    private static LinkedHashMap<Class<? extends EntityLivingBase>, LinkedHashMap<String, Integer>> entityHeadTurnSpeeds;
-    private static LinkedHashMap<Class<? extends EntityLivingBase>, LinkedHashMap<String, Integer>> entityFleePercentages;
+    private static LinkedHashMap<Class<? extends Entity>, LinkedHashMap<String, Integer>> entityHeadTurnSpeeds, entityFleePercentages;
 
     public static void update()
     {
@@ -22,13 +22,17 @@ public class EntityAIData
     }
 
 
-    public static int headTurnSpeed(EntityLivingBase searcher)
+    public static int headTurnSpeed(Entity entity)
     {
-        return MCTools.entityMatchesIntMapOrDefault(searcher, entityHeadTurnSpeeds, serverSettings.ai.headTurnSpeed);
+        if (!(entity instanceof EntityLivingBase)) return 0;
+
+        return MCTools.entityMatchesIntMapOrDefault(entity, entityHeadTurnSpeeds, serverSettings.ai.headTurnSpeed);
     }
 
-    public static int fleeThreshold(EntityLivingBase searcher)
+    public static int fleeThreshold(Entity entity)
     {
-        return MCTools.entityMatchesIntMapOrDefault(searcher, entityFleePercentages, serverSettings.ai.flee.threshold);
+        if (!(entity instanceof EntityLivingBase)) return 0;
+
+        return MCTools.entityMatchesIntMapOrDefault(entity, entityFleePercentages, serverSettings.ai.flee.threshold);
     }
 }

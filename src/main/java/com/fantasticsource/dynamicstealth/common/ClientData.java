@@ -114,7 +114,7 @@ public class ClientData
         throw new IllegalArgumentException("Unregistered color: " + color);
     }
 
-    public static byte getCID(EntityPlayer player, EntityLivingBase searcher, EntityLivingBase target, float threatPercentage)
+    public static byte getCID(EntityPlayer player, Entity searcher, Entity target, float threatPercentage)
     {
         return getCID(getColor(player, searcher, target, threatPercentage));
     }
@@ -145,11 +145,11 @@ public class ClientData
         throw new IllegalArgumentException("Unregistered cid: " + cid);
     }
 
-    public static int getColor(EntityPlayer player, EntityLivingBase searcher, EntityLivingBase target, float threatPercentage)
+    public static int getColor(EntityPlayer player, Entity searcher, Entity target, float threatPercentage)
     {
         if (EntityThreatData.bypassesThreat(searcher)) return COLOR_BYPASS;
 
-        if (CompatEBWizardry.mindTrickPotion != null && searcher.getActivePotionEffect(CompatEBWizardry.mindTrickPotion) != null) return COLOR_DAZED;
+        if (CompatEBWizardry.mindTrickPotion != null && searcher instanceof EntityLivingBase && ((EntityLivingBase) searcher).getActivePotionEffect(CompatEBWizardry.mindTrickPotion) != null) return COLOR_DAZED;
 
         AIDynamicStealth stealthAI = searcher instanceof EntityLiving ? AIDynamicStealth.getStealthAI((EntityLiving) searcher) : null;
         if (stealthAI != null && stealthAI.isFleeing())
@@ -158,7 +158,7 @@ public class ClientData
         }
         if (serverSettings.hud.recognizePassive && EntityThreatData.isPassive(searcher)) return COLOR_IDLE_PASSIVE;
         if (threatPercentage <= 0) return COLOR_IDLE_NON_PASSIVE;
-        if (target == null || !Sight.canSee(searcher, target, true)) return COLOR_SEARCHING;
+        if (target == null || (searcher instanceof EntityLivingBase && !Sight.canSee((EntityLivingBase) searcher, target, true))) return COLOR_SEARCHING;
         if (target == player) return COLOR_ATTACKING_YOU;
         return COLOR_ATTACKING_OTHER;
     }

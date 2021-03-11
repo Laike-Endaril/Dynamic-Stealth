@@ -4,6 +4,7 @@ import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.server.GlobalDefaultsAndData;
 import com.fantasticsource.mctools.MCTools;
 import ladysnake.dissolution.api.corporeality.IPossessable;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import noppes.npcs.api.NpcAPI;
 import noppes.npcs.api.entity.ICustomNpc;
@@ -17,9 +18,7 @@ import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.ser
 
 public class EntityThreatData
 {
-    private static LinkedHashMap<Class<? extends EntityLivingBase>, HashSet<String>> threatBypass;
-    private static LinkedHashMap<Class<? extends EntityLivingBase>, HashSet<String>> isPassive;
-    private static LinkedHashMap<Class<? extends EntityLivingBase>, HashSet<String>> isNonPassive;
+    private static LinkedHashMap<Class<? extends Entity>, HashSet<String>> threatBypass, isPassive, isNonPassive;
 
 
     public static void update()
@@ -57,17 +56,19 @@ public class EntityThreatData
     }
 
 
-    public static boolean bypassesThreat(EntityLivingBase livingBase)
+    public static boolean bypassesThreat(Entity entity)
     {
-        if (serverSettings.threat.bypassThreatSystem || livingBase == null) return true;
+        if (!(entity instanceof EntityLivingBase)) return true;
 
-        if (GlobalDefaultsAndData.isFullBypass(livingBase)) return true;
+        if (serverSettings.threat.bypassThreatSystem) return true;
 
-        if (Compat.dissolution && livingBase instanceof IPossessable && ((IPossessable) livingBase).getPossessingEntity() != null) return true;
+        if (GlobalDefaultsAndData.isFullBypass(entity)) return true;
+
+        if (Compat.dissolution && entity instanceof IPossessable && ((IPossessable) entity).getPossessingEntity() != null) return true;
 
         if (Compat.customnpcs)
         {
-            IEntity iEntity = NpcAPI.Instance().getIEntity(livingBase);
+            IEntity iEntity = NpcAPI.Instance().getIEntity(entity);
             if (iEntity instanceof ICustomNpc)
             {
                 ICustomNpc npc = (ICustomNpc) iEntity;
@@ -79,16 +80,18 @@ public class EntityThreatData
             }
         }
 
-        return MCTools.entityMatchesMap(livingBase, threatBypass);
+        return MCTools.entityMatchesMap(entity, threatBypass);
     }
 
-    public static boolean isPassive(EntityLivingBase livingBase)
+    public static boolean isPassive(Entity entity)
     {
-        if (livingBase == null || bypassesThreat(livingBase)) return false;
+        if (!(entity instanceof EntityLivingBase)) return false;
 
-        if (MCTools.entityMatchesMap(livingBase, isNonPassive)) return false;
-        if (MCTools.entityMatchesMap(livingBase, isPassive)) return true;
+        if (bypassesThreat(entity)) return false;
 
-        return MCTools.isPassive(livingBase);
+        if (MCTools.entityMatchesMap(entity, isNonPassive)) return false;
+        if (MCTools.entityMatchesMap(entity, isPassive)) return true;
+
+        return MCTools.isPassive((EntityLivingBase) entity);
     }
 }
