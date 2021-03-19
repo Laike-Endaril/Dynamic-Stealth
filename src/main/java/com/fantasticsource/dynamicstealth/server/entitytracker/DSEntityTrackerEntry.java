@@ -1,7 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.entitytracker;
 
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
-import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeMap;
@@ -31,39 +30,19 @@ import java.util.Set;
 
 public class DSEntityTrackerEntry extends EntityTrackerEntry
 {
-    private static final Logger LOGGER = LogManager.getLogger();
+    protected static final Logger LOGGER = LogManager.getLogger();
 
-    public final Set<EntityPlayerMP> trackingPlayers = Sets.newHashSet();
+    protected final Entity entity;
+    protected final boolean isLivingBase, isPlayer;
+    protected final EntityLivingBase livingBase;
+    protected final EntityPlayerMP player;
+    protected final int updateFrequency;
+    protected final boolean sendVelocityUpdates;
 
-    private final Entity entity;
-    private final boolean isLivingBase;
-    private final EntityLivingBase livingBase;
-    private final boolean isPlayer;
-    private final EntityPlayerMP player;
-    private final int updateFrequency;
-    private final boolean sendVelocityUpdates;
-    public int updateCounter;
-    private int ticksSinceLastForcedTeleport;
-    private boolean onGround;
-    private boolean ridingEntity;
-    private boolean updatedPlayerVisibility;
-
-    private long encodedPosX;
-    private long encodedPosY;
-    private long encodedPosZ;
-
-    private int encodedRotationYaw;
-    private int encodedRotationPitch;
-
-    private int lastHeadMotion;
-
-    private double lastMotionX;
-    private double lastMotionY;
-    private double lastMotionZ;
-
-    private double lastX;
-    private double lastY;
-    private double lastZ;
+    protected int ticksSinceLastForcedTeleport, encodedRotationYaw, encodedRotationPitch, lastHeadMotion;
+    protected boolean onGround, ridingEntity, updatedPlayerVisibility;
+    protected long encodedPosX, encodedPosY, encodedPosZ;
+    protected double lastX, lastY, lastZ, lastMotionX, lastMotionY, lastMotionZ;
 
     private List<Entity> passengers = Collections.emptyList();
 
