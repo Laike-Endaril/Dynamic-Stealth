@@ -40,9 +40,9 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
     protected final boolean sendVelocityUpdates;
 
     protected int ticksSinceLastForcedTeleport, encodedRotationYaw, encodedRotationPitch, lastHeadMotion;
-    protected boolean onGround, ridingEntity, updatedPlayerVisibility;
+    protected boolean onGround, ridingEntity;
     protected long encodedPosX, encodedPosY, encodedPosZ;
-    protected double lastX, lastY, lastZ, lastMotionX, lastMotionY, lastMotionZ;
+    protected double lastMotionX, lastMotionY, lastMotionZ;
 
     private List<Entity> passengers = Collections.emptyList();
 
@@ -82,15 +82,6 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
 
     public void updatePlayerList(List<EntityPlayer> players)
     {
-        if (!updatedPlayerVisibility || entity.getDistanceSq(lastX, lastY, lastZ) > 16)
-        {
-            lastX = entity.posX;
-            lastY = entity.posY;
-            lastZ = entity.posZ;
-
-            updatedPlayerVisibility = true;
-        }
-
         List<Entity> list = entity.getPassengers();
 
         if (!list.equals(passengers))
@@ -514,6 +505,5 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
 
     public void resetPlayerVisibility()
     {
-        updatedPlayerVisibility = false;
     }
 }
