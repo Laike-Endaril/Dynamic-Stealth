@@ -39,7 +39,7 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
     protected final int updateFrequency;
     protected final boolean sendVelocityUpdates;
 
-    protected int ticksSinceLastForcedTeleport, encodedRotationYaw, encodedRotationPitch, lastHeadMotion;
+    protected int encodedRotationYaw, encodedRotationPitch, lastEncodedHeadMotion;
     protected double lastMotionX, lastMotionY, lastMotionZ;
 
     private List<Entity> passengers = Collections.emptyList();
@@ -61,7 +61,7 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
         encodedRotationYaw = MathHelper.floor(entity.rotationYaw * 256 / 360);
         encodedRotationPitch = MathHelper.floor(entity.rotationPitch * 256 / 360);
 
-        lastHeadMotion = MathHelper.floor(entity.getRotationYawHead() * 256 / 360);
+        lastEncodedHeadMotion = MathHelper.floor(entity.getRotationYawHead() * 256 / 360);
     }
 
     public boolean equals(Object entityTrackerEntry)
@@ -95,46 +95,36 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
                     encodedRotationYaw = newEncodedYaw;
                     encodedRotationPitch = newEncodedPitch;
                 }
-
-                sendMetadata();
             }
             else
             {
-                int k2 = MathHelper.floor(entity.rotationYaw * 256 / 360);
-                int i = MathHelper.floor(entity.rotationPitch * 256 / 360);
-                Packet<?> entityUpdatePacket = null;
-                boolean flag1 = Math.abs(k2 - encodedRotationYaw) >= 1 || Math.abs(i - encodedRotationPitch) >= 1;
-
-                if (updateCounter > 0) entityUpdatePacket = new SPacketEntityTeleport(entity);
-
-                if (updateCounter > 0 && (sendVelocityUpdates || (isLivingBase && livingBase.isElytraFlying())))
+                if (updateCounter > 0)
                 {
-                    if (lastMotionX != entity.motionX || lastMotionY != entity.motionY || lastMotionZ != entity.motionZ)
+                    if (sendVelocityUpdates || (isLivingBase && livingBase.isElytraFlying()))
                     {
-                        lastMotionX = entity.motionX;
-                        lastMotionY = entity.motionY;
-                        lastMotionZ = entity.motionZ;
-                        sendPacketToTrackedPlayers(new SPacketEntityVelocity(entity.getEntityId(), entity.motionX, entity.motionY, entity.motionZ));
+                        if (lastMotionX != entity.motionX || lastMotionY != entity.motionY || lastMotionZ != entity.motionZ)
+                        {
+                            lastMotionX = entity.motionX;
+                            lastMotionY = entity.motionY;
+                            lastMotionZ = entity.motionZ;
+                            sendPacketToTrackedPlayers(new SPacketEntityVelocity(entity.getEntityId(), entity.motionX, entity.motionY, entity.motionZ));
+                        }
                     }
+
+                    sendPacketToTrackedPlayers(new SPacketEntityTeleport(entity));
                 }
 
-                if (entityUpdatePacket != null) sendPacketToTrackedPlayers(entityUpdatePacket);
-
-                sendMetadata();
-
-                if (flag1)
-                {
-                    encodedRotationYaw = k2;
-                    encodedRotationPitch = i;
-                }
+                encodedRotationYaw = MathHelper.floor(entity.rotationYaw * 256 / 360);
+                encodedRotationPitch = MathHelper.floor(entity.rotationPitch * 256 / 360);
             }
 
-            int k1 = MathHelper.floor(entity.getRotationYawHead() * 256 / 360);
+            sendMetadata();
 
-            if (Math.abs(k1 - lastHeadMotion) >= 1)
+            int newEncodedHeadRotation = MathHelper.floor(entity.getRotationYawHead() * 256 / 360);
+            if (Math.abs(newEncodedHeadRotation - lastEncodedHeadMotion) >= 1)
             {
-                sendPacketToTrackedPlayers(new SPacketEntityHeadLook(entity, (byte) k1));
-                lastHeadMotion = k1;
+                sendPacketToTrackedPlayers(new SPacketEntityHeadLook(entity, (byte) newEncodedHeadRotation));
+                lastEncodedHeadMotion = newEncodedHeadRotation;
             }
 
             entity.isAirBorne = false;
@@ -337,7 +327,7 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
         if (isPlayer) return new SPacketSpawnPlayer(player);
         if (isLivingBase && entity instanceof IAnimals)
         {
-            lastHeadMotion = MathHelper.floor(entity.getRotationYawHead() * 256 / 360);
+            lastEncodedHeadMotion = MathHelper.floor(entity.getRotationYawHead() * 256 / 360);
             return new SPacketSpawnMob(livingBase);
         }
         if (entity instanceof EntityArmorStand) return new SPacketSpawnObject(entity, 78);
