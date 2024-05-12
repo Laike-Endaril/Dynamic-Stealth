@@ -82,11 +82,10 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
 
     public void updatePlayerList(List<EntityPlayer> players)
     {
-        List<Entity> list = entity.getPassengers();
-
-        if (!list.equals(passengers))
+        List<Entity> newPassengers = entity.getPassengers();
+        if (!newPassengers.equals(passengers))
         {
-            passengers = list;
+            passengers = newPassengers;
             sendPacketToTrackedPlayers(new SPacketSetPassengers(entity));
         }
 
@@ -94,15 +93,13 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
         {
             if (entity.isRiding())
             {
-                int j1 = MathHelper.floor(entity.rotationYaw * 256 / 360);
-                int l1 = MathHelper.floor(entity.rotationPitch * 256 / 360);
-                boolean flag3 = Math.abs(j1 - encodedRotationYaw) >= 1 || Math.abs(l1 - encodedRotationPitch) >= 1;
-
-                if (flag3)
+                int newEncodedYaw = MathHelper.floor(entity.rotationYaw * 256 / 360);
+                int newEncodedPitch = MathHelper.floor(entity.rotationPitch * 256 / 360);
+                if (Math.abs(newEncodedYaw - encodedRotationYaw) >= 1 || Math.abs(newEncodedPitch - encodedRotationPitch) >= 1)
                 {
-                    sendPacketToTrackedPlayers(new SPacketEntity.S16PacketEntityLook(entity.getEntityId(), (byte) j1, (byte) l1, entity.onGround));
-                    encodedRotationYaw = j1;
-                    encodedRotationPitch = l1;
+                    sendPacketToTrackedPlayers(new SPacketEntity.S16PacketEntityLook(entity.getEntityId(), (byte) newEncodedYaw, (byte) newEncodedPitch, entity.onGround));
+                    encodedRotationYaw = newEncodedYaw;
+                    encodedRotationPitch = newEncodedPitch;
                 }
 
                 encodedPosX = EntityTracker.getPositionLong(entity.posX);
@@ -150,7 +147,6 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
                     {
                         onGround = entity.onGround;
                         ticksSinceLastForcedTeleport = 0;
-                        resetPlayerVisibility();
                         packet1 = new SPacketEntityTeleport(entity);
                     }
                 }
@@ -204,7 +200,7 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
 
         if (entity.velocityChanged)
         {
-            sendToTrackingAndSelf(new SPacketEntityVelocity(entity));
+            sendToTrackingAndSelf(new SPacketEntity(entity.getEntityId()));
             entity.velocityChanged = false;
         }
     }
@@ -502,10 +498,6 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
     }
 
     public void setMaxRange(int maxRangeIn)
-    {
-    }
-
-    public void resetPlayerVisibility()
     {
     }
 }
