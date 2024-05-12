@@ -434,7 +434,19 @@ public class Network
             {
                 for (Entity seen : Sight.seenEntities(player).keySet())
                 {
-                    if (seen.isEntityAlive() && seen.getDistanceSq(playerPos) <= rangeSq && !(seen instanceof EntityArrow && ((EntityArrow) seen).pickupStatus != EntityArrow.PickupStatus.ALLOWED)) inputList.add(seen);
+                    if (!seen.isEntityAlive() || seen.getDistanceSq(playerPos) > rangeSq) continue;
+                    if (seen instanceof EntityArrow)
+                    {
+                        switch (((EntityArrow) seen).pickupStatus)
+                        {
+                            case DISALLOWED:
+                                continue;
+                            case CREATIVE_ONLY:
+                                if (!player.isCreative()) continue;
+                        }
+                    }
+
+                    inputList.add(seen);
                 }
             }
         }
