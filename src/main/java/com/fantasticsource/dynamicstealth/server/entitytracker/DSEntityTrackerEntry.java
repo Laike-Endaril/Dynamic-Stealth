@@ -40,8 +40,6 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
     protected final boolean sendVelocityUpdates;
 
     protected int ticksSinceLastForcedTeleport, encodedRotationYaw, encodedRotationPitch, lastHeadMotion;
-    protected boolean onGround, ridingEntity;
-    protected long encodedPosX, encodedPosY, encodedPosZ;
     protected double lastMotionX, lastMotionY, lastMotionZ;
 
     private List<Entity> passengers = Collections.emptyList();
@@ -59,11 +57,7 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
 
         this.updateFrequency = updateFrequency;
         this.sendVelocityUpdates = sendVelocityUpdates;
-        onGround = entity.onGround;
 
-        encodedPosX = EntityTracker.getPositionLong(entity.posX);
-        encodedPosY = EntityTracker.getPositionLong(entity.posY);
-        encodedPosZ = EntityTracker.getPositionLong(entity.posZ);
         encodedRotationYaw = MathHelper.floor(entity.rotationYaw * 256 / 360);
         encodedRotationPitch = MathHelper.floor(entity.rotationPitch * 256 / 360);
 
@@ -102,54 +96,16 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
                     encodedRotationPitch = newEncodedPitch;
                 }
 
-                encodedPosX = EntityTracker.getPositionLong(entity.posX);
-                encodedPosY = EntityTracker.getPositionLong(entity.posY);
-                encodedPosZ = EntityTracker.getPositionLong(entity.posZ);
                 sendMetadata();
-                ridingEntity = true;
             }
             else
             {
-                ++this.ticksSinceLastForcedTeleport;
-                long i1 = EntityTracker.getPositionLong(entity.posX);
-                long i2 = EntityTracker.getPositionLong(entity.posY);
-                long j2 = EntityTracker.getPositionLong(entity.posZ);
                 int k2 = MathHelper.floor(entity.rotationYaw * 256 / 360);
                 int i = MathHelper.floor(entity.rotationPitch * 256 / 360);
-                long j = i1 - encodedPosX;
-                long k = i2 - encodedPosY;
-                long l = j2 - encodedPosZ;
-                Packet<?> packet1 = null;
-                boolean flag = j * j + k * k + l * l >= 128 || updateCounter % 60 == 0;
+                Packet<?> entityUpdatePacket = null;
                 boolean flag1 = Math.abs(k2 - encodedRotationYaw) >= 1 || Math.abs(i - encodedRotationPitch) >= 1;
 
-                if (updateCounter > 0)
-                {
-                    if (j >= -32768L && j < 32768L && k >= -32768L && k < 32768L && l >= -32768L && l < 32768L && ticksSinceLastForcedTeleport <= 400 && !ridingEntity && onGround == entity.onGround)
-                    {
-                        if ((!flag || !flag1))
-                        {
-                            if (flag)
-                            {
-                                packet1 = new SPacketEntity.S15PacketEntityRelMove(entity.getEntityId(), j, k, l, entity.onGround);
-                            }
-                            else if (flag1)
-                            {
-                                packet1 = new SPacketEntity.S16PacketEntityLook(entity.getEntityId(), (byte) k2, (byte) i, entity.onGround);
-                            }
-                        }
-                        else
-                        {
-                            packet1 = new SPacketEntity.S17PacketEntityLookMove(entity.getEntityId(), j, k, l, (byte) k2, (byte) i, entity.onGround);
-                        }
-                    }
-                    else
-                    {
-                        onGround = entity.onGround;
-                        ticksSinceLastForcedTeleport = 0;
-                        packet1 = new SPacketEntityTeleport(entity);
-                    }
-                }
+                if (updateCounter > 0) entityUpdatePacket = new SPacketEntityTeleport(entity);
 
                 if (updateCounter > 0 && (sendVelocityUpdates || (isLivingBase && livingBase.isElytraFlying())))
                 {
@@ -162,27 +118,15 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
                     }
                 }
 
-                if (packet1 != null)
-                {
-                    this.sendPacketToTrackedPlayers(packet1);
-                }
+                if (entityUpdatePacket != null) sendPacketToTrackedPlayers(entityUpdatePacket);
 
                 sendMetadata();
-
-                if (flag)
-                {
-                    encodedPosX = i1;
-                    encodedPosY = i2;
-                    encodedPosZ = j2;
-                }
 
                 if (flag1)
                 {
                     encodedRotationYaw = k2;
                     encodedRotationPitch = i;
                 }
-
-                ridingEntity = false;
             }
 
             int k1 = MathHelper.floor(entity.getRotationYawHead() * 256 / 360);
