@@ -200,7 +200,7 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
 
         if (entity.velocityChanged)
         {
-            sendToTrackingAndSelf(new SPacketEntity(entity.getEntityId()));
+            sendToTrackingAndSelf(new SPacketEntityVelocity(entity));
             entity.velocityChanged = false;
         }
     }
