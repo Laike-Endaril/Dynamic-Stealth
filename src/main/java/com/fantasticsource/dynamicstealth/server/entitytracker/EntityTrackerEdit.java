@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth.server.entitytracker;
 
 import com.fantasticsource.dynamicstealth.server.GlobalDefaultsAndData;
 import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
+import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.Tools;
 import net.minecraft.entity.*;
 import net.minecraft.entity.boss.EntityDragon;
@@ -14,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.*;
 import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.SPacketCollectItem;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
@@ -127,6 +129,25 @@ public class EntityTrackerEdit extends EntityTracker
 
     public void sendToTracking(Entity entityIn, Packet<?> packetIn)
     {
+        //Fix client not processing item pickups correctly due to not "seeing" the picked-up entity (eg. item/xp pickup sound effects not playing)
+        if (packetIn instanceof SPacketCollectItem)
+        {
+            int collectorID = ((SPacketCollectItem) packetIn).getEntityID();
+            Entity collector = MCTools.getValidEntityByID(collectorID);
+            if (collector instanceof EntityPlayerMP)
+            {
+                int collectedID = ((SPacketCollectItem) packetIn).getCollectedItemEntityID();
+                Entity collected = MCTools.getValidEntityByID(collectedID);
+
+                if (!getTrackingPlayers(collected).contains(collector))
+                {
+                    EntityTrackerEntry trackerEntry = trackedEntityHashTable.lookup(collectedID);
+                    if (trackerEntry instanceof DSEntityTrackerEntry) ((DSEntityTrackerEntry) trackerEntry).makePlayerTrackThis((EntityPlayerMP) collector);
+                }
+            }
+        }
+
+
         EntityTrackerEntry entitytrackerentry = trackedEntityHashTable.lookup(entityIn.getEntityId());
 
         if (entitytrackerentry != null)

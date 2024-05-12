@@ -273,89 +273,7 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
     {
         if (player != entity)
         {
-            if (isVisibleTo(player))
-            {
-                if (!trackingPlayers.contains(player))
-                {
-                    trackingPlayers.add(player);
-                    Packet<?> packet = createSpawnPacket();
-                    player.connection.sendPacket(packet);
-
-                    if (!entity.getDataManager().isEmpty())
-                    {
-                        player.connection.sendPacket(new SPacketEntityMetadata(entity.getEntityId(), entity.getDataManager(), true));
-                    }
-
-                    if (isLivingBase)
-                    {
-                        AttributeMap attributemap = (AttributeMap) livingBase.getAttributeMap();
-                        Collection<IAttributeInstance> collection = attributemap.getWatchedAttributes();
-
-                        if (!collection.isEmpty())
-                        {
-                            player.connection.sendPacket(new SPacketEntityProperties(entity.getEntityId(), collection));
-                        }
-                    }
-
-                    lastMotionX = entity.motionX;
-                    lastMotionY = entity.motionY;
-                    lastMotionZ = entity.motionZ;
-
-                    //Send velocity; SPacketSpawnMob already contains velocities
-                    if (!(packet instanceof SPacketSpawnMob) && (sendVelocityUpdates || (isLivingBase && livingBase.isElytraFlying())))
-                    {
-                        player.connection.sendPacket(new SPacketEntityVelocity(entity.getEntityId(), entity.motionX, entity.motionY, entity.motionZ));
-                    }
-
-                    //Send equipment
-                    if (isLivingBase)
-                    {
-                        for (EntityEquipmentSlot entityequipmentslot : EntityEquipmentSlot.values())
-                        {
-                            ItemStack itemstack = livingBase.getItemStackFromSlot(entityequipmentslot);
-
-                            if (!itemstack.isEmpty())
-                            {
-                                player.connection.sendPacket(new SPacketEntityEquipment(entity.getEntityId(), entityequipmentslot, itemstack));
-                            }
-                        }
-                    }
-
-                    //Send packet to set entity to display as sleeping in a bed
-                    if (isPlayer && this.player.isPlayerSleeping())
-                    {
-                        player.connection.sendPacket(new SPacketUseBed(this.player, new BlockPos(entity)));
-                    }
-
-                    //Send visual potion effects
-                    if (isLivingBase)
-                    {
-                        for (PotionEffect potioneffect : livingBase.getActivePotionEffects())
-                        {
-                            player.connection.sendPacket(new SPacketEntityEffect(entity.getEntityId(), potioneffect));
-                        }
-                    }
-
-                    //Send riding entities
-                    if (!entity.getPassengers().isEmpty())
-                    {
-                        player.connection.sendPacket(new SPacketSetPassengers(entity));
-                    }
-
-                    //Send ridden entity
-                    if (entity.isRiding())
-                    {
-                        player.connection.sendPacket(new SPacketSetPassengers(entity.getRidingEntity())); //getRidingEntity DOES NOT GET THE RIDING ENTITY!  It gets the RIDDEN entity (these are opposites, ppl...)
-                    }
-
-                    //External data alterations
-                    entity.addTrackingPlayer(player);
-                    player.addEntity(entity);
-
-                    //Fire forge event
-                    ForgeEventFactory.onStartEntityTracking(entity, player);
-                }
-            }
+            if (isVisibleTo(player)) makePlayerTrackThis(player);
             else if (trackingPlayers.contains(player))
             {
                 //Internal data alterations
@@ -374,6 +292,90 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
     public boolean isVisibleTo(EntityPlayerMP playerMP)
     {
         return Sight.canSee(playerMP, entity, true);
+    }
+
+    public void makePlayerTrackThis(EntityPlayerMP player)
+    {
+        if (!trackingPlayers.contains(player))
+        {
+            trackingPlayers.add(player);
+            Packet<?> packet = createSpawnPacket();
+            player.connection.sendPacket(packet);
+
+            if (!entity.getDataManager().isEmpty())
+            {
+                player.connection.sendPacket(new SPacketEntityMetadata(entity.getEntityId(), entity.getDataManager(), true));
+            }
+
+            if (isLivingBase)
+            {
+                AttributeMap attributemap = (AttributeMap) livingBase.getAttributeMap();
+                Collection<IAttributeInstance> collection = attributemap.getWatchedAttributes();
+
+                if (!collection.isEmpty())
+                {
+                    player.connection.sendPacket(new SPacketEntityProperties(entity.getEntityId(), collection));
+                }
+            }
+
+            lastMotionX = entity.motionX;
+            lastMotionY = entity.motionY;
+            lastMotionZ = entity.motionZ;
+
+            //Send velocity; SPacketSpawnMob already contains velocities
+            if (!(packet instanceof SPacketSpawnMob) && (sendVelocityUpdates || (isLivingBase && livingBase.isElytraFlying())))
+            {
+                player.connection.sendPacket(new SPacketEntityVelocity(entity.getEntityId(), entity.motionX, entity.motionY, entity.motionZ));
+            }
+
+            //Send equipment
+            if (isLivingBase)
+            {
+                for (EntityEquipmentSlot entityequipmentslot : EntityEquipmentSlot.values())
+                {
+                    ItemStack itemstack = livingBase.getItemStackFromSlot(entityequipmentslot);
+
+                    if (!itemstack.isEmpty())
+                    {
+                        player.connection.sendPacket(new SPacketEntityEquipment(entity.getEntityId(), entityequipmentslot, itemstack));
+                    }
+                }
+            }
+
+            //Send packet to set entity to display as sleeping in a bed
+            if (isPlayer && this.player.isPlayerSleeping())
+            {
+                player.connection.sendPacket(new SPacketUseBed(this.player, new BlockPos(entity)));
+            }
+
+            //Send visual potion effects
+            if (isLivingBase)
+            {
+                for (PotionEffect potioneffect : livingBase.getActivePotionEffects())
+                {
+                    player.connection.sendPacket(new SPacketEntityEffect(entity.getEntityId(), potioneffect));
+                }
+            }
+
+            //Send riding entities
+            if (!entity.getPassengers().isEmpty())
+            {
+                player.connection.sendPacket(new SPacketSetPassengers(entity));
+            }
+
+            //Send ridden entity
+            if (entity.isRiding())
+            {
+                player.connection.sendPacket(new SPacketSetPassengers(entity.getRidingEntity())); //getRidingEntity DOES NOT GET THE RIDING ENTITY!  It gets the RIDDEN entity (these are opposites, ppl...)
+            }
+
+            //External data alterations
+            entity.addTrackingPlayer(player);
+            player.addEntity(entity);
+
+            //Fire forge event
+            ForgeEventFactory.onStartEntityTracking(entity, player);
+        }
     }
 
     public void updatePlayerEntities(List<EntityPlayer> players)
