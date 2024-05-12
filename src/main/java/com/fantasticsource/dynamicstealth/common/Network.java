@@ -16,6 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
@@ -433,7 +434,7 @@ public class Network
             {
                 for (Entity seen : Sight.seenEntities(player).keySet())
                 {
-                    if (seen.isEntityAlive() && seen.getDistanceSq(playerPos) <= rangeSq) inputList.add(seen);
+                    if (seen.isEntityAlive() && seen.getDistanceSq(playerPos) <= rangeSq && !(seen instanceof EntityArrow && ((EntityArrow) seen).pickupStatus != EntityArrow.PickupStatus.ALLOWED)) inputList.add(seen);
                 }
             }
         }
@@ -454,12 +455,20 @@ public class Network
                 {
                     for (Entity seen : inputList)
                     {
-                        if (EntityThreatData.bypassesThreat(seen))
+                        if (EntityThreatData.isPickup(seen))
+                        {
+                            //Color
+                            buf.writeByte(ClientData.CID_PICKUP);
+                            //Searcher ID
+                            buf.writeInt(seen.getEntityId());
+                        }
+                        else if (EntityThreatData.bypassesThreat(seen))
                         {
                             //Color
                             buf.writeByte(ClientData.CID_BYPASS);
                             //Searcher ID
                             buf.writeInt(seen.getEntityId());
+
                             //Target ID
                             Entity target = (seen instanceof EntityLiving) ? ((EntityLiving) seen).getAttackTarget() : null;
                             buf.writeInt(target == null ? -1 : target.getEntityId());
@@ -475,7 +484,8 @@ public class Network
                             buf.writeInt(seen.getEntityId());
 
                             //Target ID
-                            if (canHaveClientTarget(cid)) buf.writeInt(data.target == null ? -1 : data.target.getEntityId());
+                            if (clientCanSeeTargetTarget(cid)) buf.writeInt(data.target == null ? -1 : data.target.getEntityId());
+
                             //Threat level
                             if (canHaveThreat(cid)) buf.writeByte((int) data.threatPercentage);
                         }
@@ -485,7 +495,7 @@ public class Network
                 {
                     for (Entity seen : inputList)
                     {
-                        if (EntityThreatData.bypassesThreat(seen))
+                        if (EntityThreatData.isPickup(seen) || EntityThreatData.bypassesThreat(seen))
                         {
                             //Color
                             buf.writeByte(ClientData.CID_BYPASS);
@@ -526,7 +536,7 @@ public class Network
                     for (; remaining > 0; remaining--)
                     {
                         int color = ClientData.getColor(buf.readByte());
-                        outputList.add(new OnPointData(color, buf.readInt(), canHaveClientTarget(color) ? buf.readInt() : -1, canHaveThreat(color) ? buf.readByte() : 0));
+                        outputList.add(new OnPointData(color, buf.readInt(), clientCanSeeTargetTarget(color) ? buf.readInt() : -1, canHaveThreat(color) ? buf.readByte() : 0));
                     }
                 }
                 else

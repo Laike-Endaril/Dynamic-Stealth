@@ -31,10 +31,10 @@ public class ClientData
             CID_FLEEING_NON_PASSIVE = 5,
             CID_FLEEING_PASSIVE = 6,
             CID_BYPASS = 7,
-            CID_DAZED = 8;
+            CID_DAZED = 8,
+            CID_PICKUP = 9;
 
     public static final int
-            COLOR_ITEM = 0xFFFFFF,                  //Target: no, Threat: no, Color: White
             COLOR_ATTACKING_YOU = 0xFF0000,         //Target: yes, Threat: yes, Color: Red
             COLOR_ATTACKING_OTHER = 0xFFFF00,       //Target: yes, Threat: yes, Color: Yellow
             COLOR_SEARCHING = 0xFF8800,             //Target: only on server, Threat: yes, Color: Orange
@@ -43,7 +43,8 @@ public class ClientData
             COLOR_FLEEING_N0N_PASSIVE = 0xFF55FF,   //Target: maybe, Threat: yes, Color: Light Purple
             COLOR_FLEEING_PASSIVE = 0xAA00AA,       //Target: maybe, Threat: yes, Color: Dark Purple
             COLOR_BYPASS = 0x555555,                //Target: maybe, Threat: no, Color: Dark Gray
-            COLOR_DAZED = 0x55FF55;                 //Target: maybe, Threat: maybe, Color: Light Green
+            COLOR_DAZED = 0x55FF55,                 //Target: maybe, Threat: maybe, Color: Light Green
+            COLOR_PICKUP = 0xFFFFFF;                  //Target: no, Threat: no, Color: White
 
     public static int stealthLevel = Byte.MIN_VALUE, prevStealthLevel = Byte.MIN_VALUE, lightLevel = 0, prevStealthFrameIndex = 0;
     public static float prevStealthDisplayed = 0;
@@ -111,6 +112,8 @@ public class ClientData
                 return CID_BYPASS;
             case COLOR_DAZED:
                 return CID_DAZED;
+            case COLOR_PICKUP:
+                return CID_PICKUP;
         }
         throw new IllegalArgumentException("Unregistered color: " + color);
     }
@@ -142,12 +145,16 @@ public class ClientData
                 return COLOR_BYPASS;
             case CID_DAZED:
                 return COLOR_DAZED;
+            case CID_PICKUP:
+                return COLOR_PICKUP;
         }
         throw new IllegalArgumentException("Unregistered cid: " + cid);
     }
 
     public static int getColor(EntityPlayer player, Entity searcher, Entity target, float threatPercentage)
     {
+        if (EntityThreatData.isPickup(searcher)) return COLOR_PICKUP;
+
         if (EntityThreatData.bypassesThreat(searcher)) return COLOR_BYPASS;
 
         if (CompatEBWizardry.mindTrickPotion != null && searcher instanceof EntityLivingBase && ((EntityLivingBase) searcher).getActivePotionEffect(CompatEBWizardry.mindTrickPotion) != null) return COLOR_DAZED;
@@ -164,24 +171,24 @@ public class ClientData
         return COLOR_ATTACKING_OTHER;
     }
 
-    public static boolean canHaveClientTarget(byte cid)
+    public static boolean clientCanSeeTargetTarget(byte cid)
     {
-        return cid != CID_IDLE_PASSIVE && cid != CID_IDLE_NON_PASSIVE && cid != CID_SEARCHING && cid != CID_DAZED;
+        return cid != CID_IDLE_PASSIVE && cid != CID_IDLE_NON_PASSIVE && cid != CID_SEARCHING && cid != CID_DAZED && cid != CID_PICKUP;
     }
 
-    public static boolean canHaveClientTarget(int color)
+    public static boolean clientCanSeeTargetTarget(int color)
     {
-        return color != COLOR_IDLE_PASSIVE && color != COLOR_IDLE_NON_PASSIVE && color != COLOR_SEARCHING && color != COLOR_DAZED;
+        return color != COLOR_IDLE_PASSIVE && color != COLOR_IDLE_NON_PASSIVE && color != COLOR_SEARCHING && color != COLOR_DAZED && color != COLOR_PICKUP;
     }
 
     public static boolean canHaveThreat(byte cid)
     {
-        return cid != CID_IDLE_PASSIVE && cid != CID_IDLE_NON_PASSIVE && cid != CID_BYPASS && cid != CID_DAZED;
+        return cid != CID_IDLE_PASSIVE && cid != CID_IDLE_NON_PASSIVE && cid != CID_BYPASS && cid != CID_DAZED && cid != CID_PICKUP;
     }
 
     public static boolean canHaveThreat(int color)
     {
-        return color != COLOR_IDLE_PASSIVE && color != COLOR_IDLE_NON_PASSIVE && color != COLOR_BYPASS && color != COLOR_DAZED;
+        return color != COLOR_IDLE_PASSIVE && color != COLOR_IDLE_NON_PASSIVE && color != COLOR_BYPASS && color != COLOR_DAZED && color != COLOR_PICKUP;
     }
 
     public static class OnPointData

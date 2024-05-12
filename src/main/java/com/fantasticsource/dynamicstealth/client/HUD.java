@@ -854,7 +854,7 @@ public class HUD
 
                 if (!MinecraftForge.EVENT_BUS.post(new RenderTargetingHUDEvent.Onscreen(event, originDrawX, originDrawY, targetData)))
                 {
-                    int color = entity instanceof EntityItem ? COLOR_ITEM : targetData.color;
+                    int color = targetData.color;
                     Color c;
                     if (clientSettings.hudSettings.targetingStyle.stateColoredReticle)
                     {

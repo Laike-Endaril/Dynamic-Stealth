@@ -6,6 +6,9 @@ import com.fantasticsource.mctools.MCTools;
 import ladysnake.dissolution.api.corporeality.IPossessable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.projectile.EntityArrow;
 import noppes.npcs.api.NpcAPI;
 import noppes.npcs.api.entity.ICustomNpc;
 import noppes.npcs.api.entity.IEntity;
@@ -93,5 +96,10 @@ public class EntityThreatData
         if (MCTools.entityMatchesMap(entity, isPassive)) return true;
 
         return MCTools.isPassive((EntityLivingBase) entity);
+    }
+
+    public static boolean isPickup(Entity entity)
+    {
+        return entity instanceof EntityItem || entity instanceof EntityXPOrb || entity instanceof EntityArrow;
     }
 }
