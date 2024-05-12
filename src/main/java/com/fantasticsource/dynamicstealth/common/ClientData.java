@@ -34,6 +34,7 @@ public class ClientData
             CID_DAZED = 8;
 
     public static final int
+            COLOR_ITEM = 0xFFFFFF,                  //Target: no, Threat: no, Color: White
             COLOR_ATTACKING_YOU = 0xFF0000,         //Target: yes, Threat: yes, Color: Red
             COLOR_ATTACKING_OTHER = 0xFFFF00,       //Target: yes, Threat: yes, Color: Yellow
             COLOR_SEARCHING = 0xFF8800,             //Target: only on server, Threat: yes, Color: Orange

@@ -27,6 +27,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
@@ -853,7 +854,7 @@ public class HUD
 
                 if (!MinecraftForge.EVENT_BUS.post(new RenderTargetingHUDEvent.Onscreen(event, originDrawX, originDrawY, targetData)))
                 {
-                    int color = targetData.color;
+                    int color = entity instanceof EntityItem ? COLOR_ITEM : targetData.color;
                     Color c;
                     if (clientSettings.hudSettings.targetingStyle.stateColoredReticle)
                     {
@@ -873,7 +874,11 @@ public class HUD
                     float padding = 1;
                     ArrayList<String> elements = new ArrayList<>();
 
-                    if (ClientData.allowTargetingName && clientSettings.hudSettings.targetingStyle.components.name) elements.add(entity.getName());
+                    if (ClientData.allowTargetingName && clientSettings.hudSettings.targetingStyle.components.name)
+                    {
+                        if (entity instanceof EntityItem) elements.add(((EntityItem) entity).getItem().getDisplayName());
+                        else elements.add(entity.getName());
+                    }
 
                     if (ClientData.allowTargetingHP && clientSettings.hudSettings.targetingStyle.components.hp && entity instanceof EntityLivingBase)
                     {
@@ -883,7 +888,7 @@ public class HUD
                         elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.hp", ONE_DECIMAL.format(hp), ONE_DECIMAL.format(max), (int) (hp / max * 100)));
                     }
 
-                    if (clientSettings.hudSettings.targetingStyle.components.action)
+                    if (clientSettings.hudSettings.targetingStyle.components.action && entity instanceof EntityLivingBase)
                     {
                         String action;
                         switch (color)
@@ -914,7 +919,7 @@ public class HUD
                         elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.action", action));
                     }
 
-                    if (ClientData.allowTargetingThreat && clientSettings.hudSettings.targetingStyle.components.threat)
+                    if (ClientData.allowTargetingThreat && clientSettings.hudSettings.targetingStyle.components.threat && entity instanceof EntityLivingBase)
                     {
                         if (color == COLOR_BYPASS) elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.threatNotApplicable"));
                         else if (targetData.percent > 0) elements.add(I18n.translateToLocalFormatted(DynamicStealth.MODID + ".hud.threat", targetData.percent));
