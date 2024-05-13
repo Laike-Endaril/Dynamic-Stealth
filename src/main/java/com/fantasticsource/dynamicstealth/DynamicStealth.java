@@ -890,10 +890,6 @@ public class DynamicStealth
         MinecraftForge.EVENT_BUS.register(BlocksAndItems.class);
 
         Network.init();
-        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
-        {
-//        Keys.init(event); TODO
-        }
     }
 
     @EventHandler
