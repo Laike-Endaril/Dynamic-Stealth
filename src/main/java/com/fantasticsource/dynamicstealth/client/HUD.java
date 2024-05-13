@@ -28,6 +28,8 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
@@ -877,7 +879,31 @@ public class HUD
                     if (ClientData.allowTargetingName && clientSettings.hudSettings.targetingStyle.components.name)
                     {
                         if (entity instanceof EntityItem) elements.add(((EntityItem) entity).getItem().getDisplayName());
-                        else elements.add(entity.getName());
+                        else if (entity instanceof EntityItemFrame) elements.add(I18n.translateToLocal("item.frame.name"));
+                        else if (entity instanceof EntityMinecart)
+                        {
+                            switch (((EntityMinecart) entity).getType())
+                            {
+                                case CHEST:
+                                    elements.add(I18n.translateToLocal("item.minecartChest.name"));
+                                    break;
+                                case FURNACE:
+                                    elements.add(I18n.translateToLocal("item.minecartFurnace.name"));
+                                    break;
+                                case TNT:
+                                    elements.add(I18n.translateToLocal("item.minecartTnt.name"));
+                                    break;
+                                case HOPPER:
+                                    elements.add(I18n.translateToLocal("item.minecartHopper.name"));
+                                    break;
+                                case COMMAND_BLOCK:
+                                    elements.add(I18n.translateToLocal("item.minecartCommandBlock.name"));
+                                    break;
+                                default:
+                                    elements.add(I18n.translateToLocal("item.minecart.name"));
+                            }
+                        }
+                        else elements.add(I18n.translateToLocal(entity.getName()));
                     }
 
                     if (ClientData.allowTargetingHP && clientSettings.hudSettings.targetingStyle.components.hp && entity instanceof EntityLivingBase)
