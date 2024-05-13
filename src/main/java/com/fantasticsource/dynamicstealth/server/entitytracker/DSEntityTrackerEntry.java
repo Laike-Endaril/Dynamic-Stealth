@@ -85,38 +85,24 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
 
         if (updateCounter % updateFrequency == 0 || entity.isAirBorne || entity.getDataManager().isDirty())
         {
-            if (entity.isRiding())
+            if (updateCounter > 0)
             {
-                int newEncodedYaw = MathHelper.floor(entity.rotationYaw * 256 / 360);
-                int newEncodedPitch = MathHelper.floor(entity.rotationPitch * 256 / 360);
-                if (Math.abs(newEncodedYaw - encodedRotationYaw) >= 1 || Math.abs(newEncodedPitch - encodedRotationPitch) >= 1)
+                if (sendVelocityUpdates || (isLivingBase && livingBase.isElytraFlying()))
                 {
-                    sendPacketToTrackedPlayers(new SPacketEntity.S16PacketEntityLook(entity.getEntityId(), (byte) newEncodedYaw, (byte) newEncodedPitch, entity.onGround));
-                    encodedRotationYaw = newEncodedYaw;
-                    encodedRotationPitch = newEncodedPitch;
-                }
-            }
-            else
-            {
-                if (updateCounter > 0)
-                {
-                    if (sendVelocityUpdates || (isLivingBase && livingBase.isElytraFlying()))
+                    if (lastMotionX != entity.motionX || lastMotionY != entity.motionY || lastMotionZ != entity.motionZ)
                     {
-                        if (lastMotionX != entity.motionX || lastMotionY != entity.motionY || lastMotionZ != entity.motionZ)
-                        {
-                            lastMotionX = entity.motionX;
-                            lastMotionY = entity.motionY;
-                            lastMotionZ = entity.motionZ;
-                            sendPacketToTrackedPlayers(new SPacketEntityVelocity(entity.getEntityId(), entity.motionX, entity.motionY, entity.motionZ));
-                        }
+                        lastMotionX = entity.motionX;
+                        lastMotionY = entity.motionY;
+                        lastMotionZ = entity.motionZ;
+                        sendPacketToTrackedPlayers(new SPacketEntityVelocity(entity.getEntityId(), entity.motionX, entity.motionY, entity.motionZ));
                     }
-
-                    sendPacketToTrackedPlayers(new SPacketEntityTeleport(entity));
                 }
 
-                encodedRotationYaw = MathHelper.floor(entity.rotationYaw * 256 / 360);
-                encodedRotationPitch = MathHelper.floor(entity.rotationPitch * 256 / 360);
+                sendPacketToTrackedPlayers(new SPacketEntityTeleport(entity));
             }
+
+            encodedRotationYaw = MathHelper.floor(entity.rotationYaw * 256 / 360);
+            encodedRotationPitch = MathHelper.floor(entity.rotationPitch * 256 / 360);
 
             sendMetadata();
 
