@@ -1,6 +1,6 @@
 package com.fantasticsource.dynamicstealth;
 
-import com.fantasticsource.dynamicstealth.client.DSNetHandlerPlayClientLogger;
+import com.fantasticsource.dynamicstealth.client.DSNetHandlerPlayClientLoggerFilter;
 import com.fantasticsource.dynamicstealth.client.HUD;
 import com.fantasticsource.dynamicstealth.client.RenderAlterer;
 import com.fantasticsource.dynamicstealth.client.TooltipAlterer;
@@ -892,7 +892,7 @@ public class DynamicStealth
 
         Network.init();
 
-        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) DSNetHandlerPlayClientLogger.init();
+        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) DSNetHandlerPlayClientLoggerFilter.init();
     }
 
     @EventHandler
