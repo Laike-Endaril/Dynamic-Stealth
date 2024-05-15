@@ -1,6 +1,5 @@
 package com.fantasticsource.dynamicstealth.server.entitytracker;
 
-import com.fantasticsource.dynamicstealth.server.GlobalDefaultsAndData;
 import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.tools.Tools;
@@ -85,7 +84,7 @@ public class EntityTrackerEdit extends EntityTracker
         }
         else
         {
-            EntityTrackerEntry entityEntry = !GlobalDefaultsAndData.isFullBypass(entityIn) ? new DSEntityTrackerEntry(entityIn, trackingRange, maxTrackingDistanceThreshold, updateFrequency, sendVelocityUpdates) : new EntityTrackerEntry(entityIn, trackingRange, maxTrackingDistanceThreshold, updateFrequency, sendVelocityUpdates);
+            EntityTrackerEntry entityEntry = new DSEntityTrackerEntry(entityIn, trackingRange, maxTrackingDistanceThreshold, updateFrequency, sendVelocityUpdates);
             entries.add(entityEntry);
             trackedEntityHashTable.addKey(entityIn.getEntityId(), entityEntry);
             entityEntry.updatePlayerEntities(world.playerEntities);

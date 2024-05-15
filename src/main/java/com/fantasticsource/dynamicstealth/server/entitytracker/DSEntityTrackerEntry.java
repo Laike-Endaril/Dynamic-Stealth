@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.entitytracker;
 
+import com.fantasticsource.dynamicstealth.server.GlobalDefaultsAndData;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import net.minecraft.block.Block;
 import net.minecraft.entity.*;
@@ -44,10 +45,12 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
 
     private List<Entity> passengers = Collections.emptyList();
 
+    protected int trackerEntryRange, entityTrackerMaxRange;
 
-    public DSEntityTrackerEntry(Entity entity, int maxRange, int currentRange, int updateFrequency, boolean sendVelocityUpdates)
+
+    public DSEntityTrackerEntry(Entity entity, int trackerEntryRange, int entityTrackerMaxRange, int updateFrequency, boolean sendVelocityUpdates)
     {
-        super(entity, maxRange, currentRange, updateFrequency, sendVelocityUpdates);
+        super(entity, trackerEntryRange, entityTrackerMaxRange, updateFrequency, sendVelocityUpdates);
 
         this.entity = entity;
         isLivingBase = entity instanceof EntityLivingBase;
@@ -62,6 +65,9 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
         encodedRotationPitch = MathHelper.floor(entity.rotationPitch * 256 / 360);
 
         lastEncodedHeadMotion = MathHelper.floor(entity.getRotationYawHead() * 256 / 360);
+
+        this.trackerEntryRange = trackerEntryRange;
+        this.entityTrackerMaxRange = entityTrackerMaxRange;
     }
 
     public boolean equals(Object entityTrackerEntry)
@@ -207,7 +213,13 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
 
     public boolean isVisibleTo(EntityPlayerMP playerMP)
     {
-        return Sight.canSee(playerMP, entity, true);
+        if (!GlobalDefaultsAndData.isFullBypass(entity)) return Sight.canSee(playerMP, entity, true);
+
+        //Simulate vanilla tracking for full bypass entities
+        double d0 = playerMP.posX - entity.posX;
+        double d1 = playerMP.posZ - entity.posZ;
+        int i = Math.min(trackerEntryRange, entityTrackerMaxRange);
+        return d0 >= -i && d0 <= i && d1 >= -i && d1 <= i && entity.isSpectatedByPlayer(playerMP);
     }
 
     public void makePlayerTrackThis(EntityPlayerMP player)
@@ -217,6 +229,7 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
             trackingPlayers.add(player);
             Packet<?> packet = createSpawnPacket();
             player.connection.sendPacket(packet);
+            if (packet instanceof SPacketSpawnPlayer) player.connection.sendPacket(new SPacketEntityHeadLook(entity, (byte) (entity.getRotationYawHead() * 256 / 360)));
 
             if (!entity.getDataManager().isEmpty())
             {
