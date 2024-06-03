@@ -21,6 +21,7 @@ import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
@@ -439,7 +440,7 @@ public class Network
                 for (Entity seen : Sight.seenEntities(player).keySet())
                 {
                     if (!seen.isEntityAlive() || seen.getDistanceSq(playerPos) > rangeSq) continue;
-                    if (seen instanceof EntityMinecart || seen instanceof EntityItemFrame || seen instanceof EntityBoat || seen instanceof EntityArmorStand) continue;
+                    if (seen instanceof EntityMinecart || seen instanceof EntityItemFrame || seen instanceof EntityBoat || seen instanceof EntityArmorStand || seen instanceof EntityFishHook) continue;
                     if (seen instanceof EntityArrow)
                     {
                         switch (((EntityArrow) seen).pickupStatus)
