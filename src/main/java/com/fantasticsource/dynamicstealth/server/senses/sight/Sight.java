@@ -24,7 +24,6 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -34,7 +33,6 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemSplashPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
@@ -322,7 +320,8 @@ public class Sight
         double distSquared = eyeVec.squareDistanceTo(targetVec);
         int distanceFar = distanceFar(searcher);
 
-        if (hasSoulSight(searcher))
+        if (distSquared < 400 && target instanceof EntityPlayerMP && ((EntityPlayerMP) target).getActiveItemStack().getItem().getUnlocalizedName().equals("item.instances.homewardcrystal")) return -777;
+        else if (hasSoulSight(searcher))
         {
             if (distSquared > 10000) return 777;
             else return -777;
