@@ -266,11 +266,6 @@ public class Sight
 
     private static double visualStealthLevelInternal(EntityLivingBase searcher, Entity target, double yaw, double pitch, double offsetLR)
     {
-        if (target instanceof EntityItem && ((EntityItem) target).getItem().getItem() instanceof ItemSplashPotion)
-        {
-            int k = 0;
-        }
-
         //Hard checks (absolute)
         if (searcher.world != target.world || target.isDead || target instanceof FakePlayer || !searcher.isEntityAlive()) return 777;
         if (target instanceof EntityPlayer)
