@@ -11,6 +11,7 @@ import com.fantasticsource.dynamicstealth.server.Attributes;
 import com.fantasticsource.dynamicstealth.server.HUDData;
 import com.fantasticsource.dynamicstealth.server.senses.HidingData;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
+import com.fantasticsource.fantasticlib.api.FLibAPI;
 import com.fantasticsource.mctools.ImprovedRayTracing;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.ServerTickTimer;
@@ -34,6 +35,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
@@ -42,6 +44,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import noppes.npcs.api.NpcAPI;
 import noppes.npcs.api.entity.ICustomNpc;
@@ -320,16 +323,14 @@ public class Sight
         double distSquared = eyeVec.squareDistanceTo(targetVec);
         int distanceFar = distanceFar(searcher);
 
-        if (distSquared < 400 && target instanceof EntityPlayerMP && ((EntityPlayerMP) target).getActiveItemStack().getItem().getUnlocalizedName().equals("item.instances:homewardcrystal")) return -777;
+        NBTTagCompound compound = FLibAPI.getNBTCap(target).getCompound("instances");
+        if (distSquared < 400 && compound.hasKey("lastCrystalWarp") && (FMLCommonHandler.instance().getMinecraftServerInstance().worlds[0].getTotalWorldTime() - compound.getLong("lastCrystalWarp") < 40)) return -777;
         else if (hasSoulSight(searcher))
         {
             if (distSquared > 10000) return 777;
             else return -777;
         }
-        else
-        {
-            if (distSquared > Math.pow(distanceFar, 2)) return 777;
-        }
+        else if (distSquared > Math.pow(distanceFar, 2)) return 777;
 
         int angleLarge = angleLarge(searcher);
         if (angleLarge == 0) return 777;
