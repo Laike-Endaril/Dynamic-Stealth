@@ -320,7 +320,7 @@ public class Sight
         double distSquared = eyeVec.squareDistanceTo(targetVec);
         int distanceFar = distanceFar(searcher);
 
-        if (distSquared < 400 && target instanceof EntityPlayerMP && ((EntityPlayerMP) target).getActiveItemStack().getItem().getUnlocalizedName().equals("item.instances.homewardcrystal")) return -777;
+        if (distSquared < 400 && target instanceof EntityPlayerMP && ((EntityPlayerMP) target).getActiveItemStack().getItem().getUnlocalizedName().equals("item.instances:homewardcrystal")) return -777;
         else if (hasSoulSight(searcher))
         {
             if (distSquared > 10000) return 777;
