@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.senses.sight;
 
+import com.fantasticsource.dynamicstealth.Commands;
 import com.fantasticsource.dynamicstealth.common.BlocksAndItems;
 import com.fantasticsource.dynamicstealth.common.DSTools;
 import com.fantasticsource.dynamicstealth.compat.Compat;
@@ -42,6 +43,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
 import net.minecraftforge.common.util.FakePlayer;
@@ -183,6 +186,10 @@ public class Sight
                     WrappingQueue<Double> queue = pair.getKey();
 
                     double clampedResult = Tools.min(Tools.max(-1, result - 1), 1);
+                    if (clampedResult < 1 && player instanceof EntityPlayerMP && Commands.listWatchers.contains(target))
+                    {
+                        player.sendMessage(new TextComponentString(TextFormatting.LIGHT_PURPLE + "" + String.format("%.2f", clampedResult) + " - " + searcher.getName() + TextFormatting.LIGHT_PURPLE + " (" + String.format("%.2f", searcher.posX) + ", " + String.format("%.2f", searcher.posY) + ", " + String.format("%.2f", searcher.posZ) + ")"));
+                    }
                     if (queue.size() != 0 && pair.getValue() == tick)
                     {
                         queue.setNewestToOldest(0, Tools.min(clampedResult, queue.getNewestToOldest(0)));

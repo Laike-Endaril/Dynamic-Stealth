@@ -9,6 +9,7 @@ import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
@@ -23,6 +24,9 @@ import static net.minecraft.util.text.TextFormatting.WHITE;
 
 public class Commands extends CommandBase
 {
+    public static final HashSet<EntityPlayerMP> listWatchers = new HashSet<>();
+
+
     @Override
     public String getName()
     {
@@ -46,6 +50,7 @@ public class Commands extends CommandBase
         if (sender.canUseCommand(2, getName()))
         {
             return AQUA + "/dstealth threat <entity UUID> <target entity UUID> <amount>" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.threat.comment") + "\n" +
+                    AQUA + "/dstealth watchers" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.watchers.comment") + "\n" +
 
                     AQUA + "/dstealth creativeinvis <t/f/true/false>" + WHITE + " - " + I18n.translateToLocalFormatted(DynamicStealth.MODID + ".cmd.creativeinvis.comment") + "\n" +
 
@@ -79,6 +84,7 @@ public class Commands extends CommandBase
             if (sender.canUseCommand(2, getName()))
             {
                 result.add("threat");
+                result.add("watchers");
             }
             result.add("creativeinvis");
             result.add("hidefrom");
@@ -277,6 +283,15 @@ public class Commands extends CommandBase
                 Threat.set((EntityLivingBase) entity, (EntityLivingBase) target, amount);
                 break;
 
+
+            case "watchers":
+                if (sender instanceof EntityPlayerMP)
+                {
+                    if (listWatchers.contains(sender)) listWatchers.remove(sender);
+                    else listWatchers.add((EntityPlayerMP) sender);
+                }
+                else notifyCommandListener(sender, this, DynamicStealth.MODID + ".cmd.watchersNotPlayer", args[2]);
+                break;
 
             default:
                 notifyCommandListener(sender, this, getUsage(sender));
