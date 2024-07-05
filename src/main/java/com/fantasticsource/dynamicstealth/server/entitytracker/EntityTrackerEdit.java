@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth.server.entitytracker;
 
 import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
 import com.fantasticsource.mctools.MCTools;
+import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.Tools;
 import net.minecraft.entity.*;
 import net.minecraft.entity.boss.EntityDragon;
@@ -131,11 +132,11 @@ public class EntityTrackerEdit extends EntityTracker
         //Fix client not processing item pickups correctly due to not "seeing" the picked-up entity (eg. item/xp pickup sound effects not playing)
         if (packetIn instanceof SPacketCollectItem)
         {
-            int collectorID = ((SPacketCollectItem) packetIn).getEntityID();
+            int collectorID = (int) ReflectionTool.get(SPacketCollectItem.class, new String[]{"field_149356_b", "entityId"}, packetIn);
             Entity collector = MCTools.getValidEntityByID(collectorID);
             if (collector instanceof EntityPlayerMP)
             {
-                int collectedID = ((SPacketCollectItem) packetIn).getCollectedItemEntityID();
+                int collectedID = (int) ReflectionTool.get(SPacketCollectItem.class, new String[]{"field_149357_a", "collectedItemEntityId"}, packetIn);
                 Entity collected = MCTools.getValidEntityByID(collectedID);
 
                 if (!getTrackingPlayers(collected).contains(collector))
