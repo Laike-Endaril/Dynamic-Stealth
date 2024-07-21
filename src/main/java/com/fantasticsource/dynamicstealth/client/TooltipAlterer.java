@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth.client;
 
 import com.fantasticsource.dynamicstealth.common.ClientData;
 import com.fantasticsource.dynamicstealth.config.DynamicStealthConfig;
+import com.fantasticsource.dynamicstealth.server.event.attacks.AttackData;
 import com.fantasticsource.dynamicstealth.server.event.attacks.WeaponEntry;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.potions.FantasticPotionEffect;
@@ -59,22 +60,25 @@ public class TooltipAlterer
         }
 
 
-        tooltip.add("");
-        tooltip.add(I18n.translateToLocal(MODID + ".tooltip.normalAttacks"));
-        if (normal.consumeItem) tooltip.add(I18n.translateToLocal(MODID + ".tooltip.consumeItem"));
-        if (normal.armorPenetration) tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.penetratingDamage", String.format("%.2f", vanillaDamage * normal.damageMultiplier)));
-        else tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.normalDamage", String.format("%.2f", vanillaDamage * normal.damageMultiplier)));
-        for (FantasticPotionEffect potionEffect : normal.attackerEffects)
+        if (!normal.equals(AttackData.normalDefault))
         {
-            tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.giveYouPotion", I18n.translateToLocalFormatted(potionEffect.getPotion().getName()), potionEffect.getAmplifier() + 1, Potion.getPotionDurationString(potionEffect, 1)));
-        }
-        for (FantasticPotionEffect potionEffect : normal.victimEffects)
-        {
-            tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.giveVictimPotion", I18n.translateToLocalFormatted(potionEffect.getPotion().getName()), potionEffect.getAmplifier() + 1, Potion.getPotionDurationString(potionEffect, 1)));
+            tooltip.add("");
+            tooltip.add(I18n.translateToLocal(MODID + ".tooltip.normalAttacks"));
+            if (normal.consumeItem) tooltip.add(I18n.translateToLocal(MODID + ".tooltip.consumeItem"));
+            if (normal.armorPenetration) tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.penetratingDamage", String.format("%.2f", vanillaDamage * normal.damageMultiplier)));
+            else tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.normalDamage", String.format("%.2f", vanillaDamage * normal.damageMultiplier)));
+            for (FantasticPotionEffect potionEffect : normal.attackerEffects)
+            {
+                tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.giveYouPotion", I18n.translateToLocalFormatted(potionEffect.getPotion().getName()), potionEffect.getAmplifier() + 1, Potion.getPotionDurationString(potionEffect, 1)));
+            }
+            for (FantasticPotionEffect potionEffect : normal.victimEffects)
+            {
+                tooltip.add(I18n.translateToLocalFormatted(MODID + ".tooltip.giveVictimPotion", I18n.translateToLocalFormatted(potionEffect.getPotion().getName()), potionEffect.getAmplifier() + 1, Potion.getPotionDurationString(potionEffect, 1)));
+            }
         }
 
 
-        if (!stealth.equals(normal))
+        if (!stealth.equals(normal) && !stealth.equals(AttackData.stealthDefault))
         {
             tooltip.add("");
             tooltip.add(I18n.translateToLocal(MODID + ".tooltip.stealthAttacks"));
@@ -92,7 +96,7 @@ public class TooltipAlterer
         }
 
 
-        if (!WeaponEntry.resultMatches(vanillaDamage, normal, blockedNormal))
+        if (!WeaponEntry.resultMatches(normal, blockedNormal) && !blockedNormal.equals(AttackData.normalBlockedDefault))
         {
             double blockedDamage = blockedNormal.armorPenetration ? vanillaDamage * blockedNormal.damageMultiplier : 0;
             tooltip.add("");
@@ -111,7 +115,7 @@ public class TooltipAlterer
         }
 
 
-        if (!WeaponEntry.resultMatches(vanillaDamage, stealth, blockedStealth))
+        if (!WeaponEntry.resultMatches(stealth, blockedStealth) && !blockedStealth.equals(AttackData.stealthBlockedDefault))
         {
             double blockedDamage = blockedStealth.armorPenetration ? vanillaDamage * blockedStealth.damageMultiplier : 0;
             tooltip.add("");
