@@ -15,7 +15,7 @@ public class AttackDefaults
     static
     {
         //Misc
-        normalAttackDefaults.add("dye, false, 0, , blindness.20, true");
+        normalAttackDefaults.add("dye, false, 0, , blindness.40, true");
         normalAttackDefaults.add("glowstone_dust, false, 0, , glowing.20, true");
 
 
