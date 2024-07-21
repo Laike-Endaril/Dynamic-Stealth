@@ -131,7 +131,7 @@ public class WeaponEntry
         return filter.equals(other.filter);
     }
 
-    public static boolean resultMatches(double vanillaDamage, WeaponEntry unblocked, WeaponEntry blocked)
+    public static boolean resultMatches(WeaponEntry unblocked, WeaponEntry blocked)
     {
         if (unblocked.consumeItem != blocked.consumeItem) return false;
         if (unblocked.armorPenetration != blocked.armorPenetration) return false;
@@ -139,9 +139,11 @@ public class WeaponEntry
 
         ArrayList<FantasticPotionEffect> effects = new ArrayList<>(unblocked.attackerEffects);
         for (FantasticPotionEffect effect : blocked.attackerEffects) if (!effects.remove(effect)) return false;
+        if (effects.size() > 0) return false;
 
         effects = new ArrayList<>(unblocked.victimEffects);
         for (FantasticPotionEffect effect : blocked.victimEffects) if (!effects.remove(effect)) return false;
+        if (effects.size() > 0) return false;
 
         return true;
     }
