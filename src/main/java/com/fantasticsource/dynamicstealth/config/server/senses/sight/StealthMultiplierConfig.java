@@ -55,7 +55,7 @@ public class StealthMultiplierConfig
                     "If set to 0, blind entities can't see"
             })
     @Config.RangeDouble(min = 0, max = 1)
-    public double blindnessMultiplier = 0.5;
+    public double blindnessMultiplier = 0.1;
 
     @Config.Name("Level Up Stealth Skill Multiplier")
     @Config.LangKey(DynamicStealth.MODID + ".config.levelUp2StealthMultiplier")
