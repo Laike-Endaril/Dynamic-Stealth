@@ -1,5 +1,7 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+Add touch (orange) and damage (red) indicators to HUD (save direction it came from, not position)
+
 Use touch attributes
 
 Add peek keybinds to replace current hand mirror behavior?
