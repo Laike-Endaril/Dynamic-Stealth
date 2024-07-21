@@ -1,6 +1,6 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-Rewrite attributes (while re-using attribute registry names where possible)
+Use touch attributes
 
 Add peek keybinds to replace current hand mirror behavior?
 ...block item actions
@@ -12,8 +12,6 @@ Mob flee speeds...
 ...fine-tune
 ...add config for general multiplier
 ...add config for entity-specific flee speeds
-
-Per-entity config for whether the entity's attacks should be prevented if the victim is not within their FOV (request from gua12ab on curseforge)
 
 
 

@@ -29,6 +29,9 @@ public class Attributes
     public static RangedAttribute SCENT_REDUCTION = (RangedAttribute) new RangedAttribute(null, DynamicStealth.MODID + ".scentReduction", 100, 0, Double.MAX_VALUE).setShouldWatch(true);
     public static RangedAttribute SMELLING = (RangedAttribute) new RangedAttribute(null, DynamicStealth.MODID + ".smelling", 100, 0, Double.MAX_VALUE).setShouldWatch(true);
 
+    public static RangedAttribute TREMOR_REDUCTION = (RangedAttribute) new RangedAttribute(null, DynamicStealth.MODID + ".tremorReduction", 100, 0, Double.MAX_VALUE).setShouldWatch(true);
+    public static RangedAttribute FEEL = (RangedAttribute) new RangedAttribute(null, DynamicStealth.MODID + ".feel", 100, 0, Double.MAX_VALUE).setShouldWatch(true);
+
 
     public static void init()
     {
@@ -62,5 +65,8 @@ public class Attributes
 
         attributeMap.registerAttribute(SCENT_REDUCTION);
         attributeMap.registerAttribute(SMELLING);
+
+        attributeMap.registerAttribute(TREMOR_REDUCTION);
+        attributeMap.registerAttribute(FEEL);
     }
 }

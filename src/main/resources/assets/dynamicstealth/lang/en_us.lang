@@ -1,3 +1,17 @@
+attribute.name.dynamicstealth.threatGen=x Threat Generation Multiplier
+attribute.name.dynamicstealth.threatGenTargetSpotted=x Threat Generation Multiplier (target spotted)
+attribute.name.dynamicstealth.threatGenAttackedBySame=x Threat Generation Multiplier (attacked by target)
+attribute.name.dynamicstealth.threatGenDamageDealt=x Threat Generation Multiplier (damage dealt)
+attribute.name.dynamicstealth.threatGenWarned=x Threat Generation Multiplier (warned)
+attribute.name.dynamicstealth.threatGenAllyKilled=x Threat Generation Multiplier (ally killed)
+attribute.name.dynamicstealth.threatGenTargetVisible=x Threat Generation Multiplier (target visible)
+
+attribute.name.dynamicstealth.threatDeg=x Threat Degredation Multiplier
+attribute.name.dynamicstealth.threatDegTargetNotVisible=x Threat Degredation Multiplier (target not visible)
+attribute.name.dynamicstealth.threatDegFlee=x Threat Degredation Multiplier (fleeing)
+
+
+
 attribute.name.dynamicstealth.visibilityReduction=% Visibility Reduction
 attribute.name.dynamicstealth.sight=% Sight
 
@@ -6,6 +20,9 @@ attribute.name.dynamicstealth.hearing=% Hearing
 
 attribute.name.dynamicstealth.scentReduction=% Scent Reduction
 attribute.name.dynamicstealth.smelling=% Smelling
+
+attribute.name.dynamicstealth.tremorReduction=% Tremor Reduction
+attribute.name.dynamicstealth.feel=% Feel
 
 
 
