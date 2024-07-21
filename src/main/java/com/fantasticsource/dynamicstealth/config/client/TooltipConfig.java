@@ -20,5 +20,5 @@ public class TooltipConfig
                     "If true, tooltips always show assassination info, even if it's just the defaults",
                     "If false, tooltips only show assassination info if it's different from the defaults"
             })
-    public boolean alwaysShowAssassinationInfo = true;
+    public boolean alwaysShowAssassinationInfo = false;
 }
