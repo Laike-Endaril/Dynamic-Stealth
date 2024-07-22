@@ -8,6 +8,7 @@ import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.potions.FantasticPotionEffect;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.text.translation.I18n;
@@ -60,7 +61,7 @@ public class TooltipAlterer
         }
 
 
-        if (!normal.equals(AttackData.normalDefault))
+        if (!normal.equals(AttackData.normalDefault) || stack.getAttributeModifiers(EntityEquipmentSlot.MAINHAND).keySet().contains("generic.attackDamage"))
         {
             tooltip.add("");
             tooltip.add(I18n.translateToLocal(MODID + ".tooltip.normalAttacks"));
