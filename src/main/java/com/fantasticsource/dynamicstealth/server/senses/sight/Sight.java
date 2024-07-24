@@ -38,6 +38,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.profiler.Profiler;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
@@ -72,14 +73,26 @@ public class Sight
     private static Map<EntityLivingBase, Map<Entity, SeenData>> recentlySeenMap = new LinkedHashMap<>();
     private static Map<Pair<EntityPlayerMP, Boolean>, LinkedHashMap<Entity, Double>> playerSeenThisTickMap = new LinkedHashMap<>();
 
+    public static Profiler profiler = null;
 
-    public static void update(TickEvent.ServerTickEvent event)
+
+    public static void update(TickEvent.ServerTickEvent event, Profiler profiler)
     {
+        Sight.profiler = profiler;
+
         if (event.phase == TickEvent.Phase.END)
         {
+            profiler.startSection("Sight.update()");
+
             playerSeenThisTickMap.clear();
+
+            profiler.startSection("updateRecentlySeen");
             recentlySeenMap.entrySet().removeIf(Sight::updateRecentlySeen);
+
+            profiler.endStartSection("updateStealthHistory");
             globalPlayerStealthHistory.entrySet().removeIf(Sight::updateStealthHistory);
+
+            profiler.endSection();
         }
     }
 
@@ -103,7 +116,13 @@ public class Sight
         EntityLivingBase livingBase = entry.getKey();
         if (!MCTools.entityIsValid(livingBase)) return true;
 
-        entry.getValue().entrySet().removeIf(e -> !MCTools.entityIsValid(e.getKey()));
+        entry.getValue().entrySet().removeIf(e ->
+        {
+            profiler.startSection(livingBase.getClass().getName());
+            boolean result = !MCTools.entityIsValid(e.getKey());
+            profiler.endSection();
+            return result;
+        });
         return false;
     }
 

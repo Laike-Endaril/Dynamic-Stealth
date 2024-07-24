@@ -266,8 +266,7 @@ public class DynamicStealth
         profiler.startSection("DStealth - ServerTick");
 
 
-        profiler.startSection("Sight.update()");
-        Sight.update(event);
+        Sight.update(event, profiler);
 
         profiler.endStartSection("Communication.update()");
         Communication.update(event);
