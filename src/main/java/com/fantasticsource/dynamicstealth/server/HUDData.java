@@ -28,7 +28,7 @@ public class HUDData
         if (!(searcher instanceof EntityLivingBase)) return false;
         if (searcher instanceof EntityPlayerMP)
         {
-            if (((EntityPlayerMP) searcher).isCreative()) return false;
+            if (((EntityPlayerMP) searcher).isCreative() || ((EntityPlayerMP) searcher).isSpectator()) return false;
             if (target instanceof EntityPlayerMP && !HidingData.isHidingFrom((EntityPlayer) target, searcher.getUniqueID())) return false;
         }
 
