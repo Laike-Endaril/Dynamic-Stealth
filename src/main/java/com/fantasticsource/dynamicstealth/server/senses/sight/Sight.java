@@ -196,7 +196,7 @@ public class Sight
         {
             //Save first cache
             //This is where the stealth gauge checks are done
-            if (isAggressive && target instanceof EntityPlayer && HUDData.isGauged(searcher))
+            if (isAggressive && target instanceof EntityPlayer && HUDData.isGauged(target, searcher))
             {
                 if (searcher instanceof EntityPlayer || (searcher instanceof EntityLiving && (((EntityLiving) searcher).getAttackTarget() == target || (!EntityThreatData.isPassive(searcher) && !EntityThreatData.bypassesThreat(searcher)))))
                 {

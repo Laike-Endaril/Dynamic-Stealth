@@ -1,8 +1,11 @@
 package com.fantasticsource.dynamicstealth.server;
 
+import com.fantasticsource.dynamicstealth.server.senses.HidingData;
 import com.fantasticsource.mctools.MCTools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -20,9 +23,14 @@ public class HUDData
         MCTools.populateEntityMap(serverSettings.hud.stealthGaugeBlacklist, ungaugedEntities);
     }
 
-    public static boolean isGauged(Entity searcher)
+    public static boolean isGauged(Entity target, Entity searcher)
     {
         if (!(searcher instanceof EntityLivingBase)) return false;
+        if (searcher instanceof EntityPlayerMP)
+        {
+            if (((EntityPlayerMP) searcher).isCreative()) return false;
+            if (target instanceof EntityPlayerMP && !HidingData.isHidingFrom((EntityPlayer) target, searcher.getUniqueID())) return false;
+        }
 
         return !MCTools.entityMatchesMap(searcher, ungaugedEntities);
     }
