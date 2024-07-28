@@ -17,6 +17,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.play.server.*;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -213,7 +214,17 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
 
     public boolean isVisibleTo(EntityPlayerMP playerMP)
     {
-        if (!GlobalDefaultsAndData.isFullBypass(entity)) return Sight.canSee(playerMP, entity, true);
+        if (!GlobalDefaultsAndData.isFullBypass(entity))
+        {
+            if (entity instanceof EntityBoat)
+            {
+                AxisAlignedBB playerBox = playerMP.getCollisionBoundingBox();
+                AxisAlignedBB boatBox = entity.getCollisionBoundingBox();
+                if (playerBox != null && boatBox != null && playerBox.intersects(boatBox)) return true;
+            }
+
+            return Sight.canSee(playerMP, entity, true);
+        }
 
         //Simulate vanilla tracking for full bypass entities
         double d0 = playerMP.posX - entity.posX;
