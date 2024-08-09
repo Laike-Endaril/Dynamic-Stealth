@@ -78,22 +78,16 @@ public class Sight
 
     public static void update(TickEvent.ServerTickEvent event, Profiler profiler)
     {
+        playerSeenThisTickMap.clear();
+
         Sight.profiler = profiler;
+        profiler.startSection("updateRecentlySeen");
+        recentlySeenMap.entrySet().removeIf(Sight::updateRecentlySeen);
 
-        if (event.phase == TickEvent.Phase.END)
-        {
-            profiler.startSection("Sight.update()");
+        profiler.endStartSection("updateStealthHistory");
+        globalPlayerStealthHistory.entrySet().removeIf(Sight::updateStealthHistory);
 
-            playerSeenThisTickMap.clear();
-
-            profiler.startSection("updateRecentlySeen");
-            recentlySeenMap.entrySet().removeIf(Sight::updateRecentlySeen);
-
-            profiler.endStartSection("updateStealthHistory");
-            globalPlayerStealthHistory.entrySet().removeIf(Sight::updateStealthHistory);
-
-            profiler.endSection();
-        }
+        profiler.endSection();
     }
 
     private static boolean updateStealthHistory(Map.Entry<EntityPlayer, Pair<WrappingQueue<Double>, Long>> entry)

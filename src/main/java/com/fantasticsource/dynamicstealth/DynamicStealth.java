@@ -262,19 +262,23 @@ public class DynamicStealth
     @SubscribeEvent
     public static void serverTick(TickEvent.ServerTickEvent event)
     {
-        Profiler profiler = FMLCommonHandler.instance().getMinecraftServerInstance().profiler;
-        profiler.startSection("DStealth - ServerTick");
+        if (event.phase == TickEvent.Phase.END)
+        {
+            Profiler profiler = FMLCommonHandler.instance().getMinecraftServerInstance().profiler;
+            profiler.startSection("DStealth - ServerTick");
 
 
-        Sight.update(event, profiler);
+            profiler.startSection("Sight.update()");
+            Sight.update(event, profiler);
 
-        profiler.endStartSection("Communication.update()");
-        Communication.update(event);
+            profiler.endStartSection("Communication.update()");
+            Communication.update(event);
 
-        profiler.endSection();
+            profiler.endSection();
 
 
-        profiler.endSection();
+            profiler.endSection();
+        }
     }
 
 
