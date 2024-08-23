@@ -44,9 +44,4 @@ public class OPHUDFilterConfig
     @Config.LangKey(DynamicStealth.MODID + ".config.opHUDShowFlee")
     @Config.Comment({"If true, on-point indicators appear for non-passive entities that are fleeing"})
     public boolean fleeingNonPassive = true;
-
-    @Config.Name("090 Dazed")
-    @Config.LangKey(DynamicStealth.MODID + ".config.opHUDShowDazed")
-    @Config.Comment({"If true, on-point indicators appear for dazed entities"})
-    public boolean dazed = true;
 }

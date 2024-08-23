@@ -57,9 +57,6 @@ public class RenderAlterer
             ScorePlayerTeam team = scoreboard.createTeam("dark green");
             team.setPrefix(TextFormatting.DARK_GREEN.toString());
             colorTeams.add(team);
-            team = scoreboard.createTeam("green");
-            team.setPrefix(TextFormatting.GREEN.toString());
-            colorTeams.add(team);
             team = scoreboard.createTeam("blue");
             team.setPrefix(TextFormatting.BLUE.toString());
             colorTeams.add(team);
@@ -95,10 +92,9 @@ public class RenderAlterer
 
     private static String getTeam(int color)
     {
+        //White entities don't need a team, since that is the default glow color
         switch (color)
         {
-            case ClientData.COLOR_DAZED:
-                return "green";
             case ClientData.COLOR_IDLE_PASSIVE:
                 return "dark green";
             case ClientData.COLOR_IDLE_NON_PASSIVE:
