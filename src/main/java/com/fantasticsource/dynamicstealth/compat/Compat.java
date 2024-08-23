@@ -18,6 +18,7 @@ public class Compat
     public static Class bibliocraftArmorStandEntity = null;
 
     public static boolean
+            party = false,
             customnpcs = false,
             neat = false,
             statues = false,

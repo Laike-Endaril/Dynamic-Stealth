@@ -4,6 +4,7 @@ import com.fantasticsource.dynamicstealth.DynamicStealth;
 import com.fantasticsource.dynamicstealth.component.CWeaponEntry;
 import com.fantasticsource.dynamicstealth.server.event.attacks.AttackData;
 import com.fantasticsource.dynamicstealth.server.event.attacks.WeaponEntry;
+import com.fantasticsource.dynamicstealth.server.senses.HidingData;
 import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
@@ -482,14 +483,28 @@ public class Network
                         }
                         else if (EntityThreatData.bypassesThreat(seen))
                         {
-                            //Color
-                            buf.writeByte(ClientData.CID_BYPASS);
-                            //Searcher ID
-                            buf.writeInt(seen.getEntityId());
+                            if (!HidingData.isHidingFrom(player, seen.getUniqueID()))
+                            {
+                                //Color
+                                buf.writeByte(ClientData.CID_BYPASS_ALLY);
+                                //Searcher ID
+                                buf.writeInt(seen.getEntityId());
 
-                            //Target ID
-                            Entity target = (seen instanceof EntityLiving) ? ((EntityLiving) seen).getAttackTarget() : null;
-                            buf.writeInt(target == null ? -1 : target.getEntityId());
+                                //Target ID
+                                Entity target = (seen instanceof EntityLiving) ? ((EntityLiving) seen).getAttackTarget() : null;
+                                buf.writeInt(target == null ? -1 : target.getEntityId());
+                            }
+                            else
+                            {
+                                //Color
+                                buf.writeByte(ClientData.CID_BYPASS);
+                                //Searcher ID
+                                buf.writeInt(seen.getEntityId());
+
+                                //Target ID
+                                Entity target = (seen instanceof EntityLiving) ? ((EntityLiving) seen).getAttackTarget() : null;
+                                buf.writeInt(target == null ? -1 : target.getEntityId());
+                            }
                         }
                         else
                         {

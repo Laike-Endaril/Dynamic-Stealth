@@ -1,16 +1,16 @@
 package com.fantasticsource.dynamicstealth.server.senses;
 
 import com.fantasticsource.dynamicstealth.DynamicStealth;
+import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.PlayerData;
+import com.fantasticsource.party.CPartyMember;
+import com.fantasticsource.party.Party;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.UUID;
+import java.util.*;
 
 public class HidingData
 {
@@ -157,6 +157,18 @@ public class HidingData
 
         if (id.equals(player.getPersistentID())) return false;
 
+        if (Compat.party)
+        {
+            Map.Entry<CPartyMember, ArrayList<CPartyMember>> party = Party.getParty(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(id));
+            if (party != null)
+            {
+                if (party.getKey().name.equals(player.getName())) return false;
+                for (CPartyMember partyMember : party.getValue())
+                {
+                    if (partyMember.name.equals(player.getName())) return false;
+                }
+            }
+        }
         HidingData data = hidingData.get(player.getPersistentID());
         if (data == null) return true;
 

@@ -2,6 +2,7 @@ package com.fantasticsource.dynamicstealth.common;
 
 import com.fantasticsource.dynamicstealth.server.ai.AIDynamicStealth;
 import com.fantasticsource.dynamicstealth.server.event.attacks.WeaponEntry;
+import com.fantasticsource.dynamicstealth.server.senses.HidingData;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import net.minecraft.client.Minecraft;
@@ -30,7 +31,9 @@ public class ClientData
             CID_FLEEING_NON_PASSIVE = 5,
             CID_FLEEING_PASSIVE = 6,
             CID_BYPASS = 7,
-            CID_PICKUP = 9;
+            CID_PICKUP = 9,
+            CID_ALLY = 10,
+            CID_BYPASS_ALLY = 11;
 
     public static final int
             COLOR_ATTACKING_YOU = 0xFF0000,         //Target: yes, Threat: yes, Color: Red
@@ -41,7 +44,11 @@ public class ClientData
             COLOR_FLEEING_N0N_PASSIVE = 0xFF55FF,   //Target: maybe, Threat: yes, Color: Light Purple
             COLOR_FLEEING_PASSIVE = 0xAA00AA,       //Target: maybe, Threat: yes, Color: Dark Purple
             COLOR_BYPASS = 0x555555,                //Target: maybe, Threat: no, Color: Dark Gray
-            COLOR_PICKUP = 0xFFFFFF;                  //Target: no, Threat: no, Color: White
+            COLOR_PICKUP = 0xFFFFFF,                //Target: no, Threat: no, Color: White
+            COLOR_ALLY = 0xFFFFFE,                  //Target: maybe, Threat: maybe, Color: White
+            COLOR_BYPASS_ALLY = 0xFFFEFF;           //Target: maybe, Threat: no, Color: White
+    //Tried to make allies green one time, but players seem to glow white even when they're on a correctly set up green team
+
 
     public static int stealthLevel = Byte.MIN_VALUE, prevStealthLevel = Byte.MIN_VALUE, lightLevel = 0, prevStealthFrameIndex = 0;
     public static float prevStealthDisplayed = 0;
@@ -109,6 +116,10 @@ public class ClientData
                 return CID_BYPASS;
             case COLOR_PICKUP:
                 return CID_PICKUP;
+            case COLOR_ALLY:
+                return CID_ALLY;
+            case COLOR_BYPASS_ALLY:
+                return CID_BYPASS_ALLY;
         }
         throw new IllegalArgumentException("Unregistered color: " + color);
     }
@@ -140,6 +151,10 @@ public class ClientData
                 return COLOR_BYPASS;
             case CID_PICKUP:
                 return COLOR_PICKUP;
+            case CID_ALLY:
+                return COLOR_ALLY;
+            case CID_BYPASS_ALLY:
+                return COLOR_BYPASS_ALLY;
         }
         throw new IllegalArgumentException("Unregistered cid: " + cid);
     }
@@ -148,8 +163,13 @@ public class ClientData
     {
         if (EntityThreatData.isPickup(searcher)) return COLOR_PICKUP;
 
-        if (EntityThreatData.bypassesThreat(searcher)) return COLOR_BYPASS;
+        if (!HidingData.isHidingFrom(player, searcher.getUniqueID()))
+        {
+            if (EntityThreatData.bypassesThreat(searcher)) return COLOR_BYPASS_ALLY;
+            return COLOR_ALLY;
+        }
 
+        if (EntityThreatData.bypassesThreat(searcher)) return COLOR_BYPASS;
 
         AIDynamicStealth stealthAI = searcher instanceof EntityLiving ? AIDynamicStealth.getStealthAI((EntityLiving) searcher) : null;
         if (stealthAI != null && stealthAI.isFleeing())
@@ -175,12 +195,12 @@ public class ClientData
 
     public static boolean canHaveThreat(byte cid)
     {
-        return cid != CID_IDLE_PASSIVE && cid != CID_IDLE_NON_PASSIVE && cid != CID_BYPASS && cid != CID_PICKUP;
+        return cid != CID_IDLE_PASSIVE && cid != CID_IDLE_NON_PASSIVE && cid != CID_BYPASS && cid != CID_PICKUP && cid != CID_BYPASS_ALLY;
     }
 
     public static boolean canHaveThreat(int color)
     {
-        return color != COLOR_IDLE_PASSIVE && color != COLOR_IDLE_NON_PASSIVE && color != COLOR_BYPASS && color != COLOR_PICKUP;
+        return color != COLOR_IDLE_PASSIVE && color != COLOR_IDLE_NON_PASSIVE && color != COLOR_BYPASS && color != COLOR_PICKUP && color != COLOR_BYPASS_ALLY;
     }
 
     public static class OnPointData
