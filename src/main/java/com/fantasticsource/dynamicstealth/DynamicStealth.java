@@ -430,21 +430,22 @@ public class DynamicStealth
                 }
             }
 
+            //Melee and target's friends didn't see
             if (!wasSeen && !EntityThreatData.isPassive(victim) && !GlobalDefaultsAndData.isFullBypass(killer))
             {
-                //Was melee and target's friends didn't see
+                //Target cannot see us
                 if (!Sight.canSee(victim, source, true))
                 {
-                    //Target cannot see us
+                    //Target is not searching for / fleeing from us
                     if (victimThreatTarget != source)
                     {
-                        //Target is not searching for / fleeing from us
+                        //Target is not mind controlled by us
                         if (!CompatEBWizardry.mindControllerIs(victim, killer))
                         {
-                            //Target is not mind controlled by us
+                            //Assassinations
                             if (!(killer instanceof FakePlayer) && !MinecraftForge.EVENT_BUS.post(new AssassinationEvent(killer, victim)))
                             {
-                                //Assassinations
+                                //Make sure killer is still alive before giving them the potion effects (don't give creepers potion effects from suicide assassinations, to prevent them from making potion clouds)
                                 if (!killer.isDead)
                                 {
                                     WeaponEntry weaponEntry = AttackData.getWeaponEntry(isMelee ? killer.getHeldItemMainhand() : null, WeaponEntry.TYPE_ASSASSINATION, false);
