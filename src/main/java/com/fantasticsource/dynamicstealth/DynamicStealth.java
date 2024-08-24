@@ -445,12 +445,13 @@ public class DynamicStealth
                             if (!(killer instanceof FakePlayer) && !MinecraftForge.EVENT_BUS.post(new AssassinationEvent(killer, victim)))
                             {
                                 //Assassinations
-                                WeaponEntry weaponEntry = AttackData.getWeaponEntry(isMelee ? killer.getHeldItemMainhand() : null, WeaponEntry.TYPE_ASSASSINATION, false);
-
-
-                                for (PotionEffect potionEffect : weaponEntry.attackerEffects)
+                                if (!killer.isDead)
                                 {
-                                    killer.addPotionEffect(new PotionEffect(potionEffect));
+                                    WeaponEntry weaponEntry = AttackData.getWeaponEntry(isMelee ? killer.getHeldItemMainhand() : null, WeaponEntry.TYPE_ASSASSINATION, false);
+                                    for (PotionEffect potionEffect : weaponEntry.attackerEffects)
+                                    {
+                                        killer.addPotionEffect(new PotionEffect(potionEffect));
+                                    }
                                 }
                             }
                         }
