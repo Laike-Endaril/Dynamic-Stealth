@@ -214,23 +214,28 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
 
     public boolean isVisibleTo(EntityPlayerMP playerMP)
     {
-        if (!GlobalDefaultsAndData.isFullBypass(entity))
-        {
-            if (entity instanceof EntityBoat)
-            {
-                AxisAlignedBB playerBox = playerMP.getCollisionBoundingBox();
-                AxisAlignedBB boatBox = entity.getCollisionBoundingBox();
-                if (playerBox != null && boatBox != null && playerBox.intersects(boatBox)) return true;
-            }
-
-            return Sight.canSee(playerMP, entity, true);
-        }
-
-        //Simulate vanilla tracking for full bypass entities
+        //Check max range and spectation
         double d0 = playerMP.posX - entity.posX;
         double d1 = playerMP.posZ - entity.posZ;
         int i = Math.min(trackerEntryRange, entityTrackerMaxRange);
-        return d0 >= -i && d0 <= i && d1 >= -i && d1 <= i && entity.isSpectatedByPlayer(playerMP);
+        if (d0 < -i || d0 > i || d1 < -i || d1 > i || !entity.isSpectatedByPlayer(playerMP)) return false;
+
+
+        //For full bypass (vanilla) behavior, this is the end
+        if (GlobalDefaultsAndData.isFullBypass(entity)) return true;
+
+
+        //Boats are special sometimes
+        if (entity instanceof EntityBoat)
+        {
+            AxisAlignedBB playerBox = playerMP.getCollisionBoundingBox();
+            AxisAlignedBB boatBox = entity.getCollisionBoundingBox();
+            if (playerBox != null && boatBox != null && playerBox.intersects(boatBox)) return true;
+        }
+
+
+        //Main DS check
+        return Sight.canSee(playerMP, entity, true);
     }
 
     public void makePlayerTrackThis(EntityPlayerMP player)
