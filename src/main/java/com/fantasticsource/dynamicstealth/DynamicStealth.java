@@ -49,6 +49,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.profiler.Profiler;
@@ -93,6 +94,7 @@ import noppes.npcs.api.entity.ICustomNpc;
 
 import java.io.File;
 import java.util.Set;
+import java.util.UUID;
 
 import static com.fantasticsource.dynamicstealth.common.Network.WRAPPER;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
@@ -443,10 +445,16 @@ public class DynamicStealth
                     //Make sure killer is still alive before giving them the potion effects (don't give creepers potion effects from suicide assassinations, to prevent them from making potion clouds)
                     if (!killer.isDead)
                     {
-                        WeaponEntry weaponEntry = AttackData.getWeaponEntry(isMelee ? killer.getHeldItemMainhand() : null, WeaponEntry.TYPE_ASSASSINATION, false);
-                        for (PotionEffect potionEffect : weaponEntry.attackerEffects)
+                        //Also make sure we don't get assassination potion effects from killing our own summons
+                        NBTTagCompound serializedEntityNBT = victim.serializeNBT();
+                        UUID ebWizardryCasterID = serializedEntityNBT.hasKey("casterUUIDLeast") ? serializedEntityNBT.getUniqueId("casterUUID") : null;
+                        if (!killer.getUniqueID().equals(ebWizardryCasterID))
                         {
-                            killer.addPotionEffect(new PotionEffect(potionEffect));
+                            WeaponEntry weaponEntry = AttackData.getWeaponEntry(isMelee ? killer.getHeldItemMainhand() : null, WeaponEntry.TYPE_ASSASSINATION, false);
+                            for (PotionEffect potionEffect : weaponEntry.attackerEffects)
+                            {
+                                killer.addPotionEffect(new PotionEffect(potionEffect));
+                            }
                         }
                     }
                 }
