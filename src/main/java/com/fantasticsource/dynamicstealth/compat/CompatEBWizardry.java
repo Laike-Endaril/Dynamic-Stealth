@@ -25,9 +25,21 @@ public class CompatEBWizardry
 
     public static boolean mindControllerIs(EntityLivingBase entity, EntityLivingBase controller)
     {
+        if (mindControlPotion == null) return false;
+
+
         UUID id = mindControllerUUID(entity);
         if (controller == null) return id == null;
 
         return controller.getUniqueID().equals(id);
+    }
+
+    public static boolean summonerIs(EntityLivingBase entity, EntityLivingBase summoner)
+    {
+        if (mindControlPotion == null) return false;
+
+
+        NBTTagCompound compound = entity.serializeNBT();
+        return compound.hasKey("casterUUIDLeast") && summoner.getUniqueID().equals(compound.getUniqueId("casterUUID"));
     }
 }
