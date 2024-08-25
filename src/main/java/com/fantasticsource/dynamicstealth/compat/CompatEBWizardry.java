@@ -39,7 +39,8 @@ public class CompatEBWizardry
         if (mindControlPotion == null) return false;
 
 
-        NBTTagCompound compound = entity.serializeNBT();
+        NBTTagCompound compound = new NBTTagCompound();
+        entity.writeToNBT(compound);
         return compound.hasKey("casterUUIDLeast") && summoner.getUniqueID().equals(compound.getUniqueId("casterUUID"));
     }
 }
