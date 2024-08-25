@@ -6,7 +6,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.passive.EntityBat;
-import net.minecraftforge.common.util.FakePlayer;
 
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -29,7 +28,7 @@ public class EntityTouchData
         if (!(entity instanceof EntityLivingBase)) return false;
 
         if (GlobalDefaultsAndData.isFullBypass(entity)) return false;
-        if (entity instanceof EntityArmorStand || entity instanceof EntityBat || entity instanceof FakePlayer) return false;
+        if (entity instanceof EntityArmorStand || entity instanceof EntityBat) return false;
 
         return !MCTools.entityMatchesMap(entity, unfeelingEntities);
     }

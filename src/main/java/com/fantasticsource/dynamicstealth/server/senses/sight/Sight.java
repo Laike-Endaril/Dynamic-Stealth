@@ -48,7 +48,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
-import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import noppes.npcs.api.NpcAPI;
@@ -289,7 +288,7 @@ public class Sight
     private static double visualStealthLevelInternal(EntityLivingBase searcher, Entity target, double yaw, double pitch, double offsetLR)
     {
         //Hard checks (absolute)
-        if (searcher.world != target.world || target.isDead || target instanceof FakePlayer || (!searcher.isEntityAlive() && !searcher.getClass().getName().equals("boni.dummy.EntityDummy"))) return 777;
+        if (searcher.world != target.world || target.isDead || (!searcher.isEntityAlive() && !searcher.getClass().getName().equals("boni.dummy.EntityDummy"))) return 777;
         if (target instanceof EntityPlayer)
         {
             EntityPlayer player = (EntityPlayer) target;
