@@ -17,10 +17,7 @@ public class CompatEBWizardry
     {
         if (mindControlPotion == null || entity.getActivePotionEffect(mindControlPotion) == null) return null;
 
-        NBTTagCompound compound = entity.writeToNBT(new NBTTagCompound());
-        if (!compound.hasKey("ForgeData")) return null;
-
-        compound = compound.getCompoundTag("ForgeData");
+        NBTTagCompound compound = entity.getEntityData();
         if (!compound.hasKey("controllingEntityLeast")) return null;
 
         return compound.getUniqueId("controllingEntity");
