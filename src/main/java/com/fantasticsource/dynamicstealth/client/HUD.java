@@ -447,19 +447,19 @@ public class HUD
         int maxAngle = clientSettings.hudSettings.targetingFilter.maxAngle;
         if (maxDist <= 0 || maxAngle < 0) return;
 
-        EntityPlayer player = Minecraft.getMinecraft().player;
-        if (player == null) return;
+        Entity viewEntity = Minecraft.getMinecraft().getRenderViewEntity();
+        if (viewEntity == null) return;
 
-        World world = player.world;
+        World world = viewEntity.world;
         if (world == null) return;
 
         Entity entity = world.getEntityByID(data.searcherID);
         if (entity == null) return;
 
-        double distSquared = player.getDistanceSq(entity);
+        double distSquared = viewEntity.getDistanceSq(entity);
         if (distSquared > Math.pow(maxDist, 2)) return;
 
-        double angleDif = Vec3d.fromPitchYaw(player.rotationPitch, player.rotationYawHead).normalize().dotProduct(new Vec3d(entity.posX - player.posX, (entity.posY + entity.height * 0.5) - (player.posY + player.eyeHeight), entity.posZ - player.posZ).normalize());
+        double angleDif = Vec3d.fromPitchYaw(viewEntity.rotationPitch, viewEntity.getRotationYawHead()).normalize().dotProduct(new Vec3d(entity.posX - viewEntity.posX, (entity.posY + entity.height * 0.5) - (viewEntity.posY + viewEntity.getEyeHeight()), entity.posZ - viewEntity.posZ).normalize());
         //And because Vec3d.fromPitchYaw occasionally returns values barely out of the range of (-1, 1)...
         if (angleDif < -1) angleDif = -1;
         else if (angleDif > 1) angleDif = 1;
