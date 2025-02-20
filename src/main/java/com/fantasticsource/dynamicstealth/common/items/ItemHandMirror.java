@@ -53,6 +53,7 @@ public class ItemHandMirror extends Item
         if (world.isRemote)
         {
             Camera.allowControl = true;
+            Camera.showHotbar = true;
             Camera.playerRenderMode = Camera.PLAYER_RENDER_IF_THIRD_PERSON;
             Camera.followOffsetLR = 0;
             Camera.getCamera().activate(player, -1);
