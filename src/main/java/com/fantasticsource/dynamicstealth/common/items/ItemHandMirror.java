@@ -52,7 +52,7 @@ public class ItemHandMirror extends Item
         //Sided execution
         if (world.isRemote)
         {
-            Camera.allowControl = true;
+            Camera.controlMode = Camera.CONTROL_PLAYER;
             Camera.showHotbar = true;
             Camera.playerRenderMode = Camera.PLAYER_RENDER_IF_THIRD_PERSON;
             Camera.followOffsetLR = 0;

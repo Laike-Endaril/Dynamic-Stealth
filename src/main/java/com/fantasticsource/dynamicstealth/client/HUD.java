@@ -13,6 +13,7 @@ import com.fantasticsource.mctools.ClientTickTimer;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.OutlinedFontRenderer;
 import com.fantasticsource.mctools.Render;
+import com.fantasticsource.mctools.cliententity.Camera;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.datastructures.Color;
@@ -30,7 +31,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.translation.I18n;
@@ -133,10 +133,9 @@ public class HUD
             ClientData.targetData = null;
             ClientData.targetPriority = Integer.MAX_VALUE;
 
-            for (OnPointData data : opMap.values())
-            {
-                makeTargetIfBetter(data);
-            }
+            if (Camera.getCamera().isActive()) Minecraft.getMinecraft().setRenderViewEntity(Camera.getCamera());
+            for (OnPointData data : opMap.values()) makeTargetIfBetter(data);
+            if (Camera.getCamera().isActive()) Minecraft.getMinecraft().setRenderViewEntity(Camera.getCamera().originalViewEntity);
         }
     }
 
