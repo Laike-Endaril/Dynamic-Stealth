@@ -22,7 +22,7 @@ public class MainHUDStyleConfig
             {
                     "The color of the stealth gauge",
                     "",
-                    "This uses the format RRGGBB color format (if you google RRGGBB you'll find a color picker you can use)"
+                    "This uses the RRGGBB color format (if you google RRGGBB you'll find a color picker you can use)"
             })
     public String stealthGaugeColor = "FFFFFF";
 
@@ -32,7 +32,7 @@ public class MainHUDStyleConfig
             {
                     "The color of the stealth gauge's rim and arrow",
                     "",
-                    "This uses the format RRGGBB color format (if you google RRGGBB you'll find a color picker you can use)"
+                    "This uses the RRGGBB color format (if you google RRGGBB you'll find a color picker you can use)"
             })
     public String stealthGaugeRimColor = "222222";
 

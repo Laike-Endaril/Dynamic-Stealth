@@ -32,7 +32,7 @@ public class TargetingHUDStyleConfig
             {
                     "The color of the targeting reticle, if state-colored reticle is false",
                     "",
-                    "This uses the format RRGGBB color format (if you google RRGGBB you'll find a color picker you can use)"
+                    "This uses the RRGGBB color format (if you google RRGGBB you'll find a color picker you can use)"
             })
     public String defaultReticleColor = "FFFFFF";
 
@@ -70,7 +70,7 @@ public class TargetingHUDStyleConfig
             {
                     "The color of the targeting HUD text, if state-colored text is false",
                     "",
-                    "This uses the format RRGGBB color format (if you google RRGGBB you'll find a color picker you can use)"
+                    "This uses the RRGGBB color format (if you google RRGGBB you'll find a color picker you can use)"
             })
     public String defaultTextColor = "FFFFFF";
 
@@ -104,7 +104,7 @@ public class TargetingHUDStyleConfig
                     "The color of the directional indicator for the main target, if state-colored arrow is false",
                     "This arrow is only visible when the current target is off-screen",
                     "",
-                    "This uses the format RRGGBB color format (if you google RRGGBB you'll find a color picker you can use)"
+                    "This uses the RRGGBB color format (if you google RRGGBB you'll find a color picker you can use)"
             })
     public String defaultArrowColor = "FFFFFF";
 

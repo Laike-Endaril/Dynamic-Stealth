@@ -27,7 +27,7 @@ public class LightGaugeConfig
             {
                     "The color of an empty light gauge piece",
                     "",
-                    "This uses the format RRGGBB color format (if you google RRGGBB you'll find a color picker you can use)"
+                    "This uses the RRGGBB color format (if you google RRGGBB you'll find a color picker you can use)"
             })
     public String lightGaugeColorEmpty = "442266";
 
@@ -37,7 +37,7 @@ public class LightGaugeConfig
             {
                     "The color of a filled light gauge piece",
                     "",
-                    "This uses the format RRGGBB color format (if you google RRGGBB you'll find a color picker you can use)"
+                    "This uses the RRGGBB color format (if you google RRGGBB you'll find a color picker you can use)"
             })
     public String lightGaugeColorFull = "FFFF00";
 
