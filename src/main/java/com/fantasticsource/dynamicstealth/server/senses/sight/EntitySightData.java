@@ -22,7 +22,7 @@ public class EntitySightData
 
     public static HashSet<Entity> potionSoulSightEntities;
 
-    public static LinkedHashMap<Integer, Integer> minimumDimensionLightLevels;
+    public static LinkedHashMap<Integer, Integer> minimumDimensionLightLevels, dimensionSunlightLevels, minimumDimensionMoonlightLevels, maximumDimensionMoonlightLevels;
 
     private static LinkedHashMap<Class<? extends Entity>, HashSet<String>> naturallyBrightEntities, naturalNightvisionEntities, naturalSoulSightEntities;
     private static LinkedHashMap<Class<? extends Entity>, Pair<Integer, Integer>> entityAngles, entityDistances;
@@ -43,6 +43,9 @@ public class EntitySightData
         entityLighting = new LinkedHashMap<>();
 
         minimumDimensionLightLevels = new LinkedHashMap<>();
+        dimensionSunlightLevels = new LinkedHashMap<>();
+        minimumDimensionMoonlightLevels = new LinkedHashMap<>();
+        maximumDimensionMoonlightLevels = new LinkedHashMap<>();
 
         EntityEntry entry;
         String[] tokens;
@@ -128,6 +131,9 @@ public class EntitySightData
             }
         }
 
+
+        int light;
+
         for (String string : serverSettings.senses.sight.c_lighting.z_minimumDimensionLightLevels)
         {
             tokens = string.split(",");
@@ -135,11 +141,51 @@ public class EntitySightData
             else
             {
                 int dim = Integer.parseInt(tokens[0].trim());
-                int minLight = Integer.parseInt(tokens[1].trim());
-                if (minLight < 0 || minLight > 15) System.err.println("Minimum light levels for dimensions must be from 0 to 15, inclusive!");
-                else minimumDimensionLightLevels.put(dim, minLight);
+                light = Integer.parseInt(tokens[1].trim());
+                if (light < 0 || light > 15) System.err.println("Minimum light levels for dimensions must be from 0 to 15, inclusive!");
+                else minimumDimensionLightLevels.put(dim, light);
             }
         }
+
+        for (String string : serverSettings.senses.sight.c_lighting.z_0910_dimensionSunlightLevels)
+        {
+            tokens = string.split(",");
+            if (tokens.length != 2) System.err.println("Wrong number of arguments for dimension sunlight level; please check example in tooltip");
+            else
+            {
+                int dim = Integer.parseInt(tokens[0].trim());
+                light = Integer.parseInt(tokens[1].trim());
+                if (light < 0 || light > 15) System.err.println("Sunlight levels for dimensions must be from 0 to 15, inclusive!");
+                else dimensionSunlightLevels.put(dim, light);
+            }
+        }
+
+        for (String string : serverSettings.senses.sight.c_lighting.z_0930_minimumDimensionMoonlightLevels)
+        {
+            tokens = string.split(",");
+            if (tokens.length != 2) System.err.println("Wrong number of arguments for minimum dimension moonlight level; please check example in tooltip");
+            else
+            {
+                int dim = Integer.parseInt(tokens[0].trim());
+                light = Integer.parseInt(tokens[1].trim());
+                if (light < 0 || light > 15) System.err.println("Minimum moonlight levels for dimensions must be from 0 to 15, inclusive!");
+                else minimumDimensionMoonlightLevels.put(dim, light);
+            }
+        }
+
+        for (String string : serverSettings.senses.sight.c_lighting.z_0940_maximumDimensionMoonlightLevels)
+        {
+            tokens = string.split(",");
+            if (tokens.length != 2) System.err.println("Wrong number of arguments for maximum dimension moonlight level; please check example in tooltip");
+            else
+            {
+                int dim = Integer.parseInt(tokens[0].trim());
+                light = Integer.parseInt(tokens[1].trim());
+                if (light < 0 || light > 15) System.err.println("Maximum moonlight levels for dimensions must be from 0 to 15, inclusive!");
+                else maximumDimensionMoonlightLevels.put(dim, light);
+            }
+        }
+
 
         if (serverSettings.senses.sight.e_angles.angleSmall > serverSettings.senses.sight.e_angles.angleLarge) throw new IllegalArgumentException("angleLarge must be greater than or equal to angleSmall");
         if (serverSettings.senses.sight.f_distances.distanceNear > serverSettings.senses.sight.f_distances.distanceFar) throw new IllegalArgumentException("distanceFar must be greater than or equal to distanceNear");
@@ -238,6 +284,21 @@ public class EntitySightData
     public static int minimumDimensionLight(int dim)
     {
         return minimumDimensionLightLevels.getOrDefault(dim, 0);
+    }
+
+    public static int dimensionSunlight(int dim)
+    {
+        return dimensionSunlightLevels.getOrDefault(dim, -1);
+    }
+
+    public static int minimumDimensionMoonlight(int dim)
+    {
+        return minimumDimensionMoonlightLevels.getOrDefault(dim, -1);
+    }
+
+    public static int maximumDimensionMoonlight(int dim)
+    {
+        return maximumDimensionMoonlightLevels.getOrDefault(dim, -1);
     }
 
 

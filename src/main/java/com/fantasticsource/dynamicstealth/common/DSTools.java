@@ -6,6 +6,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
 import java.util.HashSet;
 
@@ -43,9 +45,79 @@ public class DSTools
         return result;
     }
 
-    public static int lightLevelTotal(World world, Vec3d vec)
+    //How much the position is exposed to sky light; not actual sky light level, and certainly not exposure to weather as this goes through glass
+    //Inherently a 0-15 value, as it pulls data from a nibble array
+    public static int vanillaSkyLightExposure(World world, BlockPos pos)
     {
-        return lightLevelTotal(world, new BlockPos(vec));
+        if (world.isRemote) throw new IllegalStateException("Light levels should only be accessed from server-side!");
+
+        Chunk chunk = world.getChunkFromBlockCoords(pos);
+        int y = pos.getY();
+        if (y > world.getHeight()) return 15;
+
+        if (y < 0)
+        {
+            y = 0;
+            pos = new BlockPos(pos.getX(), 0, pos.getZ());
+        }
+        if (!world.isAreaLoaded(pos, 1)) return 0;
+
+        ExtendedBlockStorage extendedblockstorage = chunk.getBlockStorageArray()[y >> 4];
+        return extendedblockstorage.getSkyLight(pos.getX() & 15, y & 15, pos.getZ() & 15);
+    }
+
+    public static int adjustedSkyLightLevelTotal(World world, BlockPos pos)
+    {
+        if (!world.provider.hasSkyLight()) return 0;
+
+        int dim = world.provider.getDimension();
+
+
+        double sunlight = EntitySightData.dimensionSunlight(dim);
+        if (sunlight == -1) sunlight = world.provider.hasSkyLight() ? 15 : 0;
+
+        double maxMoonlight = EntitySightData.maximumDimensionMoonlight(dim);
+        if (maxMoonlight == -1) maxMoonlight = world.provider.hasSkyLight() ? 7 : 0;
+
+        double moonlight = EntitySightData.minimumDimensionMoonlight(dim);
+        if (moonlight == -1) moonlight = world.provider.hasSkyLight() ? 2 : 0;
+        moonlight = moonlight + world.getCurrentMoonPhaseFactor() * (maxMoonlight - moonlight);
+
+
+        double sunRatio = world.provider.getSunBrightnessFactor(1);
+        double skyLightRatio = sunlight * sunRatio + moonlight * (1d - sunRatio);
+        skyLightRatio *= vanillaSkyLightExposure(world, pos) / 15d;
+
+        int skyLight = (int) Math.round(skyLightRatio);
+        if (skyLight < 0) skyLight = 0;
+        if (skyLight > 15) skyLight = 15;
+        return skyLight;
+    }
+
+    public static int vanillaBlockLightLevelTotal(World world, BlockPos pos)
+    {
+        if (world.isRemote) throw new IllegalStateException("Light levels should only be accessed from server-side!");
+
+        if (!world.isAreaLoaded(pos, 1)) return 0;
+
+        Chunk chunk = world.getChunkFromBlockCoords(pos);
+        ExtendedBlockStorage extendedblockstorage = chunk.getBlockStorageArray()[pos.getY() >> 4];
+        return extendedblockstorage.getBlockLight(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15);
+    }
+
+    public static int adjustedBlockLightLevelTotal(World world, BlockPos pos)
+    {
+        return vanillaBlockLightLevelTotal(world, pos);
+    }
+
+    public static int adjustedLightLevelTotal(World world, Vec3d vec)
+    {
+        return adjustedLightLevelTotal(world, new BlockPos(vec));
+    }
+
+    public static int adjustedLightLevelTotal(World world, BlockPos pos)
+    {
+        return Tools.max(adjustedSkyLightLevelTotal(world, pos), adjustedBlockLightLevelTotal(world, pos), EntitySightData.minimumDimensionLight(world.provider.getDimension()));
     }
 
     public static int entityLightLevel(Entity target)
@@ -57,22 +129,9 @@ public class DSTools
         int result = 0;
         for (BlockPos pos : entityCheckBlocks(target))
         {
-            result = Tools.max(result, lightLevelTotal(target.world, pos));
+            result = Tools.max(result, adjustedLightLevelTotal(target.world, pos));
             if (result == 15) return result;
         }
         return result;
-    }
-
-    public static int lightLevelTotal(World world, BlockPos pos)
-    {
-        if (world.isRemote) throw new IllegalStateException("Light levels should only be accessed from server-side!");
-
-        int y = pos.getY();
-        if (y < 0) return 0;
-        if (y > world.getHeight()) return 15 - world.getSkylightSubtracted();
-        if (!world.isAreaLoaded(pos, 1)) return 0;
-
-        //On vanilla server side, overground light levels from world.getLightFromNeighbors() range from 4 at night to 15 at day (transitioning between at dawn and dusk) and do not account for moon phase
-        return Tools.max(world.getLightFromNeighbors(pos), EntitySightData.minimumDimensionLight(world.provider.getDimension()));
     }
 }

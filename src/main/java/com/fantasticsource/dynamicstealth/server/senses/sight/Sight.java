@@ -497,7 +497,7 @@ public class Sight
         {
             for (Vec3d vec : DSTools.entityCheckVectors(target))
             {
-                queue.add(vec, 15 - DSTools.lightLevelTotal(world, vec));
+                queue.add(vec, 15 - DSTools.adjustedLightLevelTotal(world, vec));
             }
         }
 
