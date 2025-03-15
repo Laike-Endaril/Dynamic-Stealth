@@ -9,6 +9,7 @@ import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
 import com.fantasticsource.dynamicstealth.server.threat.Threat;
+import com.fantasticsource.mctools.ImprovedRayTracing;
 import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.ServerTickTimer;
 import io.netty.buffer.ByteBuf;
@@ -26,6 +27,7 @@ import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -451,6 +453,20 @@ public class Network
                             case CREATIVE_ONLY:
                                 if (!player.isCreative()) continue;
                         }
+                    }
+                    if (!serverSettings.senses.usePlayerSenses)
+                    {
+                        Vec3d eyeVec = player.getPositionEyes(1);
+                        boolean los = false;
+                        for (Vec3d vec : DSTools.entityCheckVectors(seen))
+                        {
+                            if (ImprovedRayTracing.isUnobstructed(player.world, eyeVec, vec, false))
+                            {
+                                los = true;
+                                break;
+                            }
+                        }
+                        if (!los) continue;
                     }
 
                     inputList.add(seen);
