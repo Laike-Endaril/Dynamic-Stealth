@@ -67,8 +67,12 @@ public class DSTools
     {
         if (world.isRemote) throw new IllegalStateException("Light levels should only be accessed from server-side!");
 
+        int y = pos.getY();
+        if (y < 0) return 0;
+        if (y > world.getHeight()) return 15 - world.getSkylightSubtracted();
         if (!world.isAreaLoaded(pos, 1)) return 0;
 
+        //On vanilla server side, overground light levels from world.getLightFromNeighbors() range from 4 at night to 15 at day (transitioning between at dawn and dusk) and do not account for moon phase
         return Tools.max(world.getLightFromNeighbors(pos), EntitySightData.minimumDimensionLight(world.provider.getDimension()));
     }
 }
