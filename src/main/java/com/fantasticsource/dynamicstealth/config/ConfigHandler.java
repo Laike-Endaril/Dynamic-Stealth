@@ -33,7 +33,7 @@ public class ConfigHandler
         if (file.exists()) file.renameTo(new File(MCTools.getConfigDir() + "dynamicstealth/dynamicstealth (old).cfg"));
 
         mostRecentFile = mostRecent();
-        currentAlreadyExists = mostRecentFile.exists();
+        currentAlreadyExists = currentFile.exists();
     }
 
     private static File mostRecent()
@@ -175,6 +175,10 @@ public class ConfigHandler
             case 85:
                 //Mod versions 85-94
                 update85To95();
+                //Don't use break here; allow cases to pass to the next one, so it does each update function incrementally
+            case 95:
+                //Mod versions 95-115
+                update95To116();
                 //Don't use break here; allow cases to pass to the next one, so it does each update function incrementally
         }
 
@@ -375,6 +379,33 @@ public class ConfigHandler
             newData.add(name + ", 0");
         }
         current.get("general.server settings.ai.entity-specific settings (advanced)", "Entity-Specific Flee Threshold", new String[0]).set(newData.toArray(new String[0]));
+
+        current.save();
+        logWriter.close();
+    }
+
+    private static void update95To116() throws IOException
+    {
+        Configuration current = new Configuration(currentFile);
+        Configuration old = new Configuration(mostRecentFile);
+
+        rename(old, "general.client settings.hud.light gauge", "000 Show Light Gauge", "general.client settings.hud", "040 Show Light Gauge");
+
+        rename(old, "general.client settings.main hud style", "Stealth Gauge Mode", "general.client settings.stealth gauge style", "010 Stealth Gauge Mode");
+        rename(old, "general.client settings.main hud style", "Stealth Gauge Speed", "general.client settings.stealth gauge style", "020 Stealth Gauge Speed");
+        rename(old, "general.client settings.main hud style", "Stealth Gauge X Position", "general.client settings.stealth gauge style", "030 Stealth Gauge X Position");
+        rename(old, "general.client settings.main hud style", "Stealth Gauge Y Position", "general.client settings.stealth gauge style", "040 Stealth Gauge Y Position");
+        rename(old, "general.client settings.main hud style", "Stealth Gauge Size", "general.client settings.stealth gauge style", "050 Stealth Gauge Size");
+        rename(old, "general.client settings.main hud style", "Stealth Gauge Opacity", "general.client settings.stealth gauge style", "060 Stealth Gauge Opacity");
+        rename(old, "general.client settings.main hud style", "Stealth Gauge Color", "general.client settings.stealth gauge style", "070 Stealth Gauge Color");
+        rename(old, "general.client settings.main hud style", "Stealth Gauge Rim Color", "general.client settings.stealth gauge style", "080 Stealth Gauge Rim Color");
+        rename(old, "general.client settings.main hud style", "Cursor Reversion Delay", "general.client settings.stealth gauge style", "090 Cursor Reversion Delay");
+
+        log();
+        log();
+        log();
+
+        transferAll(old, current);
 
         current.save();
         logWriter.close();

@@ -9,7 +9,6 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 /**
  * The stealth gauge is a true HUD, triggering from RenderGameOverlayEvent.Pre, type RenderGameOverlayEvent.ElementType.HOTBAR (ie. just before the hotbar is rendered)
  * You can access the parent event (an instance of RenderGameOverlayEvent.Pre) from the targeting HUD event
- * Check static fields in MainHUDStyleConfig if you want to link into more related DS settings
  */
 @Cancelable
 public class RenderStealthGaugeEvent extends Event

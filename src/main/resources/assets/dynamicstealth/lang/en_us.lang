@@ -107,7 +107,15 @@ dynamicstealth.config.entityFading.tooltip=FILLSCREEN How entities fade in and o
 dynamicstealth.config.tooltips=Tooltips
 dynamicstealth.config.tooltips.tooltip=FILLSCREEN How item tooltips are altered
 
-dynamicstealth.config.mainHUDStyle=Main HUD Style
+dynamicstealth.config.showStealthGauge=Show Stealth Gauge
+dynamicstealth.config.showStealthGauge.tooltip=FILLSCREEN FIXNEWLINES If true, the stealth gauge may be displayed when applicable\n\nYou may need to have something around to see or nearly see you\n\nSee other settings below for detailed config\n \n
+dynamicstealth.config.showOpHUD=Show On-Point HUD
+dynamicstealth.config.showOpHUD.tooltip=FILLSCREEN FIXNEWLINES If true, there may be a small HUD above all applicable entities in the world\n\nThis may include a health bar and small threat gauge\n\nSee other settings below for detailed config\n \n
+dynamicstealth.config.showTargetingHUD=Show Targeting HUD
+dynamicstealth.config.showTargetingHUD.tooltip=FILLSCREEN FIXNEWLINES If true, the entity you're closest to looking at may have a targeting cursor on it, and detailed information in a panel\n\nSee other settings below for detailed config\n \n
+dynamicstealth.config.showLightGauge=Show Light Gauge
+dynamicstealth.config.showLightGauge.tooltip=FILLSCREEN FIXNEWLINES If true, you may see a light gauge, which shows how bright DS currently considers you to be\n\nSee other settings below for detailed config\n \n
+dynamicstealth.config.stealthGaugeStyle=Stealth Gauge Style
 dynamicstealth.config.opHUDFilter=On-point HUD Filter
 dynamicstealth.config.opHUDStyle=On-point HUD Style
 dynamicstealth.config.targetingFilter=Targeting Filter
@@ -237,8 +245,6 @@ dynamicstealth.config.targetShowThreat.tooltip=FILLSCREEN FIXNEWLINES If true, t
 dynamicstealth.config.targetShowDistance=Distance
 dynamicstealth.config.targetShowDistance.tooltip=FILLSCREEN FIXNEWLINES If true, the targeted entity's distance is shown (if available)\n \n
 
-dynamicstealth.config.lightGaugeShow=Show Light Gauge
-dynamicstealth.config.lightGaugeShow.tooltip=FILLSCREEN FIXNEWLINES Whether to show the light gauge\n \n
 dynamicstealth.config.lightGaugeAlpha=Light Gauge Opacity
 dynamicstealth.config.lightGaugeAlpha.tooltip=FILLSCREEN FIXNEWLINES How visible the light gauge is, transparency-wise\n\n0 means invisible, 1 means completely opaque\n \n
 dynamicstealth.config.lightGaugeColorEmpty=Light Gauge Color (Empty)

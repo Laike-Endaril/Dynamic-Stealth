@@ -5,11 +5,6 @@ import net.minecraftforge.common.config.Config;
 
 public class LightGaugeConfig
 {
-    @Config.Name("000 Show Light Gauge")
-    @Config.LangKey(DynamicStealth.MODID + ".config.lightGaugeShow")
-    @Config.Comment("Whether to show the light gauge")
-    public boolean showLightGauge = true;
-
     @Config.Name("010 Light Gauge Opacity")
     @Config.LangKey(DynamicStealth.MODID + ".config.lightGaugeAlpha")
     @Config.Comment(

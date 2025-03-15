@@ -168,7 +168,7 @@ public class RenderAlterer
 
 
                 //Add focused target glow effect
-                if (clientSettings.hudSettings.targetingStyle.glow && clientSettings.hudSettings.targetingStyle.stateColoredGlow)
+                if (clientSettings.hudSettings.showTargetingHUD && clientSettings.hudSettings.targetingStyle.glow && clientSettings.hudSettings.targetingStyle.stateColoredGlow)
                 {
                     ClientData.OnPointData data = ClientData.targetData;
                     if (data != null && data.searcherID == livingBase.getEntityId())
@@ -238,7 +238,7 @@ public class RenderAlterer
             {
                 //Add focused target and soul sight glow effects
                 ClientData.OnPointData data = ClientData.targetData;
-                if (clientSettings.hudSettings.targetingStyle.glow && data != null && data.searcherID == livingBase.getEntityId())
+                if (clientSettings.hudSettings.showTargetingHUD && clientSettings.hudSettings.targetingStyle.glow && data != null && data.searcherID == livingBase.getEntityId())
                 {
                     setTempGlow(event);
                 }
