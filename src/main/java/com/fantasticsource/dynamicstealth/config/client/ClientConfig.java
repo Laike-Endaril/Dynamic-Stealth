@@ -20,4 +20,15 @@ public class ClientConfig
     @Config.LangKey(DynamicStealth.MODID + ".config.tooltips")
     @Config.Comment("How item tooltips are altered")
     public TooltipConfig tooltips = new TooltipConfig();
+
+    @Config.Name("010 Spider and Enderman Render Fix")
+    @Config.LangKey(DynamicStealth.MODID + ".config.spiderAndEndermanRenderFix")
+    @Config.RequiresMcRestart
+    @Config.Comment(
+            {
+                    "If true, replaces the normal rendering of spider and endermen eyes to fix a couple vanilla rendering bugs",
+                    "If you notice that spiders and endermen are rendering badly, but other things are fine, try turning this off",
+                    "More likely to need this turned to false when running shaders"
+            })
+    public boolean spiderAndEndermanRenderFix = true;
 }

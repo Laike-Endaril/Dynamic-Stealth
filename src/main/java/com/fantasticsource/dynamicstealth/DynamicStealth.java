@@ -95,6 +95,7 @@ import java.io.File;
 import java.util.Set;
 
 import static com.fantasticsource.dynamicstealth.common.Network.WRAPPER;
+import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.clientSettings;
 import static com.fantasticsource.dynamicstealth.config.DynamicStealthConfig.serverSettings;
 import static com.fantasticsource.dynamicstealth.server.threat.Threat.THREAT_TYPE.*;
 
@@ -756,7 +757,7 @@ public class DynamicStealth
             }
             else //Client-side
             {
-                RenderAlterer.replaceLayers(living);
+                if (clientSettings.spiderAndEndermanRenderFix) RenderAlterer.replaceLayers(living);
             }
         }
         catch (Exception e)
