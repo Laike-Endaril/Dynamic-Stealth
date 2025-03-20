@@ -53,13 +53,14 @@ public class DSTools
 
         Chunk chunk = world.getChunkFromBlockCoords(pos);
         int y = pos.getY();
-        if (y > world.getHeight()) return 15;
 
         if (y < 0)
         {
             y = 0;
             pos = new BlockPos(pos.getX(), 0, pos.getZ());
         }
+        else if (y >= world.getHeight()) return 15;
+
         if (!world.isAreaLoaded(pos, 1)) return 0;
 
         ExtendedBlockStorage extendedblockstorage = chunk.getBlockStorageArray()[y >> 4];
@@ -100,13 +101,17 @@ public class DSTools
     {
         if (world.isRemote) throw new IllegalStateException("Light levels should only be accessed from server-side!");
 
+        int y = pos.getY();
+        if (y < 0) return 0;
+        if (y >= world.getHeight()) return 0;
+
         if (!world.isAreaLoaded(pos, 1)) return 0;
 
         Chunk chunk = world.getChunkFromBlockCoords(pos);
-        ExtendedBlockStorage extendedblockstorage = chunk.getBlockStorageArray()[pos.getY() >> 4];
+        ExtendedBlockStorage extendedblockstorage = chunk.getBlockStorageArray()[y >> 4];
         if (extendedblockstorage == null) return 0;
 
-        return extendedblockstorage.getBlockLight(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15);
+        return extendedblockstorage.getBlockLight(pos.getX() & 15, y & 15, pos.getZ() & 15);
     }
 
     public static int adjustedBlockLightLevelTotal(World world, BlockPos pos)
