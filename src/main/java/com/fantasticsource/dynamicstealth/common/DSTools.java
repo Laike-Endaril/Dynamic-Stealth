@@ -63,6 +63,8 @@ public class DSTools
         if (!world.isAreaLoaded(pos, 1)) return 0;
 
         ExtendedBlockStorage extendedblockstorage = chunk.getBlockStorageArray()[y >> 4];
+        if (extendedblockstorage == null) return chunk.canSeeSky(pos) ? 15 : 0;
+
         return extendedblockstorage.getSkyLight(pos.getX() & 15, y & 15, pos.getZ() & 15);
     }
 
@@ -102,6 +104,8 @@ public class DSTools
 
         Chunk chunk = world.getChunkFromBlockCoords(pos);
         ExtendedBlockStorage extendedblockstorage = chunk.getBlockStorageArray()[pos.getY() >> 4];
+        if (extendedblockstorage == null) return 0;
+
         return extendedblockstorage.getBlockLight(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15);
     }
 
