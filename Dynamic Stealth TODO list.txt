@@ -1,12 +1,11 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+Add DS block light level settings (moving light sources, but only for DS light levels)?
+OR
+Make moving light mod that works right (may have to replace or ASM Chunk or ExtendedBlockStorage)?
+
 Add touch (orange) and damage (red) indicators to HUD (save direction it came from, not position)
-
-Use touch attributes
-
-Add peek keybinds to replace current hand mirror behavior?
-...block item actions
-...translate/rotate head
+Use touch attributes for BOTH (damage indicators only hidden if "unfeeling")
 
 Add ally groups for helper system config
 
