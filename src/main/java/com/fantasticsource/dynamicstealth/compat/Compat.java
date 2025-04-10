@@ -2,7 +2,6 @@ package com.fantasticsource.dynamicstealth.compat;
 
 import com.fantasticsource.dynamicstealth.config.DynamicStealthConfig;
 import com.fantasticsource.dynamicstealth.server.ai.edited.AIAttackMeleeEdit;
-import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.Tools;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
@@ -45,7 +44,6 @@ public class Compat
         if (Loader.isModLoaded("tombstone"))
         {
             Compat.corailTombstone = true;
-            CompatCorailTombstone.ghostlyShapePotionEffectClass = ReflectionTool.getClassByName("ovh.corail.tombstone.effect.GhostlyShapeEffect");
             CompatCorailTombstone.shadowStepEnchantment = ForgeRegistries.ENCHANTMENTS.getValue(new ResourceLocation("tombstone", "shadow_step"));
         }
         if (Loader.isModLoaded("dissolution"))

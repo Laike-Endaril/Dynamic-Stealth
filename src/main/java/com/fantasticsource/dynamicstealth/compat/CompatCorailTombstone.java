@@ -7,7 +7,6 @@ import net.minecraft.entity.EntityLivingBase;
 
 public class CompatCorailTombstone
 {
-    public static Class ghostlyShapePotionEffectClass = null;
     public static Enchantment shadowStepEnchantment = null;
 
     public static double shadowStepVisMultiplier(EntityLivingBase livingBase, int lightLevel)

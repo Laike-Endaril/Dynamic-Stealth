@@ -318,7 +318,7 @@ public class Sight
         {
             for (PotionEffect potionEffect : ((EntityLivingBase) target).getActivePotionEffects())
             {
-                if (potionEffect.getClass() == CompatCorailTombstone.ghostlyShapePotionEffectClass) return 777;
+                if (potionEffect.getEffectName().equals("tombstone.potion.ghostly_shape.name")) return 777;
             }
         }
 
@@ -392,14 +392,6 @@ public class Sight
         if (sight.g_absolutes.seeGlowing && isLivingBase && targetLivingBase.getActivePotionEffect(MobEffects.GLOWING) != null) return -777;
 
 
-        //Attributes (absolute, factor, after angles and glowing)
-        double sightAttrib = searcher.getEntityAttribute(Attributes.SIGHT).getAttributeValue();
-        if (sightAttrib <= 0) return 777;
-
-        double visReductionAttrib = !isLivingBase ? Attributes.VISIBILITY_REDUCTION.getDefaultValue() : targetLivingBase.getEntityAttribute(Attributes.VISIBILITY_REDUCTION).getAttributeValue();
-        double attributeMultipliers = visReductionAttrib <= 0 ? 777 : sightAttrib / visReductionAttrib;
-
-
         //Lighting and LOS checks (absolute, factor, after Angles, after Glowing)
         int lightLevel = bestLightingAtLOSHit(searcher, target, isBright(target), eyeVec);
         if (lightLevel == -777) return 777;
@@ -423,6 +415,21 @@ public class Sight
                 lightFactor = (lightFactor - lightLevelLow) / (lightLevelHigh - lightLevelLow) * (lightMultHigh - lightMultLow) + lightMultLow;
             }
         }
+
+
+        //True sight from Corail Tombstone (absolute, after LOS checks)
+        for (PotionEffect effect : searcher.getActivePotionEffects())
+        {
+            if (effect.getEffectName().equals("tombstone.potion.true_sight.name")) return -777;
+        }
+
+
+        //Attributes (absolute, factor, after angles, glowing, and true sight)
+        double sightAttrib = searcher.getEntityAttribute(Attributes.SIGHT).getAttributeValue();
+        if (sightAttrib <= 0) return 777;
+
+        double visReductionAttrib = !isLivingBase ? Attributes.VISIBILITY_REDUCTION.getDefaultValue() : targetLivingBase.getEntityAttribute(Attributes.VISIBILITY_REDUCTION).getAttributeValue();
+        double attributeMultipliers = visReductionAttrib <= 0 ? 777 : sightAttrib / visReductionAttrib;
 
 
         //Blindness (multiplier)
