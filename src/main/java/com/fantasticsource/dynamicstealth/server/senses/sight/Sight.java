@@ -401,9 +401,10 @@ public class Sight
 
 
         //Lighting and LOS checks (absolute, factor, after Angles, after Glowing)
-        double lightFactor = bestLightingAtLOSHit(searcher, target, isBright(target), eyeVec);
-        if (lightFactor == -777) return 777;
+        int lightLevel = bestLightingAtLOSHit(searcher, target, isBright(target), eyeVec);
+        if (lightLevel == -777) return 777;
 
+        double lightFactor = lightLevel;
         if (hasNightvision(searcher))
         {
             lightFactor = Math.min(15, lightFactor + sight.c_lighting.nightvisionBonus);
@@ -438,6 +439,10 @@ public class Sight
 
         //Level Up Reloaded stealth level (multiplier)
         double levelUp2StealthMultiplier = target instanceof EntityPlayer ? CompatLevelUp2.stealthLevelVisMultiplier((EntityPlayer) target) : 1;
+
+
+        //Corail Tombstone shadow step level (multiplier)
+        double corailTombstoneShadowStepMultiplier = target instanceof EntityLivingBase ? CompatCorailTombstone.shadowStepVisMultiplier((EntityLivingBase) target, lightLevel) : 1;
 
 
         //Mob Heads (multiplier)
@@ -480,7 +485,7 @@ public class Sight
 
 
         //Combine multipliers
-        double stealthMultiplier = Tools.min(mobHeadMultiplier, blindnessMultiplier * invisibilityMultiplier * crouchingMultiplier * levelUp2StealthMultiplier);
+        double stealthMultiplier = Tools.min(mobHeadMultiplier, blindnessMultiplier * invisibilityMultiplier * crouchingMultiplier * levelUp2StealthMultiplier * corailTombstoneShadowStepMultiplier);
         double visibilityMultiplier = armorMultiplier;
         double configMultipliers = Tools.min(Tools.max(stealthMultiplier * visibilityMultiplier, 0), 1);
 
@@ -490,7 +495,7 @@ public class Sight
     }
 
 
-    private static double bestLightingAtLOSHit(Entity searcher, Entity target, boolean forceMaxLight, Vec3d eyeVec)
+    private static int bestLightingAtLOSHit(Entity searcher, Entity target, boolean forceMaxLight, Vec3d eyeVec)
     {
         World world = searcher.world;
         if (world != target.world) return -777;
@@ -513,10 +518,10 @@ public class Sight
         }
 
         Vec3d testVec;
-        double result;
+        int result;
         while (queue.size() > 0)
         {
-            result = queue.peekPriority();
+            result = (int) queue.peekPriority();
             testVec = queue.poll();
             if (ImprovedRayTracing.isUnobstructed(searcher.world, eyeVec, testVec, false))
             {

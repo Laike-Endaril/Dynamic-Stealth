@@ -66,9 +66,30 @@ public class StealthMultiplierConfig
                     "If set to 0, there is no effect",
                     "",
                     "If set to 1, a player with just 1 level of stealth in Level Up Reloaded would be impossible to see",
+                    "",
                     "If set to 0.1, a player with level 10 stealth in Level Up Reloaded would be impossible to see",
+                    "",
                     "If set to 0.05, a player with level 10 stealth in Level Up Reloaded would be twice as hard to see"
             })
     @Config.RangeDouble(min = 0, max = 1)
-    public double levelUp2StealthMultiplier = 0;
+    public double levelUp2StealthMultiplier = 0.05;
+
+    @Config.Name("Corail Tombstone Shadow Step Multiplier")
+    @Config.LangKey(DynamicStealth.MODID + ".config.corailTombstoneShadowStepStealthMultiplier")
+    @Config.Comment(
+            {
+                    "Multiplies a player's visibility by 1 - (shadowStepLevel * (15 - light level) * this)",
+                    "",
+                    "If set to 0, there is no effect",
+                    "",
+                    "If set to 1, a player with any level of shadow step would be impossible to see in any light level less than 15",
+                    "",
+                    "If set to 0.1, a player with level 10 shadow step would be impossible to see in any light level less than 15",
+                    "",
+                    "If set to 0.0067 (1/150), a player with level 10 shadow step would be impossible to see at light level 0",
+                    "",
+                    "If set to 0.006 (0.9/150), a player with level 10 shadow step would be 90% harder to see at light level 0",
+            })
+    @Config.RangeDouble(min = 0, max = 1)
+    public double corailTombstoneShadowStepStealthMultiplier = 0.006;
 }

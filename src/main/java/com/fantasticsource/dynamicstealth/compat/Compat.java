@@ -46,6 +46,7 @@ public class Compat
         {
             Compat.corailTombstone = true;
             CompatCorailTombstone.ghostlyShapePotionEffectClass = ReflectionTool.getClassByName("ovh.corail.tombstone.effect.GhostlyShapeEffect");
+            CompatCorailTombstone.shadowStepEnchantment = ForgeRegistries.ENCHANTMENTS.getValue(new ResourceLocation("tombstone", "shadow_step"));
         }
         if (Loader.isModLoaded("dissolution"))
         {
