@@ -4,6 +4,7 @@ import com.fantasticsource.dynamicstealth.Commands;
 import com.fantasticsource.dynamicstealth.common.BlocksAndItems;
 import com.fantasticsource.dynamicstealth.common.DSTools;
 import com.fantasticsource.dynamicstealth.compat.Compat;
+import com.fantasticsource.dynamicstealth.compat.CompatCorailTombstone;
 import com.fantasticsource.dynamicstealth.compat.CompatDissolution;
 import com.fantasticsource.dynamicstealth.compat.CompatLevelUp2;
 import com.fantasticsource.dynamicstealth.config.DynamicStealthConfig;
@@ -38,6 +39,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
@@ -297,19 +299,28 @@ public class Sight
 
             if (searcher instanceof EntityPlayer)
             {
+                if (target == ((EntityPlayerMP) searcher).getSpectatingEntity()) return -777;
+                if (CompatDissolution.isPossessing((EntityPlayer) searcher, target)) return -777;
                 if (!DynamicStealthConfig.serverSettings.senses.pvpStealth || !HidingData.isHidingFrom((EntityPlayer) target, searcher.getPersistentID())) return -777;
             }
         }
+
         if (Compat.customnpcs)
         {
             IEntity cnpc = NpcAPI.Instance().getIEntity(target);
             if (cnpc instanceof ICustomNpc && !cnpc.isAlive() && ((ICustomNpc) cnpc).getStats().getHideDeadBody() && ((EntityLivingBase) cnpc.getMCEntity()).deathTime == 0) return 777;
         }
 
-        if (searcher instanceof EntityPlayerMP && target == ((EntityPlayerMP) searcher).getSpectatingEntity()) return -777;
         if (target instanceof EntityDragon || target instanceof EntityWither) return -777;
-        if (searcher instanceof EntityPlayer && CompatDissolution.isPossessing((EntityPlayer) searcher, target)) return -777;
         if (MCTools.isRidingOrRiddenBy(searcher, target)) return -777;
+
+        if (Compat.corailTombstone && target instanceof EntityLivingBase)
+        {
+            for (PotionEffect potionEffect : ((EntityLivingBase) target).getActivePotionEffects())
+            {
+                if (potionEffect.getClass() == CompatCorailTombstone.ghostlyShapePotionEffectClass) return 777;
+            }
+        }
 
 
         //Compute eye position

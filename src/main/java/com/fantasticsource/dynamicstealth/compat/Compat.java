@@ -2,12 +2,17 @@ package com.fantasticsource.dynamicstealth.compat;
 
 import com.fantasticsource.dynamicstealth.config.DynamicStealthConfig;
 import com.fantasticsource.dynamicstealth.server.ai.edited.AIAttackMeleeEdit;
+import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.Tools;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITasks;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import java.util.HashSet;
 
@@ -25,7 +30,48 @@ public class Compat
             iceandfire = false,
             dissolution = false,
             conarm = false,
+            corailTombstone = false,
             testdummy = false;
+
+
+    public static void init()
+    {
+        if (Loader.isModLoaded("party")) Compat.party = true;
+        if (Loader.isModLoaded("neat")) Compat.neat = true;
+        if (Loader.isModLoaded("testdummy")) Compat.testdummy = true;
+        if (Loader.isModLoaded("statues")) Compat.statues = true;
+        if (Loader.isModLoaded("iceandfire")) Compat.iceandfire = true;
+        if (Loader.isModLoaded("conarm")) Compat.conarm = true;
+        if (Loader.isModLoaded("tombstone"))
+        {
+            Compat.corailTombstone = true;
+            CompatCorailTombstone.ghostlyShapePotionEffectClass = ReflectionTool.getClassByName("ovh.corail.tombstone.effect.GhostlyShapeEffect");
+        }
+        if (Loader.isModLoaded("dissolution"))
+        {
+            Compat.dissolution = true;
+            MinecraftForge.EVENT_BUS.register(CompatDissolution.class);
+        }
+        if (Loader.isModLoaded("customnpcs"))
+        {
+            Compat.customnpcs = true;
+            MinecraftForge.EVENT_BUS.register(CompatCNPC.class);
+        }
+        if (Loader.isModLoaded("bibliocraft"))
+        {
+            try
+            {
+                Compat.bibliocraftArmorStandEntity = Class.forName("jds.bibliocraft.entity.AbtractSteve");
+            }
+            catch (ClassNotFoundException e)
+            {
+                System.err.println(TextFormatting.RED + "Bibliocraft is loaded, but could not find jds.bibliocraft.entity.AbtractSteve");
+            }
+        }
+
+        CompatEBWizardry.mindTrickPotion = ForgeRegistries.POTIONS.getValue(new ResourceLocation("ebwizardry", "mind_trick"));
+        CompatEBWizardry.mindControlPotion = ForgeRegistries.POTIONS.getValue(new ResourceLocation("ebwizardry", "mind_control"));
+    }
 
 
     protected static void cancelTasksRequiringAttackTarget(EntityAITasks tasks)

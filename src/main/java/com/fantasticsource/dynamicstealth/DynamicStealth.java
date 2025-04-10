@@ -8,7 +8,10 @@ import com.fantasticsource.dynamicstealth.common.BlocksAndItems;
 import com.fantasticsource.dynamicstealth.common.ClientData;
 import com.fantasticsource.dynamicstealth.common.Network;
 import com.fantasticsource.dynamicstealth.common.potions.Potions;
-import com.fantasticsource.dynamicstealth.compat.*;
+import com.fantasticsource.dynamicstealth.compat.Compat;
+import com.fantasticsource.dynamicstealth.compat.CompatEBWizardry;
+import com.fantasticsource.dynamicstealth.compat.CompatNeat;
+import com.fantasticsource.dynamicstealth.compat.CompatRoughMobs;
 import com.fantasticsource.dynamicstealth.config.ConfigHandler;
 import com.fantasticsource.dynamicstealth.config.DynamicStealthConfig;
 import com.fantasticsource.dynamicstealth.server.*;
@@ -55,10 +58,8 @@ import net.minecraft.profiler.Profiler;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -86,7 +87,6 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import noppes.npcs.api.NpcAPI;
 import noppes.npcs.api.entity.ICustomNpc;
@@ -897,41 +897,9 @@ public class DynamicStealth
     @EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
-        //Recipes
         BlocksAndItems.registerRecipes(event);
 
-
-        //Compat init
-        if (Loader.isModLoaded("party")) Compat.party = true;
-        if (Loader.isModLoaded("neat")) Compat.neat = true;
-        if (Loader.isModLoaded("testdummy")) Compat.testdummy = true;
-        if (Loader.isModLoaded("statues")) Compat.statues = true;
-        if (Loader.isModLoaded("iceandfire")) Compat.iceandfire = true;
-        if (Loader.isModLoaded("conarm")) Compat.conarm = true;
-        if (Loader.isModLoaded("dissolution"))
-        {
-            Compat.dissolution = true;
-            MinecraftForge.EVENT_BUS.register(CompatDissolution.class);
-        }
-        if (Loader.isModLoaded("customnpcs"))
-        {
-            Compat.customnpcs = true;
-            MinecraftForge.EVENT_BUS.register(CompatCNPC.class);
-        }
-        if (Loader.isModLoaded("bibliocraft"))
-        {
-            try
-            {
-                Compat.bibliocraftArmorStandEntity = Class.forName("jds.bibliocraft.entity.AbtractSteve");
-            }
-            catch (ClassNotFoundException e)
-            {
-                System.err.println(TextFormatting.RED + "Bibliocraft is loaded, but could not find jds.bibliocraft.entity.AbtractSteve");
-            }
-        }
-
-        CompatEBWizardry.mindTrickPotion = ForgeRegistries.POTIONS.getValue(new ResourceLocation("ebwizardry", "mind_trick"));
-        CompatEBWizardry.mindControlPotion = ForgeRegistries.POTIONS.getValue(new ResourceLocation("ebwizardry", "mind_control"));
+        Compat.init();
 
         update();
 
