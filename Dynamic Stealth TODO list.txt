@@ -1,8 +1,17 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
+I was testing particles in my library and had them appearing in front of all entities' faces via rotations...
+...and noticed that creepers' runes would flick in all directions as they walked
+I think this might be due to them looking toward path points from my own AI, including when they move PAST those path points and haven't targeted the next one yet...maybe
+
+I don't think DS is setting client-side player vars for camera yaw / pitch (head yaw / pitch?), at least on LAN (haven't checked dedicated) unless the player is in motion
+In-face particle didn't update yaw or pitch, actual head didn't update pitch
+
 Add DS block light level settings (moving light sources, but only for DS light levels)?
 OR
 Make moving light mod that works right (may have to replace or ASM Chunk or ExtendedBlockStorage)?
+
+Populate or calculate "bright" entities based on Entity.getBrightness?
 
 Add touch (orange) and damage (red) indicators to HUD (save direction it came from, not position)
 Use touch attributes for BOTH (damage indicators only hidden if "unfeeling")
