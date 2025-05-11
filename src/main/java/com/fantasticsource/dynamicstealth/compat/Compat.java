@@ -30,7 +30,8 @@ public class Compat
             dissolution = false,
             conarm = false,
             corailTombstone = false,
-            testdummy = false;
+            testdummy = false,
+            bacchanalianMobs = false; // code by PurplePrint
 
 
     public static void init()
@@ -41,6 +42,7 @@ public class Compat
         if (Loader.isModLoaded("statues")) Compat.statues = true;
         if (Loader.isModLoaded("iceandfire")) Compat.iceandfire = true;
         if (Loader.isModLoaded("conarm")) Compat.conarm = true;
+        if (Loader.isModLoaded("bacchanalianmobs")) Compat.bacchanalianMobs = true; // code by PurplePrint
         if (Loader.isModLoaded("tombstone"))
         {
             Compat.corailTombstone = true;

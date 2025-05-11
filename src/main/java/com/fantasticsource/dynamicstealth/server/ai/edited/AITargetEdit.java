@@ -14,6 +14,7 @@ import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.util.FakePlayer;
 
 import javax.annotation.Nullable;
 
@@ -54,6 +55,18 @@ public abstract class AITargetEdit extends EntityAIBase
                     return false;
                 }
             }
+        }
+
+        if (Compat.bacchanalianMobs)
+        {
+            // code by PurplePrint (start)
+            if (target instanceof FakePlayer) return true;
+            if (target instanceof EntityPlayer)
+            {
+                EntityPlayer player = (EntityPlayer) target;
+                if (player.isCreative() || player.isSpectator()) return false;
+            }
+            // code by PurplePrint (end)
         }
 
         if (target instanceof EntityPlayer && ((EntityPlayer) target).capabilities.disableDamage) return false;

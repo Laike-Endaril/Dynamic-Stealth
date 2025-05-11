@@ -801,11 +801,14 @@ public class DynamicStealth
             else if (actionClass == EntityAIWatchClosest2.class) replaceTask(tasks, task, new AIWatchClosestEdit((EntityAIWatchClosest) task.action, true));
 
                 //EntityAIAttackMelee and subclasses
-            else if (actionClass == EntityAIAttackMelee.class) replaceTask(tasks, task, new AIAttackMeleeEdit((EntityAIAttackMelee) task.action));
-            else if (actionClass == EntityRabbit.AIEvilAttack.class) replaceTask(tasks, task, new AIAttackMeleeEdit((EntityAIAttackMelee) task.action));
-            else if (actionClass == EntityPolarBear.AIMeleeAttack.class) replaceTask(tasks, task, new AIBearAttackEdit((EntityAIAttackMelee) task.action));
-            else if (actionClass == EntitySpider.AISpiderAttack.class) replaceTask(tasks, task, new AISpiderAttackEdit((EntityAIAttackMelee) task.action));
-            else if (actionClass == EntityAIZombieAttack.class) replaceTask(tasks, task, new AIZombieAttackEdit((EntityAIZombieAttack) task.action));
+                // PurplePrint's comment:
+                // Эти задачи ломают поведение мобов в режиме X-Ray.
+                //Laike: Basically translates to "these don't work right with X-Ray mode" (has to do with certain AI tasks in Bacchalian Mobs)
+            else if (actionClass == EntityAIAttackMelee.class && !Compat.bacchanalianMobs) replaceTask(tasks, task, new AIAttackMeleeEdit((EntityAIAttackMelee) task.action));
+            else if (actionClass == EntityRabbit.AIEvilAttack.class && !Compat.bacchanalianMobs) replaceTask(tasks, task, new AIAttackMeleeEdit((EntityAIAttackMelee) task.action));
+            else if (actionClass == EntityPolarBear.AIMeleeAttack.class && !Compat.bacchanalianMobs) replaceTask(tasks, task, new AIBearAttackEdit((EntityAIAttackMelee) task.action));
+            else if (actionClass == EntitySpider.AISpiderAttack.class && !Compat.bacchanalianMobs) replaceTask(tasks, task, new AISpiderAttackEdit((EntityAIAttackMelee) task.action));
+            else if (actionClass == EntityAIZombieAttack.class && !Compat.bacchanalianMobs) replaceTask(tasks, task, new AIZombieAttackEdit((EntityAIZombieAttack) task.action));
 
                 //EntityAINearestAttackableTarget and subclasses
             else if (actionClass == EntityAINearestAttackableTarget.class) replaceTask(tasks, task, new AINearestAttackableTargetEdit((EntityAINearestAttackableTarget) task.action));

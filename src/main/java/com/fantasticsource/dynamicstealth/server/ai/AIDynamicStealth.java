@@ -14,6 +14,7 @@ import com.fantasticsource.mctools.NPEAttackTargetTaskHolder;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.Tools;
 import com.fantasticsource.tools.TrigLookupTable;
+import com.purplerupter.bacchanalianmobs.sight.main.XRayTags;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -208,7 +209,28 @@ public class AIDynamicStealth extends EntityAIBase
             return false;
         }
 
-        EntityLivingBase target = Threat.getTarget(searcher);
+
+        EntityLivingBase target;
+        if (!Compat.bacchanalianMobs) target = Threat.getTarget(searcher);
+        else
+        {
+            target = null;
+            // code by PurplePrint (start)
+            boolean sightXRay = searcher.getEntityData().hasKey(XRayTags.TARGET_NAME_TAG);
+            boolean fallback = false;
+
+            if (sightXRay)
+            {
+                String targetName = searcher.getEntityData().getString(XRayTags.TARGET_NAME_TAG);
+                if (targetName.isEmpty()) fallback = true;
+                else if (searcher.getAttackTarget() != null) return false;
+            }
+
+            // original behavior
+            if (!sightXRay || fallback) target = Threat.getTarget(searcher);
+            // code by PurplePrint (end)
+        }
+
         if (target != null && CompatEBWizardry.mindControllerIs(searcher, target))
         {
             Threat.set(searcher, null, 0);
