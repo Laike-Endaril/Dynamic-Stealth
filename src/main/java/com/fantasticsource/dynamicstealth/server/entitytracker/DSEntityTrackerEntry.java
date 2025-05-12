@@ -41,7 +41,7 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
     protected final int updateFrequency;
     protected final boolean sendVelocityUpdates;
 
-    protected int encodedRotationYaw, encodedRotationPitch, lastEncodedHeadMotion;
+    protected int lastYaw, lastPitch, lastHeadYaw;
     protected double lastMotionX, lastMotionY, lastMotionZ;
 
     private List<Entity> passengers = Collections.emptyList();
@@ -62,10 +62,10 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
         this.updateFrequency = updateFrequency;
         this.sendVelocityUpdates = sendVelocityUpdates;
 
-        encodedRotationYaw = MathHelper.floor(entity.rotationYaw * 256 / 360);
-        encodedRotationPitch = MathHelper.floor(entity.rotationPitch * 256 / 360);
+        lastYaw = MathHelper.floor(entity.rotationYaw * 256 / 360);
+        lastPitch = MathHelper.floor(entity.rotationPitch * 256 / 360);
 
-        lastEncodedHeadMotion = MathHelper.floor(entity.getRotationYawHead() * 256 / 360);
+        lastHeadYaw = MathHelper.floor(entity.getRotationYawHead() * 256 / 360);
 
         this.trackerEntryRange = trackerEntryRange;
         this.entityTrackerMaxRange = entityTrackerMaxRange;
@@ -108,16 +108,24 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
                 sendPacketToTrackedPlayers(new SPacketEntityTeleport(entity));
             }
 
-            encodedRotationYaw = MathHelper.floor(entity.rotationYaw * 256 / 360);
-            encodedRotationPitch = MathHelper.floor(entity.rotationPitch * 256 / 360);
+
+            int yaw = MathHelper.floor(entity.rotationYaw * 256 / 360);
+            int pitch = MathHelper.floor(entity.rotationPitch * 256 / 360);
+            if (yaw != lastYaw || pitch != lastPitch)
+            {
+                sendPacketToTrackedPlayers(new SPacketEntity.S16PacketEntityLook(entity.getEntityId(), (byte) yaw, (byte) pitch, entity.onGround));
+                lastYaw = yaw;
+                lastPitch = pitch;
+            }
+
 
             sendMetadata();
 
-            int newEncodedHeadRotation = MathHelper.floor(entity.getRotationYawHead() * 256 / 360);
-            if (Math.abs(newEncodedHeadRotation - lastEncodedHeadMotion) >= 1)
+            int headYaw = MathHelper.floor(entity.getRotationYawHead() * 256 / 360);
+            if (headYaw != lastHeadYaw)
             {
-                sendPacketToTrackedPlayers(new SPacketEntityHeadLook(entity, (byte) newEncodedHeadRotation));
-                lastEncodedHeadMotion = newEncodedHeadRotation;
+                sendPacketToTrackedPlayers(new SPacketEntityHeadLook(entity, (byte) headYaw));
+                lastHeadYaw = headYaw;
             }
 
             entity.isAirBorne = false;
@@ -166,11 +174,7 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
     public void sendToTrackingAndSelf(Packet<?> packetIn)
     {
         sendPacketToTrackedPlayers(packetIn);
-
-        if (isPlayer)
-        {
-            player.connection.sendPacket(packetIn);
-        }
+        if (isPlayer) player.connection.sendPacket(packetIn);
     }
 
     public void sendDestroyEntityPacketToTrackedPlayers()
@@ -342,7 +346,7 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
         if (isPlayer) return new SPacketSpawnPlayer(player);
         if (isLivingBase && entity instanceof IAnimals)
         {
-            lastEncodedHeadMotion = MathHelper.floor(entity.getRotationYawHead() * 256 / 360);
+            lastHeadYaw = MathHelper.floor(entity.getRotationYawHead() * 256 / 360);
             return new SPacketSpawnMob(livingBase);
         }
         if (entity instanceof EntityArmorStand) return new SPacketSpawnObject(entity, 78);
