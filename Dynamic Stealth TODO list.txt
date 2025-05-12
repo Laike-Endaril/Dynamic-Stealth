@@ -1,6 +1,7 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-I don't think DS is setting client-side player vars for camera yaw / pitch (head yaw / pitch?), at least on LAN (haven't checked dedicated) unless the player is in motion
+I don't think DS is setting client-side player vars for camera yaw / pitch (head yaw / pitch?)
+Happens on both LAN and dedicated
 In-face particle didn't update yaw or pitch, actual head didn't update pitch
 
 Add DS block light level settings (moving light sources, but only for DS light levels)?
