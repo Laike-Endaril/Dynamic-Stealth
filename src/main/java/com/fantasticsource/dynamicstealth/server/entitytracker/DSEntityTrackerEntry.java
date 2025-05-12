@@ -318,6 +318,17 @@ public class DSEntityTrackerEntry extends EntityTrackerEntry
                 player.connection.sendPacket(new SPacketSetPassengers(entity.getRidingEntity())); //getRidingEntity DOES NOT GET THE RIDING ENTITY!  It gets the RIDDEN entity (these are opposites, ppl...)
             }
 
+            //Send leash if we can see the leash-er
+            if (entity instanceof EntityLiving)
+            {
+                Entity leashHolder = ((EntityLiving) entity).getLeashHolder();
+                if (leashHolder != null && Sight.canSee(player, leashHolder, false))
+                {
+                    player.connection.sendPacket(new SPacketEntityAttach(entity, leashHolder));
+                }
+            }
+
+
             //External data alterations
             entity.addTrackingPlayer(player);
             player.addEntity(entity);

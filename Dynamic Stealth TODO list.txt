@@ -1,12 +1,6 @@
 CURRENTLY WORKING ON ========================================================================================================================================================================================================
 
-I don't think DS is setting client-side player vars for camera yaw / pitch (head yaw / pitch?)
-Happens on both LAN and dedicated
-In-face particle didn't update yaw or pitch, actual head didn't update pitch
-
-Add DS block light level settings (moving light sources, but only for DS light levels)?
-OR
-Make moving light mod that works right (may have to replace or ASM Chunk or ExtendedBlockStorage)?
+Finish the render for my server-side dynamic light mod and link into it
 
 Populate or calculate "bright" entities based on Entity.getBrightness?
 
@@ -26,10 +20,10 @@ BUG FIXES ======================================================================
 
 Entities seem to be failing at pathfinding fairly often when at a certain distance
 
-Fix animation handling when an entity starts being tracked; Animania's sleeping animation, the normal death animation, and any similar
+Fix animation handling when an entity starts being tracked; Animania's sleeping animation, the normal death animation, etc.
 
 Mobs in desperation mode can be put into flee mode by hitting them...
-...fix by adding "desperation" status effect
+...fix by adding desperation timer?
 
 Spiders path toward their threat target even if they can't see it (must have a threat target)...
 ...happens when all AI besides mine is removed, so either something to do with my AI or something outside AI, or both
@@ -46,12 +40,7 @@ Fix entities being able to attack through glass diagonally (because they can see
 
 Make stuck detection account for jumping by allowing for more play along y axis
 
-Fix leashes not rendering sometimes (not a vanilla bug)...
-...can reproduce by leashing a horse, flying into the air, and dropping into water while facing down
-
-Fix "opaque flashing" of mobs on the edge of vision due to no visibility data -> defaulting to full visibility...
-...occasionally happens on fade-in (rare)
-...don't think it ever happens on fade-out anymore
+Fix held items not following entity fading
 
 
 
