@@ -158,7 +158,10 @@ public class Sight
 
     public static double visualStealthLevel(EntityLivingBase searcher, Entity target, boolean isAggressive, boolean useCache, boolean saveCache, double yaw, double pitch)
     {
-        if (searcher == null || target == null || !searcher.world.isBlockLoaded(searcher.getPosition()) || !target.world.isBlockLoaded(target.getPosition())) return 777;
+        if (searcher == null || target == null) return 777;
+        if (searcher == target) return -777;
+        if (!searcher.world.isBlockLoaded(searcher.getPosition()) || !target.world.isBlockLoaded(target.getPosition())) return 777;
+
 
         searcher.world.profiler.startSection("DStealth: Visual Stealth");
         Map<Entity, SeenData> map = recentlySeenMap.get(searcher);
