@@ -18,9 +18,8 @@ Mob flee speeds...
 
 BUG FIXES ===================================================================================================================================================================================================================
 
-Spiders will walk off death ledges when AIDynamicStealth.lastKnownPosition is off the edge (eg. from searching-for-threat-target algorithm)
-May apply to other entities, but if not, probably something to do with certain EntityMoveHelper subclasses (again)
-A general solution would be best, not just being careful with setting of lastKnownPosition, but being careful with checking it (and maybe other positions) before going to it
+Mobs close to reaching their "cower" position will stutter-step toward it
+Probably due to dropping path if within a certain distance to goal?
 
 Entities seem to be failing at pathfinding fairly often when at a certain distance
 

@@ -419,6 +419,7 @@ public class AIDynamicStealth extends EntityAIBase
 
         if (newMode == MODE_SPIN)
         {
+            navigator.getPathToEntityLiving(searcher); //PathNavigateClimber has issues...and just in case a mod does something similar
             startAngle = searcher.rotationYawHead;
             spinDirection = searcher.getRNG().nextBoolean();
             angleDif = 0;
@@ -758,10 +759,15 @@ public class AIDynamicStealth extends EntityAIBase
                         else
                         {
                             path = navigator.getPathToPos(fleeToPos);
+                            navigator.getPathToEntityLiving(searcher); //PathNavigateClimber has issues...and just in case a mod does something similar
                             navigator.setPath(path, fleeSpeed);
                         }
                     }
-                    else if (navigator.getPath() != path) navigator.setPath(path, fleeSpeed);
+                    else if (navigator.getPath() != path)
+                    {
+                        navigator.getPathToEntityLiving(searcher); //PathNavigateClimber has issues...and just in case a mod does something similar
+                        navigator.setPath(path, fleeSpeed);
+                    }
                 }
             }
             else if (mode == MODE_COWER)
