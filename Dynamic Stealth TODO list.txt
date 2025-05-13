@@ -18,6 +18,10 @@ Mob flee speeds...
 
 BUG FIXES ===================================================================================================================================================================================================================
 
+Spiders will walk off death ledges when AIDynamicStealth.lastKnownPosition is off the edge (eg. from searching-for-threat-target algorithm)
+May apply to other entities, but if not, probably something to do with certain EntityMoveHelper subclasses (again)
+A general solution would be best, not just being careful with setting of lastKnownPosition, but being careful with checking it (and maybe other positions) before going to it
+
 Entities seem to be failing at pathfinding fairly often when at a certain distance
 
 Fix animation handling when an entity starts being tracked; Animania's sleeping animation, the normal death animation, etc.
@@ -25,12 +29,9 @@ Fix animation handling when an entity starts being tracked; Animania's sleeping 
 Mobs in desperation mode can be put into flee mode by hitting them...
 ...fix by adding desperation timer?
 
-Spiders path toward their threat target even if they can't see it (must have a threat target)...
-...happens when all AI besides mine is removed, so either something to do with my AI or something outside AI, or both
-...since it only happens with spiders and not other mobs, I'd think it has to do with something outside the AI, at least partially
-
 Spider riders sometimes move really fast...is that normal?...
 ...comes from skeleton, not spider (removed all AI from spiders and it still happened)
+...may have something to do with EntityMoveHelper or a subclass
 
 Fix entities being able to attack through glass due to same raytrace being used for attacks and vision...
 ...is there some method used in all melee attacks that I can inject a raytrace into?

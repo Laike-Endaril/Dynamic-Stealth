@@ -178,6 +178,8 @@ public class AIDynamicStealth extends EntityAIBase
             EntityLivingBase target = Threat.getTarget(searcher);
             if (target == null) return false;
 
+            if (!Sight.canSee(searcher, target, true)) return false;
+
             Path newPath = navigator.getPathToEntityLiving(target);
             if (newPath == null || newPath.isSamePath(navigator.getPath())) return false;
 
