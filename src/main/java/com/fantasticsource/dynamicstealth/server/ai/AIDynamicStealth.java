@@ -244,9 +244,8 @@ public class AIDynamicStealth extends EntityAIBase
             Threat.setThreat(searcher, 0);
         }
 
-        Threat.ThreatData threatData = Threat.get(searcher);
-        float threatPercentage = threatData.threatPercentage;
 
+        float threatPercentage = Threat.getThreat(searcher);
         if (threatPercentage <= 0)
         {
             EntityLivingBase attackTarget = searcher.getAttackTarget();
@@ -276,9 +275,8 @@ public class AIDynamicStealth extends EntityAIBase
             return true;
         }
 
-        EntityLivingBase threatTarget = threatData.target;
 
-        if (threatTarget == null)
+        if (target == null)
         {
             EntityLivingBase attackTarget = searcher.getAttackTarget();
             if (AITargetEdit.isSuitableTarget(searcher, attackTarget))
@@ -313,15 +311,15 @@ public class AIDynamicStealth extends EntityAIBase
             {
                 if (!triedTriggerCantReach && !MinecraftForge.EVENT_BUS.post(new BasicEvent.CantReachEvent(searcher)))
                 {
-                    if (Sight.canSee(searcher, threatTarget, true))
+                    if (Sight.canSee(searcher, target, true))
                     {
-                        warn(searcher, threatTarget, threatTarget.getPosition(), true);
+                        warn(searcher, target, target.getPosition(), true);
                     }
                     else
                     {
-                        int distance = (int) searcher.getDistance(threatTarget);
+                        int distance = (int) searcher.getDistance(target);
                         if (lastKnownPosition == null) lastKnownPosition = searcher.getPosition();
-                        warn(searcher, threatTarget, MCTools.randomPos(lastKnownPosition, Tools.min(distance >> 1, 7), Tools.min(distance >> 2, 4)), false);
+                        warn(searcher, target, MCTools.randomPos(lastKnownPosition, Tools.min(distance >> 1, 7), Tools.min(distance >> 2, 4)), false);
                     }
 
                     for (PotionEffect potionEffect : EventData.cantReachPotions)
@@ -341,12 +339,12 @@ public class AIDynamicStealth extends EntityAIBase
         }
         else triedTriggerCantReach = false;
 
-        if (AITargetEdit.isSuitableTarget(searcher, threatTarget))
+        if (AITargetEdit.isSuitableTarget(searcher, target))
         {
             //Existing target's current position is known
-            lastKnownPosition = threatTarget.getPosition();
+            lastKnownPosition = target.getPosition();
             clearAIPath();
-            searcher.setAttackTarget(threatTarget);
+            searcher.setAttackTarget(target);
             Threat.apply(searcher, null, serverSettings.threat.seenTargetThreatRate, GEN_TARGET_VISIBLE, true);
             searcher.world.profiler.endSection();
             return false;

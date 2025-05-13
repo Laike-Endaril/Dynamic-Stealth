@@ -21,6 +21,7 @@ Mob flee speeds...
 BUG FIXES ===================================================================================================================================================================================================================
 
 Entities seem to be failing at pathfinding fairly often when at a certain distance
+This is only when the entity can see their target, and therefore is not using my AI for pathfinding toward it
 
 Fix animation handling when an entity starts being tracked; Animania's sleeping animation, the normal death animation, etc.
 
