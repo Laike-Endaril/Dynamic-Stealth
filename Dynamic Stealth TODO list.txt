@@ -2,6 +2,8 @@ CURRENTLY WORKING ON ===========================================================
 
 Finish the render for my server-side dynamic light mod and link into it
 
+Should soul sight show in threat colors?  Would require network change
+
 Populate or calculate "bright" entities based on Entity.getBrightness?
 
 Add touch (orange) and damage (red) indicators to HUD (save direction it came from, not position)
