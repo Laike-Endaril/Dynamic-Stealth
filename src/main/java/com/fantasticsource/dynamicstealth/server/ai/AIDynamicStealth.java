@@ -56,7 +56,7 @@ public class AIDynamicStealth extends EntityAIBase
     public static final int
             FLEE_NONE = 0,
             FLEE_PASSIVE = 1,
-            FLEE_CANTREACH = 2,
+            FLEE_CANT_REACH = 2,
             FLEE_HP = 3;
 
     private static Method navigatorCanNavigateMethod;
@@ -153,7 +153,7 @@ public class AIDynamicStealth extends EntityAIBase
     public void fleeIfYouShould(float hpOffset)
     {
         int threshold = EntityAIData.fleeThreshold(searcher);
-        if (fleeReason == FLEE_CANTREACH || threshold > 0)
+        if (fleeReason == FLEE_CANT_REACH || threshold > 0)
         {
             if (EntityThreatData.isPassive(searcher))
             {
@@ -331,7 +331,7 @@ public class AIDynamicStealth extends EntityAIBase
 
                     if (serverSettings.ai.cantReach.flee)
                     {
-                        fleeReason = FLEE_CANTREACH;
+                        fleeReason = FLEE_CANT_REACH;
                         searcher.world.profiler.endSection();
                         return true;
                     }
@@ -500,7 +500,7 @@ public class AIDynamicStealth extends EntityAIBase
 
         if (fleeReason != FLEE_NONE && mode != MODE_FLEE && mode != MODE_COWER)
         {
-            //Flee (do not use mode() method, to prevent accidentally using it from other places; fleeing should be started by setting "fleeing" to true)
+            //Flee (do not use mode() method, to prevent accidentally using it from other places; fleeing should be started by setting fleeReason)
             mode = MODE_FLEE;
             clearAIPath();
             fleeToPos = null;
@@ -668,7 +668,7 @@ public class AIDynamicStealth extends EntityAIBase
             }
             else
             {
-                if (fleeReason == FLEE_CANTREACH && canReachTarget())
+                if (fleeReason == FLEE_CANT_REACH && canReachTarget())
                 {
                     mode(MODE_NONE);
                     fleeIfYouShould(0);
