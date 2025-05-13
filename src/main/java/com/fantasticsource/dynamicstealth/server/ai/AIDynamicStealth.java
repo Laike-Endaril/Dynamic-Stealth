@@ -13,7 +13,6 @@ import com.fantasticsource.mctools.MCTools;
 import com.fantasticsource.mctools.NPEAttackTargetTaskHolder;
 import com.fantasticsource.tools.ReflectionTool;
 import com.fantasticsource.tools.Tools;
-import com.fantasticsource.tools.TrigLookupTable;
 import com.purplerupter.bacchanalianmobs.sight.main.XRayTags;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -60,7 +59,6 @@ public class AIDynamicStealth extends EntityAIBase
             FLEE_HP = 3;
 
     private static Method navigatorCanNavigateMethod;
-    private static TrigLookupTable trigTable = TRIG_TABLE;
 
     static
     {
@@ -574,7 +572,7 @@ public class AIDynamicStealth extends EntityAIBase
             else angleDif -= headTurnSpeed;
 
             double angleRad = Tools.degtorad(startAngle + angleDif);
-            searcher.getLookHelper().setLookPosition(searcher.posX - trigTable.sin(angleRad), searcher.posY + searcher.getEyeHeight(), searcher.posZ + trigTable.cos(angleRad), headTurnSpeed, headTurnSpeed);
+            searcher.getLookHelper().setLookPosition(searcher.posX - TRIG_TABLE.sin(angleRad), searcher.posY + searcher.getEyeHeight(), searcher.posZ + TRIG_TABLE.cos(angleRad), headTurnSpeed, headTurnSpeed);
 
             if (Math.abs(angleDif) >= 360) mode(MODE_FIND_RANDOM_PATH);
         }

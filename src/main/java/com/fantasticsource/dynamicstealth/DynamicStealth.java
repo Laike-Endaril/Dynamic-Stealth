@@ -107,7 +107,7 @@ public class DynamicStealth
     public static final String VERSION = "1.12.2.119";
     public static final String CONFIG_VERSION = "1.12.2.116"; //The lowest compatible config version
 
-    public static final TrigLookupTable TRIG_TABLE = new TrigLookupTable(1024);
+    public static final TrigLookupTable TRIG_TABLE = TrigLookupTable.TRIG_TABLE_1048576;
 
     private static EntityLivingBase victimThreatTarget = null;
 
