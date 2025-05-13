@@ -301,8 +301,11 @@ public class AIDynamicStealth extends EntityAIBase
 
         //Threat > 0 and threatTarget != null...we have an existing target from before
 
+
         if (!canReachTarget() && !EventData.checkCantReachPotionFilter(searcher))
         {
+            //Can't reach target
+
             if (MCTools.isOwned(searcher))
             {
                 Threat.apply(searcher, null, serverSettings.threat.ownedCantReachDegredationRate, DEG_OWNED_CANT_REACH, false);
@@ -355,8 +358,9 @@ public class AIDynamicStealth extends EntityAIBase
 
         //Target's current position is unknown
         Compat.clearAttackTargetAndCancelBadTasks(searcher);
+        boolean result = unseenTargetDegredation(threatPercentage);
         searcher.world.profiler.endSection();
-        return unseenTargetDegredation(threatPercentage);
+        return result;
     }
 
     private boolean unseenTargetDegredation(float threatPercentage)
