@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.dynamicstealth.common.DSTools;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.dynamicstealth.server.threat.EntityThreatData;
@@ -116,7 +117,7 @@ public abstract class AITargetEdit extends EntityAIBase
 
     private boolean canEasilyReach(EntityLivingBase target)
     {
-        Path path = attacker.getNavigator().getPathToEntityLiving(target);
+        Path path = DSTools.getPath(attacker, target);
 
         if (path == null) return false;
 

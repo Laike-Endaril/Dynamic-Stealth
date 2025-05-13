@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.dynamicstealth.common.DSTools;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
@@ -29,7 +30,7 @@ public class AIAttackMeleeEdit extends EntityAIAttackMelee
 
         if (getAttackReachSqr(target) >= attacker.getDistanceSq(target.posX, target.getEntityBoundingBox().minY, target.posZ)) return true;
 
-        path = attacker.getNavigator().getPathToEntityLiving(target);
+        path = DSTools.getPath(attacker, target);
         return path != null;
     }
 
@@ -45,7 +46,7 @@ public class AIAttackMeleeEdit extends EntityAIAttackMelee
 
         if (getAttackReachSqr(target) >= attacker.getDistanceSq(target.posX, target.getEntityBoundingBox().minY, target.posZ)) return true;
 
-        path = attacker.getNavigator().getPathToEntityLiving(target);
+        path = DSTools.getPath(attacker, target);
         return path != null;
     }
 

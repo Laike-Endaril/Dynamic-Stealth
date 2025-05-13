@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.dynamicstealth.common.DSTools;
 import com.fantasticsource.dynamicstealth.server.senses.sight.Sight;
 import com.fantasticsource.tools.datastructures.ExplicitPriorityQueue;
 import com.google.common.base.Predicate;
@@ -8,6 +9,7 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIFollow;
 import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.pathfinding.*;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
@@ -103,7 +105,7 @@ public class AIParrotFollowEdit extends EntityAIBase //In vanilla, this is only 
 
                 if (d3 > (double) (stopDistance * stopDistance))
                 {
-                    path = navigator.getPathToEntityLiving(target);
+                    path = DSTools.getPath(searcher, target);
                     navigator.setPath(path, speedModifier);
                 }
                 else
@@ -115,7 +117,7 @@ public class AIParrotFollowEdit extends EntityAIBase //In vanilla, this is only 
                     {
                         double d4 = target.posX - searcher.posX;
                         double d5 = target.posZ - searcher.posZ;
-                        path = navigator.getPathToXYZ(searcher.posX - d4, searcher.posY, searcher.posZ - d5);
+                        path = DSTools.getPath(searcher, new BlockPos(searcher.posX - d4, searcher.posY, searcher.posZ - d5));
                         navigator.setPath(path, speedModifier);
                     }
                 }

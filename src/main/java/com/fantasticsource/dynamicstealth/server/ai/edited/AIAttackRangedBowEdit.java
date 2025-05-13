@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.dynamicstealth.common.DSTools;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.ai.EntityAIAttackRangedBow;
@@ -85,7 +86,7 @@ public class AIAttackRangedBowEdit<T extends EntityMob & IRangedAttackMob> exten
         }
         else
         {
-            path = entity.getNavigator().getPathToEntityLiving(target);
+            path = DSTools.getPath(entity, target);
             entity.getNavigator().setPath(path, moveSpeedAmp);
             strafingTime = -1;
         }

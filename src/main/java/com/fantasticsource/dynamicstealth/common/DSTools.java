@@ -3,6 +3,9 @@ package com.fantasticsource.dynamicstealth.common;
 import com.fantasticsource.dynamicstealth.server.senses.sight.EntitySightData;
 import com.fantasticsource.tools.Tools;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.pathfinding.Path;
+import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -142,5 +145,35 @@ public class DSTools
             if (result == 15) return result;
         }
         return result;
+    }
+
+
+    public static Path getPath(EntityLiving living, Entity target)
+    {
+        return getPath(living, target.getPosition());
+    }
+
+    public static Path getPath(EntityLiving living, BlockPos pos)
+    {
+        PathNavigate navigator = living.getNavigator();
+        BlockPos startPos = living.getPosition();
+        double distSquared = pos.distanceSq(startPos);
+        double rangeSquared = navigator.getPathSearchRange() - 2;
+        rangeSquared *= rangeSquared;
+
+
+        if (distSquared < rangeSquared) return navigator.getPathToPos(pos);
+
+
+        //Position out of range
+        BlockPos dif = pos.subtract(startPos);
+        double ratio = navigator.getPathSearchRange() * 0.75 / Math.sqrt(dif.distanceSq(0, 0, 0));
+        return navigator.getPathToPos(startPos.add(new BlockPos(dif.getX() * ratio, dif.getY() * ratio, dif.getZ() * ratio)));
+    }
+
+    public static boolean tryMoveToEntityLiving(EntityLiving living, Entity target, double speedIn)
+    {
+        Path path = getPath(living, target);
+        return path != null && living.getNavigator().setPath(path, speedIn);
     }
 }

@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai;
 
+import com.fantasticsource.dynamicstealth.common.DSTools;
 import com.fantasticsource.dynamicstealth.compat.Compat;
 import com.fantasticsource.dynamicstealth.compat.CompatEBWizardry;
 import com.fantasticsource.dynamicstealth.server.CombatTracker;
@@ -518,8 +519,7 @@ public class AIDynamicStealth extends EntityAIBase
         //Failure -> MODE_SPIN
         if (mode == MODE_FIND_PATH)
         {
-            double distSquared = lastKnownPosition.distanceSq(searcher.getPosition());
-            if (distSquared < 1 || timeAtPos > 60) mode(MODE_SPIN);
+            if (lastKnownPosition.distanceSq(searcher.getPosition()) < 1 || timeAtPos > 60) mode(MODE_SPIN);
             else try
             {
                 if (!(boolean) navigatorCanNavigateMethod.invoke(navigator))
@@ -529,21 +529,7 @@ public class AIDynamicStealth extends EntityAIBase
                 }
 
                 //We can navigate, and have not reached lastKnownPosition
-                Path newPath;
-                if (distSquared < Math.pow(navigator.getPathSearchRange() - 2, 2))
-                {
-                    //Position in range
-                    newPath = navigator.getPathToPos(lastKnownPosition);
-                }
-                else
-                {
-                    //Position out of range
-                    BlockPos startPos = searcher.getPosition();
-                    BlockPos dif = lastKnownPosition.subtract(startPos);
-                    double ratio = navigator.getPathSearchRange() * 0.75 / Math.sqrt(dif.distanceSq(0, 0, 0));
-                    newPath = navigator.getPathToPos(startPos.add(new BlockPos(dif.getX() * ratio, dif.getY() * ratio, dif.getZ() * ratio)));
-                }
-
+                Path newPath = DSTools.getPath(searcher, lastKnownPosition);
                 if (newPath == null || newPath.isSamePath(path)) mode(MODE_SPIN);
                 else
                 {

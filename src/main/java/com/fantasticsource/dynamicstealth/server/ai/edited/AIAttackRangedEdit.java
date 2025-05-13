@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.dynamicstealth.common.DSTools;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IRangedAttackMob;
@@ -81,7 +82,7 @@ public class AIAttackRangedEdit extends EntityAIBase
         }
         else
         {
-            path = attacker.getNavigator().getPathToEntityLiving(target);
+            path = DSTools.getPath(attacker, target);
             attacker.getNavigator().setPath(path, entityMoveSpeed);
         }
 

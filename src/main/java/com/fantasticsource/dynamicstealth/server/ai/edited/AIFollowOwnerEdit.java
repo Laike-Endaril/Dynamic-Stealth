@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.dynamicstealth.common.DSTools;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -81,7 +82,7 @@ public class AIFollowOwnerEdit extends EntityAIBase
             {
                 timeToRecalcPath = 10;
 
-                if (!petPathfinder.tryMoveToEntityLiving(owner, followSpeed))
+                if (!DSTools.tryMoveToEntityLiving(tameable, owner, followSpeed))
                 {
                     if (!tameable.getLeashed() && !tameable.isRiding() && !serverSettings.ai.preventPetTeleport)
                     {

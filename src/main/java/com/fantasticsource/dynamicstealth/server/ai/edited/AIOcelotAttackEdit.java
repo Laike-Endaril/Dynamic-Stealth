@@ -1,5 +1,6 @@
 package com.fantasticsource.dynamicstealth.server.ai.edited;
 
+import com.fantasticsource.dynamicstealth.common.DSTools;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -63,7 +64,7 @@ public class AIOcelotAttackEdit extends EntityAIBase
             speed = 0.6D;
         }
 
-        path = entity.getNavigator().getPathToEntityLiving(target);
+        path = DSTools.getPath(entity, target);
         entity.getNavigator().setPath(path, speed);
 
         if (attackCountdown > 0) attackCountdown--;

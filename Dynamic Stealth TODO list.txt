@@ -20,11 +20,6 @@ Mob flee speeds...
 
 BUG FIXES ===================================================================================================================================================================================================================
 
-Entities seem to be failing at pathfinding fairly often when at a certain distance
-This is only when the entity can see their target, and therefore is not using my AI for pathfinding toward it
-Ie. a vanilla bug, not a DS bug (confirmed without DS installed)
-Fixing would require checking for when an entity can see its target but can't path toward it (navigator has a range var iirc which could be checked), and then doing a partial path in the direction like I did in AIDynamicStealth
-
 Fix animation handling when an entity starts being tracked; Animania's sleeping animation, the normal death animation, etc.
 
 Mobs in desperation mode can be put into flee mode by hitting them...
