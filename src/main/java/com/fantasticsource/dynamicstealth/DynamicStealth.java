@@ -803,7 +803,7 @@ public class DynamicStealth
                 //EntityAIAttackMelee and subclasses
                 // PurplePrint's comment:
                 // Эти задачи ломают поведение мобов в режиме X-Ray.
-                //Laike: Basically translates to "these don't work right with X-Ray mode" (has to do with certain AI tasks in Bacchalian Mobs)
+                //Laike: Basically translates to "these don't work right with X-Ray mode" (has to do with certain AI tasks in Bacchanalian Mobs)
             else if (actionClass == EntityAIAttackMelee.class && !Compat.bacchanalianMobs) replaceTask(tasks, task, new AIAttackMeleeEdit((EntityAIAttackMelee) task.action));
             else if (actionClass == EntityRabbit.AIEvilAttack.class && !Compat.bacchanalianMobs) replaceTask(tasks, task, new AIAttackMeleeEdit((EntityAIAttackMelee) task.action));
             else if (actionClass == EntityPolarBear.AIMeleeAttack.class && !Compat.bacchanalianMobs) replaceTask(tasks, task, new AIBearAttackEdit((EntityAIAttackMelee) task.action));
