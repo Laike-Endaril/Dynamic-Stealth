@@ -510,45 +510,41 @@ public class AIDynamicStealth extends EntityAIBase
         if (mode == MODE_FIND_PATH)
         {
             double distSquared = lastKnownPosition.distanceSq(searcher.getPosition());
-            if (distSquared < 1) mode(MODE_SPIN);
-            else if (timeAtPos > 60) fleeReason = FLEE_CANT_REACH;
-            else
+            if (distSquared < 1 || timeAtPos > 60) mode(MODE_SPIN);
+            else try
             {
-                try
+                if (!(boolean) navigatorCanNavigateMethod.invoke(navigator))
                 {
-                    if (!(boolean) navigatorCanNavigateMethod.invoke(navigator))
-                    {
-                        searcher.world.profiler.endSection();
-                        return;
-                    }
-
-                    //We can navigate, and have not reached lastKnownPosition
-                    Path newPath;
-                    if (distSquared < Math.pow(navigator.getPathSearchRange() - 2, 2))
-                    {
-                        //Position in range
-                        newPath = navigator.getPathToPos(lastKnownPosition);
-                    }
-                    else
-                    {
-                        //Position out of range
-                        BlockPos startPos = searcher.getPosition();
-                        BlockPos dif = lastKnownPosition.subtract(startPos);
-                        double ratio = navigator.getPathSearchRange() * 0.75 / Math.sqrt(dif.distanceSq(0, 0, 0));
-                        newPath = navigator.getPathToPos(startPos.add(new BlockPos(dif.getX() * ratio, dif.getY() * ratio, dif.getZ() * ratio)));
-                    }
-
-                    if (newPath == null || newPath.isSamePath(path)) fleeReason = FLEE_CANT_REACH;
-                    else
-                    {
-                        path = newPath;
-                        mode(MODE_FOLLOW_PATH);
-                    }
+                    searcher.world.profiler.endSection();
+                    return;
                 }
-                catch (IllegalAccessException | InvocationTargetException e)
+
+                //We can navigate, and have not reached lastKnownPosition
+                Path newPath;
+                if (distSquared < Math.pow(navigator.getPathSearchRange() - 2, 2))
                 {
-                    MCTools.crash(e, 150, false);
+                    //Position in range
+                    newPath = navigator.getPathToPos(lastKnownPosition);
                 }
+                else
+                {
+                    //Position out of range
+                    BlockPos startPos = searcher.getPosition();
+                    BlockPos dif = lastKnownPosition.subtract(startPos);
+                    double ratio = navigator.getPathSearchRange() * 0.75 / Math.sqrt(dif.distanceSq(0, 0, 0));
+                    newPath = navigator.getPathToPos(startPos.add(new BlockPos(dif.getX() * ratio, dif.getY() * ratio, dif.getZ() * ratio)));
+                }
+
+                if (newPath == null || newPath.isSamePath(path)) mode(MODE_SPIN);
+                else
+                {
+                    path = newPath;
+                    mode(MODE_FOLLOW_PATH);
+                }
+            }
+            catch (IllegalAccessException | InvocationTargetException e)
+            {
+                MCTools.crash(e, 150, false);
             }
         }
 
