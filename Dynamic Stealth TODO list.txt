@@ -18,9 +18,6 @@ Mob flee speeds...
 
 BUG FIXES ===================================================================================================================================================================================================================
 
-Mobs close to reaching their "cower" position will stutter-step toward it
-Probably due to dropping path if within a certain distance to goal?
-
 Entities seem to be failing at pathfinding fairly often when at a certain distance
 
 Fix animation handling when an entity starts being tracked; Animania's sleeping animation, the normal death animation, etc.

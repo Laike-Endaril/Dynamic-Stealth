@@ -740,7 +740,15 @@ public class AIDynamicStealth extends EntityAIBase
                     //Set flee position
                     BlockPos oldFleePos = fleeToPos;
 
-                    if (fleeToPos == null || searcher.getPosition().distanceSq(fleeToPos) < 5 || (path != null && path.isFinished()) || timeAtPos > 2)
+                    double distanceThresholdSq = searcher.width * 0.5 + 1;
+                    distanceThresholdSq *= distanceThresholdSq;
+                    if (fleeToPos != null && searcher.getPosition().distanceSq(fleeToPos) < distanceThresholdSq)
+                    {
+                        //Cornered while fleeing
+                        if (fleeReason == FLEE_PASSIVE) timeAtPos = 0; //Passives continue to panic/flee
+                        else mode(MODE_COWER); //Non-passives enter "cornered" mode
+                    }
+                    else if (fleeToPos == null || (path != null && path.isFinished()) || timeAtPos > 2)
                     {
                         if (timeAtPos <= 3) fleeToPos = new BlockPos(searcher.getPositionVector().add(searcher.getPositionVector().subtract(new Vec3d(lastKnownPosition)).normalize().scale(10)));
                         else if (timeAtPos == 4) findShortRangeGoalPos();
