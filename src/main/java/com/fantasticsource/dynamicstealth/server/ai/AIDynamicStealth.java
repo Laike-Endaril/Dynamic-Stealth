@@ -223,7 +223,11 @@ public class AIDynamicStealth extends EntityAIBase
             {
                 String targetName = searcher.getEntityData().getString(XRayTags.TARGET_NAME_TAG);
                 if (targetName.isEmpty()) fallback = true;
-                else if (searcher.getAttackTarget() != null) return false;
+                else if (searcher.getAttackTarget() != null)
+                {
+                    searcher.world.profiler.endSection();
+                    return false;
+                }
             }
 
             // original behavior
@@ -303,6 +307,7 @@ public class AIDynamicStealth extends EntityAIBase
             {
                 Threat.apply(searcher, null, serverSettings.threat.ownedCantReachDegredationRate, DEG_OWNED_CANT_REACH, false);
                 clearAIPath();
+                searcher.world.profiler.endSection();
                 return false;
             }
             else
