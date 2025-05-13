@@ -170,7 +170,7 @@ public class Threat
                 if (searcherSeesTarget && (oldTarget == null || oldTarget == target))
                 {
                     threatPercentage *= MCTools.getAttribute(target, Attributes.THREATGEN_SPOTTED, 1);
-                    Threat.set(searcher, target, (float) threatPercentage);
+                    Threat.set(searcher, target, (float) threatPercentage + oldPercentage);
                 }
                 break;
 
